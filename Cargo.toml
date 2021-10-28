@@ -6,7 +6,7 @@ edition = "2021"
 
 [dependencies]
 derefable = "0.1"
-serde = "1"
+serde = { version = "1", features = ["derive"] }
 structopt = "0.3"
 anyhow = "1"
 thiserror = "1"
