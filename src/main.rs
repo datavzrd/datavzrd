@@ -4,6 +4,6 @@ pub(crate) mod cli;
 pub(crate) mod render;
 
 fn main() {
-    let opt = cli::Opt::from_args();
-    // call renderer from here.
+    let opt = cli::Datavzrd::from_args();
+    // call renderer
 }
