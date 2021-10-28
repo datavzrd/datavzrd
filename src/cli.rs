@@ -1,7 +1,6 @@
 use std::path::PathBuf;
 use structopt::StructOpt;
 
-/// A basic example
 #[derive(StructOpt, Debug)]
 #[structopt(
     about = "A tool to create visual HTML reports from collections of CSV/TSV tables.",
