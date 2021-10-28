@@ -15,7 +15,7 @@ fn main() {
 }
 
 #[derive(Derefable, Deserialize, Debug, Clone)]
-pub(crate) struct TablesSpec<P: AsRef<Path>>(HashMap<String, TableSpec<P>>);
+pub(crate) struct TablesSpec<P: AsRef<Path>>(#[deref] HashMap<String, TableSpec<P>>);
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all(deserialize = "kebab-case"))]
