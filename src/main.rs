@@ -1,5 +1,5 @@
-use structopt::StructOpt;
 use crate::spec::TablesSpec;
+use structopt::StructOpt;
 
 pub(crate) mod cli;
 pub(crate) mod render;

@@ -1,12 +1,12 @@
+use anyhow::Result;
 use derefable::Derefable;
 use serde;
 use serde::de::Deserializer;
 use serde::Deserialize;
-use std::collections::HashMap;
-use std::path::{PathBuf, Path};
-use anyhow::Result;
-use std::fs;
 use serde_json;
+use std::collections::HashMap;
+use std::fs;
+use std::path::{Path, PathBuf};
 
 #[derive(Derefable, Deserialize, Debug, Clone)]
 pub(crate) struct TablesSpec(#[deref] HashMap<String, TableSpec>);
