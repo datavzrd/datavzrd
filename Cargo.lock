@@ -91,6 +91,7 @@ dependencies = [
  "csv",
  "derefable",
  "serde",
+ "serde_json",
  "structopt",
  "thiserror",
  "typed-builder",
@@ -239,6 +240,17 @@ dependencies = [
  "proc-macro2 1.0.32",
  "quote 1.0.10",
  "syn 1.0.81",
+]
+
+[[package]]
+name = "serde_json"
+version = "1.0.68"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0f690853975602e1bfe1ccbf50504d67174e3bcf340f23b5ea9992e0587a52d8"
+dependencies = [
+ "itoa",
+ "ryu",
+ "serde",
 ]
 
 [[package]]

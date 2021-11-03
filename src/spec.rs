@@ -3,10 +3,20 @@ use serde;
 use serde::de::Deserializer;
 use serde::Deserialize;
 use std::collections::HashMap;
-use std::path::PathBuf;
+use std::path::{PathBuf, Path};
+use anyhow::Result;
+use std::fs;
+use serde_json;
 
 #[derive(Derefable, Deserialize, Debug, Clone)]
 pub(crate) struct TablesSpec(#[deref] HashMap<String, TableSpec>);
+
+impl TablesSpec {
+    pub(crate) fn from_file<P: AsRef<Path>>(path: P) -> Result<TablesSpec> {
+        let config_file = fs::read_to_string(path)?;
+        Ok(serde_json::from_str(&config_file)?)
+    }
+}
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all(deserialize = "kebab-case"))]
