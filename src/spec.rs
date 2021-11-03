@@ -3,15 +3,15 @@ use serde;
 use serde::de::Deserializer;
 use serde::Deserialize;
 use std::collections::HashMap;
-use std::path::Path;
+use std::path::PathBuf;
 
 #[derive(Derefable, Deserialize, Debug, Clone)]
-pub(crate) struct TablesSpec<P: AsRef<Path>>(#[deref] HashMap<String, TableSpec<P>>);
+pub(crate) struct TablesSpec(#[deref] HashMap<String, TableSpec>);
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all(deserialize = "kebab-case"))]
-pub(crate) struct TableSpec<P: AsRef<Path>> {
-    path: P,
+pub(crate) struct TableSpec {
+    path: PathBuf,
     #[serde(default)]
     render_columns: HashMap<String, RenderColumnSpec>,
 }
@@ -45,8 +45,8 @@ pub(crate) struct CustomPlotSpec;
 
 impl<'de> Deserialize<'de> for CustomPlotSpec {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where
-            D: Deserializer<'de>,
+    where
+        D: Deserializer<'de>,
     {
         Ok(CustomPlotSpec::default())
     }
@@ -58,8 +58,8 @@ pub(crate) struct JSFunction;
 
 impl<'de> Deserialize<'de> for JSFunction {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where
-            D: Deserializer<'de>,
+    where
+        D: Deserializer<'de>,
     {
         Ok(JSFunction::default())
     }

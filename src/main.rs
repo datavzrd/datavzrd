@@ -6,5 +6,5 @@ pub(crate) mod spec;
 
 fn main() {
     let opt = cli::Datavzrd::from_args();
-    // call renderer
+    let _config = opt.config;
 }
