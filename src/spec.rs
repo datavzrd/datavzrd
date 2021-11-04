@@ -66,7 +66,7 @@ fn test_config_deserialization() {
     };
 
     let expected_config = TablesSpec {
-        0: HashMap::from([(String::from("table"), expected_table_spec)])
+        0: HashMap::from([(String::from("table"), expected_table_spec)]),
     };
 
     let raw_config = r#"
