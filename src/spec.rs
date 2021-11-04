@@ -73,7 +73,7 @@ fn test_config_deserialization() {
     };
 
     let raw_config = r#"
-    table:
+    tables:
         table-a:
             path: test.tsv
             render-columns:
