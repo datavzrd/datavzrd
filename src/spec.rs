@@ -11,7 +11,7 @@ use std::path::{Path, PathBuf};
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct TablesSpec {
     #[deref]
-    tables: HashMap<String, TableSpec>
+    tables: HashMap<String, TableSpec>,
 }
 
 impl TablesSpec {
@@ -56,7 +56,6 @@ pub(crate) struct CustomPlot {
     schema: String,
 }
 
-
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct PlotSpec {
     #[serde(rename = "type")]
@@ -72,7 +71,7 @@ fn test_config_deserialization() {
         link_to_url: Some(String::from("https://www.rust-lang.org")),
         plot: None,
         custom_plot: None,
-        summary_plot: None
+        summary_plot: None,
     };
 
     let expected_table_spec = TableSpec {
