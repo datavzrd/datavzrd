@@ -6,6 +6,7 @@ use serde_yaml;
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::str::FromStr;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct TablesSpec {
@@ -20,10 +21,16 @@ impl TablesSpec {
     }
 }
 
+fn default_separator() -> char {
+    char::from_str(",").unwrap()
+}
+
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct TableSpec {
     path: PathBuf,
+    #[serde(default = "default_separator")]
+    separator: char,
     #[serde(default)]
     render_columns: HashMap<String, RenderColumnSpec>,
 }
@@ -75,6 +82,7 @@ fn test_config_deserialization() {
 
     let expected_table_spec = TableSpec {
         path: PathBuf::from("test.tsv"),
+        separator: ',',
         render_columns: HashMap::from([(String::from("x"), expected_render_columns)]),
     };
 
