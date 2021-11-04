@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-#[derive(Derefable, Deserialize, Debug, Clone)]
+#[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct TablesSpec(#[deref] HashMap<String, TableSpec>);
 
 impl TablesSpec {
@@ -18,7 +18,7 @@ impl TablesSpec {
     }
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct TableSpec {
     path: PathBuf,
@@ -26,7 +26,7 @@ pub(crate) struct TableSpec {
     render_columns: HashMap<String, RenderColumnSpec>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct RenderColumnSpec {
     #[serde(default)]
@@ -43,8 +43,42 @@ pub(crate) struct RenderColumnSpec {
     custom_plot: Option<String>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct PlotSpec {
     #[serde(rename = "type")]
     plot_type: String,
+}
+
+#[test]
+fn test_config_deserialization() {
+    let expected_render_columns = RenderColumnSpec {
+        custom: None,
+        link_to_table_row: Some(String::from("some-value")),
+        link_to_table: Some(String::from("table-b")),
+        link_to_url: Some(String::from("https://www.rust-lang.org")),
+        plot: None,
+        custom_plot: None,
+    };
+
+    let expected_table_spec = TableSpec {
+        path: PathBuf::from("test.tsv"),
+        render_columns: HashMap::from([(String::from("table-a"), expected_render_columns)]),
+    };
+
+    let expected_config = TablesSpec {
+        0: HashMap::from([(String::from("table"), expected_table_spec)])
+    };
+
+    let raw_config = r#"
+    table:
+        table-a:
+            path: test.tsv
+            render-columns:
+                link-to-table-row: some-value
+                link_to_table: table-b
+                link-to-url: https://www.rust-lang.org
+    "#;
+
+    let config: TablesSpec = serde_yaml::from_str(raw_config).unwrap();
+    assert_eq!(config, expected_config);
 }
