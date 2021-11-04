@@ -43,8 +43,19 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     plot: Option<PlotSpec>,
     #[serde(default)]
-    custom_plot: Option<String>,
+    custom_plot: Option<CustomPlot>,
+    #[serde(default)]
+    summary_plot: Option<String>,
 }
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+pub(crate) struct CustomPlot {
+    #[serde(default)]
+    data: String,
+    #[serde(default)]
+    schema: String,
+}
+
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct PlotSpec {
@@ -61,6 +72,7 @@ fn test_config_deserialization() {
         link_to_url: Some(String::from("https://www.rust-lang.org")),
         plot: None,
         custom_plot: None,
+        summary_plot: None
     };
 
     let expected_table_spec = TableSpec {
