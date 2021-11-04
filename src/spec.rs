@@ -9,7 +9,9 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
-pub(crate) struct TablesSpec(#[deref] HashMap<String, TableSpec>);
+pub(crate) struct TablesSpec {
+    tables: HashMap<String, TableSpec>
+}
 
 impl TablesSpec {
     pub(crate) fn from_file<P: AsRef<Path>>(path: P) -> Result<TablesSpec> {
