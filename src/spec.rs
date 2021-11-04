@@ -10,6 +10,7 @@ use std::path::{Path, PathBuf};
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct TablesSpec {
+    #[deref]
     tables: HashMap<String, TableSpec>
 }
 
