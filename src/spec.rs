@@ -65,11 +65,11 @@ fn test_config_deserialization() {
 
     let expected_table_spec = TableSpec {
         path: PathBuf::from("test.tsv"),
-        render_columns: HashMap::from([(String::from("table-a"), expected_render_columns)]),
+        render_columns: HashMap::from([(String::from("x"), expected_render_columns)]),
     };
 
     let expected_config = TablesSpec {
-        tables: HashMap::from([(String::from("table"), expected_table_spec)]),
+        tables: HashMap::from([(String::from("table-a"), expected_table_spec)]),
     };
 
     let raw_config = r#"
@@ -77,9 +77,10 @@ fn test_config_deserialization() {
         table-a:
             path: test.tsv
             render-columns:
-                link-to-table-row: some-value
-                link_to_table: table-b
-                link-to-url: https://www.rust-lang.org
+                x:
+                    link-to-table-row: some-value
+                    link-to-table: table-b
+                    link-to-url: https://www.rust-lang.org
     "#;
 
     let config: TablesSpec = serde_yaml::from_str(raw_config).unwrap();
