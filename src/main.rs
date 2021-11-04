@@ -7,5 +7,5 @@ pub(crate) mod spec;
 
 fn main() {
     let opt = cli::Datavzrd::from_args();
-    let config = TablesSpec::from_file(opt.config).unwrap();
+    let _config = TablesSpec::from_file(opt.config).unwrap();
 }

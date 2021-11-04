@@ -1,7 +1,6 @@
 use anyhow::Result;
 use derefable::Derefable;
 use serde;
-use serde::de::Deserializer;
 use serde::Deserialize;
 use serde_yaml;
 use std::collections::HashMap;
