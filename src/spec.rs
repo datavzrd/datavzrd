@@ -50,8 +50,8 @@ pub(crate) struct RenderColumnSpec {
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct CustomPlot {
-    #[serde(default)]
-    data: String,
+    #[serde(default, rename = "data")]
+    plot_data: String,
     #[serde(default)]
     schema: String,
 }
