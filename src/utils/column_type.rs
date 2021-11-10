@@ -1,31 +1,45 @@
 use anyhow::Result;
-use csv::StringRecord;
 use std::collections::HashMap;
+use std::iter::FromIterator;
 use std::path::Path;
 use std::str::FromStr;
 
 #[derive(Debug, PartialEq)]
 enum ColumnType {
+    None,
     String,
     Integer,
     Float,
 }
 
-fn classify_column(rows: &Vec<StringRecord>, column_index: usize) -> ColumnType {
-    let integers = rows
-        .iter()
-        .filter(|x| i64::from_str(&x[column_index]).is_ok())
-        .count();
-    let floats = rows
-        .iter()
-        .filter(|x| f64::from_str(&x[column_index]).is_ok())
-        .count();
-    let non_integers = rows.len() - integers;
+// TODO: Use Derive once its stabilized: https://github.com/rust-lang/rust/issues/86985
+impl Default for ColumnType {
+    fn default() -> Self {
+        ColumnType::None
+    }
+}
 
-    match (floats > integers, floats >= non_integers) {
-        (true, true) => ColumnType::Float,
-        (false, true) => ColumnType::Integer,
-        (_, false) => ColumnType::String,
+impl ColumnType {
+    fn update(&mut self, value: &str) -> Result<()> {
+        *self = match (
+            f64::from_str(value).is_ok(),
+            i64::from_str(value).is_ok(),
+            &self,
+        ) {
+            (true, true, ColumnType::None) | (true, true, ColumnType::Integer) => {
+                ColumnType::Integer
+            }
+            (true, false, ColumnType::None) | (true, _, ColumnType::Float) => ColumnType::Float,
+            (false, false, ColumnType::None) | (_, _, ColumnType::String) => ColumnType::String,
+            (true, false, ColumnType::Integer) => {
+                panic!("Found a float in a column that only had integers before.")
+            }
+            (false, false, ColumnType::Integer) | (false, false, ColumnType::Float) => {
+                panic!("Found a string in a column that only had numeric values before.")
+            }
+            (false, true, _) => unreachable!(),
+        };
+        Ok(())
     }
 }
 
@@ -34,13 +48,21 @@ fn classify_table<P: AsRef<Path>>(path: P, separator: char) -> Result<HashMap<St
         .delimiter(separator as u8)
         .from_path(path)?;
 
-    let mut classification = HashMap::new();
+    let headers = reader.headers()?.clone();
+    let mut classification = HashMap::from_iter(
+        headers
+            .iter()
+            .map(|f| (f.to_owned(), ColumnType::default())),
+    );
 
-    let records: Vec<_> = reader.records().into_iter().map(|r| r.unwrap()).collect();
-    let headers = reader.headers()?;
-    for (i, title) in headers.iter().enumerate() {
-        classification.insert(title.to_owned(), classify_column(&records, i));
+    for record in reader.records() {
+        let result = record?;
+        for (i, title) in headers.iter().enumerate() {
+            let column_type = classification.get_mut(title).unwrap();
+            column_type.update(&result[i])?;
+        }
     }
+
     Ok(classification)
 }
 

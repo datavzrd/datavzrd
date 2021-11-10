@@ -1,8 +1,6 @@
 use anyhow::Result;
 use derefable::Derefable;
-use serde;
 use serde::Deserialize;
-use serde_yaml;
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
