@@ -1,7 +1,7 @@
 use derive_new::new;
 use serde::Serialize;
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(new, Debug, Clone, Serialize, PartialEq)]
 pub(crate) struct RowAddress {
     page: usize,
     row: usize,
