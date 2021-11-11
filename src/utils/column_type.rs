@@ -69,13 +69,26 @@ mod tests {
     use std::str::FromStr;
 
     #[test]
-    fn test_classify_table() {
+    fn test_classify_uniform_table() {
         let classification =
             classify_table("tests/data/sales.csv", char::from_str(",").unwrap()).unwrap();
         let expected = HashMap::from([
             (String::from("first"), ColumnType::String),
             (String::from("last"), ColumnType::String),
             (String::from("ccnumber"), ColumnType::Integer),
+            (String::from("price"), ColumnType::Float),
+        ]);
+        assert_eq!(classification, expected);
+    }
+
+    #[test]
+    fn test_classify_non_uniform_table() {
+        let classification =
+            classify_table("tests/data/non_uniform_datatypes.csv", char::from_str(",").unwrap()).unwrap();
+        let expected = HashMap::from([
+            (String::from("first"), ColumnType::String),
+            (String::from("last"), ColumnType::String),
+            (String::from("ccnumber"), ColumnType::Float),
             (String::from("price"), ColumnType::Float),
         ]);
         assert_eq!(classification, expected);
