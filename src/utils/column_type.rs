@@ -83,8 +83,11 @@ mod tests {
 
     #[test]
     fn test_classify_non_uniform_table() {
-        let classification =
-            classify_table("tests/data/non_uniform_datatypes.csv", char::from_str(",").unwrap()).unwrap();
+        let classification = classify_table(
+            "tests/data/non_uniform_datatypes.csv",
+            char::from_str(",").unwrap(),
+        )
+        .unwrap();
         let expected = HashMap::from([
             (String::from("first"), ColumnType::String),
             (String::from("last"), ColumnType::String),
