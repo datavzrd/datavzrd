@@ -29,14 +29,10 @@ impl ColumnType {
             (true, true, ColumnType::None) | (true, true, ColumnType::Integer) => {
                 ColumnType::Integer
             }
-            (true, false, ColumnType::None) | (true, _, ColumnType::Float) => ColumnType::Float,
-            (false, false, ColumnType::None) | (_, _, ColumnType::String) => ColumnType::String,
-            (true, false, ColumnType::Integer) => {
-                panic!("Found a float in a column that only had integers before.")
-            }
-            (false, false, ColumnType::Integer) | (false, false, ColumnType::Float) => {
-                panic!("Found a string in a column that only had numeric values before.")
-            }
+            (true, false, ColumnType::None)
+            | (true, _, ColumnType::Float)
+            | (true, false, ColumnType::Integer) => ColumnType::Float,
+            (false, false, _) | (_, _, ColumnType::String) => ColumnType::String,
             (false, true, _) => unreachable!(),
         };
         Ok(())
