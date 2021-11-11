@@ -62,15 +62,24 @@ fn classify_table<P: AsRef<Path>>(path: P, separator: char) -> Result<HashMap<St
     Ok(classification)
 }
 
-#[test]
-fn test_classify_table() {
-    let classification =
-        classify_table("tests/data/sales.csv", char::from_str(",").unwrap()).unwrap();
-    let expected = HashMap::from([
-        (String::from("first"), ColumnType::String),
-        (String::from("last"), ColumnType::String),
-        (String::from("ccnumber"), ColumnType::Integer),
-        (String::from("price"), ColumnType::Float),
-    ]);
-    assert_eq!(classification, expected);
+#[cfg(test)]
+mod tests {
+    use crate::utils::column_type::{classify_table, ColumnType};
+    use std::str::FromStr;
+    use std::collections::HashMap;
+
+    #[test]
+    fn test_classify_table() {
+        let classification =
+            classify_table("tests/data/sales.csv", char::from_str(",").unwrap()).unwrap();
+        let expected = HashMap::from([
+            (String::from("first"), ColumnType::String),
+            (String::from("last"), ColumnType::String),
+            (String::from("ccnumber"), ColumnType::Integer),
+            (String::from("price"), ColumnType::Float),
+        ]);
+        assert_eq!(classification, expected);
+    }
 }
+
+
