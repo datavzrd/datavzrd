@@ -53,9 +53,9 @@ fn classify_table<P: AsRef<Path>>(path: P, separator: char) -> Result<HashMap<St
 
     for record in reader.records() {
         let result = record?;
-        for (i, title) in headers.iter().enumerate() {
+        for (title, value) in headers.iter().zip(result.iter()) {
             let column_type = classification.get_mut(title).unwrap();
-            column_type.update(&result[i])?;
+            column_type.update(value)?;
         }
     }
 
