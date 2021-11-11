@@ -70,8 +70,11 @@ mod tests {
 
     #[test]
     fn test_classify_uniform_table() {
-        let classification =
-            classify_table("tests/data/sales.csv", char::from_str(",").unwrap()).unwrap();
+        let classification = classify_table(
+            "tests/data/uniform_datatypes.csv",
+            char::from_str(",").unwrap(),
+        )
+        .unwrap();
         let expected = HashMap::from([
             (String::from("first"), ColumnType::String),
             (String::from("last"), ColumnType::String),

@@ -67,7 +67,7 @@ mod tests {
     #[test]
     fn test_column_index() {
         let column_index = ColumnIndex::new(
-            "tests/data/sales.csv",
+            "tests/data/uniform_datatypes.csv",
             char::from_str(",").unwrap(),
             "first",
             3,
