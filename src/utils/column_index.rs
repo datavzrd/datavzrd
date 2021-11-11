@@ -57,23 +57,31 @@ impl ColumnIndex {
     }
 }
 
-#[test]
-fn test_column_index() {
-    let column_index = ColumnIndex::new(
-        "tests/data/sales.csv",
-        char::from_str(",").unwrap(),
-        "first",
-        3,
-    )
-    .unwrap();
-    let expected_column_index = ColumnIndex {
-        index: HashMap::from([
-            (String::from("Delia"), RowAddress::new(0, 0)),
-            (String::from("Douglas"), RowAddress::new(0, 1)),
-            (String::from("Winnie"), RowAddress::new(0, 2)),
-            (String::from("George"), RowAddress::new(1, 0)),
-        ]),
-    };
+#[cfg(test)]
+mod tests {
+    use crate::utils::column_index::ColumnIndex;
+    use crate::utils::row_address::RowAddress;
+    use std::collections::HashMap;
+    use std::str::FromStr;
 
-    assert_eq!(column_index, expected_column_index)
+    #[test]
+    fn test_column_index() {
+        let column_index = ColumnIndex::new(
+            "tests/data/uniform_datatypes.csv",
+            char::from_str(",").unwrap(),
+            "first",
+            3,
+        )
+        .unwrap();
+        let expected_column_index = ColumnIndex {
+            index: HashMap::from([
+                (String::from("Delia"), RowAddress::new(0, 0)),
+                (String::from("Douglas"), RowAddress::new(0, 1)),
+                (String::from("Winnie"), RowAddress::new(0, 2)),
+                (String::from("George"), RowAddress::new(1, 0)),
+            ]),
+        };
+
+        assert_eq!(column_index, expected_column_index)
+    }
 }

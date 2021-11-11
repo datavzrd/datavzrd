@@ -1,8 +1,6 @@
 use anyhow::Result;
 use derefable::Derefable;
-use serde;
 use serde::Deserialize;
-use serde_yaml;
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -68,29 +66,35 @@ pub(crate) struct PlotSpec {
     plot_type: String,
 }
 
-#[test]
-fn test_config_deserialization() {
-    let expected_render_columns = RenderColumnSpec {
-        custom: None,
-        link_to_table_row: Some(String::from("some-value")),
-        link_to_table: Some(String::from("table-b")),
-        link_to_url: Some(String::from("https://www.rust-lang.org")),
-        plot: None,
-        custom_plot: None,
-        summary_plot: None,
-    };
+#[cfg(test)]
+mod tests {
+    use crate::spec::{RenderColumnSpec, TableSpec, TablesSpec};
+    use std::collections::HashMap;
+    use std::path::PathBuf;
 
-    let expected_table_spec = TableSpec {
-        path: PathBuf::from("test.tsv"),
-        separator: ',',
-        render_columns: HashMap::from([(String::from("x"), expected_render_columns)]),
-    };
+    #[test]
+    fn test_config_deserialization() {
+        let expected_render_columns = RenderColumnSpec {
+            custom: None,
+            link_to_table_row: Some(String::from("some-value")),
+            link_to_table: Some(String::from("table-b")),
+            link_to_url: Some(String::from("https://www.rust-lang.org")),
+            plot: None,
+            custom_plot: None,
+            summary_plot: None,
+        };
 
-    let expected_config = TablesSpec {
-        tables: HashMap::from([(String::from("table-a"), expected_table_spec)]),
-    };
+        let expected_table_spec = TableSpec {
+            path: PathBuf::from("test.tsv"),
+            separator: ',',
+            render_columns: HashMap::from([(String::from("x"), expected_render_columns)]),
+        };
 
-    let raw_config = r#"
+        let expected_config = TablesSpec {
+            tables: HashMap::from([(String::from("table-a"), expected_table_spec)]),
+        };
+
+        let raw_config = r#"
     tables:
         table-a:
             path: test.tsv
@@ -101,6 +105,7 @@ fn test_config_deserialization() {
                     link-to-url: https://www.rust-lang.org
     "#;
 
-    let config: TablesSpec = serde_yaml::from_str(raw_config).unwrap();
-    assert_eq!(config, expected_config);
+        let config: TablesSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert_eq!(config, expected_config);
+    }
 }
