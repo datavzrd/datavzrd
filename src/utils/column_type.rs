@@ -65,8 +65,8 @@ fn classify_table<P: AsRef<Path>>(path: P, separator: char) -> Result<HashMap<St
 #[cfg(test)]
 mod tests {
     use crate::utils::column_type::{classify_table, ColumnType};
-    use std::str::FromStr;
     use std::collections::HashMap;
+    use std::str::FromStr;
 
     #[test]
     fn test_classify_table() {
@@ -81,5 +81,3 @@ mod tests {
         assert_eq!(classification, expected);
     }
 }
-
-

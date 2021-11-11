@@ -68,7 +68,7 @@ pub(crate) struct PlotSpec {
 
 #[cfg(test)]
 mod tests {
-    use crate::spec::{TablesSpec, RenderColumnSpec, TableSpec};
+    use crate::spec::{RenderColumnSpec, TableSpec, TablesSpec};
     use std::collections::HashMap;
     use std::path::PathBuf;
 
