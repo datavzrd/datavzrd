@@ -13,9 +13,8 @@ pub(crate) mod utils;
 fn main() -> Result<()> {
     let opt = cli::Datavzrd::from_args();
     let config = TablesSpec::from_file(opt.config).unwrap();
-    for (name, table) in config.tables {
-        let renderer = TableRenderer::builder().specs(table).build();
-        renderer.render_table(&opt.output)?;
-    }
+    let renderer = TableRenderer::builder().specs(config).build();
+    renderer.render_tables(&opt.output)?;
+
     Ok(())
 }
