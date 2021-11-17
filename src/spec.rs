@@ -9,7 +9,7 @@ use std::str::FromStr;
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct TablesSpec {
     #[deref]
-    tables: HashMap<String, TableSpec>,
+    pub(crate) tables: HashMap<String, TableSpec>,
 }
 
 impl TablesSpec {
@@ -26,9 +26,10 @@ fn default_separator() -> char {
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct TableSpec {
-    path: PathBuf,
+    pub(crate) path: PathBuf,
     #[serde(default = "default_separator")]
-    separator: char,
+    pub(crate) separator: char,
+    pub(crate) page_size: usize,
     #[serde(default)]
     render_columns: HashMap<String, RenderColumnSpec>,
 }
@@ -87,6 +88,7 @@ mod tests {
         let expected_table_spec = TableSpec {
             path: PathBuf::from("test.tsv"),
             separator: ',',
+            page_size: 100,
             render_columns: HashMap::from([(String::from("x"), expected_render_columns)]),
         };
 
@@ -98,6 +100,7 @@ mod tests {
     tables:
         table-a:
             path: test.tsv
+            page-size: 100
             render-columns:
                 x:
                     link-to-table-row: some-value
