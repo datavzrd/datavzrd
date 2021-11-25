@@ -23,12 +23,17 @@ fn default_separator() -> char {
     char::from_str(",").unwrap()
 }
 
+fn default_page_size() -> usize {
+    100_usize
+}
+
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct TableSpec {
     pub(crate) path: PathBuf,
     #[serde(default = "default_separator")]
     pub(crate) separator: char,
+    #[serde(default = "default_page_size")]
     pub(crate) page_size: usize,
     #[serde(default)]
     render_columns: HashMap<String, RenderColumnSpec>,
