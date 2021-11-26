@@ -1,9 +1,5 @@
-use crate::render::Renderer;
-use crate::spec::TablesSpec;
 use crate::utils::column_type::{classify_table, ColumnType};
-use crate::utils::row_address::RowAddressFactory;
 use anyhow::Result;
-use csv::StringRecord;
 use itertools::Itertools;
 use serde::Serialize;
 use serde_json::json;
@@ -13,60 +9,12 @@ use std::io::Write;
 use std::path::Path;
 use std::str::FromStr;
 use tera::{Context, Tera};
-use typed_builder::TypedBuilder;
 
-#[derive(TypedBuilder, Debug)]
-pub(crate) struct TableRenderer {
-    specs: TablesSpec,
-}
-
-impl Renderer for TableRenderer {
-    fn render_tables<P>(&self, path: P) -> Result<()>
-    where
-        P: AsRef<Path>,
-    {
-        for (name, table) in &self.specs.tables {
-            let mut reader = csv::ReaderBuilder::new()
-                .delimiter(table.separator as u8)
-                .from_path(&table.path)?;
-
-            let row_address_factory = RowAddressFactory::new(table.page_size);
-
-            for (page, grouped_records) in &reader
-                .records()
-                .into_iter()
-                .enumerate()
-                .group_by(|(i, _)| row_address_factory.get(*i).page)
-            {
-                let records = grouped_records.collect_vec();
-                render_page(
-                    &path,
-                    page,
-                    records
-                        .iter()
-                        .map(|(_, records)| records.as_ref().unwrap())
-                        .collect_vec(),
-                )?;
-            }
-
-            let out_path = Path::new(path.as_ref()).join(name);
-            fs::create_dir(&out_path)?;
-
-            render_plots(&out_path, &table.path, table.separator)?;
-        }
-        Ok(())
-    }
-}
-
-fn render_page<P: AsRef<Path>>(
+pub(crate) fn render_plots<P: AsRef<Path>>(
     output_path: P,
-    page_index: usize,
-    data: Vec<&StringRecord>,
+    csv_path: &Path,
+    separator: char,
 ) -> Result<()> {
-    unimplemented!()
-}
-
-fn render_plots<P: AsRef<Path>>(output_path: P, csv_path: &Path, separator: char) -> Result<()> {
     let column_types = classify_table(csv_path, separator)?;
 
     let mut reader = csv::ReaderBuilder::new()
@@ -87,7 +35,7 @@ fn render_plots<P: AsRef<Path>>(output_path: P, csv_path: &Path, separator: char
                 let plot = generate_nominal_plot(csv_path, separator, index)?;
                 templates.add_raw_template(
                     "plot.js.tera",
-                    include_str!("../../templates/nominal_plot.js.tera"),
+                    include_str!("../../../templates/nominal_plot.js.tera"),
                 )?;
                 context.insert("table", &json!(plot).to_string())
             }
@@ -95,7 +43,7 @@ fn render_plots<P: AsRef<Path>>(output_path: P, csv_path: &Path, separator: char
                 let plot = generate_numeric_plot(csv_path, separator, index)?;
                 templates.add_raw_template(
                     "plot.js.tera",
-                    include_str!("../../templates/numeric_plot.js.tera"),
+                    include_str!("../../../templates/numeric_plot.js.tera"),
                 )?;
                 context.insert("table", &json!(plot).to_string())
             }
