@@ -76,7 +76,7 @@ mod tests {
         let expected_column_index = ColumnIndex {
             index: HashMap::from([
                 (String::from("Delia"), RowAddress::new(0, 0)),
-                (String::from("Douglas"), RowAddress::new(0, 1)),
+                (String::from("George"), RowAddress::new(0, 1)),
                 (String::from("Winnie"), RowAddress::new(0, 2)),
                 (String::from("George"), RowAddress::new(1, 0)),
             ]),

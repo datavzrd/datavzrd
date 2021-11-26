@@ -150,15 +150,41 @@ fn generate_nominal_plot(
 const MAX_NOMINAL_BINS: usize = 10;
 const NUMERIC_BINS: usize = 20;
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Debug, Clone, Ord, PartialOrd, Eq, PartialEq)]
 struct PlotRecord {
     key: String,
     value: u32,
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Debug, Clone, PartialEq)]
 struct BinnedPlotRecord {
     bin_start: f32,
     bin_end: f32,
     value: u32,
+}
+
+
+#[cfg(test)]
+mod tests {
+    use crate::render::portable::plot::{generate_nominal_plot, PlotRecord};
+
+    #[test]
+    fn test_nominal_plot_generation() {
+        let mut records = generate_nominal_plot("tests/data/uniform_datatypes.csv".as_ref(), ',', 0).unwrap().unwrap();
+        let mut expected = vec![
+            PlotRecord {
+                key: String::from("George"),
+                value: 2
+            },
+            PlotRecord {
+                key: String::from("Delia"),
+                value: 1
+            },
+            PlotRecord {
+                key: String::from("Winnie"),
+                value: 1
+            }
+        ];
+        assert_eq!(records.sort(), expected.sort());
+    }
 }
