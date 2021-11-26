@@ -4,7 +4,7 @@ use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 
-fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
+pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
     let path = Path::new(path.as_ref()).join("static");
     fs::create_dir(&path)?;
     let files = vec![

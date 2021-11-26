@@ -1,5 +1,5 @@
 mod plot;
-mod utils;
+pub(crate) mod utils;
 
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
