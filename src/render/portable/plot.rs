@@ -163,27 +163,29 @@ struct BinnedPlotRecord {
     value: u32,
 }
 
-
 #[cfg(test)]
 mod tests {
     use crate::render::portable::plot::{generate_nominal_plot, PlotRecord};
 
     #[test]
     fn test_nominal_plot_generation() {
-        let mut records = generate_nominal_plot("tests/data/uniform_datatypes.csv".as_ref(), ',', 0).unwrap().unwrap();
+        let mut records =
+            generate_nominal_plot("tests/data/uniform_datatypes.csv".as_ref(), ',', 0)
+                .unwrap()
+                .unwrap();
         let mut expected = vec![
             PlotRecord {
                 key: String::from("George"),
-                value: 2
+                value: 2,
             },
             PlotRecord {
                 key: String::from("Delia"),
-                value: 1
+                value: 1,
             },
             PlotRecord {
                 key: String::from("Winnie"),
-                value: 1
-            }
+                value: 1,
+            },
         ];
         assert_eq!(records.sort(), expected.sort());
     }
