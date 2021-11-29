@@ -4,7 +4,6 @@ use std::path::Path;
 use anyhow::Result;
 
 use crate::utils::row_address::{RowAddress, RowAddressFactory};
-use std::str::FromStr;
 
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) struct ColumnIndex {

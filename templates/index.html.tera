@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>datavzrd report</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/csv_report.css">
+</head>
+
+<body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="../js/bootstrap-table.min.js"></script>
+<script src="../js/vega.min.js"></script>
+<script src="../js/vega-lite.min.js"></script>
+<script src="../js/vega-embed.min.js"></script>
+<script src="../js/lz-string.min.js"></script>
+<script src="../data/index{{ current_page }}.js"></script>
+<script src="../js/csv_report.js"></script>
+{% for title in titles %}
+<script src="../plots/plot_{{ loop.index0 }}.js"></script>
+{% endfor %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">rbt report</a>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools/blob/master/CHANGELOG.md">{{ version }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools">github</a>
+            </li>
+        </ul>
+        <span class="navbar-text">
+            created {{ time }}
+        </span>
+    </div>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarText2">
+        <ul class="navbar-nav mr-auto">
+            <li><a href="index{{ current_page}}.html">csv-report</a></li>
+        </ul>
+        <span class="pull-right">
+            <a class="pull-right nav-link" href="../report.xlsx" download>
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-arrow-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7 2l.5-2.5 3 3L10 5a1 1 0 0 1-1-1zm-.5 3.5a.5.5 0 0 0-1 0v3.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 11.293V7.5z"/>
+                </svg>
+            </a>
+        </span>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 loading text-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div class="col-md-12 table-container" style="margin-top: 15px;">
+            <table id="table" class="table">
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+        {% if pages > 1 %}
+        <div style="padding-top: 1rem">
+            <nav aria-label="page navigation">
+                <ul class="pagination justify-content-start">
+                    {% if current_page > 1 %}
+                    {% if current_page != 2 %}
+                    <li class="page-item"><a class="page-link" href="index1.html">First</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="">...</a></li>
+                    {% endif %}
+                    <li class="page-item"><a class="page-link" href="index{{ current_page - 1 }}.html">{{  current_page - 1 }}</a></li>
+                    {% endif %}
+                    <li class="page-item active"><a class="page-link" href="index{{ current_page }}.html">{{  current_page  }}</a></li>
+                    {% if current_page < pages %}
+                    <li class="page-item"><a class="page-link" href="index{{ current_page + 1 }}.html">{{  current_page + 1 }}</a></li>
+                    {% if current_page != (pages - 1) %}
+                    <li class="page-item disabled"><a class="page-link" href="">...</a></li>
+                    <li class="page-item"><a class="page-link" href="index{{ pages }}.html">Last</a></li>
+                    {% endif %}
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+        </div>
+    </div>
+    <!-- Modal -->
+    {% for title in titles %}
+    <div class="modal fade" id="modal_{{ loop.index0 }}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ title }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% if is_reasonable[title] %}
+                <div class="modal-body">
+                    <div id="plot_{{ loop.index0 }}" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                {% else %}
+                <div class="modal-body">
+                    <p>Too many values to plot a reasonable histogram.</p>
+                </div>
+                {% endif %}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="{{ title }}-search" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Search for {{ title }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="../prefixes/col_{{ loop.index0 }}.html" frameBorder="0" style="width: 100%; height: min(530px, 50vh)"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</body>
+</html>
