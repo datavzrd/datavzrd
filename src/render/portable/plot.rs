@@ -66,7 +66,7 @@ fn generate_numeric_plot(
         .from_path(path)?;
 
     dbg!("Render Plots:");
-    dbg!(&reader);
+    //dbg!(&reader);
     dbg!(&reader.records().collect_vec());
     dbg!(separator as u8, path);
 

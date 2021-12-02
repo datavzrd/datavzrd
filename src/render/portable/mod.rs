@@ -36,7 +36,7 @@ impl Renderer for TableRenderer {
             let pages = reader.records().count() / table.page_size;
 
             dbg!("Render Table:");
-            dbg!(&reader);
+            //dbg!(&reader);
             dbg!(&reader.records().collect_vec());
             dbg!(table.separator as u8, &table.path);
 
