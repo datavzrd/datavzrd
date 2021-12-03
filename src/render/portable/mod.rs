@@ -7,16 +7,16 @@ use crate::spec::TablesSpec;
 use crate::utils::row_address::RowAddressFactory;
 use anyhow::Result;
 use chrono::{DateTime, Local};
-use csv::{StringRecord, Reader};
+use csv::{Reader, StringRecord};
 use itertools::Itertools;
 use lz_str::compress_to_utf16;
 use serde_json::json;
 use std::fs;
+use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use tera::{Context, Tera};
 use typed_builder::TypedBuilder;
-use std::fs::File;
 
 #[derive(TypedBuilder, Debug)]
 pub(crate) struct TableRenderer {
