@@ -65,11 +65,6 @@ fn generate_numeric_plot(
         .delimiter(separator as u8)
         .from_path(path)?;
 
-    dbg!("Render Plots:");
-    dbg!(&reader);
-    dbg!(&reader.records().collect_vec());
-    dbg!(separator as u8, path);
-
     let min = reader
         .records()
         .map(|r| f32::from_str(r.unwrap().get(column_index).unwrap()).unwrap())

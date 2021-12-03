@@ -35,11 +35,6 @@ impl Renderer for TableRenderer {
             let row_address_factory = RowAddressFactory::new(table.page_size);
             let pages = reader.records().count() / table.page_size;
 
-            dbg!("Render Table:");
-            dbg!(&reader);
-            dbg!(&reader.records().collect_vec());
-            dbg!(table.separator as u8, &table.path);
-
             let out_path = Path::new(path.as_ref()).join(name);
             fs::create_dir(&out_path)?;
 
