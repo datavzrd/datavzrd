@@ -3,21 +3,21 @@
 <head>
     <title>datavzrd report</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap-table.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/csv_report.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/csv_report.css">
 </head>
 
 <body>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.bundle.min.js"></script>
-<script src="../js/bootstrap-table.min.js"></script>
-<script src="../js/vega.min.js"></script>
-<script src="../js/vega-lite.min.js"></script>
-<script src="../js/vega-embed.min.js"></script>
-<script src="../js/lz-string.min.js"></script>
+<script src="../static/jquery.min.js"></script>
+<script src="../static/bootstrap.bundle.min.js"></script>
+<script src="../static/bootstrap-table.min.js"></script>
+<script src="../static/vega.min.js"></script>
+<script src="../static/vega-lite.min.js"></script>
+<script src="../static/vega-embed.min.js"></script>
+<script src="../static/lz-string.min.js"></script>
 <script src="../data/index{{ current_page }}.js"></script>
-<script src="../js/csv_report.js"></script>
+<script src="../stat/csv_report.js"></script>
 {% for title in titles %}
 <script src="../plots/plot_{{ loop.index0 }}.js"></script>
 {% endfor %}
@@ -101,16 +101,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {% if is_reasonable[title] %}
+                {# {% if is_reasonable[title] %}
                 <div class="modal-body">
                     <div id="plot_{{ loop.index0 }}" style="width: 100%; height: 300px; border:none;">
                     </div>
                 </div>
-                {% else %}
+                {% else %} #}
                 <div class="modal-body">
                     <p>Too many values to plot a reasonable histogram.</p>
                 </div>
-                {% endif %}
+                {# {% endif %} #}
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>

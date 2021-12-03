@@ -49,7 +49,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
             }
         };
         let js = templates.render("plot.js.tera", &context)?;
-        let file_path = path.join(Path::new(&format!("plot_{}", index)));
+        let file_path = path.join(Path::new(&format!("plot_{}", index)).with_extension("js"));
         let mut file = fs::File::create(file_path)?;
         file.write_all(js.as_bytes())?;
     }

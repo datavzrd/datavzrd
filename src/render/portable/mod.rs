@@ -7,7 +7,7 @@ use crate::spec::TablesSpec;
 use crate::utils::row_address::RowAddressFactory;
 use anyhow::Result;
 use chrono::{DateTime, Local};
-use csv::StringRecord;
+use csv::{StringRecord, Reader};
 use itertools::Itertools;
 use lz_str::compress_to_utf16;
 use serde_json::json;
@@ -16,6 +16,7 @@ use std::io::Write;
 use std::path::Path;
 use tera::{Context, Tera};
 use typed_builder::TypedBuilder;
+use std::fs::File;
 
 #[derive(TypedBuilder, Debug)]
 pub(crate) struct TableRenderer {
@@ -28,15 +29,21 @@ impl Renderer for TableRenderer {
         P: AsRef<Path>,
     {
         for (name, table) in &self.specs.tables {
-            let mut reader = csv::ReaderBuilder::new()
-                .delimiter(table.separator as u8)
-                .from_path(&table.path)?;
+            let generate_reader = || -> csv::Result<Reader<File>> {
+                csv::ReaderBuilder::new()
+                    .delimiter(table.separator as u8)
+                    .from_path(&table.path)
+            };
+
+            let mut counter_reader = generate_reader()?;
 
             let row_address_factory = RowAddressFactory::new(table.page_size);
-            let pages = reader.records().count() / table.page_size;
+            let pages = counter_reader.records().count() / table.page_size;
 
             let out_path = Path::new(path.as_ref()).join(name);
             fs::create_dir(&out_path)?;
+
+            let mut reader = generate_reader()?;
 
             let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
 
@@ -86,7 +93,7 @@ fn render_page<P: AsRef<Path>>(
 
     context.insert("data", &json!(compressed_data).to_string());
     context.insert("titles", &titles.iter().collect_vec());
-    context.insert("page", &page_index);
+    context.insert("current_page", &page_index);
     context.insert("pages", &pages);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
     context.insert("version", &env!("CARGO_PKG_VERSION"));
@@ -94,7 +101,7 @@ fn render_page<P: AsRef<Path>>(
     let file_path = Path::new(output_path.as_ref())
         .join(Path::new(&format!("index_{}", page_index)).with_extension("html"));
 
-    let html = templates.render("csv_report.html.tera", &context)?;
+    let html = templates.render("index.html.tera", &context)?;
 
     let mut file = fs::File::create(file_path)?;
     file.write_all(html.as_bytes())?;
