@@ -4,6 +4,7 @@ pub(crate) mod utils;
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
 use crate::spec::TablesSpec;
+use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
 use anyhow::Result;
 use chrono::{DateTime, Local};
@@ -11,6 +12,7 @@ use csv::{Reader, StringRecord};
 use itertools::Itertools;
 use lz_str::compress_to_utf16;
 use serde_json::json;
+use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -44,7 +46,6 @@ impl Renderer for TableRenderer {
             fs::create_dir(&out_path)?;
 
             let mut reader = generate_reader()?;
-
             let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
 
             for (page, grouped_records) in &reader
@@ -65,7 +66,7 @@ impl Renderer for TableRenderer {
                     &headers,
                 )?;
             }
-
+            render_table_javascript(&out_path, &headers, &table.path, table.separator)?;
             render_plots(&out_path, &table.path, table.separator)?;
         }
         Ok(())
@@ -105,6 +106,40 @@ fn render_page<P: AsRef<Path>>(
 
     let mut file = fs::File::create(file_path)?;
     file.write_all(html.as_bytes())?;
+
+    Ok(())
+}
+
+fn render_table_javascript<P: AsRef<Path>>(
+    output_path: P,
+    titles: &Vec<String>,
+    csv_path: &Path,
+    separator: char,
+) -> Result<()> {
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "table.js.tera",
+        include_str!("../../../templates/table.js.tera"),
+    )?;
+    let mut context = Context::new();
+
+    let numeric: HashMap<String, bool> = classify_table(csv_path, separator)?
+        .iter()
+        .map(|(k, v)| (k.to_owned(), *v != ColumnType::String))
+        .collect();
+
+    context.insert("titles", &titles.iter().collect_vec());
+    // Ignore formatter for now
+    let formatter: Option<HashMap<&str, &str>> = None;
+    context.insert("formatter", &formatter);
+    context.insert("num", &numeric);
+
+    let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
+
+    let js = templates.render("table.js.tera", &context)?;
+
+    let mut file = fs::File::create(file_path)?;
+    file.write_all(js.as_bytes())?;
 
     Ok(())
 }

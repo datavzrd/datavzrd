@@ -1,0 +1,10 @@
+.sym { cursor: pointer; }
+.table-container { display: none; }
+.loading { height: 100%; padding-top: 25%;}
+.active-row { background: lightgray !important; }
+th { white-space: nowrap; }
+#table { max-width: 90%; }
+td:hover { background: lightgray }
+.btn-sm { position: absolute; top: 3px; right: 3px; display: none}
+td:hover .btn-sm { display: table }
+td { position: relative }

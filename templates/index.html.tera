@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap-table.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/csv_report.css">
+    <link rel="stylesheet" type="text/css" href="../static/datavzrd.css">
 </head>
 
 <body>
@@ -16,13 +16,16 @@
 <script src="../static/vega-lite.min.js"></script>
 <script src="../static/vega-embed.min.js"></script>
 <script src="../static/lz-string.min.js"></script>
-<script src="../data/index{{ current_page }}.js"></script>
-<script src="../stat/csv_report.js"></script>
+<script src="table.js"></script>
 {% for title in titles %}
-<script src="../plots/plot_{{ loop.index0 }}.js"></script>
-{% endfor %}
+<script src="plots/plot_{{ loop.index0 }}.js"></script>{% endfor %}
+
+<script>
+    const data = {{ data | safe }};
+</script>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">rbt report</a>
+    <a class="navbar-brand" href="#">datavzrd</a>
     <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
@@ -40,15 +43,15 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarText2">
         <ul class="navbar-nav mr-auto">
-            <li><a href="index{{ current_page}}.html">csv-report</a></li>
+            <li><a href="index{{ current_page}}.html">datavzrd</a></li>
         </ul>
-        <span class="pull-right">
+        <!--<span class="pull-right">
             <a class="pull-right nav-link" href="../report.xlsx" download>
                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-arrow-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7 2l.5-2.5 3 3L10 5a1 1 0 0 1-1-1zm-.5 3.5a.5.5 0 0 0-1 0v3.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 11.293V7.5z"/>
                 </svg>
             </a>
-        </span>
+        </span>-->
     </div>
 </nav>
 <div class="container-fluid">
