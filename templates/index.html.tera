@@ -104,16 +104,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {# {% if is_reasonable[title] %}
+                {# {% if is_reasonable[title] %} #}
                 <div class="modal-body">
                     <div id="plot_{{ loop.index0 }}" style="width: 100%; height: 300px; border:none;">
                     </div>
                 </div>
-                {% else %} #}
-                <div class="modal-body">
+                {# {% else %}
+                <div class="modal-body"> // TODO: Think about how to solve this in the most elegant way
                     <p>Too many values to plot a reasonable histogram.</p>
                 </div>
-                {# {% endif %} #}
+                {% endif %} #}
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>

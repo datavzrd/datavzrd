@@ -9,6 +9,8 @@ use std::io::Write;
 use std::path::Path;
 use std::str::FromStr;
 use tera::{Context, Tera};
+use csv::Reader;
+use std::fs::File;
 
 pub(crate) fn render_plots<P: AsRef<Path>>(
     output_path: P,
@@ -61,15 +63,21 @@ fn generate_numeric_plot(
     separator: char,
     column_index: usize,
 ) -> Result<Vec<BinnedPlotRecord>> {
-    let mut reader = csv::ReaderBuilder::new()
-        .delimiter(separator as u8)
-        .from_path(path)?;
+    let generate_reader = || -> csv::Result<Reader<File>> {
+        csv::ReaderBuilder::new()
+            .delimiter(separator as u8)
+            .from_path(&path)
+    };
 
-    let min = reader
+    let mut min_reader = generate_reader()?;
+    let mut max_reader = generate_reader()?;
+    let mut reader = generate_reader()?;
+
+    let min = min_reader
         .records()
         .map(|r| f32::from_str(r.unwrap().get(column_index).unwrap()).unwrap())
         .fold(f32::INFINITY, |a, b| a.min(b));
-    let max = reader
+    let max = max_reader
         .records()
         .map(|r| f32::from_str(r.unwrap().get(column_index).unwrap()).unwrap())
         .fold(f32::NEG_INFINITY, |a, b| a.max(b));
@@ -104,6 +112,7 @@ fn generate_numeric_plot(
             value: nan,
         })
     }
+
     Ok(result)
 }
 
