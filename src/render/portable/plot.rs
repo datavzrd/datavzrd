@@ -1,16 +1,16 @@
 use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::Result;
+use csv::Reader;
 use itertools::Itertools;
 use serde::Serialize;
 use serde_json::json;
 use std::collections::HashMap;
 use std::fs;
+use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use std::str::FromStr;
 use tera::{Context, Tera};
-use csv::Reader;
-use std::fs::File;
 
 pub(crate) fn render_plots<P: AsRef<Path>>(
     output_path: P,
