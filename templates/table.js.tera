@@ -13,7 +13,7 @@ $(document).ready(function() {
     });
     var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
 
-    var format = {% if formatter %}{{ formatter }}{% else %}[];{% endif %}
+    var format = {% if formatter %}{{ '{' }}{% for f,v in formatter %}"{{ f }}":{{ v }}{% if not loop.last %},{% endif %}{% endfor %}{{ '}' }}{% else %}[];{% endif %}
 
     var he = $( window ).height() - 150;
 

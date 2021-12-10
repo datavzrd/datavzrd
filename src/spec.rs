@@ -36,14 +36,14 @@ pub(crate) struct TableSpec {
     #[serde(default = "default_page_size")]
     pub(crate) page_size: usize,
     #[serde(default)]
-    render_columns: HashMap<String, RenderColumnSpec>,
+    pub(crate) render_columns: HashMap<String, RenderColumnSpec>,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct RenderColumnSpec {
     #[serde(default)]
-    custom: Option<String>,
+    pub(crate) custom: Option<String>,
     #[serde(default)]
     link_to_table_row: Option<String>,
     #[serde(default)]

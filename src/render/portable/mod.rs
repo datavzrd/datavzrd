@@ -3,7 +3,7 @@ pub(crate) mod utils;
 
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
-use crate::spec::TablesSpec;
+use crate::spec::{RenderColumnSpec, TablesSpec};
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
 use anyhow::Result;
@@ -66,7 +66,13 @@ impl Renderer for TableRenderer {
                     &headers,
                 )?;
             }
-            render_table_javascript(&out_path, &headers, &table.path, table.separator)?;
+            render_table_javascript(
+                &out_path,
+                &headers,
+                &table.path,
+                table.separator,
+                &table.render_columns,
+            )?;
             render_plots(&out_path, &table.path, table.separator)?;
         }
         Ok(())
@@ -115,6 +121,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     titles: &Vec<String>,
     csv_path: &Path,
     separator: char,
+    render_columns: &HashMap<String, RenderColumnSpec>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -123,15 +130,19 @@ fn render_table_javascript<P: AsRef<Path>>(
     )?;
     let mut context = Context::new();
 
+    let formatters: HashMap<String, String> = render_columns
+        .iter()
+        .filter(|(_, k)| k.custom.is_some())
+        .map(|(k, v)| (k.to_owned(), v.custom.as_ref().unwrap().to_owned()))
+        .collect();
+
     let numeric: HashMap<String, bool> = classify_table(csv_path, separator)?
         .iter()
         .map(|(k, v)| (k.to_owned(), *v != ColumnType::String))
         .collect();
 
     context.insert("titles", &titles.iter().collect_vec());
-    // Ignore formatter for now
-    let formatter: Option<HashMap<&str, &str>> = None;
-    context.insert("formatter", &formatter);
+    context.insert("formatter", &Some(formatters));
     context.insert("num", &numeric);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
