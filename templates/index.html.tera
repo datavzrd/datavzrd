@@ -45,13 +45,18 @@
         <ul class="navbar-nav mr-auto">
             <li><a href="index_{{ current_page}}.html">datavzrd</a></li>
         </ul>
-        <!--<span class="pull-right">
-            <a class="pull-right nav-link" href="../report.xlsx" download>
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-arrow-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7 2l.5-2.5 3 3L10 5a1 1 0 0 1-1-1zm-.5 3.5a.5.5 0 0 0-1 0v3.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 11.293V7.5z"/>
-                </svg>
-            </a>
-        </span>-->
+        <span class="pull-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                tables
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    {% for table in tables %}
+                    <a class="dropdown-item" href="../{{ table }}/index_1.html">{{ table }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </span>
     </div>
 </nav>
 <div class="container-fluid">
