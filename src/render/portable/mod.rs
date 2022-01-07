@@ -57,7 +57,7 @@ impl Renderer for TableRenderer {
                 let records = grouped_records.collect_vec();
                 render_page(
                     &out_path,
-                    page,
+                    page + 1,
                     pages,
                     records
                         .iter()

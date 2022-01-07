@@ -43,7 +43,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarText2">
         <ul class="navbar-nav mr-auto">
-            <li><a href="index{{ current_page}}.html">datavzrd</a></li>
+            <li><a href="index_{{ current_page}}.html">datavzrd</a></li>
         </ul>
         <!--<span class="pull-right">
             <a class="pull-right nav-link" href="../report.xlsx" download>
@@ -74,17 +74,17 @@
                 <ul class="pagination justify-content-start">
                     {% if current_page > 1 %}
                     {% if current_page != 2 %}
-                    <li class="page-item"><a class="page-link" href="index1.html">First</a></li>
+                    <li class="page-item"><a class="page-link" href="index_1.html">First</a></li>
                     <li class="page-item disabled"><a class="page-link" href="">...</a></li>
                     {% endif %}
-                    <li class="page-item"><a class="page-link" href="index{{ current_page - 1 }}.html">{{  current_page - 1 }}</a></li>
+                    <li class="page-item"><a class="page-link" href="index_{{ current_page - 1 }}.html">{{  current_page - 1 }}</a></li>
                     {% endif %}
-                    <li class="page-item active"><a class="page-link" href="index{{ current_page }}.html">{{  current_page  }}</a></li>
+                    <li class="page-item active"><a class="page-link" href="index_{{ current_page }}.html">{{  current_page  }}</a></li>
                     {% if current_page < pages %}
-                    <li class="page-item"><a class="page-link" href="index{{ current_page + 1 }}.html">{{  current_page + 1 }}</a></li>
+                    <li class="page-item"><a class="page-link" href="index_{{ current_page + 1 }}.html">{{  current_page + 1 }}</a></li>
                     {% if current_page != (pages - 1) %}
                     <li class="page-item disabled"><a class="page-link" href="">...</a></li>
-                    <li class="page-item"><a class="page-link" href="index{{ pages }}.html">Last</a></li>
+                    <li class="page-item"><a class="page-link" href="index_{{ pages }}.html">Last</a></li>
                     {% endif %}
                     {% endif %}
                 </ul>
