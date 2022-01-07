@@ -193,6 +193,7 @@ dependencies = [
  "derive-new",
  "itertools",
  "lz-str",
+ "ndhistogram",
  "serde",
  "serde_json",
  "serde_yaml",
@@ -424,6 +425,16 @@ name = "memchr"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
+
+[[package]]
+name = "ndhistogram"
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "80e7df27db1bc5bc0f095d2ccbb587acb79afb1c179d756dbff4eacbe4e75fb8"
+dependencies = [
+ "num-traits",
+ "serde",
+]
 
 [[package]]
 name = "num-integer"

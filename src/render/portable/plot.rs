@@ -2,6 +2,8 @@ use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::Result;
 use csv::Reader;
 use itertools::Itertools;
+use ndhistogram::axis::Uniform;
+use ndhistogram::{ndhistogram, Histogram};
 use serde::Serialize;
 use serde_json::json;
 use std::collections::HashMap;
@@ -81,29 +83,24 @@ fn generate_numeric_plot(
         .records()
         .map(|r| f32::from_str(r.unwrap().get(column_index).unwrap()).unwrap())
         .fold(f32::NEG_INFINITY, |a, b| a.max(b));
-    let step = (max - min) / NUMERIC_BINS as f32;
 
-    let mut bins = vec![0_u32; NUMERIC_BINS];
+    let mut hist = ndhistogram!(Uniform::new(NUMERIC_BINS, min, max));
     let mut nan = 0;
 
     for r in reader.records() {
         let record = r?;
         let value = record.get(column_index).unwrap();
         if let Ok(number) = f32::from_str(value) {
-            bins[((number - min) / step).trunc() as usize] += 1;
+            hist.fill(&number)
         } else {
             nan += 1;
         }
     }
 
-    let mut result = Vec::new();
-    for (i, bin) in bins.iter().enumerate() {
-        result.push(BinnedPlotRecord {
-            bin_start: min + i as f32 * step,
-            bin_end: min + (i + 1) as f32 * step,
-            value: *bin,
-        })
-    }
+    let mut result = hist
+        .iter()
+        .map(|h| BinnedPlotRecord::new(h.bin.start(), h.bin.end(), *h.value))
+        .collect_vec();
 
     if nan > 0 {
         result.push(BinnedPlotRecord {
@@ -170,6 +167,16 @@ struct BinnedPlotRecord {
     bin_start: f32,
     bin_end: f32,
     value: u32,
+}
+
+impl BinnedPlotRecord {
+    fn new(start: Option<f32>, end: Option<f32>, value: f64) -> BinnedPlotRecord {
+        BinnedPlotRecord {
+            bin_start: start.unwrap_or_else(|| f32::NEG_INFINITY),
+            bin_end: end.unwrap_or_else(|| f32::INFINITY),
+            value: value as u32,
+        }
+    }
 }
 
 #[cfg(test)]
