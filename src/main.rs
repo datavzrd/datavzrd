@@ -1,4 +1,4 @@
-use crate::render::portable::utils::render_static_files;
+use crate::render::portable::utils::{render_index_file, render_static_files};
 use crate::render::portable::TableRenderer;
 use crate::render::Renderer;
 use crate::spec::TablesSpec;
@@ -13,7 +13,7 @@ pub(crate) mod utils;
 fn main() -> Result<()> {
     let opt = cli::Datavzrd::from_args();
     let config = TablesSpec::from_file(opt.config).unwrap();
-
+    render_index_file(&opt.output, &config)?;
     render_static_files(&opt.output)?;
 
     let renderer = TableRenderer::builder().specs(config).build();

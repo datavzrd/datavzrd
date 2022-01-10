@@ -94,8 +94,8 @@ fn render_page<P: AsRef<Path>>(
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
-        "index.html.tera",
-        include_str!("../../../templates/index.html.tera"),
+        "table.html.tera",
+        include_str!("../../../templates/table.html.tera"),
     )?;
     let mut context = Context::new();
 
@@ -120,7 +120,7 @@ fn render_page<P: AsRef<Path>>(
     let file_path = Path::new(output_path.as_ref())
         .join(Path::new(&format!("index_{}", page_index)).with_extension("html"));
 
-    let html = templates.render("index.html.tera", &context)?;
+    let html = templates.render("table.html.tera", &context)?;
 
     let mut file = fs::File::create(file_path)?;
     file.write_all(html.as_bytes())?;
