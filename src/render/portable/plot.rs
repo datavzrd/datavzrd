@@ -189,6 +189,7 @@ mod tests {
             generate_nominal_plot("tests/data/uniform_datatypes.csv".as_ref(), ',', 0)
                 .unwrap()
                 .unwrap();
+        records.sort_unstable();
         let mut expected = vec![
             PlotRecord {
                 key: String::from("George"),
@@ -203,6 +204,7 @@ mod tests {
                 value: 1,
             },
         ];
-        assert_eq!(records.sort(), expected.sort());
+        expected.sort_unstable();
+        assert_eq!(records, expected);
     }
 }
