@@ -15,7 +15,7 @@ $(document).ready(function() {
 
     var format = {% if formatter %}{{ '{' }}{% for f,v in formatter %}"{{ f }}":{{ v }}{% if not loop.last %},{% endif %}{% endfor %}{{ '}' }}{% else %}[];{% endif %}
 
-    var he = $( window ).height() - 150;
+    var he = $( window ).height() - 195;
 
     $('#table').bootstrapTable({
         height: he,
