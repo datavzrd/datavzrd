@@ -45,11 +45,11 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) custom: Option<String>,
     #[serde(default)]
-    link_to_table_row: Option<String>,
+    pub(crate) link_to_table_row: Option<String>,
     #[serde(default)]
-    link_to_table: Option<String>,
+    pub(crate) link_to_table: Option<String>,
     #[serde(default)]
-    link_to_url: Option<String>,
+    pub(crate) link_to_url: Option<String>,
     #[serde(default)]
     plot: Option<PlotSpec>,
     #[serde(default)]

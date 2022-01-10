@@ -64,6 +64,9 @@ impl Renderer for TableRenderer {
                         .map(|(_, records)| records.as_ref().unwrap())
                         .collect_vec(),
                     &headers,
+                    &self.specs.tables.keys().map(|s| s.to_owned()).collect_vec(),
+                    &table.render_columns,
+                    name,
                 )?;
             }
             render_table_javascript(
@@ -85,6 +88,9 @@ fn render_page<P: AsRef<Path>>(
     pages: usize,
     data: Vec<&StringRecord>,
     titles: &Vec<String>,
+    tables: &Vec<String>,
+    render_columns: &HashMap<String, RenderColumnSpec>,
+    name: &str
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -93,7 +99,7 @@ fn render_page<P: AsRef<Path>>(
     )?;
     let mut context = Context::new();
 
-    let data = data.iter().map(|s| s.iter().collect_vec()).collect_vec();
+    let data = data.iter().map(|s| s.iter().collect_vec()).map(|r| link_columns(render_columns, titles, r)).collect_vec();
     let compressed_data = compress_to_utf16(&json!(data).to_string());
 
     let local: DateTime<Local> = Local::now();
@@ -102,6 +108,8 @@ fn render_page<P: AsRef<Path>>(
     context.insert("titles", &titles.iter().collect_vec());
     context.insert("current_page", &page_index);
     context.insert("pages", &pages);
+    context.insert("tables", tables);
+    context.insert("name", name);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
     context.insert("version", &env!("CARGO_PKG_VERSION"));
 
@@ -153,4 +161,25 @@ fn render_table_javascript<P: AsRef<Path>>(
     file.write_all(js.as_bytes())?;
 
     Ok(())
+}
+
+
+fn link_columns(render_columns: &HashMap<String, RenderColumnSpec>, titles: &Vec<String>, column: Vec<&str>) -> Vec<String> {
+    let mut result = Vec::new();
+    for (i,title) in titles.iter().enumerate() {
+        if let Some(render_column) = render_columns.get(title) {
+            if let Some(link) = render_column.link_to_url.clone() {
+                result.push(format!("<a href='{}' target='_blank' >{}</a>", link.replace("{value}", column[i]), column[i]));
+            } else if let Some(table) = render_column.link_to_table.clone() {
+                result.push(format!("<a href='../{}/index_1.html'>{}</a>", table.replace("{value}", column[i]), column[i]));
+            } else if let Some(_table_row) = render_column.link_to_table_row.clone() {
+                result.push(column[i].to_string()); // TODO: Implement link-to-table-row
+            } else {
+                result.push(column[i].to_string());
+            }
+        } else {
+            result.push(column[i].to_string());
+        }
+    }
+    result
 }

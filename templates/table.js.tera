@@ -36,7 +36,7 @@ $(document).ready(function() {
         row = {};
         for (const element of r) {
             var el = element;
-            if (element.length > 30 && format[columns[i]] == undefined) {
+            if (element.length > 30 && format[columns[i]] == undefined && !element.includes("<a href=")) {
                 el = `${element.substring(0,30)}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${element}</div>'>...</a>`;
             }
             if (num[i]) {
