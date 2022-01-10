@@ -172,8 +172,8 @@ struct BinnedPlotRecord {
 impl BinnedPlotRecord {
     fn new(start: Option<f32>, end: Option<f32>, value: f64) -> BinnedPlotRecord {
         BinnedPlotRecord {
-            bin_start: start.unwrap_or_else(|| f32::NEG_INFINITY),
-            bin_end: end.unwrap_or_else(|| f32::INFINITY),
+            bin_start: start.unwrap_or(f32::NEG_INFINITY),
+            bin_end: end.unwrap_or(f32::INFINITY),
             value: value as u32,
         }
     }
