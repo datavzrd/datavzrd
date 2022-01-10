@@ -167,7 +167,6 @@ fn render_table_javascript<P: AsRef<Path>>(
     Ok(())
 }
 
-
 #[allow(clippy::if_same_then_else)]
 fn link_columns(
     render_columns: &HashMap<String, RenderColumnSpec>,
