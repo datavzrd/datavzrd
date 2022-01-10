@@ -4,7 +4,7 @@ use serde::Serialize;
 #[derive(new, Debug, Clone, Serialize, PartialEq)]
 pub(crate) struct RowAddress {
     pub(crate) page: usize,
-    row: usize,
+    pub(crate) row: usize,
 }
 
 #[derive(new, Debug, Clone)]

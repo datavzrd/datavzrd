@@ -40,7 +40,10 @@ impl Renderer for TableRenderer {
             let mut counter_reader = generate_reader()?;
 
             let row_address_factory = RowAddressFactory::new(table.page_size);
-            let pages = counter_reader.records().count() / table.page_size;
+            let pages = row_address_factory
+                .get(counter_reader.records().count() - 1)
+                .page
+                + 1;
 
             let out_path = Path::new(path.as_ref()).join(name);
             fs::create_dir(&out_path)?;
@@ -77,6 +80,13 @@ impl Renderer for TableRenderer {
                 &table.render_columns,
             )?;
             render_plots(&out_path, &table.path, table.separator)?;
+            render_search_dialogs(
+                &out_path,
+                &headers,
+                &table.path,
+                table.separator,
+                table.page_size,
+            )?;
         }
         Ok(())
     }
@@ -198,4 +208,49 @@ fn link_columns(
         }
     }
     result
+}
+
+fn render_search_dialogs<P: AsRef<Path>>(
+    path: P,
+    titles: &Vec<String>,
+    csv_path: &Path,
+    separator: char,
+    page_size: usize,
+) -> Result<()> {
+    let output_path = Path::new(path.as_ref()).join("search");
+    fs::create_dir(&output_path)?;
+    for (column, title) in titles.iter().enumerate() {
+        let mut reader = csv::ReaderBuilder::new()
+            .delimiter(separator as u8)
+            .from_path(csv_path)?;
+
+        let row_address_factory = RowAddressFactory::new(page_size);
+
+        let records = &reader
+            .records()
+            .map(|row| row.unwrap())
+            .map(|row| row.get(column).unwrap().to_string())
+            .enumerate()
+            .map(|(i, row)| (row, row_address_factory.get(i)))
+            .map(|(row, address)| (row, address.page + 1, address.row))
+            .collect_vec();
+
+        let mut templates = Tera::default();
+        templates.add_raw_template(
+            "search_dialog.html.tera",
+            include_str!("../../../templates/search_dialog.html.tera"),
+        )?;
+        let mut context = Context::new();
+        context.insert("records", &records);
+        context.insert("title", &title);
+
+        let file_path = Path::new(&output_path)
+            .join(Path::new(&format!("column_{}", column)).with_extension("html"));
+
+        let html = templates.render("search_dialog.html.tera", &context)?;
+
+        let mut file = fs::File::create(file_path)?;
+        file.write_all(html.as_bytes())?;
+    }
+    Ok(())
 }

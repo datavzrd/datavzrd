@@ -135,7 +135,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <iframe src="../prefixes/col_{{ loop.index0 }}.html" frameBorder="0" style="width: 100%; height: min(530px, 50vh)"></iframe>
+                    <iframe src="search/column_{{ loop.index0 }}.html" frameBorder="0" style="width: 100%; height: min(530px, 50vh)"></iframe>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
