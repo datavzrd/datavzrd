@@ -167,6 +167,8 @@ fn render_table_javascript<P: AsRef<Path>>(
     Ok(())
 }
 
+
+#[allow(clippy::if_same_then_else)]
 fn link_columns(
     render_columns: &HashMap<String, RenderColumnSpec>,
     titles: &Vec<String>,
@@ -188,7 +190,7 @@ fn link_columns(
                     column[i]
                 ));
             } else if let Some(_table_row) = render_column.link_to_table_row.clone() {
-                result.push(column[i].to_string()); // TODO: Implement link-to-table-row
+                result.push(column[i].to_string()); // TODO: Implement link-to-table-row and remove #[allow(clippy::if_same_then_else)]
             } else {
                 result.push(column[i].to_string());
             }
