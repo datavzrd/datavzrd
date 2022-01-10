@@ -90,7 +90,7 @@ fn render_page<P: AsRef<Path>>(
     titles: &Vec<String>,
     tables: &Vec<String>,
     render_columns: &HashMap<String, RenderColumnSpec>,
-    name: &str
+    name: &str,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -99,7 +99,11 @@ fn render_page<P: AsRef<Path>>(
     )?;
     let mut context = Context::new();
 
-    let data = data.iter().map(|s| s.iter().collect_vec()).map(|r| link_columns(render_columns, titles, r)).collect_vec();
+    let data = data
+        .iter()
+        .map(|s| s.iter().collect_vec())
+        .map(|r| link_columns(render_columns, titles, r))
+        .collect_vec();
     let compressed_data = compress_to_utf16(&json!(data).to_string());
 
     let local: DateTime<Local> = Local::now();
@@ -163,15 +167,26 @@ fn render_table_javascript<P: AsRef<Path>>(
     Ok(())
 }
 
-
-fn link_columns(render_columns: &HashMap<String, RenderColumnSpec>, titles: &Vec<String>, column: Vec<&str>) -> Vec<String> {
+fn link_columns(
+    render_columns: &HashMap<String, RenderColumnSpec>,
+    titles: &Vec<String>,
+    column: Vec<&str>,
+) -> Vec<String> {
     let mut result = Vec::new();
-    for (i,title) in titles.iter().enumerate() {
+    for (i, title) in titles.iter().enumerate() {
         if let Some(render_column) = render_columns.get(title) {
             if let Some(link) = render_column.link_to_url.clone() {
-                result.push(format!("<a href='{}' target='_blank' >{}</a>", link.replace("{value}", column[i]), column[i]));
+                result.push(format!(
+                    "<a href='{}' target='_blank' >{}</a>",
+                    link.replace("{value}", column[i]),
+                    column[i]
+                ));
             } else if let Some(table) = render_column.link_to_table.clone() {
-                result.push(format!("<a href='../{}/index_1.html'>{}</a>", table.replace("{value}", column[i]), column[i]));
+                result.push(format!(
+                    "<a href='../{}/index_1.html'>{}</a>",
+                    table.replace("{value}", column[i]),
+                    column[i]
+                ));
             } else if let Some(_table_row) = render_column.link_to_table_row.clone() {
                 result.push(column[i].to_string()); // TODO: Implement link-to-table-row
             } else {
