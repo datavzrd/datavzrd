@@ -7,7 +7,7 @@ use crate::utils::row_address::{RowAddress, RowAddressFactory};
 
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) struct ColumnIndex {
-    index: HashMap<String, RowAddress>,
+    pub(crate) index: HashMap<String, RowAddress>,
 }
 
 impl ColumnIndex {

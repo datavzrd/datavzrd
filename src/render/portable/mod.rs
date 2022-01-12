@@ -21,13 +21,14 @@ use std::path::Path;
 use tera::{Context, Tera};
 use thiserror::Error;
 use typed_builder::TypedBuilder;
+use crate::utils::column_index::ColumnIndex;
 
 #[derive(TypedBuilder, Debug)]
 pub(crate) struct TableRenderer {
     specs: TablesSpec,
 }
 
-type LinkedTable = HashMap<(String, String), HashMap<String, (usize, usize)>>;
+type LinkedTable = HashMap<(String, String), ColumnIndex>;
 
 impl Renderer for TableRenderer {
     fn render_tables<P>(&self, path: P) -> Result<()>
@@ -99,13 +100,14 @@ impl Renderer for TableRenderer {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn render_page<P: AsRef<Path>>(
     output_path: P,
     page_index: usize,
     pages: usize,
     data: Vec<&StringRecord>,
-    titles: &Vec<String>,
-    tables: &Vec<String>,
+    titles: &[String],
+    tables: &[String],
     render_columns: &HashMap<String, RenderColumnSpec>,
     name: &str,
     linked_tables: &LinkedTable,
@@ -148,7 +150,7 @@ fn render_page<P: AsRef<Path>>(
 
 fn render_table_javascript<P: AsRef<Path>>(
     output_path: P,
-    titles: &Vec<String>,
+    titles: &[String],
     csv_path: &Path,
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
@@ -187,7 +189,7 @@ fn render_table_javascript<P: AsRef<Path>>(
 
 fn link_columns(
     render_columns: &HashMap<String, RenderColumnSpec>,
-    titles: &Vec<String>,
+    titles: &[String],
     column: Vec<&str>,
     linked_tables: &LinkedTable,
 ) -> Result<Vec<String>> {
@@ -211,7 +213,7 @@ fn link_columns(
                 let linked_values = linked_tables
                     .get(&(table.to_string(), linked_column.to_string()))
                     .unwrap();
-                let linked_value = match linked_values.get(column[i]) {
+                let linked_value = match linked_values.index.get(column[i]) {
                     Some(value) => value,
                     None => {
                         bail!(TableLinkingError::NotFound {
@@ -224,8 +226,8 @@ fn link_columns(
                 result.push(format!(
                     "<a href='../{}/index_{}.html?highlight={}'>{}</a>",
                     table,
-                    linked_value.0 + 1,
-                    linked_value.1,
+                    linked_value.page + 1,
+                    linked_value.row,
                     column[i],
                 ));
             } else {
@@ -240,7 +242,7 @@ fn link_columns(
 
 fn render_search_dialogs<P: AsRef<Path>>(
     path: P,
-    titles: &Vec<String>,
+    titles: &[String],
     csv_path: &Path,
     separator: char,
     page_size: usize,
@@ -299,23 +301,9 @@ fn get_linked_tables(table: &str, specs: &TablesSpec) -> Result<LinkedTable> {
         let separator = specs.tables.get(*table).unwrap().separator;
         let page_size = specs.tables.get(*table).unwrap().page_size;
 
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(separator as u8)
-            .from_path(path)?;
-        let headers = reader.headers()?.iter().collect_vec();
-        let column_index = headers.iter().position(|x| x == column).unwrap();
-        let row_address_factory = RowAddressFactory::new(page_size);
+        let column_index = ColumnIndex::new(path, separator, column, page_size)?;
 
-        let values: HashMap<_, _> = reader
-            .records()
-            .map(|r| r.unwrap())
-            .map(|r| r.get(column_index).unwrap().to_string())
-            .enumerate()
-            .map(|(i, r)| (r, row_address_factory.get(i)))
-            .map(|(record, row_address)| (record, (row_address.page, row_address.row)))
-            .collect();
-
-        result.insert((table.to_string(), column.to_string()), values);
+        result.insert((table.to_string(), column.to_string()), column_index);
     }
     Ok(result)
 }
