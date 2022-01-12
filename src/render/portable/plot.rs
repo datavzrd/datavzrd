@@ -14,6 +14,7 @@ use std::path::Path;
 use std::str::FromStr;
 use tera::{Context, Tera};
 
+/// Renders plots to javascript file
 pub(crate) fn render_plots<P: AsRef<Path>>(
     output_path: P,
     csv_path: &Path,
@@ -60,6 +61,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
     Ok(())
 }
 
+/// Generates plot records for columns of types Float and Integer
 fn generate_numeric_plot(
     path: &Path,
     separator: char,
@@ -113,6 +115,7 @@ fn generate_numeric_plot(
     Ok(result)
 }
 
+/// Generates plot records for columns of type String
 fn generate_nominal_plot(
     path: &Path,
     separator: char,

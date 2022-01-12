@@ -31,6 +31,7 @@ pub(crate) struct TableRenderer {
 type LinkedTable = HashMap<(String, String), ColumnIndex>;
 
 impl Renderer for TableRenderer {
+    /// Render all tables of user config
     fn render_tables<P>(&self, path: P) -> Result<()>
     where
         P: AsRef<Path>,
@@ -101,6 +102,7 @@ impl Renderer for TableRenderer {
 }
 
 #[allow(clippy::too_many_arguments)]
+/// Render single page of a table
 fn render_page<P: AsRef<Path>>(
     output_path: P,
     page_index: usize,
@@ -148,6 +150,7 @@ fn render_page<P: AsRef<Path>>(
     Ok(())
 }
 
+/// Render javascript files for each table containing formatters
 fn render_table_javascript<P: AsRef<Path>>(
     output_path: P,
     titles: &[String],
@@ -187,6 +190,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     Ok(())
 }
 
+/// Apply render columns specs to a single table row
 fn link_columns(
     render_columns: &HashMap<String, RenderColumnSpec>,
     titles: &[String],
@@ -240,6 +244,7 @@ fn link_columns(
     Ok(result)
 }
 
+/// Render search dialog modals for individual columns of every table
 fn render_search_dialogs<P: AsRef<Path>>(
     path: P,
     titles: &[String],

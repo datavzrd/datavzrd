@@ -39,6 +39,7 @@ impl ColumnType {
     }
 }
 
+/// Classifies table columns as String, Integer or Float
 pub(crate) fn classify_table<P: AsRef<Path>>(
     path: P,
     separator: char,
