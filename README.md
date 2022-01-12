@@ -8,6 +8,56 @@ Plots can be fully customized by users via a config file. These also allow the u
 
 ```datavzrd config.yaml --output results/```
 
+## Configuring datavzrd
+
+datavzrd allows the user to easily customize it's interactive HTML report via a config file. 
+
+```yaml
+tables:
+  table-a:
+    path: "table-a.csv"
+    render-columns:
+      x:
+        custom: |
+          function(value) {
+            return `<b>${value}</b>`;
+          }
+      y:
+        link-to-url: 'https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={value}'
+      z:
+        link-to-table-row: table-b/gene
+  table-b:
+    path: table-b.csv
+    separator: ;
+    render-columns:
+      gene:
+        link-to-table: 'gene-{value}'
+  gene-mycn:
+    path: genes/table-mycn.csv
+    page-size: 40
+```
+
+### tables
+
+`tables` consists of all different CSV/TSV tables that should be included in the resulting report. Each table definition can contain these values:
+
+| keyword                           | explanation                                  | default |
+|-----------------------------------|----------------------------------------------|---------|
+| path                              | The path of the CSV/TSV file                 |         |
+| separator                         | The delimiter of the file                    | ,       |
+| page-size                         | Number of rows per page                      | 100     |
+| [render-columns](#render-columns) | Configuration of individual column rendering |         |
+
+### render-columns 
+
+`render-columns` contains individual configurations for each column:
+
+| keyword           | explanation                                                                                                 |
+|-------------------|-------------------------------------------------------------------------------------------------------------|
+| link-to-url       | Renders a link to the given url with {value} replace by the value of the table                              |
+| link-to-table     | Renders as link to the given table, not a specific row                                                      |
+| link-to-table-row | Renders as link to the other table highlighting the row in which the gene column has the same value as here |
+
 ## Authors
 
 * [Johannes Köster](https://github.com/johanneskoester) (https://koesterlab.github.io)
