@@ -4,6 +4,7 @@ pub(crate) mod utils;
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
 use crate::spec::{RenderColumnSpec, TablesSpec};
+use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
 use anyhow::bail;
@@ -21,7 +22,6 @@ use std::path::Path;
 use tera::{Context, Tera};
 use thiserror::Error;
 use typed_builder::TypedBuilder;
-use crate::utils::column_index::ColumnIndex;
 
 #[derive(TypedBuilder, Debug)]
 pub(crate) struct TableRenderer {
