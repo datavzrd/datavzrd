@@ -57,6 +57,7 @@ tables:
 | link-to-url       | Renders a link to the given url with {value} replace by the value of the table                              |
 | link-to-table     | Renders as link to the given table, not a specific row                                                      |
 | link-to-table-row | Renders as link to the other table highlighting the row in which the gene column has the same value as here |
+| custom            | Applies the given js function to render column content                                                      |
 
 ## Authors
 
