@@ -61,10 +61,10 @@ impl TableSpec {
             .from_path(&self.path)?;
         let headers = reader.headers()?;
         for (key, render_column_specs) in &self.render_columns {
-            if INDEX.is_match(&key) {
+            if INDEX.is_match(key) {
                 let index = usize::from_str(
                     INDEX
-                        .captures_iter(&key)
+                        .captures_iter(key)
                         .collect_vec()
                         .pop()
                         .unwrap()
@@ -81,8 +81,9 @@ impl TableSpec {
                         })
                     }
                     Some(k) => {
-                        if let Some(_) =
-                            indexed_keys.insert(k.to_string(), render_column_specs.clone())
+                        if indexed_keys
+                            .insert(k.to_string(), render_column_specs.clone())
+                            .is_some()
                         {
                             bail!(ConfigError::DuplicateColumn {
                                 column: k.to_string(),
@@ -91,13 +92,14 @@ impl TableSpec {
                         };
                     }
                 }
-            } else {
-                if let Some(_) = indexed_keys.insert(key.to_string(), render_column_specs.clone()) {
-                    bail!(ConfigError::DuplicateColumn {
-                        column: key.to_string(),
-                        table_path: self.path.clone(),
-                    })
-                };
+            } else if indexed_keys
+                .insert(key.to_string(), render_column_specs.clone())
+                .is_some()
+            {
+                bail!(ConfigError::DuplicateColumn {
+                    column: key.to_string(),
+                    table_path: self.path.clone(),
+                })
             }
         }
         self.render_columns = indexed_keys;
