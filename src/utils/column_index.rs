@@ -41,7 +41,7 @@ impl ColumnIndex {
 
     /// Obtain subset of index given a set of keys. This can e.g. be used to obtain
     /// an index for serialization to JSON for use in a specific page of a foreign table.
-    pub(crate) fn subset<R, K>(&self, keys: K) -> HashMap<String, Option<RowAddress>>
+    pub(crate) fn _subset<R, K>(&self, keys: K) -> HashMap<String, Option<RowAddress>>
     where
         R: AsRef<str>,
         K: Iterator<Item = R>,
