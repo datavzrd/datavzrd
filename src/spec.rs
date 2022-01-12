@@ -1,10 +1,15 @@
+use anyhow::bail;
 use anyhow::Result;
 use derefable::Derefable;
+use itertools::Itertools;
+use lazy_static::lazy_static;
+use regex::Regex;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
+use thiserror::Error;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct TablesSpec {
@@ -15,7 +20,11 @@ pub(crate) struct TablesSpec {
 impl TablesSpec {
     pub(crate) fn from_file<P: AsRef<Path>>(path: P) -> Result<TablesSpec> {
         let config_file = fs::read_to_string(path)?;
-        Ok(serde_yaml::from_str(&config_file)?)
+        let mut tables_spec: TablesSpec = serde_yaml::from_str(&config_file)?;
+        for (_, spec) in tables_spec.tables.iter_mut() {
+            spec.column_index_to_value()?;
+        }
+        Ok(tables_spec)
     }
 }
 
@@ -37,6 +46,63 @@ pub(crate) struct TableSpec {
     pub(crate) page_size: usize,
     #[serde(default)]
     pub(crate) render_columns: HashMap<String, RenderColumnSpec>,
+}
+
+lazy_static! {
+    static ref INDEX: Regex = Regex::new(r"index\(([0-9]+)\)").unwrap();
+}
+
+impl TableSpec {
+    /// Converts columns addressed with index to the actual header values of the table
+    fn column_index_to_value(&mut self) -> Result<()> {
+        let mut indexed_keys = HashMap::new();
+        let mut reader = csv::ReaderBuilder::new()
+            .delimiter(self.separator as u8)
+            .from_path(&self.path)?;
+        let headers = reader.headers()?;
+        for (key, render_column_specs) in &self.render_columns {
+            if INDEX.is_match(&key) {
+                let index = usize::from_str(
+                    INDEX
+                        .captures_iter(&key)
+                        .collect_vec()
+                        .pop()
+                        .unwrap()
+                        .get(1)
+                        .unwrap()
+                        .as_str(),
+                )?;
+                match headers.get(index) {
+                    None => {
+                        bail!(ConfigError::IndexTooLarge {
+                            index,
+                            header_length: headers.len(),
+                            table_path: self.path.clone(),
+                        })
+                    }
+                    Some(k) => {
+                        if let Some(_) =
+                            indexed_keys.insert(k.to_string(), render_column_specs.clone())
+                        {
+                            bail!(ConfigError::DuplicateColumn {
+                                column: k.to_string(),
+                                table_path: self.path.clone(),
+                            })
+                        };
+                    }
+                }
+            } else {
+                if let Some(_) = indexed_keys.insert(key.to_string(), render_column_specs.clone()) {
+                    bail!(ConfigError::DuplicateColumn {
+                        column: key.to_string(),
+                        table_path: self.path.clone(),
+                    })
+                };
+            }
+        }
+        self.render_columns = indexed_keys;
+        Ok(())
+    }
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -70,6 +136,18 @@ pub(crate) struct CustomPlot {
 pub(crate) struct PlotSpec {
     #[serde(rename = "type")]
     plot_type: String,
+}
+
+#[derive(Error, Debug)]
+pub enum ConfigError {
+    #[error("Could not find column with index {index:?} under path {table_path:?} with only {header_length:?} columns.")]
+    IndexTooLarge {
+        index: usize,
+        header_length: usize,
+        table_path: PathBuf,
+    },
+    #[error("Column {column:?} under path {table_path:?} seems to have multiple definitions. Please check your config file.")]
+    DuplicateColumn { column: String, table_path: PathBuf },
 }
 
 #[cfg(test)]
