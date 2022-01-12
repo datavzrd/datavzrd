@@ -3,8 +3,8 @@ use serde::Serialize;
 
 #[derive(new, Debug, Clone, Serialize, PartialEq)]
 pub(crate) struct RowAddress {
-    page: usize,
-    row: usize,
+    pub(crate) page: usize,
+    pub(crate) row: usize,
 }
 
 #[derive(new, Debug, Clone)]

@@ -9,7 +9,7 @@ use std::str::FromStr;
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct TablesSpec {
     #[deref]
-    tables: HashMap<String, TableSpec>,
+    pub(crate) tables: HashMap<String, TableSpec>,
 }
 
 impl TablesSpec {
@@ -23,27 +23,33 @@ fn default_separator() -> char {
     char::from_str(",").unwrap()
 }
 
+fn default_page_size() -> usize {
+    100_usize
+}
+
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct TableSpec {
-    path: PathBuf,
+    pub(crate) path: PathBuf,
     #[serde(default = "default_separator")]
-    separator: char,
+    pub(crate) separator: char,
+    #[serde(default = "default_page_size")]
+    pub(crate) page_size: usize,
     #[serde(default)]
-    render_columns: HashMap<String, RenderColumnSpec>,
+    pub(crate) render_columns: HashMap<String, RenderColumnSpec>,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct RenderColumnSpec {
     #[serde(default)]
-    custom: Option<String>,
+    pub(crate) custom: Option<String>,
     #[serde(default)]
-    link_to_table_row: Option<String>,
+    pub(crate) link_to_table_row: Option<String>,
     #[serde(default)]
-    link_to_table: Option<String>,
+    pub(crate) link_to_table: Option<String>,
     #[serde(default)]
-    link_to_url: Option<String>,
+    pub(crate) link_to_url: Option<String>,
     #[serde(default)]
     plot: Option<PlotSpec>,
     #[serde(default)]
@@ -87,6 +93,7 @@ mod tests {
         let expected_table_spec = TableSpec {
             path: PathBuf::from("test.tsv"),
             separator: ',',
+            page_size: 100,
             render_columns: HashMap::from([(String::from("x"), expected_render_columns)]),
         };
 
@@ -98,6 +105,7 @@ mod tests {
     tables:
         table-a:
             path: test.tsv
+            page-size: 100
             render-columns:
                 x:
                     link-to-table-row: some-value

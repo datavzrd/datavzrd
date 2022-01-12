@@ -5,7 +5,7 @@ use std::path::Path;
 use std::str::FromStr;
 
 #[derive(Debug, PartialEq)]
-enum ColumnType {
+pub(crate) enum ColumnType {
     None,
     String,
     Integer,
@@ -39,7 +39,11 @@ impl ColumnType {
     }
 }
 
-fn classify_table<P: AsRef<Path>>(path: P, separator: char) -> Result<HashMap<String, ColumnType>> {
+/// Classifies table columns as String, Integer or Float
+pub(crate) fn classify_table<P: AsRef<Path>>(
+    path: P,
+    separator: char,
+) -> Result<HashMap<String, ColumnType>> {
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
         .from_path(path)?;

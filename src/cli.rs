@@ -10,7 +10,7 @@ pub struct Datavzrd {
     // The number of occurrences of the `v/verbose` flag
     /// Verbose mode (-v, -vv, -vvv, etc.)
     #[structopt(short, long, parse(from_occurrences))]
-    pub(crate) verbose: u8,
+    pub(crate) _verbose: u8,
 
     /// Config file containing file paths and settings
     #[structopt(name = "CONFIG", parse(from_os_str))]

@@ -4,11 +4,10 @@ use std::path::Path;
 use anyhow::Result;
 
 use crate::utils::row_address::{RowAddress, RowAddressFactory};
-use std::str::FromStr;
 
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) struct ColumnIndex {
-    index: HashMap<String, RowAddress>,
+    pub(crate) index: HashMap<String, RowAddress>,
 }
 
 impl ColumnIndex {
@@ -42,7 +41,7 @@ impl ColumnIndex {
 
     /// Obtain subset of index given a set of keys. This can e.g. be used to obtain
     /// an index for serialization to JSON for use in a specific page of a foreign table.
-    pub(crate) fn subset<R, K>(&self, keys: K) -> HashMap<String, Option<RowAddress>>
+    pub(crate) fn _subset<R, K>(&self, keys: K) -> HashMap<String, Option<RowAddress>>
     where
         R: AsRef<str>,
         K: Iterator<Item = R>,
@@ -76,7 +75,7 @@ mod tests {
         let expected_column_index = ColumnIndex {
             index: HashMap::from([
                 (String::from("Delia"), RowAddress::new(0, 0)),
-                (String::from("Douglas"), RowAddress::new(0, 1)),
+                (String::from("George"), RowAddress::new(0, 1)),
                 (String::from("Winnie"), RowAddress::new(0, 2)),
                 (String::from("George"), RowAddress::new(1, 0)),
             ]),
