@@ -50,7 +50,7 @@ tables:
 
 ### render-columns 
 
-`render-columns` contains individual configurations for each column:
+`render-columns` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file or its 0-based index (e.g. `index(5)` for the 6th column):
 
 | keyword           | explanation                                                                                                 |
 |-------------------|-------------------------------------------------------------------------------------------------------------|
