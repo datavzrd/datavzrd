@@ -36,6 +36,10 @@ fn default_page_size() -> usize {
     100_usize
 }
 
+fn default_header_size() -> usize {
+    1_usize
+}
+
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct TableSpec {
@@ -44,6 +48,8 @@ pub(crate) struct TableSpec {
     pub(crate) separator: char,
     #[serde(default = "default_page_size")]
     pub(crate) page_size: usize,
+    #[serde(default = "default_header_size")]
+    pub(crate) header_rows: usize,
     #[serde(default)]
     pub(crate) render_columns: HashMap<String, RenderColumnSpec>,
 }
@@ -174,6 +180,7 @@ mod tests {
             path: PathBuf::from("test.tsv"),
             separator: ',',
             page_size: 100,
+            header_rows: 1,
             render_columns: HashMap::from([(String::from("x"), expected_render_columns)]),
         };
 

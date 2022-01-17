@@ -19,6 +19,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
     output_path: P,
     csv_path: &Path,
     separator: char,
+    header_rows: usize,
 ) -> Result<()> {
     let column_types = classify_table(csv_path, separator)?;
 
@@ -37,7 +38,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
         match column_types.get(column) {
             None | Some(ColumnType::None) => unreachable!(),
             Some(ColumnType::String) => {
-                let plot = generate_nominal_plot(csv_path, separator, index)?;
+                let plot = generate_nominal_plot(csv_path, separator, index, header_rows)?;
                 templates.add_raw_template(
                     "plot.js.tera",
                     include_str!("../../../templates/nominal_plot.js.tera"),
@@ -45,7 +46,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
                 context.insert("table", &json!(plot).to_string())
             }
             Some(ColumnType::Integer) | Some(ColumnType::Float) => {
-                let plot = generate_numeric_plot(csv_path, separator, index)?;
+                let plot = generate_numeric_plot(csv_path, separator, index, header_rows)?;
                 templates.add_raw_template(
                     "plot.js.tera",
                     include_str!("../../../templates/numeric_plot.js.tera"),
@@ -66,6 +67,7 @@ fn generate_numeric_plot(
     path: &Path,
     separator: char,
     column_index: usize,
+    header_rows: usize,
 ) -> Result<Vec<BinnedPlotRecord>> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
@@ -89,7 +91,7 @@ fn generate_numeric_plot(
     let mut hist = ndhistogram!(Uniform::new(NUMERIC_BINS, min, max));
     let mut nan = 0;
 
-    for r in reader.records() {
+    for r in reader.records().skip(header_rows - 1) {
         let record = r?;
         let value = record.get(column_index).unwrap();
         if let Ok(number) = f32::from_str(value) {
@@ -120,6 +122,7 @@ fn generate_nominal_plot(
     path: &Path,
     separator: char,
     column_index: usize,
+    header_rows: usize,
 ) -> Result<Option<Vec<PlotRecord>>> {
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
@@ -127,7 +130,7 @@ fn generate_nominal_plot(
 
     let mut count_values = HashMap::new();
 
-    for record in reader.records() {
+    for record in reader.records().skip(header_rows - 1) {
         let result = record?;
         let value = result.get(column_index).unwrap();
         if !value.is_empty() {
@@ -189,7 +192,7 @@ mod tests {
     #[test]
     fn test_nominal_plot_generation() {
         let mut records =
-            generate_nominal_plot("tests/data/uniform_datatypes.csv".as_ref(), ',', 0)
+            generate_nominal_plot("tests/data/uniform_datatypes.csv".as_ref(), ',', 0, 1)
                 .unwrap()
                 .unwrap();
         records.sort_unstable();

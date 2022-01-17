@@ -28,6 +28,7 @@ $(document).ready(function() {
         data: []
     })
 
+    let additional_headers = [{% if additional_headers %}{% for ah in additional_headers %}{{ "{" }}{% for title in titles %}"{{ title }}":"<b>{{ ah[title] }}</b>"{% if not loop.last %},{% endif %}{% endfor %}{{ "}" }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}];
     let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let num = [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}];
     var table_rows = [];
@@ -48,6 +49,7 @@ $(document).ready(function() {
         }
         table_rows.push(row);
     }
+    $('#table').bootstrapTable('append', additional_headers)
     $('#table').bootstrapTable('append', table_rows)
 
     $( ".btn-sm" ).click(function() {
@@ -68,10 +70,10 @@ $(document).ready(function() {
         }
     });
 
-    let to_be_highlighted = window.location.href.toString().split("highlight=").pop();
+    let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
     let rows = $("table > tbody > tr");
     rows.each(function() {
-        if (this.dataset.index === to_be_highlighted) {
+        if (this.dataset.index == to_be_highlighted) {
             $(this).children().addClass('active-row');
             $('#table').bootstrapTable('scrollTo', {unit: 'rows', value: to_be_highlighted})
         }
