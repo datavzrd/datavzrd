@@ -16,6 +16,7 @@
 <script src="../static/vega-lite.min.js"></script>
 <script src="../static/vega-embed.min.js"></script>
 <script src="../static/lz-string.min.js"></script>
+<script src="../static/showdown.min.js"></script>
 <script src="table.js"></script>
 {% for title in titles %}
 <script src="plots/plot_{{ loop.index0 }}.js"></script>{% endfor %}
@@ -70,11 +71,11 @@
 </nav>
 <div class="container-fluid">
     {% if description %}
+    <script>$(document).ready(function() {renderMarkdownDescription();});</script>
     <div class="row" style="margin-top: 15px;">
         <div class="col-md-12">
             <div class="collapse" id="collapseDescription">
-                <div class="card card-body">
-                    {{ description }}
+                <div class="card card-body" id="innerDescription" data-markdown="{{ description }}">
                 </div>
             </div>
         </div>
