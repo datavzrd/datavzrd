@@ -16,6 +16,7 @@ datavzrd allows the user to easily customize it's interactive HTML report via a 
 tables:
   table-a:
     path: "table-a.csv"
+    desc: "A description of table-a."
     render-columns:
       x:
         custom: |
@@ -42,13 +43,14 @@ tables:
 
 `tables` consists of all different CSV/TSV tables that should be included in the resulting report. Each table definition can contain these values:
 
-| keyword                           | explanation                                  | default |
-|-----------------------------------|----------------------------------------------|---------|
-| path                              | The path of the CSV/TSV file                 |         |
-| separator                         | The delimiter of the file                    | ,       |
-| page-size                         | Number of rows per page                      | 100     |
-| header-rows                       | Number of header-rows of the file            | 1       |
-| [render-columns](#render-columns) | Configuration of individual column rendering |         |
+| keyword                           | explanation                                    | default |
+|-----------------------------------|------------------------------------------------|---------|
+| path                              | The path of the CSV/TSV file                   |         |
+| desc                              | A description that will be shown in the report |         | 
+| separator                         | The delimiter of the file                      | ,       |
+| page-size                         | Number of rows per page                        | 100     |
+| header-rows                       | Number of header-rows of the file              | 1       |
+| [render-columns](#render-columns) | Configuration of individual column rendering   |         |
 
 ### render-columns 
 

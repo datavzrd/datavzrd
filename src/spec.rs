@@ -50,6 +50,8 @@ pub(crate) struct TableSpec {
     pub(crate) page_size: usize,
     #[serde(default = "default_header_size")]
     pub(crate) header_rows: usize,
+    #[serde(rename = "desc")]
+    pub(crate) description: Option<String>,
     #[serde(default)]
     pub(crate) render_columns: HashMap<String, RenderColumnSpec>,
 }
@@ -181,6 +183,7 @@ mod tests {
             separator: ',',
             page_size: 100,
             header_rows: 1,
+            description: None,
             render_columns: HashMap::from([(String::from("x"), expected_render_columns)]),
         };
 
