@@ -35,6 +35,7 @@ tables:
   gene-mycn:
     path: genes/table-mycn.csv
     page-size: 40
+    header-rows: 2
 ```
 
 ### tables
@@ -46,6 +47,7 @@ tables:
 | path                              | The path of the CSV/TSV file                 |         |
 | separator                         | The delimiter of the file                    | ,       |
 | page-size                         | Number of rows per page                      | 100     |
+| header-rows                       | Number of header-rows of the file            | 1       |
 | [render-columns](#render-columns) | Configuration of individual column rendering |         |
 
 ### render-columns 

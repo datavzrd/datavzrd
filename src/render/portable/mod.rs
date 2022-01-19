@@ -47,7 +47,7 @@ impl Renderer for TableRenderer {
 
             let row_address_factory = RowAddressFactory::new(table.page_size);
             let pages = row_address_factory
-                .get(counter_reader.records().count() - 1)
+                .get(counter_reader.records().count() - table.header_rows)
                 .page
                 + 1;
 
@@ -59,8 +59,22 @@ impl Renderer for TableRenderer {
             let mut reader = generate_reader()?;
             let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
 
+            let additional_headers = if table.header_rows > 1 {
+                let mut additional_header_reader = generate_reader()?;
+                Some(
+                    additional_header_reader
+                        .records()
+                        .take(table.header_rows - 1)
+                        .map(|r| r.unwrap())
+                        .collect_vec(),
+                )
+            } else {
+                None
+            };
+
             for (page, grouped_records) in &reader
                 .records()
+                .skip(table.header_rows - 1)
                 .into_iter()
                 .enumerate()
                 .group_by(|(i, _)| row_address_factory.get(*i).page)
@@ -87,14 +101,16 @@ impl Renderer for TableRenderer {
                 &table.path,
                 table.separator,
                 &table.render_columns,
+                additional_headers,
             )?;
-            render_plots(&out_path, &table.path, table.separator)?;
+            render_plots(&out_path, &table.path, table.separator, table.header_rows)?;
             render_search_dialogs(
                 &out_path,
                 &headers,
                 &table.path,
                 table.separator,
                 table.page_size,
+                table.header_rows,
             )?;
         }
         Ok(())
@@ -157,6 +173,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     csv_path: &Path,
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
+    additional_headers: Option<Vec<StringRecord>>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -176,7 +193,20 @@ fn render_table_javascript<P: AsRef<Path>>(
         .map(|(k, v)| (k.to_owned(), *v != ColumnType::String))
         .collect();
 
+    let header_rows = additional_headers.map(|headers| {
+        headers
+            .iter()
+            .map(|r| {
+                r.iter()
+                    .enumerate()
+                    .map(|(i, v)| (&titles[i], v.to_string()))
+                    .collect::<HashMap<_, _>>()
+            })
+            .collect_vec()
+    });
+
     context.insert("titles", &titles.iter().collect_vec());
+    context.insert("additional_headers", &header_rows);
     context.insert("formatter", &Some(formatters));
     context.insert("num", &numeric);
 
@@ -251,6 +281,7 @@ fn render_search_dialogs<P: AsRef<Path>>(
     csv_path: &Path,
     separator: char,
     page_size: usize,
+    header_rows: usize,
 ) -> Result<()> {
     let output_path = Path::new(path.as_ref()).join("search");
     fs::create_dir(&output_path)?;
@@ -263,6 +294,7 @@ fn render_search_dialogs<P: AsRef<Path>>(
 
         let records = &reader
             .records()
+            .skip(header_rows - 1)
             .map(|row| row.unwrap())
             .map(|row| row.get(column).unwrap().to_string())
             .enumerate()
