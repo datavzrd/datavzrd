@@ -68,7 +68,7 @@ fn generate_numeric_plot(
     separator: char,
     column_index: usize,
     header_rows: usize,
-) -> Result<Vec<BinnedPlotRecord>> {
+) -> Result<Option<Vec<BinnedPlotRecord>>> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
             .delimiter(separator as u8)
@@ -87,6 +87,10 @@ fn generate_numeric_plot(
         .records()
         .map(|r| f32::from_str(r.unwrap().get(column_index).unwrap()).unwrap())
         .fold(f32::NEG_INFINITY, |a, b| a.max(b));
+
+    if min == max {
+        return Ok(None);
+    }
 
     let mut hist = ndhistogram!(Uniform::new(NUMERIC_BINS, min, max));
     let mut nan = 0;
@@ -114,7 +118,7 @@ fn generate_numeric_plot(
         })
     }
 
-    Ok(result)
+    Ok(Some(result))
 }
 
 /// Generates plot records for columns of type String
@@ -147,11 +151,12 @@ fn generate_nominal_plot(
         })
         .collect_vec();
 
+    let unique_values = count_values.iter().map(|(_, v)| v).unique().count();
+    if unique_values <= 1 {
+        return Ok(None);
+    };
+
     if plot_data.len() > MAX_NOMINAL_BINS {
-        let unique_values = count_values.iter().map(|(_, v)| v).unique().count();
-        if unique_values <= 1 {
-            return Ok(None);
-        };
         plot_data.sort_by(|a, b| b.value.cmp(&a.value));
         plot_data = plot_data.into_iter().take(MAX_NOMINAL_BINS).collect();
     }
