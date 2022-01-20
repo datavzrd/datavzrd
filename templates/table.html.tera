@@ -16,6 +16,7 @@
 <script src="../static/vega-lite.min.js"></script>
 <script src="../static/vega-embed.min.js"></script>
 <script src="../static/lz-string.min.js"></script>
+<script src="../static/showdown.min.js"></script>
 <script src="table.js"></script>
 {% for title in titles %}
 <script src="plots/plot_{{ loop.index0 }}.js"></script>{% endfor %}
@@ -43,9 +44,18 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarText2">
         <ul class="navbar-nav mr-auto">
-            <li><a href="index_{{ current_page}}.html">{{ name }}</a></li>
+            <li><a href="index_{{ current_page }}.html">{{ name }}</a></li>
         </ul>
         <span class="pull-right">
+            {% if description %}
+            <div class="btn-group">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                    </svg>
+                </button>
+            </div>
+            {% endif %}
             <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 tables
@@ -60,6 +70,17 @@
     </div>
 </nav>
 <div class="container-fluid">
+    {% if description %}
+    <script>$(document).ready(function() {renderMarkdownDescription();});</script>
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-md-12">
+            <div class="collapse" id="collapseDescription">
+                <div class="card card-body" id="innerDescription" data-markdown="{{ description | escape }}">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <div class="row">
         <div class="col-md-12 loading text-center">
             <div class="spinner-border" role="status">

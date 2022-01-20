@@ -84,3 +84,10 @@ $(document).ready(function() {
         $('#table').bootstrapTable('resetView',{height: he});
     })
 });
+
+function renderMarkdownDescription() {
+    var innerDescription = document.getElementById('innerDescription');
+    var converter = new showdown.Converter();
+    converter.setFlavor('github');
+    innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
+};

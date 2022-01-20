@@ -92,6 +92,7 @@ impl Renderer for TableRenderer {
                     &self.specs.tables.keys().map(|s| s.to_owned()).collect_vec(),
                     &table.render_columns,
                     name,
+                    table.description.as_deref(),
                     &linked_tables,
                 )?;
             }
@@ -128,6 +129,7 @@ fn render_page<P: AsRef<Path>>(
     tables: &[String],
     render_columns: &HashMap<String, RenderColumnSpec>,
     name: &str,
+    description: Option<&str>,
     linked_tables: &LinkedTable,
 ) -> Result<()> {
     let mut templates = Tera::default();
@@ -150,6 +152,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("titles", &titles.iter().collect_vec());
     context.insert("current_page", &page_index);
     context.insert("pages", &pages);
+    context.insert("description", &description);
     context.insert("tables", tables);
     context.insert("name", name);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
