@@ -3,7 +3,7 @@ pub(crate) mod utils;
 
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
-use crate::spec::{RenderColumnSpec, TablesSpec};
+use crate::spec::{CustomPlot, RenderColumnSpec, TablesSpec};
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
@@ -142,7 +142,8 @@ fn render_page<P: AsRef<Path>>(
     let data = data
         .iter()
         .map(|s| s.iter().collect_vec())
-        .map(|r| link_columns(render_columns, titles, r, linked_tables).unwrap())
+        .enumerate()
+        .map(|(i, r)| link_columns(render_columns, titles, r, linked_tables, i).unwrap())
         .collect_vec();
     let compressed_data = compress_to_utf16(&json!(data).to_string());
 
@@ -196,6 +197,12 @@ fn render_table_javascript<P: AsRef<Path>>(
         .map(|(k, v)| (k.to_owned(), *v != ColumnType::String))
         .collect();
 
+    let custom_plots: HashMap<String, CustomPlot> = render_columns
+        .iter()
+        .filter(|(_, k)| k.custom_plot.is_some())
+        .map(|(k, v)| (k.to_owned(), v.custom_plot.as_ref().unwrap().to_owned()))
+        .collect();
+
     let header_rows = additional_headers.map(|headers| {
         headers
             .iter()
@@ -211,6 +218,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("titles", &titles.iter().collect_vec());
     context.insert("additional_headers", &header_rows);
     context.insert("formatter", &Some(formatters));
+    context.insert("custom_plots", &custom_plots);
     context.insert("num", &numeric);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
@@ -229,6 +237,7 @@ fn link_columns(
     titles: &[String],
     column: Vec<&str>,
     linked_tables: &LinkedTable,
+    row: usize,
 ) -> Result<Vec<String>> {
     let mut result = Vec::new();
     for (i, title) in titles.iter().enumerate() {
@@ -266,6 +275,11 @@ fn link_columns(
                     linked_value.page + 1,
                     linked_value.row,
                     column[i],
+                ));
+            } else if render_column.custom_plot.is_some() {
+                result.push(format!(
+                    "<div id='{}-{}' data-value='{}'></div>",
+                    title, row, column[i]
                 ));
             } else {
                 result.push(column[i].to_string());

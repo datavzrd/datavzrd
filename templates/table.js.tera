@@ -37,7 +37,7 @@ $(document).ready(function() {
         row = {};
         for (const element of r) {
             var el = element;
-            if (element.length > 30 && format[columns[i]] == undefined && !element.includes("<a href=")) {
+            if (element.length > 30 && format[columns[i]] == undefined && !element.includes("<div") && !element.includes("<a href=")) {
                 el = `${element.substring(0,30)}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${element}</div>'>...</a>`;
             }
             if (num[i]) {
@@ -70,6 +70,10 @@ $(document).ready(function() {
         }
     });
 
+    {% for title, custom_plot in custom_plots %}
+    renderCustomPlots{{ loop.index0 }}(additional_headers.length);
+    {% endfor %}
+
     let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
     let rows = $("table > tbody > tr");
     rows.each(function() {
@@ -91,3 +95,20 @@ function renderMarkdownDescription() {
     converter.setFlavor('github');
     innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
 };
+
+{% for title, custom_plot in custom_plots %}
+function renderCustomPlots{{ loop.index0 }}(ah) {
+    var data_function = {{ custom_plot.data }};
+    var specs =  {{ custom_plot.schema }};
+    var rows = $("table > tbody > tr").length - ah;
+    for (i = 0; i < rows; i++) {
+        var element = document.getElementById(`{{ title }}-${i}`);
+        var data = data_function(element.dataset.value);
+        var s = specs;
+        s.data = {};
+        s.data.values = data;
+        var element_id = `#{{ title }}-${i}`;
+        vegaEmbed(element_id, JSON.parse(JSON.stringify(s)));
+    }
+};
+{% endfor %}
