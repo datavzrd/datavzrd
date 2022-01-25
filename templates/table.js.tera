@@ -71,7 +71,7 @@ $(document).ready(function() {
     });
 
     {% for title, custom_plot in custom_plots %}
-    renderCustomPlots{{ loop.index0 }}(additional_headers.length);
+    renderCustomPlots{{ loop.index0 }}(additional_headers.length, columns);
     {% endfor %}
 
     let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
@@ -97,11 +97,12 @@ function renderMarkdownDescription() {
 };
 
 {% for title, custom_plot in custom_plots %}
-function renderCustomPlots{{ loop.index0 }}(ah) {
+function renderCustomPlots{{ loop.index0 }}(ah, columns) {
     var data_function = {{ custom_plot.data }};
     var specs =  {{ custom_plot.schema }};
-    var rows = $("table > tbody > tr").length - ah;
-    for (i = 0; i < rows; i++) {
+    var rows = $("table > tbody > tr");
+    var row_length = $("table > tbody > tr").length - ah;
+    for (i = 0; i < row_length; i++) {
         var element = document.getElementById(`{{ title }}-${i}`);
         var data = data_function(element.dataset.value);
         var s = specs;
@@ -110,5 +111,10 @@ function renderCustomPlots{{ loop.index0 }}(ah) {
         var element_id = `#{{ title }}-${i}`;
         vegaEmbed(element_id, JSON.parse(JSON.stringify(s)));
     }
+    let index = columns.indexOf("{{ title }}") + 1;
+    $(`table > tbody > tr td:nth-child(${index})`).each(
+        function() {
+            this.classList.add("plotcell");
+    });
 };
 {% endfor %}

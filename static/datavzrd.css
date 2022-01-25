@@ -45,6 +45,10 @@ td {
     position: relative
 }
 
+td.plotcell {
+    padding: 0;
+}
+
 th .th-inner {
     transform: translate(-10px, 30px) rotate(-45deg);
     width: 1em;
