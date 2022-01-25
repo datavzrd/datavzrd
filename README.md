@@ -80,7 +80,8 @@ tables:
 | link-to-table                     | Renders as link to the given table, not a specific row                                                      |
 | link-to-table-row                 | Renders as link to the other table highlighting the row in which the gene column has the same value as here |
 | custom                            | Applies the given js function to render column content                                                      |
-| [custom-plot](#custom-plot)       | Renders a custom vega-lite plot to the corresponding table cell     
+| [custom-plot](#custom-plot)       | Renders a custom vega-lite plot to the corresponding table cell                                             |
+| [plot](#plot)                     | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                                          |
 
 ### custom-plot
 
@@ -90,6 +91,22 @@ tables:
 |-----------|------------------------------------------------------------------------------------------------------|
 | data      | A function to return the data needed for the schema (see below) from the content of the column cell  |
 | schema    | A schema for a vega plot that is rendered into each cell of this column                              |
+
+### plot
+
+`plot` allows the rendering of either a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values or a heatmap for nominal values.
+
+| keyword             | explanation                                                                                 |
+|---------------------|---------------------------------------------------------------------------------------------|
+| [ticks](#ticks)     | Defines a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values   |
+
+### ticks
+
+`ticks` defines the attributes of a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values.
+
+| keyword   | explanation                                                                             |
+|-----------|-----------------------------------------------------------------------------------------|
+| scale     | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick plot  |
 
 ## Authors
 
