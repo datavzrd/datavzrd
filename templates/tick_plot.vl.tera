@@ -1,5 +1,6 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 50,
     "encoding": {
         "x": {
             "field": "{{ field }}",
@@ -24,6 +25,7 @@
     ],
     "config": {
         "tick": {"thickness": 2},
+        "background": null,
         "style": {"cell": {"stroke": "transparent"}}
     }
 }
