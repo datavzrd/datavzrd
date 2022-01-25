@@ -55,6 +55,11 @@ tables:
     path: genes/table-mycn.csv
     page-size: 40
     header-rows: 2
+    render-columns:
+      frequency:
+        plot:
+          ticks:
+            scale: linear
 ```
 
 ### tables
