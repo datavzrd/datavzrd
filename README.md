@@ -35,6 +35,22 @@ tables:
     render-columns:
       gene:
         link-to-table: 'gene-{value}'
+      significance:
+        custom-plot:
+          data: |
+            function(value) {
+              return [{"significance": value, "threshold": value > 60}]
+            }
+          schema: |
+            {
+              "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+              "mark": "circle",
+              "encoding": {
+                "size": {"field": "significance", "type": "quantitative", "scale": {"domain": [0,100]}},
+                "color": {"field": "threshold", "scale": {"domain": [true,false]}}
+              },
+              "config": {"legend": {"disable": true}}
+            }
   gene-mycn:
     path: genes/table-mycn.csv
     page-size: 40
@@ -58,12 +74,22 @@ tables:
 
 `render-columns` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file or its 0-based index (e.g. `index(5)` for the 6th column):
 
-| keyword           | explanation                                                                                                 |
-|-------------------|-------------------------------------------------------------------------------------------------------------|
-| link-to-url       | Renders a link to the given url with {value} replace by the value of the table                              |
-| link-to-table     | Renders as link to the given table, not a specific row                                                      |
-| link-to-table-row | Renders as link to the other table highlighting the row in which the gene column has the same value as here |
-| custom            | Applies the given js function to render column content                                                      |
+| keyword                           | explanation                                                                                                 |
+|-----------------------------------|-------------------------------------------------------------------------------------------------------------|
+| link-to-url                       | Renders a link to the given url with {value} replace by the value of the table                              |
+| link-to-table                     | Renders as link to the given table, not a specific row                                                      |
+| link-to-table-row                 | Renders as link to the other table highlighting the row in which the gene column has the same value as here |
+| custom                            | Applies the given js function to render column content                                                      |
+| [custom-plot](#custom-plot)       | Renders a custom vega-lite plot to the corresponding table cell     
+
+### custom-plot
+
+`custom-plot` allows the rendering of customized vega-lite plots per cell.
+
+| keyword   | explanation                                                                                          |
+|-----------|------------------------------------------------------------------------------------------------------|
+| data      | A function to return the data needed for the schema (see below) from the content of the column cell  |
+| schema    | A schema for a vega plot that is rendered into each cell of this column                              |
 
 ## Authors
 

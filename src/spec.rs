@@ -5,6 +5,7 @@ use itertools::Itertools;
 use lazy_static::lazy_static;
 use regex::Regex;
 use serde::Deserialize;
+use serde::Serialize;
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -127,14 +128,14 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) link_to_url: Option<String>,
     #[serde(default)]
-    plot: Option<PlotSpec>,
+    pub(crate) plot: Option<PlotSpec>,
     #[serde(default)]
-    custom_plot: Option<CustomPlot>,
+    pub(crate) custom_plot: Option<CustomPlot>,
     #[serde(default)]
     summary_plot: Option<String>,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub(crate) struct CustomPlot {
     #[serde(default, rename = "data")]
     plot_data: String,
