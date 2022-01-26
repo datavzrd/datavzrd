@@ -136,11 +136,18 @@ pub(crate) struct RenderColumnSpec {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct CustomPlot {
     #[serde(default, rename = "data")]
     plot_data: String,
     #[serde(default)]
     schema: String,
+    #[serde(default = "default_vega_controls")]
+    vega_controls: String,
+}
+
+fn default_vega_controls() -> String {
+    "false".to_string()
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]

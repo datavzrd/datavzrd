@@ -86,10 +86,11 @@ tables:
 
 `custom-plot` allows the rendering of customized vega-lite plots per cell.
 
-| keyword   | explanation                                                                                          |
-|-----------|------------------------------------------------------------------------------------------------------|
-| data      | A function to return the data needed for the schema (see below) from the content of the column cell  |
-| schema    | A schema for a vega plot that is rendered into each cell of this column                              |
+| keyword       | explanation                                                                                          | default |
+|---------------|------------------------------------------------------------------------------------------------------|---------|
+| data          | A function to return the data needed for the schema (see below) from the content of the column cell  |         |
+| schema        | A schema for a vega plot that is rendered into each cell of this column                              |         |
+| vega-controls | Whether or not the resulting vega-lite plot is supposed to have action-links in the embedded view    | false   |
 
 ## Authors
 
