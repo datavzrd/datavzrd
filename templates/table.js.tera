@@ -54,7 +54,11 @@ $(document).ready(function() {
 
     $( ".btn-sm" ).click(function() {
         var col = $(this).data( "col" );
-        var field = $(this).data( "val" );
+        var field = $(this).data("val");
+        if (field.startsWith("<div")) {
+            var temp = $(field);
+            field = temp[0].dataset.value;
+        }
         var marker = { "bin_start": field};
         var index = columns.indexOf(col);
         switch (index) {
@@ -113,7 +117,8 @@ function renderCustomPlots{{ loop.index0 }}(ah, columns) {
         s.data = {};
         s.data.values = data;
         var element_id = `#{{ title }}-${i}`;
-        vegaEmbed(element_id, JSON.parse(JSON.stringify(s)));
+        var opt = {"actions": false};
+        vegaEmbed(element_id, JSON.parse(JSON.stringify(s)), opt);
     }
     let index = columns.indexOf("{{ title }}") + 1;
     $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -135,7 +140,8 @@ function renderTickPlots{{ loop.index0 }}(ah, columns) {
         s.data = {};
         s.data.values = data;
         var element_id = `#{{ title }}-${i}`;
-        vegaEmbed(element_id, JSON.parse(JSON.stringify(s)));
+        var opt = {"actions": false};
+        vegaEmbed(element_id, JSON.parse(JSON.stringify(s)), opt);
     }
     let index = columns.indexOf("{{ title }}") + 1;
     $(`table > tbody > tr td:nth-child(${index})`).each(
