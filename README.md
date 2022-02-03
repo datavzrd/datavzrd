@@ -60,6 +60,13 @@ tables:
         plot:
           ticks:
             scale: linear
+      quality:
+        plot:
+          heatmap:
+            scale: linear
+            range:
+              - green
+              - red
 ```
 
 ### tables
@@ -118,10 +125,11 @@ tables:
 
 `heatmap` defines the attributes of a heatmap for numeric or nominal values.
 
-| keyword   | explanation                                                                                  |
-|-----------|----------------------------------------------------------------------------------------------|
-| scale     | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the heatmap         |
-| scheme    | Defines the [scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap   |
+| keyword   | explanation                                                                                                    |
+|-----------|----------------------------------------------------------------------------------------------------------------|
+| scale     | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the heatmap                           |
+| scheme    | Defines the [scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap for nominal values  |
+| range     | Defines the color range of the heatmap as a list                                                  |
 
 ## Authors
 

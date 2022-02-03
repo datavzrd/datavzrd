@@ -160,7 +160,7 @@ function renderTickPlots{{ loop.index0 }}(ah, columns) {
 {% for title, tuple in heatmaps %}
 function colorizeColumn{{ loop.index0 }}(ah) {
     var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
-    var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range(vega.scheme('{{ tuple.0.scheme }}'));
+    var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range({% if tuple.0.scale == "ordinal" %}vega.scheme('{{ tuple.0.scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
     var row_length = $("table > tbody > tr").length - ah;
     for (i = 0; i < row_length; i++) {
         var element = document.getElementById(`{{ title }}-${i}`);

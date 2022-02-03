@@ -162,6 +162,8 @@ pub(crate) struct Heatmap {
     pub(crate) scale_type: String,
     #[serde(default, rename = "scheme")]
     color_scheme: String,
+    #[serde(default, rename = "range")]
+    color_range: Vec<String>,
 }
 
 #[derive(Error, Debug)]
