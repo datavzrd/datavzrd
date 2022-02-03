@@ -4,7 +4,7 @@ pub(crate) mod utils;
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
-use crate::spec::{CustomPlot, RenderColumnSpec, TablesSpec, TickPlot};
+use crate::spec::{CustomPlot, Heatmap, RenderColumnSpec, TablesSpec, TickPlot};
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
@@ -187,6 +187,11 @@ fn render_table_javascript<P: AsRef<Path>>(
     )?;
     let mut context = Context::new();
 
+    let header_row_length = additional_headers
+        .clone()
+        .unwrap_or_else(|| vec![StringRecord::from(vec![""])])
+        .len();
+
     let formatters: HashMap<String, String> = render_columns
         .iter()
         .filter(|(_, k)| k.custom.is_some())
@@ -215,13 +220,32 @@ fn render_table_javascript<P: AsRef<Path>>(
                     k,
                     csv_path,
                     separator,
-                    additional_headers
-                        .clone()
-                        .unwrap_or_else(|| vec![StringRecord::from(vec![""])])
-                        .len(),
+                    header_row_length,
                     v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
                 )
                 .unwrap(),
+            )
+        })
+        .collect();
+
+    let heatmaps: HashMap<String, (&Heatmap, String)> = render_columns
+        .iter()
+        .filter(|(_, k)| k.plot.is_some())
+        .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
+        .map(|(k, v)| {
+            (
+                k.to_owned(),
+                (
+                    v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
+                    get_column_domain(
+                        k,
+                        csv_path,
+                        separator,
+                        header_row_length,
+                        v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
+                    )
+                    .unwrap(),
+                ),
             )
         })
         .collect();
@@ -243,6 +267,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("formatter", &Some(formatters));
     context.insert("custom_plots", &custom_plots);
     context.insert("tick_plots", &tick_plots);
+    context.insert("heatmaps", &heatmaps);
     context.insert("num", &numeric);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
@@ -302,8 +327,8 @@ fn link_columns(
                 ));
             } else if render_column.custom_plot.is_some() || render_column.plot.is_some() {
                 result.push(format!(
-                    "<div id='{}-{}' data-value='{}'></div>",
-                    title, row, column[i]
+                    "<div id='{}-{}' data-value='{}'>{}</div>",
+                    title, row, column[i], column[i]
                 ));
             } else {
                 result.push(column[i].to_string());
@@ -416,6 +441,33 @@ fn render_tick_plot(
     context.insert("scale_type", &tick_plot.scale_type);
 
     Ok(templates.render("tick_plot.vl.tera", &context)?)
+}
+
+fn get_column_domain(
+    title: &str,
+    csv_path: &Path,
+    separator: char,
+    header_rows: usize,
+    heatmap: &Heatmap,
+) -> Result<String> {
+    let mut reader = csv::ReaderBuilder::new()
+        .delimiter(separator as u8)
+        .from_path(csv_path)?;
+
+    let column_index = reader
+        .headers()
+        .map(|s| s.iter().position(|t| t == title).unwrap())?;
+
+    match heatmap.scale_type.as_str() {
+        "ordinal" => Ok(json!(reader
+            .records()
+            .map(|r| r.unwrap())
+            .map(|r| r.get(column_index).unwrap().to_owned())
+            .unique()
+            .collect_vec())
+        .to_string()),
+        _ => Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string()),
+    }
 }
 
 #[derive(Error, Debug)]

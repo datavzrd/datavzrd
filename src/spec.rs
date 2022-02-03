@@ -147,7 +147,7 @@ pub(crate) struct CustomPlot {
 pub(crate) struct PlotSpec {
     #[serde(rename = "ticks")]
     pub(crate) tick_plot: Option<TickPlot>,
-    heatmap: Option<Heatmap>,
+    pub(crate) heatmap: Option<Heatmap>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -159,7 +159,7 @@ pub(crate) struct TickPlot {
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub(crate) struct Heatmap {
     #[serde(default, rename = "scale")]
-    scale_type: String,
+    pub(crate) scale_type: String,
     #[serde(default, rename = "scheme")]
     color_scheme: String,
 }
