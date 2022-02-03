@@ -121,7 +121,7 @@ function renderCustomPlots{{ loop.index0 }}(ah, columns) {
         s.data = {};
         s.data.values = data;
         var element_id = `#{{ title }}-${i}`;
-        var opt = {"actions": false};
+        var opt = {"actions": {{ custom_plot.vega_controls }}};
         vegaEmbed(element_id, JSON.parse(JSON.stringify(s)), opt);
     }
     let index = columns.indexOf("{{ title }}") + 1;
