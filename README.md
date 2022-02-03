@@ -101,9 +101,10 @@ tables:
 
 `plot` allows the rendering of either a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values or a heatmap for nominal values.
 
-| keyword             | explanation                                                                                 |
-|---------------------|---------------------------------------------------------------------------------------------|
-| [ticks](#ticks)     | Defines a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values   |
+| keyword                 | explanation                                                                                 |
+|-------------------------|---------------------------------------------------------------------------------------------|
+| [ticks](#ticks)         | Defines a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values   |
+| [heatmap](#heatmap)     | Defines a heatmap for numeric or nominal values                                             |
 
 ### ticks
 
@@ -112,6 +113,15 @@ tables:
 | keyword   | explanation                                                                             |
 |-----------|-----------------------------------------------------------------------------------------|
 | scale     | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick plot  |
+
+### heatmap
+
+`heatmap` defines the attributes of a heatmap for numeric or nominal values.
+
+| keyword   | explanation                                                                                  |
+|-----------|----------------------------------------------------------------------------------------------|
+| scale     | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the heatmap         |
+| scheme    | Defines the [scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap   |
 
 ## Authors
 
