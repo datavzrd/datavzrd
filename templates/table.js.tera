@@ -82,7 +82,11 @@ $(document).ready(function() {
         renderTickPlots{{ loop.index0 }}(additional_headers.length, columns);
     {% endfor %}
 
-    let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
+    {% for title, tick_plot in heatmaps %}
+        colorizeColumn{{ loop.index0 }}(additional_headers.length);
+    {% endfor %}
+
+let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
     let rows = $("table > tbody > tr");
     rows.each(function() {
         if (this.dataset.index == to_be_highlighted) {
@@ -102,7 +106,7 @@ function renderMarkdownDescription() {
     var converter = new showdown.Converter();
     converter.setFlavor('github');
     innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
-};
+}
 
 {% for title, custom_plot in custom_plots %}
 function renderCustomPlots{{ loop.index0 }}(ah, columns) {
@@ -125,7 +129,7 @@ function renderCustomPlots{{ loop.index0 }}(ah, columns) {
         function() {
             this.classList.add("plotcell");
     });
-};
+}
 {% endfor %}
 
 {% for title, tick_plot in tick_plots %}
@@ -147,6 +151,20 @@ function renderTickPlots{{ loop.index0 }}(ah, columns) {
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             this.classList.add("plotcell");
-        });
-    };
+        }
+    );
+ };
+
+{% endfor %}
+
+{% for title, tuple in heatmaps %}
+function colorizeColumn{{ loop.index0 }}(ah) {
+    var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
+    var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range({% if tuple.0.scale == "ordinal" %}vega.scheme('{{ tuple.0.scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
+    var row_length = $("table > tbody > tr").length - ah;
+    for (i = 0; i < row_length; i++) {
+        var element = document.getElementById(`{{ title }}-${i}`);
+        element.parentElement.style.backgroundColor = scale(element.dataset.value);
+    }
+}
 {% endfor %}
