@@ -75,18 +75,9 @@ fn generate_numeric_plot(
             .from_path(&path)
     };
 
-    let mut min_reader = generate_reader()?;
-    let mut max_reader = generate_reader()?;
     let mut reader = generate_reader()?;
 
-    let min = min_reader
-        .records()
-        .map(|r| f32::from_str(r.unwrap().get(column_index).unwrap()).unwrap())
-        .fold(f32::INFINITY, |a, b| a.min(b));
-    let max = max_reader
-        .records()
-        .map(|r| f32::from_str(r.unwrap().get(column_index).unwrap()).unwrap())
-        .fold(f32::NEG_INFINITY, |a, b| a.max(b));
+    let (min, max) = get_min_max(path, separator, column_index, header_rows)?;
 
     if min == max {
         return Ok(None);
@@ -119,6 +110,38 @@ fn generate_numeric_plot(
     }
 
     Ok(Some(result))
+}
+
+/// Finds the numeric minimum and maximum value of a csv column
+pub(crate) fn get_min_max(
+    path: &Path,
+    separator: char,
+    column_index: usize,
+    header_rows: usize,
+) -> Result<(f32, f32)> {
+    let generate_reader = || -> csv::Result<Reader<File>> {
+        csv::ReaderBuilder::new()
+            .delimiter(separator as u8)
+            .from_path(&path)
+    };
+
+    let mut min_reader = generate_reader()?;
+    let mut max_reader = generate_reader()?;
+
+    let min = min_reader
+        .records()
+        .skip(header_rows - 1)
+        .map(|r| r.unwrap().get(column_index).unwrap().to_string())
+        .filter_map(|s| s.parse().ok())
+        .fold(f32::INFINITY, |a, b| a.min(b));
+    let max = max_reader
+        .records()
+        .skip(header_rows - 1)
+        .map(|r| r.unwrap().get(column_index).unwrap().to_string())
+        .filter_map(|s| s.parse().ok())
+        .fold(f32::NEG_INFINITY, |a, b| a.max(b));
+
+    Ok((min, max))
 }
 
 /// Generates plot records for columns of type String
