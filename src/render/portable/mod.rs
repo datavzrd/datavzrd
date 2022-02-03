@@ -1,9 +1,10 @@
 mod plot;
 pub(crate) mod utils;
 
+use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
-use crate::spec::{CustomPlot, RenderColumnSpec, TablesSpec};
+use crate::spec::{CustomPlot, RenderColumnSpec, TablesSpec, TickPlot};
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
@@ -203,6 +204,28 @@ fn render_table_javascript<P: AsRef<Path>>(
         .map(|(k, v)| (k.to_owned(), v.custom_plot.as_ref().unwrap().to_owned()))
         .collect();
 
+    let tick_plots: HashMap<String, String> = render_columns
+        .iter()
+        .filter(|(_, k)| k.plot.is_some())
+        .filter(|(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some())
+        .map(|(k, v)| {
+            (
+                k.to_owned(),
+                render_tick_plot(
+                    k,
+                    csv_path,
+                    separator,
+                    additional_headers
+                        .clone()
+                        .unwrap_or_else(|| vec![StringRecord::from(vec![""])])
+                        .len(),
+                    v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
+                )
+                .unwrap(),
+            )
+        })
+        .collect();
+
     let header_rows = additional_headers.map(|headers| {
         headers
             .iter()
@@ -219,6 +242,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("additional_headers", &header_rows);
     context.insert("formatter", &Some(formatters));
     context.insert("custom_plots", &custom_plots);
+    context.insert("tick_plots", &tick_plots);
     context.insert("num", &numeric);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
@@ -276,7 +300,7 @@ fn link_columns(
                     linked_value.row,
                     column[i],
                 ));
-            } else if render_column.custom_plot.is_some() {
+            } else if render_column.custom_plot.is_some() || render_column.plot.is_some() {
                 result.push(format!(
                     "<div id='{}-{}' data-value='{}'></div>",
                     title, row, column[i]
@@ -360,6 +384,38 @@ fn get_linked_tables(table: &str, specs: &TablesSpec) -> Result<LinkedTable> {
         result.insert((table.to_string(), column.to_string()), column_index);
     }
     Ok(result)
+}
+
+/// Renders tick plots for given csv column
+fn render_tick_plot(
+    title: &str,
+    csv_path: &Path,
+    separator: char,
+    header_rows: usize,
+    tick_plot: &TickPlot,
+) -> Result<String> {
+    let mut reader = csv::ReaderBuilder::new()
+        .delimiter(separator as u8)
+        .from_path(csv_path)?;
+
+    let column_index = reader
+        .headers()
+        .map(|s| s.iter().position(|t| t == title).unwrap())?;
+
+    let (min, max) = get_min_max(csv_path, separator, column_index, header_rows)?;
+
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "tick_plot.vl.tera",
+        include_str!("../../../templates/tick_plot.vl.tera"),
+    )?;
+    let mut context = Context::new();
+    context.insert("minimum", &min);
+    context.insert("maximum", &max);
+    context.insert("field", &title);
+    context.insert("scale_type", &tick_plot.scale_type);
+
+    Ok(templates.render("tick_plot.vl.tera", &context)?)
 }
 
 #[derive(Error, Debug)]

@@ -152,8 +152,23 @@ fn default_vega_controls() -> String {
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct PlotSpec {
-    #[serde(rename = "type")]
-    plot_type: String,
+    #[serde(rename = "ticks")]
+    pub(crate) tick_plot: Option<TickPlot>,
+    heatmap: Option<Heatmap>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+pub(crate) struct TickPlot {
+    #[serde(default, rename = "scale")]
+    pub(crate) scale_type: String,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+pub(crate) struct Heatmap {
+    #[serde(default, rename = "scale")]
+    scale_type: String,
+    #[serde(default, rename = "scheme")]
+    color_scheme: String,
 }
 
 #[derive(Error, Debug)]

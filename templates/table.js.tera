@@ -54,7 +54,11 @@ $(document).ready(function() {
 
     $( ".btn-sm" ).click(function() {
         var col = $(this).data( "col" );
-        var field = $(this).data( "val" );
+        var field = $(this).data("val");
+        if (field.startsWith("<div")) {
+            var temp = $(field);
+            field = temp[0].dataset.value;
+        }
         var marker = { "bin_start": field};
         var index = columns.indexOf(col);
         switch (index) {
@@ -72,6 +76,10 @@ $(document).ready(function() {
 
     {% for title, custom_plot in custom_plots %}
     renderCustomPlots{{ loop.index0 }}(additional_headers.length, columns);
+    {% endfor %}
+
+    {% for title, tick_plot in tick_plots %}
+        renderTickPlots{{ loop.index0 }}(additional_headers.length, columns);
     {% endfor %}
 
     let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
@@ -118,4 +126,27 @@ function renderCustomPlots{{ loop.index0 }}(ah, columns) {
             this.classList.add("plotcell");
     });
 };
+{% endfor %}
+
+{% for title, tick_plot in tick_plots %}
+function renderTickPlots{{ loop.index0 }}(ah, columns) {
+    var specs =  {{ tick_plot }};
+    var rows = $("table > tbody > tr");
+    var row_length = $("table > tbody > tr").length - ah;
+    for (i = 0; i < row_length; i++) {
+        var element = document.getElementById(`{{ title }}-${i}`);
+        var data = [{"{{ title }}": element.dataset.value}];
+        var s = specs;
+        s.data = {};
+        s.data.values = data;
+        var element_id = `#{{ title }}-${i}`;
+        var opt = {"actions": false};
+        vegaEmbed(element_id, JSON.parse(JSON.stringify(s)), opt);
+    }
+    let index = columns.indexOf("{{ title }}") + 1;
+    $(`table > tbody > tr td:nth-child(${index})`).each(
+        function() {
+            this.classList.add("plotcell");
+        });
+    };
 {% endfor %}
