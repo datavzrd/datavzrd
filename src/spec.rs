@@ -13,19 +13,19 @@ use std::str::FromStr;
 use thiserror::Error;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
-pub(crate) struct TablesSpec {
+pub(crate) struct ItemsSpec {
     #[deref]
-    pub(crate) tables: HashMap<String, TableSpec>,
+    pub(crate) items: HashMap<String, ItemSpecs>,
 }
 
-impl TablesSpec {
-    pub(crate) fn from_file<P: AsRef<Path>>(path: P) -> Result<TablesSpec> {
+impl ItemsSpec {
+    pub(crate) fn from_file<P: AsRef<Path>>(path: P) -> Result<ItemsSpec> {
         let config_file = fs::read_to_string(path)?;
-        let mut tables_spec: TablesSpec = serde_yaml::from_str(&config_file)?;
-        for (_, spec) in tables_spec.tables.iter_mut() {
+        let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)?;
+        for (_, spec) in items_spec.items.iter_mut() {
             spec.column_index_to_value()?;
         }
-        Ok(tables_spec)
+        Ok(items_spec)
     }
 }
 
@@ -43,7 +43,7 @@ fn default_header_size() -> usize {
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
-pub(crate) struct TableSpec {
+pub(crate) struct ItemSpecs {
     pub(crate) path: PathBuf,
     #[serde(default = "default_separator")]
     pub(crate) separator: char,
@@ -54,14 +54,16 @@ pub(crate) struct TableSpec {
     #[serde(rename = "desc")]
     pub(crate) description: Option<String>,
     #[serde(default)]
-    pub(crate) render_columns: HashMap<String, RenderColumnSpec>,
+    pub(crate) render_table: Option<HashMap<String, RenderColumnSpec>>,
+    #[serde(default)]
+    pub(crate) render_plot: Option<RenderPlotSpec>,
 }
 
 lazy_static! {
     static ref INDEX: Regex = Regex::new(r"index\(([0-9]+)\)").unwrap();
 }
 
-impl TableSpec {
+impl ItemSpecs {
     /// Converts columns addressed with index to the actual header values of the table
     fn column_index_to_value(&mut self) -> Result<()> {
         let mut indexed_keys = HashMap::new();
@@ -69,7 +71,7 @@ impl TableSpec {
             .delimiter(self.separator as u8)
             .from_path(&self.path)?;
         let headers = reader.headers()?;
-        for (key, render_column_specs) in &self.render_columns {
+        for (key, render_column_specs) in self.render_table.as_ref().unwrap().iter() {
             if INDEX.is_match(key) {
                 let index = usize::from_str(
                     INDEX
@@ -111,7 +113,7 @@ impl TableSpec {
                 })
             }
         }
-        self.render_columns = indexed_keys;
+        self.render_table = Some(indexed_keys);
         Ok(())
     }
 }
@@ -133,6 +135,13 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) custom_plot: Option<CustomPlot>,
     #[serde(default)]
     summary_plot: Option<String>,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
+pub(crate) struct RenderPlotSpec {
+    #[serde(default)]
+    schema: String,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -187,12 +196,12 @@ pub enum ConfigError {
 
 #[cfg(test)]
 mod tests {
-    use crate::spec::{RenderColumnSpec, TableSpec, TablesSpec};
+    use crate::spec::{ItemSpecs, ItemsSpec, RenderColumnSpec, RenderPlotSpec};
     use std::collections::HashMap;
     use std::path::PathBuf;
 
     #[test]
-    fn test_config_deserialization() {
+    fn test_table_config_deserialization() {
         let expected_render_columns = RenderColumnSpec {
             custom: None,
             link_to_table_row: Some(String::from("some-value")),
@@ -203,32 +212,70 @@ mod tests {
             summary_plot: None,
         };
 
-        let expected_table_spec = TableSpec {
+        let expected_table_spec = ItemSpecs {
             path: PathBuf::from("test.tsv"),
             separator: ',',
             page_size: 100,
             header_rows: 1,
             description: None,
-            render_columns: HashMap::from([(String::from("x"), expected_render_columns)]),
+            render_table: Some(HashMap::from([(
+                String::from("x"),
+                expected_render_columns,
+            )])),
+            render_plot: None,
         };
 
-        let expected_config = TablesSpec {
-            tables: HashMap::from([(String::from("table-a"), expected_table_spec)]),
+        let expected_config = ItemsSpec {
+            items: HashMap::from([(String::from("table-a"), expected_table_spec)]),
         };
 
         let raw_config = r#"
-    tables:
+    items:
         table-a:
             path: test.tsv
             page-size: 100
-            render-columns:
+            render-table:
                 x:
                     link-to-table-row: some-value
                     link-to-table: table-b
                     link-to-url: https://www.rust-lang.org
     "#;
 
-        let config: TablesSpec = serde_yaml::from_str(raw_config).unwrap();
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert_eq!(config, expected_config);
+    }
+
+    #[test]
+    fn test_plot_config_deserialization() {
+        let expected_render_plot = RenderPlotSpec {
+            schema: "{'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}\n".to_string(),
+        };
+
+        let expected_item_spec = ItemSpecs {
+            path: PathBuf::from("test.tsv"),
+            separator: ',',
+            page_size: 100,
+            header_rows: 1,
+            description: Some("my table".parse().unwrap()),
+            render_table: None,
+            render_plot: Some(expected_render_plot),
+        };
+
+        let expected_config = ItemsSpec {
+            items: HashMap::from([(String::from("plot-a"), expected_item_spec)]),
+        };
+
+        let raw_config = r#"
+    items:
+        plot-a:
+            path: test.tsv
+            desc: "my table"
+            render-plot:
+                schema: |
+                    {'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}
+    "#;
+
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert_eq!(config, expected_config);
     }
 }

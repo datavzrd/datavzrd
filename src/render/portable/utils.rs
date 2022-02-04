@@ -1,4 +1,4 @@
-use crate::spec::TablesSpec;
+use crate::spec::ItemsSpec;
 use anyhow::Result;
 use std::fs;
 use std::fs::File;
@@ -58,8 +58,8 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
     Ok(())
 }
 
-pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &TablesSpec) -> Result<()> {
-    let table = specs.tables.keys().next().unwrap();
+pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> Result<()> {
+    let table = specs.items.keys().next().unwrap();
     let mut templates = Tera::default();
     templates.add_raw_template(
         "index.html.tera",

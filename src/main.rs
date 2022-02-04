@@ -1,7 +1,7 @@
 use crate::render::portable::utils::{render_index_file, render_static_files};
-use crate::render::portable::TableRenderer;
+use crate::render::portable::ItemRenderer;
 use crate::render::Renderer;
-use crate::spec::TablesSpec;
+use crate::spec::ItemsSpec;
 use anyhow::Result;
 use structopt::StructOpt;
 
@@ -12,11 +12,11 @@ pub(crate) mod utils;
 
 fn main() -> Result<()> {
     let opt = cli::Datavzrd::from_args();
-    let config = TablesSpec::from_file(opt.config).unwrap();
+    let config = ItemsSpec::from_file(opt.config).unwrap();
     render_index_file(&opt.output, &config)?;
     render_static_files(&opt.output)?;
 
-    let renderer = TableRenderer::builder().specs(config).build();
+    let renderer = ItemRenderer::builder().specs(config).build();
     renderer.render_tables(&opt.output)?;
 
     Ok(())

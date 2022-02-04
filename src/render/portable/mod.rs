@@ -4,7 +4,7 @@ pub(crate) mod utils;
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
-use crate::spec::{CustomPlot, Heatmap, RenderColumnSpec, TablesSpec, TickPlot};
+use crate::spec::{CustomPlot, Heatmap, ItemsSpec, RenderColumnSpec, TickPlot};
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
@@ -25,19 +25,19 @@ use thiserror::Error;
 use typed_builder::TypedBuilder;
 
 #[derive(TypedBuilder, Debug)]
-pub(crate) struct TableRenderer {
-    specs: TablesSpec,
+pub(crate) struct ItemRenderer {
+    specs: ItemsSpec,
 }
 
 type LinkedTable = HashMap<(String, String), ColumnIndex>;
 
-impl Renderer for TableRenderer {
-    /// Render all tables of user config
+impl Renderer for ItemRenderer {
+    /// Render all items of user config
     fn render_tables<P>(&self, path: P) -> Result<()>
     where
         P: AsRef<Path>,
     {
-        for (name, table) in &self.specs.tables {
+        for (name, table) in &self.specs.items {
             let generate_reader = || -> csv::Result<Reader<File>> {
                 csv::ReaderBuilder::new()
                     .delimiter(table.separator as u8)
@@ -90,8 +90,8 @@ impl Renderer for TableRenderer {
                         .map(|(_, records)| records.as_ref().unwrap())
                         .collect_vec(),
                     &headers,
-                    &self.specs.tables.keys().map(|s| s.to_owned()).collect_vec(),
-                    &table.render_columns,
+                    &self.specs.items.keys().map(|s| s.to_owned()).collect_vec(),
+                    table.render_table.as_ref().unwrap(),
                     name,
                     table.description.as_deref(),
                     &linked_tables,
@@ -102,7 +102,7 @@ impl Renderer for TableRenderer {
                 &headers,
                 &table.path,
                 table.separator,
-                &table.render_columns,
+                table.render_table.as_ref().unwrap(),
                 additional_headers,
             )?;
             render_plots(&out_path, &table.path, table.separator, table.header_rows)?;
@@ -388,10 +388,12 @@ fn render_search_dialogs<P: AsRef<Path>>(
     Ok(())
 }
 
-fn get_linked_tables(table: &str, specs: &TablesSpec) -> Result<LinkedTable> {
-    let table_spec = specs.tables.get(table).unwrap();
+fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
+    let table_spec = specs.items.get(table).unwrap();
     let links = &table_spec
-        .render_columns
+        .render_table
+        .as_ref()
+        .unwrap()
         .iter()
         .filter_map(|(_, rc_spec)| rc_spec.link_to_table_row.as_ref())
         .map(|link| link.split_once('/').unwrap())
@@ -400,9 +402,9 @@ fn get_linked_tables(table: &str, specs: &TablesSpec) -> Result<LinkedTable> {
     let mut result = HashMap::new();
 
     for (table, column) in links {
-        let path = &specs.tables.get(*table).unwrap().path;
-        let separator = specs.tables.get(*table).unwrap().separator;
-        let page_size = specs.tables.get(*table).unwrap().page_size;
+        let path = &specs.items.get(*table).unwrap().path;
+        let separator = specs.items.get(*table).unwrap().separator;
+        let page_size = specs.items.get(*table).unwrap().page_size;
 
         let column_index = ColumnIndex::new(path, separator, column, page_size)?;
 
