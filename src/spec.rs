@@ -158,7 +158,7 @@ pub(crate) struct LinkSpec {
     #[serde(default)]
     pub(crate) column: String,
     #[serde(default)]
-    pub(crate) table: Option<String>,
+    pub(crate) item: Option<String>,
     #[serde(default)]
     pub(crate) table_row: Option<String>,
 }

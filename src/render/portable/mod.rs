@@ -163,13 +163,23 @@ fn render_page<P: AsRef<Path>>(
         .map(|s| s.iter().collect_vec())
         .enumerate()
         .map(|(i, r)| link_columns(render_columns, titles, r, i).unwrap())
-        .map(|mut r| r.push(render_link_column(&r, linked_tables, titles, links).unwrap()))
         .collect_vec();
     let compressed_data = compress_to_utf16(&json!(data).to_string());
+
+    let compressed_linkouts = if !links.is_empty() {
+        let linkouts = data
+            .iter()
+            .map(|r| render_link_column(r, linked_tables, titles, links).unwrap())
+            .collect_vec();
+        Some(compress_to_utf16(&json!(linkouts).to_string()))
+    } else {
+        None
+    };
 
     let local: DateTime<Local> = Local::now();
 
     context.insert("data", &json!(compressed_data).to_string());
+    context.insert("linkouts", &json!(compressed_linkouts).to_string());
     context.insert("titles", &titles.iter().collect_vec());
     context.insert("current_page", &page_index);
     context.insert("pages", &pages);
@@ -530,7 +540,7 @@ fn render_link_column(
     let mut linkouts = Vec::new();
     for link_specs in links.values() {
         let index = titles.iter().position(|t| t == &link_specs.column).unwrap();
-        if let Some(table) = &link_specs.table {
+        if let Some(table) = &link_specs.item {
             let val = table.replace("{value}", &row[index]);
             linkouts.push(Linkout {
                 name: val.to_string(),
