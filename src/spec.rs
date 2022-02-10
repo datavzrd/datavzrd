@@ -215,7 +215,10 @@ pub enum ConfigError {
 
 #[cfg(test)]
 mod tests {
-    use crate::spec::{ItemSpecs, ItemsSpec, RenderColumnSpec, RenderPlotSpec};
+    use crate::spec::{
+        default_links, default_render_table, ItemSpecs, ItemsSpec, LinkSpec, RenderColumnSpec,
+        RenderPlotSpec,
+    };
     use std::collections::HashMap;
     use std::path::PathBuf;
 
@@ -223,8 +226,6 @@ mod tests {
     fn test_table_config_deserialization() {
         let expected_render_columns = RenderColumnSpec {
             custom: None,
-            link_to_table_row: Some(String::from("some-value")),
-            link_to_table: Some(String::from("table-b")),
             link_to_url: Some(String::from("https://www.rust-lang.org")),
             plot: None,
             custom_plot: None,
@@ -236,6 +237,7 @@ mod tests {
             separator: ',',
             page_size: 100,
             header_rows: 1,
+            links: default_links(),
             description: None,
             render_table: Some(HashMap::from([(
                 String::from("x"),
@@ -255,8 +257,6 @@ mod tests {
             page-size: 100
             render-table:
                 x:
-                    link-to-table-row: some-value
-                    link-to-table: table-b
                     link-to-url: https://www.rust-lang.org
     "#;
 
@@ -270,13 +270,23 @@ mod tests {
             schema: "{'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}\n".to_string(),
         };
 
+        let expected_links = HashMap::from([(
+            "my-link".to_string(),
+            LinkSpec {
+                column: "test".to_string(),
+                item: Some("other-table".to_string()),
+                table_row: None,
+            },
+        )]);
+
         let expected_item_spec = ItemSpecs {
             path: PathBuf::from("test.tsv"),
             separator: ',',
             page_size: 100,
             header_rows: 1,
+            links: Some(expected_links),
             description: Some("my table".parse().unwrap()),
-            render_table: None,
+            render_table: default_render_table(),
             render_plot: Some(expected_render_plot),
         };
 
@@ -289,6 +299,10 @@ mod tests {
         plot-a:
             path: test.tsv
             desc: "my table"
+            links:
+                my-link:
+                    column: test
+                    item: other-table
             render-plot:
                 schema: |
                     {'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}
