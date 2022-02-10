@@ -1,0 +1,14 @@
+{% if links | length > 1 %}
+<div class="dropdown show">
+    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Linkouts
+    </a>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        {% for link in links %}
+        <a class="dropdown-item" href="{{ link.url }}">{{ link.name }}</a>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<a class="btn btn-primary" href="{{ links | first }}" role="button">{{ links | first }}</a>
+{% endif %}

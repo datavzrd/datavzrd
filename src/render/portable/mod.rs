@@ -4,7 +4,9 @@ pub(crate) mod utils;
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
-use crate::spec::{CustomPlot, Heatmap, ItemSpecs, ItemsSpec, RenderColumnSpec, TickPlot};
+use crate::spec::{
+    CustomPlot, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, RenderColumnSpec, TickPlot,
+};
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
@@ -14,6 +16,7 @@ use chrono::{DateTime, Local};
 use csv::{Reader, StringRecord};
 use itertools::Itertools;
 use lz_str::compress_to_utf16;
+use serde::Serialize;
 use serde_json::json;
 use std::collections::HashMap;
 use std::fs;
@@ -107,6 +110,7 @@ impl Renderer for ItemRenderer {
                         name,
                         table.description.as_deref(),
                         &linked_tables,
+                        table.links.as_ref().unwrap(),
                     )?;
                 }
                 render_table_javascript(
@@ -145,6 +149,7 @@ fn render_page<P: AsRef<Path>>(
     name: &str,
     description: Option<&str>,
     linked_tables: &LinkedTable,
+    links: &HashMap<String, LinkSpec>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -157,7 +162,8 @@ fn render_page<P: AsRef<Path>>(
         .iter()
         .map(|s| s.iter().collect_vec())
         .enumerate()
-        .map(|(i, r)| link_columns(render_columns, titles, r, linked_tables, i).unwrap())
+        .map(|(i, r)| link_columns(render_columns, titles, r, i).unwrap())
+        .map(|mut r| r.push(render_link_column(&r, linked_tables, titles, links).unwrap()))
         .collect_vec();
     let compressed_data = compress_to_utf16(&json!(data).to_string());
 
@@ -298,7 +304,6 @@ fn link_columns(
     render_columns: &HashMap<String, RenderColumnSpec>,
     titles: &[String],
     column: Vec<&str>,
-    linked_tables: &LinkedTable,
     row: usize,
 ) -> Result<Vec<String>> {
     let mut result = Vec::new();
@@ -309,34 +314,6 @@ fn link_columns(
                     "<a href='{}' target='_blank' >{}</a>",
                     link.replace("{value}", column[i]),
                     column[i]
-                ));
-            } else if let Some(table) = render_column.link_to_table.clone() {
-                result.push(format!(
-                    "<a href='../{}/index_1.html'>{}</a>",
-                    table.replace("{value}", column[i]),
-                    column[i]
-                ));
-            } else if let Some(table_row) = render_column.link_to_table_row.clone() {
-                let (table, linked_column) = table_row.split_once('/').unwrap();
-                let linked_values = linked_tables
-                    .get(&(table.to_string(), linked_column.to_string()))
-                    .unwrap();
-                let linked_value = match linked_values.index.get(column[i]) {
-                    Some(value) => value,
-                    None => {
-                        bail!(TableLinkingError::NotFound {
-                            not_found: column[i].to_string(),
-                            column: title.to_string(),
-                            table: table.to_string(),
-                        })
-                    }
-                };
-                result.push(format!(
-                    "<a href='../{}/index_{}.html?highlight={}'>{}</a>",
-                    table,
-                    linked_value.page + 1,
-                    linked_value.row,
-                    column[i],
                 ));
             } else if render_column.custom_plot.is_some() || render_column.plot.is_some() {
                 result.push(format!(
@@ -404,11 +381,11 @@ fn render_search_dialogs<P: AsRef<Path>>(
 fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
     let table_spec = specs.items.get(table).unwrap();
     let links = &table_spec
-        .render_table
+        .links
         .as_ref()
         .unwrap()
         .iter()
-        .filter_map(|(_, rc_spec)| rc_spec.link_to_table_row.as_ref())
+        .filter_map(|(_, link_spec)| link_spec.table_row.as_ref())
         .map(|link| link.split_once('/').unwrap())
         .collect_vec();
 
@@ -485,6 +462,7 @@ fn get_column_domain(
     }
 }
 
+/// Renders a plot page from given render-plot spec
 fn render_plot_page<P: AsRef<Path>>(
     output_path: P,
     tables: &[String],
@@ -534,6 +512,68 @@ fn render_plot_page<P: AsRef<Path>>(
     file.write_all(html.as_bytes())?;
 
     Ok(())
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct Linkout {
+    name: String,
+    url: String,
+}
+
+/// Renders the additional column for tables that contains the linkouts
+fn render_link_column(
+    row: &[String],
+    linked_tables: &LinkedTable,
+    titles: &[String],
+    links: &HashMap<String, LinkSpec>,
+) -> Result<String> {
+    let mut linkouts = Vec::new();
+    for link_specs in links.values() {
+        let index = titles.iter().position(|t| t == &link_specs.column).unwrap();
+        if let Some(table) = &link_specs.table {
+            let val = table.replace("{value}", &row[index]);
+            linkouts.push(Linkout {
+                name: val.to_string(),
+                url: format!("../{}/index_1.html", val),
+            })
+        } else if let Some(table_row) = &link_specs.table_row {
+            let (table, linked_column) = table_row.split_once('/').unwrap();
+            let linked_values = linked_tables
+                .get(&(table.to_string(), linked_column.to_string()))
+                .unwrap();
+            let linked_value = match linked_values.index.get(&row[index]) {
+                Some(value) => value,
+                None => {
+                    bail!(TableLinkingError::NotFound {
+                        not_found: row[index].to_string(),
+                        column: titles[index].to_string(),
+                        table: table.to_string(),
+                    })
+                }
+            };
+            linkouts.push(Linkout {
+                name: row[index].to_string(),
+                url: format!(
+                    "../{}/index_{}.html?highlight={}",
+                    table,
+                    linked_value.page + 1,
+                    linked_value.row,
+                ),
+            });
+        } else {
+            unreachable!()
+        }
+    }
+
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "linkout_button.html.tera",
+        include_str!("../../../templates/linkout_button.html.tera"),
+    )?;
+    let mut context = Context::new();
+    context.insert("links", &linkouts);
+
+    Ok(templates.render("linkout_button.html.tera", &context)?)
 }
 
 #[derive(Error, Debug)]

@@ -47,6 +47,10 @@ fn default_render_table() -> Option<HashMap<String, RenderColumnSpec>> {
     Some(HashMap::new())
 }
 
+fn default_links() -> Option<HashMap<String, LinkSpec>> {
+    Some(HashMap::new())
+}
+
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct ItemSpecs {
@@ -57,6 +61,8 @@ pub(crate) struct ItemSpecs {
     pub(crate) page_size: usize,
     #[serde(default = "default_header_size")]
     pub(crate) header_rows: usize,
+    #[serde(default = "default_links")]
+    pub(crate) links: Option<HashMap<String, LinkSpec>>,
     #[serde(rename = "desc")]
     pub(crate) description: Option<String>,
     #[serde(default = "default_render_table")]
@@ -130,10 +136,6 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) custom: Option<String>,
     #[serde(default)]
-    pub(crate) link_to_table_row: Option<String>,
-    #[serde(default)]
-    pub(crate) link_to_table: Option<String>,
-    #[serde(default)]
     pub(crate) link_to_url: Option<String>,
     #[serde(default)]
     pub(crate) plot: Option<PlotSpec>,
@@ -148,6 +150,17 @@ pub(crate) struct RenderColumnSpec {
 pub(crate) struct RenderPlotSpec {
     #[serde(default)]
     pub(crate) schema: String,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
+pub(crate) struct LinkSpec {
+    #[serde(default)]
+    pub(crate) column: String,
+    #[serde(default)]
+    pub(crate) table: Option<String>,
+    #[serde(default)]
+    pub(crate) table_row: Option<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
