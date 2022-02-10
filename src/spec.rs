@@ -23,7 +23,9 @@ impl ItemsSpec {
         let config_file = fs::read_to_string(path)?;
         let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)?;
         for (_, spec) in items_spec.items.iter_mut() {
-            spec.column_index_to_value()?;
+            if spec.render_table.is_some() {
+                spec.column_index_to_value()?;
+            }
         }
         Ok(items_spec)
     }
@@ -41,6 +43,10 @@ fn default_header_size() -> usize {
     1_usize
 }
 
+fn default_render_table() -> Option<HashMap<String, RenderColumnSpec>> {
+    Some(HashMap::new())
+}
+
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct ItemSpecs {
@@ -53,7 +59,7 @@ pub(crate) struct ItemSpecs {
     pub(crate) header_rows: usize,
     #[serde(rename = "desc")]
     pub(crate) description: Option<String>,
-    #[serde(default)]
+    #[serde(default = "default_render_table")]
     pub(crate) render_table: Option<HashMap<String, RenderColumnSpec>>,
     #[serde(default)]
     pub(crate) render_plot: Option<RenderPlotSpec>,
@@ -141,7 +147,7 @@ pub(crate) struct RenderColumnSpec {
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct RenderPlotSpec {
     #[serde(default)]
-    schema: String,
+    pub(crate) schema: String,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]

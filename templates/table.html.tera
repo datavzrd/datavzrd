@@ -58,7 +58,7 @@
             {% endif %}
             <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                tables
+                items
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
                     {% for table in tables %}
