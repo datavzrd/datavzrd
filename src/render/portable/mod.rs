@@ -51,6 +51,8 @@ impl Renderer for ItemRenderer {
             let out_path = Path::new(path.as_ref()).join(name);
             fs::create_dir(&out_path)?;
 
+            let linked_tables = get_linked_tables(name, &self.specs)?;
+
             // Render plot
             if table.render_plot.is_some() {
                 render_plot_page(
@@ -58,6 +60,8 @@ impl Renderer for ItemRenderer {
                     &self.specs.items.keys().map(|s| s.to_owned()).collect_vec(),
                     name,
                     table,
+                    &linked_tables,
+                    table.links.as_ref().unwrap(),
                 )?;
             }
             // Render table
@@ -69,8 +73,6 @@ impl Renderer for ItemRenderer {
                     .get(counter_reader.records().count() - table.header_rows)
                     .page
                     + 1;
-
-                let linked_tables = get_linked_tables(name, &self.specs)?;
 
                 let mut reader = generate_reader()?;
                 let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
@@ -478,13 +480,18 @@ fn render_plot_page<P: AsRef<Path>>(
     tables: &[String],
     name: &str,
     item_spec: &ItemSpecs,
+    linked_tables: &LinkedTable,
+    links: &HashMap<String, LinkSpec>,
 ) -> Result<()> {
-    let mut reader = csv::ReaderBuilder::new()
-        .delimiter(item_spec.separator as u8)
-        .from_path(&item_spec.path)?;
+    let generate_reader = || -> csv::Result<Reader<File>> {
+        csv::ReaderBuilder::new()
+            .delimiter(item_spec.separator as u8)
+            .from_path(&item_spec.path)
+    };
+    let mut reader = generate_reader()?;
 
     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-    let records: Vec<HashMap<String, String>> = reader
+    let mut records: Vec<HashMap<String, String>> = reader
         .records()
         .skip(&item_spec.header_rows - 1)
         .map(|row| {
@@ -495,6 +502,30 @@ fn render_plot_page<P: AsRef<Path>>(
                 .collect()
         })
         .collect_vec();
+
+    if !links.is_empty() {
+        let mut linkout_reader = generate_reader()?;
+        let linkouts = linkout_reader
+            .records()
+            .map(|row| {
+                render_linkouts(
+                    &row.unwrap().iter().map(|s| s.to_owned()).collect_vec(),
+                    linked_tables,
+                    &headers,
+                    links,
+                )
+                .unwrap()
+            })
+            .collect_vec();
+
+        assert_eq!(records.len(), linkouts.len());
+
+        for (i, record) in records.iter_mut().enumerate() {
+            for linkout in &linkouts[i] {
+                record.insert(linkout.name.to_string(), linkout.url.to_string());
+            }
+        }
+    }
 
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -530,20 +561,40 @@ struct Linkout {
     url: String,
 }
 
-/// Renders the additional column for tables that contains the linkouts
+/// Renders the additional column with buttons for tables that contains the linkouts
 fn render_link_column(
     row: &[String],
     linked_tables: &LinkedTable,
     titles: &[String],
     links: &HashMap<String, LinkSpec>,
 ) -> Result<String> {
+    let linkouts = render_linkouts(row, linked_tables, titles, links)?;
+
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "linkout_button.html.tera",
+        include_str!("../../../templates/linkout_button.html.tera"),
+    )?;
+    let mut context = Context::new();
+    context.insert("links", &linkouts);
+
+    Ok(templates.render("linkout_button.html.tera", &context)?)
+}
+
+/// Formats linkouts from given links config
+fn render_linkouts(
+    row: &[String],
+    linked_tables: &LinkedTable,
+    titles: &[String],
+    links: &HashMap<String, LinkSpec>,
+) -> Result<Vec<Linkout>> {
     let mut linkouts = Vec::new();
-    for link_specs in links.values() {
+    for (name, link_specs) in links {
         let index = titles.iter().position(|t| t == &link_specs.column).unwrap();
         if let Some(table) = &link_specs.item {
             let val = table.replace("{value}", &row[index]);
             linkouts.push(Linkout {
-                name: val.to_string(),
+                name: name.to_string(),
                 url: format!("../{}/index_1.html", val),
             })
         } else if let Some(table_row) = &link_specs.table_row {
@@ -562,7 +613,7 @@ fn render_link_column(
                 }
             };
             linkouts.push(Linkout {
-                name: row[index].to_string(),
+                name: name.to_string(),
                 url: format!(
                     "../{}/index_{}.html?highlight={}",
                     table,
@@ -574,16 +625,7 @@ fn render_link_column(
             unreachable!()
         }
     }
-
-    let mut templates = Tera::default();
-    templates.add_raw_template(
-        "linkout_button.html.tera",
-        include_str!("../../../templates/linkout_button.html.tera"),
-    )?;
-    let mut context = Context::new();
-    context.insert("links", &linkouts);
-
-    Ok(templates.render("linkout_button.html.tera", &context)?)
+    Ok(linkouts)
 }
 
 #[derive(Error, Debug)]
