@@ -13,12 +13,19 @@ Plots can be fully customized by users via a config file. These also allow the u
 datavzrd allows the user to easily customize it's interactive HTML report via a config file. 
 
 ```yaml
-tables:
+items:
   table-a:
     path: "table-a.csv"
     desc: |
       # A header
       This is the **description** for *table-a*.
+    links:
+      gene details:
+        column: gene
+        item: "gene-{value}"
+      gene expression:
+        column: gene
+        table-row: table-b/gene
     render-columns:
       x:
         custom: |
@@ -27,14 +34,10 @@ tables:
           }
       y:
         link-to-url: 'https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={value}'
-      z:
-        link-to-table-row: table-b/gene
   table-b:
     path: table-b.csv
     separator: ;
     render-columns:
-      gene:
-        link-to-table: 'gene-{value}'
       significance:
         custom-plot:
           data: |
@@ -67,11 +70,30 @@ tables:
             range:
               - green
               - red
+  gene-mycn-plot:
+    path: genes/table-mycn.csv
+    header-rows: 2
+    links:
+      some expression:
+        column: quality
+        item: table-b
+    render-plot:
+      schema: |
+        {
+              "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+              "mark": "circle",
+              "encoding": {
+                "size": {"field": "significance", "type": "quantitative", "scale": {"domain": [0,100]}},
+                "color": {"field": "threshold", "scale": {"domain": [true,false]}},
+                "href": {"field": "some expression"}
+              },
+              "config": {"legend": {"disable": true}}
+            }
 ```
 
-### tables
+### items
 
-`tables` consists of all different CSV/TSV tables that should be included in the resulting report. Each table definition can contain these values:
+`items` consists of all different CSV/TSV items (table or plot) that should be included in the resulting report. If neither `render-table` nor `render-plot` is present, datavzrd will render the given file as a table. Each item definition can contain these values:
 
 | keyword                           | explanation                                                                                                                                 | default |
 |-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|---------|
@@ -80,20 +102,36 @@ tables:
 | separator                         | The delimiter of the file                                                                                                                   | ,       |
 | page-size                         | Number of rows per page                                                                                                                     | 100     |
 | header-rows                       | Number of header-rows of the file                                                                                                           | 1       |
-| [render-columns](#render-columns) | Configuration of individual column rendering                                                                                                |         |
+| [links](#links)                   | Configuration linking between items                                                                                                         |         |
+| [render-table](#render-table)     | Configuration of individual column rendering                                                                                                |         |
+| [render-plot](#render-plot)       | Configuration of a single plot                                                                                                              |         |
 
-### render-columns 
+### render-table 
 
-`render-columns` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file or its 0-based index (e.g. `index(5)` for the 6th column):
+`render-table` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file or its 0-based index (e.g. `index(5)` for the 6th column):
 
 | keyword                           | explanation                                                                                                 |
 |-----------------------------------|-------------------------------------------------------------------------------------------------------------|
 | link-to-url                       | Renders a link to the given url with {value} replace by the value of the table                              |
-| link-to-table                     | Renders as link to the given table, not a specific row                                                      |
-| link-to-table-row                 | Renders as link to the other table highlighting the row in which the gene column has the same value as here |
 | custom                            | Applies the given js function to render column content                                                      |
 | [custom-plot](#custom-plot)       | Renders a custom vega-lite plot to the corresponding table cell                                             |
-| [plot](#plot)                     | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                                          |
+| [plot](#plot)                     | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                         |
+
+### render-plot
+
+`render-plot` contains individual configurations for generating a single plot from the given CSV/TSV file.
+
+| keyword                           | explanation                                                                                                 |
+|-----------------------------------|-------------------------------------------------------------------------------------------------------------|
+| schema                            | A schema for a vega plot that is rendered into each cell of this column                                     |
+
+### links
+
+`links` can configure linkouts between multiple items.
+
+| column                            | The column that contains the value used for the linkout                                                          |
+| table-row                         | Renders as a linkout to the other table highlighting the row in which the gene column has the same value as here |
+| table                             | Renders as link to the given table, not a specific row                                                           |
 
 ### custom-plot
 

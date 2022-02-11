@@ -4,7 +4,9 @@ pub(crate) mod utils;
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
-use crate::spec::{CustomPlot, Heatmap, RenderColumnSpec, TablesSpec, TickPlot};
+use crate::spec::{
+    CustomPlot, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, RenderColumnSpec, TickPlot,
+};
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
@@ -14,106 +16,123 @@ use chrono::{DateTime, Local};
 use csv::{Reader, StringRecord};
 use itertools::Itertools;
 use lz_str::compress_to_utf16;
+use serde::Serialize;
 use serde_json::json;
 use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
+use std::option::Option::Some;
 use std::path::Path;
 use tera::{Context, Tera};
 use thiserror::Error;
 use typed_builder::TypedBuilder;
 
 #[derive(TypedBuilder, Debug)]
-pub(crate) struct TableRenderer {
-    specs: TablesSpec,
+pub(crate) struct ItemRenderer {
+    specs: ItemsSpec,
 }
 
 type LinkedTable = HashMap<(String, String), ColumnIndex>;
 
-impl Renderer for TableRenderer {
-    /// Render all tables of user config
+impl Renderer for ItemRenderer {
+    /// Render all items of user config
     fn render_tables<P>(&self, path: P) -> Result<()>
     where
         P: AsRef<Path>,
     {
-        for (name, table) in &self.specs.tables {
+        for (name, table) in &self.specs.items {
             let generate_reader = || -> csv::Result<Reader<File>> {
                 csv::ReaderBuilder::new()
                     .delimiter(table.separator as u8)
                     .from_path(&table.path)
             };
 
-            let mut counter_reader = generate_reader()?;
-
-            let row_address_factory = RowAddressFactory::new(table.page_size);
-            let pages = row_address_factory
-                .get(counter_reader.records().count() - table.header_rows)
-                .page
-                + 1;
-
-            let linked_tables = get_linked_tables(name, &self.specs)?;
-
             let out_path = Path::new(path.as_ref()).join(name);
             fs::create_dir(&out_path)?;
 
-            let mut reader = generate_reader()?;
-            let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+            let linked_tables = get_linked_tables(name, &self.specs)?;
 
-            let additional_headers = if table.header_rows > 1 {
-                let mut additional_header_reader = generate_reader()?;
-                Some(
-                    additional_header_reader
-                        .records()
-                        .take(table.header_rows - 1)
-                        .map(|r| r.unwrap())
-                        .collect_vec(),
-                )
-            } else {
-                None
-            };
-
-            for (page, grouped_records) in &reader
-                .records()
-                .skip(table.header_rows - 1)
-                .into_iter()
-                .enumerate()
-                .group_by(|(i, _)| row_address_factory.get(*i).page)
-            {
-                let records = grouped_records.collect_vec();
-                render_page(
+            // Render plot
+            if table.render_plot.is_some() {
+                render_plot_page(
                     &out_path,
-                    page + 1,
-                    pages,
-                    records
-                        .iter()
-                        .map(|(_, records)| records.as_ref().unwrap())
-                        .collect_vec(),
-                    &headers,
-                    &self.specs.tables.keys().map(|s| s.to_owned()).collect_vec(),
-                    &table.render_columns,
+                    &self.specs.items.keys().map(|s| s.to_owned()).collect_vec(),
                     name,
-                    table.description.as_deref(),
+                    table,
                     &linked_tables,
+                    table.links.as_ref().unwrap(),
                 )?;
             }
-            render_table_javascript(
-                &out_path,
-                &headers,
-                &table.path,
-                table.separator,
-                &table.render_columns,
-                additional_headers,
-            )?;
-            render_plots(&out_path, &table.path, table.separator, table.header_rows)?;
-            render_search_dialogs(
-                &out_path,
-                &headers,
-                &table.path,
-                table.separator,
-                table.page_size,
-                table.header_rows,
-            )?;
+            // Render table
+            else if let Some(table_specs) = &table.render_table {
+                let mut counter_reader = generate_reader()?;
+
+                let row_address_factory = RowAddressFactory::new(table.page_size);
+                let pages = row_address_factory
+                    .get(counter_reader.records().count() - table.header_rows)
+                    .page
+                    + 1;
+
+                let mut reader = generate_reader()?;
+                let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+
+                let additional_headers = if table.header_rows > 1 {
+                    let mut additional_header_reader = generate_reader()?;
+                    Some(
+                        additional_header_reader
+                            .records()
+                            .take(table.header_rows - 1)
+                            .map(|r| r.unwrap())
+                            .collect_vec(),
+                    )
+                } else {
+                    None
+                };
+
+                for (page, grouped_records) in &reader
+                    .records()
+                    .skip(table.header_rows - 1)
+                    .into_iter()
+                    .enumerate()
+                    .group_by(|(i, _)| row_address_factory.get(*i).page)
+                {
+                    let records = grouped_records.collect_vec();
+                    render_page(
+                        &out_path,
+                        page + 1,
+                        pages,
+                        records
+                            .iter()
+                            .map(|(_, records)| records.as_ref().unwrap())
+                            .collect_vec(),
+                        &headers,
+                        &self.specs.items.keys().map(|s| s.to_owned()).collect_vec(),
+                        table_specs,
+                        name,
+                        table.description.as_deref(),
+                        &linked_tables,
+                        table.links.as_ref().unwrap(),
+                    )?;
+                }
+                render_table_javascript(
+                    &out_path,
+                    &headers,
+                    &table.path,
+                    table.separator,
+                    table_specs,
+                    additional_headers,
+                )?;
+                render_plots(&out_path, &table.path, table.separator, table.header_rows)?;
+                render_search_dialogs(
+                    &out_path,
+                    &headers,
+                    &table.path,
+                    table.separator,
+                    table.page_size,
+                    table.header_rows,
+                )?;
+            }
         }
         Ok(())
     }
@@ -132,6 +151,7 @@ fn render_page<P: AsRef<Path>>(
     name: &str,
     description: Option<&str>,
     linked_tables: &LinkedTable,
+    links: &HashMap<String, LinkSpec>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -144,13 +164,24 @@ fn render_page<P: AsRef<Path>>(
         .iter()
         .map(|s| s.iter().collect_vec())
         .enumerate()
-        .map(|(i, r)| link_columns(render_columns, titles, r, linked_tables, i).unwrap())
+        .map(|(i, r)| link_columns(render_columns, titles, r, i).unwrap())
         .collect_vec();
     let compressed_data = compress_to_utf16(&json!(data).to_string());
+
+    let compressed_linkouts = if !links.is_empty() {
+        let linkouts = data
+            .iter()
+            .map(|r| render_link_column(r, linked_tables, titles, links).unwrap())
+            .collect_vec();
+        Some(compress_to_utf16(&json!(linkouts).to_string()))
+    } else {
+        None
+    };
 
     let local: DateTime<Local> = Local::now();
 
     context.insert("data", &json!(compressed_data).to_string());
+    context.insert("linkouts", &json!(compressed_linkouts).to_string());
     context.insert("titles", &titles.iter().collect_vec());
     context.insert("current_page", &page_index);
     context.insert("pages", &pages);
@@ -285,7 +316,6 @@ fn link_columns(
     render_columns: &HashMap<String, RenderColumnSpec>,
     titles: &[String],
     column: Vec<&str>,
-    linked_tables: &LinkedTable,
     row: usize,
 ) -> Result<Vec<String>> {
     let mut result = Vec::new();
@@ -296,34 +326,6 @@ fn link_columns(
                     "<a href='{}' target='_blank' >{}</a>",
                     link.replace("{value}", column[i]),
                     column[i]
-                ));
-            } else if let Some(table) = render_column.link_to_table.clone() {
-                result.push(format!(
-                    "<a href='../{}/index_1.html'>{}</a>",
-                    table.replace("{value}", column[i]),
-                    column[i]
-                ));
-            } else if let Some(table_row) = render_column.link_to_table_row.clone() {
-                let (table, linked_column) = table_row.split_once('/').unwrap();
-                let linked_values = linked_tables
-                    .get(&(table.to_string(), linked_column.to_string()))
-                    .unwrap();
-                let linked_value = match linked_values.index.get(column[i]) {
-                    Some(value) => value,
-                    None => {
-                        bail!(TableLinkingError::NotFound {
-                            not_found: column[i].to_string(),
-                            column: title.to_string(),
-                            table: table.to_string(),
-                        })
-                    }
-                };
-                result.push(format!(
-                    "<a href='../{}/index_{}.html?highlight={}'>{}</a>",
-                    table,
-                    linked_value.page + 1,
-                    linked_value.row,
-                    column[i],
                 ));
             } else if render_column.custom_plot.is_some() || render_column.plot.is_some() {
                 result.push(format!(
@@ -388,21 +390,23 @@ fn render_search_dialogs<P: AsRef<Path>>(
     Ok(())
 }
 
-fn get_linked_tables(table: &str, specs: &TablesSpec) -> Result<LinkedTable> {
-    let table_spec = specs.tables.get(table).unwrap();
+fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
+    let table_spec = specs.items.get(table).unwrap();
     let links = &table_spec
-        .render_columns
+        .links
+        .as_ref()
+        .unwrap()
         .iter()
-        .filter_map(|(_, rc_spec)| rc_spec.link_to_table_row.as_ref())
+        .filter_map(|(_, link_spec)| link_spec.table_row.as_ref())
         .map(|link| link.split_once('/').unwrap())
         .collect_vec();
 
     let mut result = HashMap::new();
 
     for (table, column) in links {
-        let path = &specs.tables.get(*table).unwrap().path;
-        let separator = specs.tables.get(*table).unwrap().separator;
-        let page_size = specs.tables.get(*table).unwrap().page_size;
+        let path = &specs.items.get(*table).unwrap().path;
+        let separator = specs.items.get(*table).unwrap().separator;
+        let page_size = specs.items.get(*table).unwrap().page_size;
 
         let column_index = ColumnIndex::new(path, separator, column, page_size)?;
 
@@ -468,6 +472,160 @@ fn get_column_domain(
         .to_string()),
         _ => Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string()),
     }
+}
+
+/// Renders a plot page from given render-plot spec
+fn render_plot_page<P: AsRef<Path>>(
+    output_path: P,
+    tables: &[String],
+    name: &str,
+    item_spec: &ItemSpecs,
+    linked_tables: &LinkedTable,
+    links: &HashMap<String, LinkSpec>,
+) -> Result<()> {
+    let generate_reader = || -> csv::Result<Reader<File>> {
+        csv::ReaderBuilder::new()
+            .delimiter(item_spec.separator as u8)
+            .from_path(&item_spec.path)
+    };
+    let mut reader = generate_reader()?;
+
+    let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+    let mut records: Vec<HashMap<String, String>> = reader
+        .records()
+        .skip(&item_spec.header_rows - 1)
+        .map(|row| {
+            row.unwrap()
+                .iter()
+                .enumerate()
+                .map(|(index, record)| (headers.get(index).unwrap().to_owned(), record.to_owned()))
+                .collect()
+        })
+        .collect_vec();
+
+    if !links.is_empty() {
+        let mut linkout_reader = generate_reader()?;
+        let linkouts = linkout_reader
+            .records()
+            .map(|row| {
+                render_linkouts(
+                    &row.unwrap().iter().map(|s| s.to_owned()).collect_vec(),
+                    linked_tables,
+                    &headers,
+                    links,
+                )
+                .unwrap()
+            })
+            .collect_vec();
+
+        assert_eq!(records.len(), linkouts.len());
+
+        for (i, record) in records.iter_mut().enumerate() {
+            for linkout in &linkouts[i] {
+                record.insert(linkout.name.to_string(), linkout.url.to_string());
+            }
+        }
+    }
+
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "plot.html.tera",
+        include_str!("../../../templates/plot.html.tera"),
+    )?;
+    let mut context = Context::new();
+
+    let local: DateTime<Local> = Local::now();
+
+    context.insert("data", &json!(records).to_string());
+    context.insert("description", &item_spec.description);
+    context.insert("tables", tables);
+    context.insert("name", name);
+    context.insert("specs", &item_spec.render_plot.as_ref().unwrap().schema);
+    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
+    context.insert("version", &env!("CARGO_PKG_VERSION"));
+
+    let file_path =
+        Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
+
+    let html = templates.render("plot.html.tera", &context)?;
+
+    let mut file = fs::File::create(file_path)?;
+    file.write_all(html.as_bytes())?;
+
+    Ok(())
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct Linkout {
+    name: String,
+    url: String,
+}
+
+/// Renders the additional column with buttons for tables that contains the linkouts
+fn render_link_column(
+    row: &[String],
+    linked_tables: &LinkedTable,
+    titles: &[String],
+    links: &HashMap<String, LinkSpec>,
+) -> Result<String> {
+    let linkouts = render_linkouts(row, linked_tables, titles, links)?;
+
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "linkout_button.html.tera",
+        include_str!("../../../templates/linkout_button.html.tera"),
+    )?;
+    let mut context = Context::new();
+    context.insert("links", &linkouts);
+
+    Ok(templates.render("linkout_button.html.tera", &context)?)
+}
+
+/// Formats linkouts from given links config
+fn render_linkouts(
+    row: &[String],
+    linked_tables: &LinkedTable,
+    titles: &[String],
+    links: &HashMap<String, LinkSpec>,
+) -> Result<Vec<Linkout>> {
+    let mut linkouts = Vec::new();
+    for (name, link_specs) in links {
+        let index = titles.iter().position(|t| t == &link_specs.column).unwrap();
+        if let Some(table) = &link_specs.item {
+            let val = table.replace("{value}", &row[index]);
+            linkouts.push(Linkout {
+                name: name.to_string(),
+                url: format!("../{}/index_1.html", val),
+            })
+        } else if let Some(table_row) = &link_specs.table_row {
+            let (table, linked_column) = table_row.split_once('/').unwrap();
+            let linked_values = linked_tables
+                .get(&(table.to_string(), linked_column.to_string()))
+                .unwrap();
+            let linked_value = match linked_values.index.get(&row[index]) {
+                Some(value) => value,
+                None => {
+                    bail!(TableLinkingError::NotFound {
+                        not_found: row[index].to_string(),
+                        column: titles[index].to_string(),
+                        table: table.to_string(),
+                    })
+                }
+            };
+            linkouts.push(Linkout {
+                name: name.to_string(),
+                url: format!(
+                    "../{}/index_{}.html?highlight={}",
+                    table,
+                    linked_value.page + 1,
+                    linked_value.row,
+                ),
+            });
+        } else {
+            unreachable!()
+        }
+    }
+    Ok(linkouts)
 }
 
 #[derive(Error, Debug)]

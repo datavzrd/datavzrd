@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table-fixed-columns.min.css">
     <link rel="stylesheet" type="text/css" href="../static/datavzrd.css">
 </head>
 
@@ -12,6 +13,7 @@
 <script src="../static/jquery.min.js"></script>
 <script src="../static/bootstrap.bundle.min.js"></script>
 <script src="../static/bootstrap-table.min.js"></script>
+<script src="../static/bootstrap-table-fixed-columns.min.js"></script>
 <script src="../static/vega.min.js"></script>
 <script src="../static/vega-lite.min.js"></script>
 <script src="../static/vega-embed.min.js"></script>
@@ -23,6 +25,7 @@
 
 <script>
     const data = {{ data | safe }};
+    const linkouts = {{ linkouts | safe }};
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -58,7 +61,7 @@
             {% endif %}
             <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                tables
+                items
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
                     {% for table in tables %}
