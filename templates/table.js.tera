@@ -72,7 +72,7 @@ $(document).ready(function() {
 
     $( ".btn-sm" ).click(function() {
         var col = $(this).data( "col" );
-        var field = $(this).data("val");
+        var field = $(this).data("val").toString();
         if (field.startsWith("<div")) {
             var temp = $(field);
             field = temp[0].dataset.value;
