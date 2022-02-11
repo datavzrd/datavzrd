@@ -28,16 +28,19 @@ $(document).ready(function() {
     }{% if not loop.last %},{% endif %}{% endfor %}];
 
     var fixed_right = 0;
+    var fixed = false;
 
     if (linkouts != null) {
         bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
         fixed_right = 1;
+        fixed = true;
     }
 
     $('#table').bootstrapTable({
         height: he,
         columns: bs_table_cols,
         data: [],
+        fixedColumns: fixed,
         fixedRightNumber: fixed_right,
     })
 

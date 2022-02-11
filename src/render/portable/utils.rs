@@ -19,6 +19,10 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
             include_str!("../../../static/bootstrap-table.min.js"),
         ),
         (
+            "bootstrap-table-fixed-columns.min.js",
+            include_str!("../../../static/bootstrap-table-fixed-columns.min.js"),
+        ),
+        (
             "jquery.min.js",
             include_str!("../../../static/jquery.min.js"),
         ),
@@ -43,6 +47,10 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
         (
             "bootstrap-table.min.css",
             include_str!("../../../static/bootstrap-table.min.css"),
+        ),
+        (
+            "bootstrap-table-fixed-columns.min.css",
+            include_str!("../../../static/bootstrap-table-fixed-columns.min.css"),
         ),
         ("datavzrd.css", include_str!("../../../static/datavzrd.css")),
         (

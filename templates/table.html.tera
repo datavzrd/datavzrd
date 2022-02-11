@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table-fixed-columns.min.css">
     <link rel="stylesheet" type="text/css" href="../static/datavzrd.css">
 </head>
 
@@ -12,6 +13,7 @@
 <script src="../static/jquery.min.js"></script>
 <script src="../static/bootstrap.bundle.min.js"></script>
 <script src="../static/bootstrap-table.min.js"></script>
+<script src="../static/bootstrap-table-fixed-columns.min.js"></script>
 <script src="../static/vega.min.js"></script>
 <script src="../static/vega-lite.min.js"></script>
 <script src="../static/vega-embed.min.js"></script>
