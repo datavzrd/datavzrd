@@ -108,7 +108,7 @@ items:
 | separator                         | The delimiter of the file                                                                                                                   | ,       |
 | page-size                         | Number of rows per page                                                                                                                     | 100     |
 | header-rows                       | Number of header-rows of the file                                                                                                           | 1       |
-| pin-columns                       | Number columns that are fixed to the left side of the table and therefore always visible.                                                   | 0       |
+| pin-columns                       | Number of columns that are fixed to the left side of the table and therefore always visible.                                                   | 0       |
 | [links](#links)                   | Configuration linking between items                                                                                                         |         |
 | [render-table](#render-table)     | Configuration of individual column rendering                                                                                                |         |
 | [render-plot](#render-plot)       | Configuration of a single plot                                                                                                              |         |
