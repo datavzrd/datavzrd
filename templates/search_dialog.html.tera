@@ -10,7 +10,17 @@
 <script src="../../static/jquery.min.js"></script>
 <script src="../../static/bootstrap.bundle.min.js"></script>
 <script src="../../static/bootstrap-table.min.js"></script>
-
+<script>
+    $(document).ready(function() {
+        $('.table').bootstrapTable({
+            onPostHeader: function () {
+                $(".search-input").focus();
+            }
+        });
+        $(".search-input").focus();
+    });
+</script>
+</script>
 <div class="container-fluid">
     <div class="row">
         <div class="col-9 mr-auto">
