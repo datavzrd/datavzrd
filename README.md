@@ -13,6 +13,7 @@ Plots can be fully customized by users via a config file. These also allow the u
 datavzrd allows the user to easily customize it's interactive HTML report via a config file. 
 
 ```yaml
+name: My beautiful datvzrd report
 items:
   table-a:
     path: "table-a.csv"
@@ -90,6 +91,10 @@ items:
               "config": {"legend": {"disable": true}}
             }
 ```
+
+### name
+
+`name` allows the user to optionally set a name for the generated report that will be heading all resulting tables and plots.
 
 ### items
 

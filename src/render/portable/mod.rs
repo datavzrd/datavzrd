@@ -113,6 +113,7 @@ impl Renderer for ItemRenderer {
                         table.description.as_deref(),
                         &linked_tables,
                         table.links.as_ref().unwrap(),
+                        &self.specs.report_name,
                     )?;
                 }
                 render_table_javascript(
@@ -152,6 +153,7 @@ fn render_page<P: AsRef<Path>>(
     description: Option<&str>,
     linked_tables: &LinkedTable,
     links: &HashMap<String, LinkSpec>,
+    report_name: &str,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -188,6 +190,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("description", &description);
     context.insert("tables", tables);
     context.insert("name", name);
+    context.insert("report_name", report_name);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
     context.insert("version", &env!("CARGO_PKG_VERSION"));
 
