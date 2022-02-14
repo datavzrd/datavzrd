@@ -49,6 +49,9 @@
         <ul class="navbar-nav mr-auto">
             <li><a href="index_{{ current_page }}.html">{{ name }}</a></li>
         </ul>
+        <ul class="nav navbar-nav mr-auto">
+            <li class="nav-item"><div>{{ report_name }}</div></li>
+        </ul>
         <span class="pull-right">
             {% if description %}
             <div class="btn-group">

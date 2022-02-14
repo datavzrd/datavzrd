@@ -16,6 +16,8 @@ use thiserror::Error;
 pub(crate) struct ItemsSpec {
     #[deref]
     pub(crate) items: HashMap<String, ItemSpecs>,
+    #[serde(default, rename = "name")]
+    pub(crate) report_name: String,
 }
 
 impl ItemsSpec {
@@ -248,9 +250,11 @@ mod tests {
 
         let expected_config = ItemsSpec {
             items: HashMap::from([(String::from("table-a"), expected_table_spec)]),
+            report_name: "my_report".to_string(),
         };
 
         let raw_config = r#"
+    name: my_report    
     items:
         table-a:
             path: test.tsv
@@ -292,6 +296,7 @@ mod tests {
 
         let expected_config = ItemsSpec {
             items: HashMap::from([(String::from("plot-a"), expected_item_spec)]),
+            report_name: "".to_string(),
         };
 
         let raw_config = r#"
