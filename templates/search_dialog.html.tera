@@ -10,7 +10,14 @@
 <script src="../../static/jquery.min.js"></script>
 <script src="../../static/bootstrap.bundle.min.js"></script>
 <script src="../../static/bootstrap-table.min.js"></script>
-
+<script>
+    $(document).ready(function() {
+        setTimeout(function(){
+            $(".search-input").focus()
+        }, 500);
+    });
+</script>
+</script>
 <div class="container-fluid">
     <div class="row">
         <div class="col-9 mr-auto">
