@@ -12,9 +12,12 @@
 <script src="../../static/bootstrap-table.min.js"></script>
 <script>
     $(document).ready(function() {
-        setTimeout(function(){
-            $(".search-input").focus()
-        }, 500);
+        $('.table').bootstrapTable({
+            onPostHeader: function () {
+                $(".search-input").focus();
+            }
+        });
+        $(".search-input").focus();
     });
 </script>
 </script>
