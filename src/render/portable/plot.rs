@@ -1,5 +1,5 @@
 use crate::utils::column_type::{classify_table, ColumnType};
-use anyhow::Result;
+use anyhow::{Context as AnyhowContext, Result};
 use csv::Reader;
 use itertools::Itertools;
 use ndhistogram::axis::Uniform;
@@ -25,7 +25,8 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
 
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
-        .from_path(csv_path)?;
+        .from_path(csv_path)
+        .context(format!("Could not read file with path {:?}", csv_path))?;
 
     let path = Path::new(output_path.as_ref()).join("plots");
     fs::create_dir(&path)?;
@@ -75,7 +76,8 @@ fn generate_numeric_plot(
             .from_path(&path)
     };
 
-    let mut reader = generate_reader()?;
+    let mut reader =
+        generate_reader().context(format!("Could not read file with path {:?}", path))?;
 
     let (min, max) = get_min_max(path, separator, column_index, header_rows)?;
 
@@ -125,8 +127,10 @@ pub(crate) fn get_min_max(
             .from_path(&path)
     };
 
-    let mut min_reader = generate_reader()?;
-    let mut max_reader = generate_reader()?;
+    let mut min_reader =
+        generate_reader().context(format!("Could not read file with path {:?}", path))?;
+    let mut max_reader =
+        generate_reader().context(format!("Could not read file with path {:?}", path))?;
 
     let min = min_reader
         .records()
@@ -153,7 +157,8 @@ fn generate_nominal_plot(
 ) -> Result<Option<Vec<PlotRecord>>> {
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
-        .from_path(path)?;
+        .from_path(path)
+        .context(format!("Could not read file with path {:?}", path))?;
 
     let mut count_values = HashMap::new();
 

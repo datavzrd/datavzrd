@@ -10,8 +10,8 @@ use crate::spec::{
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
-use anyhow::bail;
 use anyhow::Result;
+use anyhow::{bail, Context as AnyhowContext};
 use chrono::{DateTime, Local};
 use csv::{Reader, StringRecord};
 use itertools::Itertools;
@@ -76,7 +76,8 @@ impl Renderer for ItemRenderer {
             }
             // Render table
             else if let Some(table_specs) = &table.render_table {
-                let mut counter_reader = generate_reader()?;
+                let mut counter_reader = generate_reader()
+                    .context(format!("Could not read file with path {:?}", &dataset.path))?;
 
                 let row_address_factory = RowAddressFactory::new(table.page_size);
                 let pages = row_address_factory
@@ -84,11 +85,13 @@ impl Renderer for ItemRenderer {
                     .page
                     + 1;
 
-                let mut reader = generate_reader()?;
+                let mut reader = generate_reader()
+                    .context(format!("Could not read file with path {:?}", &dataset.path))?;
                 let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
 
                 let additional_headers = if dataset.header_rows > 1 {
-                    let mut additional_header_reader = generate_reader()?;
+                    let mut additional_header_reader = generate_reader()
+                        .context(format!("Could not read file with path {:?}", &dataset.path))?;
                     Some(
                         additional_header_reader
                             .records()
@@ -380,7 +383,8 @@ fn render_search_dialogs<P: AsRef<Path>>(
     for (column, title) in titles.iter().enumerate() {
         let mut reader = csv::ReaderBuilder::new()
             .delimiter(separator as u8)
-            .from_path(csv_path)?;
+            .from_path(csv_path)
+            .context(format!("Could not read file with path {:?}", csv_path))?;
 
         let row_address_factory = RowAddressFactory::new(page_size);
 
@@ -462,7 +466,8 @@ fn render_tick_plot(
 ) -> Result<String> {
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
-        .from_path(csv_path)?;
+        .from_path(csv_path)
+        .context(format!("Could not read file with path {:?}", csv_path))?;
 
     let column_index = reader
         .headers()
@@ -493,7 +498,8 @@ fn get_column_domain(
 ) -> Result<String> {
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
-        .from_path(csv_path)?;
+        .from_path(csv_path)
+        .context(format!("Could not read file with path {:?}", csv_path))?;
 
     let column_index = reader
         .headers()
@@ -526,7 +532,8 @@ fn render_plot_page<P: AsRef<Path>>(
             .delimiter(dataset.separator as u8)
             .from_path(&dataset.path)
     };
-    let mut reader = generate_reader()?;
+    let mut reader =
+        generate_reader().context(format!("Could not read file with path {:?}", &dataset.path))?;
 
     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
     let mut records: Vec<HashMap<String, String>> = reader
@@ -542,7 +549,8 @@ fn render_plot_page<P: AsRef<Path>>(
         .collect_vec();
 
     if !links.is_empty() {
-        let mut linkout_reader = generate_reader()?;
+        let mut linkout_reader = generate_reader()
+            .context(format!("Could not read file with path {:?}", &dataset.path))?;
         let linkouts = linkout_reader
             .records()
             .map(|row| {

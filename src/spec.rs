@@ -1,6 +1,6 @@
 use crate::render::portable::DatasetError;
-use anyhow::bail;
 use anyhow::Result;
+use anyhow::{bail, Context};
 use derefable::Derefable;
 use itertools::Itertools;
 use lazy_static::lazy_static;
@@ -101,7 +101,8 @@ impl ItemSpecs {
         let mut indexed_keys = HashMap::new();
         let mut reader = csv::ReaderBuilder::new()
             .delimiter(dataset.separator as u8)
-            .from_path(&dataset.path)?;
+            .from_path(&dataset.path)
+            .context(format!("Could not read file with path {:?}", &dataset.path))?;
         let headers = reader.headers()?;
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().iter() {
             if INDEX.is_match(key) {
