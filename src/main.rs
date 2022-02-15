@@ -2,7 +2,7 @@ use crate::render::portable::utils::{render_index_file, render_static_files};
 use crate::render::portable::ItemRenderer;
 use crate::render::Renderer;
 use crate::spec::ItemsSpec;
-use anyhow::{Context, Result};
+use anyhow::{bail, Context, Result};
 use structopt::StructOpt;
 
 pub(crate) mod cli;
@@ -16,6 +16,10 @@ fn main() -> Result<()> {
         "Could not find config file under given path {:?}",
         &opt.config
     ))?;
+
+    if !opt.output.exists() {
+        bail!("Given output directory {:?} does not exist", &opt.output);
+    }
 
     render_index_file(&opt.output, &config)?;
     render_static_files(&opt.output)?;
