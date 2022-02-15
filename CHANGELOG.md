@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.1](https://www.github.com/koesterlab/datavzrd/compare/v0.1.0...v0.1.1) (2022-02-15)
+
+
+### Bug Fixes
+
+* updated release process ([e8463f7](https://www.github.com/koesterlab/datavzrd/commit/e8463f7db8d946898a36f5d7001984515322ad1c))
+
 ## 0.1.0 (2022-02-15)
 
 

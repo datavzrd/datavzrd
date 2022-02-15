@@ -1,6 +1,6 @@
 [package]
 name = "datavzrd"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Johannes Köster <johannes.koester@tu-dortmund.de>", "Felix Wiegand <felix.wiegand@tu-dortmund.de>"]
 edition = "2021"
 
