@@ -1,0 +1,185 @@
+oscar_no,oscar_yr,award,name,movie,age,birth_pl,birth_date,birth_mo,birth_d,birth_y
+1,1929,Best actress,Janet Gaynor,7th Heaven,22,Pennsylvania,1906-10-06,10,6,1906
+2,1930,Best actress,Mary Pickford,Coquette,37,Canada,1892-04-08,4,8,1892
+3,1931,Best actress,Norma Shearer,The Divorcee,28,Canada,1902-08-10,8,10,1902
+4,1932,Best actress,Marie Dressler,Min and Bill,63,Canada,1868-11-09,11,9,1868
+5,1933,Best actress,Helen Hayes,The Sin of Madelon Claudet,32,Washington DC,1900-10-10,10,10,1900
+6,1934,Best actress,Katharine Hepburn,Morning Glory,26,Connecticut,1907-05-12,5,12,1907
+7,1935,Best actress,Claudette Colbert,It Happened One Night,31,France,1903-09-13,9,13,1903
+8,1936,Best actress,Bette Davis,Dangerous,27,Massachusetts,1908-04-05,4,5,1908
+9,1937,Best actress,Luise Rainer,The Great Ziegfeld,26,Germany,1910-01-12,1,12,1910
+10,1938,Best actress,Luise Rainer,The Good Earth,27,Germany,1910-01-12,1,12,1910
+11,1939,Best actress,Bette Davis,Jezebel,30,Massachusetts,1908-04-05,4,5,1908
+12,1940,Best actress,Vivien Leigh,Gone with the Wind,26,India,1913-11-05,11,5,1913
+13,1941,Best actress,Ginger Rogers,Kitty Foyle,29,Missouri,1911-07-16,7,16,1911
+14,1942,Best actress,Joan Fontaine,Suspicion,24,Japan,1917-10-22,10,22,1917
+15,1943,Best actress,Greer Garson,Mrs. Miniver,38,England,1904-09-29,9,29,1904
+16,1944,Best actress,Jennifer Jones,The Song of Bernadette,24,Oklahoma,1919-03-02,3,2,1919
+17,1945,Best actress,Ingrid Bergman,Gaslight,29,Sweden,1915-08-29,8,29,1915
+18,1946,Best actress,Joan Crawford,Mildred Pierce,33,Texas,1912-03-23,3,23,1912
+19,1947,Best actress,Olivia de Havilland,To Each His Own,30,Japan,1916-07-01,7,1,1916
+20,1948,Best actress,Loretta Young,The Farmer's Daughter,34,Utah,1913-01-06,1,6,1913
+21,1949,Best actress,Jane Wyman,Johnny Belinda,34,Missouri,1914-01-04,1,4,1914
+22,1950,Best actress,Olivia de Havilland,The Heiress,33,Japan,1916-07-01,7,1,1916
+23,1951,Best actress,Judy Holliday,Born Yesterday,29,New York,1921-06-21,6,21,1921
+24,1952,Best actress,Vivien Leigh,A Streetcar Named Desire,38,India,1913-11-05,11,5,1913
+25,1953,Best actress,Shirley Booth,"Come Back, Little Sheba",54,New York,1898-08-30,8,30,1898
+26,1954,Best actress,Audrey Hepburn,Roman Holiday,24,Belgium,1929-05-04,5,4,1929
+27,1955,Best actress,Grace Kelly,The Country Girl,25,Philly,1929-11-12,11,12,1929
+28,1956,Best actress,Anna Magnani,The Rose Tattoo,47,Italy,1908-03-07,3,7,1908
+29,1957,Best actress,Ingrid Bergman,Anastasia,41,Sweden,1915-08-29,8,29,1915
+30,1958,Best actress,Joanne Woodward,The Three Faces of Eve,27,Georgia,1930-02-27,2,27,1930
+31,1959,Best actress,Susan Hayward,I Want to Live!,41,New York,1917-06-30,6,30,1917
+32,1960,Best actress,Simone Signoret,Room at the Top,38,Germany,1921-03-25,3,25,1921
+33,1961,Best actress,Elisabeth Taylor,Butterfield 8,28,England,1932-02-27,2,27,1932
+34,1962,Best actress,Sophia Loren,Two Women,27,Italy,1934-09-20,9,20,1934
+35,1963,Best actress,Anne Bancroft,The Miracle Worker,31,New York,1931-09-17,9,17,1931
+36,1964,Best actress,Patricia Neal,Hud,37,Kentucky,1926-01-20,1,20,1926
+37,1965,Best actress,Julie Andrews,Mary Poppins,29,England,1935-10-01,10,1,1935
+38,1966,Best actress,Julie Christie,Darling,25,India,1940-04-14,4,14,1940
+39,1967,Best actress,Elizabeth Taylor,Who's Afraid of Virginia Woolf,34,England,1932-02-27,2,27,1932
+40,1968,Best actress,Katharine Hepburn,Guess Who's Coming to Dinner,60,Connecticut,1907-05-12,5,12,1907
+41,1969,Best actress,Barbra Streisand,Funny Girl,26,New York,1942-04-24,4,24,1942
+41,1969,Best actress,Katharine Hepburn,The Lion in Winter,61,Connecticut,1907-05-12,5,12,1907
+42,1970,Best actress,Maggie Smith,The Prime of Miss Jean Brodie,35,England,1934-12-28,12,28,1934
+43,1971,Best actress,Glenda Jackson,Women in Love,34,England,1936-05-09,5,9,1936
+44,1972,Best actress,Jane Fonda,Klute,34,New York,1937-12-21,12,21,1937
+45,1973,Best actress,Liza Minnelli,Cabaret,26,California,1946-03-12,3,12,1946
+46,1974,Best actress,Glenda Jackson,A Touch of Class,37,England,1936-05-09,5,9,1936
+47,1975,Best actress,Ellen Burstyn,Alice Doesn't Live Here Anymore,42,Michigan,1932-12-07,12,7,1932
+48,1976,Best actress,Louise Fletcher,One Flew Over the Cuckoo's Nest,41,Alabama,1934-07-22,7,22,1934
+49,1977,Best actress,Faye Dunaway,Network,35,Florida,1941-01-14,1,14,1941
+50,1978,Best actress,Diane Keaton,Annie Hall,31,California,1946-01-05,1,5,1946
+51,1979,Best actress,Jane Fonda,Coming Home,41,New York,1937-12-21,12,21,1937
+52,1980,Best actress,Sally Field,Norma Rae,33,California,1946-11-06,11,6,1946
+53,1981,Best actress,Sissy Spacek,Coal Miner's Daughter,31,Texas,1949-12-25,12,25,1949
+54,1982,Best actress,Katharine Hepburn,On Golden Pond,74,Connecticut,1907-05-12,5,12,1907
+55,1983,Best actress,Meryl Streep,Sophie's Choice,33,New Jersey,1949-06-22,6,22,1949
+56,1984,Best actress,Shirley MacLaine,Terms of Endearment,49,Virginia,1934-04-24,4,24,1934
+57,1985,Best actress,Sally Field,Places in the Heart,38,California,1946-11-06,11,6,1946
+58,1986,Best actress,Geraldine Page,The Trip to Bountiful,61,Missouri,1924-11-22,11,22,1924
+59,1987,Best actress,Marlee Matlin,Children of a Lesser God,21,Illinois,1965-08-24,8,24,1965
+60,1988,Best actress,Cher,Moonstruck,41,California,1946-05-20,5,20,1946
+61,1989,Best actress,Jodie Foster,The Accused,26,California,1962-11-19,11,19,1962
+62,1990,Best actress,Jessica Tandy,Driving Miss Daisy,80,England,1909-06-07,6,7,1909
+63,1991,Best actress,Kathy Bates,Misery,42,Tennessee,1948-06-28,6,28,1948
+64,1992,Best actress,Jodie Foster,The Silence of the Lambs,29,California,1962-11-19,11,19,1962
+65,1993,Best actress,Emma Thompson,Howards End,33,England,1959-04-15,4,15,1959
+66,1994,Best actress,Holly Hunter,The Piano,35,Georgia,1958-03-20,3,20,1958
+67,1995,Best actress,Jessica Lange,Blue Sky,45,Minnesota,1949-04-20,4,20,1949
+68,1996,Best actress,Susan Sarandon,Dead Man Walking,49,New York,1946-10-04,10,4,1946
+69,1997,Best actress,Frances McDormand,Fargo,39,Illinois,1957-06-23,6,23,1957
+70,1998,Best actress,Helen Hunt,As Good As It Gets,34,California,1963-06-15,6,15,1963
+71,1999,Best actress,Gwyneth Paltrow,Shakespeare in Love,26,California,1972-09-28,9,28,1972
+72,2000,Best actress,Hilary Swank,Boys Don't Cry,25,Washington,1974-07-30,7,30,1974
+73,2001,Best actress,Julia Roberts,Erin Brockovich,33,Georgia,1967-10-28,10,28,1967
+74,2002,Best actress,Halle Berry,Monster's Ball,35,Ohio,1966-08-14,8,14,1966
+75,2003,Best actress,Nicole Kidman,The Hours,35,Australia,1967-06-20,6,20,1967
+76,2004,Best actress,Charlize Theron,Monster,28,South Africa,1975-08-07,8,7,1975
+77,2005,Best actress,Hilary Swank,Million Dollar Baby,30,Washington,1974-07-30,7,30,1974
+78,2006,Best actress,Reese Witherspoon,Walk the Line,29,Louisiana,1976-03-22,3,22,1976
+79,2007,Best actress,Helen Mirren,The Queen,61,England,1945-07-26,7,26,1945
+80,2008,Best actress,Marion Cotillard,La Vie En Rose,32,France,1975-09-30,9,30,1975
+81,2009,Best actress,Kate Winslet,The Reader,33,England,1975-10-05,10,5,1975
+82,2010,Best actress,Sandra Bullock,The Blind Side,45,Virginia,1964-07-26,7,26,1964
+83,2011,Best actress,Natalie Portman,Black Swan,29,Israel,1981-09-06,9,6,1981
+84,2012,Best actress,Meryl Streep,The Iron Lady,62,New Jersey,1949-06-22,6,22,1949
+1,1929,Best actor,Emil Jannings,The Way of All Flesh,44,Switzerland,1884-07-23,7,23,1884
+2,1930,Best actor,Warner Baxter,In Old Arizona,40,Ohio,1889-03-29,3,29,1889
+3,1931,Best actor,George Arliss,Disraeli,62,England,1868-04-10,4,10,1868
+4,1932,Best actor,Lionel Barrymore,A Free Soul,53,Pennsylvania,1878-04-28,4,28,1878
+5,1933,Best actor,Fredric March,Dr. Jekyll and Mr. Hyde,35,Wisconsin,1897-08-31,8,31,1897
+5,1933,Best actor,Wallace Beery,The Champ,47,Missouri,1885-04-01,4,1,1885
+6,1934,Best actor,Charles Laughton,The Private Life of Henry VIII,34,England,1899-07-01,7,1,1899
+7,1935,Best actor,Clark Gable,It Happened One Night,33,Ohio,1901-02-01,2,1,1901
+8,1936,Best actor,Victor McLaglen,The Informer,52,England,1883-12-11,12,11,1883
+9,1937,Best actor,Paul Muni,The Story of Louis Pasteur,41,Poland,1895-09-22,9,22,1895
+10,1938,Best actor,Spencer Tracy,Captains Courageous,37,Wisconsin,1900-04-05,4,5,1900
+11,1939,Best actor,Spencer Tracy,Boys Town,38,Wisconsin,1900-04-05,4,5,1900
+12,1940,Best actor,Robert Donat,"Goodbye, Mr. Chips",34,England,1905-03-18,3,18,1905
+13,1941,Best actor,James Stewart,The Philadelphia Story,32,Pennsylvania,1908-05-20,5,20,1908
+14,1942,Best actor,Gary Cooper,Sergeant York,40,Montana,1901-05-07,5,7,1901
+15,1943,Best actor,James Cagney,Yankee Doodle Dandy,43,New York,1899-07-17,7,17,1899
+16,1944,Best actor,Paul Lukas,Watch on the Rhine,48,Hungary,1895-05-26,5,26,1895
+17,1945,Best actor,Bing Crosby,Going My Way,41,Washington,1903-05-03,5,3,1903
+18,1946,Best actor,Ray Milland,The Lost Weekend,40,Wales,1905-01-03,1,3,1905
+19,1947,Best actor,Fredric March,The Best Years of Our Lives,49,Wisconsin,1897-08-31,8,31,1897
+20,1948,Best actor,Ronald Colman,A Double Life,56,England,1891-02-09,2,9,1891
+21,1949,Best actor,Laurence Olivier,Hamlet,41,England,1907-05-22,5,22,1907
+22,1950,Best actor,Broderick Crawford,All the King's Men,38,Pennsylvania,1911-12-09,12,9,1911
+23,1951,Best actor,Jose Ferrer,Cyrano de Bergerac,41,Puerto Rico,1909-01-08,1,8,1909
+24,1952,Best actor,Humphrey Bogart,The African Queen,52,New York,1899-12-25,12,25,1899
+25,1953,Best actor,Gary Cooper,High Noon,51,Montana,1901-05-07,5,7,1901
+26,1954,Best actor,William Holden,Stalag 17,35,Illinois,1918-04-17,4,17,1918
+27,1955,Best actor,Marlon Brando,On the Waterfront,30,Nebraska,1924-04-03,4,3,1924
+28,1956,Best actor,Ernest Borgnine,Marty,38,Connecticut,1917-01-24,1,24,1917
+29,1957,Best actor,Yul Brynner,The King and I,41,Russia,1915-07-07,7,7,1915
+30,1958,Best actor,Alec Guinness,The Bridge on the River Kwai,43,England,1914-04-02,4,2,1914
+31,1959,Best actor,David Niven,Separate Tables,48,Wales,1910-03-01,3,1,1910
+32,1960,Best actor,Charlton Heston,Ben-Hur,36,Illinois,1923-10-04,10,4,1923
+33,1961,Best actor,Burt Lancaster,Elmer Gantry,47,New York,1913-11-02,11,2,1913
+34,1962,Best actor,Maximilian Schell,Judgment at Nuremberg,31,Austria,1930-12-08,12,8,1930
+35,1963,Best actor,Gregory Peck,To Kill a Mockingbird,46,California,1916-04-05,4,5,1916
+36,1964,Best actor,Sidney Poitier,Lilies of the Field,36,Florida,1927-02-20,2,20,1927
+37,1965,Best actor,Rex Harrison,My Fair Lady,56,England,1908-03-05,3,5,1908
+38,1966,Best actor,Lee Marvin,Cat Ballou,41,New York,1924-02-19,2,19,1924
+39,1967,Best actor,Paul Scofield,A Man for All Seasons,44,England,1922-01-21,1,21,1922
+40,1968,Best actor,Rod Steiger,In the Heat of the Night,42,New York,1925-04-14,4,14,1925
+41,1969,Best actor,Cliff Robertson,Charly,43,California,1925-09-09,9,9,1925
+42,1970,Best actor,John Wayne,True Grit,62,Iowa,1907-05-26,5,26,1907
+43,1971,Best actor,George C. Scott,Patton,43,Virginia,1927-10-18,10,18,1927
+44,1972,Best actor,Gene Hackman,The French Connection,41,California,1930-01-30,1,30,1930
+45,1973,Best actor,Marlon Brando,The Godfather,48,Nebraska,1924-04-03,4,3,1924
+46,1974,Best actor,Jack Lemmon,Save the Tiger,48,Massachusetts,1925-02-08,2,8,1925
+47,1975,Best actor,Art Carney,Harry and Tonto,56,New York,1918-11-04,11,4,1918
+48,1976,Best actor,Jack Nicholson,One Flew Over The Cuckoo's Nest,38,New York,1937-04-22,4,22,1937
+49,1977,Best actor,Peter Finch,Network,60,England,1916-09-28,9,28,1916
+50,1978,Best actor,Richard Dreyfuss,The Goodbye Girl,30,New York,1947-10-29,10,29,1947
+51,1979,Best actor,Jon Voight,Coming Home,40,New York,1938-12-29,12,29,1938
+52,1980,Best actor,Dustin Hoffman,Kramer vs. Kramer,42,California,1937-08-08,8,8,1937
+53,1981,Best actor,Robert De Niro,Raging Bull,37,New York,1943-08-17,8,17,1943
+54,1982,Best actor,Henry Fonda,On Golden Pond,76,Nebraska,1905-05-16,5,16,1905
+55,1983,Best actor,Ben Kingsley,Kung Fu Ghandi,39,England,1943-12-31,12,31,1943
+56,1984,Best actor,Robert Duvall,Tender Mercies,52,California,1931-01-05,1,5,1931
+57,1985,Best actor,F. Murray Abraham,Amadeus,45,Pennsylvania,1939-10-24,10,24,1939
+58,1986,Best actor,William Hurt,Kiss of the Spider Woman,35,Washington DC,1950-03-20,3,20,1950
+59,1987,Best actor,Paul Newman,The Color of Money,61,Ohio,1925-01-26,1,26,1925
+60,1988,Best actor,Michael Douglas,Wall Street,43,New Jersey,1944-09-25,9,25,1944
+61,1989,Best actor,Dustin Hoffman,Rain Man,51,California,1937-08-08,8,8,1937
+62,1990,Best actor,Daniel Day-Lewis,My Left Foot,32,England,1957-04-29,4,29,1957
+63,1991,Best actor,Jeremy Irons,Reversal of Fortune,42,Isle of Wight,1948-09-19,9,19,1948
+64,1992,Best actor,Anthony Hopkins,The Silence of the Lambs,54,Wales,1937-12-31,12,31,1937
+65,1993,Best actor,Al Pacino,Scent of a Woman,52,New York,1940-04-25,4,25,1940
+66,1994,Best actor,Tom Hanks,Philadelphia,37,California,1956-07-09,7,9,1956
+67,1995,Best actor,Tom Hanks,Forrest Gump,38,California,1956-07-09,7,9,1956
+68,1996,Best actor,Nicolas Cage,Leaving Las Vegas,31,California,1964-01-07,1,7,1964
+69,1997,Best actor,Geoffrey Rush,Shine,45,Australia,1951-07-06,7,6,1951
+70,1998,Best actor,Jack Nicholson,As Good as It Gets,60,New York,1937-04-22,4,22,1937
+71,1999,Best actor,Roberto Benigni,Life Is Beautiful,46,Italy,1952-10-27,10,27,1952
+72,2000,Best actor,Kevin Spacey,American Beauty,40,New Jersey,1959-07-26,7,26,1959
+73,2001,Best actor,Russell Crowe,Gladiator,36,New Zealand,1964-04-07,4,7,1964
+74,2002,Best actor,Denzel Washington,Training Day,47,New York,1954-12-28,12,28,1954
+75,2003,Best actor,Adrien Brody,The Pianist,29,New York,1973-04-14,4,14,1973
+76,2004,Best actor,Sean Penn,Mystic River,43,California,1960-08-17,8,17,1960
+77,2005,Best actor,Jamie Foxx,Ray,37,Texas,1967-12-13,12,13,1967
+78,2006,Best actor,Philip Hoffman,Capote,38,New York,1967-07-23,7,23,1967
+79,2007,Best actor,Forest Whitaker,The Last King of Scotland,45,California,1961-07-15,7,15,1961
+80,2008,Best actor,Daniel Day-Lewis,There Will Be Blood,50,England,1957-04-29,4,29,1957
+81,2009,Best actor,Sean Penn,Milk,48,California,1960-08-17,8,17,1960
+82,2010,Best actor,Jeff Bridges,Crazy Heart,60,California,1949-12-04,12,4,1949
+83,2011,Best actor,Colin Firth,The King's Speech,50,England,1960-10-09,10,9,1960
+84,2012,Best actor,Jean Dujardin,The Artist,39,France,1972-07-19,7,19,1972
+85,2013,Best actress,Jennifer Lawrence,Silver Linings Playbook,22,Kentucky,1990-08-15,8,15,1990
+86,2014,Best actress,Cate Blanchett,Blue Jasmine,44,Australia,1969-05-14,5,14,1969
+87,2015,Best actress,Julianne Moore,Still Alice,54,North Carolina,1960-12-03,12,3,1960
+88,2016,Best actress,Brie Larson,Room,26,California,1989-10-01,10,1,1989
+89,2017,Best actress,Emma Stone,La La Land,28,Arizona,1988-11-06,11,6,1988
+90,2018,Best actress,Frances McDormand,"Three Billboards Outside Ebbing, Missouri",60,Illinois,1957-06-23,6,23,1957
+91,2019,Best actress,Olivia Colman,The Favourite,44,England,1974-01-30,1,30,1974
+85,2013,Best actor,Daniel Day-Lewis,Lincoln,55,England,1957-04-29,4,29,1957
+86,2014,Best actor,Matthew McConaughey,Dallas Buyers Club,44,Texas,1969-11-04,11,4,1969
+87,2015,Best actor,Eddie Redmayne,The Theory of Everything,32,England,1982-01-06,1,6,1982
+88,2016,Best actor,Leonardo Di Caprio,The Revenant,41,California,1974-11-11,11,11,1974
+89,2017,Best actor,Casey Affleck,Manchester by the Sea,41,Massachusetts,1975-08-12,8,12,1975
+90,2018,Best actor,Gary Oldman,Darkest Hour,59,England,1958-03-21,3,21,1958
+91,2019,Best actor,Rami Malek,Bohemian Rhapsody,37,California,1981-05-12,5,12,1981
