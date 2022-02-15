@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.1.2](https://www.github.com/koesterlab/datavzrd/compare/v0.1.1...v0.1.2) (2022-02-15)
+
+
+### Bug Fixes
+
+* add missing license ([a0a3473](https://www.github.com/koesterlab/datavzrd/commit/a0a34735ca044033f42b72b7cbe975ea9e1357e9))
+* Display correct column on missing value ([#19](https://www.github.com/koesterlab/datavzrd/issues/19)) ([bacbe5b](https://www.github.com/koesterlab/datavzrd/commit/bacbe5b8819b54990a4243fe3b24342ee581f870))
+
 ### [0.1.1](https://www.github.com/koesterlab/datavzrd/compare/v0.1.0...v0.1.1) (2022-02-15)
 
 
