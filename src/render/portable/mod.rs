@@ -5,7 +5,7 @@ use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
 use crate::spec::{
-    CustomPlot, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, RenderColumnSpec, TickPlot,
+    CustomPlot, DatasetSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, RenderColumnSpec, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -41,11 +41,20 @@ impl Renderer for ItemRenderer {
     where
         P: AsRef<Path>,
     {
-        for (name, table) in &self.specs.items {
+        for (name, table) in &self.specs.views {
+            let dataset = match self.specs.datasets.get(&table.dataset) {
+                Some(dataset) => dataset,
+                None => {
+                    bail!(DatasetError::NotFound {
+                        dataset_name: table.dataset.clone()
+                    })
+                }
+            };
+
             let generate_reader = || -> csv::Result<Reader<File>> {
                 csv::ReaderBuilder::new()
-                    .delimiter(table.separator as u8)
-                    .from_path(&table.path)
+                    .delimiter(dataset.separator as u8)
+                    .from_path(&dataset.path)
             };
 
             let out_path = Path::new(path.as_ref()).join(name);
@@ -57,11 +66,12 @@ impl Renderer for ItemRenderer {
             if table.render_plot.is_some() {
                 render_plot_page(
                     &out_path,
-                    &self.specs.items.keys().map(|s| s.to_owned()).collect_vec(),
+                    &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                     name,
                     table,
+                    dataset,
                     &linked_tables,
-                    table.links.as_ref().unwrap(),
+                    dataset.links.as_ref().unwrap(),
                 )?;
             }
             // Render table
@@ -70,19 +80,19 @@ impl Renderer for ItemRenderer {
 
                 let row_address_factory = RowAddressFactory::new(table.page_size);
                 let pages = row_address_factory
-                    .get(counter_reader.records().count() - table.header_rows)
+                    .get(counter_reader.records().count() - dataset.header_rows)
                     .page
                     + 1;
 
                 let mut reader = generate_reader()?;
                 let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
 
-                let additional_headers = if table.header_rows > 1 {
+                let additional_headers = if dataset.header_rows > 1 {
                     let mut additional_header_reader = generate_reader()?;
                     Some(
                         additional_header_reader
                             .records()
-                            .take(table.header_rows - 1)
+                            .take(dataset.header_rows - 1)
                             .map(|r| r.unwrap())
                             .collect_vec(),
                     )
@@ -92,7 +102,7 @@ impl Renderer for ItemRenderer {
 
                 for (page, grouped_records) in &reader
                     .records()
-                    .skip(table.header_rows - 1)
+                    .skip(dataset.header_rows - 1)
                     .into_iter()
                     .enumerate()
                     .group_by(|(i, _)| row_address_factory.get(*i).page)
@@ -107,32 +117,37 @@ impl Renderer for ItemRenderer {
                             .map(|(_, records)| records.as_ref().unwrap())
                             .collect_vec(),
                         &headers,
-                        &self.specs.items.keys().map(|s| s.to_owned()).collect_vec(),
+                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                         table_specs,
                         name,
                         table.description.as_deref(),
                         &linked_tables,
-                        table.links.as_ref().unwrap(),
+                        dataset.links.as_ref().unwrap(),
                         &self.specs.report_name,
                     )?;
                 }
                 render_table_javascript(
                     &out_path,
                     &headers,
-                    &table.path,
-                    table.separator,
+                    &dataset.path,
+                    dataset.separator,
                     table_specs,
                     additional_headers,
                     table.pin_columns,
                 )?;
-                render_plots(&out_path, &table.path, table.separator, table.header_rows)?;
+                render_plots(
+                    &out_path,
+                    &dataset.path,
+                    dataset.separator,
+                    dataset.header_rows,
+                )?;
                 render_search_dialogs(
                     &out_path,
                     &headers,
-                    &table.path,
-                    table.separator,
+                    &dataset.path,
+                    dataset.separator,
                     table.page_size,
-                    table.header_rows,
+                    dataset.header_rows,
                 )?;
             }
         }
@@ -165,11 +180,8 @@ fn render_page<P: AsRef<Path>>(
 
     let data = data
         .iter()
-        .map(|s| s.iter().collect_vec())
-        .enumerate()
-        .map(|(i, r)| link_columns(render_columns, titles, r, i).unwrap())
+        .map(|s| s.iter().map(|s| s.to_string()).collect_vec())
         .collect_vec();
-    let compressed_data = compress_to_utf16(&json!(data).to_string());
 
     let compressed_linkouts = if !links.is_empty() {
         let linkouts = data
@@ -180,6 +192,12 @@ fn render_page<P: AsRef<Path>>(
     } else {
         None
     };
+    let data = data
+        .iter()
+        .enumerate()
+        .map(|(i, r)| link_columns(render_columns, titles, r.to_vec(), i).unwrap())
+        .collect_vec();
+    let compressed_data = compress_to_utf16(&json!(data).to_string());
 
     let local: DateTime<Local> = Local::now();
 
@@ -321,7 +339,7 @@ fn render_table_javascript<P: AsRef<Path>>(
 fn link_columns(
     render_columns: &HashMap<String, RenderColumnSpec>,
     titles: &[String],
-    column: Vec<&str>,
+    column: Vec<String>,
     row: usize,
 ) -> Result<Vec<String>> {
     let mut result = Vec::new();
@@ -330,7 +348,7 @@ fn link_columns(
             if let Some(link) = render_column.link_to_url.clone() {
                 result.push(format!(
                     "<a href='{}' target='_blank' >{}</a>",
-                    link.replace("{value}", column[i]),
+                    link.replace("{value}", &column[i]),
                     column[i]
                 ));
             } else if render_column.custom_plot.is_some() || render_column.plot.is_some() {
@@ -397,8 +415,9 @@ fn render_search_dialogs<P: AsRef<Path>>(
 }
 
 fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
-    let table_spec = specs.items.get(table).unwrap();
-    let links = &table_spec
+    let table_spec = specs.views.get(table).unwrap();
+    let dataset = &specs.datasets.get(&table_spec.dataset).unwrap();
+    let links = &dataset
         .links
         .as_ref()
         .unwrap()
@@ -410,11 +429,23 @@ fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
     let mut result = HashMap::new();
 
     for (table, column) in links {
-        let path = &specs.items.get(*table).unwrap().path;
-        let separator = specs.items.get(*table).unwrap().separator;
-        let page_size = specs.items.get(*table).unwrap().page_size;
+        let linked_table = &specs.views.get(*table).unwrap();
+        let other_dataset = match specs.datasets.get(&linked_table.dataset) {
+            Some(dataset) => dataset,
+            None => {
+                bail!(DatasetError::NotFound {
+                    dataset_name: table_spec.dataset.clone()
+                })
+            }
+        };
+        let page_size = specs.views.get(*table).unwrap().page_size;
 
-        let column_index = ColumnIndex::new(path, separator, column, page_size)?;
+        let column_index = ColumnIndex::new(
+            &other_dataset.path,
+            other_dataset.separator,
+            column,
+            page_size,
+        )?;
 
         result.insert((table.to_string(), column.to_string()), column_index);
     }
@@ -486,20 +517,21 @@ fn render_plot_page<P: AsRef<Path>>(
     tables: &[String],
     name: &str,
     item_spec: &ItemSpecs,
+    dataset: &DatasetSpecs,
     linked_tables: &LinkedTable,
     links: &HashMap<String, LinkSpec>,
 ) -> Result<()> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
-            .delimiter(item_spec.separator as u8)
-            .from_path(&item_spec.path)
+            .delimiter(dataset.separator as u8)
+            .from_path(&dataset.path)
     };
     let mut reader = generate_reader()?;
 
     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
     let mut records: Vec<HashMap<String, String>> = reader
         .records()
-        .skip(&item_spec.header_rows - 1)
+        .skip(&dataset.header_rows - 1)
         .map(|row| {
             row.unwrap()
                 .iter()
@@ -642,4 +674,10 @@ pub enum TableLinkingError {
         column: String,
         table: String,
     },
+}
+
+#[derive(Error, Debug)]
+pub enum DatasetError {
+    #[error("Could not find dataset {dataset_name:?}.")]
+    NotFound { dataset_name: String },
 }

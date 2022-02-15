@@ -14,12 +14,9 @@ datavzrd allows the user to easily customize it's interactive HTML report via a 
 
 ```yaml
 name: My beautiful datvzrd report
-items:
+datasets:
   table-a:
     path: "table-a.csv"
-    desc: |
-      # A header
-      This is the **description** for *table-a*.
     links:
       gene details:
         column: gene
@@ -27,6 +24,21 @@ items:
       gene expression:
         column: gene
         table-row: table-b/gene
+  table-b:
+    path: table-b.csv
+    separator: ;
+  gene-mycn:
+    path: "genes/table-mycn.csv"
+    header-rows: 2
+    links:
+      some expression:
+        column: quality
+        item: table-b
+views:
+  table-a:
+    desc: |
+      # A header
+      This is the **description** for *table-a*.
     render-columns:
       x:
         custom: |
@@ -36,8 +48,6 @@ items:
       y:
         link-to-url: 'https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={value}'
   table-b:
-    path: table-b.csv
-    separator: ;
     render-columns:
       significance:
         custom-plot:
@@ -56,9 +66,8 @@ items:
               "config": {"legend": {"disable": true}}
             }
   gene-mycn:
-    path: genes/table-mycn.csv
+    dataset: gene-mycn
     page-size: 40
-    header-rows: 2
     render-columns:
       frequency:
         plot:
@@ -72,13 +81,8 @@ items:
               - green
               - red
   gene-mycn-plot:
-    path: genes/table-mycn.csv
-    header-rows: 2
+    dataset: gene-mycn
     pin-columns: 3
-    links:
-      some expression:
-        column: quality
-        item: table-b
     render-plot:
       schema: |
         {
@@ -97,19 +101,27 @@ items:
 
 `name` allows the user to optionally set a name for the generated report that will be heading all resulting tables and plots.
 
-### items
+### datasets
 
-`items` consists of all different CSV/TSV items (table or plot) that should be included in the resulting report. If neither `render-table` nor `render-plot` is present, datavzrd will render the given file as a table. Each item definition can contain these values:
+`datasets` defines the different datasets of the report. This is also the place to define links between your individual datasets.
 
 | keyword                           | explanation                                                                                                                                 | default |
 |-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|---------|
 | path                              | The path of the CSV/TSV file                                                                                                                |         |
-| desc                              | A description that will be shown in the report. [Markdown](https://github.github.com/gfm/) is allowed and will be rendered to proper HTML.  |         | 
 | separator                         | The delimiter of the file                                                                                                                   | ,       |
-| page-size                         | Number of rows per page                                                                                                                     | 100     |
 | header-rows                       | Number of header-rows of the file                                                                                                           | 1       |
-| pin-columns                       | Number of columns that are fixed to the left side of the table and therefore always visible                                                   | 0       |
 | [links](#links)                   | Configuration linking between items                                                                                                         |         |
+
+### views
+
+`views` consists of all different CSV/TSV views (table or plot) that should be included in the resulting report. If neither `render-table` nor `render-plot` is present, datavzrd will render the given file as a table. Each item definition can contain these values:
+
+| keyword                           | explanation                                                                                                                                 | default |
+|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| desc                              | A description that will be shown in the report. [Markdown](https://github.github.com/gfm/) is allowed and will be rendered to proper HTML.  |         |
+| dataset                           | The name of the corresponding dataset to this view defined in [datasets](#datasets)                                                         |         |
+| page-size                         | Number of rows per page                                                                                                                     | 100     |
+| pin-columns                       | Number of columns that are fixed to the left side of the table and therefore always visible                                                 | 0       |
 | [render-table](#render-table)     | Configuration of individual column rendering                                                                                                |         |
 | [render-plot](#render-plot)       | Configuration of a single plot                                                                                                              |         |
 

@@ -1,3 +1,4 @@
+use crate::render::portable::DatasetError;
 use anyhow::bail;
 use anyhow::Result;
 use derefable::Derefable;
@@ -14,19 +15,28 @@ use thiserror::Error;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 pub(crate) struct ItemsSpec {
-    #[deref]
-    pub(crate) items: HashMap<String, ItemSpecs>,
     #[serde(default, rename = "name")]
     pub(crate) report_name: String,
+    pub(crate) datasets: HashMap<String, DatasetSpecs>,
+    #[deref]
+    pub(crate) views: HashMap<String, ItemSpecs>,
 }
 
 impl ItemsSpec {
     pub(crate) fn from_file<P: AsRef<Path>>(path: P) -> Result<ItemsSpec> {
         let config_file = fs::read_to_string(path)?;
         let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)?;
-        for (_, spec) in items_spec.items.iter_mut() {
+        for (_, spec) in items_spec.views.iter_mut() {
             if spec.render_table.is_some() {
-                spec.column_index_to_value()?;
+                let dataset = match items_spec.datasets.get(&spec.dataset) {
+                    Some(dataset) => dataset,
+                    None => {
+                        bail!(DatasetError::NotFound {
+                            dataset_name: spec.dataset.clone()
+                        })
+                    }
+                };
+                spec.column_index_to_value(dataset)?;
             }
         }
         Ok(items_spec)
@@ -55,18 +65,24 @@ fn default_links() -> Option<HashMap<String, LinkSpec>> {
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
-pub(crate) struct ItemSpecs {
+pub(crate) struct DatasetSpecs {
     pub(crate) path: PathBuf,
     #[serde(default = "default_separator")]
     pub(crate) separator: char,
-    #[serde(default = "default_page_size")]
-    pub(crate) page_size: usize,
     #[serde(default = "default_header_size")]
     pub(crate) header_rows: usize,
-    #[serde(default)]
-    pub(crate) pin_columns: usize,
     #[serde(default = "default_links")]
     pub(crate) links: Option<HashMap<String, LinkSpec>>,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
+pub(crate) struct ItemSpecs {
+    pub(crate) dataset: String,
+    #[serde(default = "default_page_size")]
+    pub(crate) page_size: usize,
+    #[serde(default)]
+    pub(crate) pin_columns: usize,
     #[serde(rename = "desc")]
     pub(crate) description: Option<String>,
     #[serde(default = "default_render_table")]
@@ -81,11 +97,11 @@ lazy_static! {
 
 impl ItemSpecs {
     /// Converts columns addressed with index to the actual header values of the table
-    fn column_index_to_value(&mut self) -> Result<()> {
+    fn column_index_to_value(&mut self, dataset: &DatasetSpecs) -> Result<()> {
         let mut indexed_keys = HashMap::new();
         let mut reader = csv::ReaderBuilder::new()
-            .delimiter(self.separator as u8)
-            .from_path(&self.path)?;
+            .delimiter(dataset.separator as u8)
+            .from_path(&dataset.path)?;
         let headers = reader.headers()?;
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().iter() {
             if INDEX.is_match(key) {
@@ -104,7 +120,7 @@ impl ItemSpecs {
                         bail!(ConfigError::IndexTooLarge {
                             index,
                             header_length: headers.len(),
-                            table_path: self.path.clone(),
+                            table_path: dataset.path.clone(),
                         })
                     }
                     Some(k) => {
@@ -114,7 +130,7 @@ impl ItemSpecs {
                         {
                             bail!(ConfigError::DuplicateColumn {
                                 column: k.to_string(),
-                                table_path: self.path.clone(),
+                                table_path: dataset.path.clone(),
                             })
                         };
                     }
@@ -125,7 +141,7 @@ impl ItemSpecs {
             {
                 bail!(ConfigError::DuplicateColumn {
                     column: key.to_string(),
-                    table_path: self.path.clone(),
+                    table_path: dataset.path.clone(),
                 })
             }
         }
@@ -220,8 +236,8 @@ pub enum ConfigError {
 #[cfg(test)]
 mod tests {
     use crate::spec::{
-        default_links, default_render_table, ItemSpecs, ItemsSpec, LinkSpec, RenderColumnSpec,
-        RenderPlotSpec,
+        default_links, default_render_table, DatasetSpecs, ItemSpecs, ItemsSpec, LinkSpec,
+        RenderColumnSpec, RenderPlotSpec,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -236,13 +252,17 @@ mod tests {
             summary_plot: None,
         };
 
-        let expected_table_spec = ItemSpecs {
+        let expected_dataset_spec = DatasetSpecs {
             path: PathBuf::from("test.tsv"),
             separator: ',',
-            page_size: 100,
             header_rows: 1,
-            pin_columns: 1,
             links: default_links(),
+        };
+
+        let expected_table_spec = ItemSpecs {
+            dataset: "table-a".to_string(),
+            page_size: 100,
+            pin_columns: 1,
             description: None,
             render_table: Some(HashMap::from([(
                 String::from("x"),
@@ -252,15 +272,19 @@ mod tests {
         };
 
         let expected_config = ItemsSpec {
-            items: HashMap::from([(String::from("table-a"), expected_table_spec)]),
+            datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
+            views: HashMap::from([(String::from("table-a"), expected_table_spec)]),
             report_name: "my_report".to_string(),
         };
 
         let raw_config = r#"
-    name: my_report    
-    items:
+    name: my_report
+    datasets:
         table-a:
             path: test.tsv
+    views:
+        table-a:
+            dataset: table-a
             page-size: 100
             pin-columns: 1
             render-table:
@@ -287,32 +311,40 @@ mod tests {
             },
         )]);
 
-        let expected_item_spec = ItemSpecs {
+        let expected_dataset_spec = DatasetSpecs {
             path: PathBuf::from("test.tsv"),
             separator: ',',
-            page_size: 100,
             header_rows: 1,
-            pin_columns: 0,
             links: Some(expected_links),
+        };
+
+        let expected_item_spec = ItemSpecs {
+            dataset: "table-a".to_string(),
+            page_size: 100,
+            pin_columns: 0,
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
             render_plot: Some(expected_render_plot),
         };
 
         let expected_config = ItemsSpec {
-            items: HashMap::from([(String::from("plot-a"), expected_item_spec)]),
+            datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
+            views: HashMap::from([(String::from("plot-a"), expected_item_spec)]),
             report_name: "".to_string(),
         };
 
         let raw_config = r#"
-    items:
-        plot-a:
+    datasets:
+        table-a:
             path: test.tsv
-            desc: "my table"
             links:
                 my-link:
                     column: test
                     item: other-table
+    views:
+        plot-a:
+            dataset: table-a
+            desc: "my table"
             render-plot:
                 schema: |
                     {'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}

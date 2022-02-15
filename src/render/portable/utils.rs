@@ -67,7 +67,7 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
 }
 
 pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> Result<()> {
-    let table = specs.items.keys().next().unwrap();
+    let table = specs.views.keys().next().unwrap();
     let mut templates = Tera::default();
     templates.add_raw_template(
         "index.html.tera",
