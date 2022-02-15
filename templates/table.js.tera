@@ -33,15 +33,15 @@ $(document).ready(function() {
     if (linkouts != null) {
         bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
         fixed_right = 1;
-        fixed = true;
     }
 
     $('#table').bootstrapTable({
         height: he,
         columns: bs_table_cols,
         data: [],
-        fixedColumns: fixed,
+        fixedColumns: true,
         fixedRightNumber: fixed_right,
+        fixedNumber: {{ pin_columns }}
     })
 
     let additional_headers = [{% if additional_headers %}{% for ah in additional_headers %}{{ "{" }}{% for title in titles %}"{{ title }}":"<b>{{ ah[title] }}</b>"{% if not loop.last %},{% endif %}{% endfor %}{{ "}" }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}];

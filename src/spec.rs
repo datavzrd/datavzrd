@@ -63,6 +63,8 @@ pub(crate) struct ItemSpecs {
     pub(crate) page_size: usize,
     #[serde(default = "default_header_size")]
     pub(crate) header_rows: usize,
+    #[serde(default)]
+    pub(crate) pin_columns: usize,
     #[serde(default = "default_links")]
     pub(crate) links: Option<HashMap<String, LinkSpec>>,
     #[serde(rename = "desc")]
@@ -239,6 +241,7 @@ mod tests {
             separator: ',',
             page_size: 100,
             header_rows: 1,
+            pin_columns: 1,
             links: default_links(),
             description: None,
             render_table: Some(HashMap::from([(
@@ -259,6 +262,7 @@ mod tests {
         table-a:
             path: test.tsv
             page-size: 100
+            pin-columns: 1
             render-table:
                 x:
                     link-to-url: https://www.rust-lang.org
@@ -288,6 +292,7 @@ mod tests {
             separator: ',',
             page_size: 100,
             header_rows: 1,
+            pin_columns: 0,
             links: Some(expected_links),
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
