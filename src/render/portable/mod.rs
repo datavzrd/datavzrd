@@ -645,7 +645,7 @@ fn render_linkouts(
                 None => {
                     bail!(TableLinkingError::NotFound {
                         not_found: row[index].to_string(),
-                        column: titles[index].to_string(),
+                        column: linked_column.to_string(),
                         table: table.to_string(),
                     })
                 }
