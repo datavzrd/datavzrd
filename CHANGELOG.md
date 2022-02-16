@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.0](https://www.github.com/koesterlab/datavzrd/compare/v0.1.2...v0.2.0) (2022-02-16)
+
+
+### Features
+
+* Add example report ([#21](https://www.github.com/koesterlab/datavzrd/issues/21)) ([4e266a0](https://www.github.com/koesterlab/datavzrd/commit/4e266a09f3bfa0250604ca67e8531022a8ac8ced))
+* Show proper error message for non existing output directory ([#26](https://www.github.com/koesterlab/datavzrd/issues/26)) ([008524f](https://www.github.com/koesterlab/datavzrd/commit/008524f2748fe37cece68fe65700e2deda13bcb2))
+* Show proper error message for wrong file paths ([#25](https://www.github.com/koesterlab/datavzrd/issues/25)) ([c0e7539](https://www.github.com/koesterlab/datavzrd/commit/c0e75396cfa08e9c9745b79acdaf5a618632d318))
+
+
+### Bug Fixes
+
+* Complete error message for wrong config file path ([#24](https://www.github.com/koesterlab/datavzrd/issues/24)) ([b0dc4aa](https://www.github.com/koesterlab/datavzrd/commit/b0dc4aa8b568a555a70e2b48e9bf57da4c1149c8))
+
 ### [0.1.2](https://www.github.com/koesterlab/datavzrd/compare/v0.1.1...v0.1.2) (2022-02-15)
 
 
