@@ -1,5 +1,4 @@
-name: CI
-
+name: Deploy example report to GitHub Pages
 on:
   push:
     branches: [ main ]
@@ -19,9 +18,13 @@ jobs:
           override: true
 
       - name: Generate report
-        run: cargo run .examples/example-config.yaml --output .examples/example-report
+        run: cargo run .examples/example-config.yaml --output example-report
 
-      - name: Store report
-        uses: EndBug/add-and-commit@v8
-        with:
-          add: .examples/example-report/
+      - name: Deploy
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: gh-pages
+          FOLDER: example-report
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: "Update example report to commit {sha}"
