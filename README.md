@@ -150,6 +150,8 @@ views:
 
 `links` can configure linkouts between multiple items.
 
+| keyword                           | explanation                                                                                                      |
+|-----------------------------------|------------------------------------------------------------------------------------------------------------------|
 | column                            | The column that contains the value used for the linkout                                                          |
 | table-row                         | Renders as a linkout to the other table highlighting the row in which the gene column has the same value as here |
 | table                             | Renders as link to the given table, not a specific row                                                           |
