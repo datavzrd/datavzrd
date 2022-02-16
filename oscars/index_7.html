@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>datavzrd report</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table-fixed-columns.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/datavzrd.css">
+</head>
+
+<body>
+<script src="../static/jquery.min.js"></script>
+<script src="../static/bootstrap.bundle.min.js"></script>
+<script src="../static/bootstrap-table.min.js"></script>
+<script src="../static/bootstrap-table-fixed-columns.min.js"></script>
+<script src="../static/vega.min.js"></script>
+<script src="../static/vega-lite.min.js"></script>
+<script src="../static/vega-embed.min.js"></script>
+<script src="../static/lz-string.min.js"></script>
+<script src="../static/showdown.min.js"></script>
+<script src="table.js"></script>
+
+<script src="plots/plot_0.js"></script>
+<script src="plots/plot_1.js"></script>
+<script src="plots/plot_2.js"></script>
+<script src="plots/plot_3.js"></script>
+<script src="plots/plot_4.js"></script>
+<script src="plots/plot_5.js"></script>
+<script src="plots/plot_6.js"></script>
+<script src="plots/plot_7.js"></script>
+<script src="plots/plot_8.js"></script>
+<script src="plots/plot_9.js"></script>
+<script src="plots/plot_10.js"></script>
+
+<script>
+    const data = "᭸ᄣかᐦ䨨恇ᄦ㋴ĐࢀĠᘡᰥᠦ〷䁙༠⻴ഀ஠㴫˸ݖ剠传㩌㪔Ⱓ砢᳨ĩࡖ凥䀸浠Ỡ䊮㕌˼䗊⠧栢ᯒ性〭㋰ߧ჉㕦䘶ⳗ槓猷ዋ⣵䋠ŒረǼ¶⬨崱ࡂᖨჶ烒⏂Ⱐ䆖ภťℱ㍲椉琭䚆䬻ํ䭗Ᾰ⶗㪚焩⒴᪚㌻ќᔳந╅畲経㊱˱⛂≱怣哵Ჶ拽㻁䊴溍㏐䵬朇㡫ᖫ⍧丣༰Α恥͈多z#୨ᖣ嚞嶃堡⹤┲!ᡈ孈ᬁ屎倠݄↤㠠፣⋓偨%䬓㱑枨ᴣ䁑瑞Ậ⃑倠௃ơ悐ᒶ❕幖俩樤屾lከ኉Ǩ僉橭᭮妴嬪垍⨒乡㴈曕㸮䁍檤榞幈䭄⎔䀢噸瀠Ӆ⃣⵪䷖楳妕両咍䭎ᚯ价磚悪埵䗵↪⫉を㰤⺁׸㩟喡ᩖ犮敵夝öйز㮆Γ尾ਲ਼摦㸀ྷ斡紞䂅ʠǹ惲樱୼゠ᡯ炨䠺֡ᕆ℀ᯤ定ᄈঝ܍恨ᮒ仄⃝䄙F〮獑⦗妜Ⴄ⌱ⓒ㲿云ՅҌ⪭汲䃅掐慾㳉涇ᗝ㑣氺㕞嗆滓෢槒ᣗ⬗懑繬侮䭉ⶖ⽕⎛ؿ‡䑔ㄨ瀠㣟攀瑘㔵暤嗑恡ңਬண忊㟙༫挤㡇朙㼠ሤᐪ ᴅ䊬囵崣圌ǒ㙍岓㘽䯑皝嗓剴䚰刔亷婬䅶㪌䞠⹼妕犋婰栨⳷૱徐滿媑ਇ䀭⫷䍱ǃᘰ䓪൧ᠬܣ圚ṭ㻨㽬᧦㓬曊㡫἟䟂椣ݮ竃!䤰ⰺ瀴渧ʙⰤ搠㕂෣ʫᏙ彻ฆ紟ᠷʼش⊦ඥ⭔枥㌴஻࣢晤值殂ૺ᭻武恣ᭌ੫䁼⬓怮溪㤑歷ܺ⿸ႄٙ❧᠙枑᧩᜾⫚ᰣ様䔥ᯚ┹ᙔᳳ柶ȷἉ峏◈∶ԥࡹ䉣࢞ΠE㿠愐ᑴ䏃⛽宖䇴㬐᳻綇⋶瓏ૻ㵦ᣯ瑌ᄪ㬴廡窨㩻㦐䚂硑⹿䱨冁⁑␮ׁ楾䁒ᇽ 㶍⭸䍺祛⯨፠㝳䜧㰦殑毯☘傿ᨾ嬯ᴦ睂嶴惍竆綣ᩴ切ᘎ梱㵼柊篲%ᅰ嘮ے砱䢀樥䒆ㅠ幰䋨嬶ዽ榽ᴆ乺㴎佨ᤩ䪢樺䈨䨩䠡ሸ⃢㹻儩緵୹恚潸᭘᣹密怼无歑䎤⽐ᛄ㊧ďᛣ簐渧䊨䔰ႈ岕ᙘ伱̈ࢳ䁀噜䟝垭掤粖ℌ祸槴熕史㒈湲礯厧䧇ጼ捪ⷯ㵸稉ᾋ⡆ࢠᄊܣ䣭宦㛥穐㝭旛⢍檀䒽扂Ⰺ㧪㵠㷫ⵌᏨ㙤ǹᦒଧ糴Ǘ紌ᯛ墓撠⾦榙秋綟ぎ格曯ᰣϾ爸抷盥彡琦ᮟᾥ㙀孖所寏䁄慞羨ᐱ঩ㅇ⠡ɷ䜡ⴎἝ⇨秪⑦嶐᧓玎᧳渶ㆴ㚁⻹慝{╶䟰T䢡粥䄀ᣣ倵ɀ縥廵ࡣ䑔䏨㊃砸祙ெ坉珡冡䢼೼ٲ愧䖛⠵Հ䗒㍎ਁ攧懫櫜䱃ɳ͉侫憶⟓政㊦羅䒯戼㠯䶻䆢⢋㉀㬱ȼ㜊挰ㅠᚠৼϳ䟈⦪嬇Ⓐ൲眺៭੅暢旸磴䖦Ắӝۗⵣ傀㴾惹͸Э⃢ఋ҄棥ၩӐ䢩⢼愫◬櫸ԋ嶉⃀い∯᭸乢沿೙ᨃḧ׳ᴙ⣒䞣㹶ᙛ煠瀩儨䎠+␄㬨ႊ仉櫗⯧⹒瓀ఉ〺础ᐘ塚Ʉ䢉榧䓘爬宆㑎琾⻖᥽塛䱒⚘(䪀7䢣㈢挥ߵ瀩㛁嬭夶ߒ݈琜嵡乌䖬吭礕亾㯢䘥µᭋ¤㽆Ⳕ㎊㯮㘫*⾳ᇫᖑ牂剾ᄡ⾤ᦱك᚛煌⚺່䫹㢾ǿ䐱䦢 癏⋀಼憹ㅋṒ扦̼㪆ᙼ䣤忭ℊ⡀ᒹ⛊捼ᭇ桒ࡀࠤⅬᮐ䓀䈙ে╶槫峄䊄ྵ䅷䜕㍋ーฆ痍咘Ü㤡ᆻš亂坊櫈䐥՞⡵䱟欫㕂䁡ض汉哂牃⌑慌ᐭ༐߲絁歩ᛵnᬬ彬㲿૆ǋŮፒ杙抹╺斟䚄磡礲২⦩ᛔ圃冬ㅃ㝀掐㕷┓䪠䦀+᠀Ԡ㈧╹䷬犓⽗ᐡ㝼㎓櫌囬᳭⧷漪㥾籰መᢳੵ଴畟㎘੍䳽⎫瀿紝䠦䲘ٮ៍⒮ؕ䩰⸨፫㽞ᰉ㚖ᥣ枘䔍ۺ熾Ɖ惼厡恠\\篌狗➗睾盆嫯⓷䴸緍禇᎛ዌ十㫖ㅱ囈榇ᚄ⸨⫣Ӻ䑠篘ᒊ叒㆖ゲ晏≰ᱠ瀢乃䉸㣘㊑岗ᥣ䕬䴍䥹䤱ᣄോ嵊⇝᫣⚚捃ৰǆ浳䍙䉓ࡄ㉠␴燯㖥烦甚ᶃ偕ۀ梿ᵈᵱ䲕䠞䈇䪓甅ᶋ䌂拂拃≿坥䇹勣䉚㭶᪖ࡁዳࢣ⡔Ľⱓ嵱ࠌ⪔儜ׁ悉䳚ẙ䯱戉ત㉡㈝ݡⰱ㗦朹ℭÓ⭕䁖㳛惕㪅↭妈把扴㢜ࡪ妪↦ⵠᵃ⪵⿮ᐠ⼢丢֩䖃ີⶎ涹⃨➭㨺懄Ö祶ㅔ㔍಄γ丝ᎩǠႺ厥ଟ⠯¼⫳ᴃ吙柆捠昹⣭劋ᕾ穢紆柹ᰪׯฅᄬ津↗⩗⾒癧痡姵㛒昌Ὂⰳ⮨ᆀ͖⇨ᮗぽ㈨烜渫惑⮐㱖殍ጙ篠ߒᄺ䵱䠯盷㤜4Ⱚᵕ壑圲䵼㬲ݴຈᬠ੃㇣ᇴ疟禰燏ᱫⵎ泿⼏Ὠ䓷懱冁㇃䠆☽⍪㞁嶫⛟ಃ冥䴡䕱उ䲑綡Ⱙ泜㰤彔嵱౪፴綷ౢ哊䛋ㅋ愖䄏₞氽ኁ⮘彴喐ๆ⚹悈᷹糪戗᧣ಒ秆㻔㩚䞙㼃瑐滘綹䯙䜵禟ူ瘇ᶝ㗢⬠百氊ྱ㝓䷷綐㑦絠─檴⌏殏尛ₐ䧒叇峚␸䢃䂕炽␥ᵹ᎖չዐྠᬷ栄奒℀ᮥ榺䗴埃䘈痉㦀᫤㈥௚ᄥ屮䩜拒㹑भƔ绀密䟋ὧᤊี≏⌗p঳Ⴢɀ攩倘猵㺊庋级氃㵻皂哻㸳ਭ㰀䮖伝>管ừ⮂တ無拋俙μ牘ᑨ㐊咄㴖䱲溺ఆ羑囜⾄廷玓᪔⾦㚟怠ᗎ䏤əฅ㩭㐙㼤ඟᬌ忕熌⋦⃗໎倽姠倖廚吃ᐋዩÏ咦ਡ䵢Ư攢੐ⰲぎ垞♓㌣唟恠児⢨䬕ⅅ⢘絳㸱瑹␲ᗮ㋱獡ℤ忲⸫ㇱ㱛枠䂩⌨ㄡ恝䛗瞹ᔧᬷ㳔ਪ㴥☲㄄॓˹䘠ᠵ儀䟫Ť摙ݐ㼠䰷Ⲙ皀卐ѝ䁢పࢧ㠬Ⅎર媣২Ơ柵ṃ帢亰摮㡂Ꮁ粤ᚸ㿢斵簹抇୚✿婅㙠⌘绽欕┕㬛櫯Ƣ畀粡ࡃۛ灡ᤧ矩犧热㢉欭䘻㓐⎘ధ繹癢ᡤឦ⁛ʨ洢硁ḫ㑨恃㑸ᓻ唚₊䢫ᄬǨ漻䅿䛩ㄤⶉ篽ᛀ柞قᾱపŦ⌱狴嚦ᖘ␠勽E㘗㠣緩㹃卛␫㵲㨾ပħ㱌໲䀨壙援帴๟ܒ啳瑘˭⻓ࠨ稫೐ዤ噑曉੟㢉䘭㳁ᐟ⌲☬爧࡛ᙠಸ凧䕈稒౟ↄ⒠㕥ṓ∺яᶰ≷ửࡿ㚂ၔـᅳ⎦䀢䒐㟊ȹ屈อ㔐壧ɢㄢ䊸沘䯸暉೭᫘ឨᐤܶนᗤ⹼坤溡ㅗㅁাΓᘮ竚攀㞚ᓬƄ♑ᆦᩤ㺐֍㵘㭩4℗ፘ汧籭✼㭇偝✕⓳ч积橴堐磦扉⑾ษᅇ烧梗㔀ૢ䡮牬৤卐ᕉ⤧ࢶ㗦ٍ㩺瑯ၲ኱ᐶۻⓇ㞷¦䨪৅⥕ᚵ൱㙉౜⛰䁦ᝈ癢⳿त䶉帿ౖ៦∠䅒䠴䈠 ";
+    const linkouts = "᭡࠮䄌Ϡጤ堭怢Ƭǐრ杌௦ࡐʐྀǦण层■ஊЧ撩㭩⃵♛焠࣠׶塤zᘠ匴ሰけࠤ祆ᝉ⍼⡩໔⤤䨉२͗瀬≚₟䁠⮰皨⎐㈙呶傠୅ᄠ瀡䧠‡噦Ձض坿╉畆磱ഴ灑窌ᥙǬ俤ቀ㨸䂰楑⤠޹̾╁灃ᢁ凄Ⲍຖ吶ħ⒡⠥姀ℐԔ杒7>䥕▸Ǳ⠡䲓ቂໄ怩䀠懼䶔璬唎↚㼠ᆠۤ㟂䧠畧杷ዓ᰺ി䊠牅ᡡС䉄ᨵ㉓僸ヰ⎡ဢ᰼‰䠵㢱╁⤂⹼≁滃ᆡΡ⑴(⼯烖␩ᦒⅎ囍໱司⡕⊒⁾㟚ᄃ堨⤢1ႀᡄ⿥砠๙䌈塼䢅䀪惡暲泔䡵㜂ⳙⲴ2㏌値ઋኪ㹲☺ઠֶ⡡乻ໞⷶᔪ䷒矀ⴸ㷀淖瘂⻀ͰǸ獡⌌㓪狝⣴喽⓯ⴊ㝫㋷Ⲻ囫琯⮄෦ᓵ㕰䍇⦰滴䃋ফ䑶ᔇ㚲⃙ᐠ帤⓵䛆椽͞䊆庈⭝䤢㧼潟䡂約泔崬㎩碦ḭ䮖紹㜔¼䖰⑺䟥姼泚้ռ渊涥Ḁ吳ᴕ䵮縌箣෱帺泓⫭㝸㝘㷗℘烀䦦ଛ吀摈០ნڡᄚ`煲كॐ¥ჾᵠႴ≮傜㾨ࡢ㡥┿᭫ⓘ༦԰牡ᄀႥᄚ㗪がħᤆⓧ桨ๅა⓪ࢀ╠Ȕᬼ攸̠ࠇ傸䴤扢ᜤ䩻֠ਁद桨ᚯ刏吒慔䅨瓼ဗʠ⟧ࡤ⒫ሆᾢ决Ң恈ᅧࢄ࠲࡬㛀哌㍲熈౭ҁቩၨხᥤण᥄ࡣ䥿兯噔䜭⨘⠬槤㒩ᑆᝬ凴ⷬ⢬㦫㇞仭爜ね惂␦㄂⧪䦑⏨Х॥祪⎠⨏䠓嘵ㄣ噀!厠栧笁翰䅄⁎䉐⨣מᕗ䎢ㄪࢨ䤦⇨Թ⋈盃➈㴠愉੄͸኶恄ȱ捘㤭援㛉Ӱᑘ቙䢣ͤ墶㛍᷀䞡璼⊄ⰻᆰ岿ሴ抴偡焲却媻㙔暸则຿㌔ƨ㐐冨⁬榶ㅰֹ㋌疻㌌綰猼厠䉲䣖珼⅍൜᛭炜⾧琜䁸ࢴ惍㙢桶௢䑻獰呬䏂䅛ଂɨ䠰⯼⯃翁寲揙孒㛰傖⻢Ē㹤厍ⅸ宪⥲窲ᇽ⬊⭸秆⍺ᮺ䭥欆⯺桼䝥ᮋ䧽榚彿樦壧ⱋ毲᭦禌灆䥩ᥚ䮍橋⳥汮⯿ᩪ啾䄶兢珫狷滪櫤˶勛Ֆ㲈ⷒ珔⾫廤Ж煰㫛懢奆燭⵮᧾㩎㗸棎⌈ᲇ䷼導混㨾喔箾甋淚剶箧䤀ᒔ柧∙ዀᛠ䐥嗉⧓₡䂪癡఺ۡᠾҥ摔ׁࢫᕧ␥㴥绎㺈ⵂ᜸牏❱ᥗࡅ⭝䚑℧䘑箠▃慌灙ॊ☿⤷庁༗嘯丐䞥租㰹⍄料ִ▋ᗒ琏㉹⎵乵星䏪k硖ᬓ畜ဢ戅绺⤴篦ᔟ巫ྫ୹㉳ô勞瓁夗殴⹿ᒰ჋ᑜ۲㥴䱪咠櫀䃕⃴䱙嗩䌈㪣Ő㌓睄ඊ䇆၃⭁爱⁴ᵪ㐬毤တ၅剠ᗏの̀孳縖写ຩ歨䞄䣷ň㊣㩹ΰ礠䀪ࣃ䟛楴ൡ㆏劈ᚧ憯䧱崨ദᰱ䆤ᣬ㳢ⰵ䍸䶣塻׽䣦nሃ⹆ᡜ๒ᡡう澨⨠䐨䐤ࡗ䊹ℬᇢɂ⊚㍤౥䙌枩Ң冩໱㦳愓㒗獸瞌ԅ撂揹ዠ⦥ၘ╃㧋⋐檍≖僢㒆䆈⫿⣍䲱疡孚㗅朳㖴ὧ琡䰼Ảᣃׅⶣ婻㏑⚒瞬ૡ盋ᓼ撧洝䁘䬺斎⢓帨獉䃃ຢ敳簱ᴊ㕠Ԡ焇ì⮌瘮㴍尥擙䗩ŷᶓ䯕理ᖗ湺矴笁㲧Ꮢ㞬㣻䴇彞愗ࠁ眮๩⸱勃春積瓀䘨బ硁ਭ浟~䏀焨᜜璠⊧䂵䋚܏㑱ኞ尶戼⊵៾䇏䈂╉Ѡ掲䃇痁罈焴娝哇㳂䆋瓞⪹㦴奜৒㐀ᢄᔣᑎȱ▚ၧ簂䄵ૹ࿅壃Ŭ徢્¨㶴䡲嘅ప僿䇁㕶○柼ె咸⧴墄ϵ⍷睿晥崹櫜ᏽ䋍㑤࢈⑔䊨磰䣴൚ᤱ䆔彃੍㖴㎈䩛䇈兏Ⅹ㙚᢭切⯂ᙖ瘎刊䲓桸䟶壚䠀῏ㅐ堭紵捡䲁♇䝣㞫䍟౦溤ुᤲ᣽ᒛ㙘扱ᯤ楔檨╩檁䦔抩奙䱪ẩ姁⒓ㅨ割䥾䛡⦷ᱍ啛塅伅筃▪㍬㳒掉斉榳䇍㵜箕夓疳卾巁⩳㊹஍姶杒盰状㡐嚝寛㚂绽䱌ᦊ礵䴪母硎㗑⹧ჴ劗哞悙ᦵ亃䬒撺㧾→㹩㬜厗紊珼ᬄ㱀嗐枬૿∶寝燏ភ䌙ᐎ⑼䅈剝⁢拑㪚架唡㪮ዓ䣵主党嬺ዀ紈䤚斓᜺槈狁ᒴ䖡㕎⿪盕粥㒖Ԗ笊擉䄉⼒॒Ǧ僇偝敜峨֛␑俊䚭ḳ怏䪦嫤т糲䜛擯ᑟԪ嬊๊敚▽棣倵歸㏶ᤋ⬚伮甲⽅凴ᇣ☺捼⍆䪴玎埦恇ᶕ共ᓽ嫚Ꮶ᧕⃓㩔璊ࠆ冨㴳ठ㌲稦ᙺ彲嬌〉埍㜣ᮬ㛨㌑墋焨怲䣤傮ᡆ冨σㆧԌ㐻岍त਑ㅗ熧ㅅ䧒ᝢ㤏⓺㙤ڄ曙᝛Ⳡ努Ⲱ䩯⩞ᵂ䆶⋽殷ϗᕌߖⰶ└⭛♪Ὡ婎䥄䯵囃ၓ絅㮦∖ڏ孞科䲻㞹揵㲮氚忟筝䵓䌶㰌妐净ᥙ眀㮰㇛傄瞀林Ꮚ㤛㈾Ჷ伥㞷ᱸ㩽彔屗Ἦű෷⤸㞀㺎䡸䝐孧瑞䙚ю⦖嗂嬼侌⮢㱼掤媥㲝Ⰽ㶙ᤚ侟ය惦⯳吊旮㧫䚰暴疾紏ᨦ䃚৺⤳氰Œ尣狎攬敶䳯䷰棘殩㧅煻㌦孏ຄ櫹♮瀲巙礪᧥ە⋆㎅⤋纙䊢綤ޠ什忈䖠溫惼ᆑ㙂፰➲橾ᚭ䇅动浝੠哵搓摎禊ᇓ⹁ૡᒵ巶ᣇ坑౽㩕㎂疗瘖灉ᬝ㒬⭾㚸㈑碏熡᯶⣴᎛✛筤沠ᓺາ㎻棙⚉፭ᥚ㬹䝅ㅆ瀄筑nㅽ㬘照㜼⋬瞗⌌斱眃櫃嶧差染槏㫍澞椏ヹ弑奞䓫ᮉ伥妵壖涖ℙ㈠渗㾆㊟员␟ㄣř䃺䜖坽⍂㝾᳇㓧ȸ厩ٯ煣ᵙ㩬瀸㉇↓᜴付㖔՚眠䛠兜൛䣬㉍报ࠦᱹ亮啷㠃ϲ晴匇֘➪㱘唃Ú狩㲜プ᪹Ⳳ⻺瘞೘෥䪤ኗ㩲┲⣪猳㐑䷰⬊甀啋⳧䅸ኵ‪旴ʪ厗㋉⵵⪴ર瘲ⷫ䇶瓡Ị痨䄖゗㒻ј溾㇕㞹㑜暞皕{糣橡眕㣚䏼ᚕ猷₩⏶ᛃ▯⒉ዠ幏⇗ᲫᏣ堹㙭ڛ㋵ˌೱ㺙亳糥瑍㥺⫴婶ᗋͣ櫵㺏䂏ࡑ᯼౭劦⮙孫嚽牠ύ㭬㚁ᐍ╧ḵ墣厩ङቩ䚫㋆㋹⟭㛓爰Ṩᝧ㙋兿⑸໯䴀୧␤ㇶ勻炉⼙斾ǧᑟ㟻㩲⢺扟ؙپ穗牠帚┲㌟㊟⁚㽫绀瘟⋨⇫㊟熧‧懸ǇႣ⇺凸盃ഌ᜙㇮Ĵ㚙⨸৽ܙ晇㨤繸崄狼╘༸䜘ୃᰛ槪䛷ഷ㤦㮫ⅾ冰杚壾䈂ރጧ秧ᜉ厀䣚哤Ồༀ灦౏䅇怰去ࡦ粲䕉␪ᾼ⅞瞀ֺ屗ਚ௅ᚻ岧♠ᅞધ䁻ᓜ哕ㆺ㑝䇸䧀盉摟৬侪㷙ⓨ⅗惄睄㳸晾㇄䏉糾愡瞕ᬩ᪺䈔䡂ᢘ㱃⹑㔭⾤⍱᛺偯㲥ᏹ㑉瑭᪚呫ẛ⃤汦૷᫥㉤䆊䯸嬅疚▙剚帹ාäƹ投嗨䠣屠刍㎏㮋㫳婽砋ྛۺ兣〿ᄘᩁቭఱ㤘❥㙹ᆿⴉှ㫻㉽⻻穌犀࠶ࣦ㟺ƛ兮◹矦ㄧ獝㫤⽴绫ෟ⸉㻡套儔㸘彠฿匤竨罨熎惹ℇ㶼熡攣㇫䃴ň瘸緧䭜㇯୮∤ᖡƈツਤ㹤仟஧ᘤŇŠ嘤疒䅙㦴ㅀ摅䡎ੌ瑥ۆ䋪᪔औ䌦秷ઉ凯♇浮䧗䢄壈ు䬂࿓ㅆᷡ⻒㜔ᢦ撲⇖࠴曆䊸⥟俵୅ᑀ渼䣐潆䷦懞璢栅Տ৐⩐䦤╈טĢ媤祓漒伢稵弰ᙎ咐嫅慇ॺ侐䃦㱀㓾࿴碈ዾạ५⡧勩ᬉ瓯ଥ浓᩺ᐨ䉧ᵔ噥僋উᅊ帵刔疊᫠᧭ろ㹥嫥娽㞏ވฺᤵ਻෣捜㚕಻⅓ፄ㪼ᆈ䔚❵㙓僻⺅㛱㻫眆෦㠽㹐㒘䖄矩勳඘添歜纳䅟⋥⽽妯喌嫧糃㇟㌌仦幏㆝佬ࠚ⇸燣䩪玑䝀犷಼椧ᇥ斗ࣿ㜈ᝆǸ瞪勂坃爋䬘娥㹻㨟೎㼅⧤䛧䶙㘀ⅉໜ暤收慝乂埜䆨兏乏䡚ڋ祚∔⺢瘵ᥔ✔⠜縶䥓䪢䔢湀ᕃ礼眺捄痱√瞄䆻ࣖ⦾琄噆䛐⦋⼜擶烜⨒玺傰ᛗ㔾灊ᖧᛎ憎傐綥ᱝ⥎ೢ眩㪧⦱田ྦྷ壎ṱ兔繆勬ᆜ⻔悶彞楙匲䐆౤庅㍏ᕹ庶◖ᘔ䶉ᓑ廡亏Ⅶ孳嘽爋ᥧ㯿嬚Ⰿ൤ݸ旳㙆ઇ曹刉䮈唈㩇ᦙ䢒猉᳚㧗඼繵⁐喵亶឴䫔稽ᄪ竑᭞ㆷ玌䑵崳ㇻಟⱶ筙㧿唼⩷忸犻៖䀚懢㧊䊼乶狋䶎⧙Ӧჩ㨛甼ਆ৳㥟େῩ睐䙠仇፴৥喇䮊瘰㫎䢲ூ燶共ঐ瀊琄浐⹣⮜䪹໊Ժ↢姶ॎ⨠⭐奆朱㔲ୢ浄㡌㖱梺䛷㓡׻⩗ⷴ䷻撯⣢櫴㏝㗖燡׶р䖩濮斧㷼䗉橴珴啂⼖䒔栻⥬ⷴ欴䑾ᚠ栨姳㣜榀櫔噺ۃ⋢⮨籢懀扎䱦寇ᇓ榿✔䠡⭡囂燨䭺哅庘泲撇㓈䵑䥆䣺捑᥆⦻⍦槍ᥫ㒿⍔泎㺖⡿⌉៭䷋儆绖䭎㤥⾣ὗ⭛旍ᘒ烕○剏㚌摶㻼ᔿ㒪枅㙁经喉ᱶᗐ煊比৤㗝ᕛ供ᗥ巐㇎⽧㮶秊ⱏడ幛幞຿ೣᕴ烯燖毊緕灈秔皊焦᧦䚷䣀瘄㻄嵌㌾ቄϙ䈈䪦忄⣇∐䥚暹⛜✜ය姉╓ᑼ侓㒳⥁嶪伮柶䯔畹澢囵敩ו楢憖咅㕂劮皭䕀滆಴䏠ⴹׄ⢚熭Ị呴ⶎ洷㫈ᵽ梯㦶篆Ầ䴂儖Ᏼො⬾摤⟘䬙ㄲ籥ϑᇎ䪲篇⫫榒⭾晤䒎䡻楲䞪燃┱䵈祤ۯ◇瀏ᆶߢ練歒䋻槎緶⻬涴姅綮⾞廕ً緼欸瀖㳐稠᪙ု滾ㆡ⩸磖噚繀ᴪ氮旁ͯቡ怊ዔ燩⭶䤅猳Ϻ欮㙷ᇹ厵၁凖ᝇ໕佖嬇ၒ嗸ム洭烮淘౜案䫂峍⪇ܬ態䐂Ḗ弯緇丼㍤瑥ӄ㖂Ὦ園㏗䆟䶷ᲗⲈ␷Ϟⷴ嗫玡◰堆⒈懌买件ᒝ渥樒⎯௔掟ᡰ巚Ⲗ⏮眆╅盞瘕楮媮㷟湎ᮎ箬׳搅∎念壟帞๔圶ʇ䗉瓫⡭φᅳ梔洕庾㶲⥨䲶ኍപ⳾晕̈́ᦊ⩈繕㓋嬙ᷦ⥔≼万櫆泺區㒵᫒嚇囱綕Ḉ祃姉吘ᢘ园૟綢樉砮ᭈᖇ皡瓕䋘㐖夌忹旑̪溹䄆傟奟眕朁ᚈŹ⽜乷嚂ȓ侉緪䷗㍮杁爘⫊䍧᧊崬ž售沊猯ᷕ䏚澊差㫁獟Ḣ῕竕珈䬩烶໛獞渙妗◠୒᳚岬Ḣ烼剥彈咄䭆ᨮ囘䕎֚痳∶ᆀ䮗⥓ᆬ㮍ᵵ孡ᚯ䯂捇拑䄵严季峁ᤵ䞉差ᧂ灸潇䏔҂垬ᛧ挦䤂偔妔楡ᾅ䑤ӈ⍁溦梷⊜┨氵璵懕ൕ猵掫劏ᆹᬬ煤৊ᥧ淲拎અ⯥ᩬ昔槌㻗滵甚疋刓爈䆅穈歁奕碏仲ㄢ楜僖窄⴫࠹丼◊ίゕ壯悇奏爧⟏ᗖ㍣侹忏⇯๺氭他嚏Ιⱖ句ૄ䏽ᭁ䗖⢕Ʃ姖槯梜玮棭籘巍䍰䷭柕㫋㭝⩍晈䮀㕼崙䖍↑珵媽涏⛐௘彪⣁Ꮘ帊ỽ瞌烓㘝差堩沖ˈⲥ犰㔒㯐寓▔䥑孢⍘⮺宄䕤巕⬎⣜䬻庐䎼榟䋟⤭ᾕ籈槁☦䆥侒椼峝䟯҂Ᏻ汏◳澉ᅨ浨䬕ኝ㵹୩䓏㟋簊⼬䥦৏Ꮡ䩵棸ፄ߅ή瘖㖒޹亣杧㩟᧏汌刽嚅ݟ正缉♒毓ఒ珎洬ΣᲕ䣨䚇癄㼌滤㶜๓ᴕ濏⤔㤬㣘源炘奓䦉笼㳒᭛ᨒ伿皃㧿໊悾睘✧䴳愤⿫ᭌ㴎㒽ἶ⟼ᾳ珯஑䇪㲦瘎劔䰊㡍榿⏎孤䯳哆巫枪㞍嶿徿瞆ẽ儣憀㮙漧焌ໝ稃夎掾Ᏼ⧦ও怵⻗q䛓埚紒୍榎敍攃換巅塿⏰笣溅䁮侍䰑㣝呤ॻ䭉㸅帍懀⯩ઝ䉬猔⬻澝慼㊔᥅㨝峌瓁⭵୆䵿熲䷣眣禵㖙坬淉綷檍縙㽙ᬾ㚃䞟栻昽ⶏ卨̻總ڒ㝃㺻毌⚄穳᡻埌圍͉⦗仨Γᗬ㸭睿瘔殦繁咎༏泑徛Ἵⷌ瞸෬㘤ᢂ猤૙䒿㎝涯㠵㮔㒗䐈写䟾ϋ瞳檧呸戓ତ䨧沔䈉寂༥摝唞枥种憧䴍䦚᰽䳄刖柵级䔌Ȝ捘硗ダᮙ溫妏猌᲏构年䕍岒俴廇桿㲞䬱㰑爍ᨄൌ簰㡗䟅⟩㯯㝜צጫ殩北䨤⯏夷潐㾛൛櫩楾羐紵㥞䆵≶垊嫞䐾婊博嶋尿嬁叚祌䛯縏㞞屐獖䥸怸渋䏐⩳㢝䄈ℼ捁䭴䝙巨矸䨼ᐻ帀䫍ຈ߱柒㫽塒۷͕礝畣壺堩Њ↨㻜㯦濧ᜅ枖䟬獋巳㇛壸㯘縈ਧ婯㰆槿⽵ખ柰⍄州矯厠桹デ⿏牚㯶敽㹜ᜦ䩩⌨ⷻ灏叞墙ㆃ冥乭祃擛ڤ渓⏽୎洴࿏嬶姹䰎珔䇨姷≯᪼攐俳㬷峉眚寚媛终斴⻳₾拟क䅐◽伢ᅙ盿䘺ẙ柁ዟἑᣃⲟ㲵⠖愼罉⶗囩䳎㿹瀎⚵⺇楟泏㥬瓲㗽儧疀犞帮໚ᄈ槒຤ܕ池罕ᵔ෮奐ʨ甡䱺䮘✎ᮬ湑⯚撠籴䫱䛮䞔ഠ攗䎎㰥㜉暮渦稠በ䇼搫泼唣䰳㛀⩞㳢⼀檨ኂ㤰⃮ኝⰩ⟫浊ⴤ挀㬈Ļ庁柊乺ܹ憫ࢢ剐ㄷ➞縔牂夾夤瘹ⶦṽ秣悯▽⨶⏥ୃᵎ཯匾卫㈇䋑慗憼ઐ窢犱࿴伷෩璿嫡樚氷巓∧堣⓫㑼⸭䗵㾐䘘唐㮬ⅉ㨋炎縹㫤摋㐌℮⓽൥ᒚЬ䣎ঘ斏廎⛤毤ᐧ˝漢⯴敱祵獨㼚᪹疅垡嚛ㄝ栟ᢍԪ探欳㲦睈⹖ங‰⎳嘵ڬ枏᤽〆⃱㝇㶶烡䶎燩ᤂ妫Ĥл⟰儭箕ᑘオൈࢯ䚦ⰺ☲䷌㻷㡇泠縣ᑲⱙ眧ᷤ͸㈒㞹䮊຺峯ҹ毀梣剖ϳ烆沎単⫞஥缀偱㻸竼ᫀ喼ٗ浳⃐璽௸⭮㴤⯃䖧刎㦚ᰐ維䓐ɀ᝷喡ห䚞ᬛ瞏῏䙧娯⌺㍜港ựछ⊏㊩崱庘ȵ䯐噢碿每ᎨҮ⥳箂⌗凩峎牤઀翍⊪碴洟૜ᕐ㉚匸ᳺ疆収㲦縊呠Ȋ䔠ተ潂攮懪Ğ䵀༠㡱殚䔻㟔⪎婬潗ǥ劫湃Ù⏐ࡴ⯾╥䴾⤴煤ތ槈䲌ᐭొ䄋㑆ࢥჱᅘᠲ㒜戗㮺ጘᘅ敡ⱎ礥᷶ੳ䝞⯹琇ႀ䅶䓚႐䳵熭怢瀺痝ଢ咞㽥⸹ɼᙙ欦ᾐ劂㚕໠℆ᓃઓ彡㥱枏䞹愐▁ᱯ㖥⦯࿰ភ啓ତ⚾㨛䌇䱣Ṑ䝏木熃ⴕᙓ㾏嵱ෝ勑缤ᾈࢁ纶ᇶᨰ䎂ᄩ捻筹Ⱟ垵勎䩦ೋ沈຅᧲ᡘ尜傐毹䤇畹ੌ姪價䭅撙囦碠ᝑ฽䮫嫣㤈ˏ杼⸡⣉悋ᯜ媭ժᴏዼ暠ⳣ澙≒唈㯾珥瘉㱡䦜榑掖ᇼ〈᷺䎃丕ຜ€埤昸恲ˆ䛼渘札㾪俵゠ᎍ്宩偆紽䱪ड䕡ᒐ䒢溔ᅡ⍁淮ࢬ㤩ឧ⸴偿㚭科࿃Ϣᨩ慌Ӝኔ௪㴊㣦રᾩ⥣窸ᥤ禣¬塈ᜢ汢燪⯢峧樍ғ䆌◦伨笝᳕柼ጿ̘䯭̱縙ㄸ៙㓢箩ᙏஃ勓㙆჻絛ణ寑ઉ笼䡪䧉׉ỏ٣⎮毼㣿緖砟䬑䍇=ඩ䥫䞻数僂圕呜⣤ͅೃ䗁䰥娵罆婘ٮৗ⺲㶑獢ᬳ㔦༃岡揚ຎᡩ昷㣞ὠ䱳澩峽䍤后㙪␱哅弍恳狜֌᱃⸲䈨䣫ྜ古ඓ姼潡䆀䉲檈嬌᫴绢桭森唆粴㒘▹䣥妽ಛ懘篧ℐۡ೯ᅅ㭊Ꮋ吺㚩懅㌱澤ሃ╢ᔀ咩ォ䵃䓕籢㑫䲹ṅᚱⱪ極䘩፸癃≭才筓粖䣟壎ቧ嬻ࡱ榒筊敨絤悑⑆絋史઄㍁絸ᄈ㖤燌㨙ጬ彼喲᥍甁屌䭒㫶᯲₂ᑭ䦕ގᄏ⼂⠯湉᳣揺ऒ≉孢↱纾䧿樧ᑰ恳᧦՛⤛掕༪㛊璇☴懌⨀䫛₴瞐㾨ㆥᔟ抩䰢➡䶥㰽墙⧃❚ᛴ䲕ኁ䅛桡粄ਔ⯙ֆ⪺䉣㸨姈Ᏼ憭⣒⅛崜Ꮙ侊⃡ᡄ㘤ṩ䆟ӆῴ媃佰叠䳗؈䶿䝑♄⚲噤䁑㯋Ⴢׅ᫨硌墾⳱ࡖ⁩䳚៍䯆樕䔝棸䮩ዔ䥒⾉ዩ๞䊱Ꮖ喎㩦圖ǋ戌䤂怓๗Ⴇ劚ચ㿩ູ⻯᲌儏➠ᄼ磽凮奅ㅻᏦゴ⊮➙⤂犂抎⠚溼狭ኖ᫠僜珏๡㜑⒅䘸粊᧔լᚻ♒ᛴ⟳磯㑍ऀ⬁᭧ᅄʉ᤽枳᳴敓ᩕ䋯崋Ⴁあ寰佚䪲ẃ儵┗Ử攓ऑف哹犾౱㆙㞦箃澪禽⒰䭂䴓䦫ᡗ梫ʈ䭯宖ᇅ䞲抲妮࠘桸殢埭ྲྀ糬匶䡋ș❪඼繡经柄⚌塣瘄孒჋糅熲♾㥅t䢍ᇀᓄ伌捃၊摛缽㷹ಚ㎱樴康Ბ䦁搪ᘔ欂㽮呎ᴛ㶧җ䄑䈴攺牽຀撾ᘄ娃崬罾ʬ䨢䵀ℹⵥ掂⺉溚䞷ᔴ䙒嗪捖岼㐋䩪㇙縆框䪟֍旿ᅬ䐳㷩៿岣એ䜔ా㤶Ⴝᦍ㺢月吸坓叩獑哙狶〔㥥䉅ከゎ;͌岂侼絫ᣀ㓧Рײ ";
+</script>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">datavzrd</a>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools/blob/master/CHANGELOG.md">0.2.0</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools">github</a>
+            </li>
+        </ul>
+        <span class="navbar-text">
+            created Wed Feb 16 16:38:35 2022
+        </span>
+    </div>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarText2">
+        <ul class="navbar-nav mr-auto">
+            <li><a href="index_7.html">oscars</a></li>
+        </ul>
+        <ul class="nav navbar-nav mr-auto">
+            <li class="nav-item"><div>My oscar report</div></li>
+        </ul>
+        <span class="pull-right">
+            
+            <div class="btn-group">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                items
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    
+                    <a class="dropdown-item" href="../oscars/index_1.html">oscars</a>
+                    
+                    <a class="dropdown-item" href="../movies/index_1.html">movies</a>
+                    
+                    <a class="dropdown-item" href="../oscar-plot/index_1.html">oscar-plot</a>
+                    
+                    <a class="dropdown-item" href="../movies-plot/index_1.html">movies-plot</a>
+                    
+                </div>
+            </div>
+        </span>
+    </div>
+</nav>
+<div class="container-fluid">
+    
+    <script>$(document).ready(function() {renderMarkdownDescription();});</script>
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-md-12">
+            <div class="collapse" id="collapseDescription">
+                <div class="card card-body" id="innerDescription" data-markdown="### All winning oscars beginning in the year 1929.
+This table contains *all* winning oscars for best actress and best actor.
+">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12 loading text-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div class="col-md-12 table-container" style="margin-top: 15px;">
+            <table id="table" class="table" data-classes="table table-hover">
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+        
+        <div style="padding-top: 1rem">
+            <nav aria-label="page navigation">
+                <ul class="pagination justify-content-start">
+                    
+                    
+                    <li class="page-item"><a class="page-link" href="index_1.html">First</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="">...</a></li>
+                    
+                    <li class="page-item"><a class="page-link" href="index_6.html">6</a></li>
+                    
+                    <li class="page-item active"><a class="page-link" href="index_7.html">7</a></li>
+                    
+                    <li class="page-item"><a class="page-link" href="index_8.html">8</a></li>
+                    
+                    
+                </ul>
+            </nav>
+        </div>
+        
+        </div>
+    </div>
+    <!-- Modal -->
+    
+    <div class="modal fade" id="modal_0" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">oscar_no</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="plot_0" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal_1" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">oscar_yr</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="plot_1" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal_2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">award</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="plot_2" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal_3" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">name</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="plot_3" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal_4" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">movie</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="plot_4" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal_5" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">age</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="plot_5" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal_6" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">birth_pl</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="plot_6" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal_7" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">birth_date</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="plot_7" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal_8" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">birth_mo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="plot_8" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal_9" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">birth_d</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="plot_9" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal_10" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">birth_y</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="plot_10" style="width: 100%; height: 300px; border:none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="search" tabindex="-1" role="dialog" aria-hidden="true" data-focus="false">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Search</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="search-iframe" src="" frameBorder="0" style="width: 100%; height: min(530px, 50vh)"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
