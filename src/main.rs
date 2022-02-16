@@ -2,7 +2,7 @@ use crate::render::portable::utils::{render_index_file, render_static_files};
 use crate::render::portable::ItemRenderer;
 use crate::render::Renderer;
 use crate::spec::ItemsSpec;
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result};
 use structopt::StructOpt;
 
 pub(crate) mod cli;
@@ -18,7 +18,7 @@ fn main() -> Result<()> {
     ))?;
 
     if !opt.output.exists() {
-        bail!("Given output directory {:?} does not exist", &opt.output);
+        std::fs::create_dir(&opt.output)?;
     }
 
     render_index_file(&opt.output, &config)?;
