@@ -82,16 +82,13 @@
     </div>
     {% endif %}
     <div class="row">
-        <div class="col-md-12 text-center">
-            <div id="vis"></div>
+        <div class="col-md-12 d-flex justify-content-center" style="height: calc(100vh - 200px)">
+            <div class="mt-auto mb-auto ml-auto mr-auto" id="vis"></div>
             <script>
                 const specs = {{ specs | safe }};
                 const data = {{ data | safe }};
-
                 specs.data.values = data;
-                specs.width = $( window ).width() - 200;
-                specs.height = $( window ).height() - 200;
-
+                if (specs.width == "container") { $("#vis").css("width", "100%"); }
                 vegaEmbed('#vis', specs);
             </script>
         </div>
