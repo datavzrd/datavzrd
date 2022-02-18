@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://www.github.com/koesterlab/datavzrd/compare/v0.2.0...v0.3.0) (2022-02-18)
+
+
+### Features
+
+* Allow user to use width: container in vega-lite specs ([#30](https://www.github.com/koesterlab/datavzrd/issues/30)) ([c65693b](https://www.github.com/koesterlab/datavzrd/commit/c65693b12c51dcb9d63466172776d2348c4ecabd))
+* Create output directory if it does not exist ([#27](https://www.github.com/koesterlab/datavzrd/issues/27)) ([08eafbe](https://www.github.com/koesterlab/datavzrd/commit/08eafbe671c78ee7b88413194b2f8e2982b696d9))
+
+
+### Bug Fixes
+
+* Minor cosmetic changes ([#29](https://www.github.com/koesterlab/datavzrd/issues/29)) ([e813018](https://www.github.com/koesterlab/datavzrd/commit/e813018a09cc45375109ce78f1fbe6b54879c435))
+
 ## [0.2.0](https://www.github.com/koesterlab/datavzrd/compare/v0.1.2...v0.2.0) (2022-02-16)
 
 
