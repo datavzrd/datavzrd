@@ -137,6 +137,7 @@ impl Renderer for ItemRenderer {
                     table_specs,
                     additional_headers,
                     table.pin_columns,
+                    pages,
                 )?;
                 render_plots(
                     &out_path,
@@ -227,6 +228,7 @@ fn render_page<P: AsRef<Path>>(
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 /// Render javascript files for each table containing formatters
 fn render_table_javascript<P: AsRef<Path>>(
     output_path: P,
@@ -236,6 +238,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_headers: Option<Vec<StringRecord>>,
     pin_columns: usize,
+    pages: usize,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -327,6 +330,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("heatmaps", &heatmaps);
     context.insert("num", &numeric);
     context.insert("pin_columns", &pin_columns);
+    context.insert("pages", &pages);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
 

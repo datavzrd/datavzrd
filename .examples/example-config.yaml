@@ -24,7 +24,7 @@ views:
     desc: |
       ### All winning oscars beginning in the year 1929.
       This table contains *all* winning oscars for best actress and best actor.
-    page-size: 25
+    page-size: 500
     render-table:
       age:
         plot:

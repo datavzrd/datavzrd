@@ -23,6 +23,10 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
             include_str!("../../../static/bootstrap-table-fixed-columns.min.js"),
         ),
         (
+            "bootstrap-table-filter-control.min.js",
+            include_str!("../../../static/bootstrap-table-filter-control.min.js"),
+        ),
+        (
             "jquery.min.js",
             include_str!("../../../static/jquery.min.js"),
         ),

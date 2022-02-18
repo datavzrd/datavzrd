@@ -14,6 +14,7 @@
 <script src="../static/bootstrap.bundle.min.js"></script>
 <script src="../static/bootstrap-table.min.js"></script>
 <script src="../static/bootstrap-table-fixed-columns.min.js"></script>
+<script src="../static/bootstrap-table-filter-control.min.js"></script>
 <script src="../static/vega.min.js"></script>
 <script src="../static/vega-lite.min.js"></script>
 <script src="../static/vega-embed.min.js"></script>
