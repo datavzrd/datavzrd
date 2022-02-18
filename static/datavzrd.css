@@ -59,3 +59,15 @@ th .th-inner {
 #vis-container {
     height: calc(100vh - 200px)
 }
+
+.form-control {
+    width: calc(100% - 5px) !important;
+}
+
+.filter-control {
+    padding-bottom: 2px;
+}
+
+.fixed-table-container {
+    border: none !important;
+}

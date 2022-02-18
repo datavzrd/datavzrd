@@ -46,6 +46,12 @@ $(document).ready(function() {
         fixedNumber: {{ pin_columns }}
     })
 
+    {% if pages <= 1 %}
+    $('.fixed-table-header').css({'padding-top':'3rem','padding-bottom':'5.5rem'});
+    $('th').css({'vertical-align':'top !important', 'height': 0});
+    $('.form-control').addClass('form-control-sm');
+    {% endif %}
+
     let additional_headers = [{% if additional_headers %}{% for ah in additional_headers %}{{ "{" }}{% for title in titles %}"{{ title }}":"<b>{{ ah[title] }}</b>"{% if not loop.last %},{% endif %}{% endfor %}{{ "}" }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}];
     let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let num = [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}];

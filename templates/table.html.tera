@@ -99,9 +99,9 @@
             </table>
         </div>
     </div>
+    {% if pages > 1 %}
     <div class="row">
         <div class="col-md-12">
-        {% if pages > 1 %}
         <div style="padding-top: 1rem">
             <nav aria-label="page navigation">
                 <ul class="pagination justify-content-start">
@@ -123,9 +123,9 @@
                 </ul>
             </nav>
         </div>
-        {% endif %}
         </div>
     </div>
+    {% endif %}
     <!-- Modal -->
     {% for title in titles %}
     <div class="modal fade" id="modal_{{ loop.index0 }}" tabindex="-1" role="dialog" aria-hidden="true">
