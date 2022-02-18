@@ -82,7 +82,7 @@
     </div>
     {% endif %}
     <div class="row">
-        <div class="col-md-12 d-flex justify-content-center" style="height: calc(100vh - 200px)">
+        <div class="col-md-12 d-flex justify-content-center" id="vis-container">
             <div class="mt-auto mb-auto ml-auto mr-auto" id="vis"></div>
             <script>
                 const specs = {{ specs | safe }};
