@@ -91,6 +91,8 @@ views:
         {
           "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
           "description": "A scatterplot showing movie ratings.",
+          "width": "container",
+          "height": 400,
           "data": {
             "values": []
           },

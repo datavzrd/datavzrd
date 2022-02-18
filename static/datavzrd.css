@@ -55,3 +55,7 @@ th .th-inner {
     overflow: visible !important;
     transform-origin: top left;
 }
+
+#vis-container {
+    height: calc(100vh - 200px)
+}
