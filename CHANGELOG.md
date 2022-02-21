@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://www.github.com/koesterlab/datavzrd/compare/v0.3.0...v1.0.0) (2022-02-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* Rename schema to spec and scheme to color-scheme (#31)
+
+### Code Refactoring
+
+* Rename schema to spec and scheme to color-scheme ([#31](https://www.github.com/koesterlab/datavzrd/issues/31)) ([b9fca5f](https://www.github.com/koesterlab/datavzrd/commit/b9fca5f2cb6b145b55527bef2eed95c1359ef467))
+
 ## [0.3.0](https://www.github.com/koesterlab/datavzrd/compare/v0.2.0...v0.3.0) (2022-02-18)
 
 
