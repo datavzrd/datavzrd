@@ -169,7 +169,7 @@ pub(crate) struct RenderColumnSpec {
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct RenderPlotSpec {
-    #[serde(default)]
+    #[serde(default, rename = "spec")]
     pub(crate) schema: String,
 }
 
@@ -189,7 +189,7 @@ pub(crate) struct LinkSpec {
 pub(crate) struct CustomPlot {
     #[serde(default, rename = "data")]
     plot_data: String,
-    #[serde(default)]
+    #[serde(default, rename = "spec")]
     schema: String,
     #[serde(default = "default_vega_controls")]
     vega_controls: String,
@@ -213,10 +213,11 @@ pub(crate) struct TickPlot {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct Heatmap {
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: String,
-    #[serde(default, rename = "scheme")]
+    #[serde(default)]
     color_scheme: String,
     #[serde(default, rename = "range")]
     color_range: Vec<String>,
@@ -347,7 +348,7 @@ mod tests {
             dataset: table-a
             desc: "my table"
             render-plot:
-                schema: |
+                spec: |
                     {'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}
     "#;
 

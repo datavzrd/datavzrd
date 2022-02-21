@@ -60,7 +60,7 @@ views:
             function(value) {
               return [{"significance": value, "threshold": value > 60}]
             }
-          schema: |
+          spec: |
             {
               "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
               "mark": "circle",
@@ -89,7 +89,7 @@ views:
     dataset: gene-mycn
     pin-columns: 3
     render-plot:
-      schema: |
+      spec: |
         {
               "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
               "mark": "circle",
@@ -147,7 +147,7 @@ views:
 
 | keyword                           | explanation                                                                                                 |
 |-----------------------------------|-------------------------------------------------------------------------------------------------------------|
-| schema                            | A schema for a vega plot that is rendered into each cell of this column                                     |
+| spec                            | A schema for a vega plot that is rendered into each cell of this column                                     |
 
 ### links
 
@@ -166,7 +166,7 @@ views:
 | keyword       | explanation                                                                                          | default |
 |---------------|------------------------------------------------------------------------------------------------------|---------|
 | data          | A function to return the data needed for the schema (see below) from the content of the column cell  |         |
-| schema        | A schema for a vega plot that is rendered into each cell of this column                              |         |
+| spec          | The vega-lite spec for a vega plot that is rendered into each cell of this column                    |         |
 | vega-controls | Whether or not the resulting vega-lite plot is supposed to have action-links in the embedded view    | false   |
 
 ### plot
@@ -190,11 +190,11 @@ views:
 
 `heatmap` defines the attributes of a heatmap for numeric or nominal values.
 
-| keyword   | explanation                                                                                                    |
-|-----------|----------------------------------------------------------------------------------------------------------------|
-| scale     | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the heatmap                           |
-| scheme    | Defines the [scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap for nominal values  |
-| range     | Defines the color range of the heatmap as a list                                                  |
+| keyword      | explanation                                                                                                         |
+|--------------|---------------------------------------------------------------------------------------------------------------------|
+| scale        | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the heatmap                                |
+| color-scheme | Defines the [color-scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap for nominal values |
+| range        | Defines the color range of the heatmap as a list                                                                    |
 
 ## Authors
 

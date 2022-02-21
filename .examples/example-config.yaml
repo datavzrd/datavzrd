@@ -42,7 +42,7 @@ views:
       ## My beatiful oscar scatterplot
       *So many great actors and actresses*
     render-plot:
-      schema: |
+      spec: |
         {
           "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
           "description": "A scatterplot showing oscars.",
@@ -81,13 +81,13 @@ views:
         plot:
           heatmap:
             scale: ordinal
-            scheme: accent
+            color-scheme: accent
   movies-plot:
     dataset: movies
     desc: |
       All movies with its *runtime* and *ratings* plotted over *time*.
     render-plot:
-      schema: |
+      spec: |
         {
           "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
           "description": "A scatterplot showing movie ratings.",
