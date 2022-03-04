@@ -44,7 +44,7 @@ views:
     desc: |
       # A header
       This is the **description** for *table-a*.
-    render-columns:
+    render-table:
       x:
         custom: |
           function(value) {
@@ -53,7 +53,7 @@ views:
       y:
         link-to-url: 'https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={value}'
   table-b:
-    render-columns:
+    render-table:
       significance:
         custom-plot:
           data: |
@@ -73,7 +73,7 @@ views:
   gene-mycn:
     dataset: gene-mycn
     page-size: 40
-    render-columns:
+    render-table:
       frequency:
         plot:
           ticks:
