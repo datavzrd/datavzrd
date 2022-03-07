@@ -41,6 +41,7 @@ datasets:
         item: table-b
 views:
   table-a:
+    dataset: table-a
     desc: |
       # A header
       This is the **description** for *table-a*.
@@ -53,6 +54,7 @@ views:
       y:
         link-to-url: 'https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={value}'
   table-b:
+    dataset: table-b
     render-table:
       significance:
         custom-plot:
