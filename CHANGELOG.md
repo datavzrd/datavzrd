@@ -1,5 +1,14 @@
 # Changelog
 
+### [1.0.1](https://www.github.com/koesterlab/datavzrd/compare/v1.0.0...v1.0.1) (2022-03-09)
+
+
+### Bug Fixes
+
+* Fix example config ([d280358](https://www.github.com/koesterlab/datavzrd/commit/d280358dc94d0048a2f5ea216007da9695d99bad))
+* No error for empty csv files ([#37](https://www.github.com/koesterlab/datavzrd/issues/37)) ([ce6ea18](https://www.github.com/koesterlab/datavzrd/commit/ce6ea187a6be70634c20ffb3a9d27761153b2054))
+* use smaller font sizes and less padding ([#34](https://www.github.com/koesterlab/datavzrd/issues/34)) ([7f17009](https://www.github.com/koesterlab/datavzrd/commit/7f170099f3a50b230e21d44d991ecc341559acf7))
+
 ## [1.0.0](https://www.github.com/koesterlab/datavzrd/compare/v0.3.0...v1.0.0) (2022-02-21)
 
 
