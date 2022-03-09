@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>datavzrd report</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table-fixed-columns.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/datavzrd.css">
+</head>
+
+<body>
+<script src="../static/jquery.min.js"></script>
+<script src="../static/bootstrap.bundle.min.js"></script>
+<script src="../static/bootstrap-table.min.js"></script>
+<script src="../static/bootstrap-table-fixed-columns.min.js"></script>
+<script src="../static/vega.min.js"></script>
+<script src="../static/vega-lite.min.js"></script>
+<script src="../static/vega-embed.min.js"></script>
+<script src="../static/lz-string.min.js"></script>
+<script src="../static/showdown.min.js"></script>
+<script src="table.js"></script>
+
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">datavzrd</a>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools/blob/master/CHANGELOG.md">{{ version }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools">github</a>
+            </li>
+        </ul>
+        <span class="navbar-text">
+            created {{ time }}
+        </span>
+    </div>
+</nav>
+<nav class="navbar navbar-expand navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarText2">
+        <ul class="navbar-nav mr-auto">
+            <li><a href="#">{{ name }}</a></li>
+        </ul>
+        <ul class="nav navbar-nav mr-auto">
+            <li class="nav-item"><div>{{ report_name }}</div></li>
+        </ul>
+        <span class="pull-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                views
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    {% for table in tables %}
+                    <a class="dropdown-item" href="../{{ table }}/index_1.html">{{ table }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </span>
+    </div>
+</nav>
+<div class="container">
+    <div class="row" style="height: calc(100vh - 190px);">
+        <div class="col-md-12 d-flex justify-content-center align-items-center">
+            <h4>No data</h4>
+        </div>
+    </div>
+</div>
+</body>
+</html>
