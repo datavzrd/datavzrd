@@ -4,6 +4,7 @@
 
 .table-container {
     display: none;
+    font-size: 0.8rem;
 }
 
 .loading {
@@ -42,10 +43,16 @@ td:hover .btn-sm {
 }
 
 td {
-    position: relative
+    position: relative;
 }
 
-td.plotcell {
+.table td, .table th {
+    padding-bottom: 0;
+    padding-top: 0;
+    padding-right: 0.5rem;
+}
+
+.table td.plotcell {
     padding: 0;
 }
 
