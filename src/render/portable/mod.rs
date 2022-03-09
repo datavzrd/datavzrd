@@ -62,95 +62,106 @@ impl Renderer for ItemRenderer {
 
             let linked_tables = get_linked_tables(name, &self.specs)?;
 
-            // Render plot
-            if table.render_plot.is_some() {
-                render_plot_page(
-                    &out_path,
-                    &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
-                    name,
-                    table,
-                    dataset,
-                    &linked_tables,
-                    dataset.links.as_ref().unwrap(),
-                )?;
-            }
-            // Render table
-            else if let Some(table_specs) = &table.render_table {
-                let mut counter_reader = generate_reader()
-                    .context(format!("Could not read file with path {:?}", &dataset.path))?;
-
-                let row_address_factory = RowAddressFactory::new(table.page_size);
-                let pages = row_address_factory
-                    .get(counter_reader.records().count() - dataset.header_rows)
-                    .page
-                    + 1;
-
-                let mut reader = generate_reader()
-                    .context(format!("Could not read file with path {:?}", &dataset.path))?;
-                let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-
-                let additional_headers = if dataset.header_rows > 1 {
-                    let mut additional_header_reader = generate_reader()
-                        .context(format!("Could not read file with path {:?}", &dataset.path))?;
-                    Some(
-                        additional_header_reader
-                            .records()
-                            .take(dataset.header_rows - 1)
-                            .map(|r| r.unwrap())
-                            .collect_vec(),
-                    )
-                } else {
-                    None
-                };
-
-                for (page, grouped_records) in &reader
-                    .records()
-                    .skip(dataset.header_rows - 1)
-                    .into_iter()
-                    .enumerate()
-                    .group_by(|(i, _)| row_address_factory.get(*i).page)
-                {
-                    let records = grouped_records.collect_vec();
-                    render_page(
+            let mut counter_reader = generate_reader()
+                .context(format!("Could not read file with path {:?}", &dataset.path))?;
+            let records_length = counter_reader.records().count();
+            if records_length > 0 {
+                // Render plot
+                if table.render_plot.is_some() {
+                    render_plot_page(
                         &out_path,
-                        page + 1,
-                        pages,
-                        records
-                            .iter()
-                            .map(|(_, records)| records.as_ref().unwrap())
-                            .collect_vec(),
-                        &headers,
                         &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
-                        table_specs,
                         name,
-                        table.description.as_deref(),
+                        table,
+                        dataset,
                         &linked_tables,
                         dataset.links.as_ref().unwrap(),
-                        &self.specs.report_name,
                     )?;
                 }
-                render_table_javascript(
+                // Render table
+                else if let Some(table_specs) = &table.render_table {
+                    let row_address_factory = RowAddressFactory::new(table.page_size);
+                    let pages = row_address_factory
+                        .get(records_length - dataset.header_rows)
+                        .page
+                        + 1;
+
+                    let mut reader = generate_reader()
+                        .context(format!("Could not read file with path {:?}", &dataset.path))?;
+                    let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+
+                    let additional_headers = if dataset.header_rows > 1 {
+                        let mut additional_header_reader = generate_reader().context(format!(
+                            "Could not read file with path {:?}",
+                            &dataset.path
+                        ))?;
+                        Some(
+                            additional_header_reader
+                                .records()
+                                .take(dataset.header_rows - 1)
+                                .map(|r| r.unwrap())
+                                .collect_vec(),
+                        )
+                    } else {
+                        None
+                    };
+
+                    for (page, grouped_records) in &reader
+                        .records()
+                        .skip(dataset.header_rows - 1)
+                        .into_iter()
+                        .enumerate()
+                        .group_by(|(i, _)| row_address_factory.get(*i).page)
+                    {
+                        let records = grouped_records.collect_vec();
+                        render_page(
+                            &out_path,
+                            page + 1,
+                            pages,
+                            records
+                                .iter()
+                                .map(|(_, records)| records.as_ref().unwrap())
+                                .collect_vec(),
+                            &headers,
+                            &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
+                            table_specs,
+                            name,
+                            table.description.as_deref(),
+                            &linked_tables,
+                            dataset.links.as_ref().unwrap(),
+                            &self.specs.report_name,
+                        )?;
+                    }
+                    render_table_javascript(
+                        &out_path,
+                        &headers,
+                        &dataset.path,
+                        dataset.separator,
+                        table_specs,
+                        additional_headers,
+                        table.pin_columns,
+                    )?;
+                    render_plots(
+                        &out_path,
+                        &dataset.path,
+                        dataset.separator,
+                        dataset.header_rows,
+                    )?;
+                    render_search_dialogs(
+                        &out_path,
+                        &headers,
+                        &dataset.path,
+                        dataset.separator,
+                        table.page_size,
+                        dataset.header_rows,
+                    )?;
+                }
+            } else {
+                render_empty_dataset(
                     &out_path,
-                    &headers,
-                    &dataset.path,
-                    dataset.separator,
-                    table_specs,
-                    additional_headers,
-                    table.pin_columns,
-                )?;
-                render_plots(
-                    &out_path,
-                    &dataset.path,
-                    dataset.separator,
-                    dataset.header_rows,
-                )?;
-                render_search_dialogs(
-                    &out_path,
-                    &headers,
-                    &dataset.path,
-                    dataset.separator,
-                    table.page_size,
-                    dataset.header_rows,
+                    name,
+                    &self.specs.report_name,
+                    &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                 )?;
             }
         }
@@ -369,7 +380,39 @@ fn link_columns(
     Ok(result)
 }
 
-/// Render search dialog modals for individual columns of every table
+/// Renders an empty page when datasets are empty
+fn render_empty_dataset<P: AsRef<Path>>(
+    output_path: P,
+    name: &str,
+    report_name: &str,
+    tables: &[String],
+) -> Result<()> {
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "empty.html.tera",
+        include_str!("../../../templates/empty.html.tera"),
+    )?;
+    let mut context = Context::new();
+    let local: DateTime<Local> = Local::now();
+
+    context.insert("tables", tables);
+    context.insert("name", name);
+    context.insert("report_name", report_name);
+    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
+    context.insert("version", &env!("CARGO_PKG_VERSION"));
+
+    let file_path =
+        Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
+
+    let html = templates.render("empty.html.tera", &context)?;
+
+    let mut file = fs::File::create(file_path)?;
+    file.write_all(html.as_bytes())?;
+
+    Ok(())
+}
+
+/// Renders search dialog modals for individual columns of every table
 fn render_search_dialogs<P: AsRef<Path>>(
     path: P,
     titles: &[String],
