@@ -6,9 +6,6 @@ datasets:
       link to oscar plot:
         column: age
         item: oscar-plot
-      link to oscar entry:
-        column: name
-        table-row: oscars/name
       link to movie:
         column: movie
         table-row: movies/Title
