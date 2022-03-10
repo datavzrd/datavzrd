@@ -132,7 +132,7 @@ function renderMarkdownDescription() {
 {% for title, custom_plot in custom_plots %}
 function renderCustomPlots{{ loop.index0 }}(ah, columns) {
     var data_function = {{ custom_plot.data }};
-    var specs =  {{ custom_plot.schema }};
+    var specs =  {{ custom_plot.spec }};
     var rows = $("table > tbody > tr");
     var row_length = $("table > tbody > tr").length - ah;
     for (i = 0; i < row_length; i++) {
