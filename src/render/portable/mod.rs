@@ -81,11 +81,6 @@ impl Renderer for ItemRenderer {
                 }
                 // Render table
                 else if let Some(table_specs) = &table.render_table {
-                    let table_specs = &table_specs
-                        .clone()
-                        .into_iter()
-                        .filter(|(_, s)| !s.optional)
-                        .collect();
                     let row_address_factory = RowAddressFactory::new(table.page_size);
                     let pages = row_address_factory
                         .get(records_length - dataset.header_rows)
@@ -95,6 +90,12 @@ impl Renderer for ItemRenderer {
                     let mut reader = generate_reader()
                         .context(format!("Could not read file with path {:?}", &dataset.path))?;
                     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+
+                    let table_specs = &table_specs
+                        .clone()
+                        .into_iter()
+                        .filter(|(k, s)| !s.optional || headers.contains(k))
+                        .collect();
 
                     let additional_headers = if dataset.header_rows > 1 {
                         let mut additional_header_reader = generate_reader().context(format!(
