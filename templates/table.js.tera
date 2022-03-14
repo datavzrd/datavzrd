@@ -136,12 +136,12 @@ function renderCustomPlots{{ loop.index0 }}(ah, columns) {
     var rows = $("table > tbody > tr");
     var row_length = $("table > tbody > tr").length - ah;
     for (i = 0; i < row_length; i++) {
-        var element = document.getElementById(`{{ title }}-${i}`);
+        var element = document.getElementById(`{{ title | slugify }}-${i}`);
         var data = data_function(element.dataset.value);
         var s = specs;
         s.data = {};
         s.data.values = data;
-        var element_id = `#{{ title }}-${i}`;
+        var element_id = `#{{ title | slugify }}-${i}`;
         var opt = {"actions": {{ custom_plot.vega_controls }}};
         vegaEmbed(element_id, JSON.parse(JSON.stringify(s)), opt);
     }
@@ -159,12 +159,12 @@ function renderTickPlots{{ loop.index0 }}(ah, columns) {
     var rows = $("table > tbody > tr");
     var row_length = $("table > tbody > tr").length - ah;
     for (i = 0; i < row_length; i++) {
-        var element = document.getElementById(`{{ title }}-${i}`);
+        var element = document.getElementById(`{{ title | slugify }}-${i}`);
         var data = [{"{{ title }}": element.dataset.value}];
         var s = specs;
         s.data = {};
         s.data.values = data;
-        var element_id = `#{{ title }}-${i}`;
+        var element_id = `#{{ title | slugify }}-${i}`;
         var opt = {"actions": false};
         vegaEmbed(element_id, JSON.parse(JSON.stringify(s)), opt);
     }
@@ -184,7 +184,7 @@ function colorizeColumn{{ loop.index0 }}(ah) {
     var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range({% if tuple.0.scale == "ordinal" %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
     var row_length = $("table > tbody > tr").length - ah;
     for (i = 0; i < row_length; i++) {
-        var element = document.getElementById(`{{ title }}-${i}`);
+        var element = document.getElementById(`{{ title | slugify }}-${i}`);
         element.parentElement.style.backgroundColor = scale(element.dataset.value);
     }
 }
