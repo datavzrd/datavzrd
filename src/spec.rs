@@ -155,6 +155,8 @@ impl ItemSpecs {
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct RenderColumnSpec {
     #[serde(default)]
+    pub(crate) optional: bool,
+    #[serde(default)]
     pub(crate) custom: Option<String>,
     #[serde(default)]
     pub(crate) link_to_url: Option<String>,
@@ -251,6 +253,7 @@ mod tests {
     #[test]
     fn test_table_config_deserialization() {
         let expected_render_columns = RenderColumnSpec {
+            optional: false,
             custom: None,
             link_to_url: Some(String::from("https://www.rust-lang.org")),
             plot: None,
