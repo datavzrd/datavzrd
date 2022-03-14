@@ -138,7 +138,7 @@ views:
 
 | keyword                           | explanation                                                                                                 |
 |-----------------------------------|-------------------------------------------------------------------------------------------------------------|
-| link-to-url                       | Renders a link to the given url with {value} replace by the value of the table                              |
+| link-to-url                       | Renders a link to the given url with {value} replace by the value of the table. Other values of the same row can be accessed by their column header (e.g. {age} for a column named age).      |
 | custom                            | Applies the given js function to render column content. The parameters of the function are similar to the ones defined [here](https://bootstrap-table.com/docs/api/column-options/#formatter) |
 | [custom-plot](#custom-plot)       | Renders a custom vega-lite plot to the corresponding table cell                                             |
 | [plot](#plot)                     | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                         |

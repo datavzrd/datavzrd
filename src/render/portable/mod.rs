@@ -360,7 +360,10 @@ fn link_columns(
     let mut result = Vec::new();
     for (i, title) in titles.iter().enumerate() {
         if let Some(render_column) = render_columns.get(title) {
-            if let Some(link) = render_column.link_to_url.clone() {
+            if let Some(mut link) = render_column.link_to_url.clone() {
+                for (j, t) in titles.iter().enumerate() {
+                    link = link.replace(&format!("{{{t}}}"), &column[j])
+                }
                 result.push(format!(
                     "<a href='{}' target='_blank' >{}</a>",
                     link.replace("{value}", &column[i]),
