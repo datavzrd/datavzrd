@@ -91,6 +91,12 @@ impl Renderer for ItemRenderer {
                         .context(format!("Could not read file with path {:?}", &dataset.path))?;
                     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
 
+                    let table_specs = &table_specs
+                        .clone()
+                        .into_iter()
+                        .filter(|(k, s)| !s.optional || headers.contains(k))
+                        .collect();
+
                     let additional_headers = if dataset.header_rows > 1 {
                         let mut additional_header_reader = generate_reader().context(format!(
                             "Could not read file with path {:?}",
