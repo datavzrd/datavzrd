@@ -4,7 +4,7 @@ let plot_0 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"On Golden Pond","value":2},{"key":"Network","value":2},{"key":"It Happened One Night","value":2},{"key":"Coming Home","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"Butterfield 8","value":1},{"key":"The Hours","value":1},{"key":"The Blind Side","value":1},{"key":"Dallas Buyers Club","value":1},{"key":"Save the Tiger","value":1}]},
+            "data": {"values": [{"key":"On Golden Pond","value":2},{"key":"Coming Home","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"Network","value":2},{"key":"It Happened One Night","value":2},{"key":"Blue Jasmine","value":1},{"key":"Women in Love","value":1},{"key":"Suspicion","value":1},{"key":"La Vie En Rose","value":1},{"key":"Room at the Top","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {

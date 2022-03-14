@@ -252,12 +252,12 @@ function renderTickPlots0(ah, columns) {
     var rows = $("table > tbody > tr");
     var row_length = $("table > tbody > tr").length - ah;
     for (i = 0; i < row_length; i++) {
-        var element = document.getElementById(`imdbRating-${i}`);
+        var element = document.getElementById(`imdbrating-${i}`);
         var data = [{"imdbRating": element.dataset.value}];
         var s = specs;
         s.data = {};
         s.data.values = data;
-        var element_id = `#imdbRating-${i}`;
+        var element_id = `#imdbrating-${i}`;
         var opt = {"actions": false};
         vegaEmbed(element_id, JSON.parse(JSON.stringify(s)), opt);
     }
@@ -277,7 +277,7 @@ function colorizeColumn0(ah) {
     var scale = ordinal().domain(["TV-G","Unrated","Passed","PG-13","R","Approved","Not Rated","M/PG","G","TV-MA","PG","N/A","M"]).range(vega.scheme('accent'));
     var row_length = $("table > tbody > tr").length - ah;
     for (i = 0; i < row_length; i++) {
-        var element = document.getElementById(`Rated-${i}`);
+        var element = document.getElementById(`rated-${i}`);
         element.parentElement.style.backgroundColor = scale(element.dataset.value);
     }
 }
