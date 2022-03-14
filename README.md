@@ -184,9 +184,10 @@ views:
 
 `ticks` defines the attributes of a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values.
 
-| keyword   | explanation                                                                             |
-|-----------|-----------------------------------------------------------------------------------------|
-| scale     | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick plot  |
+| keyword   | explanation                                                                                                                       |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------------|
+| scale     | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick plot                                            |
+| domain    | Defines the domain of the tick plot. If not present datavzrd will automatically use the minimum and maximum values for the domain |
 
 ### heatmap
 
@@ -197,6 +198,7 @@ views:
 | scale        | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the heatmap                                |
 | color-scheme | Defines the [color-scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap for nominal values |
 | range        | Defines the color range of the heatmap as a list                                                                    |
+| domain       | Defines the domain of the heatmap as a list                                                                         |
 
 ## Authors
 

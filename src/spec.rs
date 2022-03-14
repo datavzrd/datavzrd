@@ -210,6 +210,8 @@ pub(crate) struct PlotSpec {
 pub(crate) struct TickPlot {
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: String,
+    #[serde(default)]
+    pub(crate) domain: Option<Vec<f32>>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -221,6 +223,8 @@ pub(crate) struct Heatmap {
     color_scheme: String,
     #[serde(default, rename = "range")]
     color_range: Vec<String>,
+    #[serde(default)]
+    pub(crate) domain: Option<Vec<String>>,
 }
 
 #[derive(Error, Debug)]

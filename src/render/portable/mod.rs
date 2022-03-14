@@ -516,7 +516,11 @@ fn render_tick_plot(
         .headers()
         .map(|s| s.iter().position(|t| t == title).unwrap())?;
 
-    let (min, max) = get_min_max(csv_path, separator, column_index, header_rows)?;
+    let (min, max) = if let Some(domain) = &tick_plot.domain {
+        (domain[0], domain[1])
+    } else {
+        get_min_max(csv_path, separator, column_index, header_rows)?
+    };
 
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -539,6 +543,10 @@ fn get_column_domain(
     header_rows: usize,
     heatmap: &Heatmap,
 ) -> Result<String> {
+    if let Some(domain) = &heatmap.domain {
+        return Ok(json!(domain).to_string());
+    }
+
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
         .from_path(csv_path)
