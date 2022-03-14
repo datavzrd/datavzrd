@@ -225,7 +225,7 @@ function renderTickPlots0(ah, columns) {
         "x": {
             "field": "imdbRating",
             "type": "quantitative",
-            "scale": {"type": "linear","domain": [5.099999904632568, 9.199999809265137]},
+            "scale": {"type": "linear","domain": [1, 10]},
             "axis": {
                 "title": null,
                 "ticks": false,

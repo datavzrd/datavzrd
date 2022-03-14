@@ -211,6 +211,8 @@ $(document).ready(function() {
     
 
     
+        colorizeColumn0(additional_headers.length);
+    
 
 let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
     let rows = $("table > tbody > tr");
@@ -291,6 +293,16 @@ function renderTickPlots0(ah, columns) {
 
 
 
+
+function colorizeColumn0(ah) {
+    var ordinal = vega.scale('ordinal');
+    var scale = ordinal().domain(["Best actor","Best actress"]).range(["#add8e6","#ffb6c1"]);
+    var row_length = $("table > tbody > tr").length - ah;
+    for (i = 0; i < row_length; i++) {
+        var element = document.getElementById(`award-${i}`);
+        element.parentElement.style.backgroundColor = scale(element.dataset.value);
+    }
+}
 
 
 function embedSearch(index) {

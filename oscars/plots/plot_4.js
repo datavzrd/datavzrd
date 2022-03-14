@@ -4,7 +4,7 @@ let plot_4 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"Coming Home","value":2},{"key":"Network","value":2},{"key":"It Happened One Night","value":2},{"key":"On Golden Pond","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"Driving Miss Daisy","value":1},{"key":"The Three Faces of Eve","value":1},{"key":"Darkest Hour","value":1},{"key":"A Man for All Seasons","value":1},{"key":"Save the Tiger","value":1}]},
+            "data": {"values": [{"key":"Network","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"It Happened One Night","value":2},{"key":"On Golden Pond","value":2},{"key":"Coming Home","value":2},{"key":"As Good As It Gets","value":1},{"key":"The Sin of Madelon Claudet","value":1},{"key":"Elmer Gantry","value":1},{"key":"Erin Brockovich","value":1},{"key":"Shine","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {
