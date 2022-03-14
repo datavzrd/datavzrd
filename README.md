@@ -28,7 +28,7 @@ datasets:
         item: "gene-{value}"
       gene expression:
         column: gene
-        table-row: table-b/gene
+        dataset-row: table-b/gene
   table-b:
     path: table-b.csv
     separator: ;
@@ -38,7 +38,7 @@ datasets:
     links:
       some expression:
         column: quality
-        item: table-b
+        dataset: table-b
 views:
   table-a:
     dataset: table-a
@@ -160,8 +160,8 @@ views:
 | keyword                           | explanation                                                                                                      |
 |-----------------------------------|------------------------------------------------------------------------------------------------------------------|
 | column                            | The column that contains the value used for the linkout                                                          |
-| table-row                         | Renders as a linkout to the other table highlighting the row in which the gene column has the same value as here |
-| table                             | Renders as link to the given table, not a specific row                                                           |
+| dataset-row                       | Renders as a linkout to the other dataset highlighting the row in which the gene column has the same value as here |
+| dataset                           | Renders as link to the given dataset, not a specific row                                                           |
 
 ### custom-plot
 
