@@ -18,6 +18,7 @@ use itertools::Itertools;
 use lz_str::compress_to_utf16;
 use serde::Serialize;
 use serde_json::json;
+use slugify::slugify;
 use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
@@ -368,7 +369,10 @@ fn link_columns(
             } else if render_column.custom_plot.is_some() || render_column.plot.is_some() {
                 result.push(format!(
                     "<div id='{}-{}' data-value='{}'>{}</div>",
-                    title, row, column[i], column[i]
+                    slugify!(title),
+                    row,
+                    column[i],
+                    column[i]
                 ));
             } else {
                 result.push(column[i].to_string());
