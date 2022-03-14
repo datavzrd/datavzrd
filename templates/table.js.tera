@@ -205,7 +205,6 @@ function colorizeColumn{{ loop.index0 }}(ah) {
                 link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
                 {% raw %}link = link.replaceAll(`{${column}}`, table_rows[row][column]);{% endraw %}
-                    console.log(link);
                 }
                 this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
                 row++;
