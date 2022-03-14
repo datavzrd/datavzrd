@@ -81,6 +81,11 @@ impl Renderer for ItemRenderer {
                 }
                 // Render table
                 else if let Some(table_specs) = &table.render_table {
+                    let table_specs = &table_specs
+                        .clone()
+                        .into_iter()
+                        .filter(|(_, s)| !s.optional)
+                        .collect();
                     let row_address_factory = RowAddressFactory::new(table.page_size);
                     let pages = row_address_factory
                         .get(records_length - dataset.header_rows)

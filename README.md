@@ -57,6 +57,7 @@ views:
     dataset: table-b
     render-table:
       significance:
+        optional: true
         custom-plot:
           data: |
             function(value) {
@@ -136,12 +137,13 @@ views:
 
 `render-table` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file or its 0-based index (e.g. `index(5)` for the 6th column):
 
-| keyword                           | explanation                                                                                                 |
-|-----------------------------------|-------------------------------------------------------------------------------------------------------------|
-| link-to-url                       | Renders a link to the given url with {value} replace by the value of the table                              |
-| custom                            | Applies the given js function to render column content. The parameters of the function are similar to the ones defined [here](https://bootstrap-table.com/docs/api/column-options/#formatter) |
-| [custom-plot](#custom-plot)       | Renders a custom vega-lite plot to the corresponding table cell                                             |
-| [plot](#plot)                     | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                         |
+| keyword                           | explanation                                                                                                 | default |
+|-----------------------------------|-------------------------------------------------------------------------------------------------------------|---------|
+| link-to-url                       | Renders a link to the given url with {value} replace by the value of the table                              |         |
+| custom                            | Applies the given js function to render column content. The parameters of the function are similar to the ones defined [here](https://bootstrap-table.com/docs/api/column-options/#formatter) |         |
+| [custom-plot](#custom-plot)       | Renders a custom vega-lite plot to the corresponding table cell                                             |         |
+| [plot](#plot)                     | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                         |         |
+| optional                          | Allows to have a column specified in render-table that is actually not present.                             | false   |
 
 ### render-plot
 

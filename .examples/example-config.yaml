@@ -29,6 +29,11 @@ views:
             scale: linear
       name:
         link-to-url: "https://lmgtfy.app/?q={value}"
+      pups:
+        optional: true
+        plot:
+          ticks:
+            scale: linear
       movie:
         link-to-url: "https://de.wikipedia.org/wiki/{value}"
       award:
