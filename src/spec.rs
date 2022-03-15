@@ -164,8 +164,6 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) plot: Option<PlotSpec>,
     #[serde(default)]
     pub(crate) custom_plot: Option<CustomPlot>,
-    #[serde(default)]
-    summary_plot: Option<String>,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -258,7 +256,6 @@ mod tests {
             link_to_url: Some(String::from("https://www.rust-lang.org")),
             plot: None,
             custom_plot: None,
-            summary_plot: None,
         };
 
         let expected_dataset_spec = DatasetSpecs {
