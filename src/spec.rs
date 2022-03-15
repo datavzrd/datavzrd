@@ -181,7 +181,7 @@ pub(crate) struct LinkSpec {
     #[serde(default)]
     pub(crate) column: String,
     #[serde(default)]
-    pub(crate) item: Option<String>,
+    pub(crate) view: Option<String>,
     #[serde(default)]
     pub(crate) table_row: Option<String>,
 }
@@ -315,7 +315,7 @@ mod tests {
             "my-link".to_string(),
             LinkSpec {
                 column: "test".to_string(),
-                item: Some("other-table".to_string()),
+                view: Some("other-table".to_string()),
                 table_row: None,
             },
         )]);
@@ -349,7 +349,7 @@ mod tests {
             links:
                 my-link:
                     column: test
-                    item: other-table
+                    view: other-table
     views:
         plot-a:
             dataset: table-a

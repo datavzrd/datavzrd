@@ -25,7 +25,7 @@ datasets:
     links:
       gene details:
         column: gene
-        item: "gene-{value}"
+        view: "gene-{value}"
       gene expression:
         column: gene
         table-row: table-b/gene
@@ -38,7 +38,7 @@ datasets:
     links:
       some expression:
         column: quality
-        item: table-b
+        view: table-b
 views:
   table-a:
     dataset: table-a
@@ -161,7 +161,7 @@ views:
 |-----------------------------------|------------------------------------------------------------------------------------------------------------------|
 | column                            | The column that contains the value used for the linkout                                                          |
 | table-row                         | Renders as a linkout to the other table highlighting the row in which the gene column has the same value as here |
-| table                             | Renders as link to the given table, not a specific row                                                           |
+| view                              | Renders as a link to the given view                                                                              |
 
 ### custom-plot
 

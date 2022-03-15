@@ -5,7 +5,7 @@ datasets:
     links:
       link to oscar plot:
         column: age
-        item: oscar-plot
+        view: oscar-plot
       link to movie:
         column: movie
         table-row: movies/Title
