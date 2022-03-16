@@ -189,6 +189,12 @@ $(document).ready(function() {
     
 
     
+        linkUrlColumn0(additional_headers.length, columns, table_rows);
+    
+        linkUrlColumn1(additional_headers.length, columns, table_rows);
+    
+
+    
         colorizeColumn0(additional_headers.length);
     
 
@@ -281,6 +287,42 @@ function colorizeColumn0(ah) {
         element.parentElement.style.backgroundColor = scale(element.dataset.value);
     }
 }
+
+
+
+    function linkUrlColumn0(ah, columns, table_rows) {
+        let index = columns.indexOf("Title") + 1;
+        let link_url = "https://de.wikipedia.org/wiki/{value}";
+        let row = 0;
+        $(`table > tbody > tr td:nth-child(${index})`).each(
+            function() {
+                value = this.innerHTML;
+                link = link_url.replaceAll("{value}", value);
+                for (column of columns) {
+                link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+                }
+                this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
+                row++;
+            }
+        );
+    }
+
+    function linkUrlColumn1(ah, columns, table_rows) {
+        let index = columns.indexOf("imdbID") + 1;
+        let link_url = "https://www.imdb.com/title/{value}/";
+        let row = 0;
+        $(`table > tbody > tr td:nth-child(${index})`).each(
+            function() {
+                value = this.innerHTML;
+                link = link_url.replaceAll("{value}", value);
+                for (column of columns) {
+                link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+                }
+                this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
+                row++;
+            }
+        );
+    }
 
 
 function embedSearch(index) {
