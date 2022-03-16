@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.1.0](https://www.github.com/koesterlab/datavzrd/compare/v1.0.2...v1.1.0) (2022-03-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* Refactor item to view (#46)
+
+### Features
+
+* Add domain keyword for ticks and heatmap ([#41](https://www.github.com/koesterlab/datavzrd/issues/41)) ([843b7b5](https://www.github.com/koesterlab/datavzrd/commit/843b7b5b7b43c625341d826688c51856372438fa))
+* Add optional keyword for render-table ([#43](https://www.github.com/koesterlab/datavzrd/issues/43)) ([6d245d1](https://www.github.com/koesterlab/datavzrd/commit/6d245d1436423f7e877e62d3140084cbe3906835))
+* Make entire row available to link-to-url ([#44](https://www.github.com/koesterlab/datavzrd/issues/44)) ([2f1e87f](https://www.github.com/koesterlab/datavzrd/commit/2f1e87fcac736c5ee9af0af38947473497adc632))
+* New keyword spec-path ([#48](https://www.github.com/koesterlab/datavzrd/issues/48)) ([726868d](https://www.github.com/koesterlab/datavzrd/commit/726868df47fc279f07bc4b0bd2b6cdec532b95ce))
+
+
+### Bug Fixes
+
+* Fix broken plots for headers with whitespaces ([#40](https://www.github.com/koesterlab/datavzrd/issues/40)) ([7bb9b59](https://www.github.com/koesterlab/datavzrd/commit/7bb9b596e49a671071bb2460d80bd3815c049585))
+
+
+### Code Refactoring
+
+* Refactor item to view ([#46](https://www.github.com/koesterlab/datavzrd/issues/46)) ([1d86341](https://www.github.com/koesterlab/datavzrd/commit/1d86341f0564e5350b05cfd9f30c6eff70524aed))
+
+
+### Miscellaneous Chores
+
+* release 1.1.0 ([9c111f3](https://www.github.com/koesterlab/datavzrd/commit/9c111f369da24073c47466020e38e18f5bda8b83))
+
 ### [1.0.2](https://www.github.com/koesterlab/datavzrd/compare/v1.0.1...v1.0.2) (2022-03-10)
 
 
