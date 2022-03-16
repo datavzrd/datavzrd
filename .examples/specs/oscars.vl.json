@@ -1,0 +1,23 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "A scatterplot showing oscars.",
+  "data": {
+    "values": []
+  },
+  "mark": {"type": "point", "tooltip": {"content": "data"}},
+  "encoding": {
+    "x": {
+      "field": "oscar_yr",
+      "type": "quantitative",
+      "scale": {"zero": false}
+    },
+    "y": {
+      "field": "age",
+      "type": "quantitative",
+      "scale": {"zero": false}
+    },
+    "href": {"field": "link to oscar entry"},
+    "color": {"field": "award", "type": "nominal"},
+    "shape": {"field": "award", "type": "nominal"}
+  }
+}

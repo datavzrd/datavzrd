@@ -151,7 +151,8 @@ views:
 
 | keyword                           | explanation                                                                                                 |
 |-----------------------------------|-------------------------------------------------------------------------------------------------------------|
-| spec                              | A schema for a vega plot that is rendered into each cell of this column                                     |
+| spec                              | A schema for a vega lite plot that will be rendered to a single view                                        |
+| spec-path                         | The path to a file containing a schema for a vega lite plot that will be rendered to a single view          |
 
 ### links
 
@@ -167,11 +168,12 @@ views:
 
 `custom-plot` allows the rendering of customized vega-lite plots per cell.
 
-| keyword       | explanation                                                                                          | default |
-|---------------|------------------------------------------------------------------------------------------------------|---------|
-| data          | A function to return the data needed for the schema (see below) from the content of the column cell  |         |
-| spec          | The vega-lite spec for a vega plot that is rendered into each cell of this column                    |         |
-| vega-controls | Whether or not the resulting vega-lite plot is supposed to have action-links in the embedded view    | false   |
+| keyword       | explanation                                                                                                | default |
+|---------------|------------------------------------------------------------------------------------------------------------|---------|
+| data          | A function to return the data needed for the schema (see below) from the content of the column cell        |         |
+| spec          | The vega-lite spec for a vega plot that is rendered into each cell of this column                          |         |
+| spec-path     | The path to a file containing a schema for a vega-lite plot that is rendered into each cell of this column |         |
+| vega-controls | Whether or not the resulting vega-lite plot is supposed to have action-links in the embedded view          | false   |
 
 ### plot
 

@@ -281,7 +281,11 @@ fn render_table_javascript<P: AsRef<Path>>(
     let custom_plots: HashMap<String, CustomPlot> = render_columns
         .iter()
         .filter(|(_, k)| k.custom_plot.is_some())
-        .map(|(k, v)| (k.to_owned(), v.custom_plot.as_ref().unwrap().to_owned()))
+        .map(|(k, v)| {
+            let mut custom_plot = v.custom_plot.as_ref().unwrap().to_owned();
+            custom_plot.read_schema().unwrap();
+            (k.to_owned(), custom_plot)
+        })
         .collect();
 
     let tick_plots: HashMap<String, String> = render_columns
@@ -634,6 +638,9 @@ fn render_plot_page<P: AsRef<Path>>(
         }
     }
 
+    let mut render_plot_specs = item_spec.render_plot.clone().unwrap();
+    render_plot_specs.read_schema()?;
+
     let mut templates = Tera::default();
     templates.add_raw_template(
         "plot.html.tera",
@@ -647,7 +654,7 @@ fn render_plot_page<P: AsRef<Path>>(
     context.insert("description", &item_spec.description);
     context.insert("tables", tables);
     context.insert("name", name);
-    context.insert("specs", &item_spec.render_plot.as_ref().unwrap().schema);
+    context.insert("specs", &render_plot_specs.schema.as_ref().unwrap());
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
     context.insert("version", &env!("CARGO_PKG_VERSION"));
 
