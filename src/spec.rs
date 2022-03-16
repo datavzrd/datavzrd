@@ -9,6 +9,8 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::collections::HashMap;
 use std::fs;
+use std::fs::File;
+use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use thiserror::Error;
@@ -172,7 +174,22 @@ pub(crate) struct RenderColumnSpec {
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct RenderPlotSpec {
     #[serde(default, rename = "spec")]
-    pub(crate) schema: String,
+    pub(crate) schema: Option<String>,
+    #[serde(default, rename = "spec-path")]
+    pub(crate) schema_path: Option<String>,
+}
+
+impl RenderPlotSpec {
+    /// Reads schema for RenderPlotSpec from path and saves it under the schema attribute
+    pub(crate) fn read_schema(&mut self) -> Result<()> {
+        if let Some(path) = self.schema_path.as_ref() {
+            let mut file = File::open(path)?;
+            let mut contents = String::new();
+            file.read_to_string(&mut contents)?;
+            self.schema = Some(contents);
+        }
+        Ok(())
+    }
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -192,9 +209,24 @@ pub(crate) struct CustomPlot {
     #[serde(default, rename = "data")]
     plot_data: String,
     #[serde(default, rename = "spec")]
-    schema: String,
+    schema: Option<String>,
+    #[serde(default, rename = "spec-path")]
+    schema_path: Option<String>,
     #[serde(default = "default_vega_controls")]
     vega_controls: String,
+}
+
+impl CustomPlot {
+    /// Reads schema for CustomPlot from path and saves it under the schema attribute
+    pub(crate) fn read_schema(&mut self) -> Result<()> {
+        if let Some(path) = self.schema_path.as_ref() {
+            let mut file = File::open(path)?;
+            let mut contents = String::new();
+            file.read_to_string(&mut contents)?;
+            self.schema = Some(contents);
+        }
+        Ok(())
+    }
 }
 
 fn default_vega_controls() -> String {
@@ -308,7 +340,10 @@ mod tests {
     #[test]
     fn test_plot_config_deserialization() {
         let expected_render_plot = RenderPlotSpec {
-            schema: "{'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}\n".to_string(),
+            schema: Some(
+                "{'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}\n".to_string(),
+            ),
+            schema_path: None,
         };
 
         let expected_links = HashMap::from([(

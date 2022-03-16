@@ -47,30 +47,7 @@ views:
       ## My beatiful oscar scatterplot
       *So many great actors and actresses*
     render-plot:
-      spec: |
-        {
-          "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-          "description": "A scatterplot showing oscars.",
-          "data": {
-            "values": []
-          },
-          "mark": {"type": "point", "tooltip": {"content": "data"}},
-          "encoding": {
-            "x": {
-              "field": "oscar_yr",
-              "type": "quantitative",
-              "scale": {"zero": false}
-            },
-            "y": {
-              "field": "age",
-              "type": "quantitative",
-              "scale": {"zero": false}
-            },
-            "href": {"field": "link to oscar entry"},
-            "color": {"field": "award", "type": "nominal"},
-            "shape": {"field": "award", "type": "nominal"}
-          }
-        }
+      spec-path: ".examples/specs/oscars.vl.json"
   movies:
     dataset: movies
     render-table:
@@ -95,37 +72,4 @@ views:
     desc: |
       All movies with its *runtime* and *ratings* plotted over *time*.
     render-plot:
-      spec: |
-        {
-          "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-          "description": "A scatterplot showing movie ratings.",
-          "width": "container",
-          "height": 400,
-          "data": {
-            "values": []
-          },
-          "transform": [
-            {"calculate": "parseInt(datum.Runtime)", "as": "parsed_runtime"}
-          ],
-          "mark": {"type": "circle", "opacity": 0.8, "tooltip": {"content": "data"}},
-          "encoding": {
-            "x": {
-              "field": "Year",
-              "type": "quantitative",
-              "scale": {"zero": false}
-            },
-            "size": {
-              "title": "Runtime",
-              "field": "parsed_runtime",
-              "type": "quantitative",
-              "scale": {"zero": false}
-            },
-            "y": {
-              "field": "imdbRating",
-              "type": "quantitative",
-              "scale": {"zero": false}
-            },
-            "href": {"field": "link to oscar entry"},
-            "color": {"field": "Rated", "type": "nominal"},
-          }
-        }
+      spec-path: ".examples/specs/movies.vl.json"
