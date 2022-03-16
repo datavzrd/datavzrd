@@ -705,7 +705,7 @@ fn render_linkouts(
     let mut linkouts = Vec::new();
     for (name, link_specs) in links {
         let index = titles.iter().position(|t| t == &link_specs.column).unwrap();
-        if let Some(table) = &link_specs.item {
+        if let Some(table) = &link_specs.view {
             let val = table.replace("{value}", &row[index]);
             linkouts.push(Linkout {
                 name: name.to_string(),
