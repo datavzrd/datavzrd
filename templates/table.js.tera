@@ -103,6 +103,10 @@ $(document).ready(function() {
         renderTickPlots{{ loop.index0 }}(additional_headers.length, columns);
     {% endfor %}
 
+    {% for title, link_url in link_urls %}
+        linkUrlColumn{{ loop.index0 }}(additional_headers.length, columns, table_rows);
+    {% endfor %}
+
     {% for title, tick_plot in heatmaps %}
         colorizeColumn{{ loop.index0 }}(additional_headers.length);
     {% endfor %}
@@ -188,6 +192,25 @@ function colorizeColumn{{ loop.index0 }}(ah) {
         element.parentElement.style.backgroundColor = scale(element.dataset.value);
     }
 }
+{% endfor %}
+
+{% for title, link_url in link_urls %}
+    function linkUrlColumn{{ loop.index0 }}(ah, columns, table_rows) {
+        let index = columns.indexOf("{{ title }}") + 1;
+        let link_url = "{{ link_url }}";
+        let row = 0;
+        $(`table > tbody > tr td:nth-child(${index})`).each(
+            function() {
+                value = this.innerHTML;
+                link = link_url.replaceAll("{value}", value);
+                for (column of columns) {
+                {% raw %}link = link.replaceAll(`{${column}}`, table_rows[row][column]);{% endraw %}
+                }
+                this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
+                row++;
+            }
+        );
+    }
 {% endfor %}
 
 function embedSearch(index) {

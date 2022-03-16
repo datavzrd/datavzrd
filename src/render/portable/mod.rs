@@ -329,6 +329,17 @@ fn render_table_javascript<P: AsRef<Path>>(
         })
         .collect();
 
+    let link_urls: HashMap<String, String> = render_columns
+        .iter()
+        .filter(|(_, k)| k.link_to_url.is_some())
+        .map(|(t, spec)| {
+            (
+                t.to_string(),
+                spec.link_to_url.as_ref().unwrap().to_string(),
+            )
+        })
+        .collect();
+
     let header_rows = additional_headers.map(|headers| {
         headers
             .iter()
@@ -347,6 +358,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("custom_plots", &custom_plots);
     context.insert("tick_plots", &tick_plots);
     context.insert("heatmaps", &heatmaps);
+    context.insert("link_urls", &link_urls);
     context.insert("num", &numeric);
     context.insert("pin_columns", &pin_columns);
 
@@ -370,13 +382,7 @@ fn link_columns(
     let mut result = Vec::new();
     for (i, title) in titles.iter().enumerate() {
         if let Some(render_column) = render_columns.get(title) {
-            if let Some(link) = render_column.link_to_url.clone() {
-                result.push(format!(
-                    "<a href='{}' target='_blank' >{}</a>",
-                    link.replace("{value}", &column[i]),
-                    column[i]
-                ));
-            } else if render_column.custom_plot.is_some() || render_column.plot.is_some() {
+            if render_column.custom_plot.is_some() || render_column.plot.is_some() {
                 result.push(format!(
                     "<div id='{}-{}' data-value='{}'>{}</div>",
                     slugify!(title),
