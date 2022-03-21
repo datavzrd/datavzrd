@@ -153,6 +153,10 @@ impl ItemSpecs {
     }
 }
 
+fn default_display_mode() -> String {
+    String::from("normal")
+}
+
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct RenderColumnSpec {
@@ -160,6 +164,8 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) optional: bool,
     #[serde(default)]
     pub(crate) custom: Option<String>,
+    #[serde(default = "default_display_mode")]
+    pub(crate) display_mode: String,
     #[serde(default)]
     pub(crate) link_to_url: Option<String>,
     #[serde(default)]
@@ -285,6 +291,7 @@ mod tests {
         let expected_render_columns = RenderColumnSpec {
             optional: false,
             custom: None,
+            display_mode: "normal".to_string(),
             link_to_url: Some(String::from("https://www.rust-lang.org")),
             plot: None,
             custom_plot: None,

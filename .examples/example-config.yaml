@@ -23,6 +23,14 @@ views:
       This table contains *all* winning oscars for best actress and best actor.
     page-size: 25
     render-table:
+      oscar_no:
+        display-mode: detail
+      birth_mo:
+        display-mode: detail
+      birth_d:
+        display-mode: detail
+      birth_y:
+        display-mode: detail
       age:
         plot:
           ticks:

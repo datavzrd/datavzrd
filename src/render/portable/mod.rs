@@ -340,6 +340,19 @@ fn render_table_javascript<P: AsRef<Path>>(
         })
         .collect();
 
+    let mut display_modes: HashMap<String, String> = titles
+        .iter()
+        .map(|t| (t.to_string(), "normal".to_string()))
+        .collect();
+    for (title, rc) in render_columns {
+        display_modes.insert(title.to_string(), rc.display_mode.to_string());
+    }
+    let detail_mode = display_modes
+        .iter()
+        .filter(|(_, mode)| *mode != "normal")
+        .count()
+        > 0;
+
     let header_rows = additional_headers.map(|headers| {
         headers
             .iter()
@@ -358,6 +371,8 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("custom_plots", &custom_plots);
     context.insert("tick_plots", &tick_plots);
     context.insert("heatmaps", &heatmaps);
+    context.insert("display_modes", &display_modes);
+    context.insert("detail_mode", &detail_mode);
     context.insert("link_urls", &link_urls);
     context.insert("num", &numeric);
     context.insert("pin_columns", &pin_columns);
