@@ -62,6 +62,7 @@ $(document).ready(function() {
         height: he,
         columns: bs_table_cols,
         data: [],
+        
         fixedColumns: true,
         fixedRightNumber: fixed_right,
         fixedNumber: 0
@@ -69,6 +70,7 @@ $(document).ready(function() {
 
     let additional_headers = [];
     let columns = ["Title","Year","Rated","Released","Runtime","Genre","Director","imdbRating","imdbID"];
+    let displayed_columns = ["Title","Year","Rated","Released","Runtime","Genre","Director","imdbRating","imdbID"];
     let num = [false,false,false,false,false,false,false,true,false];
     var table_rows = [];
     var j = 0;
@@ -185,13 +187,13 @@ $(document).ready(function() {
     
 
     
-        renderTickPlots0(additional_headers.length, columns);
+        renderTickPlots0(additional_headers.length, displayed_columns);
     
 
     
-        linkUrlColumn0(additional_headers.length, columns, table_rows);
+        linkUrlColumn0(additional_headers.length, displayed_columns, table_rows);
     
-        linkUrlColumn1(additional_headers.length, columns, table_rows);
+        linkUrlColumn1(additional_headers.length, displayed_columns, table_rows);
     
 
     
@@ -329,3 +331,4 @@ function embedSearch(index) {
     var source = `search/column_${index}.html`;
     document.getElementById('search-iframe').setAttribute("src",source);
 }
+
