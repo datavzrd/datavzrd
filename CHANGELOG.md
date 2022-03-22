@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://www.github.com/koesterlab/datavzrd/compare/v1.1.0...v1.2.0) (2022-03-22)
+
+
+### Features
+
+* New keyword display-mode ([#51](https://www.github.com/koesterlab/datavzrd/issues/51)) ([cabba0e](https://www.github.com/koesterlab/datavzrd/commit/cabba0e1ff68e9b9cdef92b6ad85d73824fa90a6))
+
+
+### Performance Improvements
+
+* Render plots via javascript ([#53](https://www.github.com/koesterlab/datavzrd/issues/53)) ([e87fe98](https://www.github.com/koesterlab/datavzrd/commit/e87fe9829b7bd8342f9006e9e9bdc19d0d03df8d))
+
 ## [1.1.0](https://www.github.com/koesterlab/datavzrd/compare/v1.0.2...v1.1.0) (2022-03-16)
 
 
