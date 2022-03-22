@@ -49,6 +49,9 @@ $(document).ready(function() {
     let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let num = [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}];
+    let ticks = [{% for title, tick_plot in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+    let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+    let links = [{% for title, link_url in link_urls %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     var table_rows = [];
     var j = 0;
     for (const r of decompressed) {
@@ -56,10 +59,10 @@ $(document).ready(function() {
         row = {};
         for (const element of r) {
             var el = element;
-            if (element.length > 30 && format[columns[i]] == undefined && !element.includes("<div") && !element.includes("<a href=")) {
+            if (element.length > 30 && format[columns[i]] == undefined && !ticks.includes(columns[i]) && !cp.includes(columns[i]) && !links.includes(columns[i])) {
                 el = `${element.substring(0,30)}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${element}</div>'>...</a>`;
             }
-            if (num[i]) {
+            if (num[i] && !ticks.includes(columns[i]) && !cp.includes(columns[i]) ) {
                 row[columns[i]] = el + "<button type=\"button\" class=\"btn btn-primary btn-sm\" data-val=\"" + el + "\" data-col=\"" + columns[i] + "\"><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-bar-chart-fill\" viewBox=\"0 0 16 16\">\r\n  <path d=\"M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z\"\/>\r\n<\/svg><\/button>";
             } else {
                 row[columns[i]] = el;
@@ -110,7 +113,7 @@ $(document).ready(function() {
     {% endfor %}
 
     {% for title, tick_plot in heatmaps %}
-        colorizeColumn{{ loop.index0 }}(additional_headers.length);
+        colorizeColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
     {% endfor %}
 
 let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
@@ -137,62 +140,80 @@ function renderMarkdownDescription() {
 
 {% for title, custom_plot in custom_plots %}
 function renderCustomPlots{{ loop.index0 }}(ah, columns) {
+    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
     var data_function = {{ custom_plot.data }};
     var specs =  {{ custom_plot.spec }};
-    var rows = $("table > tbody > tr");
-    var row_length = $("table > tbody > tr").length - ah;
-    for (i = 0; i < row_length; i++) {
-        var element = document.getElementById(`{{ title | slugify }}-${i}`);
-        var data = data_function(element.dataset.value);
-        var s = specs;
-        s.data = {};
-        s.data.values = data;
-        var element_id = `#{{ title | slugify }}-${i}`;
-        var opt = {"actions": {{ custom_plot.vega_controls }}};
-        vegaEmbed(element_id, JSON.parse(JSON.stringify(s)), opt);
-    }
-    let index = columns.indexOf("{{ title }}") + 1;
+    let row = 0;
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
+            if (row < ah) {
+                row++;
+                return;
+            }
+            var id = `{{ title | slugify }}-${row}`;
             this.classList.add("plotcell");
-    });
+            const div = document.createElement("div");
+            value = this.innerHTML;
+            this.innerHTML = "";
+            this.appendChild(div);
+            var data = data_function(value);
+            var s = specs;
+            s.data = {};
+            s.data.values = data;
+            var opt = {"actions": {{ custom_plot.vega_controls }}};
+            vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+            row++;
+        }
+    );
 }
 {% endfor %}
 
 {% for title, tick_plot in tick_plots %}
 function renderTickPlots{{ loop.index0 }}(ah, columns) {
-    var specs =  {{ tick_plot }};
-    var rows = $("table > tbody > tr");
-    var row_length = $("table > tbody > tr").length - ah;
-    for (i = 0; i < row_length; i++) {
-        var element = document.getElementById(`{{ title | slugify }}-${i}`);
-        var data = [{"{{ title }}": element.dataset.value}];
-        var s = specs;
-        s.data = {};
-        s.data.values = data;
-        var element_id = `#{{ title | slugify }}-${i}`;
-        var opt = {"actions": false};
-        vegaEmbed(element_id, JSON.parse(JSON.stringify(s)), opt);
-    }
     let index = columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
+    var specs =  {{ tick_plot }};
+    let row = 0;
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
+            if (row < ah) {
+                row++;
+                return;
+            }
+            var id = `{{ title | slugify }}-${row}`;
             this.classList.add("plotcell");
+            const div = document.createElement("div");
+            value = this.innerHTML;
+            this.innerHTML = "";
+            this.appendChild(div);
+            var data = [{"{{ title }}": value}];
+            var s = specs;
+            s.data = {};
+            s.data.values = data;
+            var opt = {"actions": false};
+            vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+            row++;
         }
     );
- };
-
+}
 {% endfor %}
 
 {% for title, tuple in heatmaps %}
-function colorizeColumn{{ loop.index0 }}(ah) {
+function colorizeColumn{{ loop.index0 }}(ah, columns) {
+    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
     var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
     var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
-    var row_length = $("table > tbody > tr").length - ah;
-    for (i = 0; i < row_length; i++) {
-        var element = document.getElementById(`{{ title | slugify }}-${i}`);
-        element.parentElement.style.backgroundColor = scale(element.dataset.value);
-    }
+    let row = 0;
+    $(`table > tbody > tr td:nth-child(${index})`).each(
+        function() {
+            if (row < ah) {
+                row++;
+                return;
+            }
+            value = this.innerHTML;
+            this.style.backgroundColor = scale(value);
+            row++;
+        }
+    );
 }
 {% endfor %}
 
@@ -203,6 +224,10 @@ function colorizeColumn{{ loop.index0 }}(ah) {
         let row = 0;
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
+                if (row < ah) {
+                    row++;
+                    return;
+                }
                 value = this.innerHTML;
                 link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
