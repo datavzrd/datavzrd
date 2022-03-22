@@ -1,5 +1,14 @@
 # Changelog
 
+### [1.2.1](https://www.github.com/koesterlab/datavzrd/compare/v1.2.0...v1.2.1) (2022-03-22)
+
+
+### Bug Fixes
+
+* Do not require empty data for plots ([#56](https://www.github.com/koesterlab/datavzrd/issues/56)) ([e420a8a](https://www.github.com/koesterlab/datavzrd/commit/e420a8a96dd35a463064ce9067e575f665deb727))
+* Fix empty files with linkouts ([#54](https://www.github.com/koesterlab/datavzrd/issues/54)) ([63b527a](https://www.github.com/koesterlab/datavzrd/commit/63b527ad4b6fed84293c028d9c77cf85f8e87580))
+* Fix example config ([#55](https://www.github.com/koesterlab/datavzrd/issues/55)) ([2da1706](https://www.github.com/koesterlab/datavzrd/commit/2da1706738864b386fe07ffe93f0d024d8679d45))
+
 ## [1.2.0](https://www.github.com/koesterlab/datavzrd/compare/v1.1.0...v1.2.0) (2022-03-22)
 
 
