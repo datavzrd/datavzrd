@@ -18,7 +18,6 @@ use itertools::Itertools;
 use lz_str::compress_to_utf16;
 use serde::Serialize;
 use serde_json::json;
-use slugify::slugify;
 use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
@@ -131,7 +130,6 @@ impl Renderer for ItemRenderer {
                                 .collect_vec(),
                             &headers,
                             &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
-                            table_specs,
                             name,
                             table.description.as_deref(),
                             &linked_tables,
@@ -185,7 +183,6 @@ fn render_page<P: AsRef<Path>>(
     data: Vec<&StringRecord>,
     titles: &[String],
     tables: &[String],
-    render_columns: &HashMap<String, RenderColumnSpec>,
     name: &str,
     description: Option<&str>,
     linked_tables: &LinkedTable,
@@ -213,11 +210,7 @@ fn render_page<P: AsRef<Path>>(
     } else {
         None
     };
-    let data = data
-        .iter()
-        .enumerate()
-        .map(|(i, r)| link_columns(render_columns, titles, r.to_vec(), i).unwrap())
-        .collect_vec();
+
     let compressed_data = compress_to_utf16(&json!(data).to_string());
 
     let local: DateTime<Local> = Local::now();
@@ -385,34 +378,6 @@ fn render_table_javascript<P: AsRef<Path>>(
     file.write_all(js.as_bytes())?;
 
     Ok(())
-}
-
-/// Apply render columns specs to a single table row
-fn link_columns(
-    render_columns: &HashMap<String, RenderColumnSpec>,
-    titles: &[String],
-    column: Vec<String>,
-    row: usize,
-) -> Result<Vec<String>> {
-    let mut result = Vec::new();
-    for (i, title) in titles.iter().enumerate() {
-        if let Some(render_column) = render_columns.get(title) {
-            if render_column.custom_plot.is_some() || render_column.plot.is_some() {
-                result.push(format!(
-                    "<div id='{}-{}' data-value='{}'>{}</div>",
-                    slugify!(title),
-                    row,
-                    column[i],
-                    column[i]
-                ));
-            } else {
-                result.push(column[i].to_string());
-            }
-        } else {
-            result.push(column[i].to_string());
-        }
-    }
-    Ok(result)
 }
 
 /// Renders an empty page when datasets are empty
