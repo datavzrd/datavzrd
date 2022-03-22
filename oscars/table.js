@@ -66,6 +66,9 @@ $(document).ready(function() {
     let columns = ["oscar_no","oscar_yr","award","name","movie","age","birth_pl","birth_date","birth_mo","birth_d","birth_y"];
     let displayed_columns = ["oscar_yr","award","name","movie","age","birth_pl","birth_date",];
     let num = [true,true,false,false,false,true,false,false,true,true,true];
+    let ticks = ["age"];
+    let cp = [];
+    let links = ["movie","name"];
     var table_rows = [];
     var j = 0;
     for (const r of decompressed) {
@@ -73,10 +76,10 @@ $(document).ready(function() {
         row = {};
         for (const element of r) {
             var el = element;
-            if (element.length > 30 && format[columns[i]] == undefined && !element.includes("<div") && !element.includes("<a href=")) {
+            if (element.length > 30 && format[columns[i]] == undefined && !ticks.includes(columns[i]) && !cp.includes(columns[i]) && !links.includes(columns[i])) {
                 el = `${element.substring(0,30)}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${element}</div>'>...</a>`;
             }
-            if (num[i]) {
+            if (num[i] && !ticks.includes(columns[i]) && !cp.includes(columns[i]) ) {
                 row[columns[i]] = el + "<button type=\"button\" class=\"btn btn-primary btn-sm\" data-val=\"" + el + "\" data-col=\"" + columns[i] + "\"><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-bar-chart-fill\" viewBox=\"0 0 16 16\">\r\n  <path d=\"M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z\"\/>\r\n<\/svg><\/button>";
             } else {
                 row[columns[i]] = el;
@@ -207,7 +210,7 @@ $(document).ready(function() {
     
 
     
-        colorizeColumn0(additional_headers.length);
+        colorizeColumn0(additional_headers.length, displayed_columns);
     
 
 let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
@@ -236,6 +239,7 @@ function renderMarkdownDescription() {
 
 
 function renderTickPlots0(ah, columns) {
+    let index = columns.indexOf("age") + 1 + 1;
     var specs =  {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": 50,
@@ -267,37 +271,48 @@ function renderTickPlots0(ah, columns) {
         "style": {"cell": {"stroke": "transparent"}}
     }
 };
-    var rows = $("table > tbody > tr");
-    var row_length = $("table > tbody > tr").length - ah;
-    for (i = 0; i < row_length; i++) {
-        var element = document.getElementById(`age-${i}`);
-        var data = [{"age": element.dataset.value}];
-        var s = specs;
-        s.data = {};
-        s.data.values = data;
-        var element_id = `#age-${i}`;
-        var opt = {"actions": false};
-        vegaEmbed(element_id, JSON.parse(JSON.stringify(s)), opt);
-    }
-    let index = columns.indexOf("age") + 1 + 1;
+    let row = 0;
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
+            if (row < ah) {
+                row++;
+                return;
+            }
+            var id = `age-${row}`;
             this.classList.add("plotcell");
+            const div = document.createElement("div");
+            value = this.innerHTML;
+            this.innerHTML = "";
+            this.appendChild(div);
+            var data = [{"age": value}];
+            var s = specs;
+            s.data = {};
+            s.data.values = data;
+            var opt = {"actions": false};
+            vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+            row++;
         }
     );
- };
+}
 
 
 
-
-function colorizeColumn0(ah) {
+function colorizeColumn0(ah, columns) {
+    let index = columns.indexOf("award") + 1 + 1;
     var ordinal = vega.scale('ordinal');
     var scale = ordinal().domain(["Best actor","Best actress"]).range(["#add8e6","#ffb6c1"]);
-    var row_length = $("table > tbody > tr").length - ah;
-    for (i = 0; i < row_length; i++) {
-        var element = document.getElementById(`award-${i}`);
-        element.parentElement.style.backgroundColor = scale(element.dataset.value);
-    }
+    let row = 0;
+    $(`table > tbody > tr td:nth-child(${index})`).each(
+        function() {
+            if (row < ah) {
+                row++;
+                return;
+            }
+            value = this.innerHTML;
+            this.style.backgroundColor = scale(value);
+            row++;
+        }
+    );
 }
 
 
@@ -308,6 +323,10 @@ function colorizeColumn0(ah) {
         let row = 0;
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
+                if (row < ah) {
+                    row++;
+                    return;
+                }
                 value = this.innerHTML;
                 link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
@@ -325,6 +344,10 @@ function colorizeColumn0(ah) {
         let row = 0;
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
+                if (row < ah) {
+                    row++;
+                    return;
+                }
                 value = this.innerHTML;
                 link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
