@@ -87,6 +87,7 @@
             <script>
                 const specs = {{ specs | safe }};
                 const data = {{ data | safe }};
+                specs.data = {};
                 specs.data.values = data;
                 if (specs.width == "container") { $("#vis").css("width", "100%"); }
                 vegaEmbed('#vis', specs);

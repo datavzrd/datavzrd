@@ -1,9 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "A scatterplot showing oscars.",
-  "data": {
-    "values": []
-  },
   "mark": {"type": "point", "tooltip": {"content": "data"}},
   "encoding": {
     "x": {
