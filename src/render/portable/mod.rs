@@ -60,12 +60,11 @@ impl Renderer for ItemRenderer {
             let out_path = Path::new(path.as_ref()).join(name);
             fs::create_dir(&out_path)?;
 
-            let linked_tables = get_linked_tables(name, &self.specs)?;
-
             let mut counter_reader = generate_reader()
                 .context(format!("Could not read file with path {:?}", &dataset.path))?;
             let records_length = counter_reader.records().count();
             if records_length > 0 {
+                let linked_tables = get_linked_tables(name, &self.specs)?;
                 // Render plot
                 if table.render_plot.is_some() {
                     render_plot_page(
