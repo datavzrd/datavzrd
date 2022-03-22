@@ -3,9 +3,6 @@
   "description": "A scatterplot showing movie ratings.",
   "width": "container",
   "height": 400,
-  "data": {
-    "values": []
-  },
   "transform": [
     {"calculate": "parseInt(datum.Runtime)", "as": "parsed_runtime"}
   ],
@@ -28,6 +25,6 @@
       "scale": {"zero": false}
     },
     "href": {"field": "link to oscar entry"},
-    "color": {"field": "Rated", "type": "nominal"},
+    "color": {"field": "Rated", "type": "nominal"}
   }
 }
