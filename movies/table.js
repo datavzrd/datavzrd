@@ -75,6 +75,10 @@ $(document).ready(function() {
     let ticks = ["imdbRating"];
     let cp = [];
     let links = ["Title","imdbID"];
+
+    var header_height = (70+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2;
+    $('th').css("height", header_height);
+
     var table_rows = [];
     var j = 0;
     for (const r of decompressed) {
