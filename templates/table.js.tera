@@ -52,6 +52,10 @@ $(document).ready(function() {
     let ticks = [{% for title, tick_plot in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let links = [{% for title, link_url in link_urls %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+
+    var header_height = (70+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2;
+    $('th').css("height", header_height);
+
     var table_rows = [];
     var j = 0;
     for (const r of decompressed) {
