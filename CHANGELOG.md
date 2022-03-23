@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.2.2](https://www.github.com/koesterlab/datavzrd/compare/v1.2.1...v1.2.2) (2022-03-23)
+
+
+### Bug Fixes
+
+* Adjust header height to content ([#59](https://www.github.com/koesterlab/datavzrd/issues/59)) ([d5307c1](https://www.github.com/koesterlab/datavzrd/commit/d5307c17d988cbc4839c0aefff0bf538f75612f4))
+
 ### [1.2.1](https://www.github.com/koesterlab/datavzrd/compare/v1.2.0...v1.2.1) (2022-03-22)
 
 
