@@ -113,64 +113,64 @@ views:
 
 `datasets` defines the different datasets of the report. This is also the place to define links between your individual datasets.
 
-| keyword                           | explanation                                                                                                                                 | default |
-|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| path                              | The path of the CSV/TSV file                                                                                                                |         |
-| separator                         | The delimiter of the file                                                                                                                   | ,       |
-| header-rows                       | Number of header-rows of the file                                                                                                           | 1       |
-| [links](#links)                   | Configuration linking between items                                                                                                         |         |
+| keyword         | explanation                         | default |
+| --------------- | ----------------------------------- | ------- |
+| path            | The path of the CSV/TSV file        |         |
+| separator       | The delimiter of the file           | ,       |
+| header-rows     | Number of header-rows of the file   | 1       |
+| [links](#links) | Configuration linking between items |         |
 
 ### views
 
 `views` consists of all different CSV/TSV views (table or plot) that should be included in the resulting report. If neither `render-table` nor `render-plot` is present, datavzrd will render the given file as a table. Each item definition can contain these values:
 
-| keyword                           | explanation                                                                                                                                 | default |
-|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| desc                              | A description that will be shown in the report. [Markdown](https://github.github.com/gfm/) is allowed and will be rendered to proper HTML.  |         |
-| dataset                           | The name of the corresponding dataset to this view defined in [datasets](#datasets)                                                         |         |
-| page-size                         | Number of rows per page                                                                                                                     | 100     |
-| pin-columns                       | Number of columns that are fixed to the left side of the table and therefore always visible                                                 | 0       |
-| [render-table](#render-table)     | Configuration of individual column rendering                                                                                                |         |
-| [render-plot](#render-plot)       | Configuration of a single plot                                                                                                              |         |
+| keyword                       | explanation                                                                                                                                | default |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| desc                          | A description that will be shown in the report. [Markdown](https://github.github.com/gfm/) is allowed and will be rendered to proper HTML. |         |
+| dataset                       | The name of the corresponding dataset to this view defined in [datasets](#datasets)                                                        |         |
+| page-size                     | Number of rows per page                                                                                                                    | 100     |
+| pin-columns                   | Number of columns that are fixed to the left side of the table and therefore always visible                                                | 0       |
+| [render-table](#render-table) | Configuration of individual column rendering                                                                                               |         |
+| [render-plot](#render-plot)   | Configuration of a single plot                                                                                                             |         |
 
 ### render-table 
 
-`render-table` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file or its 0-based index (e.g. `index(5)` for the 6th column):
+`render-table` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file, its 0-based index (e.g. `index(5)` for the 6th column), or a regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`):
 
-| keyword                           | explanation                                                                                                                                                                                   | default | possible values |
-|-----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-----------------|
-| link-to-url                       | Renders a link to the given url with {value} replace by the value of the table. Other values of the same row can be accessed by their column header (e.g. {age} for a column named age).      |         |                 |
-| custom                            | Applies the given js function to render column content. The parameters of the function are similar to the ones defined [here](https://bootstrap-table.com/docs/api/column-options/#formatter) |         |                 |
-| [custom-plot](#custom-plot)       | Renders a custom vega-lite plot to the corresponding table cell                                                                                                                               |         |                 |
-| [plot](#plot)                     | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                                                                                                           |         |                 |
-| optional                          | Allows to have a column specified in render-table that is actually not present.                                                                                                               | false   | true, false     |
-| display-mode                      | Allows to have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`.                                        | normal  | detail, normal  |
+| keyword                     | explanation                                                                                                                                                                                   | default | possible values |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | --------------- |
+| link-to-url                 | Renders a link to the given url with {value} replace by the value of the table. Other values of the same row can be accessed by their column header (e.g. {age} for a column named age).      |         |                 |
+| custom                      | Applies the given js function to render column content. The parameters of the function are similar to the ones defined [here](https://bootstrap-table.com/docs/api/column-options/#formatter) |         |                 |
+| [custom-plot](#custom-plot) | Renders a custom vega-lite plot to the corresponding table cell                                                                                                                               |         |                 |
+| [plot](#plot)               | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                                                                                                           |         |                 |
+| optional                    | Allows to have a column specified in render-table that is actually not present.                                                                                                               | false   | true, false     |
+| display-mode                | Allows to have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`.                                        | normal  | detail, normal  |
 
 ### render-plot
 
 `render-plot` contains individual configurations for generating a single plot from the given CSV/TSV file.
 
-| keyword                           | explanation                                                                                                 |
-|-----------------------------------|-------------------------------------------------------------------------------------------------------------|
-| spec                              | A schema for a vega lite plot that will be rendered to a single view                                        |
-| spec-path                         | The path to a file containing a schema for a vega lite plot that will be rendered to a single view          |
+| keyword   | explanation                                                                                        |
+| --------- | -------------------------------------------------------------------------------------------------- |
+| spec      | A schema for a vega lite plot that will be rendered to a single view                               |
+| spec-path | The path to a file containing a schema for a vega lite plot that will be rendered to a single view |
 
 ### links
 
 `links` can configure linkouts between multiple items.
 
-| keyword                           | explanation                                                                                                      |
-|-----------------------------------|------------------------------------------------------------------------------------------------------------------|
-| column                            | The column that contains the value used for the linkout                                                          |
-| table-row                         | Renders as a linkout to the other table highlighting the row in which the gene column has the same value as here |
-| view                              | Renders as a link to the given view                                                                              |
+| keyword   | explanation                                                                                                      |
+| --------- | ---------------------------------------------------------------------------------------------------------------- |
+| column    | The column that contains the value used for the linkout                                                          |
+| table-row | Renders as a linkout to the other table highlighting the row in which the gene column has the same value as here |
+| view      | Renders as a link to the given view                                                                              |
 
 ### custom-plot
 
 `custom-plot` allows the rendering of customized vega-lite plots per cell.
 
 | keyword       | explanation                                                                                                | default |
-|---------------|------------------------------------------------------------------------------------------------------------|---------|
+| ------------- | ---------------------------------------------------------------------------------------------------------- | ------- |
 | data          | A function to return the data needed for the schema (see below) from the content of the column cell        |         |
 | spec          | The vega-lite spec for a vega plot that is rendered into each cell of this column                          |         |
 | spec-path     | The path to a file containing a schema for a vega-lite plot that is rendered into each cell of this column |         |
@@ -180,26 +180,26 @@ views:
 
 `plot` allows the rendering of either a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values or a heatmap for nominal values.
 
-| keyword                 | explanation                                                                                 |
-|-------------------------|---------------------------------------------------------------------------------------------|
-| [ticks](#ticks)         | Defines a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values   |
-| [heatmap](#heatmap)     | Defines a heatmap for numeric or nominal values                                             |
+| keyword             | explanation                                                                               |
+| ------------------- | ----------------------------------------------------------------------------------------- |
+| [ticks](#ticks)     | Defines a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values |
+| [heatmap](#heatmap) | Defines a heatmap for numeric or nominal values                                           |
 
 ### ticks
 
 `ticks` defines the attributes of a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values.
 
-| keyword   | explanation                                                                                                                       |
-|-----------|-----------------------------------------------------------------------------------------------------------------------------------|
-| scale     | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick plot                                            |
-| domain    | Defines the domain of the tick plot. If not present datavzrd will automatically use the minimum and maximum values for the domain |
+| keyword | explanation                                                                                                                       |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| scale   | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick plot                                            |
+| domain  | Defines the domain of the tick plot. If not present datavzrd will automatically use the minimum and maximum values for the domain |
 
 ### heatmap
 
 `heatmap` defines the attributes of a heatmap for numeric or nominal values.
 
 | keyword      | explanation                                                                                                         |
-|--------------|---------------------------------------------------------------------------------------------------------------------|
+| ------------ | ------------------------------------------------------------------------------------------------------------------- |
 | scale        | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the heatmap                                |
 | color-scheme | Defines the [color-scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap for nominal values |
 | range        | Defines the color range of the heatmap as a list                                                                    |
