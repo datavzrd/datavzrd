@@ -13,7 +13,8 @@
 }
 
 .active-row {
-    background: lightgray !important;
+    border-top: 2px solid #6ea8fe !important;
+    border-bottom: 2px solid #6ea8fe;
 }
 
 th {
@@ -25,10 +26,6 @@ th {
 
 #table {
     max-width: 100%;
-}
-
-td:hover {
-    background: lightgray
 }
 
 .btn-sm {
