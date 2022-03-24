@@ -1,5 +1,15 @@
 # Changelog
 
+### [1.2.3](https://www.github.com/koesterlab/datavzrd/compare/v1.2.2...v1.2.3) (2022-03-24)
+
+
+### Bug Fixes
+
+* Adjust header height to content ([8f7f5ba](https://www.github.com/koesterlab/datavzrd/commit/8f7f5ba20678e9183959defe891f6249af80e5c6))
+* Improve error message for missing columns without optional: true ([#63](https://www.github.com/koesterlab/datavzrd/issues/63)) ([3517b3e](https://www.github.com/koesterlab/datavzrd/commit/3517b3e3fde18f4418c8d3ab3ad5c3ef8bd92a1a))
+* No linebreaks in numeric cells ([#62](https://www.github.com/koesterlab/datavzrd/issues/62)) ([3d59973](https://www.github.com/koesterlab/datavzrd/commit/3d59973f049f23c28353da05fa98ee0c67b072c9))
+* Remove ellipsis from datavzrd ([#64](https://www.github.com/koesterlab/datavzrd/issues/64)) ([89916d1](https://www.github.com/koesterlab/datavzrd/commit/89916d128301b47bcc3fecbab47ce48c384c1329))
+
 ### [1.2.2](https://www.github.com/koesterlab/datavzrd/compare/v1.2.1...v1.2.2) (2022-03-23)
 
 
