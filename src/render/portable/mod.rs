@@ -511,9 +511,15 @@ fn render_tick_plot(
         .from_path(csv_path)
         .context(format!("Could not read file with path {:?}", csv_path))?;
 
-    let column_index = reader
-        .headers()
-        .map(|s| s.iter().position(|t| t == title).unwrap())?;
+    let column_index = reader.headers().map(|s| {
+        s.iter()
+            .position(|t| t == title)
+            .context(ColumnError::NotFound {
+                column: title.to_string(),
+                path: csv_path.to_str().unwrap().to_string(),
+            })
+            .unwrap()
+    })?;
 
     let (min, max) = if let Some(domain) = &tick_plot.domain {
         (domain[0], domain[1])
@@ -735,6 +741,12 @@ pub enum TableLinkingError {
         column: String,
         table: String,
     },
+}
+
+#[derive(Error, Debug)]
+pub enum ColumnError {
+    #[error("Could not find column {column:?} in dataset with path {path:?}. If this is intentional try to use optional: true.")]
+    NotFound { column: String, path: String },
 }
 
 #[derive(Error, Debug)]
