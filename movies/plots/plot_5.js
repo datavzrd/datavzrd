@@ -4,7 +4,7 @@ let plot_5 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"Drama","value":29},{"key":"Drama, Romance","value":24},{"key":"Comedy, Drama, Romance","value":12},{"key":"Biography, Drama, Music","value":8},{"key":"Biography, Drama","value":8},{"key":"Biography, Drama, History","value":8},{"key":"Comedy, Romance","value":6},{"key":"Crime, Drama","value":5},{"key":"Drama, Thriller","value":5},{"key":"Biography, Crime, Drama","value":4}]},
+            "data": {"values": [{"key":"Drama","value":29},{"key":"Drama, Romance","value":24},{"key":"Comedy, Drama, Romance","value":12},{"key":"Biography, Drama, Music","value":8},{"key":"Biography, Drama, History","value":8},{"key":"Biography, Drama","value":8},{"key":"Comedy, Romance","value":6},{"key":"Drama, Thriller","value":5},{"key":"Crime, Drama","value":5},{"key":"Biography, Crime, Drama","value":4}]},
             "mark": "bar",
             "encoding": {
                 "x": {
