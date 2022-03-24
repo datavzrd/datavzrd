@@ -49,6 +49,7 @@ $(document).ready(function() {
     let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let num = [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}];
+    let dp_num = [{% for title in titles %}{% if display_modes[title] == "normal" %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let ticks = [{% for title, tick_plot in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let links = [{% for title, link_url in link_urls %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
@@ -95,7 +96,7 @@ $(document).ready(function() {
             {% endfor %}
         }
     });
-
+    addNumClass(dp_num, additional_headers.length);
     {% for title, custom_plot in custom_plots %}
     renderCustomPlots{{ loop.index0 }}(additional_headers.length, displayed_columns);
     {% endfor %}
@@ -250,3 +251,23 @@ function detailFormatter(index, row) {
     return html.join('')
 }
 {% endif %}
+
+function addNumClass(dp_num, ah) {
+    for (let i in dp_num) {
+        if (dp_num[i]) {
+            let row = 0;
+            let n = parseInt(i) + {% if detail_mode %} + 2{% else %} + 1{% endif %};
+            $(`table > tbody > tr td:nth-child(${n})`).each(
+                function() {
+                    console.log(this);
+                    if (row < ah) {
+                        row++;
+                        return;
+                    }
+                    this.classList.add("num-cell");
+                    row++;
+                }
+            );
+        }
+    }
+}
