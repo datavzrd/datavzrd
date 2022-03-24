@@ -94,11 +94,11 @@ pub(crate) struct ItemSpecs {
 }
 
 lazy_static! {
-    static ref INDEX: Regex = Regex::new(r"^index\(([0-9]+)\)$").unwrap();
+    static ref INDEX_RE: Regex = Regex::new(r"^index\(([0-9]+)\)$").unwrap();
 }
 
 lazy_static! {
-    static ref REGEX: Regex = Regex::new(r"^regex\((.+)\)$").unwrap();
+    static ref REGEX_RE: Regex = Regex::new(r"^regex\('(.+)'\)$").unwrap();
 }
 
 impl ItemSpecs {
@@ -122,8 +122,8 @@ impl ItemSpecs {
                     .unwrap()
                     .as_str()
             };
-            if INDEX.is_match(key) {
-                let index = usize::from_str(get_first_match_group(&INDEX))?;
+            if INDEX_RE.is_match(key) {
+                let index = usize::from_str(get_first_match_group(&INDEX_RE))?;
                 match headers.get(index) {
                     None => {
                         bail!(ConfigError::IndexTooLarge {
@@ -144,8 +144,8 @@ impl ItemSpecs {
                         };
                     }
                 }
-            } else if REGEX.is_match(key) {
-                let pattern = get_first_match_group(&REGEX);
+            } else if REGEX_RE.is_match(key) {
+                let pattern = get_first_match_group(&REGEX_RE);
                 let regex = Regex::new(pattern).context(format!(
                     "Failed to parse provided column regex {key}.",
                     key = key
