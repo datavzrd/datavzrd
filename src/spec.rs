@@ -38,7 +38,7 @@ impl ItemsSpec {
                         })
                     }
                 };
-                spec.column_index_to_value(dataset)?;
+                spec.preprocess_columns(dataset)?;
             }
         }
         Ok(items_spec)
@@ -94,30 +94,36 @@ pub(crate) struct ItemSpecs {
 }
 
 lazy_static! {
-    static ref INDEX: Regex = Regex::new(r"index\(([0-9]+)\)").unwrap();
+    static ref INDEX: Regex = Regex::new(r"^index\(([0-9]+)\)$").unwrap();
+}
+
+lazy_static! {
+    static ref REGEX: Regex = Regex::new(r"^regex\((.+)\)$").unwrap();
 }
 
 impl ItemSpecs {
     /// Converts columns addressed with index to the actual header values of the table
-    fn column_index_to_value(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+    fn preprocess_columns(&mut self, dataset: &DatasetSpecs) -> Result<()> {
         let mut indexed_keys = HashMap::new();
         let mut reader = csv::ReaderBuilder::new()
             .delimiter(dataset.separator as u8)
             .from_path(&dataset.path)
             .context(format!("Could not read file with path {:?}", &dataset.path))?;
         let headers = reader.headers()?;
+
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().iter() {
+            let get_first_match_group = |regex: &Regex| {
+                regex
+                    .captures_iter(key)
+                    .collect_vec()
+                    .pop()
+                    .unwrap()
+                    .get(1)
+                    .unwrap()
+                    .as_str()
+            };
             if INDEX.is_match(key) {
-                let index = usize::from_str(
-                    INDEX
-                        .captures_iter(key)
-                        .collect_vec()
-                        .pop()
-                        .unwrap()
-                        .get(1)
-                        .unwrap()
-                        .as_str(),
-                )?;
+                let index = usize::from_str(get_first_match_group(&INDEX))?;
                 match headers.get(index) {
                     None => {
                         bail!(ConfigError::IndexTooLarge {
@@ -136,6 +142,23 @@ impl ItemSpecs {
                                 table_path: dataset.path.clone(),
                             })
                         };
+                    }
+                }
+            } else if REGEX.is_match(key) {
+                let pattern = get_first_match_group(&REGEX);
+                let regex = Regex::new(pattern).context(format!(
+                    "Failed to parse provided column regex {key}.",
+                    key = key
+                ))?;
+                for header in headers.iter().filter(|header| regex.is_match(header)) {
+                    if indexed_keys
+                        .insert(header.to_string(), render_column_specs.clone())
+                        .is_some()
+                    {
+                        bail!(ConfigError::DuplicateColumn {
+                            column: header.to_string(),
+                            table_path: dataset.path.clone()
+                        })
                     }
                 }
             } else if indexed_keys
