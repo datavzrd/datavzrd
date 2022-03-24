@@ -66,6 +66,7 @@ $(document).ready(function() {
     let columns = ["oscar_no","oscar_yr","award","name","movie","age","birth_pl","birth_date","birth_mo","birth_d","birth_y"];
     let displayed_columns = ["oscar_yr","award","name","movie","age","birth_pl","birth_date",];
     let num = [true,true,false,false,false,true,false,false,true,true,true];
+    let dp_num = [true,false,false,false,true,false,false,];
     let ticks = ["age"];
     let cp = [];
     let links = ["movie","name"];
@@ -200,7 +201,7 @@ $(document).ready(function() {
             
         }
     });
-
+    addNumClass(dp_num, additional_headers.length);
     
 
     
@@ -376,4 +377,25 @@ function detailFormatter(index, row) {
         html.push('<p><b>' + key + ':</b> ' + value + '</p>')
     })
     return html.join('')
+}
+
+
+function addNumClass(dp_num, ah) {
+    for (let i in dp_num) {
+        if (dp_num[i]) {
+            let row = 0;
+            let n = parseInt(i) +  + 2;
+            $(`table > tbody > tr td:nth-child(${n})`).each(
+                function() {
+                    console.log(this);
+                    if (row < ah) {
+                        row++;
+                        return;
+                    }
+                    this.classList.add("num-cell");
+                    row++;
+                }
+            );
+        }
+    }
 }

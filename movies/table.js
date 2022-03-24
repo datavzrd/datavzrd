@@ -72,6 +72,7 @@ $(document).ready(function() {
     let columns = ["Title","Year","Rated","Released","Runtime","Genre","Director","imdbRating","imdbID"];
     let displayed_columns = ["Title","Year","Rated","Released","Runtime","Genre","Director","imdbRating","imdbID"];
     let num = [false,false,false,false,false,false,false,true,false];
+    let dp_num = [false,false,false,false,false,false,false,true,false];
     let ticks = ["imdbRating"];
     let cp = [];
     let links = ["Title","imdbID"];
@@ -190,7 +191,7 @@ $(document).ready(function() {
             
         }
     });
-
+    addNumClass(dp_num, additional_headers.length);
     
 
     
@@ -359,3 +360,24 @@ function embedSearch(index) {
     document.getElementById('search-iframe').setAttribute("src",source);
 }
 
+
+
+function addNumClass(dp_num, ah) {
+    for (let i in dp_num) {
+        if (dp_num[i]) {
+            let row = 0;
+            let n = parseInt(i) +  + 1;
+            $(`table > tbody > tr td:nth-child(${n})`).each(
+                function() {
+                    console.log(this);
+                    if (row < ah) {
+                        row++;
+                        return;
+                    }
+                    this.classList.add("num-cell");
+                    row++;
+                }
+            );
+        }
+    }
+}
