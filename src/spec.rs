@@ -424,4 +424,40 @@ mod tests {
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert_eq!(config, expected_config);
     }
+
+    #[test]
+    fn test_config_preprocessing() {
+        let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
+        let oscar_config = config
+            .views
+            .get("oscars")
+            .unwrap()
+            .render_table
+            .as_ref()
+            .unwrap();
+        let expected_render_column_spec = RenderColumnSpec {
+            optional: false,
+            custom: None,
+            display_mode: "detail".to_string(),
+            link_to_url: None,
+            plot: None,
+            custom_plot: None,
+        };
+        assert_eq!(
+            oscar_config.get("oscar_no").unwrap().to_owned(),
+            expected_render_column_spec
+        );
+        assert_eq!(
+            oscar_config.get("birth_mo").unwrap().to_owned(),
+            expected_render_column_spec
+        );
+        assert_eq!(
+            oscar_config.get("birth_d").unwrap().to_owned(),
+            expected_render_column_spec
+        );
+        assert_eq!(
+            oscar_config.get("birth_y").unwrap().to_owned(),
+            expected_render_column_spec
+        );
+    }
 }
