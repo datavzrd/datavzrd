@@ -102,7 +102,7 @@ lazy_static! {
 }
 
 impl ItemSpecs {
-    /// Converts columns addressed with index to the actual header values of the table
+    /// Preprocesses columns with index and regex notation
     fn preprocess_columns(&mut self, dataset: &DatasetSpecs) -> Result<()> {
         let mut indexed_keys = HashMap::new();
         let mut reader = csv::ReaderBuilder::new()
