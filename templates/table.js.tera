@@ -75,15 +75,12 @@ $(document).ready(function() {
     $('#table').bootstrapTable('append', additional_headers)
     $('#table').bootstrapTable('append', table_rows)
 
-    $('#table').bootstrapTable({
-        onExpandRow: function (index, row, detailView) {
-        console.log("HELLO");
+    $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
         let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
         let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-        {% for title, custom_plot in custom_plots %}{% if display_modes[title] == "detail" %}
-        renderCustomPlotDetailView{{ loop.index0 }}(row[columns.indexOf(cp[{{ loop.index0 }}])], `#detail-plot-${index}-{{ loop.index0 }}`);
-        {% endif %}{% endfor %}
-        }
+        {% for title, custom_plot in custom_plots %}
+        renderCustomPlotDetailView{{ loop.index0 }}(row[cp[{{ loop.index0 }}]], `#detail-plot-${index}-{{ loop.index0 }}`);
+        {% endfor %}
     })
 
     $( ".btn-sm" ).click(function() {
@@ -262,7 +259,6 @@ function detailFormatter(index, row) {
     var html = []
     $.each(row, function (key, value) {
         if (cp.includes(key)) {
-            console.log(`detail-plot-${index}-${cp.indexOf(key)}`);
             id = `detail-plot-${index}-${cp.indexOf(key)}`;
             html.push('<p><b>' + key + ':</b> ' + `<div id="${id}"></div>` + '</p>')
         } else {
@@ -273,7 +269,7 @@ function detailFormatter(index, row) {
 }
 {% endif %}
 
-{% for title, custom_plot in custom_plots %}{% if display_modes[title] == "detail" %}
+{% for title, custom_plot in custom_plots %}
 function renderCustomPlotDetailView{{ loop.index0 }}(value, div) {
     var data_function = {{ custom_plot.data }};
     var specs =  {{ custom_plot.spec }};
@@ -284,7 +280,7 @@ function renderCustomPlotDetailView{{ loop.index0 }}(value, div) {
     var opt = {"actions": {{ custom_plot.vega_controls }}};
     vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
 }
-{% endif %}{% endfor %}
+{% endfor %}
 
 function addNumClass(dp_num, ah) {
     for (let i in dp_num) {
