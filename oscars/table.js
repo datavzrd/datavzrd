@@ -92,6 +92,12 @@ $(document).ready(function() {
     $('#table').bootstrapTable('append', additional_headers)
     $('#table').bootstrapTable('append', table_rows)
 
+    $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
+        let cp = [];
+        let columns = ["oscar_no","oscar_yr","award","name","movie","age","birth place","birth date","birth_mo","birth_d","birth_y"];
+        
+    })
+
     $( ".btn-sm" ).click(function() {
         var col = $(this).data( "col" );
         var field = $(this).data("val").toString();
@@ -364,12 +370,20 @@ function embedSearch(index) {
 
 
 function detailFormatter(index, row) {
+    let cp = [];
     var html = []
     $.each(row, function (key, value) {
-        html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+        if (cp.includes(key)) {
+            id = `detail-plot-${index}-${cp.indexOf(key)}`;
+            html.push('<p><b>' + key + ':</b> ' + `<div id="${id}"></div>` + '</p>')
+        } else {
+            html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+        }
     })
     return html.join('')
 }
+
+
 
 
 function addNumClass(dp_num, ah) {
@@ -379,7 +393,6 @@ function addNumClass(dp_num, ah) {
             let n = parseInt(i) +  + 2;
             $(`table > tbody > tr td:nth-child(${n})`).each(
                 function() {
-                    console.log(this);
                     if (row < ah) {
                         row++;
                         return;

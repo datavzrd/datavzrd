@@ -98,6 +98,12 @@ $(document).ready(function() {
     $('#table').bootstrapTable('append', additional_headers)
     $('#table').bootstrapTable('append', table_rows)
 
+    $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
+        let cp = [];
+        let columns = ["Title","Year","Rated","Released","Runtime","Genre","Director","imdbRating","imdbID"];
+        
+    })
+
     $( ".btn-sm" ).click(function() {
         var col = $(this).data( "col" );
         var field = $(this).data("val").toString();
@@ -354,6 +360,8 @@ function embedSearch(index) {
 
 
 
+
+
 function addNumClass(dp_num, ah) {
     for (let i in dp_num) {
         if (dp_num[i]) {
@@ -361,7 +369,6 @@ function addNumClass(dp_num, ah) {
             let n = parseInt(i) +  + 1;
             $(`table > tbody > tr td:nth-child(${n})`).each(
                 function() {
-                    console.log(this);
                     if (row < ah) {
                         row++;
                         return;
