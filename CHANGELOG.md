@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.3.1](https://www.github.com/koesterlab/datavzrd/compare/v1.3.0...v1.3.1) (2022-03-26)
+
+
+### Bug Fixes
+
+* Missing columns when in detail mode for link-url ([#71](https://www.github.com/koesterlab/datavzrd/issues/71)) ([24223c5](https://www.github.com/koesterlab/datavzrd/commit/24223c553a5346b2caa7ab84c04662478e1e9df8))
+* Show custom plots in detail view ([#70](https://www.github.com/koesterlab/datavzrd/issues/70)) ([e8c5075](https://www.github.com/koesterlab/datavzrd/commit/e8c50750c0aae6160a31fdc59a0a5e65d286588a))
+
 ## [1.3.0](https://www.github.com/koesterlab/datavzrd/compare/v1.2.2...v1.3.0) (2022-03-25)
 
 
