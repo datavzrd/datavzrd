@@ -207,9 +207,9 @@ $(document).ready(function() {
     
 
     
-        linkUrlColumn0(additional_headers.length, displayed_columns, table_rows);
+        linkUrlColumn0(additional_headers.length, displayed_columns, table_rows, columns);
     
-        linkUrlColumn1(additional_headers.length, displayed_columns, table_rows);
+        linkUrlColumn1(additional_headers.length, displayed_columns, table_rows, columns);
     
 
     
@@ -320,8 +320,8 @@ function colorizeColumn0(ah, columns) {
 
 
 
-    function linkUrlColumn0(ah, columns, table_rows) {
-        let index = columns.indexOf("movie") + 1 + 1;
+    function linkUrlColumn0(ah, dp_columns, table_rows, columns) {
+        let index = dp_columns.indexOf("movie") + 1 + 1;
         let link_url = "https://de.wikipedia.org/wiki/{value}";
         let row = 0;
         $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -341,8 +341,8 @@ function colorizeColumn0(ah, columns) {
         );
     }
 
-    function linkUrlColumn1(ah, columns, table_rows) {
-        let index = columns.indexOf("name") + 1 + 1;
+    function linkUrlColumn1(ah, dp_columns, table_rows, columns) {
+        let index = dp_columns.indexOf("name") + 1 + 1;
         let link_url = "https://lmgtfy.app/?q=Is {name} in {movie}?";
         let row = 0;
         $(`table > tbody > tr td:nth-child(${index})`).each(

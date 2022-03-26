@@ -4,7 +4,7 @@ let plot_0 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"It Happened One Night","value":2},{"key":"Network","value":2},{"key":"Coming Home","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"On Golden Pond","value":2},{"key":"Coal Miner's Daughter","value":1},{"key":"The Accused","value":1},{"key":"Room at the Top","value":1},{"key":"Captains Courageous","value":1},{"key":"The Bridge on the River Kwai","value":1}]},
+            "data": {"values": [{"key":"The Silence of the Lambs","value":2},{"key":"Coming Home","value":2},{"key":"Network","value":2},{"key":"On Golden Pond","value":2},{"key":"It Happened One Night","value":2},{"key":"Guess Who's Coming to Dinner","value":1},{"key":"The Good Earth","value":1},{"key":"Roman Holiday","value":1},{"key":"The Heiress","value":1},{"key":"Suspicion","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {
