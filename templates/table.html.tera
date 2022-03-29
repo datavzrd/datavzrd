@@ -94,7 +94,7 @@
             </div>
         </div>
         <div class="col-md-12 table-container" style="margin-top: 15px;">
-            <table id="table" class="table" data-classes="table table-hover">
+            <table id="table" class="table" data-classes="table">
             </table>
         </div>
     </div>
