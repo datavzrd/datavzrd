@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.4.1](https://www.github.com/koesterlab/datavzrd/compare/v1.4.0...v1.4.1) (2022-03-29)
+
+
+### Bug Fixes
+
+* Do not show empty tick plots ([#76](https://www.github.com/koesterlab/datavzrd/issues/76)) ([85d2721](https://www.github.com/koesterlab/datavzrd/commit/85d27219986741575f02b01ad8f998977a4455a2))
+
 ## [1.4.0](https://www.github.com/koesterlab/datavzrd/compare/v1.3.1...v1.4.0) (2022-03-29)
 
 
