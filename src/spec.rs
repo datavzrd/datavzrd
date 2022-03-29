@@ -16,11 +16,13 @@ use std::str::FromStr;
 use thiserror::Error;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct ItemsSpec {
     #[serde(default, rename = "name")]
     pub(crate) report_name: String,
     pub(crate) datasets: HashMap<String, DatasetSpecs>,
     #[deref]
+    pub(crate) default_view: Option<String>,
     pub(crate) views: HashMap<String, ItemSpecs>,
 }
 
@@ -341,6 +343,7 @@ mod tests {
 
         let expected_config = ItemsSpec {
             datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
+            default_view: None,
             views: HashMap::from([(String::from("table-a"), expected_table_spec)]),
             report_name: "my_report".to_string(),
         };
@@ -400,6 +403,7 @@ mod tests {
 
         let expected_config = ItemsSpec {
             datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
+            default_view: Some("table-a".to_string()),
             views: HashMap::from([(String::from("plot-a"), expected_item_spec)]),
             report_name: "".to_string(),
         };
@@ -412,6 +416,7 @@ mod tests {
                 my-link:
                     column: test
                     view: other-table
+    default-view: table-a
     views:
         plot-a:
             dataset: table-a

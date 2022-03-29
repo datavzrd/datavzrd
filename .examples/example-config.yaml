@@ -15,6 +15,7 @@ datasets:
       link to oscar entry:
         column: Title
         table-row: oscars/movie
+default-view: oscars
 views:
   oscars:
     dataset: oscars
