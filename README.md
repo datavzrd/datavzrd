@@ -109,6 +109,10 @@ views:
 
 `name` allows the user to optionally set a name for the generated report that will be heading all resulting tables and plots.
 
+### default-view
+
+`default-view` allows the user to optionally specify a view for the generated report that will be shown when opening the index file.
+
 ### datasets
 
 `datasets` defines the different datasets of the report. This is also the place to define links between your individual datasets.
