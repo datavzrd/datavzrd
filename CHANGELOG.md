@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://www.github.com/koesterlab/datavzrd/compare/v1.3.1...v1.4.0) (2022-03-29)
+
+
+### Features
+
+* Add default-view keyword ([#73](https://www.github.com/koesterlab/datavzrd/issues/73)) ([8ae2bc6](https://www.github.com/koesterlab/datavzrd/commit/8ae2bc6dc1fbc9aab372a69256ae6e80a4dce8b9))
+* Remove hovering from table ([#75](https://www.github.com/koesterlab/datavzrd/issues/75)) ([224cfd0](https://www.github.com/koesterlab/datavzrd/commit/224cfd067ee3f1844069798ed2e3fc099c883a0d))
+
 ### [1.3.1](https://www.github.com/koesterlab/datavzrd/compare/v1.3.0...v1.3.1) (2022-03-26)
 
 
