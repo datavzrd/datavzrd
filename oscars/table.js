@@ -284,15 +284,17 @@ function renderTickPlots0(ah, columns) {
             var id = `age-${row}`;
             this.classList.add("plotcell");
             const div = document.createElement("div");
-            value = this.innerHTML;
-            this.innerHTML = "";
-            this.appendChild(div);
-            var data = [{"age": value}];
-            var s = specs;
-            s.data = {};
-            s.data.values = data;
-            var opt = {"actions": false};
-            vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+            let value = this.innerHTML;
+            if (value != "") {
+                this.innerHTML = "";
+                this.appendChild(div);
+                var data = [{"age": value}];
+                var s = specs;
+                s.data = {};
+                s.data.values = data;
+                var opt = {"actions": false};
+                vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+            }
             row++;
         }
     );
@@ -330,8 +332,8 @@ function colorizeColumn0(ah, columns) {
                     row++;
                     return;
                 }
-                value = this.innerHTML;
-                link = link_url.replaceAll("{value}", value);
+                let value = this.innerHTML;
+                let link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
                 link = link.replaceAll(`{${column}}`, table_rows[row][column]);
                 }
@@ -351,8 +353,8 @@ function colorizeColumn0(ah, columns) {
                     row++;
                     return;
                 }
-                value = this.innerHTML;
-                link = link_url.replaceAll("{value}", value);
+                let value = this.innerHTML;
+                let link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
                 link = link.replaceAll(`{${column}}`, table_rows[row][column]);
                 }
