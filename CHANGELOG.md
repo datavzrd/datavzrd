@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://www.github.com/koesterlab/datavzrd/compare/v1.4.1...v1.5.0) (2022-04-04)
+
+
+### Features
+
+* Add ellipsis keyword ([#78](https://www.github.com/koesterlab/datavzrd/issues/78)) ([1b5757e](https://www.github.com/koesterlab/datavzrd/commit/1b5757ec9726608b08c4496084136a3d482da258))
+
 ### [1.4.1](https://www.github.com/koesterlab/datavzrd/compare/v1.4.0...v1.4.1) (2022-03-29)
 
 
