@@ -206,6 +206,10 @@ $(document).ready(function() {
         colorizeColumn0(additional_headers.length, displayed_columns);
     
 
+    
+        shortenColumn0(additional_headers.length, displayed_columns);
+    
+
 let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
     let rows = $("table > tbody > tr");
     rows.each(function() {
@@ -309,6 +313,26 @@ function colorizeColumn0(ah, columns) {
         }
     );
 }
+
+
+
+    function shortenColumn0(ah, columns) {
+        let index = columns.indexOf("Genre") + 1;
+        let row = 0;
+        $(`table > tbody > tr td:nth-child(${index})`).each(
+            function() {
+                if (row < ah) {
+                    row++;
+                    return;
+                }
+                value = this.innerHTML;
+                if (value.length > 15) {
+                    this.innerHTML = `${value.substring(0,15)}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${value}</div>'>...</a>`;
+                }
+                row++;
+            }
+        );
+    }
 
 
 

@@ -216,6 +216,8 @@ $(document).ready(function() {
         colorizeColumn0(additional_headers.length, displayed_columns);
     
 
+    
+
 let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
     let rows = $("table > tbody > tr");
     rows.each(function() {
@@ -319,6 +321,8 @@ function colorizeColumn0(ah, columns) {
         }
     );
 }
+
+
 
 
 
