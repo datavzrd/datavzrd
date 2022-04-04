@@ -67,7 +67,7 @@ impl ItemsSpec {
                     .from_path(&dataset.path)?;
                 let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
                 for (column, render_columns) in render_table {
-                    if !titles.contains(&column) && !render_columns.optional {
+                    if !titles.contains(column) && !render_columns.optional {
                         warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
                     }
                     let mut possible_conflicting = Vec::new();
