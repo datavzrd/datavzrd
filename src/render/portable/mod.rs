@@ -332,6 +332,12 @@ fn render_table_javascript<P: AsRef<Path>>(
         })
         .collect();
 
+    let ellipses: HashMap<String, u32> = render_columns
+        .iter()
+        .filter(|(_, k)| k.ellipsis.is_some())
+        .map(|(t, spec)| (t.to_string(), spec.ellipsis.unwrap()))
+        .collect();
+
     let mut display_modes: HashMap<String, String> = titles
         .iter()
         .map(|t| (t.to_string(), "normal".to_string()))
@@ -363,6 +369,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("custom_plots", &custom_plots);
     context.insert("tick_plots", &tick_plots);
     context.insert("heatmaps", &heatmaps);
+    context.insert("ellipses", &ellipses);
     context.insert("display_modes", &display_modes);
     context.insert("detail_mode", &detail_mode);
     context.insert("link_urls", &link_urls);
