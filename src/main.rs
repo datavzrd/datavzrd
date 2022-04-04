@@ -16,6 +16,7 @@ fn main() -> Result<()> {
         "Could not find config file under given path {:?}",
         &opt.config
     ))?;
+    config.validate()?;
 
     if !opt.output.exists() {
         std::fs::create_dir(&opt.output)?;
