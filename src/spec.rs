@@ -45,6 +45,15 @@ impl ItemsSpec {
         }
         Ok(items_spec)
     }
+
+    pub(crate) fn validate(&self) -> Result<()> {
+        for (_, view) in &self.views {
+            if self.datasets.get(&view.dataset).is_none() {
+                bail!(ConfigError::MissingDataset { dataset: view.dataset.to_string() })
+            }
+        }
+        unimplemented!()
+    }
 }
 
 fn default_separator() -> char {
@@ -300,6 +309,10 @@ pub enum ConfigError {
     },
     #[error("Column {column:?} under path {table_path:?} seems to have multiple definitions. Please check your config file.")]
     DuplicateColumn { column: String, table_path: PathBuf },
+    #[error("Could not find dataset named {dataset:?} in given config.")]
+    MissingDataset {
+        dataset: String,
+    },
 }
 
 #[cfg(test)]
