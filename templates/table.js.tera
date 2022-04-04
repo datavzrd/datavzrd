@@ -121,6 +121,10 @@ $(document).ready(function() {
         colorizeColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
     {% endfor %}
 
+    {% for title, ellipsis in ellipses %}
+        shortenColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
+    {% endfor %}
+
 let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
     let rows = $("table > tbody > tr");
     rows.each(function() {
@@ -225,6 +229,26 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
         }
     );
 }
+{% endfor %}
+
+{% for title, ellipsis in ellipses %}
+    function shortenColumn{{ loop.index0 }}(ah, columns) {
+        let index = columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
+        let row = 0;
+        $(`table > tbody > tr td:nth-child(${index})`).each(
+            function() {
+                if (row < ah) {
+                    row++;
+                    return;
+                }
+                value = this.innerHTML;
+                if (value.length > {{ ellipsis }}) {
+                    this.innerHTML = `${value.substring(0,{{ ellipsis }})}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${value}</div>'>...</a>`;
+                }
+                row++;
+            }
+        );
+    }
 {% endfor %}
 
 {% for title, link_url in link_urls %}
