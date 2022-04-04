@@ -56,6 +56,8 @@ views:
   movies:
     dataset: movies
     render-table:
+      Genre:
+        ellipsis: 15
       imdbID:
         link-to-url: "https://www.imdb.com/title/{value}/"
       Title:

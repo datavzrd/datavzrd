@@ -197,6 +197,8 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) plot: Option<PlotSpec>,
     #[serde(default)]
     pub(crate) custom_plot: Option<CustomPlot>,
+    #[serde(default)]
+    pub(crate) ellipsis: Option<u32>,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -320,6 +322,7 @@ mod tests {
             link_to_url: Some(String::from("https://www.rust-lang.org")),
             plot: None,
             custom_plot: None,
+            ellipsis: None,
         };
 
         let expected_dataset_spec = DatasetSpecs {
@@ -447,6 +450,7 @@ mod tests {
             link_to_url: None,
             plot: None,
             custom_plot: None,
+            ellipsis: None,
         };
         assert_eq!(
             oscar_config.get("oscar_no").unwrap().to_owned(),

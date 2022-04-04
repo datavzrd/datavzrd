@@ -147,6 +147,7 @@ views:
 | custom                      | Applies the given js function to render column content. The parameters of the function are similar to the ones defined [here](https://bootstrap-table.com/docs/api/column-options/#formatter) |         |                 |
 | [custom-plot](#custom-plot) | Renders a custom vega-lite plot to the corresponding table cell                                                                                                                               |         |                 |
 | [plot](#plot)               | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                                                                                                           |         |                 |
+| ellipsis                    | Shortens values to the first *n* given characters with the rest hidden behind a popover                                                                                                       |         |                 |
 | optional                    | Allows to have a column specified in render-table that is actually not present.                                                                                                               | false   | true, false     |
 | display-mode                | Allows to have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`.                                        | normal  | detail, normal  |
 
