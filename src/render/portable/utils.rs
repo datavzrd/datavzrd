@@ -85,3 +85,40 @@ pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> R
     file.write_all(html.as_bytes())?;
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{render_index_file, ItemsSpec, render_static_files};
+    use std::fs;
+    use std::path::Path;
+    use dir_assert::assert_paths;
+
+    #[test]
+    fn test_render_index_file() {
+        let spec = ItemsSpec {
+            report_name: "".to_string(),
+            datasets: Default::default(),
+            default_view: Some("my-view".to_string()),
+            views: Default::default(),
+        };
+        render_index_file(Path::new("/tmp"), &spec).unwrap();
+        let rendered_file_content = fs::read_to_string("/tmp/index.html")
+            .expect("Could not read rendered test index file.");
+        fs::remove_file("/tmp/index.html")
+            .expect("Could not read remove rendered test index file.");
+        assert_eq!(
+            rendered_file_content,
+            include_str!("../../../tests/expected/index.html")
+        )
+    }
+
+    #[test]
+    fn test_render_static_files() {
+        render_static_files(Path::new("/tmp")).unwrap();
+        assert_paths!("/tmp/static", "static");
+        for entry in fs::read_dir("/tmp/static").unwrap() {
+            fs::remove_file(entry.unwrap().path()).unwrap();
+        }
+        fs::remove_dir("/tmp/static").unwrap();
+    }
+}
