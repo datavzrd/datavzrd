@@ -1,9 +1,11 @@
 use crate::render::portable::DatasetError;
+use crate::spec::ConfigError::{ConflictingConfiguration, PlotAndTablePresentConfiguration};
 use anyhow::Result;
 use anyhow::{bail, Context};
 use derefable::Derefable;
 use itertools::Itertools;
 use lazy_static::lazy_static;
+use log::warn;
 use regex::Regex;
 use serde::Deserialize;
 use serde::Serialize;
@@ -44,6 +46,57 @@ impl ItemsSpec {
             }
         }
         Ok(items_spec)
+    }
+
+    pub(crate) fn validate(&self) -> Result<()> {
+        for (name, view) in &self.views {
+            if self.datasets.get(&view.dataset).is_none() {
+                bail!(ConfigError::MissingDataset {
+                    dataset: view.dataset.to_string()
+                })
+            }
+            if let Some(render_table) = &view.render_table {
+                if !render_table.is_empty() && view.render_plot.is_some() {
+                    bail!(PlotAndTablePresentConfiguration {
+                        view: name.to_string()
+                    });
+                }
+                let dataset = self.datasets.get(&view.dataset).unwrap();
+                let mut reader = csv::ReaderBuilder::new()
+                    .delimiter(dataset.separator as u8)
+                    .from_path(&dataset.path)?;
+                let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+                for (column, render_columns) in render_table {
+                    if !titles.contains(column) && !render_columns.optional {
+                        warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
+                    }
+                    let mut possible_conflicting = Vec::new();
+                    if render_columns.ellipsis.is_some() {
+                        possible_conflicting.push("ellipsis".to_string());
+                    }
+                    if render_columns.link_to_url.is_some() {
+                        possible_conflicting.push("link-to-url".to_string());
+                    }
+                    if render_columns.custom.is_some() {
+                        possible_conflicting.push("custom".to_string());
+                    }
+                    if render_columns.custom_plot.is_some() {
+                        possible_conflicting.push("custom-plot".to_string());
+                    }
+                    if render_columns.plot.is_some() {
+                        possible_conflicting.push("plot".to_string());
+                    }
+                    if possible_conflicting.len() > 1 {
+                        bail!(ConflictingConfiguration {
+                            view: name.to_string(),
+                            column: column.to_string(),
+                            conflict: possible_conflicting
+                        })
+                    }
+                }
+            }
+        }
+        Ok(())
     }
 }
 
@@ -302,6 +355,16 @@ pub enum ConfigError {
     },
     #[error("Column {column:?} under path {table_path:?} seems to have multiple definitions. Please check your config file.")]
     DuplicateColumn { column: String, table_path: PathBuf },
+    #[error("Could not find dataset named {dataset:?} in given config.")]
+    MissingDataset { dataset: String },
+    #[error("View {view:?} consists of a configuration with render-plot and render-table present while only one should be present. If you want both please define two separate views.")]
+    PlotAndTablePresentConfiguration { view: String },
+    #[error("Found conflicting render-table configuration for column {column:?} of view {view:?}. The conflicting configuration are {conflict:?}.")]
+    ConflictingConfiguration {
+        view: String,
+        column: String,
+        conflict: Vec<String>,
+    },
 }
 
 #[cfg(test)]
@@ -412,25 +475,84 @@ mod tests {
         };
 
         let raw_config = r#"
-    datasets:
-        table-a:
-            path: test.tsv
-            links:
-                my-link:
-                    column: test
-                    view: other-table
-    default-view: table-a
-    views:
-        plot-a:
-            dataset: table-a
-            desc: "my table"
-            render-plot:
-                spec: |
-                    {'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}
-    "#;
+            datasets:
+                table-a:
+                    path: test.tsv
+                    links:
+                        my-link:
+                            column: test
+                            view: other-table
+            default-view: table-a
+            views:
+                plot-a:
+                    dataset: table-a
+                    desc: "my table"
+                    render-plot:
+                        spec: |
+                            {'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}
+            "#;
 
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert_eq!(config, expected_config);
+    }
+
+    #[test]
+    fn test_valid_config_validation() {
+        let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
+        assert!(config.validate().is_ok());
+    }
+
+    #[test]
+    fn test_missing_dataset_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: test.tsv
+            views:
+                plot-b:
+                    dataset: table-b
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_conflicting_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: data.csv
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        some-column:
+                            plot:
+                                ticks:
+                                    scale: linear
+                            ellipsis: 25
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_plot_and_table_present_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: data.csv
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        x:
+                            link-to-url: "https://lmgtfy.app/?q=Is {name} in {movie}?"
+                    render-plot:
+                        spec-path: ".examples/specs/movies.vl.json"
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
     }
 
     #[test]
