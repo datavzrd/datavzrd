@@ -88,10 +88,10 @@ pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> R
 
 #[cfg(test)]
 mod tests {
-    use crate::{render_index_file, ItemsSpec, render_static_files};
+    use crate::{render_index_file, render_static_files, ItemsSpec};
+    use dir_assert::assert_paths;
     use std::fs;
     use std::path::Path;
-    use dir_assert::assert_paths;
 
     #[test]
     fn test_render_index_file() {
