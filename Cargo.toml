@@ -2,7 +2,7 @@
 name = "datavzrd"
 description = "A tool to create visual HTML reports from collections of CSV/TSV tables"
 license = "MIT"
-version = "1.4.1"
+version = "1.5.0"
 authors = ["Johannes Köster <johannes.koester@tu-dortmund.de>", "Felix Wiegand <felix.wiegand@tu-dortmund.de>"]
 edition = "2021"
 
@@ -26,3 +26,6 @@ lazy_static = "1.4.0"
 regex = "1.5.4"
 log = "0.4.16"
 simplelog = "0.11.2"
+
+[dev-dependencies]
+dir-assert = "0.2.0"
