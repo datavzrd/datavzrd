@@ -4,7 +4,7 @@ let plot_3 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"Katharine Hepburn","value":4},{"key":"Daniel Day-Lewis","value":3},{"key":"Sean Penn","value":2},{"key":"Meryl Streep","value":2},{"key":"Marlon Brando","value":2},{"key":"Gary Cooper","value":2},{"key":"Tom Hanks","value":2},{"key":"Vivien Leigh","value":2},{"key":"Jack Nicholson","value":2},{"key":"Fredric March","value":2}]},
+            "data": {"values": [{"key":"Katharine Hepburn","value":4},{"key":"Daniel Day-Lewis","value":3},{"key":"Marlon Brando","value":2},{"key":"Olivia de Havilland","value":2},{"key":"Bette Davis","value":2},{"key":"Gary Cooper","value":2},{"key":"Fredric March","value":2},{"key":"Hilary Swank","value":2},{"key":"Meryl Streep","value":2},{"key":"Tom Hanks","value":2}]},
             "mark": "bar",
             "encoding": {
                 "x": {
