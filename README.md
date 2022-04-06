@@ -136,6 +136,7 @@ views:
 | pin-columns                   | Number of columns that are fixed to the left side of the table and therefore always visible                                                | 0       |
 | [render-table](#render-table) | Configuration of individual column rendering                                                                                               |         |
 | [render-plot](#render-plot)   | Configuration of a single plot                                                                                                             |         |
+| hidden                        | Whether or not the view is shown in the menu navigation                                                                                    | false   |
 
 ### render-table 
 

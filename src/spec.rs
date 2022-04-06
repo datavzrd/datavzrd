@@ -135,6 +135,8 @@ pub(crate) struct DatasetSpecs {
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct ItemSpecs {
+    #[serde(default)]
+    pub(crate) hidden: bool,
     pub(crate) dataset: String,
     #[serde(default = "default_page_size")]
     pub(crate) page_size: usize,
@@ -396,6 +398,7 @@ mod tests {
         };
 
         let expected_table_spec = ItemSpecs {
+            hidden: false,
             dataset: "table-a".to_string(),
             page_size: 100,
             pin_columns: 1,
@@ -459,6 +462,7 @@ mod tests {
         };
 
         let expected_item_spec = ItemSpecs {
+            hidden: false,
             dataset: "table-a".to_string(),
             page_size: 100,
             pin_columns: 0,
