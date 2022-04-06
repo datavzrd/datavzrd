@@ -248,6 +248,7 @@ function renderTickPlots0(ah, columns) {
     var specs =  {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": 50,
+    "height": 10,
     "encoding": {
         "x": {
             "field": "age",
@@ -258,7 +259,7 @@ function renderTickPlots0(ah, columns) {
                 "ticks": false,
                 "labels": false,
                 "grid": false,
-                "offset": -20
+                "offset": -11
             }
         },
         "y": {"value": 0, "scale": {"domain": [0, 1]}}
