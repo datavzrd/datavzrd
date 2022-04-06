@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0](https://www.github.com/koesterlab/datavzrd/compare/v1.6.0...v1.7.0) (2022-04-06)
+
+
+### Features
+
+* Style table ([#88](https://www.github.com/koesterlab/datavzrd/issues/88)) ([bffa4a3](https://www.github.com/koesterlab/datavzrd/commit/bffa4a36b4387fa023d00f4d4b952dfc6d5f8f8d))
+* Validate linkouts ([#87](https://www.github.com/koesterlab/datavzrd/issues/87)) ([63a8494](https://www.github.com/koesterlab/datavzrd/commit/63a84945a84a724e3d8bd6cb46a52873c78cffb2))
+
 ## [1.6.0](https://www.github.com/koesterlab/datavzrd/compare/v1.5.0...v1.6.0) (2022-04-06)
 
 
