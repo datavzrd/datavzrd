@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $('.table-container').show();
     $('.loading').hide();
+    $('#pagination').show();
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
