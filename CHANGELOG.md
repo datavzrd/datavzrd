@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.6.0](https://www.github.com/koesterlab/datavzrd/compare/v1.5.0...v1.6.0) (2022-04-06)
+
+
+### Features
+
+* Add config validation ([#80](https://www.github.com/koesterlab/datavzrd/issues/80)) ([fd094a3](https://www.github.com/koesterlab/datavzrd/commit/fd094a366d31f55327de6a5a7d8e7cc4c020c5d3))
+* Add new keyword hidden ([#83](https://www.github.com/koesterlab/datavzrd/issues/83)) ([1e93444](https://www.github.com/koesterlab/datavzrd/commit/1e934442fb8de432e742d6b8bd5185b4daaab3c5))
+* Resize linkout buttons ([#85](https://www.github.com/koesterlab/datavzrd/issues/85)) ([db89115](https://www.github.com/koesterlab/datavzrd/commit/db89115597d94299f5048f6d68a8c05bd06dc637))
+* Resize tick plots ([#84](https://www.github.com/koesterlab/datavzrd/issues/84)) ([700c0b7](https://www.github.com/koesterlab/datavzrd/commit/700c0b7b5fb0c3985fa0ba781850fe271044d89c))
+* Validate plot scale types ([#86](https://www.github.com/koesterlab/datavzrd/issues/86)) ([4d79364](https://www.github.com/koesterlab/datavzrd/commit/4d79364b186080af6d8c4de30532a1055ff2ce03))
+
 ## [1.5.0](https://www.github.com/koesterlab/datavzrd/compare/v1.4.1...v1.5.0) (2022-04-04)
 
 
