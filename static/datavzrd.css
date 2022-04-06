@@ -7,6 +7,11 @@
     font-size: 0.8rem;
 }
 
+.linkout-btn {
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
 .loading {
     height: 100%;
     padding-top: 25%;
@@ -26,17 +31,6 @@ th {
 
 #table {
     max-width: 100%;
-}
-
-.btn-sm {
-    position: absolute;
-    top: 3px;
-    right: 3px;
-    display: none
-}
-
-td:hover .btn-sm {
-    display: table
 }
 
 td {
