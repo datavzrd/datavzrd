@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.8.0](https://www.github.com/koesterlab/datavzrd/compare/v1.7.0...v1.8.0) (2022-04-06)
+
+
+### Features
+
+* Remove pin-columns keyword ([#91](https://www.github.com/koesterlab/datavzrd/issues/91)) ([55aa0f5](https://www.github.com/koesterlab/datavzrd/commit/55aa0f5a0e860874c9281b13f8417da255777e4e))
+
+
+### Bug Fixes
+
+* fixed linkout button rendering bug ([933dd34](https://www.github.com/koesterlab/datavzrd/commit/933dd34fc2572ade9536b327a121de8b2063be0e))
+* tune link button visuals ([becea59](https://www.github.com/koesterlab/datavzrd/commit/becea59de5f915de570daff68aaf47f3212610fc))
+
 ## [1.7.0](https://www.github.com/koesterlab/datavzrd/compare/v1.6.0...v1.7.0) (2022-04-06)
 
 
