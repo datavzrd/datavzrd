@@ -1,5 +1,7 @@
 use crate::render::portable::DatasetError;
-use crate::spec::ConfigError::{ConflictingConfiguration, PlotAndTablePresentConfiguration};
+use crate::spec::ConfigError::{
+    ConflictingConfiguration, PlotAndTablePresentConfiguration, WrongScaleType,
+};
 use anyhow::Result;
 use anyhow::{bail, Context};
 use derefable::Derefable;
@@ -92,6 +94,25 @@ impl ItemsSpec {
                             column: column.to_string(),
                             conflict: possible_conflicting
                         })
+                    }
+
+                    if let Some(plot) = &render_columns.plot {
+                        if let Some(heatmap) = &plot.heatmap {
+                            if !SCALE_TYPES.contains(&&*heatmap.scale_type) {
+                                bail!(WrongScaleType {
+                                    scale_type: heatmap.scale_type.clone(),
+                                    possible_scale_types: SCALE_TYPES.to_vec(),
+                                })
+                            }
+                        }
+                        if let Some(tick_plot) = &plot.tick_plot {
+                            if !SCALE_TYPES.contains(&&*tick_plot.scale_type) {
+                                bail!(WrongScaleType {
+                                    scale_type: tick_plot.scale_type.clone(),
+                                    possible_scale_types: SCALE_TYPES.to_vec(),
+                                })
+                            }
+                        }
                     }
                 }
             }
@@ -345,6 +366,23 @@ pub(crate) struct Heatmap {
     pub(crate) domain: Option<Vec<String>>,
 }
 
+static SCALE_TYPES: [&'static str; 14] = [
+    "linear",
+    "pow",
+    "sqrt",
+    "symlog",
+    "log",
+    "time",
+    "utc",
+    "ordinal",
+    "band",
+    "point",
+    "bin-ordinal",
+    "quantile",
+    "quantize",
+    "threshold",
+];
+
 #[derive(Error, Debug)]
 pub enum ConfigError {
     #[error("Could not find column with index {index:?} under path {table_path:?} with only {header_length:?} columns.")]
@@ -364,6 +402,11 @@ pub enum ConfigError {
         view: String,
         column: String,
         conflict: Vec<String>,
+    },
+    #[error("Given scale type {scale_type:?} is not valid, please choose one of the following scale types: {possible_scale_types:?}.")]
+    WrongScaleType {
+        scale_type: String,
+        possible_scale_types: Vec<&'static str>,
     },
 }
 
@@ -531,6 +574,25 @@ mod tests {
                                 ticks:
                                     scale: linear
                             ellipsis: 25
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_wrong_scale_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: data.csv
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        some-column:
+                            plot:
+                                heatmap:
+                                    scale: inverse-quadruplic
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_err());
