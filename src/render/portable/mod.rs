@@ -134,6 +134,7 @@ impl Renderer for ItemRenderer {
                             &linked_tables,
                             dataset.links.as_ref().unwrap(),
                             &self.specs.report_name,
+                            &self.specs.views,
                         )?;
                     }
                     render_table_javascript(
@@ -187,6 +188,7 @@ fn render_page<P: AsRef<Path>>(
     linked_tables: &LinkedTable,
     links: &HashMap<String, LinkSpec>,
     report_name: &str,
+    views: &HashMap<String, ItemSpecs>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -220,7 +222,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("current_page", &page_index);
     context.insert("pages", &pages);
     context.insert("description", &description);
-    context.insert("tables", tables);
+    context.insert("tables", &tables.iter().filter(|t| !views.get(*t).unwrap().hidden ).collect_vec());
     context.insert("name", name);
     context.insert("report_name", report_name);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
