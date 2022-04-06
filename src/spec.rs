@@ -1,6 +1,7 @@
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
-    ConflictingConfiguration, PlotAndTablePresentConfiguration, WrongScaleType,
+    ConflictingConfiguration, LinkToMissingView, MissingColumn, PlotAndTablePresentConfiguration,
+    WrongScaleType,
 };
 use anyhow::Result;
 use anyhow::{bail, Context};
@@ -112,6 +113,53 @@ impl ItemsSpec {
                                     possible_scale_types: SCALE_TYPES.to_vec(),
                                 })
                             }
+                        }
+                    }
+                }
+            }
+        }
+        for (name, dataset) in &self.datasets {
+            if let Some(linkouts) = &dataset.links {
+                for (link_name, link) in linkouts {
+                    let mut reader = csv::ReaderBuilder::new()
+                        .delimiter(dataset.separator as u8)
+                        .from_path(&dataset.path)?;
+                    let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+                    if !titles.contains(&link.column) {
+                        bail!(MissingColumn {
+                            column: link.column.to_string(),
+                            dataset: name.to_string(),
+                            link: link_name.to_string(),
+                        })
+                    }
+                    if let Some(table_row) = &link.table_row {
+                        let (table, linked_column) = table_row
+                            .split_once('/')
+                            .expect("Missing expected delimiter / in table-row configuration.");
+                        if let Some(table_spec) = self.views.get(table) {
+                            if let Some(dataset) = self.datasets.get(&table_spec.dataset) {
+                                let mut reader = csv::ReaderBuilder::new()
+                                    .delimiter(dataset.separator as u8)
+                                    .from_path(&dataset.path)?;
+                                let titles =
+                                    reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+                                if !titles.contains(&linked_column.to_string()) {
+                                    bail!(ConfigError::LinkToMissingColumn {
+                                        view: table.to_string(),
+                                        column: linked_column.to_string(),
+                                        link: link_name.to_string()
+                                    })
+                                }
+                            } else {
+                                bail!(ConfigError::MissingDataset {
+                                    dataset: table_spec.dataset.to_string()
+                                })
+                            }
+                        } else {
+                            bail!(LinkToMissingView {
+                                view: table.to_string(),
+                                link: link_name.to_string()
+                            })
                         }
                     }
                 }
@@ -410,6 +458,24 @@ pub enum ConfigError {
         scale_type: String,
         possible_scale_types: Vec<&'static str>,
     },
+    #[error(
+        "Could not find column named {column:?} in given dataset {dataset:?} in linkout {link:?}."
+    )]
+    MissingColumn {
+        column: String,
+        dataset: String,
+        link: String,
+    },
+    #[error(
+        "Could not find view named {view:?} in given config that is referred to with {link:?}."
+    )]
+    LinkToMissingView { view: String, link: String },
+    #[error("Could not find column named {column:?} in {view:?} in given config that is referred to with {link:?}.")]
+    LinkToMissingColumn {
+        view: String,
+        column: String,
+        link: String,
+    },
 }
 
 #[cfg(test)]
@@ -558,6 +624,64 @@ mod tests {
             views:
                 plot-b:
                     dataset: table-b
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_missing_view_in_dataset_link_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: .examples/data/oscars.csv
+                    links:
+                        link to non existing view:
+                            column: age
+                            table-row: some-non-existent-view/some-column
+            views:
+                table-a:
+                    dataset: table-a
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_missing_column_in_dataset_link_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: .examples/data/oscars.csv
+                    links:
+                        link from non existing column:
+                            column: non-existing-column
+                            view: other-table-a
+            views:
+                table-a:
+                    dataset: table-a
+                other-table-a:
+                    dataset: table-a
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_missing_column_in_linked_table_row_link_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: .examples/data/oscars.csv
+                    links:
+                        link to non existing column:
+                            column: age
+                            table-row: "other-table-a/non existing column"
+            views:
+                table-a:
+                    dataset: table-a
+                other-table-a:
+                    dataset: table-a
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_err());
