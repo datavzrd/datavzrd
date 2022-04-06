@@ -87,7 +87,7 @@
         </div>
     </div>
     {% endif %}
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-md-12 loading text-center">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
@@ -98,12 +98,12 @@
             </table>
         </div>
     </div>
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-md-12">
         {% if pages > 1 %}
-        <div style="padding-top: 1rem">
+        <div id="pagination">
             <nav aria-label="page navigation">
-                <ul class="pagination justify-content-start">
+                <ul class="pagination justify-content-center">
                     {% if current_page > 1 %}
                     {% if current_page != 2 %}
                     <li class="page-item"><a class="page-link" href="index_1.html">First</a></li>

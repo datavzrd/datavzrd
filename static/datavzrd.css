@@ -32,6 +32,11 @@ th {
 
 #table {
     max-width: 100%;
+    width: auto;
+}
+
+.table {
+    margin: auto;
 }
 
 td {
@@ -46,6 +51,11 @@ td {
 
 .table td.plotcell {
     padding: 0;
+}
+
+#pagination {
+    padding-top: 0.5rem;
+    display: none;
 }
 
 th .th-inner {
