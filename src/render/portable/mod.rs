@@ -144,7 +144,6 @@ impl Renderer for ItemRenderer {
                         dataset.separator,
                         table_specs,
                         additional_headers,
-                        table.pin_columns,
                     )?;
                     render_plots(
                         &out_path,
@@ -253,7 +252,6 @@ fn render_table_javascript<P: AsRef<Path>>(
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_headers: Option<Vec<StringRecord>>,
-    pin_columns: usize,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -382,7 +380,6 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("detail_mode", &detail_mode);
     context.insert("link_urls", &link_urls);
     context.insert("num", &numeric);
-    context.insert("pin_columns", &pin_columns);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
 

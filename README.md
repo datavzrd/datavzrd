@@ -90,7 +90,6 @@ views:
               - red
   gene-mycn-plot:
     dataset: gene-mycn
-    pin-columns: 3
     render-plot:
       spec: |
         {
@@ -133,7 +132,6 @@ views:
 | desc                          | A description that will be shown in the report. [Markdown](https://github.github.com/gfm/) is allowed and will be rendered to proper HTML. |         |
 | dataset                       | The name of the corresponding dataset to this view defined in [datasets](#datasets)                                                        |         |
 | page-size                     | Number of rows per page                                                                                                                    | 100     |
-| pin-columns                   | Number of columns that are fixed to the left side of the table and therefore always visible                                                | 0       |
 | [render-table](#render-table) | Configuration of individual column rendering                                                                                               |         |
 | [render-plot](#render-plot)   | Configuration of a single plot                                                                                                             |         |
 | hidden                        | Whether or not the view is shown in the menu navigation                                                                                    | false   |
