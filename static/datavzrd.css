@@ -43,7 +43,8 @@ td {
     position: relative;
 }
 
-.table td, .table th {
+.table td,
+.table th {
     padding-bottom: 0;
     padding-top: 0;
     padding-right: 0.5rem;
@@ -70,7 +71,7 @@ th .th-inner {
 }
 
 .fa {
-    display:inline-block;
+    display: inline-block;
     width: 24px;
     height: 24px;
     background-size: 100%;
