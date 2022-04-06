@@ -14,6 +14,6 @@
 </div>
 {% else %}
 {% for link in links %}
-<a class="btn btn-outline-secondary btn-sm linkout-btn" href="{{ link.url }} role="button"">{{ link.name }}</a>
+<a class="btn btn-light btn-sm linkout-btn" href="{{ link.url }}" role="button">{{ link.name }}</a>
 {% endfor %}
 {% endif %}
