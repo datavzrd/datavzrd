@@ -51,22 +51,13 @@ $(document).ready(function() {
     title: 'imdbID\r\n                        <a class=\"sym\" data-toggle=\"modal\" data-target=\"#modal_8\" onclick=\"if (show_plot_8) {vegaEmbed(\'#plot_8\', plot_8)} else {document.getElementById(\'plot_8\').innerHTML = \'<p>No reasonable plot possible.</p>\'}\">\r\n                            <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi-bar-chart-fill\" fill=\"currentColor\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n                                <rect width=\"4\" height=\"5\" x=\"1\" y=\"10\" rx=\"1\"\/>\r\n                                <rect width=\"4\" height=\"9\" x=\"6\" y=\"6\" rx=\"1\"\/>\r\n                                <rect width=\"4\" height=\"14\" x=\"11\" y=\"1\" rx=\"1\"\/>\r\n                            <\/svg>\r\n                        <\/a>\r\n                        <a class=\"sym\" data-toggle=\"modal\" onclick=\"embedSearch(8)\" data-target=\"#search\">\r\n                        <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi-search\" fill=\"currentColor\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n                                <path fill-rule=\"evenodd\" d=\"M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z\"\/>\r\n                                <path fill-rule=\"evenodd\" d=\"M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z\"\/>\r\n                            <\/svg>\r\n                        <\/a>'
     }];
 
-    var fixed_right = 0;
-    var fixed = false;
-
-    if (linkouts != null) {
-        bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
-        fixed_right = 1;
-    }
+    bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
 
     $('#table').bootstrapTable({
         height: he,
         columns: bs_table_cols,
         data: [],
         
-        fixedColumns: true,
-        fixedRightNumber: fixed_right,
-        fixedNumber: 0
     })
 
     let additional_headers = [];
