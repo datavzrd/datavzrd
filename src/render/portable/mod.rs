@@ -222,7 +222,13 @@ fn render_page<P: AsRef<Path>>(
     context.insert("current_page", &page_index);
     context.insert("pages", &pages);
     context.insert("description", &description);
-    context.insert("tables", &tables.iter().filter(|t| !views.get(*t).unwrap().hidden ).collect_vec());
+    context.insert(
+        "tables",
+        &tables
+            .iter()
+            .filter(|t| !views.get(*t).unwrap().hidden)
+            .collect_vec(),
+    );
     context.insert("name", name);
     context.insert("report_name", report_name);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
