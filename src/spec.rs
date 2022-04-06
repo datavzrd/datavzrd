@@ -209,8 +209,6 @@ pub(crate) struct ItemSpecs {
     pub(crate) dataset: String,
     #[serde(default = "default_page_size")]
     pub(crate) page_size: usize,
-    #[serde(default)]
-    pub(crate) pin_columns: usize,
     #[serde(rename = "desc")]
     pub(crate) description: Option<String>,
     #[serde(default = "default_render_table")]
@@ -510,7 +508,6 @@ mod tests {
             hidden: false,
             dataset: "table-a".to_string(),
             page_size: 100,
-            pin_columns: 1,
             description: None,
             render_table: Some(HashMap::from([(
                 String::from("x"),
@@ -535,7 +532,6 @@ mod tests {
         table-a:
             dataset: table-a
             page-size: 100
-            pin-columns: 1
             render-table:
                 x:
                     link-to-url: https://www.rust-lang.org
@@ -574,7 +570,6 @@ mod tests {
             hidden: false,
             dataset: "table-a".to_string(),
             page_size: 100,
-            pin_columns: 0,
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
             render_plot: Some(expected_render_plot),
