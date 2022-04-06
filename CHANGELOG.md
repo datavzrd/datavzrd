@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.7.1](https://www.github.com/koesterlab/datavzrd/compare/v1.7.0...v1.7.1) (2022-04-06)
+
+
+### Bug Fixes
+
+* fixed linkout button rendering bug ([933dd34](https://www.github.com/koesterlab/datavzrd/commit/933dd34fc2572ade9536b327a121de8b2063be0e))
+
 ## [1.7.0](https://www.github.com/koesterlab/datavzrd/compare/v1.6.0...v1.7.0) (2022-04-06)
 
 
