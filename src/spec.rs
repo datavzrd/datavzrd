@@ -86,10 +86,18 @@ impl ItemsSpec {
                     if render_columns.custom_plot.is_some() {
                         possible_conflicting.push("custom-plot".to_string());
                     }
-                    if render_columns.plot.is_some() {
-                        possible_conflicting.push("plot".to_string());
+                    if let Some(plot) = &render_columns.plot {
+                        if plot.heatmap.is_some() {
+                            possible_conflicting.push("heatmap".to_string());
+                        } else if plot.tick_plot.is_some() {
+                            possible_conflicting.push("ticks".to_string());
+                        }
                     }
-                    if possible_conflicting.len() > 1 {
+                    if possible_conflicting.len() > 1
+                        && !(possible_conflicting.contains(&"heatmap".to_string())
+                            && possible_conflicting.contains(&"ellipsis".to_string())
+                            && possible_conflicting.len() == 2)
+                    {
                         bail!(ConflictingConfiguration {
                             view: name.to_string(),
                             column: column.to_string(),
