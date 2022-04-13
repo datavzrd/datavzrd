@@ -103,6 +103,7 @@ mod tests {
             report_name: "".to_string(),
             datasets: Default::default(),
             default_view: Some("my-view".to_string()),
+            single_page_threshold: 1000,
             views: Default::default(),
         };
         render_index_file(Path::new("/tmp"), &spec).unwrap();

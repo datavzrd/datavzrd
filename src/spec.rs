@@ -540,6 +540,7 @@ mod tests {
         let expected_config = ItemsSpec {
             datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
             default_view: None,
+            single_page_threshold: 1000,
             views: HashMap::from([(String::from("table-a"), expected_table_spec)]),
             report_name: "my_report".to_string(),
         };
@@ -599,6 +600,7 @@ mod tests {
         let expected_config = ItemsSpec {
             datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
             default_view: Some("table-a".to_string()),
+            single_page_threshold: 1000,
             views: HashMap::from([(String::from("plot-a"), expected_item_spec)]),
             report_name: "".to_string(),
         };
