@@ -1,0 +1,26 @@
+name: Generate example report for downloading
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  generate_example_report:
+    name: Generate example report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Generate report
+        run: cargo run .examples/example-config.yaml --output example-report
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: datavzrd-example-report
+          path: example-report
