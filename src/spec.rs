@@ -241,7 +241,11 @@ lazy_static! {
 
 impl ItemSpecs {
     /// Preprocesses columns with index and regex notation
-    fn preprocess_columns(&mut self, dataset: &DatasetSpecs, single_page_threshold: usize) -> Result<()> {
+    fn preprocess_columns(
+        &mut self,
+        dataset: &DatasetSpecs,
+        single_page_threshold: usize,
+    ) -> Result<()> {
         let mut indexed_keys = HashMap::new();
         let mut reader = csv::ReaderBuilder::new()
             .delimiter(dataset.separator as u8)
