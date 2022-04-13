@@ -33,6 +33,7 @@ $(document).ready(function() {
     $('#table').bootstrapTable({
         height: he,
         columns: bs_table_cols,
+        {% if is_single_page %}pagination: true,{% endif %}
         data: [],
         {% if detail_mode %}detailView: true, detailFormatter: "detailFormatter",{% endif %}
     })
@@ -117,12 +118,34 @@ $(document).ready(function() {
         shortenColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
     {% endfor %}
 
+
+    {% if is_single_page %}$('#table').on('page-change.bs.table', (number, size) => {
+        setTimeout(function (){
+            {% for title, tick_plot in tick_plots %}
+                renderTickPlots{{ loop.index0 }}(additional_headers.length, displayed_columns);
+            {% endfor %}
+            {% for title, link_url in link_urls %}
+                linkUrlColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, table_rows, columns);
+            {% endfor %}
+            {% for title, tick_plot in heatmaps %}
+                colorizeColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
+            {% endfor %}
+            {% for title, ellipsis in ellipses %}
+                shortenColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
+            {% endfor %}
+        }, 0);
+    }){% endif %}
+
 let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
+    {% if is_single_page %}
+    let page_size = $('#table').bootstrapTable('getOptions').pageSize;
+    $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
+    {% endif %}
     let rows = $("table > tbody > tr");
     rows.each(function() {
         if (this.dataset.index == to_be_highlighted) {
             $(this).children().addClass('active-row');
-            $('#table').bootstrapTable('scrollTo', {unit: 'rows', value: to_be_highlighted})
+            $('#table').bootstrapTable('scrollTo', {unit: 'rows', value: to_be_highlighted {% if is_single_page %} % page_size{% endif %}})
         }
     });
 

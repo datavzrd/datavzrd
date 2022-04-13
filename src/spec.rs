@@ -28,6 +28,8 @@ pub(crate) struct ItemsSpec {
     pub(crate) datasets: HashMap<String, DatasetSpecs>,
     #[deref]
     pub(crate) default_view: Option<String>,
+    #[serde(default = "default_single_page_threshold")]
+    pub(crate) single_page_threshold: usize,
     pub(crate) views: HashMap<String, ItemSpecs>,
 }
 
@@ -45,7 +47,7 @@ impl ItemsSpec {
                         })
                     }
                 };
-                spec.preprocess_columns(dataset)?;
+                spec.preprocess_columns(dataset, items_spec.single_page_threshold)?;
             }
         }
         Ok(items_spec)
@@ -177,6 +179,10 @@ impl ItemsSpec {
     }
 }
 
+fn default_single_page_threshold() -> usize {
+    1000_usize
+}
+
 fn default_separator() -> char {
     char::from_str(",").unwrap()
 }
@@ -235,14 +241,17 @@ lazy_static! {
 
 impl ItemSpecs {
     /// Preprocesses columns with index and regex notation
-    fn preprocess_columns(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+    fn preprocess_columns(&mut self, dataset: &DatasetSpecs, single_page_threshold: usize) -> Result<()> {
         let mut indexed_keys = HashMap::new();
         let mut reader = csv::ReaderBuilder::new()
             .delimiter(dataset.separator as u8)
             .from_path(&dataset.path)
             .context(format!("Could not read file with path {:?}", &dataset.path))?;
+        let rows = &reader.records().count();
+        if rows <= &single_page_threshold {
+            self.page_size = *rows;
+        }
         let headers = reader.headers()?;
-
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().iter() {
             let get_first_match_group = |regex: &Regex| {
                 regex
