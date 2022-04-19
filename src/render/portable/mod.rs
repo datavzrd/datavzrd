@@ -85,7 +85,11 @@ impl Renderer for ItemRenderer {
                         .page
                         + 1;
 
-                    let is_single_page = records_length <= self.specs.single_page_threshold;
+                    let is_single_page = if let Some(max_rows) = table.max_in_memory_rows {
+                        records_length <= max_rows
+                    } else {
+                        records_length <= self.specs.max_in_memory_rows
+                    };
 
                     let mut reader = generate_reader()
                         .context(format!("Could not read file with path {:?}", &dataset.path))?;

@@ -29,7 +29,7 @@ pub(crate) struct ItemsSpec {
     #[deref]
     pub(crate) default_view: Option<String>,
     #[serde(default = "default_single_page_threshold")]
-    pub(crate) single_page_threshold: usize,
+    pub(crate) max_in_memory_rows: usize,
     pub(crate) views: HashMap<String, ItemSpecs>,
 }
 
@@ -47,7 +47,7 @@ impl ItemsSpec {
                         })
                     }
                 };
-                spec.preprocess_columns(dataset, items_spec.single_page_threshold)?;
+                spec.preprocess_columns(dataset, items_spec.max_in_memory_rows)?;
             }
         }
         Ok(items_spec)
@@ -229,6 +229,8 @@ pub(crate) struct ItemSpecs {
     pub(crate) render_table: Option<HashMap<String, RenderColumnSpec>>,
     #[serde(default)]
     pub(crate) render_plot: Option<RenderPlotSpec>,
+    #[serde(default)]
+    pub(crate) max_in_memory_rows: Option<usize>,
 }
 
 lazy_static! {
@@ -535,12 +537,13 @@ mod tests {
                 expected_render_columns,
             )])),
             render_plot: None,
+            max_in_memory_rows: None,
         };
 
         let expected_config = ItemsSpec {
             datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
             default_view: None,
-            single_page_threshold: 1000,
+            max_in_memory_rows: 1000,
             views: HashMap::from([(String::from("table-a"), expected_table_spec)]),
             report_name: "my_report".to_string(),
         };
@@ -595,12 +598,13 @@ mod tests {
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
             render_plot: Some(expected_render_plot),
+            max_in_memory_rows: None,
         };
 
         let expected_config = ItemsSpec {
             datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
             default_view: Some("table-a".to_string()),
-            single_page_threshold: 1000,
+            max_in_memory_rows: 1000,
             views: HashMap::from([(String::from("plot-a"), expected_item_spec)]),
             report_name: "".to_string(),
         };
