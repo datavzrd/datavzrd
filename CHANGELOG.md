@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://www.github.com/koesterlab/datavzrd/compare/v1.8.0...v1.9.0) (2022-04-13)
+
+
+### Features
+
+* Allow combining ellipsis with heatmap ([#93](https://www.github.com/koesterlab/datavzrd/issues/93)) ([6a7d8a1](https://www.github.com/koesterlab/datavzrd/commit/6a7d8a1f2ecdcbd27bd4a7f3959a611d445c0142))
+
 ## [1.8.0](https://www.github.com/koesterlab/datavzrd/compare/v1.7.0...v1.8.0) (2022-04-06)
 
 
