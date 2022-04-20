@@ -88,3 +88,15 @@ th .th-inner {
 .num-cell {
     white-space: nowrap;
 }
+
+.form-control {
+    width: calc(100% - 5px) !important;
+}
+
+.filter-control {
+    padding-bottom: 2px;
+}
+
+.fixed-table-container {
+    border: none !important;
+}
