@@ -49,6 +49,10 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
             include_str!("../../../static/bootstrap-table.min.css"),
         ),
         (
+            "bootstrap-table-filter-control.min.js",
+            include_str!("../../../static/bootstrap-table-filter-control.min.js"),
+        ),
+        (
             "bootstrap-table-fixed-columns.min.css",
             include_str!("../../../static/bootstrap-table-fixed-columns.min.css"),
         ),
@@ -99,6 +103,7 @@ mod tests {
             report_name: "".to_string(),
             datasets: Default::default(),
             default_view: Some("my-view".to_string()),
+            max_in_memory_rows: 1000,
             views: Default::default(),
         };
         render_index_file(Path::new("/tmp"), &spec).unwrap();

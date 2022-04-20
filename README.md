@@ -116,6 +116,10 @@ views:
 
 `datasets` defines the different datasets of the report. This is also the place to define links between your individual datasets.
 
+### max-in-memory-rows
+
+`max-in-memory-rows` defines the threshold for the maximum number of rows in memory. If the given dataset exceeds the threshold the data will be split across multiple pages and their html files. Defaults to 1000 rows.
+
 | keyword         | explanation                         | default |
 | --------------- | ----------------------------------- | ------- |
 | path            | The path of the CSV/TSV file        |         |
@@ -135,6 +139,7 @@ views:
 | [render-table](#render-table) | Configuration of individual column rendering                                                                                               |         |
 | [render-plot](#render-plot)   | Configuration of a single plot                                                                                                             |         |
 | hidden                        | Whether or not the view is shown in the menu navigation                                                                                    | false   |
+| max-in-memory-rows            | Overwrites the global settings for [max-in-memory-rows](#max-in-memory-rows)                                                               |         |
 
 ### render-table 
 

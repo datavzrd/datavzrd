@@ -85,6 +85,12 @@ impl Renderer for ItemRenderer {
                         .page
                         + 1;
 
+                    let is_single_page = if let Some(max_rows) = table.max_in_memory_rows {
+                        records_length <= max_rows
+                    } else {
+                        records_length <= self.specs.max_in_memory_rows
+                    };
+
                     let mut reader = generate_reader()
                         .context(format!("Could not read file with path {:?}", &dataset.path))?;
                     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
@@ -144,6 +150,7 @@ impl Renderer for ItemRenderer {
                         dataset.separator,
                         table_specs,
                         additional_headers,
+                        is_single_page,
                     )?;
                     render_plots(
                         &out_path,
@@ -252,6 +259,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_headers: Option<Vec<StringRecord>>,
+    is_single_page: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -380,6 +388,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("detail_mode", &detail_mode);
     context.insert("link_urls", &link_urls);
     context.insert("num", &numeric);
+    context.insert("is_single_page", &is_single_page);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
 

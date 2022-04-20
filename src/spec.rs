@@ -28,6 +28,8 @@ pub(crate) struct ItemsSpec {
     pub(crate) datasets: HashMap<String, DatasetSpecs>,
     #[deref]
     pub(crate) default_view: Option<String>,
+    #[serde(default = "default_single_page_threshold")]
+    pub(crate) max_in_memory_rows: usize,
     pub(crate) views: HashMap<String, ItemSpecs>,
 }
 
@@ -45,7 +47,7 @@ impl ItemsSpec {
                         })
                     }
                 };
-                spec.preprocess_columns(dataset)?;
+                spec.preprocess_columns(dataset, items_spec.max_in_memory_rows)?;
             }
         }
         Ok(items_spec)
@@ -177,6 +179,10 @@ impl ItemsSpec {
     }
 }
 
+fn default_single_page_threshold() -> usize {
+    1000_usize
+}
+
 fn default_separator() -> char {
     char::from_str(",").unwrap()
 }
@@ -223,6 +229,8 @@ pub(crate) struct ItemSpecs {
     pub(crate) render_table: Option<HashMap<String, RenderColumnSpec>>,
     #[serde(default)]
     pub(crate) render_plot: Option<RenderPlotSpec>,
+    #[serde(default)]
+    pub(crate) max_in_memory_rows: Option<usize>,
 }
 
 lazy_static! {
@@ -235,14 +243,21 @@ lazy_static! {
 
 impl ItemSpecs {
     /// Preprocesses columns with index and regex notation
-    fn preprocess_columns(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+    fn preprocess_columns(
+        &mut self,
+        dataset: &DatasetSpecs,
+        single_page_threshold: usize,
+    ) -> Result<()> {
         let mut indexed_keys = HashMap::new();
         let mut reader = csv::ReaderBuilder::new()
             .delimiter(dataset.separator as u8)
             .from_path(&dataset.path)
             .context(format!("Could not read file with path {:?}", &dataset.path))?;
+        let rows = &reader.records().count();
+        if rows <= &single_page_threshold {
+            self.page_size = *rows;
+        }
         let headers = reader.headers()?;
-
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().iter() {
             let get_first_match_group = |regex: &Regex| {
                 regex
@@ -522,11 +537,13 @@ mod tests {
                 expected_render_columns,
             )])),
             render_plot: None,
+            max_in_memory_rows: None,
         };
 
         let expected_config = ItemsSpec {
             datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
             default_view: None,
+            max_in_memory_rows: 1000,
             views: HashMap::from([(String::from("table-a"), expected_table_spec)]),
             report_name: "my_report".to_string(),
         };
@@ -581,11 +598,13 @@ mod tests {
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
             render_plot: Some(expected_render_plot),
+            max_in_memory_rows: None,
         };
 
         let expected_config = ItemsSpec {
             datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
             default_view: Some("table-a".to_string()),
+            max_in_memory_rows: 1000,
             views: HashMap::from([(String::from("plot-a"), expected_item_spec)]),
             report_name: "".to_string(),
         };
