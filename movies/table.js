@@ -6,7 +6,7 @@ $(document).ready(function() {
         $('[data-toggle="tooltip"]').tooltip()
     });
     $(function () {
-    $('[data-toggle="popover"]').popover()
+        $('[data-toggle="popover"]').popover()
     });
     $('#table').bootstrapTable( 'resetView' , {height: window.innerHeight - 200  + 50} );
     $('.modal').on('shown.bs.modal', function () {
@@ -222,6 +222,7 @@ $(document).ready(function() {
             
                 shortenColumn0(additional_headers.length, displayed_columns);
             
+            $('[data-toggle="popover"]').popover()
         }, 0);
     })
 
