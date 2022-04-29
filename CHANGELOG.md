@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.10.3](https://www.github.com/koesterlab/datavzrd/compare/v1.10.2...v1.10.3) (2022-04-29)
+
+
+### Bug Fixes
+
+* Activate popovers after page change ([6319230](https://www.github.com/koesterlab/datavzrd/commit/6319230655b8462e897bb0226724868fbfa3cf6c))
+
 ### [1.10.2](https://www.github.com/koesterlab/datavzrd/compare/v1.10.1...v1.10.2) (2022-04-29)
 
 
