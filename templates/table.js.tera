@@ -109,7 +109,7 @@ $(document).ready(function() {
     {% endfor %}
 
     {% for title, link_url in link_urls %}
-        linkUrlColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, table_rows, columns);
+        linkUrlColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, columns);
     {% endfor %}
 
     {% for title, tick_plot in heatmaps %}
@@ -127,7 +127,7 @@ $(document).ready(function() {
                 renderTickPlots{{ loop.index0 }}(additional_headers.length, displayed_columns);
             {% endfor %}
             {% for title, link_url in link_urls %}
-                linkUrlColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, table_rows, columns);
+                linkUrlColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, columns);
             {% endfor %}
             {% for title, tick_plot in heatmaps %}
                 colorizeColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
@@ -269,9 +269,10 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
 {% endfor %}
 
 {% for title, link_url in link_urls %}
-    function linkUrlColumn{{ loop.index0 }}(ah, dp_columns, table_rows, columns) {
+    function linkUrlColumn{{ loop.index0 }}(ah, dp_columns, columns) {
         let index = dp_columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
         let link_url = "{{ link_url }}";
+        let table_rows = $('#table').bootstrapTable('getData');
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
                 let row = this.parentElement.dataset.index;
