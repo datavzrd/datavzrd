@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.0](https://www.github.com/koesterlab/datavzrd/compare/v1.9.0...v1.10.0) (2022-04-29)
+
+
+### Features
+
+* Allow missing values in other tables with keyword optional ([#98](https://www.github.com/koesterlab/datavzrd/issues/98)) ([b0c7920](https://www.github.com/koesterlab/datavzrd/commit/b0c79200dff3eeff92bd60c6b2f1b2becc971d39))
+* Single page views for small tables ([#95](https://www.github.com/koesterlab/datavzrd/issues/95)) ([ecd7019](https://www.github.com/koesterlab/datavzrd/commit/ecd70198380e0b837632332fb75667b395f76f6c))
+
 ## [1.9.0](https://www.github.com/koesterlab/datavzrd/compare/v1.8.0...v1.9.0) (2022-04-13)
 
 
