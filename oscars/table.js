@@ -347,13 +347,9 @@ function colorizeColumn0(ah, columns) {
     function linkUrlColumn0(ah, dp_columns, table_rows, columns) {
         let index = dp_columns.indexOf("movie") + 1 + 1;
         let link_url = "https://de.wikipedia.org/wiki/{value}";
-        let row = 0;
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
-                if (row < ah) {
-                    row++;
-                    return;
-                }
+                let row = this.parentElement.dataset.index;
                 let value = this.innerHTML;
                 let link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
@@ -368,13 +364,9 @@ function colorizeColumn0(ah, columns) {
     function linkUrlColumn1(ah, dp_columns, table_rows, columns) {
         let index = dp_columns.indexOf("name") + 1 + 1;
         let link_url = "https://lmgtfy.app/?q=Is {name} in {movie}?";
-        let row = 0;
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
-                if (row < ah) {
-                    row++;
-                    return;
-                }
+                let row = this.parentElement.dataset.index;
                 let value = this.innerHTML;
                 let link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
