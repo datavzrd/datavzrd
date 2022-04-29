@@ -272,13 +272,9 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
     function linkUrlColumn{{ loop.index0 }}(ah, dp_columns, table_rows, columns) {
         let index = dp_columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
         let link_url = "{{ link_url }}";
-        let row = 0;
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
-                if (row < ah) {
-                    row++;
-                    return;
-                }
+                let row = this.parentElement.dataset.index;
                 let value = this.innerHTML;
                 let link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
