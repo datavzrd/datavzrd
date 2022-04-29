@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.10.2](https://www.github.com/koesterlab/datavzrd/compare/v1.10.1...v1.10.2) (2022-04-29)
+
+
+### Bug Fixes
+
+* Fix breaking interaction between formatting urls and filtering data ([02e3e5e](https://www.github.com/koesterlab/datavzrd/commit/02e3e5eb628c3e199a79ea5d2f64b12ef3f1fe1d))
+
 ### [1.10.1](https://www.github.com/koesterlab/datavzrd/compare/v1.10.0...v1.10.1) (2022-04-29)
 
 
