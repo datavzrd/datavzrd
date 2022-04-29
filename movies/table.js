@@ -192,9 +192,9 @@ $(document).ready(function() {
     
 
     
-        linkUrlColumn0(additional_headers.length, displayed_columns, table_rows, columns);
+        linkUrlColumn0(additional_headers.length, displayed_columns, columns);
     
-        linkUrlColumn1(additional_headers.length, displayed_columns, table_rows, columns);
+        linkUrlColumn1(additional_headers.length, displayed_columns, columns);
     
 
     
@@ -212,9 +212,9 @@ $(document).ready(function() {
                 renderTickPlots0(additional_headers.length, displayed_columns);
             
             
-                linkUrlColumn0(additional_headers.length, displayed_columns, table_rows, columns);
+                linkUrlColumn0(additional_headers.length, displayed_columns, columns);
             
-                linkUrlColumn1(additional_headers.length, displayed_columns, table_rows, columns);
+                linkUrlColumn1(additional_headers.length, displayed_columns, columns);
             
             
                 colorizeColumn0(additional_headers.length, displayed_columns);
@@ -356,9 +356,10 @@ function colorizeColumn0(ah, columns) {
 
 
 
-    function linkUrlColumn0(ah, dp_columns, table_rows, columns) {
+    function linkUrlColumn0(ah, dp_columns, columns) {
         let index = dp_columns.indexOf("Title") + 1;
         let link_url = "https://de.wikipedia.org/wiki/{value}";
+        let table_rows = $('#table').bootstrapTable('getData');
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
                 let row = this.parentElement.dataset.index;
@@ -373,9 +374,10 @@ function colorizeColumn0(ah, columns) {
         );
     }
 
-    function linkUrlColumn1(ah, dp_columns, table_rows, columns) {
+    function linkUrlColumn1(ah, dp_columns, columns) {
         let index = dp_columns.indexOf("imdbID") + 1;
         let link_url = "https://www.imdb.com/title/{value}/";
+        let table_rows = $('#table').bootstrapTable('getData');
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
                 let row = this.parentElement.dataset.index;
