@@ -4,7 +4,7 @@ let plot_6 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"England","value":29},{"key":"California","value":25},{"key":"New York","value":23},{"key":"Illinois","value":5},{"key":"Connecticut","value":5},{"key":"Pennsylvania","value":5},{"key":"Texas","value":4},{"key":"Massachusetts","value":4},{"key":"New Jersey","value":4},{"key":"Ohio","value":4}]},
+            "data": {"values": [{"key":"England","value":29},{"key":"California","value":25},{"key":"New York","value":23},{"key":"Pennsylvania","value":5},{"key":"Connecticut","value":5},{"key":"Illinois","value":5},{"key":"Ohio","value":4},{"key":"Wisconsin","value":4},{"key":"Massachusetts","value":4},{"key":"New Jersey","value":4}]},
             "mark": "bar",
             "encoding": {
                 "x": {
