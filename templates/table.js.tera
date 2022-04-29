@@ -6,7 +6,7 @@ $(document).ready(function() {
         $('[data-toggle="tooltip"]').tooltip()
     });
     $(function () {
-    $('[data-toggle="popover"]').popover()
+        $('[data-toggle="popover"]').popover()
     });
     $('#table').bootstrapTable( 'resetView' , {height: window.innerHeight - 200 {% if is_single_page %} + 50{% endif %}} );
     $('.modal').on('shown.bs.modal', function () {
@@ -135,6 +135,7 @@ $(document).ready(function() {
             {% for title, ellipsis in ellipses %}
                 shortenColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
             {% endfor %}
+            $('[data-toggle="popover"]').popover()
         }, 0);
     }){% endif %}
 
