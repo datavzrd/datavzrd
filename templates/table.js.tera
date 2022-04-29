@@ -6,7 +6,7 @@ $(document).ready(function() {
         $('[data-toggle="tooltip"]').tooltip()
     });
     $(function () {
-    $('[data-toggle="popover"]').popover()
+        $('[data-toggle="popover"]').popover()
     });
     $('#table').bootstrapTable( 'resetView' , {height: window.innerHeight - 200 {% if is_single_page %} + 50{% endif %}} );
     $('.modal').on('shown.bs.modal', function () {
@@ -193,6 +193,7 @@ function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
     var data_function = {{ custom_plot.data }};
     var specs =  {{ custom_plot.spec }};
     let row = 0;
+    let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             if (row < ah) {
@@ -203,7 +204,7 @@ function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
                 var id = `{{ title | slugify }}-${row}`;
                 this.classList.add("plotcell");
                 const div = document.createElement("div");
-                value = this.innerHTML;
+                let value = table_rows[row]["{{ title }}"];
                 var data = data_function(value);
                 var s = specs;
                 s.data = {};
@@ -220,10 +221,11 @@ function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
 {% endfor %}
 
 {% for title, tick_plot in tick_plots %}
-function renderTickPlots{{ loop.index0 }}(ah, columns, table_rows) {
+function renderTickPlots{{ loop.index0 }}(ah, columns) {
     let index = columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
     var specs =  {{ tick_plot }};
     let row = 0;
+    let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             if (row < ah) {
@@ -234,7 +236,7 @@ function renderTickPlots{{ loop.index0 }}(ah, columns, table_rows) {
             this.classList.add("plotcell");
             const div = document.createElement("div");
             console.log(this.parentElement)
-            value = this.innerHTML;
+            let value = table_rows[row]["{{ title }}"];
             if (value != "") {
                 this.innerHTML = "";
                 this.appendChild(div);
@@ -292,17 +294,14 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
 {% endfor %}
 
 {% for title, link_url in link_urls %}
-    function linkUrlColumn{{ loop.index0 }}(ah, dp_columns, table_rows, columns) {
+    function linkUrlColumn{{ loop.index0 }}(ah, dp_columns, columns) {
         let index = dp_columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
         let link_url = "{{ link_url }}";
-        let row = 0;
+        let table_rows = $('#table').bootstrapTable('getData');
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
-                if (row < ah) {
-                    row++;
-                    return;
-                }
-                value = this.innerHTML;
+                let row = this.parentElement.dataset.index;
+                let value = table_rows[row]["{{ title }}"];
                 let link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
                 {% raw %}link = link.replaceAll(`{${column}}`, table_rows[row][column]);{% endraw %}
@@ -373,11 +372,11 @@ function render(additional_headers, displayed_columns, table_rows, columns) {
 {% endfor %}
 
 {% for title, tick_plot in tick_plots %}
-    renderTickPlots{{ loop.index0 }}(additional_headers.length, displayed_columns, table_rows);
+    renderTickPlots{{ loop.index0 }}(additional_headers.length, displayed_columns);
 {% endfor %}
 
 {% for title, link_url in link_urls %}
-    linkUrlColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, table_rows, columns);
+    linkUrlColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, columns);
 {% endfor %}
 
 {% for title, tick_plot in heatmaps %}

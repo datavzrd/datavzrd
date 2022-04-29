@@ -731,11 +731,15 @@ fn render_linkouts(
             let linked_value = match linked_values.index.get(&row[index]) {
                 Some(value) => value,
                 None => {
-                    bail!(TableLinkingError::NotFound {
-                        not_found: row[index].to_string(),
-                        column: linked_column.to_string(),
-                        table: table.to_string(),
-                    })
+                    if !link_specs.optional {
+                        bail!(TableLinkingError::NotFound {
+                            not_found: row[index].to_string(),
+                            column: linked_column.to_string(),
+                            table: table.to_string(),
+                        })
+                    } else {
+                        continue;
+                    }
                 }
             };
             linkouts.push(Linkout {

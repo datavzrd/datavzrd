@@ -1,5 +1,34 @@
 # Changelog
 
+### [1.10.3](https://www.github.com/koesterlab/datavzrd/compare/v1.10.2...v1.10.3) (2022-04-29)
+
+
+### Bug Fixes
+
+* Activate popovers after page change ([6319230](https://www.github.com/koesterlab/datavzrd/commit/6319230655b8462e897bb0226724868fbfa3cf6c))
+
+### [1.10.2](https://www.github.com/koesterlab/datavzrd/compare/v1.10.1...v1.10.2) (2022-04-29)
+
+
+### Bug Fixes
+
+* Fix breaking interaction between formatting urls and filtering data ([02e3e5e](https://www.github.com/koesterlab/datavzrd/commit/02e3e5eb628c3e199a79ea5d2f64b12ef3f1fe1d))
+
+### [1.10.1](https://www.github.com/koesterlab/datavzrd/compare/v1.10.0...v1.10.1) (2022-04-29)
+
+
+### Bug Fixes
+
+* Fix wrong url linking arguments for single page views ([4f14492](https://www.github.com/koesterlab/datavzrd/commit/4f144926c780ca417e875f55fc6bf0ad89b5446b))
+
+## [1.10.0](https://www.github.com/koesterlab/datavzrd/compare/v1.9.0...v1.10.0) (2022-04-29)
+
+
+### Features
+
+* Allow missing values in other tables with keyword optional ([#98](https://www.github.com/koesterlab/datavzrd/issues/98)) ([b0c7920](https://www.github.com/koesterlab/datavzrd/commit/b0c79200dff3eeff92bd60c6b2f1b2becc971d39))
+* Single page views for small tables ([#95](https://www.github.com/koesterlab/datavzrd/issues/95)) ([ecd7019](https://www.github.com/koesterlab/datavzrd/commit/ecd70198380e0b837632332fb75667b395f76f6c))
+
 ## [1.9.0](https://www.github.com/koesterlab/datavzrd/compare/v1.8.0...v1.9.0) (2022-04-13)
 
 

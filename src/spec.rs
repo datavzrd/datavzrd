@@ -377,6 +377,8 @@ pub(crate) struct LinkSpec {
     pub(crate) view: Option<String>,
     #[serde(default)]
     pub(crate) table_row: Option<String>,
+    #[serde(default)]
+    pub(crate) optional: bool,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -581,6 +583,7 @@ mod tests {
                 column: "test".to_string(),
                 view: Some("other-table".to_string()),
                 table_row: None,
+                optional: false,
             },
         )]);
 
