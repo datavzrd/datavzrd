@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.10.1](https://www.github.com/koesterlab/datavzrd/compare/v1.10.0...v1.10.1) (2022-04-29)
+
+
+### Bug Fixes
+
+* Fix wrong url linking arguments for single page views ([4f14492](https://www.github.com/koesterlab/datavzrd/commit/4f144926c780ca417e875f55fc6bf0ad89b5446b))
+
 ## [1.10.0](https://www.github.com/koesterlab/datavzrd/compare/v1.9.0...v1.10.0) (2022-04-29)
 
 
