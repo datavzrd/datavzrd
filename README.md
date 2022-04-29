@@ -29,6 +29,7 @@ datasets:
       gene expression:
         column: gene
         table-row: table-b/gene
+        optional: true
   table-b:
     path: table-b.csv
     separator: ;
@@ -168,11 +169,12 @@ views:
 
 `links` can configure linkouts between multiple items.
 
-| keyword   | explanation                                                                                                      |
-| --------- | ---------------------------------------------------------------------------------------------------------------- |
-| column    | The column that contains the value used for the linkout                                                          |
-| table-row | Renders as a linkout to the other table highlighting the row in which the gene column has the same value as here |
-| view      | Renders as a link to the given view                                                                              |
+| keyword   | explanation                                                                                                      | default |
+| --------- | ---------------------------------------------------------------------------------------------------------------- | ------- |
+| column    | The column that contains the value used for the linkout                                                          |         |
+| table-row | Renders as a linkout to the other table highlighting the row in which the gene column has the same value as here |         |
+| view      | Renders as a link to the given view                                                                              |         |
+| optional  | Allows missing values in linked tables                                                                           | false   |
 
 ### custom-plot
 
