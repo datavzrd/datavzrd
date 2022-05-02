@@ -109,8 +109,12 @@ $(document).ready(function() {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values":[]},
         "mark": "tick",
-        "encoding": {"x": {"field": "value", "type": "quantitative"}},
-        "params": [{"name": "selection", "select": "interval"}]
+        "encoding": {
+            "x": {"field": "value", "type": "quantitative", "scale": {"type": "linear", "zero": false}},
+            "color": {"condition": {"param": "selection"}, "value": "grey"}
+        },
+        "params": [{"name": "selection", "select": "interval"}],
+        "config": {"axis": {"grid": false}}
         };
 
     let tick_brush = 0;
@@ -118,7 +122,7 @@ $(document).ready(function() {
         if (dp_num[tick_brush]) {
             let plot_data = [];
             for (row of table_rows) {
-                plot_data.push({"value": row[title]});
+                plot_data.push({"value": parseInt(row[title])});
             }
             var s = tick_brush_specs;
             s.data.values = plot_data;
@@ -134,7 +138,7 @@ $(document).ready(function() {
                     $('#table').bootstrapTable('filterBy', {"":""}, {
                         'filterAlgorithm': customFilter
                     })
-                    //render(additional_headers, displayed_columns, table_rows, columns);
+                    console.log(filter_boundaries);
                 });
             })
         }
@@ -144,7 +148,7 @@ $(document).ready(function() {
     function customFilter(row, filters) {
         console.log(filter_boundaries);
         for (title of displayed_columns) {
-            if (filter_boundaries[title] !== undefined) {
+            if (filter_boundaries[title] !== undefined && !$.isEmptyObject(filter_boundaries[title])) {
                 if (row[title] < filter_boundaries[title]['value'][0] || row[title] > filter_boundaries[title]['value'][1]) {
                     return false;
                 }
