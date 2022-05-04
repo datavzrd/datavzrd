@@ -103,6 +103,7 @@ $(document).ready(function() {
 
     {% if is_single_page %}
     let filter_boundaries = {};
+    let filters = {};
     let tick_brush_specs = {
         "width": 100,
         "height": 20,
@@ -119,6 +120,7 @@ $(document).ready(function() {
 
     let tick_brush = 0;
     for (title of displayed_columns) {
+        let index = tick_brush + 1{% if detail_mode %} + 1{% endif %};
         if (dp_num[tick_brush]) {
             let plot_data = [];
             for (row of table_rows) {
@@ -129,27 +131,38 @@ $(document).ready(function() {
             s.name = title;
             s.title = title;
             $(`.bootstrap-table-filter-control-${title}`).parent().empty();
-            let index = tick_brush + 1{% if detail_mode %} + 1{% endif %};
-            $(`.row`).append(`<div id="brush-${tick_brush}"></div>`);
-            // $(`table > thead > tr th:nth-child(${index})`).append(`<div id="brush-${tick_brush}"></div>`);
+            // $(`.row`).append(`<div id="brush-${tick_brush}"></div>`);
+            $(`table > thead > tr th:nth-child(${index})`).append(`<div id="brush-${tick_brush}"></div>`);
             vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s))).then(({spec, view}) => {
                 view.addSignalListener('selection', function(name, value) {
                     filter_boundaries[spec.name] = value;
                     $('#table').bootstrapTable('filterBy', {"":""}, {
                         'filterAlgorithm': customFilter
                     })
-                    console.log(filter_boundaries);
                 });
             })
+        } else {
+            $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="">`);
+            $(`#filter-${index}`).on('input', function(event) {
+                filters[event.target.dataset.title] = $(`#filter-${index}`).val();
+                $('#table').bootstrapTable('filterBy', {"":""}, {
+                    'filterAlgorithm': customFilter
+                })
+            });
         }
         tick_brush++;
     }
 
-    function customFilter(row, filters) {
-        console.log(filter_boundaries);
+    function customFilter(row, filter) {
+        console.log(filters);
         for (title of displayed_columns) {
             if (filter_boundaries[title] !== undefined && !$.isEmptyObject(filter_boundaries[title])) {
                 if (row[title] < filter_boundaries[title]['value'][0] || row[title] > filter_boundaries[title]['value'][1]) {
+                    return false;
+                }
+            }
+            if (filters[title] !== undefined && filters[title] !== "") {
+                if (!row[title].includes(filters[title])) {
                     return false;
                 }
             }
@@ -164,7 +177,7 @@ $(document).ready(function() {
         }, 0);
     }){% endif %}
 
-let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
+    let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
     {% if is_single_page %}
     let page_size = $('#table').bootstrapTable('getOptions').pageSize;
     $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
@@ -239,7 +252,6 @@ function renderTickPlots{{ loop.index0 }}(ah, columns) {
             var id = `{{ title | slugify }}-${row}`;
             this.classList.add("plotcell");
             const div = document.createElement("div");
-            console.log(this.parentElement)
             let value = table_rows[row]["{{ title }}"];
             if (value != "") {
                 this.innerHTML = "";
