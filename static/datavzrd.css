@@ -35,8 +35,9 @@ th {
     width: auto;
 }
 
-.table {
-    margin: auto;
+.bootstrap-table {
+    margin: auto !important;
+    width: fit-content !important;
 }
 
 td {
@@ -90,8 +91,7 @@ th .th-inner {
 }
 
 .form-control {
-    width: calc(100% - 5px) !important;
-    margin: 3px;
+    width: 75px;
     border: none !important;
 }
 

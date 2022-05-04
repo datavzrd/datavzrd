@@ -123,7 +123,7 @@ $(document).ready(function() {
             "color": {"condition": {"param": "selection"}, "value": "grey"}
         },
         "params": [{"name": "selection", "select": "interval"}],
-        "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 8}}
+        "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 6}}
         };
 
     let tick_brush = 0;
@@ -152,7 +152,7 @@ $(document).ready(function() {
                 });
             })
         } else {
-            $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="Filter">`);
+            $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="Filter...">`);
             $(`#filter-${index}`).on('input', function(event) {
                 filters[event.target.dataset.title] = $(`#filter-${index}`).val();
                 $('#table').bootstrapTable('filterBy', {"":""}, {
