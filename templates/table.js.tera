@@ -31,7 +31,6 @@ $(document).ready(function() {
     bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
 
     $('#table').bootstrapTable({
-        height: he,
         columns: bs_table_cols,
         {% if is_single_page %}pagination: true,{% endif %}
         data: [],
@@ -47,7 +46,7 @@ $(document).ready(function() {
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let links = [{% for title, link_url in link_urls %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
 
-    var header_height = (80+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2;
+    var header_height = (80+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2 {% if is_single_page %} + 25{% endif %};
     $('th').css("height", header_height);
 
     var table_rows = [];
@@ -105,17 +104,26 @@ $(document).ready(function() {
     let filter_boundaries = {};
     let filters = {};
     let tick_brush_specs = {
-        "width": 100,
-        "height": 20,
+        "width": 50,
+        "height": 8,
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values":[]},
         "mark": "tick",
         "encoding": {
-            "x": {"field": "value", "type": "quantitative", "scale": {"type": "linear", "zero": false}},
+            "tooltip": {"field": "value", "type": "quantitative"},
+            "x": {
+                "field": "value",
+                "type": "quantitative",
+                "scale": {"type": "linear", "zero": false},
+                "axis": {
+                    "title": null,
+                    "orient": "top"
+                }
+            },
             "color": {"condition": {"param": "selection"}, "value": "grey"}
         },
         "params": [{"name": "selection", "select": "interval"}],
-        "config": {"axis": {"grid": false}}
+        "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 8}}
         };
 
     let tick_brush = 0;
@@ -124,25 +132,27 @@ $(document).ready(function() {
         if (dp_num[tick_brush]) {
             let plot_data = [];
             for (row of table_rows) {
-                plot_data.push({"value": parseInt(row[title])});
+                plot_data.push({"value": parseFloat(row[title])});
             }
             var s = tick_brush_specs;
             s.data.values = plot_data;
             s.name = title;
-            s.title = title;
             $(`.bootstrap-table-filter-control-${title}`).parent().empty();
             // $(`.row`).append(`<div id="brush-${tick_brush}"></div>`);
             $(`table > thead > tr th:nth-child(${index})`).append(`<div id="brush-${tick_brush}"></div>`);
-            vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s))).then(({spec, view}) => {
+            var opt = {"actions": false};
+            vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
                 view.addSignalListener('selection', function(name, value) {
                     filter_boundaries[spec.name] = value;
+                });
+                view.addEventListener('mouseup', function(name, value) {
                     $('#table').bootstrapTable('filterBy', {"":""}, {
                         'filterAlgorithm': customFilter
                     })
                 });
             })
         } else {
-            $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="">`);
+            $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="Filter">`);
             $(`#filter-${index}`).on('input', function(event) {
                 filters[event.target.dataset.title] = $(`#filter-${index}`).val();
                 $('#table').bootstrapTable('filterBy', {"":""}, {
@@ -154,7 +164,6 @@ $(document).ready(function() {
     }
 
     function customFilter(row, filter) {
-        console.log(filters);
         for (title of displayed_columns) {
             if (filter_boundaries[title] !== undefined && !$.isEmptyObject(filter_boundaries[title])) {
                 if (row[title] < filter_boundaries[title]['value'][0] || row[title] > filter_boundaries[title]['value'][1]) {
@@ -192,7 +201,7 @@ $(document).ready(function() {
 
     $( window ).resize(function() {
         var he = $( window ).height() - 150;
-        $('#table').bootstrapTable('resetView',{height: he});
+        // $('#table').bootstrapTable('resetView',{height: he});
     })
 });
 

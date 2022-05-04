@@ -91,6 +91,8 @@ th .th-inner {
 
 .form-control {
     width: calc(100% - 5px) !important;
+    margin: 3px;
+    border: none !important;
 }
 
 .filter-control {
