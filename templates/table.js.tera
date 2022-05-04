@@ -8,7 +8,6 @@ $(document).ready(function() {
     $(function () {
         $('[data-toggle="popover"]').popover()
     });
-    $('#table').bootstrapTable( 'resetView' , {height: window.innerHeight - 200 {% if is_single_page %} + 50{% endif %}} );
     $('.modal').on('shown.bs.modal', function () {
         window.dispatchEvent(new Event('resize'));
     });
@@ -19,8 +18,6 @@ $(document).ready(function() {
     }
 
     var format = {% if formatter %}{{ '{' }}{% for f,v in formatter %}"{{ f }}":{{ v }}{% if not loop.last %},{% endif %}{% endfor %}{{ '}' }}{% else %}[];{% endif %}
-
-    var he = $( window ).height() - 195 {% if is_single_page %} + 50{% endif %};
 
     let bs_table_cols = [{% for title in titles %}{% if display_modes[title] == "normal" %}{
     field: '{{ title }}',
@@ -46,7 +43,7 @@ $(document).ready(function() {
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let links = [{% for title, link_url in link_urls %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
 
-    var header_height = (80+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2 {% if is_single_page %} + 25{% endif %};
+    var header_height = (80+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2 {% if is_single_page %} + 35{% endif %};
     $('th').css("height", header_height);
 
     var table_rows = [];
@@ -411,4 +408,5 @@ function render(additional_headers, displayed_columns, table_rows, columns) {
 {% for title, ellipsis in ellipses %}
     shortenColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
 {% endfor %}
+$('[data-toggle="popover"]').popover()
 }
