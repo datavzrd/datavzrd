@@ -91,6 +91,7 @@ th .th-inner {
 }
 
 .form-control {
+    height: 40px;
     width: 75px;
     border: none !important;
 }
