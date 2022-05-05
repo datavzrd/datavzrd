@@ -114,7 +114,8 @@ $(document).ready(function() {
                 "scale": {"type": "linear", "zero": false},
                 "axis": {
                     "title": null,
-                    "orient": "top"
+                    "orient": "top",
+                    "labelFontWeight": "lighter"
                 }
             },
             "color": {"condition": {"param": "selection"}, "value": "grey"}
@@ -128,14 +129,18 @@ $(document).ready(function() {
         let index = tick_brush + 1{% if detail_mode %} + 1{% endif %};
         if (dp_num[tick_brush]) {
             let plot_data = [];
+            let values = []
             for (row of table_rows) {
                 plot_data.push({"value": parseFloat(row[title])});
+                values.push(parseFloat(row[title]));
             }
+            let min = Math.min(...values);
+            let max = Math.max(...values);
             var s = tick_brush_specs;
             s.data.values = plot_data;
             s.name = title;
+            s.encoding.x.axis.values = [min, max];
             $(`.bootstrap-table-filter-control-${title}`).parent().empty();
-            // $(`.row`).append(`<div id="brush-${tick_brush}"></div>`);
             $(`table > thead > tr th:nth-child(${index})`).append(`<div id="brush-${tick_brush}"></div>`);
             var opt = {"actions": false};
             vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
