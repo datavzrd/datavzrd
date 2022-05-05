@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://www.github.com/koesterlab/datavzrd/compare/v1.10.3...v1.11.0) (2022-05-05)
+
+
+### Features
+
+* Add brush filter for numeric columns ([#103](https://www.github.com/koesterlab/datavzrd/issues/103)) ([6f97429](https://www.github.com/koesterlab/datavzrd/commit/6f9742961cc9123e5ee26ab32d85cee02055f24a))
+
 ### [1.10.3](https://www.github.com/koesterlab/datavzrd/compare/v1.10.2...v1.10.3) (2022-04-29)
 
 
