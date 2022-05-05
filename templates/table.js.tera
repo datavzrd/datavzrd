@@ -25,7 +25,9 @@ $(document).ready(function() {
         formatter: function(value, row, index, field) { if (format["{{ title }}"] != undefined){ return format["{{ title }}"](value, row, index, field) } else { return value } }{% endif %}
     }{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
 
-    bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
+    if (linkouts != null) {
+        bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
+    }
 
     $('#table').bootstrapTable({
         columns: bs_table_cols,
