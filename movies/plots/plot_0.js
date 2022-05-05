@@ -4,7 +4,7 @@ let plot_0 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"The Silence of the Lambs","value":2},{"key":"It Happened One Night","value":2},{"key":"On Golden Pond","value":2},{"key":"Network","value":2},{"key":"Coming Home","value":2},{"key":"The Informer","value":1},{"key":"Howards End","value":1},{"key":"The Iron Lady","value":1},{"key":"The Heiress","value":1},{"key":"Alice Doesn't Live Here Anymore","value":1}]},
+            "data": {"values": [{"key":"Network","value":2},{"key":"It Happened One Night","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"On Golden Pond","value":2},{"key":"Coming Home","value":2},{"key":"Shakespeare in Love","value":1},{"key":"Leaving Las Vegas","value":1},{"key":"Misery","value":1},{"key":"The Rose Tattoo","value":1},{"key":"The Prime of Miss Jean Brodie","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {
