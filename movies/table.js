@@ -8,7 +8,6 @@ $(document).ready(function() {
     $(function () {
         $('[data-toggle="popover"]').popover()
     });
-    $('#table').bootstrapTable( 'resetView' , {height: window.innerHeight - 200  + 50} );
     $('.modal').on('shown.bs.modal', function () {
         window.dispatchEvent(new Event('resize'));
     });
@@ -19,8 +18,6 @@ $(document).ready(function() {
     }
 
     var format = [];
-
-    var he = $( window ).height() - 195  + 50;
 
     let bs_table_cols = [{
     field: 'Title',
@@ -54,11 +51,9 @@ $(document).ready(function() {
     bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
 
     $('#table').bootstrapTable({
-        height: he,
         columns: bs_table_cols,
         pagination: true,
         data: [],
-        filterControl: true,
         
     })
 
@@ -71,9 +66,8 @@ $(document).ready(function() {
     let cp = [];
     let links = ["Title","imdbID"];
 
-    var header_height = (80+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2;
-    $('th').css("height", header_height + 50 );
-    $('.fixed-table-header').css("padding-bottom", header_height + 50 );
+    var header_height = (80+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2  + 35;
+    $('th').css("height", header_height);
 
     var table_rows = [];
     var j = 0;
@@ -185,48 +179,101 @@ $(document).ready(function() {
         }
     });
     addNumClass(dp_num, additional_headers.length);
-    
+
+    render(additional_headers, displayed_columns, table_rows, columns);
 
     
-        renderTickPlots0(additional_headers.length, displayed_columns);
-    
+    let filter_boundaries = {};
+    let filters = {};
+    let tick_brush_specs = {
+        "width": 50,
+        "height": 8,
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {"values":[]},
+        "mark": "tick",
+        "encoding": {
+            "tooltip": {"field": "value", "type": "quantitative"},
+            "x": {
+                "field": "value",
+                "type": "quantitative",
+                "scale": {"type": "linear", "zero": false},
+                "axis": {
+                    "title": null,
+                    "orient": "top",
+                    "labelFontWeight": "lighter"
+                }
+            },
+            "color": {"condition": {"param": "selection"}, "value": "grey"}
+        },
+        "params": [{"name": "selection", "select": "interval"}],
+        "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 6}}
+        };
 
-    
-        linkUrlColumn0(additional_headers.length, displayed_columns, columns);
-    
-        linkUrlColumn1(additional_headers.length, displayed_columns, columns);
-    
+    let tick_brush = 0;
+    for (title of displayed_columns) {
+        let index = tick_brush + 1;
+        if (dp_num[tick_brush]) {
+            let plot_data = [];
+            let values = []
+            for (row of table_rows) {
+                plot_data.push({"value": parseFloat(row[title])});
+                values.push(parseFloat(row[title]));
+            }
+            let min = Math.min(...values);
+            let max = Math.max(...values);
+            var s = tick_brush_specs;
+            s.data.values = plot_data;
+            s.name = title;
+            s.encoding.x.axis.values = [min, max];
+            $(`.bootstrap-table-filter-control-${title}`).parent().empty();
+            $(`table > thead > tr th:nth-child(${index})`).append(`<div id="brush-${tick_brush}"></div>`);
+            var opt = {"actions": false};
+            vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
+                view.addSignalListener('selection', function(name, value) {
+                    filter_boundaries[spec.name] = value;
+                });
+                view.addEventListener('mouseup', function(name, value) {
+                    $('#table').bootstrapTable('filterBy', {"":""}, {
+                        'filterAlgorithm': customFilter
+                    })
+                });
+            })
+        } else {
+            $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="Filter...">`);
+            $(`#filter-${index}`).on('input', function(event) {
+                filters[event.target.dataset.title] = $(`#filter-${index}`).val();
+                $('#table').bootstrapTable('filterBy', {"":""}, {
+                    'filterAlgorithm': customFilter
+                })
+            });
+        }
+        tick_brush++;
+    }
 
+    function customFilter(row, filter) {
+        for (title of displayed_columns) {
+            if (filter_boundaries[title] !== undefined && !$.isEmptyObject(filter_boundaries[title])) {
+                if (row[title] < filter_boundaries[title]['value'][0] || row[title] > filter_boundaries[title]['value'][1]) {
+                    return false;
+                }
+            }
+            if (filters[title] !== undefined && filters[title] !== "") {
+                if (!row[title].includes(filters[title])) {
+                    return false;
+                }
+            }
+        }
+        return true
+    }
     
-        colorizeColumn0(additional_headers.length, displayed_columns);
-    
-
-    
-        shortenColumn0(additional_headers.length, displayed_columns);
-    
-
 
     $('#table').on('page-change.bs.table', (number, size) => {
         setTimeout(function (){
-            
-                renderTickPlots0(additional_headers.length, displayed_columns);
-            
-            
-                linkUrlColumn0(additional_headers.length, displayed_columns, columns);
-            
-                linkUrlColumn1(additional_headers.length, displayed_columns, columns);
-            
-            
-                colorizeColumn0(additional_headers.length, displayed_columns);
-            
-            
-                shortenColumn0(additional_headers.length, displayed_columns);
-            
-            $('[data-toggle="popover"]').popover()
+        render(additional_headers, displayed_columns, table_rows, columns);
         }, 0);
     })
 
-let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
+    let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
     
     let page_size = $('#table').bootstrapTable('getOptions').pageSize;
     $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
@@ -241,7 +288,7 @@ let to_be_highlighted = parseInt(window.location.href.toString().split("highligh
 
     $( window ).resize(function() {
         var he = $( window ).height() - 150;
-        $('#table').bootstrapTable('resetView',{height: he});
+        // $('#table').bootstrapTable('resetView',{height: he});
     })
 });
 
@@ -290,6 +337,7 @@ function renderTickPlots0(ah, columns) {
     }
 };
     let row = 0;
+    let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             if (row < ah) {
@@ -299,7 +347,7 @@ function renderTickPlots0(ah, columns) {
             var id = `imdbrating-${row}`;
             this.classList.add("plotcell");
             const div = document.createElement("div");
-            let value = this.innerHTML;
+            let value = table_rows[row]["imdbRating"];
             if (value != "") {
                 this.innerHTML = "";
                 this.appendChild(div);
@@ -364,7 +412,7 @@ function colorizeColumn0(ah, columns) {
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
                 let row = this.parentElement.dataset.index;
-                let value = this.innerHTML;
+                let value = table_rows[row]["Title"];
                 let link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
                 link = link.replaceAll(`{${column}}`, table_rows[row][column]);
@@ -382,7 +430,7 @@ function colorizeColumn0(ah, columns) {
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
                 let row = this.parentElement.dataset.index;
-                let value = this.innerHTML;
+                let value = table_rows[row]["imdbID"];
                 let link = link_url.replaceAll("{value}", value);
                 for (column of columns) {
                 link = link.replaceAll(`{${column}}`, table_rows[row][column]);
@@ -420,4 +468,27 @@ function addNumClass(dp_num, ah) {
             );
         }
     }
+}
+
+function render(additional_headers, displayed_columns, table_rows, columns) {
+
+
+
+    renderTickPlots0(additional_headers.length, displayed_columns);
+
+
+
+    linkUrlColumn0(additional_headers.length, displayed_columns, columns);
+
+    linkUrlColumn1(additional_headers.length, displayed_columns, columns);
+
+
+
+    colorizeColumn0(additional_headers.length, displayed_columns);
+
+
+
+    shortenColumn0(additional_headers.length, displayed_columns);
+
+$('[data-toggle="popover"]').popover()
 }
