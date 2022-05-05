@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.11.1](https://www.github.com/koesterlab/datavzrd/compare/v1.11.0...v1.11.1) (2022-05-05)
+
+
+### Bug Fixes
+
+* Remove linkouts from table if non-existent ([#106](https://www.github.com/koesterlab/datavzrd/issues/106)) ([9430a78](https://www.github.com/koesterlab/datavzrd/commit/9430a786e7114bda0f997fca8ede42896dee0eaa))
+
 ## [1.11.0](https://www.github.com/koesterlab/datavzrd/compare/v1.10.3...v1.11.0) (2022-05-05)
 
 
