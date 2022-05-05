@@ -65,8 +65,8 @@ $(document).ready(function() {
     let additional_headers = [];
     let columns = ["Title","Year","Rated","Released","Runtime","Genre","Director","imdbRating","imdbID"];
     let displayed_columns = ["Title","Year","Rated","Released","Runtime","Genre","Director","imdbRating","imdbID"];
-    let num = [false,false,false,false,false,false,false,true,false];
-    let dp_num = [false,false,false,false,false,false,false,true,false];
+    let num = [false,true,false,false,false,false,false,true,false];
+    let dp_num = [false,true,false,false,false,false,false,true,false];
     let ticks = ["imdbRating"];
     let cp = [];
     let links = ["Title","imdbID"];
@@ -320,7 +320,7 @@ function renderTickPlots0(ah, columns) {
 function colorizeColumn0(ah, columns) {
     let index = columns.indexOf("Rated") + 1;
     var ordinal = vega.scale('ordinal');
-    var scale = ordinal().domain(["TV-G","Unrated","Passed","PG-13","R","Approved","Not Rated","M/PG","G","TV-MA","PG","N/A","M"]).range(vega.scheme('accent'));
+    var scale = ordinal().domain(["Unrated","Passed","PG-13","R","Approved","Not Rated","M/PG","G","TV-MA","PG","N/A","M"]).range(vega.scheme('accent'));
     let row = 0;
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
