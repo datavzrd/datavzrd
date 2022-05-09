@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://www.github.com/koesterlab/datavzrd/compare/v1.11.1...v1.12.0) (2022-05-09)
+
+
+### Features
+
+* New keyword aux-domain-columns ([#108](https://www.github.com/koesterlab/datavzrd/issues/108)) ([086f91b](https://www.github.com/koesterlab/datavzrd/commit/086f91b54b454c9899c7e113a23ba4fa1b6e5ef4))
+
 ### [1.11.1](https://www.github.com/koesterlab/datavzrd/compare/v1.11.0...v1.11.1) (2022-05-05)
 
 
