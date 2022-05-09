@@ -200,21 +200,23 @@ views:
 
 `ticks` defines the attributes of a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values.
 
-| keyword | explanation                                                                                                                       |
-| ------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| scale   | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick plot                                            |
-| domain  | Defines the domain of the tick plot. If not present datavzrd will automatically use the minimum and maximum values for the domain |
+| keyword            | explanation                                                                                                                       |
+|--------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| scale              | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick plot                                            |
+| domain             | Defines the domain of the tick plot. If not present datavzrd will automatically use the minimum and maximum values for the domain |
+| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the tick plot.                |
 
 ### heatmap
 
 `heatmap` defines the attributes of a heatmap for numeric or nominal values.
 
-| keyword      | explanation                                                                                                         |
-| ------------ | ------------------------------------------------------------------------------------------------------------------- |
-| scale        | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the heatmap                                |
-| color-scheme | Defines the [color-scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap for nominal values |
-| range        | Defines the color range of the heatmap as a list                                                                    |
-| domain       | Defines the domain of the heatmap as a list                                                                         |
+| keyword            | explanation                                                                                                                                        |
+|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| scale              | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the heatmap                                                               |
+| color-scheme       | Defines the [color-scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap for nominal values                                |
+| range              | Defines the color range of the heatmap as a list                                                                                                   |
+| domain             | Defines the domain of the heatmap as a list                                                                                                        |
+| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Only allowed for numeric columns. |
 
 ## Authors
 

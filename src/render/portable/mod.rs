@@ -544,6 +544,13 @@ fn render_tick_plot(
 
     let (min, max) = if let Some(domain) = &tick_plot.domain {
         (domain[0], domain[1])
+    } else if let Some(aux_domain_columns) = &tick_plot.aux_domain_columns {
+        let columns = aux_domain_columns
+            .iter()
+            .map(|s| s.to_string())
+            .chain(vec![title.to_string()].into_iter())
+            .collect();
+        get_min_max_multiple_columns(csv_path, separator, header_rows, columns)?
     } else {
         get_min_max(csv_path, separator, column_index, header_rows)?
     };
@@ -590,8 +597,58 @@ fn get_column_domain(
             .unique()
             .collect_vec())
         .to_string()),
-        _ => Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string()),
+        _ => {
+            if let Some(aux_domain_columns) = &heatmap.aux_domain_columns {
+                let columns = aux_domain_columns
+                    .iter()
+                    .map(|s| s.to_string())
+                    .chain(vec![title.to_string()].into_iter())
+                    .collect();
+                Ok(json!(get_min_max_multiple_columns(
+                    csv_path,
+                    separator,
+                    header_rows,
+                    columns
+                )?)
+                .to_string())
+            } else {
+                Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string())
+            }
+        }
     }
+}
+
+/// Returns the minimum and maximum for multiple given columns
+fn get_min_max_multiple_columns(
+    csv_path: &Path,
+    separator: char,
+    header_rows: usize,
+    columns: Vec<String>,
+) -> Result<(f32, f32)> {
+    let mut mins = Vec::new();
+    let mut maxs = Vec::new();
+    for column in columns {
+        let mut reader = csv::ReaderBuilder::new()
+            .delimiter(separator as u8)
+            .from_path(csv_path)
+            .context(format!("Could not read file with path {:?}", csv_path))?;
+        let column_index = reader.headers().map(|s| {
+            s.iter()
+                .position(|t| t == column)
+                .context(ColumnError::NotFound {
+                    column: column.to_string(),
+                    path: csv_path.to_str().unwrap().to_string(),
+                })
+                .unwrap()
+        })?;
+        let (min, max) = get_min_max(csv_path, separator, column_index, header_rows)?;
+        mins.push(min);
+        maxs.push(max);
+    }
+    Ok((
+        mins.into_iter().reduce(f32::min).unwrap(),
+        maxs.into_iter().reduce(f32::max).unwrap(),
+    ))
 }
 
 /// Renders a plot page from given render-plot spec

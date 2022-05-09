@@ -419,11 +419,14 @@ pub(crate) struct PlotSpec {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct TickPlot {
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: String,
     #[serde(default)]
     pub(crate) domain: Option<Vec<f32>>,
+    #[serde(default)]
+    pub(crate) aux_domain_columns: Option<Vec<String>>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -437,9 +440,11 @@ pub(crate) struct Heatmap {
     color_range: Vec<String>,
     #[serde(default)]
     pub(crate) domain: Option<Vec<String>>,
+    #[serde(default)]
+    pub(crate) aux_domain_columns: Option<Vec<String>>,
 }
 
-static SCALE_TYPES: [&'static str; 14] = [
+static SCALE_TYPES: [&str; 14] = [
     "linear",
     "pow",
     "sqrt",
