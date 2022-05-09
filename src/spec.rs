@@ -12,6 +12,7 @@ use log::warn;
 use regex::Regex;
 use serde::Deserialize;
 use serde::Serialize;
+use std::borrow::BorrowMut;
 use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
@@ -258,6 +259,12 @@ impl ItemSpecs {
             self.page_size = *rows;
         }
         let headers = reader.headers()?;
+        if let Some(render_table) = self.render_table.borrow_mut() {
+            for (_, render_column_specs) in render_table.iter_mut() {
+                render_column_specs.preprocess(dataset)?;
+            }
+        }
+        dbg!(&self.render_table);
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().iter() {
             let get_first_match_group = |regex: &Regex| {
                 regex
@@ -346,6 +353,31 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) ellipsis: Option<u32>,
 }
 
+impl RenderColumnSpec {
+    fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+        if let Some(plot) = &mut self.plot {
+            if let Some(ticks) = &mut plot.tick_plot {
+                ticks.preprocess(dataset)?;
+            } else if let Some(heatmap) = &mut plot.heatmap {
+                heatmap.preprocess(dataset)?;
+            }
+        }
+        Ok(())
+    }
+}
+
+impl TickPlot {
+    fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+        self.aux_domain_columns.preprocess(dataset)
+    }
+}
+
+impl Heatmap {
+    fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+        self.aux_domain_columns.preprocess(dataset)
+    }
+}
+
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct RenderPlotSpec {
@@ -426,7 +458,7 @@ pub(crate) struct TickPlot {
     #[serde(default)]
     pub(crate) domain: Option<Vec<f32>>,
     #[serde(default)]
-    pub(crate) aux_domain_columns: Option<Vec<String>>,
+    pub(crate) aux_domain_columns: AuxDomainColumns,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -441,7 +473,52 @@ pub(crate) struct Heatmap {
     #[serde(default)]
     pub(crate) domain: Option<Vec<String>>,
     #[serde(default)]
-    pub(crate) aux_domain_columns: Option<Vec<String>>,
+    pub(crate) aux_domain_columns: AuxDomainColumns,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+pub struct AuxDomainColumns(pub(crate) Option<Vec<String>>);
+
+impl Default for AuxDomainColumns {
+    fn default() -> Self {
+        AuxDomainColumns(None)
+    }
+}
+
+impl AuxDomainColumns {
+    fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+        let mut reader = csv::ReaderBuilder::new()
+            .delimiter(dataset.separator as u8)
+            .from_path(&dataset.path)
+            .context(format!("Could not read file with path {:?}", &dataset.path))?;
+        let headers = reader.headers()?;
+        let mut new_tick_plot_aux_domain_columns = Vec::new();
+        if let Some(columns) = &self.0 {
+            for column in columns {
+                if REGEX_RE.is_match(column) {
+                    let pattern = REGEX_RE
+                        .captures_iter(column)
+                        .collect_vec()
+                        .pop()
+                        .unwrap()
+                        .get(1)
+                        .unwrap()
+                        .as_str();
+                    let regex = Regex::new(pattern).context(format!(
+                        "Failed to parse provided column regex {column}.",
+                        column = column
+                    ))?;
+                    for header in headers.iter().filter(|header| regex.is_match(header)) {
+                        new_tick_plot_aux_domain_columns.push(header.to_string());
+                    }
+                } else {
+                    new_tick_plot_aux_domain_columns.push(column.to_string());
+                }
+            }
+        }
+        self.0 = Some(new_tick_plot_aux_domain_columns);
+        Ok(())
+    }
 }
 
 static SCALE_TYPES: [&str; 14] = [
@@ -509,8 +586,9 @@ pub enum ConfigError {
 #[cfg(test)]
 mod tests {
     use crate::spec::{
-        default_links, default_render_table, DatasetSpecs, ItemSpecs, ItemsSpec, LinkSpec,
-        RenderColumnSpec, RenderPlotSpec,
+        default_display_mode, default_links, default_render_table, default_single_page_threshold,
+        AuxDomainColumns, DatasetSpecs, ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec,
+        RenderPlotSpec, TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -810,5 +888,68 @@ mod tests {
             oscar_config.get("birth_y").unwrap().to_owned(),
             expected_render_column_spec
         );
+    }
+
+    #[test]
+    fn test_aux_domain_columns_preprocessing() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: .examples/data/oscars.csv
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        age:
+                            plot:
+                                ticks:
+                                    scale: linear
+                                    aux-domain-columns:
+                                        - regex('birth_.+')
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        let mut item_specs = config.views.get("table-a").unwrap().clone();
+        item_specs
+            .preprocess_columns(
+                config.datasets.get("table-a").unwrap(),
+                default_single_page_threshold(),
+            )
+            .unwrap();
+        let expected_ticks = TickPlot {
+            scale_type: "linear".to_string(),
+            domain: None,
+            aux_domain_columns: AuxDomainColumns(Some(vec![
+                "birth_mo".to_string(),
+                "birth_d".to_string(),
+                "birth_y".to_string(),
+            ])),
+        };
+        let expected_plot = PlotSpec {
+            tick_plot: Some(expected_ticks),
+            heatmap: None,
+        };
+        let expected_render_columns = RenderColumnSpec {
+            optional: false,
+            custom: None,
+            display_mode: default_display_mode(),
+            link_to_url: None,
+            plot: Some(expected_plot),
+            custom_plot: None,
+            ellipsis: None,
+        };
+        let expected_item_specs = ItemSpecs {
+            hidden: false,
+            dataset: "table-a".to_string(),
+            page_size: 184_usize,
+            description: None,
+            render_table: Some(HashMap::from([(
+                "age".to_string(),
+                expected_render_columns,
+            )])),
+            render_plot: None,
+            max_in_memory_rows: None,
+        };
+
+        assert_eq!(item_specs, expected_item_specs);
     }
 }
