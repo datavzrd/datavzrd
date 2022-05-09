@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.0](https://www.github.com/koesterlab/datavzrd/compare/v1.12.0...v1.13.0) (2022-05-09)
+
+
+### Features
+
+* Allow usage of regexes for aux-domain-columns ([#111](https://www.github.com/koesterlab/datavzrd/issues/111)) ([dc54c85](https://www.github.com/koesterlab/datavzrd/commit/dc54c850fadd09f25295be504b83852b7e74b173))
+* Validate given default-view ([#110](https://www.github.com/koesterlab/datavzrd/issues/110)) ([fc52714](https://www.github.com/koesterlab/datavzrd/commit/fc5271402d887b3b66635ccb8c0fe7d33fbb491c))
+
 ## [1.12.0](https://www.github.com/koesterlab/datavzrd/compare/v1.11.1...v1.12.0) (2022-05-09)
 
 
