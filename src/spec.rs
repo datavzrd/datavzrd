@@ -55,6 +55,13 @@ impl ItemsSpec {
     }
 
     pub(crate) fn validate(&self) -> Result<()> {
+        if let Some(view) = &self.default_view {
+            if self.views.get(view).is_none() {
+                bail!(ConfigError::MissingDefaultView {
+                    view: view.to_string()
+                })
+            }
+        }
         for (name, view) in &self.views {
             if self.datasets.get(&view.dataset).is_none() {
                 bail!(ConfigError::MissingDataset {
@@ -550,6 +557,8 @@ pub enum ConfigError {
     DuplicateColumn { column: String, table_path: PathBuf },
     #[error("Could not find dataset named {dataset:?} in given config.")]
     MissingDataset { dataset: String },
+    #[error("Could not find default view named {view:?} in given config.")]
+    MissingDefaultView { view: String },
     #[error("View {view:?} consists of a configuration with render-plot and render-table present while only one should be present. If you want both please define two separate views.")]
     PlotAndTablePresentConfiguration { view: String },
     #[error("Found conflicting render-table configuration for column {column:?} of view {view:?}. The conflicting configuration are {conflict:?}.")]
@@ -728,10 +737,25 @@ mod tests {
         let raw_config = r#"
             datasets:
                 table-a:
-                    path: test.tsv
+                    path: tests/data/uniform_datatypes.csv
             views:
                 plot-b:
                     dataset: table-b
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_missing_default_view_config_validation() {
+        let raw_config = r#"
+            default-view: table-b
+            datasets:
+                table-a:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                table-a:
+                    dataset: table-a
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_err());
@@ -800,7 +824,7 @@ mod tests {
         let raw_config = r#"
             datasets:
                 table-a:
-                    path: data.csv
+                    path: tests/data/uniform_datatypes.csv
             views:
                 table-a:
                     dataset: table-a
@@ -820,7 +844,7 @@ mod tests {
         let raw_config = r#"
             datasets:
                 table-a:
-                    path: data.csv
+                    path: tests/data/uniform_datatypes.csv
             views:
                 table-a:
                     dataset: table-a
@@ -839,7 +863,7 @@ mod tests {
         let raw_config = r#"
             datasets:
                 table-a:
-                    path: data.csv
+                    path: tests/data/uniform_datatypes.csv
             views:
                 table-a:
                     dataset: table-a
