@@ -481,7 +481,7 @@ pub struct AuxDomainColumns(pub(crate) Option<Vec<String>>);
 
 impl Default for AuxDomainColumns {
     fn default() -> Self {
-        AuxDomainColumns(Some(vec![]))
+        AuxDomainColumns(None)
     }
 }
 
