@@ -544,7 +544,7 @@ fn render_tick_plot(
 
     let (min, max) = if let Some(domain) = &tick_plot.domain {
         (domain[0], domain[1])
-    } else if let Some(aux_domain_columns) = &tick_plot.aux_domain_columns {
+    } else if let Some(aux_domain_columns) = &tick_plot.aux_domain_columns.0 {
         let columns = aux_domain_columns
             .iter()
             .map(|s| s.to_string())
@@ -598,7 +598,7 @@ fn get_column_domain(
             .collect_vec())
         .to_string()),
         _ => {
-            if let Some(aux_domain_columns) = &heatmap.aux_domain_columns {
+            if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
                 let columns = aux_domain_columns
                     .iter()
                     .map(|s| s.to_string())
