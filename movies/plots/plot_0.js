@@ -4,7 +4,7 @@ let plot_0 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"Network","value":2},{"key":"On Golden Pond","value":2},{"key":"Coming Home","value":2},{"key":"It Happened One Night","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"Yankee Doodle Dandy","value":1},{"key":"Two Women","value":1},{"key":"The Miracle Worker","value":1},{"key":"The King and I","value":1},{"key":"Charly","value":1}]},
+            "data": {"values": [{"key":"The Silence of the Lambs","value":2},{"key":"It Happened One Night","value":2},{"key":"Coming Home","value":2},{"key":"On Golden Pond","value":2},{"key":"Network","value":2},{"key":"Dead Man Walking","value":1},{"key":"Monster's Ball","value":1},{"key":"The Lion in Winter","value":1},{"key":"Boys Town","value":1},{"key":"Training Day","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {
