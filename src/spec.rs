@@ -271,7 +271,6 @@ impl ItemSpecs {
                 render_column_specs.preprocess(dataset)?;
             }
         }
-        dbg!(&self.render_table);
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().iter() {
             let get_first_match_group = |regex: &Regex| {
                 regex
