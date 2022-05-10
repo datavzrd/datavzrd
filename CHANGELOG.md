@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.13.2](https://www.github.com/koesterlab/datavzrd/compare/v1.13.1...v1.13.2) (2022-05-10)
+
+
+### Bug Fixes
+
+* Fix brush filter for columns including whitespaces ([#115](https://www.github.com/koesterlab/datavzrd/issues/115)) ([3cb2d23](https://www.github.com/koesterlab/datavzrd/commit/3cb2d23bed58b3cff21b088ffb4b092bfcbd4f97))
+
 ### [1.13.1](https://www.github.com/koesterlab/datavzrd/compare/v1.13.0...v1.13.1) (2022-05-10)
 
 
