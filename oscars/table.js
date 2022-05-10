@@ -237,7 +237,6 @@ $(document).ready(function() {
             s.data.values = plot_data;
             s.name = title;
             s.encoding.x.axis.values = [min, max];
-            $(`.bootstrap-table-filter-control-${title}`).parent().empty();
             $(`table > thead > tr th:nth-child(${index})`).append(`<div id="brush-${tick_brush}"></div>`);
             var opt = {"actions": false};
             vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
