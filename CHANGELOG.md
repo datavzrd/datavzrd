@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.13.1](https://www.github.com/koesterlab/datavzrd/compare/v1.13.0...v1.13.1) (2022-05-10)
+
+
+### Bug Fixes
+
+* Remove debug statement ([9e3790b](https://www.github.com/koesterlab/datavzrd/commit/9e3790ba9f509c71f6e752097b66919d8f47126f))
+* Show error messages from config validation properly ([#113](https://www.github.com/koesterlab/datavzrd/issues/113)) ([11ca681](https://www.github.com/koesterlab/datavzrd/commit/11ca681d33621c76eafc675d933d6729e91a69d5))
+
 ## [1.13.0](https://www.github.com/koesterlab/datavzrd/compare/v1.12.0...v1.13.0) (2022-05-09)
 
 
