@@ -14,6 +14,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::BorrowMut;
 use std::collections::HashMap;
+use std::fmt::Debug;
 use std::fs;
 use std::fs::File;
 use std::io::Read;
@@ -35,8 +36,11 @@ pub(crate) struct ItemsSpec {
 }
 
 impl ItemsSpec {
-    pub(crate) fn from_file<P: AsRef<Path>>(path: P) -> Result<ItemsSpec> {
-        let config_file = fs::read_to_string(path)?;
+    pub(crate) fn from_file<P: AsRef<Path> + Debug>(path: P) -> Result<ItemsSpec> {
+        let config_file = fs::read_to_string(&path).context(format!(
+            "Could not find config file under given path {:?}",
+            &path
+        ))?;
         let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)?;
         for (_, spec) in items_spec.views.iter_mut() {
             if spec.render_table.is_some() {
