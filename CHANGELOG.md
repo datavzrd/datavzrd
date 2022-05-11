@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.14.1](https://www.github.com/koesterlab/datavzrd/compare/v1.14.0...v1.14.1) (2022-05-11)
+
+
+### Bug Fixes
+
+* Fix clear filter button ([91d3ab2](https://www.github.com/koesterlab/datavzrd/commit/91d3ab2607dbd4dab9fb1f02080b3fc355b6fcda))
+
 ## [1.14.0](https://www.github.com/koesterlab/datavzrd/compare/v1.13.3...v1.14.0) (2022-05-11)
 
 
