@@ -223,7 +223,9 @@ $(document).ready(function() {
             }
             let min = Math.min(...values);
             let max = Math.max(...values);
+            let legend_tick_length = min.toString().length + max.toString().length;
             var s = tick_brush_specs;
+            s.encoding.x.axis.labels = legend_tick_length < 8;
             s.data.values = plot_data;
             s.name = title;
             s.encoding.x.axis.values = [min, max];
