@@ -154,12 +154,17 @@ $(document).ready(function() {
                }
                let legend_tick_length = min.toString().length + max.toString().length;
                var s = tick_brush_specs;
-               s.encoding.x.axis.labels = legend_tick_length < 8;
+               let has_labels = legend_tick_length < 8;
+               s.encoding.x.axis.labels = has_labels;
                s.data.values = plot_data;
                s.name = title;
                s.encoding.x.axis.values = [min, max];
                s.encoding.x.scale.domain = [min, max];
-               $(`table > thead > tr th:nth-child(${index})`).append(`<div id="brush-${tick_brush}"></div>`);
+               let brush_class = "";
+               if (!has_labels) {
+                   brush_class = "no-labels";
+               }
+               $(`table > thead > tr th:nth-child(${index})`).append(`<div class="filter-brush-container"><div class="filter-brush ${brush_class}" id="brush-${tick_brush}"></div></div>`);
                var opt = {"actions": false};
                vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
                    view.addSignalListener('selection', function(name, value) {
