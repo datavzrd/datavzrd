@@ -486,14 +486,8 @@ pub(crate) struct Heatmap {
     pub(crate) aux_domain_columns: AuxDomainColumns,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct AuxDomainColumns(pub(crate) Option<Vec<String>>);
-
-impl Default for AuxDomainColumns {
-    fn default() -> Self {
-        AuxDomainColumns(None)
-    }
-}
 
 impl AuxDomainColumns {
     fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
