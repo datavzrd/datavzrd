@@ -228,6 +228,12 @@ $(document).ready(function() {
                 min = brush_domains[title][0];
                 max = brush_domains[title][1];
             }
+            if (Number.isInteger(min)) {
+                min = parseInt(min.toString());
+            }
+            if (Number.isInteger(max)) {
+                max = parseInt(max.toString());
+            }
             let legend_tick_length = min.toString().length + max.toString().length;
             var s = tick_brush_specs;
             s.encoding.x.axis.labels = legend_tick_length < 8;
