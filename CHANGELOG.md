@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.13.3](https://www.github.com/koesterlab/datavzrd/compare/v1.13.2...v1.13.3) (2022-05-11)
+
+
+### Bug Fixes
+
+* Limit maximum characters in axis labels for brush filters ([#117](https://www.github.com/koesterlab/datavzrd/issues/117)) ([504fc75](https://www.github.com/koesterlab/datavzrd/commit/504fc75ea992404f64ee286818dca6993684ca7b))
+
 ### [1.13.2](https://www.github.com/koesterlab/datavzrd/compare/v1.13.1...v1.13.2) (2022-05-10)
 
 
