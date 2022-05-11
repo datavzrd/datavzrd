@@ -221,6 +221,7 @@ $(document).ready(function() {
         "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 6}}
         };
 
+    let brush_domains = {"age":[20.0,100.0]};
     let tick_brush = 0;
     for (title of displayed_columns) {
         let index = tick_brush + 1 + 1;
@@ -233,12 +234,17 @@ $(document).ready(function() {
             }
             let min = Math.min(...values);
             let max = Math.max(...values);
+            if (brush_domains[title] != undefined) {
+                min = brush_domains[title][0];
+                max = brush_domains[title][1];
+            }
             let legend_tick_length = min.toString().length + max.toString().length;
             var s = tick_brush_specs;
             s.encoding.x.axis.labels = legend_tick_length < 8;
             s.data.values = plot_data;
             s.name = title;
             s.encoding.x.axis.values = [min, max];
+            s.encoding.x.scale.domain = [min, max];
             $(`table > thead > tr th:nth-child(${index})`).append(`<div id="brush-${tick_brush}"></div>`);
             var opt = {"actions": false};
             vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
@@ -325,7 +331,7 @@ function renderTickPlots0(ah, columns) {
         "x": {
             "field": "age",
             "type": "quantitative",
-            "scale": {"type": "linear","domain": [21, 80]},
+            "scale": {"type": "linear","domain": [20, 100]},
             "axis": {
                 "title": null,
                 "ticks": false,
