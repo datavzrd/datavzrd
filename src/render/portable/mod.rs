@@ -313,6 +313,37 @@ fn render_table_javascript<P: AsRef<Path>>(
         })
         .collect();
 
+    let brush_domains: HashMap<String, Vec<f32>> = render_columns
+        .iter()
+        .filter(|(_, k)| k.plot.is_some())
+        .filter(|(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some())
+        .filter(|(_, k)| {
+            k.plot
+                .as_ref()
+                .unwrap()
+                .tick_plot
+                .as_ref()
+                .unwrap()
+                .domain
+                .is_some()
+        })
+        .map(|(title, k)| {
+            (
+                title.to_string(),
+                k.plot
+                    .as_ref()
+                    .unwrap()
+                    .tick_plot
+                    .as_ref()
+                    .unwrap()
+                    .domain
+                    .as_ref()
+                    .unwrap()
+                    .to_vec(),
+            )
+        })
+        .collect();
+
     let heatmaps: HashMap<String, (&Heatmap, String)> = render_columns
         .iter()
         .filter(|(_, k)| k.plot.is_some())
@@ -388,6 +419,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("detail_mode", &detail_mode);
     context.insert("link_urls", &link_urls);
     context.insert("num", &numeric);
+    context.insert("brush_domains", &json!(brush_domains).to_string());
     context.insert("is_single_page", &is_single_page);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));

@@ -32,6 +32,9 @@ views:
         plot:
           ticks:
             scale: linear
+            domain:
+              - 20
+              - 100
       name:
         link-to-url: "https://lmgtfy.app/?q=Is {name} in {movie}?"
       movie:
