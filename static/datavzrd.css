@@ -105,3 +105,13 @@ th .th-inner {
 .fixed-table-container {
     border: none !important;
 }
+
+.filter-brush-container {
+    height: 48px;
+    position: relative;
+}
+
+.filter-brush {
+    position: absolute;
+    top: 0;
+}

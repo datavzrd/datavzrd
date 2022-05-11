@@ -144,7 +144,7 @@ $(document).ready(function() {
             s.data.values = plot_data;
             s.name = title;
             s.encoding.x.axis.values = [min, max];
-            $(`table > thead > tr th:nth-child(${index})`).append(`<div id="brush-${tick_brush}"></div>`);
+            $(`table > thead > tr th:nth-child(${index})`).append(`<div class="filter-brush-container align-middle"><div class="filter-brush" id="brush-${tick_brush}"></div></div>`);
             var opt = {"actions": false};
             vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
                 view.addSignalListener('selection', function(name, value) {
