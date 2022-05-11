@@ -4,7 +4,7 @@ let plot_3 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"27 Nov 1976","value":2},{"key":"30 Jan 2009","value":2},{"key":"15 Feb 1978","value":2},{"key":"12 Feb 1982","value":2},{"key":"22 Feb 1934","value":2},{"key":"25 Dec 1997","value":2},{"key":"14 Feb 1991","value":2},{"key":"19 Nov 1975","value":2},{"key":"04 Mar 1983","value":2},{"key":"22 Jan 1959","value":1}]},
+            "data": {"values": [{"key":"19 Nov 1975","value":2},{"key":"15 Feb 1978","value":2},{"key":"04 Mar 1983","value":2},{"key":"30 Jan 2009","value":2},{"key":"27 Nov 1976","value":2},{"key":"14 Feb 1991","value":2},{"key":"25 Dec 1997","value":2},{"key":"22 Feb 1934","value":2},{"key":"12 Feb 1982","value":2},{"key":"02 Apr 1970","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {
