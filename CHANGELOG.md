@@ -1,5 +1,14 @@
 # Changelog
 
+### [1.13.4](https://www.github.com/koesterlab/datavzrd/compare/v1.13.3...v1.13.4) (2022-05-11)
+
+
+### Bug Fixes
+
+* Use derive for default implementation of AuxDomainColumns ([#120](https://www.github.com/koesterlab/datavzrd/issues/120)) ([3c546e0](https://www.github.com/koesterlab/datavzrd/commit/3c546e0a54e932aacf8f323c84b6ae3848fd8730))
+* Use integers for filter brushes if possible ([24fe4b5](https://www.github.com/koesterlab/datavzrd/commit/24fe4b529fc38ad4321c9c0b9436a819ec94ea1c))
+* Use tick domain for filter brush if present ([#119](https://www.github.com/koesterlab/datavzrd/issues/119)) ([b4c743e](https://www.github.com/koesterlab/datavzrd/commit/b4c743e37115c6ece694b7b1e475b69ebb41a26c))
+
 ### [1.13.3](https://www.github.com/koesterlab/datavzrd/compare/v1.13.2...v1.13.3) (2022-05-11)
 
 

@@ -184,7 +184,7 @@ dependencies = [
 
 [[package]]
 name = "datavzrd"
-version = "1.13.3"
+version = "1.13.4"
 dependencies = [
  "anyhow",
  "chrono",
