@@ -164,7 +164,7 @@ $(document).ready(function() {
                if (!has_labels) {
                    brush_class = "no-labels";
                }
-               $(`table > thead > tr th:nth-child(${index})`).append(`<div class="filter-brush-container"><div class="filter-brush ${brush_class}" id="brush-${tick_brush}"></div></div>`);
+               if(!reset) $(`table > thead > tr th:nth-child(${index})`).append(`<div class="filter-brush-container"><div class="filter-brush ${brush_class}" id="brush-${tick_brush}"></div></div>`);
                var opt = {"actions": false};
                vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
                    view.addSignalListener('selection', function(name, value) {
