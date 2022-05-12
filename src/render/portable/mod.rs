@@ -24,6 +24,7 @@ use std::fs::File;
 use std::io::Write;
 use std::option::Option::Some;
 use std::path::Path;
+use std::str::FromStr;
 use tera::{Context, Tera};
 use thiserror::Error;
 use typed_builder::TypedBuilder;
@@ -313,7 +314,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         })
         .collect();
 
-    let brush_domains: HashMap<String, Vec<f32>> = render_columns
+    let mut brush_domains: HashMap<String, Vec<f32>> = render_columns
         .iter()
         .filter(|(_, k)| k.plot.is_some())
         .filter(|(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some())
@@ -343,6 +344,42 @@ fn render_table_javascript<P: AsRef<Path>>(
             )
         })
         .collect();
+
+    let heatmap_brush_domains: HashMap<String, Vec<f32>> = render_columns
+        .iter()
+        .filter(|(title, _)| *numeric.get(&title.to_string()).unwrap())
+        .filter(|(_, k)| k.plot.is_some())
+        .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
+        .filter(|(_, k)| {
+            k.plot
+                .as_ref()
+                .unwrap()
+                .heatmap
+                .as_ref()
+                .unwrap()
+                .domain
+                .is_some()
+        })
+        .map(|(title, k)| {
+            (
+                title.to_string(),
+                k.plot
+                    .as_ref()
+                    .unwrap()
+                    .heatmap
+                    .as_ref()
+                    .unwrap()
+                    .domain
+                    .as_ref()
+                    .unwrap()
+                    .iter()
+                    .map(|s| f32::from_str(s).unwrap())
+                    .collect_vec(),
+            )
+        })
+        .collect();
+
+    brush_domains.extend(heatmap_brush_domains);
 
     let heatmaps: HashMap<String, (&Heatmap, String)> = render_columns
         .iter()
