@@ -314,29 +314,53 @@ fn render_table_javascript<P: AsRef<Path>>(
         })
         .collect();
 
-    let mut brush_domains: HashMap<String, Vec<f32>> = render_columns
+    let brush_domains: HashMap<String, Vec<f32>> = render_columns
         .iter()
         .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
         .filter_map(|(title, k)| k.tick_plot.as_ref().map(|tick_plot| (title, tick_plot)))
         .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
         .map(|(title, k)| (title.to_string(), k.to_vec()))
+        .chain(
+            render_columns
+                .iter()
+                .filter(|(title, _)| *numeric.get(&title.to_string()).unwrap())
+                .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
+                .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
+                .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
+                .map(|(title, k)| {
+                    (
+                        title.to_string(),
+                        k.iter().map(|s| f32::from_str(s).unwrap()).collect_vec(),
+                    )
+                }),
+        )
         .collect();
 
-    let heatmap_brush_domains: HashMap<String, Vec<f32>> = render_columns
+    let aux_domains: HashMap<String, Vec<_>> = render_columns
         .iter()
-        .filter(|(title, _)| *numeric.get(&title.to_string()).unwrap())
         .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
-        .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
-        .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
-        .map(|(title, k)| {
-            (
-                title.to_string(),
-                k.iter().map(|s| f32::from_str(s).unwrap()).collect_vec(),
-            )
+        .filter_map(|(title, k)| k.tick_plot.as_ref().map(|tick_plot| (title, tick_plot)))
+        .filter_map(|(title, k)| {
+            k.aux_domain_columns
+                .0
+                .as_ref()
+                .map(|domains| (title, domains))
         })
+        .map(|(title, k)| (title.to_string(), k.to_vec()))
+        .chain(
+            render_columns
+                .iter()
+                .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
+                .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
+                .filter_map(|(title, k)| {
+                    k.aux_domain_columns
+                        .0
+                        .as_ref()
+                        .map(|domains| (title, domains))
+                })
+                .map(|(title, k)| (title.to_string(), k.to_vec())),
+        )
         .collect();
-
-    brush_domains.extend(heatmap_brush_domains);
 
     let heatmaps: HashMap<String, (&Heatmap, String)> = render_columns
         .iter()
@@ -414,6 +438,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("link_urls", &link_urls);
     context.insert("num", &numeric);
     context.insert("brush_domains", &json!(brush_domains).to_string());
+    context.insert("aux_domains", &json!(aux_domains).to_string());
     context.insert("is_single_page", &is_single_page);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
