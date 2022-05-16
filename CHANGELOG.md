@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.14.2](https://www.github.com/koesterlab/datavzrd/compare/v1.14.1...v1.14.2) (2022-05-16)
+
+
+### Bug Fixes
+
+* Include aux domains in filter brush domain ([#126](https://www.github.com/koesterlab/datavzrd/issues/126)) ([4157457](https://www.github.com/koesterlab/datavzrd/commit/4157457143a593a224761320c01058a76797d280))
+* Include heatmap domains for filter brushes ([#124](https://www.github.com/koesterlab/datavzrd/issues/124)) ([2503b30](https://www.github.com/koesterlab/datavzrd/commit/2503b30855dbef6cf9244d3687bcd3f8b5c2e5e4))
+
 ### [1.14.1](https://www.github.com/koesterlab/datavzrd/compare/v1.14.0...v1.14.1) (2022-05-11)
 
 
