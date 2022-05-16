@@ -316,65 +316,22 @@ fn render_table_javascript<P: AsRef<Path>>(
 
     let mut brush_domains: HashMap<String, Vec<f32>> = render_columns
         .iter()
-        .filter(|(_, k)| k.plot.is_some())
-        .filter(|(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some())
-        .filter(|(_, k)| {
-            k.plot
-                .as_ref()
-                .unwrap()
-                .tick_plot
-                .as_ref()
-                .unwrap()
-                .domain
-                .is_some()
-        })
-        .map(|(title, k)| {
-            (
-                title.to_string(),
-                k.plot
-                    .as_ref()
-                    .unwrap()
-                    .tick_plot
-                    .as_ref()
-                    .unwrap()
-                    .domain
-                    .as_ref()
-                    .unwrap()
-                    .to_vec(),
-            )
-        })
+        .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
+        .filter_map(|(title, k)| k.tick_plot.as_ref().map(|tick_plot| (title, tick_plot)))
+        .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
+        .map(|(title, k)| (title.to_string(), k.to_vec()))
         .collect();
 
     let heatmap_brush_domains: HashMap<String, Vec<f32>> = render_columns
         .iter()
         .filter(|(title, _)| *numeric.get(&title.to_string()).unwrap())
-        .filter(|(_, k)| k.plot.is_some())
-        .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
-        .filter(|(_, k)| {
-            k.plot
-                .as_ref()
-                .unwrap()
-                .heatmap
-                .as_ref()
-                .unwrap()
-                .domain
-                .is_some()
-        })
+        .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
+        .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
+        .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
         .map(|(title, k)| {
             (
                 title.to_string(),
-                k.plot
-                    .as_ref()
-                    .unwrap()
-                    .heatmap
-                    .as_ref()
-                    .unwrap()
-                    .domain
-                    .as_ref()
-                    .unwrap()
-                    .iter()
-                    .map(|s| f32::from_str(s).unwrap())
-                    .collect_vec(),
+                k.iter().map(|s| f32::from_str(s).unwrap()).collect_vec(),
             )
         })
         .collect();
