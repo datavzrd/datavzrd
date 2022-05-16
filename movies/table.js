@@ -213,6 +213,7 @@ $(document).ready(function() {
         };
 
     let brush_domains = {"imdbRating":[1.0,10.0]};
+    let aux_domains = {"Rated":[],"imdbRating":[]};
 
    function render_brush_plots(reset) {
    let tick_brush = 0;
@@ -230,6 +231,15 @@ $(document).ready(function() {
                if (brush_domains[title] != undefined) {
                    min = brush_domains[title][0];
                    max = brush_domains[title][1];
+               } else if (aux_domains[title] != undefined) {
+                   aux_values = [min, max];
+                   for (col of aux_domains[title]) {
+                        for (row of table_rows) {
+                            aux_values.push(parseFloat(row[col]));
+                        }
+                   }
+                   min = Math.min(...aux_values);
+                   max = Math.max(...aux_values);
                }
                if (Number.isInteger(min)) {
                    min = parseInt(min.toString());
