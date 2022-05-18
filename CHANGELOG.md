@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.14.4](https://www.github.com/koesterlab/datavzrd/compare/v1.14.3...v1.14.4) (2022-05-18)
+
+
+### Bug Fixes
+
+* Prevent panic in case of render-table definitions for non-existent columns ([#128](https://www.github.com/koesterlab/datavzrd/issues/128)) ([4f40d41](https://www.github.com/koesterlab/datavzrd/commit/4f40d413fb031d413efd5b9845baeed3db5aa6e1))
+
 ### [1.14.3](https://www.github.com/koesterlab/datavzrd/compare/v1.14.2...v1.14.3) (2022-05-18)
 
 
