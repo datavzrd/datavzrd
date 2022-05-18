@@ -68,7 +68,7 @@ $(document).ready(function() {
     let cp = [];
     let links = ["Title","imdbID"];
 
-    var header_height = (80+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2  + 35;
+    var header_height = (80+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2  + 45;
     $('th').css("height", header_height);
 
     var table_rows = [];
