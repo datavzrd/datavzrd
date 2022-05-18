@@ -45,7 +45,7 @@ $(document).ready(function() {
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let links = [{% for title, link_url in link_urls %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
 
-    var header_height = (80+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2 {% if is_single_page %} + 35{% endif %};
+    var header_height = (80+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2 {% if is_single_page %} + 45{% endif %};
     $('th').css("height", header_height);
 
     var table_rows = [];
