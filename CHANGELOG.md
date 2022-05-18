@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.14.3](https://www.github.com/koesterlab/datavzrd/compare/v1.14.2...v1.14.3) (2022-05-18)
+
+
+### Bug Fixes
+
+* Modify table header height to new brush filters ([25a98f4](https://www.github.com/koesterlab/datavzrd/commit/25a98f47be036451e337ac79dd9c8981dce3b52b))
+
 ### [1.14.2](https://www.github.com/koesterlab/datavzrd/compare/v1.14.1...v1.14.2) (2022-05-16)
 
 
