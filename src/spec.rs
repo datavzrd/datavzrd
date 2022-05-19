@@ -893,9 +893,18 @@ mod tests {
             custom_plot: None,
             ellipsis: None,
         };
+        let expected_render_column_spec_oscar_no = RenderColumnSpec {
+            optional: false,
+            custom: None,
+            display_mode: "hidden".to_string(),
+            link_to_url: None,
+            plot: None,
+            custom_plot: None,
+            ellipsis: None,
+        };
         assert_eq!(
             oscar_config.get("oscar_no").unwrap().to_owned(),
-            expected_render_column_spec
+            expected_render_column_spec_oscar_no
         );
         assert_eq!(
             oscar_config.get("birth_mo").unwrap().to_owned(),
