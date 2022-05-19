@@ -401,9 +401,10 @@ function embedSearch(index) {
 function detailFormatter(index, row) {
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
+    let hidden_columns = [{% for title in titles %}{% if display_modes[title] == "hidden" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     var html = []
     $.each(row, function (key, value) {
-        if (!displayed_columns.includes(key) && key !== "linkouts") {
+        if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts") {
             if (cp.includes(key)) {
                 id = `detail-plot-${index}-${cp.indexOf(key)}`;
                 var card = `<div class="card">
