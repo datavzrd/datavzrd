@@ -15,7 +15,7 @@ An example report can be [viewed online](https://koesterlab.github.io/datavzrd/i
 ## Configuring datavzrd
 
 datavzrd allows the user to easily customize it's interactive HTML report via a config file.
-When generating large reports, templating yaml files can be a bit tricky. We advise using [yte](https://github.com/koesterlab/yte) for easy yaml templating with python expressions.
+When generating large reports, templating yaml files can be a bit tricky. We advise using [yte](https://github.com/yte-template-engine/yte) for easy yaml templating with python expressions.
 
 ```yaml
 name: My beautiful datvzrd report
