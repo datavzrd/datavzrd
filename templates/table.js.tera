@@ -400,16 +400,35 @@ function embedSearch(index) {
 {% if detail_mode %}
 function detailFormatter(index, row) {
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+    let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     var html = []
     $.each(row, function (key, value) {
-        if (cp.includes(key)) {
-            id = `detail-plot-${index}-${cp.indexOf(key)}`;
-            html.push('<p><b>' + key + ':</b> ' + `<div id="${id}"></div>` + '</p>')
-        } else {
-            html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+        if (!displayed_columns.includes(key) && key !== "linkouts") {
+            if (cp.includes(key)) {
+                id = `detail-plot-${index}-${cp.indexOf(key)}`;
+                var card = `<div class="card">
+                   <div class="card-header">
+                     ${key}
+                   </div>
+                   <div class="card-body">
+                     <div id="${id}"></div>
+                   </div>
+                 </div>`;
+                html.push(card);
+            } else {
+                var card = `<div class="card">
+                   <div class="card-header">
+                     ${key}
+                   </div>
+                   <div class="card-body">
+                    ${value}
+                   </div>
+                 </div>`;
+                html.push(card);
+            }
         }
     })
-    return html.join('')
+    return `<div class="d-flex flex-wrap">${html.join('')}</div>`
 }
 {% endif %}
 
