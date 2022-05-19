@@ -142,6 +142,7 @@ impl Renderer for ItemRenderer {
                             dataset.links.as_ref().unwrap(),
                             &self.specs.report_name,
                             &self.specs.views,
+                            &self.specs.default_view,
                         )?;
                     }
                     render_table_javascript(
@@ -196,6 +197,7 @@ fn render_page<P: AsRef<Path>>(
     links: &HashMap<String, LinkSpec>,
     report_name: &str,
     views: &HashMap<String, ItemSpecs>,
+    default_view: &Option<String>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -234,8 +236,16 @@ fn render_page<P: AsRef<Path>>(
         &tables
             .iter()
             .filter(|t| !views.get(*t).unwrap().hidden)
+            .filter(|t| {
+                if let Some(default_view) = default_view {
+                    t != &default_view
+                } else {
+                    true
+                }
+            })
             .collect_vec(),
     );
+    context.insert("default_view", default_view);
     context.insert("name", name);
     context.insert("report_name", report_name);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
