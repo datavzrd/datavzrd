@@ -4,7 +4,7 @@ let plot_4 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"It Happened One Night","value":2},{"key":"Coming Home","value":2},{"key":"Network","value":2},{"key":"On Golden Pond","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"A Streetcar Named Desire","value":1},{"key":"Johnny Belinda","value":1},{"key":"The Color of Money","value":1},{"key":"Room at the Top","value":1},{"key":"The Lion in Winter","value":1}]},
+            "data": {"values": [{"key":"It Happened One Night","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"Network","value":2},{"key":"On Golden Pond","value":2},{"key":"Coming Home","value":2},{"key":"There Will Be Blood","value":1},{"key":"The King's Speech","value":1},{"key":"Kramer vs. Kramer","value":1},{"key":"Wall Street","value":1},{"key":"Tender Mercies","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {

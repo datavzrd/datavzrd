@@ -494,16 +494,35 @@ function embedSearch(index) {
 
 function detailFormatter(index, row) {
     let cp = [];
+    let displayed_columns = ["oscar_yr","award","name","movie","age","birth place","birth date",];
     var html = []
     $.each(row, function (key, value) {
-        if (cp.includes(key)) {
-            id = `detail-plot-${index}-${cp.indexOf(key)}`;
-            html.push('<p><b>' + key + ':</b> ' + `<div id="${id}"></div>` + '</p>')
-        } else {
-            html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+        if (!displayed_columns.includes(key) && key !== "linkouts") {
+            if (cp.includes(key)) {
+                id = `detail-plot-${index}-${cp.indexOf(key)}`;
+                var card = `<div class="card">
+                   <div class="card-header">
+                     ${key}
+                   </div>
+                   <div class="card-body">
+                     <div id="${id}"></div>
+                   </div>
+                 </div>`;
+                html.push(card);
+            } else {
+                var card = `<div class="card">
+                   <div class="card-header">
+                     ${key}
+                   </div>
+                   <div class="card-body">
+                    ${value}
+                   </div>
+                 </div>`;
+                html.push(card);
+            }
         }
     })
-    return html.join('')
+    return `<div class="d-flex flex-wrap">${html.join('')}</div>`
 }
 
 

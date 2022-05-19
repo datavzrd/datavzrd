@@ -115,3 +115,7 @@ th .th-inner {
     position: absolute;
     top: 12px;
 }
+
+.card {
+    margin: 0.5em;
+}
