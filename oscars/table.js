@@ -495,9 +495,10 @@ function embedSearch(index) {
 function detailFormatter(index, row) {
     let cp = [];
     let displayed_columns = ["oscar_yr","award","name","movie","age","birth place","birth date",];
+    let hidden_columns = ["oscar_no",];
     var html = []
     $.each(row, function (key, value) {
-        if (!displayed_columns.includes(key) && key !== "linkouts") {
+        if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts") {
             if (cp.includes(key)) {
                 id = `detail-plot-${index}-${cp.indexOf(key)}`;
                 var card = `<div class="card">

@@ -4,7 +4,7 @@ let plot_0 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"Network","value":2},{"key":"It Happened One Night","value":2},{"key":"On Golden Pond","value":2},{"key":"Coming Home","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"The Bridge on the River Kwai","value":1},{"key":"In Old Arizona","value":1},{"key":"Silver Linings Playbook","value":1},{"key":"Manchester by the Sea","value":1},{"key":"All the King's Men","value":1}]},
+            "data": {"values": [{"key":"The Silence of the Lambs","value":2},{"key":"Coming Home","value":2},{"key":"On Golden Pond","value":2},{"key":"It Happened One Night","value":2},{"key":"Network","value":2},{"key":"Watch on the Rhine","value":1},{"key":"A Double Life","value":1},{"key":"The Best Years of Our Lives","value":1},{"key":"The Sin of Madelon Claudet","value":1},{"key":"The Godfather","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {
