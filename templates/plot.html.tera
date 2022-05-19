@@ -54,7 +54,10 @@
                 views
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
-                    {% for table in tables %}
+                    {% if default_view %}
+                    <a class="dropdown-item" href="../{{ default_view }}/index_1.html">{{ default_view }}</a>
+                    {% endif %}
+                    {% for table in tables | sort %}
                     <a class="dropdown-item" href="../{{ table }}/index_1.html">{{ table }}</a>
                     {% endfor %}
                 </div>

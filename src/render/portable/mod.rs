@@ -76,6 +76,8 @@ impl Renderer for ItemRenderer {
                         dataset,
                         &linked_tables,
                         dataset.links.as_ref().unwrap(),
+                        &self.specs.views,
+                        &self.specs.default_view,
                     )?;
                 }
                 // Render table
@@ -721,6 +723,8 @@ fn render_plot_page<P: AsRef<Path>>(
     dataset: &DatasetSpecs,
     linked_tables: &LinkedTable,
     links: &HashMap<String, LinkSpec>,
+    views: &HashMap<String, ItemSpecs>,
+    default_view: &Option<String>,
 ) -> Result<()> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
@@ -782,7 +786,21 @@ fn render_plot_page<P: AsRef<Path>>(
 
     context.insert("data", &json!(records).to_string());
     context.insert("description", &item_spec.description);
-    context.insert("tables", tables);
+    context.insert(
+        "tables",
+        &tables
+            .iter()
+            .filter(|t| !views.get(*t).unwrap().hidden)
+            .filter(|t| {
+                if let Some(default_view) = default_view {
+                    t != &default_view
+                } else {
+                    true
+                }
+            })
+            .collect_vec(),
+    );
+    context.insert("default_view", default_view);
     context.insert("name", name);
     context.insert("specs", &render_plot_specs.schema.as_ref().unwrap());
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
