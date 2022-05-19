@@ -4,7 +4,7 @@ let plot_8 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"tt0077362","value":2},{"key":"tt0102926","value":2},{"key":"tt0073486","value":2},{"key":"tt0082846","value":2},{"key":"tt0119822","value":2},{"key":"tt0074958","value":2},{"key":"tt0025316","value":2},{"key":"tt0116477","value":1},{"key":"tt0063227","value":1},{"key":"tt0048356","value":1}]},
+            "data": {"values": [{"key":"tt0102926","value":2},{"key":"tt0119822","value":2},{"key":"tt0074958","value":2},{"key":"tt0073486","value":2},{"key":"tt0082846","value":2},{"key":"tt0077362","value":2},{"key":"tt0025316","value":2},{"key":"tt0056241","value":1},{"key":"tt0100157","value":1},{"key":"tt0035093","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {

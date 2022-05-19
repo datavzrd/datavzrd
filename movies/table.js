@@ -190,7 +190,7 @@ $(document).ready(function() {
     let filters = {};
     let tick_brush_specs = {
         "width": 50,
-        "height": 8,
+        "height": 12,
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values":[]},
         "mark": "tick",
@@ -206,10 +206,10 @@ $(document).ready(function() {
                     "labelFontWeight": "lighter"
                 }
             },
-            "color": {"condition": {"param": "selection"}, "value": "grey"}
+            "color": {"condition": {"param": "selection", "value": "#0275d8"}, "value": "grey"}
         },
         "params": [{"name": "selection", "select": "interval"}],
-        "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 6}}
+        "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 10}}
         };
 
     let brush_domains = {"imdbRating":[1.0,10.0]};
