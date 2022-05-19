@@ -404,12 +404,12 @@ function detailFormatter(index, row) {
     $.each(row, function (key, value) {
         if (cp.includes(key)) {
             id = `detail-plot-${index}-${cp.indexOf(key)}`;
-            html.push('<p><b>' + key + ':</b> ' + `<div id="${id}"></div>` + '</p>')
+            html.push(`<div class="p-2"><b>${key}: </b><div id="${id}"></div></div>`)
         } else {
-            html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+            html.push(`<div class="p-2"><b>${key}: </b>${value}</div>`)
         }
     })
-    return html.join('')
+    return `<div class="d-flex flex-wrap">${html.join('')}</div>`
 }
 {% endif %}
 
