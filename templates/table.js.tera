@@ -121,7 +121,7 @@ $(document).ready(function() {
                     "labelFontWeight": "lighter"
                 }
             },
-            "color": {"condition": {"param": "selection", "value": "red"}, "value": "grey"}
+            "color": {"condition": {"param": "selection", "value": "#0275d8"}, "value": "grey"}
         },
         "params": [{"name": "selection", "select": "interval"}],
         "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 10}}
