@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.15.0](https://www.github.com/koesterlab/datavzrd/compare/v1.14.4...v1.15.0) (2022-05-19)
+
+
+### Features
+
+* Add new display-mode: hidden ([#140](https://www.github.com/koesterlab/datavzrd/issues/140)) ([67e895d](https://www.github.com/koesterlab/datavzrd/commit/67e895d36ee2fb3613dae0a31b34417c7f696a53))
+* Improve brush-filters ([#134](https://www.github.com/koesterlab/datavzrd/issues/134)) ([b577fe1](https://www.github.com/koesterlab/datavzrd/commit/b577fe1c66a47c1c738ce4f2c295db05846ac4b2))
+* Improve detail formatter ([#137](https://www.github.com/koesterlab/datavzrd/issues/137)) ([4a30886](https://www.github.com/koesterlab/datavzrd/commit/4a308866390c76decf1986fc62a404e94435dfb3))
+
 ### [1.14.4](https://www.github.com/koesterlab/datavzrd/compare/v1.14.3...v1.14.4) (2022-05-18)
 
 

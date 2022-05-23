@@ -105,7 +105,7 @@ $(document).ready(function() {
     let filters = {};
     let tick_brush_specs = {
         "width": 50,
-        "height": 8,
+        "height": 12,
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values":[]},
         "mark": "tick",
@@ -121,10 +121,10 @@ $(document).ready(function() {
                     "labelFontWeight": "lighter"
                 }
             },
-            "color": {"condition": {"param": "selection"}, "value": "grey"}
+            "color": {"condition": {"param": "selection", "value": "#0275d8"}, "value": "grey"}
         },
         "params": [{"name": "selection", "select": "interval"}],
-        "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 6}}
+        "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 10}}
         };
 
     let brush_domains = {{ brush_domains }};
@@ -345,7 +345,9 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
                 return;
             }
             value = this.innerHTML;
-            this.style.backgroundColor = scale(value);
+            if (value !== "") {
+                this.style.backgroundColor = scale(value);
+            }
             row++;
         }
     );
@@ -400,16 +402,36 @@ function embedSearch(index) {
 {% if detail_mode %}
 function detailFormatter(index, row) {
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+    let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
+    let hidden_columns = [{% for title in titles %}{% if display_modes[title] == "hidden" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     var html = []
     $.each(row, function (key, value) {
-        if (cp.includes(key)) {
-            id = `detail-plot-${index}-${cp.indexOf(key)}`;
-            html.push('<p><b>' + key + ':</b> ' + `<div id="${id}"></div>` + '</p>')
-        } else {
-            html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+        if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts") {
+            if (cp.includes(key)) {
+                id = `detail-plot-${index}-${cp.indexOf(key)}`;
+                var card = `<div class="card">
+                   <div class="card-header">
+                     ${key}
+                   </div>
+                   <div class="card-body">
+                     <div id="${id}"></div>
+                   </div>
+                 </div>`;
+                html.push(card);
+            } else {
+                var card = `<div class="card">
+                   <div class="card-header">
+                     ${key}
+                   </div>
+                   <div class="card-body">
+                    ${value}
+                   </div>
+                 </div>`;
+                html.push(card);
+            }
         }
     })
-    return html.join('')
+    return `<div class="d-flex flex-wrap">${html.join('')}</div>`
 }
 {% endif %}
 

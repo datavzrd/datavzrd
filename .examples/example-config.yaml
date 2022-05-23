@@ -25,7 +25,7 @@ views:
     page-size: 25
     render-table:
       index(0):
-        display-mode: detail
+        display-mode: hidden
       regex('birth_.+'):
         display-mode: detail
       age:

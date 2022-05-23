@@ -18,7 +18,7 @@ use itertools::Itertools;
 use lz_str::compress_to_utf16;
 use serde::Serialize;
 use serde_json::json;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -653,13 +653,43 @@ fn get_column_domain(
         .map(|s| s.iter().position(|t| t == title).unwrap())?;
 
     match heatmap.scale_type.as_str() {
-        "ordinal" => Ok(json!(reader
-            .records()
-            .map(|r| r.unwrap())
-            .map(|r| r.get(column_index).unwrap().to_owned())
-            .unique()
-            .collect_vec())
-        .to_string()),
+        "ordinal" => {
+            if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
+                let columns = aux_domain_columns
+                    .iter()
+                    .map(|s| s.to_string())
+                    .chain(vec![title.to_string()].into_iter())
+                    .collect_vec();
+                let column_indexes: HashSet<_> = reader.headers().map(|s| {
+                    s.iter()
+                        .enumerate()
+                        .filter(|(_, title)| columns.contains(&title.to_string()))
+                        .map(|(index, _)| index)
+                        .collect()
+                })?;
+                Ok(json!(reader
+                    .records()
+                    .map(|r| r.unwrap())
+                    .map(|r| r
+                        .iter()
+                        .enumerate()
+                        .filter(|(index, _)| column_indexes.contains(index))
+                        .map(|(_, value)| value.to_string())
+                        .collect_vec())
+                    .flatten()
+                    .unique()
+                    .collect_vec())
+                .to_string())
+            } else {
+                Ok(json!(reader
+                    .records()
+                    .map(|r| r.unwrap())
+                    .map(|r| r.get(column_index).unwrap().to_owned())
+                    .unique()
+                    .collect_vec())
+                .to_string())
+            }
+        }
         _ => {
             if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
                 let columns = aux_domain_columns

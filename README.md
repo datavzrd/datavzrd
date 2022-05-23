@@ -15,7 +15,7 @@ An example report can be [viewed online](https://koesterlab.github.io/datavzrd/i
 ## Configuring datavzrd
 
 datavzrd allows the user to easily customize it's interactive HTML report via a config file.
-When generating large reports, templating yaml files can be a bit tricky. We advise using [yte](https://github.com/koesterlab/yte) for easy yaml templating with python expressions.
+When generating large reports, templating yaml files can be a bit tricky. We advise using [yte](https://github.com/yte-template-engine/yte) for easy yaml templating with python expressions.
 
 ```yaml
 name: My beautiful datvzrd report
@@ -146,15 +146,15 @@ views:
 
 `render-table` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file, its 0-based index (e.g. `index(5)` for the 6th column), or a regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`):
 
-| keyword                     | explanation                                                                                                                                                                                   | default | possible values |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | --------------- |
-| link-to-url                 | Renders a link to the given url with {value} replace by the value of the table. Other values of the same row can be accessed by their column header (e.g. {age} for a column named age).      |         |                 |
-| custom                      | Applies the given js function to render column content. The parameters of the function are similar to the ones defined [here](https://bootstrap-table.com/docs/api/column-options/#formatter) |         |                 |
-| [custom-plot](#custom-plot) | Renders a custom vega-lite plot to the corresponding table cell                                                                                                                               |         |                 |
-| [plot](#plot)               | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                                                                                                           |         |                 |
-| ellipsis                    | Shortens values to the first *n* given characters with the rest hidden behind a popover                                                                                                       |         |                 |
-| optional                    | Allows to have a column specified in render-table that is actually not present.                                                                                                               | false   | true, false     |
-| display-mode                | Allows to have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`.                                        | normal  | detail, normal  |
+| keyword                     | explanation                                                                                                                                                                                                   | default | possible values        |
+| --------------------------- |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------- |------------------------|
+| link-to-url                 | Renders a link to the given url with {value} replace by the value of the table. Other values of the same row can be accessed by their column header (e.g. {age} for a column named age).                      |         |                        |
+| custom                      | Applies the given js function to render column content. The parameters of the function are similar to the ones defined [here](https://bootstrap-table.com/docs/api/column-options/#formatter)                 |         |                        |
+| [custom-plot](#custom-plot) | Renders a custom vega-lite plot to the corresponding table cell                                                                                                                                               |         |                        |
+| [plot](#plot)               | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                                                                                                                           |         |                        |
+| ellipsis                    | Shortens values to the first *n* given characters with the rest hidden behind a popover                                                                                                                       |         |                        |
+| optional                    | Allows to have a column specified in render-table that is actually not present.                                                                                                                               | false   | true, false            |
+| display-mode                | Allows to hide columns from views by setting this to `hidden` or have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`. | normal  | detail, normal, hidden |
 
 ### render-plot
 
@@ -216,7 +216,7 @@ views:
 | color-scheme       | Defines the [color-scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap for nominal values                                                                                                                                                |
 | range              | Defines the color range of the heatmap as a list                                                                                                                                                                                                                   |
 | domain             | Defines the domain of the heatmap as a list                                                                                                                                                                                                                        |
-| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Only allowed for numeric columns. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported. |
+| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported.                                   |
 
 ## Authors
 
