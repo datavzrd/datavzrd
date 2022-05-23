@@ -670,13 +670,12 @@ fn get_column_domain(
                 Ok(json!(reader
                     .records()
                     .map(|r| r.unwrap())
-                    .map(|r| r
+                    .flat_map(|r| r
                         .iter()
                         .enumerate()
                         .filter(|(index, _)| column_indexes.contains(index))
                         .map(|(_, value)| value.to_string())
                         .collect_vec())
-                    .flatten()
                     .unique()
                     .collect_vec())
                 .to_string())
@@ -744,6 +743,7 @@ fn get_min_max_multiple_columns(
     ))
 }
 
+#[allow(clippy::too_many_arguments)]
 /// Renders a plot page from given render-plot spec
 fn render_plot_page<P: AsRef<Path>>(
     output_path: P,
