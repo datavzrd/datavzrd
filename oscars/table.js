@@ -439,7 +439,9 @@ function colorizeColumn0(ah, columns) {
                 return;
             }
             value = this.innerHTML;
-            this.style.backgroundColor = scale(value);
+            if (value !== "") {
+                this.style.backgroundColor = scale(value);
+            }
             row++;
         }
     );
