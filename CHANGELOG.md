@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.16.0](https://www.github.com/koesterlab/datavzrd/compare/v1.15.0...v1.16.0) (2022-05-23)
+
+
+### Features
+
+* Allow aux-domain-columns for non-numeric column heatmaps ([#141](https://www.github.com/koesterlab/datavzrd/issues/141)) ([a4f0c74](https://www.github.com/koesterlab/datavzrd/commit/a4f0c745aa5382cb63a8e8bfd72d64ea7cb32128))
+* Always display empty heatmap values in white ([5863fe0](https://www.github.com/koesterlab/datavzrd/commit/5863fe0861e749ec648f3433b6fd687ef8cb1a34))
+* Improve view navigation ([#135](https://www.github.com/koesterlab/datavzrd/issues/135)) ([2d54e8f](https://www.github.com/koesterlab/datavzrd/commit/2d54e8f618ec8f30ce711e2a44983c36a49ad829))
+
 ## [1.15.0](https://www.github.com/koesterlab/datavzrd/compare/v1.14.4...v1.15.0) (2022-05-19)
 
 
