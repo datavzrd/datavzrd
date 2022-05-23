@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-select.min.css">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap-table-fixed-columns.min.css">
     <link rel="stylesheet" type="text/css" href="../static/datavzrd.css">
 </head>
@@ -13,6 +14,7 @@
 <script src="../static/jquery.min.js"></script>
 <script src="../static/bootstrap.bundle.min.js"></script>
 <script src="../static/bootstrap-table.min.js"></script>
+<script src="../static/bootstrap-select.min.js"></script>
 <script src="../static/bootstrap-table-fixed-columns.min.js"></script>
 <script src="../static/bootstrap-table-filter-control.min.js"></script>
 <script src="../static/vega.min.js"></script>
@@ -51,7 +53,7 @@
             </li>
         </ul>
         <span class="navbar-text">
-            created Mon May 23 10:47:22 2022
+            created Mon May 23 11:57:17 2022
         </span>
     </div>
 </nav>
@@ -73,22 +75,18 @@
                 </button>
             </div>
             
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                views
-                </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    
-                    <a class="dropdown-item" href="../oscars/index_1.html">oscars</a>
-                    
-                    <a class="dropdown-item" href="../oscar-plot/index_1.html">oscar-plot</a>
-                    
-                    <a class="dropdown-item" href="../movies/index_1.html">movies</a>
-                    
-                    <a class="dropdown-item" href="../movies-plot/index_1.html">movies-plot</a>
-                    
-                </div>
-            </div>
+            <select id="view-selection" title="views" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." data-dropdown-align-right="true" class="selectpicker" data-style="btn-primary" data-live-search="true">
+                
+                <option value="../oscars/index_1.html">oscars</option>
+                
+                
+                <option value="../movies/index_1.html">movies</option>
+                
+                <option value="../movies-plot/index_1.html">movies-plot</option>
+                
+                <option value="../oscar-plot/index_1.html">oscar-plot</option>
+                
+            </select>
         </span>
     </div>
 </nav>

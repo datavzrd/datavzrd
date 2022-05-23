@@ -4,7 +4,7 @@ let plot_4 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"On Golden Pond","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"It Happened One Night","value":2},{"key":"Network","value":2},{"key":"Coming Home","value":2},{"key":"Leaving Las Vegas","value":1},{"key":"The Accused","value":1},{"key":"Gladiator","value":1},{"key":"Dallas Buyers Club","value":1},{"key":"Training Day","value":1}]},
+            "data": {"values": [{"key":"Network","value":2},{"key":"It Happened One Night","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"On Golden Pond","value":2},{"key":"Coming Home","value":2},{"key":"Walk the Line","value":1},{"key":"The Story of Louis Pasteur","value":1},{"key":"Sophie's Choice","value":1},{"key":"Coal Miner's Daughter","value":1},{"key":"Suspicion","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {

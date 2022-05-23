@@ -4,7 +4,7 @@ let plot_0 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"Coming Home","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"On Golden Pond","value":2},{"key":"Network","value":2},{"key":"It Happened One Night","value":2},{"key":"Crazy Heart","value":1},{"key":"The Divorcee","value":1},{"key":"Butterfield 8","value":1},{"key":"Shine","value":1},{"key":"Still Alice","value":1}]},
+            "data": {"values": [{"key":"It Happened One Night","value":2},{"key":"Network","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"Coming Home","value":2},{"key":"On Golden Pond","value":2},{"key":"A Double Life","value":1},{"key":"A Touch of Class","value":1},{"key":"Fargo","value":1},{"key":"Save the Tiger","value":1},{"key":"Yankee Doodle Dandy","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {
