@@ -216,7 +216,7 @@ views:
 | color-scheme       | Defines the [color-scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap for nominal values                                                                                                                                                |
 | range              | Defines the color range of the heatmap as a list                                                                                                                                                                                                                   |
 | domain             | Defines the domain of the heatmap as a list                                                                                                                                                                                                                        |
-| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Only allowed for numeric columns. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported. |
+| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported.                                   |
 
 ## Authors
 
