@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.16.1](https://www.github.com/koesterlab/datavzrd/compare/v1.16.0...v1.16.1) (2022-05-23)
+
+
+### Bug Fixes
+
+* Fix column highlighting for firefox ([#145](https://www.github.com/koesterlab/datavzrd/issues/145)) ([dfdfb58](https://www.github.com/koesterlab/datavzrd/commit/dfdfb589901c3935c3176e6880f3b368abeab6c2))
+
 ## [1.16.0](https://www.github.com/koesterlab/datavzrd/compare/v1.15.0...v1.16.0) (2022-05-23)
 
 
