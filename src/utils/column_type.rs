@@ -103,4 +103,13 @@ mod tests {
         ]);
         assert_eq!(classification, expected);
     }
+
+    #[test]
+    fn test_empty_column() {
+        let classification =
+            classify_table("tests/data/empty_table.csv", char::from_str(",").unwrap()).unwrap();
+        for column_type in classification.values() {
+            assert_eq!(&ColumnType::String, column_type)
+        }
+    }
 }
