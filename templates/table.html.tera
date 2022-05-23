@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-select.min.css">
     <link rel="stylesheet" type="text/css" href="../static/bootstrap-table-fixed-columns.min.css">
     <link rel="stylesheet" type="text/css" href="../static/datavzrd.css">
 </head>
@@ -13,6 +14,7 @@
 <script src="../static/jquery.min.js"></script>
 <script src="../static/bootstrap.bundle.min.js"></script>
 <script src="../static/bootstrap-table.min.js"></script>
+<script src="../static/bootstrap-select.min.js"></script>
 <script src="../static/bootstrap-table-fixed-columns.min.js"></script>
 <script src="../static/bootstrap-table-filter-control.min.js"></script>
 <script src="../static/vega.min.js"></script>
@@ -63,16 +65,14 @@
                 </button>
             </div>
             {% endif %}
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                views
-                </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    {% for table in tables %}
-                    <a class="dropdown-item" href="../{{ table }}/index_1.html">{{ table }}</a>
-                    {% endfor %}
-                </div>
-            </div>
+            <select id="view-selection" title="views" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." data-dropdown-align-right="true" class="selectpicker" data-style="btn-primary" data-live-search="true">
+                {% if default_view %}
+                <option value="../{{ default_view }}/index_1.html">{{ default_view }}</option>
+                {% endif %}
+                {% for table in tables | sort %}
+                <option value="../{{ table }}/index_1.html">{{ table }}</option>
+                {% endfor %}
+            </select>
         </span>
     </div>
 </nav>

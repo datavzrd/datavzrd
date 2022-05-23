@@ -61,6 +61,14 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
             "showdown.min.js",
             include_str!("../../../static/showdown.min.js"),
         ),
+        (
+            "bootstrap-select.min.js",
+            include_str!("../../../static/bootstrap-select.min.js"),
+        ),
+        (
+            "bootstrap-select.min.css",
+            include_str!("../../../static/bootstrap-select.min.css"),
+        ),
     ];
 
     for (name, file) in files {
