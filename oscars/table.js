@@ -195,7 +195,7 @@ $(document).ready(function() {
     render(additional_headers, displayed_columns, table_rows, columns);
 
     
-    $('.btn-group + .btn-group').before($('<div class="btn-group" style="padding-right: 4px;"><button class="btn btn-primary" type="button" id="clear-filter">clear filters</button></div>'))
+    $('.btn-group + .bootstrap-select').before($('<div class="btn-group" style="padding-right: 4px;"><button class="btn btn-primary" type="button" id="clear-filter">clear filters</button></div>'))
     let filter_boundaries = {};
     let filters = {};
     let tick_brush_specs = {
