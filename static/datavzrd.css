@@ -53,6 +53,8 @@ td {
     padding-bottom: 0;
     padding-top: 0;
     padding-right: 0.5rem;
+    /* Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=688556 see https://github.com/koesterlab/datavzrd/issues/144 */
+    background-clip: padding-box;
 }
 
 .table td.plotcell {
