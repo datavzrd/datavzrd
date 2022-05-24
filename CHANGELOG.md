@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.16.2](https://www.github.com/koesterlab/datavzrd/compare/v1.16.1...v1.16.2) (2022-05-24)
+
+
+### Bug Fixes
+
+* Fix clear-filter button ([ab3e206](https://www.github.com/koesterlab/datavzrd/commit/ab3e206f749554ddaed586dc200859807080d712))
+* Fix cut off dropdown linkouts ([5d785cd](https://www.github.com/koesterlab/datavzrd/commit/5d785cdeeb307aa94f0f632226661d9795399590))
+
 ### [1.16.1](https://www.github.com/koesterlab/datavzrd/compare/v1.16.0...v1.16.1) (2022-05-23)
 
 
