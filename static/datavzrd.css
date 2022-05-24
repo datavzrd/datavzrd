@@ -2,6 +2,10 @@
     cursor: pointer;
 }
 
+.fixed-table-body {
+    overflow: visible !important;
+}
+
 .table-container {
     display: none;
     font-size: 0.8rem;
