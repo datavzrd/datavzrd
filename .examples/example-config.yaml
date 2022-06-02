@@ -52,7 +52,7 @@ views:
   oscar-plot:
     dataset: oscars
     desc: |
-      ## My beatiful oscar scatterplot
+      ## My beautiful oscar scatter plot
       *So many great actors and actresses*
     render-plot:
       spec-path: ".examples/specs/oscars.vl.json"
