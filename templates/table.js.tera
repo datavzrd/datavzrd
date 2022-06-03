@@ -68,9 +68,17 @@ $(document).ready(function() {
 
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
         let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+        let ticks = [{% for title, tick in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+        let heatmaps = [{% for title, custom_plot in heatmaps %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
         let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
         {% for title, custom_plot in custom_plots %}
         renderCustomPlotDetailView{{ loop.index0 }}(row[cp[{{ loop.index0 }}]], `#detail-plot-${index}-{{ loop.index0 }}`);
+        {% endfor %}
+        {% for title, tuple in heatmaps %}
+        colorizeDetailCard{{ loop.index0 }}(row[heatmaps[{{ loop.index0 }}]], `#heatmap-${index}-{{ loop.index0 }}`);
+        {% endfor %}
+        {% for title, tick_plot in tick_plots %}
+        renderDetailTickPlots{{ loop.index0 }}(row[ticks[{{ loop.index0 }}]], `#detail-plot-${index}-{{ loop.index0 }}`);
         {% endfor %}
     })
 
@@ -303,6 +311,7 @@ function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
 {% for title, tick_plot in tick_plots %}
 function renderTickPlots{{ loop.index0 }}(ah, columns) {
     let index = columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
+    let detail_mode = columns.indexOf("{{ title }}") == -1;
     var specs =  {{ tick_plot }};
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData');
@@ -316,7 +325,7 @@ function renderTickPlots{{ loop.index0 }}(ah, columns) {
             this.classList.add("plotcell");
             const div = document.createElement("div");
             let value = table_rows[row]["{{ title }}"];
-            if (value != "") {
+            if (value != "" && !detail_mode) {
                 this.innerHTML = "";
                 this.appendChild(div);
                 var data = [{"{{ title }}": value}];
@@ -332,8 +341,24 @@ function renderTickPlots{{ loop.index0 }}(ah, columns) {
 }
 {% endfor %}
 
+{% for title, tick_plot in tick_plots %}
+function renderDetailTickPlots{{ loop.index0 }}(value, div) {
+    var specs =  {{ tick_plot }};
+    if (value != "") {
+        console.log(value);
+        var data = [{"{{ title }}": value}];
+        var s = specs;
+        s.data = {};
+        s.data.values = data;
+        var opt = {"actions": true};
+        vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+    }
+}
+{% endfor %}
+
 {% for title, tuple in heatmaps %}
 function colorizeColumn{{ loop.index0 }}(ah, columns) {
+    let detail_mode = columns.indexOf("{{ title }}") == -1;
     let index = columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
     var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
     var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
@@ -345,12 +370,22 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
                 return;
             }
             value = this.innerHTML;
-            if (value !== "") {
+            if (value !== "" && !detail_mode) {
                 this.style.backgroundColor = scale(value);
             }
             row++;
         }
     );
+}
+{% endfor %}
+
+{% for title, tuple in heatmaps %}
+function colorizeDetailCard{{ loop.index0 }}(value, div) {
+    var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
+    var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
+    if (value !== "") {
+        $(`${div}`).css( "background-color", scale(value) );
+    }
 }
 {% endfor %}
 
@@ -402,13 +437,19 @@ function embedSearch(index) {
 {% if detail_mode %}
 function detailFormatter(index, row) {
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+    let ticks = [{% for title, tick in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+    let heatmaps = [{% for title, custom_plot in heatmaps %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let hidden_columns = [{% for title in titles %}{% if display_modes[title] == "hidden" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     var html = []
     $.each(row, function (key, value) {
         if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts") {
-            if (cp.includes(key)) {
-                id = `detail-plot-${index}-${cp.indexOf(key)}`;
+            if (cp.includes(key) || ticks.includes(key)) {
+                if (cp.includes(key)) {
+                    id = `detail-plot-${index}-${cp.indexOf(key)}`;
+                } else {
+                    id = `detail-plot-${index}-${ticks.indexOf(key)}`;
+                }
                 var card = `<div class="card">
                    <div class="card-header">
                      ${key}
@@ -418,7 +459,18 @@ function detailFormatter(index, row) {
                    </div>
                  </div>`;
                 html.push(card);
-            } else {
+            } else if (heatmaps.includes(key)) {
+               id = `heatmap-${index}-${heatmaps.indexOf(key)}`;
+               var card = `<div class="card">
+                  <div class="card-header">
+                    ${key}
+                  </div>
+                  <div id="${id}" class="card-body">
+                    ${value}
+                  </div>
+                </div>`;
+               html.push(card);
+           } else {
                 var card = `<div class="card">
                    <div class="card-header">
                      ${key}
