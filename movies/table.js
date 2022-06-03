@@ -91,7 +91,15 @@ $(document).ready(function() {
 
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
         let cp = [];
+        let ticks = ["imdbRating"];
+        let heatmaps = ["Rated"];
         let columns = ["Title","Year","Rated","Released","Runtime","Genre","Director","imdbRating","imdbID"];
+        
+        
+        colorizeDetailCard0(row[heatmaps[0]], `#heatmap-${index}-0`);
+        
+        
+        renderDetailTickPlots0(row[ticks[0]], `#detail-plot-${index}-0`);
         
     })
 
@@ -356,6 +364,7 @@ function renderMarkdownDescription() {
 
 function renderTickPlots0(ah, columns) {
     let index = columns.indexOf("imdbRating") + 1;
+    let detail_mode = columns.indexOf("imdbRating") == -1;
     var specs =  {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": 50,
@@ -400,7 +409,7 @@ function renderTickPlots0(ah, columns) {
             this.classList.add("plotcell");
             const div = document.createElement("div");
             let value = table_rows[row]["imdbRating"];
-            if (value != "") {
+            if (value != "" && !detail_mode) {
                 this.innerHTML = "";
                 this.appendChild(div);
                 var data = [{"imdbRating": value}];
@@ -417,7 +426,54 @@ function renderTickPlots0(ah, columns) {
 
 
 
+function renderDetailTickPlots0(value, div) {
+    var specs =  {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 50,
+    "height": 10,
+    "encoding": {
+        "x": {
+            "field": "imdbRating",
+            "type": "quantitative",
+            "scale": {"type": "linear","domain": [1, 10]},
+            "axis": {
+                "title": null,
+                "ticks": false,
+                "labels": false,
+                "grid": false,
+                "offset": -11
+            }
+        },
+        "y": {"value": 0, "scale": {"domain": [0, 1]}}
+    },
+    "layer": [
+        {"mark": "tick"},
+        {
+        "mark": {"type": "text", "yOffset": -8, "xOffset": 12},
+        "encoding": {"text": {"field": "imdbRating"}}
+        }
+    ],
+    "config": {
+        "tick": {"thickness": 2},
+        "background": null,
+        "style": {"cell": {"stroke": "transparent"}}
+    }
+};
+    if (value != "") {
+        console.log(value);
+        var data = [{"imdbRating": value}];
+        var s = specs;
+        s.data = {};
+        s.data.values = data;
+        var opt = {"actions": true};
+        vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+    }
+}
+
+
+
 function colorizeColumn0(ah, columns) {
+    let detail_mode = columns.indexOf("Rated") == -1;
     let index = columns.indexOf("Rated") + 1;
     var ordinal = vega.scale('ordinal');
     var scale = ordinal().domain(["Unrated","Passed","PG-13","R","Approved","Not Rated","M/PG","G","TV-MA","PG","N/A","M"]).range(vega.scheme('accent'));
@@ -429,12 +485,22 @@ function colorizeColumn0(ah, columns) {
                 return;
             }
             value = this.innerHTML;
-            if (value !== "") {
+            if (value !== "" && !detail_mode) {
                 this.style.backgroundColor = scale(value);
             }
             row++;
         }
     );
+}
+
+
+
+function colorizeDetailCard0(value, div) {
+    var ordinal = vega.scale('ordinal');
+    var scale = ordinal().domain(["Unrated","Passed","PG-13","R","Approved","Not Rated","M/PG","G","TV-MA","PG","N/A","M"]).range(vega.scheme('accent'));
+    if (value !== "") {
+        $(`${div}`).css( "background-color", scale(value) );
+    }
 }
 
 

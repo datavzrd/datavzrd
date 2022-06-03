@@ -85,7 +85,15 @@ $(document).ready(function() {
 
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
         let cp = [];
+        let ticks = ["age"];
+        let heatmaps = ["award"];
         let columns = ["oscar_no","oscar_yr","award","name","movie","age","birth place","birth date","birth_mo","birth_d","birth_y"];
+        
+        
+        colorizeDetailCard0(row[heatmaps[0]], `#heatmap-${index}-0`);
+        
+        
+        renderDetailTickPlots0(row[ticks[0]], `#detail-plot-${index}-0`);
         
     })
 
@@ -366,6 +374,7 @@ function renderMarkdownDescription() {
 
 function renderTickPlots0(ah, columns) {
     let index = columns.indexOf("age") + 1 + 1;
+    let detail_mode = columns.indexOf("age") == -1;
     var specs =  {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": 50,
@@ -410,7 +419,7 @@ function renderTickPlots0(ah, columns) {
             this.classList.add("plotcell");
             const div = document.createElement("div");
             let value = table_rows[row]["age"];
-            if (value != "") {
+            if (value != "" && !detail_mode) {
                 this.innerHTML = "";
                 this.appendChild(div);
                 var data = [{"age": value}];
@@ -427,7 +436,54 @@ function renderTickPlots0(ah, columns) {
 
 
 
+function renderDetailTickPlots0(value, div) {
+    var specs =  {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 50,
+    "height": 10,
+    "encoding": {
+        "x": {
+            "field": "age",
+            "type": "quantitative",
+            "scale": {"type": "linear","domain": [20, 100]},
+            "axis": {
+                "title": null,
+                "ticks": false,
+                "labels": false,
+                "grid": false,
+                "offset": -11
+            }
+        },
+        "y": {"value": 0, "scale": {"domain": [0, 1]}}
+    },
+    "layer": [
+        {"mark": "tick"},
+        {
+        "mark": {"type": "text", "yOffset": -8, "xOffset": 12},
+        "encoding": {"text": {"field": "age"}}
+        }
+    ],
+    "config": {
+        "tick": {"thickness": 2},
+        "background": null,
+        "style": {"cell": {"stroke": "transparent"}}
+    }
+};
+    if (value != "") {
+        console.log(value);
+        var data = [{"age": value}];
+        var s = specs;
+        s.data = {};
+        s.data.values = data;
+        var opt = {"actions": true};
+        vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+    }
+}
+
+
+
 function colorizeColumn0(ah, columns) {
+    let detail_mode = columns.indexOf("award") == -1;
     let index = columns.indexOf("award") + 1 + 1;
     var ordinal = vega.scale('ordinal');
     var scale = ordinal().domain(["Best actor","Best actress"]).range(["#add8e6","#ffb6c1"]);
@@ -439,12 +495,22 @@ function colorizeColumn0(ah, columns) {
                 return;
             }
             value = this.innerHTML;
-            if (value !== "") {
+            if (value !== "" && !detail_mode) {
                 this.style.backgroundColor = scale(value);
             }
             row++;
         }
     );
+}
+
+
+
+function colorizeDetailCard0(value, div) {
+    var ordinal = vega.scale('ordinal');
+    var scale = ordinal().domain(["Best actor","Best actress"]).range(["#add8e6","#ffb6c1"]);
+    if (value !== "") {
+        $(`${div}`).css( "background-color", scale(value) );
+    }
 }
 
 
@@ -496,13 +562,19 @@ function embedSearch(index) {
 
 function detailFormatter(index, row) {
     let cp = [];
+    let ticks = ["age"];
+    let heatmaps = ["award"];
     let displayed_columns = ["oscar_yr","award","name","movie","age","birth place","birth date",];
     let hidden_columns = ["oscar_no",];
     var html = []
     $.each(row, function (key, value) {
         if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts") {
-            if (cp.includes(key)) {
-                id = `detail-plot-${index}-${cp.indexOf(key)}`;
+            if (cp.includes(key) || ticks.includes(key)) {
+                if (cp.includes(key)) {
+                    id = `detail-plot-${index}-${cp.indexOf(key)}`;
+                } else {
+                    id = `detail-plot-${index}-${ticks.indexOf(key)}`;
+                }
                 var card = `<div class="card">
                    <div class="card-header">
                      ${key}
@@ -512,7 +584,18 @@ function detailFormatter(index, row) {
                    </div>
                  </div>`;
                 html.push(card);
-            } else {
+            } else if (heatmaps.includes(key)) {
+               id = `heatmap-${index}-${heatmaps.indexOf(key)}`;
+               var card = `<div class="card">
+                  <div class="card-header">
+                    ${key}
+                  </div>
+                  <div id="${id}" class="card-body">
+                    ${value}
+                  </div>
+                </div>`;
+               html.push(card);
+           } else {
                 var card = `<div class="card">
                    <div class="card-header">
                      ${key}
