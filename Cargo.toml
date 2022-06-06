@@ -23,7 +23,7 @@ lz-str = "0.1.0"
 chrono = "0.4"
 ndhistogram = "0.6.2"
 lazy_static = "1.4.0"
-regex = "1.5.4"
+regex = "1.5.5"
 log = "0.4.16"
 simplelog = "0.11.2"
 
