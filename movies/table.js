@@ -99,7 +99,7 @@ $(document).ready(function() {
         colorizeDetailCard0(row[heatmaps[0]], `#heatmap-${index}-0`);
         
         
-        renderDetailTickPlots0(row[ticks[0]], `#detail-plot-${index}-0`);
+        renderDetailTickPlots0(row[ticks[0]], `#detail-plot-${index}-ticks-0`);
         
     })
 

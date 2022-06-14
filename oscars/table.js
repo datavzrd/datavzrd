@@ -93,7 +93,7 @@ $(document).ready(function() {
         colorizeDetailCard0(row[heatmaps[0]], `#heatmap-${index}-0`);
         
         
-        renderDetailTickPlots0(row[ticks[0]], `#detail-plot-${index}-0`);
+        renderDetailTickPlots0(row[ticks[0]], `#detail-plot-${index}-ticks-0`);
         
     })
 
@@ -571,9 +571,9 @@ function detailFormatter(index, row) {
         if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts") {
             if (cp.includes(key) || ticks.includes(key)) {
                 if (cp.includes(key)) {
-                    id = `detail-plot-${index}-${cp.indexOf(key)}`;
+                    id = `detail-plot-${index}-cp-${cp.indexOf(key)}`;
                 } else {
-                    id = `detail-plot-${index}-${ticks.indexOf(key)}`;
+                    id = `detail-plot-${index}-ticks-${ticks.indexOf(key)}`;
                 }
                 var card = `<div class="card">
                    <div class="card-header">
