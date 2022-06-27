@@ -44,10 +44,7 @@ impl ItemsSpec {
         let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)?;
         for (_, spec) in items_spec.views.iter_mut() {
             if spec.render_table.is_some() && spec.render_plot.is_none() {
-                let dataset = match items_spec
-                    .datasets
-                    .get(spec.dataset.as_ref().unwrap())
-                {
+                let dataset = match items_spec.datasets.get(spec.dataset.as_ref().unwrap()) {
                     Some(dataset) => dataset,
                     None => {
                         bail!(DatasetError::NotFound {
@@ -77,11 +74,7 @@ impl ItemsSpec {
                             view: name.to_string()
                         })
                     }
-                    if self
-                        .datasets
-                        .get(view.dataset.as_ref().unwrap())
-                        .is_none()
-                    {
+                    if self.datasets.get(view.dataset.as_ref().unwrap()).is_none() {
                         bail!(ConfigError::MissingDataset {
                             dataset: view.dataset.as_ref().unwrap().to_string()
                         })
@@ -91,10 +84,7 @@ impl ItemsSpec {
                             view: name.to_string()
                         });
                     }
-                    let dataset = self
-                        .datasets
-                        .get(view.dataset.as_ref().unwrap())
-                        .unwrap();
+                    let dataset = self.datasets.get(view.dataset.as_ref().unwrap()).unwrap();
                     let mut reader = csv::ReaderBuilder::new()
                         .delimiter(dataset.separator as u8)
                         .from_path(&dataset.path)?;

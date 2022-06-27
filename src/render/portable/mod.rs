@@ -65,11 +65,7 @@ impl Renderer for ItemRenderer {
                     continue;
                 }
             }
-            let dataset = match self
-                .specs
-                .datasets
-                .get(table.dataset.as_ref().unwrap())
-            {
+            let dataset = match self.specs.datasets.get(table.dataset.as_ref().unwrap()) {
                 Some(dataset) => dataset,
                 None => {
                     bail!(DatasetError::NotFound {
@@ -586,10 +582,7 @@ fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
 
     for (table, column) in links {
         let linked_table = &specs.views.get(*table).unwrap();
-        let other_dataset = match specs
-            .datasets
-            .get(linked_table.dataset.as_ref().unwrap())
-        {
+        let other_dataset = match specs.datasets.get(linked_table.dataset.as_ref().unwrap()) {
             Some(dataset) => dataset,
             None => {
                 bail!(DatasetError::NotFound {
