@@ -68,7 +68,7 @@ impl Renderer for ItemRenderer {
             let dataset = match self
                 .specs
                 .datasets
-                .get(&table.dataset.as_ref().unwrap().to_string())
+                .get(table.dataset.as_ref().unwrap())
             {
                 Some(dataset) => dataset,
                 None => {
@@ -571,7 +571,7 @@ fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
     let table_spec = specs.views.get(table).unwrap();
     let dataset = &specs
         .datasets
-        .get(&table_spec.dataset.as_ref().unwrap().to_string())
+        .get(table_spec.dataset.as_ref().unwrap())
         .unwrap();
     let links = &dataset
         .links
@@ -588,7 +588,7 @@ fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
         let linked_table = &specs.views.get(*table).unwrap();
         let other_dataset = match specs
             .datasets
-            .get(&linked_table.dataset.as_ref().unwrap().to_string())
+            .get(linked_table.dataset.as_ref().unwrap())
         {
             Some(dataset) => dataset,
             None => {

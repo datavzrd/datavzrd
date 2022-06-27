@@ -46,7 +46,7 @@ impl ItemsSpec {
             if spec.render_table.is_some() && spec.render_plot.is_none() {
                 let dataset = match items_spec
                     .datasets
-                    .get(&spec.dataset.as_ref().unwrap().to_string())
+                    .get(spec.dataset.as_ref().unwrap())
                 {
                     Some(dataset) => dataset,
                     None => {
@@ -79,7 +79,7 @@ impl ItemsSpec {
                     }
                     if self
                         .datasets
-                        .get(&view.dataset.as_ref().unwrap().to_string())
+                        .get(view.dataset.as_ref().unwrap())
                         .is_none()
                     {
                         bail!(ConfigError::MissingDataset {
@@ -93,7 +93,7 @@ impl ItemsSpec {
                     }
                     let dataset = self
                         .datasets
-                        .get(&view.dataset.as_ref().unwrap().to_string())
+                        .get(view.dataset.as_ref().unwrap())
                         .unwrap();
                     let mut reader = csv::ReaderBuilder::new()
                         .delimiter(dataset.separator as u8)
