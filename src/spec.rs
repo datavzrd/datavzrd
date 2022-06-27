@@ -43,12 +43,12 @@ impl ItemsSpec {
         ))?;
         let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)?;
         for (_, spec) in items_spec.views.iter_mut() {
-            if spec.render_table.is_some() {
-                let dataset = match items_spec.datasets.get(&spec.dataset) {
+            if spec.render_table.is_some() && spec.render_plot.is_none() {
+                let dataset = match items_spec.datasets.get(spec.dataset.as_ref().unwrap()) {
                     Some(dataset) => dataset,
                     None => {
                         bail!(DatasetError::NotFound {
-                            dataset_name: spec.dataset.clone()
+                            dataset_name: spec.dataset.as_ref().unwrap().clone()
                         })
                     }
                 };
@@ -67,73 +67,80 @@ impl ItemsSpec {
             }
         }
         for (name, view) in &self.views {
-            if self.datasets.get(&view.dataset).is_none() {
-                bail!(ConfigError::MissingDataset {
-                    dataset: view.dataset.to_string()
-                })
-            }
             if let Some(render_table) = &view.render_table {
-                if !render_table.is_empty() && view.render_plot.is_some() {
-                    bail!(PlotAndTablePresentConfiguration {
-                        view: name.to_string()
-                    });
-                }
-                let dataset = self.datasets.get(&view.dataset).unwrap();
-                let mut reader = csv::ReaderBuilder::new()
-                    .delimiter(dataset.separator as u8)
-                    .from_path(&dataset.path)?;
-                let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                for (column, render_columns) in render_table {
-                    if !titles.contains(column) && !render_columns.optional {
-                        warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
-                    }
-                    let mut possible_conflicting = Vec::new();
-                    if render_columns.ellipsis.is_some() {
-                        possible_conflicting.push("ellipsis".to_string());
-                    }
-                    if render_columns.link_to_url.is_some() {
-                        possible_conflicting.push("link-to-url".to_string());
-                    }
-                    if render_columns.custom.is_some() {
-                        possible_conflicting.push("custom".to_string());
-                    }
-                    if render_columns.custom_plot.is_some() {
-                        possible_conflicting.push("custom-plot".to_string());
-                    }
-                    if let Some(plot) = &render_columns.plot {
-                        if plot.heatmap.is_some() {
-                            possible_conflicting.push("heatmap".to_string());
-                        } else if plot.tick_plot.is_some() {
-                            possible_conflicting.push("ticks".to_string());
-                        }
-                    }
-                    if possible_conflicting.len() > 1
-                        && !(possible_conflicting.contains(&"heatmap".to_string())
-                            && possible_conflicting.contains(&"ellipsis".to_string())
-                            && possible_conflicting.len() == 2)
-                    {
-                        bail!(ConflictingConfiguration {
-                            view: name.to_string(),
-                            column: column.to_string(),
-                            conflict: possible_conflicting
+                if view.datasets.is_none() {
+                    if view.dataset.is_none() {
+                        bail!(ConfigError::MissingDatasetProperty {
+                            view: name.to_string()
                         })
                     }
-
-                    if let Some(plot) = &render_columns.plot {
-                        if let Some(heatmap) = &plot.heatmap {
-                            if !SCALE_TYPES.contains(&&*heatmap.scale_type) {
-                                bail!(WrongScaleType {
-                                    scale_type: heatmap.scale_type.clone(),
-                                    possible_scale_types: SCALE_TYPES.to_vec(),
-                                })
+                    if self.datasets.get(view.dataset.as_ref().unwrap()).is_none() {
+                        bail!(ConfigError::MissingDataset {
+                            dataset: view.dataset.as_ref().unwrap().to_string()
+                        })
+                    }
+                    if !render_table.is_empty() && view.render_plot.is_some() {
+                        bail!(PlotAndTablePresentConfiguration {
+                            view: name.to_string()
+                        });
+                    }
+                    let dataset = self.datasets.get(view.dataset.as_ref().unwrap()).unwrap();
+                    let mut reader = csv::ReaderBuilder::new()
+                        .delimiter(dataset.separator as u8)
+                        .from_path(&dataset.path)?;
+                    let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+                    for (column, render_columns) in render_table {
+                        if !titles.contains(column) && !render_columns.optional {
+                            warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
+                        }
+                        let mut possible_conflicting = Vec::new();
+                        if render_columns.ellipsis.is_some() {
+                            possible_conflicting.push("ellipsis".to_string());
+                        }
+                        if render_columns.link_to_url.is_some() {
+                            possible_conflicting.push("link-to-url".to_string());
+                        }
+                        if render_columns.custom.is_some() {
+                            possible_conflicting.push("custom".to_string());
+                        }
+                        if render_columns.custom_plot.is_some() {
+                            possible_conflicting.push("custom-plot".to_string());
+                        }
+                        if let Some(plot) = &render_columns.plot {
+                            if plot.heatmap.is_some() {
+                                possible_conflicting.push("heatmap".to_string());
+                            } else if plot.tick_plot.is_some() {
+                                possible_conflicting.push("ticks".to_string());
                             }
                         }
-                        if let Some(tick_plot) = &plot.tick_plot {
-                            if !SCALE_TYPES.contains(&&*tick_plot.scale_type) {
-                                bail!(WrongScaleType {
-                                    scale_type: tick_plot.scale_type.clone(),
-                                    possible_scale_types: SCALE_TYPES.to_vec(),
-                                })
+                        if possible_conflicting.len() > 1
+                            && !(possible_conflicting.contains(&"heatmap".to_string())
+                                && possible_conflicting.contains(&"ellipsis".to_string())
+                                && possible_conflicting.len() == 2)
+                        {
+                            bail!(ConflictingConfiguration {
+                                view: name.to_string(),
+                                column: column.to_string(),
+                                conflict: possible_conflicting
+                            })
+                        }
+
+                        if let Some(plot) = &render_columns.plot {
+                            if let Some(heatmap) = &plot.heatmap {
+                                if !SCALE_TYPES.contains(&&*heatmap.scale_type) {
+                                    bail!(WrongScaleType {
+                                        scale_type: heatmap.scale_type.clone(),
+                                        possible_scale_types: SCALE_TYPES.to_vec(),
+                                    })
+                                }
+                            }
+                            if let Some(tick_plot) = &plot.tick_plot {
+                                if !SCALE_TYPES.contains(&&*tick_plot.scale_type) {
+                                    bail!(WrongScaleType {
+                                        scale_type: tick_plot.scale_type.clone(),
+                                        possible_scale_types: SCALE_TYPES.to_vec(),
+                                    })
+                                }
                             }
                         }
                     }
@@ -159,23 +166,28 @@ impl ItemsSpec {
                             .split_once('/')
                             .expect("Missing expected delimiter / in table-row configuration.");
                         if let Some(table_spec) = self.views.get(table) {
-                            if let Some(dataset) = self.datasets.get(&table_spec.dataset) {
-                                let mut reader = csv::ReaderBuilder::new()
-                                    .delimiter(dataset.separator as u8)
-                                    .from_path(&dataset.path)?;
-                                let titles =
-                                    reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                                if !titles.contains(&linked_column.to_string()) {
-                                    bail!(ConfigError::LinkToMissingColumn {
-                                        view: table.to_string(),
-                                        column: linked_column.to_string(),
-                                        link: link_name.to_string()
+                            if let Some(table_dataset) = &table_spec.dataset {
+                                if let Some(dataset) = self.datasets.get(table_dataset) {
+                                    let mut reader = csv::ReaderBuilder::new()
+                                        .delimiter(dataset.separator as u8)
+                                        .from_path(&dataset.path)?;
+                                    let titles = reader
+                                        .headers()?
+                                        .iter()
+                                        .map(|s| s.to_owned())
+                                        .collect_vec();
+                                    if !titles.contains(&linked_column.to_string()) {
+                                        bail!(ConfigError::LinkToMissingColumn {
+                                            view: table.to_string(),
+                                            column: linked_column.to_string(),
+                                            link: link_name.to_string()
+                                        })
+                                    }
+                                } else {
+                                    bail!(ConfigError::MissingDataset {
+                                        dataset: table_dataset.to_string()
                                     })
                                 }
-                            } else {
-                                bail!(ConfigError::MissingDataset {
-                                    dataset: table_spec.dataset.to_string()
-                                })
                             }
                         } else {
                             bail!(LinkToMissingView {
@@ -232,7 +244,8 @@ pub(crate) struct DatasetSpecs {
 pub(crate) struct ItemSpecs {
     #[serde(default)]
     pub(crate) hidden: bool,
-    pub(crate) dataset: String,
+    pub(crate) dataset: Option<String>,
+    pub(crate) datasets: Option<HashMap<String, String>>,
     #[serde(default = "default_page_size")]
     pub(crate) page_size: usize,
     #[serde(rename = "desc")]
@@ -552,6 +565,8 @@ pub enum ConfigError {
     },
     #[error("Column {column:?} under path {table_path:?} seems to have multiple definitions. Please check your config file.")]
     DuplicateColumn { column: String, table_path: PathBuf },
+    #[error("View {view:?} is missing dataset property.")]
+    MissingDatasetProperty { view: String },
     #[error("Could not find dataset named {dataset:?} in given config.")]
     MissingDataset { dataset: String },
     #[error("Could not find default view named {view:?} in given config.")]
@@ -620,7 +635,8 @@ mod tests {
 
         let expected_table_spec = ItemSpecs {
             hidden: false,
-            dataset: "table-a".to_string(),
+            dataset: Some("table-a".to_string()),
+            datasets: None,
             page_size: 100,
             description: None,
             render_table: Some(HashMap::from([(
@@ -685,7 +701,8 @@ mod tests {
 
         let expected_item_spec = ItemSpecs {
             hidden: false,
-            dataset: "table-a".to_string(),
+            dataset: Some("table-a".to_string()),
+            datasets: None,
             page_size: 100,
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
@@ -969,7 +986,8 @@ mod tests {
         };
         let expected_item_specs = ItemSpecs {
             hidden: false,
-            dataset: "table-a".to_string(),
+            dataset: Some("table-a".to_string()),
+            datasets: None,
             page_size: 184_usize,
             description: None,
             render_table: Some(HashMap::from([(
