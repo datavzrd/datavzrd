@@ -86,9 +86,16 @@
             <div class="mt-auto mb-auto ml-auto mr-auto" id="vis"></div>
             <script>
                 const specs = {{ specs | safe }};
+                {% if data %}
                 const data = {{ data | safe }};
                 specs.data = {};
                 specs.data.values = data;
+                {% endif %}
+                {% if datasets %}
+                const data = {{ datasets | safe }};
+                specs.datasets = {};
+                specs.datasets = data;
+                {% endif %}
                 if (specs.width == "container") { $("#vis").css("width", "100%"); }
                 vegaEmbed('#vis', specs);
             </script>

@@ -23,7 +23,7 @@ use std::fs;
 use std::fs::File;
 use std::io::Write;
 use std::option::Option::Some;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use tera::{Context, Tera};
 use thiserror::Error;
@@ -43,11 +43,37 @@ impl Renderer for ItemRenderer {
         P: AsRef<Path>,
     {
         for (name, table) in &self.specs.views {
-            let dataset = match self.specs.datasets.get(&table.dataset) {
+            let out_path = Path::new(path.as_ref()).join(name);
+            fs::create_dir(&out_path)?;
+            if table.render_plot.is_some() {
+                if let Some(datasets) = &table.datasets {
+                    // Render plot with multiple datasets
+                    render_plot_page_with_multiple_datasets(
+                        &out_path,
+                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
+                        name,
+                        table,
+                        datasets
+                            .iter()
+                            .map(|(n, name)| {
+                                (n.to_string(), self.specs.datasets.get(name).unwrap())
+                            })
+                            .collect(),
+                        &self.specs.views,
+                        &self.specs.default_view,
+                    )?;
+                    continue;
+                }
+            }
+            let dataset = match self
+                .specs
+                .datasets
+                .get(&table.dataset.as_ref().unwrap().to_string())
+            {
                 Some(dataset) => dataset,
                 None => {
                     bail!(DatasetError::NotFound {
-                        dataset_name: table.dataset.clone()
+                        dataset_name: table.dataset.as_ref().unwrap().clone()
                     })
                 }
             };
@@ -57,9 +83,6 @@ impl Renderer for ItemRenderer {
                     .delimiter(dataset.separator as u8)
                     .from_path(&dataset.path)
             };
-
-            let out_path = Path::new(path.as_ref()).join(name);
-            fs::create_dir(&out_path)?;
 
             let mut counter_reader = generate_reader()
                 .context(format!("Could not read file with path {:?}", &dataset.path))?;
@@ -546,7 +569,10 @@ fn render_search_dialogs<P: AsRef<Path>>(
 
 fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
     let table_spec = specs.views.get(table).unwrap();
-    let dataset = &specs.datasets.get(&table_spec.dataset).unwrap();
+    let dataset = &specs
+        .datasets
+        .get(&table_spec.dataset.as_ref().unwrap().to_string())
+        .unwrap();
     let links = &dataset
         .links
         .as_ref()
@@ -560,11 +586,14 @@ fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
 
     for (table, column) in links {
         let linked_table = &specs.views.get(*table).unwrap();
-        let other_dataset = match specs.datasets.get(&linked_table.dataset) {
+        let other_dataset = match specs
+            .datasets
+            .get(&linked_table.dataset.as_ref().unwrap().to_string())
+        {
             Some(dataset) => dataset,
             None => {
                 bail!(DatasetError::NotFound {
-                    dataset_name: table_spec.dataset.clone()
+                    dataset_name: table_spec.dataset.as_ref().unwrap().clone()
                 })
             }
         };
@@ -815,6 +844,90 @@ fn render_plot_page<P: AsRef<Path>>(
     let local: DateTime<Local> = Local::now();
 
     context.insert("data", &json!(records).to_string());
+    context.insert("description", &item_spec.description);
+    context.insert(
+        "tables",
+        &tables
+            .iter()
+            .filter(|t| !views.get(*t).unwrap().hidden)
+            .filter(|t| {
+                if let Some(default_view) = default_view {
+                    t != &default_view
+                } else {
+                    true
+                }
+            })
+            .collect_vec(),
+    );
+    context.insert("default_view", default_view);
+    context.insert("name", name);
+    context.insert("specs", &render_plot_specs.schema.as_ref().unwrap());
+    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
+    context.insert("version", &env!("CARGO_PKG_VERSION"));
+
+    let file_path =
+        Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
+
+    let html = templates.render("plot.html.tera", &context)?;
+
+    let mut file = fs::File::create(file_path)?;
+    file.write_all(html.as_bytes())?;
+
+    Ok(())
+}
+
+/// Renders a plot page from given render-plot spec containing multiple datasets
+fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
+    output_path: P,
+    tables: &[String],
+    name: &str,
+    item_spec: &ItemSpecs,
+    datasets: HashMap<String, &DatasetSpecs>,
+    views: &HashMap<String, ItemSpecs>,
+    default_view: &Option<String>,
+) -> Result<()> {
+    let generate_reader = |separator: char, path: &PathBuf| -> csv::Result<Reader<File>> {
+        csv::ReaderBuilder::new()
+            .delimiter(separator as u8)
+            .from_path(&path)
+    };
+
+    let mut data = HashMap::new();
+
+    for (name, dataset) in datasets {
+        let mut reader = generate_reader(dataset.separator, &dataset.path)
+            .context(format!("Could not read file with path {:?}", &dataset.path))?;
+
+        let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+        let records: Vec<HashMap<String, String>> = reader
+            .records()
+            .skip(&dataset.header_rows - 1)
+            .map(|row| {
+                row.unwrap()
+                    .iter()
+                    .enumerate()
+                    .map(|(index, record)| {
+                        (headers.get(index).unwrap().to_owned(), record.to_owned())
+                    })
+                    .collect()
+            })
+            .collect_vec();
+
+        data.insert(name.to_string(), records);
+    }
+
+    let mut render_plot_specs = item_spec.render_plot.clone().unwrap();
+    render_plot_specs.read_schema()?;
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "plot.html.tera",
+        include_str!("../../../templates/plot.html.tera"),
+    )?;
+    let mut context = Context::new();
+
+    let local: DateTime<Local> = Local::now();
+
+    context.insert("datasets", &json!(data).to_string());
     context.insert("description", &item_spec.description);
     context.insert(
         "tables",
