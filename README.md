@@ -132,15 +132,16 @@ views:
 
 `views` consists of all different CSV/TSV views (table or plot) that should be included in the resulting report. If neither `render-table` nor `render-plot` is present, datavzrd will render the given file as a table. Each item definition can contain these values:
 
-| keyword                       | explanation                                                                                                                                | default |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| desc                          | A description that will be shown in the report. [Markdown](https://github.github.com/gfm/) is allowed and will be rendered to proper HTML. |         |
-| dataset                       | The name of the corresponding dataset to this view defined in [datasets](#datasets)                                                        |         |
-| page-size                     | Number of rows per page                                                                                                                    | 100     |
-| [render-table](#render-table) | Configuration of individual column rendering                                                                                               |         |
-| [render-plot](#render-plot)   | Configuration of a single plot                                                                                                             |         |
-| hidden                        | Whether or not the view is shown in the menu navigation                                                                                    | false   |
-| max-in-memory-rows            | Overwrites the global settings for [max-in-memory-rows](#max-in-memory-rows)                                                               |         |
+| keyword                       | explanation                                                                                                                                                                                                                                        | default |
+|-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------- |
+| desc                          | A description that will be shown in the report. [Markdown](https://github.github.com/gfm/) is allowed and will be rendered to proper HTML.                                                                                                         |         |
+| dataset                       | The name of the corresponding dataset to this view defined in [datasets](#datasets)                                                                                                                                                                |         |
+| datasets                      | Key-value pairs to include multiple datasets into a [render-plot](#render-plot) configuration. Key must be the name of the dataset in the given vega-lite specswhile the value needs to be the name of a dataset defined in [datasets](#datasets). |         |
+| page-size                     | Number of rows per page                                                                                                                                                                                                                            | 100     |
+| [render-table](#render-table) | Configuration of individual column rendering                                                                                                                                                                                                       |         |
+| [render-plot](#render-plot)   | Configuration of a single plot                                                                                                                                                                                                                     |         |
+| hidden                        | Whether or not the view is shown in the menu navigation                                                                                                                                                                                            | false   |
+| max-in-memory-rows            | Overwrites the global settings for [max-in-memory-rows](#max-in-memory-rows)                                                                                                                                                                       |         |
 
 ### render-table 
 
