@@ -4,7 +4,7 @@ let plot_0 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"It Happened One Night","value":2},{"key":"Coming Home","value":2},{"key":"On Golden Pond","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"Network","value":2},{"key":"The Champ","value":1},{"key":"The Favourite","value":1},{"key":"Alice Doesn't Live Here Anymore","value":1},{"key":"High Noon","value":1},{"key":"Patton","value":1}]},
+            "data": {"values": [{"key":"Network","value":2},{"key":"On Golden Pond","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"It Happened One Night","value":2},{"key":"Coming Home","value":2},{"key":"Separate Tables","value":1},{"key":"The Story of Louis Pasteur","value":1},{"key":"Annie Hall","value":1},{"key":"Stalag 17","value":1},{"key":"All the King's Men","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {
