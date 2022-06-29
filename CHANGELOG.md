@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.17.0](https://www.github.com/koesterlab/datavzrd/compare/v1.16.2...v1.17.0) (2022-06-27)
+
+
+### Features
+
+* Show tick plots and heatmaps in display-mode: detail ([#150](https://www.github.com/koesterlab/datavzrd/issues/150)) ([b7c1dd1](https://www.github.com/koesterlab/datavzrd/commit/b7c1dd140cbfeaa72d70853f3b80c8685b7a747b))
+* Support multiple datasets for render-plot views ([#156](https://www.github.com/koesterlab/datavzrd/issues/156)) ([1e66ff5](https://www.github.com/koesterlab/datavzrd/commit/1e66ff5b6cb47a5fdfb5a39e22e17cc4cbd11454))
+
+
+### Bug Fixes
+
+* Fix custom plots in detail mode ([#154](https://www.github.com/koesterlab/datavzrd/issues/154)) ([776fc25](https://www.github.com/koesterlab/datavzrd/commit/776fc25e21c65d9ef9b3f356c9b6f6f365a2e48c))
+
 ### [1.16.2](https://www.github.com/koesterlab/datavzrd/compare/v1.16.1...v1.16.2) (2022-05-24)
 
 
