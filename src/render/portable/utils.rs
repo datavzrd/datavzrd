@@ -69,6 +69,11 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
             "bootstrap-select.min.css",
             include_str!("../../../static/bootstrap-select.min.css"),
         ),
+        ("jspdf.umd.js", include_str!("../../../static/jspdf.umd.js")),
+        (
+            "jspdf.plugin.autotable.min.js",
+            include_str!("../../../static/jspdf.plugin.autotable.min.js"),
+        ),
     ];
 
     for (name, file) in files {

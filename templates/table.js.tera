@@ -82,6 +82,16 @@ $(document).ready(function() {
         {% endfor %}
     })
 
+    $("#btnPrint").on("click", function () {
+        var printDoc = new jspdf.jsPDF();
+        var c = [{% for title in titles %}{% if display_modes[title] == "normal" %}{header: "{{ title }}", dataKey: "{{ title }}"}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
+        if (columns.length > displayed_columns.length) {
+            c.push({header: "", dataKey: ""});
+        }
+        printDoc.autoTable({ html: '#table', columns: c })
+        printDoc.save('datavzrd-report.pdf')
+    });
+
     $( ".btn-sm" ).click(function() {
         var col = $(this).data( "col" );
         var field = $(this).data("val").toString();
@@ -327,7 +337,11 @@ function renderTickPlots{{ loop.index0 }}(ah, columns) {
             let value = table_rows[row]["{{ title }}"];
             if (value != "" && !detail_mode) {
                 this.innerHTML = "";
+                let hidden_value = document.createElement("div");
+                hidden_value.style.display = "none";
+                hidden_value.innerHTML = value;
                 this.appendChild(div);
+                this.appendChild(hidden_value);
                 var data = [{"{{ title }}": value}];
                 var s = specs;
                 s.data = {};
