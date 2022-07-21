@@ -82,6 +82,16 @@ $(document).ready(function() {
         {% endfor %}
     })
 
+    window.addEventListener('beforeprint', (event) => {
+      console.log('Before print');
+      $('#table').bootstrapTable('togglePagination');
+      render(additional_headers, displayed_columns, table_rows, columns);
+    });
+
+    $("#btnPrint").on("click", function () {
+         window.print();
+     });
+
     $( ".btn-sm" ).click(function() {
         var col = $(this).data( "col" );
         var field = $(this).data("val").toString();

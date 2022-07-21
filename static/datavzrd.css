@@ -1,3 +1,7 @@
+body {
+    -webkit-print-color-adjust:exact;
+}
+
 .sym {
     cursor: pointer;
 }
