@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.17.1](https://www.github.com/koesterlab/datavzrd/compare/v1.17.0...v1.17.1) (2022-08-04)
+
+
+### Bug Fixes
+
+* Remove detail view when columns are hidden ([#158](https://www.github.com/koesterlab/datavzrd/issues/158)) ([ea06cae](https://www.github.com/koesterlab/datavzrd/commit/ea06caee1296b0b4b46b3c02d5fc0284afc5429b))
+
 ## [1.17.0](https://www.github.com/koesterlab/datavzrd/compare/v1.16.2...v1.17.0) (2022-06-27)
 
 
