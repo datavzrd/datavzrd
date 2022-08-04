@@ -441,7 +441,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     }
     let detail_mode = display_modes
         .iter()
-        .filter(|(_, mode)| *mode != "normal")
+        .filter(|(_, mode)| *mode == "detail")
         .count()
         > 0;
 
