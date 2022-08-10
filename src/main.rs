@@ -4,7 +4,7 @@ use crate::render::Renderer;
 use crate::spec::ItemsSpec;
 use anyhow::Result;
 use log::LevelFilter;
-use simplelog::{Config, SimpleLogger};
+use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
 use structopt::StructOpt;
 
 pub(crate) mod cli;
@@ -14,7 +14,12 @@ pub(crate) mod utils;
 
 fn main() -> Result<()> {
     let opt = cli::Datavzrd::from_args();
-    let _ = SimpleLogger::init(LevelFilter::Warn, Config::default());
+    let _ = TermLogger::init(
+        LevelFilter::Warn,
+        Config::default(),
+        TerminalMode::Stderr,
+        ColorChoice::Auto,
+    );
     let config = ItemsSpec::from_file(&opt.config)?;
     config.validate()?;
 
