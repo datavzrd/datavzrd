@@ -31,9 +31,9 @@ $(document).ready(function() {
 
     $('#table').bootstrapTable({
         columns: bs_table_cols,
-        {% if is_single_page %}pagination: true,{% endif %}
+        {% if is_single_page %}pagination: true, pageSize: {{ page_size}},{% endif %}
         data: [],
-        {% if detail_mode %}detailView: true, detailFormatter: "detailFormatter",{% endif %}
+        {% if detail_mode %}detailView: true, detailFormatter: "detailFormatter"{% endif %}
     })
 
     let additional_headers = [{% if additional_headers %}{% for ah in additional_headers %}{{ "{" }}{% for title in titles %}"{{ title }}":"<b>{{ ah[title] }}</b>"{% if not loop.last %},{% endif %}{% endfor %}{{ "}" }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}];

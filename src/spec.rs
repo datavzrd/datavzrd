@@ -248,6 +248,8 @@ pub(crate) struct ItemSpecs {
     pub(crate) datasets: Option<HashMap<String, String>>,
     #[serde(default = "default_page_size")]
     pub(crate) page_size: usize,
+    #[serde(skip)]
+    pub(crate) single_page_page_size: usize,
     #[serde(rename = "desc")]
     pub(crate) description: Option<String>,
     #[serde(default = "default_render_table")]
@@ -279,6 +281,7 @@ impl ItemSpecs {
             .from_path(&dataset.path)
             .context(format!("Could not read file with path {:?}", &dataset.path))?;
         let rows = &reader.records().count();
+        self.single_page_page_size = self.page_size;
         if rows <= &single_page_threshold {
             self.page_size = *rows;
         }
@@ -499,7 +502,7 @@ pub(crate) struct Heatmap {
     pub(crate) aux_domain_columns: AuxDomainColumns,
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
 pub struct AuxDomainColumns(pub(crate) Option<Vec<String>>);
 
 impl AuxDomainColumns {
@@ -638,6 +641,7 @@ mod tests {
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: 100,
+            single_page_page_size: 0,
             description: None,
             render_table: Some(HashMap::from([(
                 String::from("x"),
@@ -704,6 +708,7 @@ mod tests {
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: 100,
+            single_page_page_size: 0,
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
             render_plot: Some(expected_render_plot),
@@ -989,6 +994,7 @@ mod tests {
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: 184_usize,
+            single_page_page_size: 100,
             description: None,
             render_table: Some(HashMap::from([(
                 "age".to_string(),
