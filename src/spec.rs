@@ -33,6 +33,7 @@ pub(crate) struct ItemsSpec {
     #[serde(default = "default_single_page_threshold")]
     pub(crate) max_in_memory_rows: usize,
     pub(crate) views: HashMap<String, ItemSpecs>,
+    pub(crate) aux_libraries: Option<Vec<String>>,
 }
 
 impl ItemsSpec {
@@ -255,6 +256,8 @@ pub(crate) struct ItemSpecs {
     #[serde(default)]
     pub(crate) render_plot: Option<RenderPlotSpec>,
     #[serde(default)]
+    pub(crate) render_html: Option<RenderHtmlSpec>,
+    #[serde(default)]
     pub(crate) max_in_memory_rows: Option<usize>,
 }
 
@@ -425,6 +428,12 @@ impl RenderPlotSpec {
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
+pub(crate) struct RenderHtmlSpec {
+    pub(crate) script_path: String,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct LinkSpec {
     #[serde(default)]
     pub(crate) column: String,
@@ -499,7 +508,7 @@ pub(crate) struct Heatmap {
     pub(crate) aux_domain_columns: AuxDomainColumns,
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
 pub struct AuxDomainColumns(pub(crate) Option<Vec<String>>);
 
 impl AuxDomainColumns {
@@ -644,6 +653,7 @@ mod tests {
                 expected_render_columns,
             )])),
             render_plot: None,
+            render_html: None,
             max_in_memory_rows: None,
         };
 
@@ -653,6 +663,7 @@ mod tests {
             max_in_memory_rows: 1000,
             views: HashMap::from([(String::from("table-a"), expected_table_spec)]),
             report_name: "my_report".to_string(),
+            aux_libraries: None
         };
 
         let raw_config = r#"
@@ -707,6 +718,7 @@ mod tests {
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
             render_plot: Some(expected_render_plot),
+            render_html: None,
             max_in_memory_rows: None,
         };
 
@@ -716,6 +728,7 @@ mod tests {
             max_in_memory_rows: 1000,
             views: HashMap::from([(String::from("plot-a"), expected_item_spec)]),
             report_name: "".to_string(),
+            aux_libraries: None
         };
 
         let raw_config = r#"
@@ -995,6 +1008,7 @@ mod tests {
                 expected_render_columns,
             )])),
             render_plot: None,
+            render_html: None,
             max_in_memory_rows: None,
         };
 

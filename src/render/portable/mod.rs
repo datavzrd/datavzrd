@@ -98,6 +98,19 @@ impl Renderer for ItemRenderer {
                         &self.specs.views,
                         &self.specs.default_view,
                     )?;
+                // Render HTML
+                } else if let Some(table_specs) = &table.render_html {
+                    render_html_page(
+                        &out_path,
+                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
+                        name,
+                        table,
+                        dataset,
+                        &self.specs.views,
+                        &self.specs.default_view,
+                        table_specs.script_path.to_string(),
+                        &self.specs.aux_libraries,
+                    )?;
                 }
                 // Render table
                 else if let Some(table_specs) = &table.render_table {
@@ -862,6 +875,85 @@ fn render_plot_page<P: AsRef<Path>>(
         Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
 
     let html = templates.render("plot.html.tera", &context)?;
+
+    let mut file = fs::File::create(file_path)?;
+    file.write_all(html.as_bytes())?;
+
+    Ok(())
+}
+
+#[allow(clippy::too_many_arguments)]
+/// Renders a plot page from given render-plot spec
+fn render_html_page<P: AsRef<Path>>(
+    output_path: P,
+    tables: &[String],
+    name: &str,
+    item_spec: &ItemSpecs,
+    dataset: &DatasetSpecs,
+    views: &HashMap<String, ItemSpecs>,
+    default_view: &Option<String>,
+    script_path: String,
+    aux_libraries: &Option<Vec<String>>,
+) -> Result<()> {
+    let generate_reader = || -> csv::Result<Reader<File>> {
+        csv::ReaderBuilder::new()
+            .delimiter(dataset.separator as u8)
+            .from_path(&dataset.path)
+    };
+    let mut reader =
+        generate_reader().context(format!("Could not read file with path {:?}", &dataset.path))?;
+
+    let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+    let records: Vec<HashMap<String, String>> = reader
+        .records()
+        .skip(&dataset.header_rows - 1)
+        .map(|row| {
+            row.unwrap()
+                .iter()
+                .enumerate()
+                .map(|(index, record)| (headers.get(index).unwrap().to_owned(), record.to_owned()))
+                .collect()
+        })
+        .collect_vec();
+
+    let script = fs::read_to_string(script_path)?;
+
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "html.html.tera",
+        include_str!("../../../templates/html.html.tera"),
+    )?;
+    let mut context = Context::new();
+
+    let local: DateTime<Local> = Local::now();
+
+    context.insert("data", &json!(records).to_string());
+    context.insert("script", &script);
+    context.insert("aux_libraries", &aux_libraries);
+    context.insert("description", &item_spec.description);
+    context.insert(
+        "tables",
+        &tables
+            .iter()
+            .filter(|t| !views.get(*t).unwrap().hidden)
+            .filter(|t| {
+                if let Some(default_view) = default_view {
+                    t != &default_view
+                } else {
+                    true
+                }
+            })
+            .collect_vec(),
+    );
+    context.insert("default_view", default_view);
+    context.insert("name", name);
+    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
+    context.insert("version", &env!("CARGO_PKG_VERSION"));
+
+    let file_path =
+        Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
+
+    let html = templates.render("html.html.tera", &context)?;
 
     let mut file = fs::File::create(file_path)?;
     file.write_all(html.as_bytes())?;
