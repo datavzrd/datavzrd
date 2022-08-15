@@ -170,7 +170,7 @@ views:
 
 ### render-html
 
-`render-html` contains individual configurations for generating a single custom view where a variable `data` with the dataset in json format that can be accessed in the given js file. The rendered view contains a `<div id="canvas">` that can then be manipulated with the given script.
+`render-html` contains individual configurations for generating a single custom view where a global variable `data` with the dataset in json format can be accessed in the given js file. The rendered view contains a `<div id="canvas">` that can then be manipulated with the given script. By default, the div uses the full width and centers its contents. Of course, the divs CSS can be overwritten via Javascript. jQuery is already available, any other necessary Javascript libraries can be loaded via [aux-libraries](#aux-libraries).
 
 | keyword     | explanation                                                                                                 |
 |-------------|-------------------------------------------------------------------------------------------------------------|
