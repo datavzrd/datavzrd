@@ -773,6 +773,7 @@ mod tests {
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: 100,
+            single_page_page_size: 0,
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
             render_plot: None,
