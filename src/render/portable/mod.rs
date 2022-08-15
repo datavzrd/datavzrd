@@ -174,6 +174,7 @@ impl Renderer for ItemRenderer {
                         table_specs,
                         additional_headers,
                         is_single_page,
+                        table.single_page_page_size,
                     )?;
                     render_plots(
                         &out_path,
@@ -283,6 +284,7 @@ fn render_page<P: AsRef<Path>>(
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 /// Render javascript files for each table containing formatters
 fn render_table_javascript<P: AsRef<Path>>(
     output_path: P,
@@ -292,6 +294,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_headers: Option<Vec<StringRecord>>,
     is_single_page: bool,
+    page_size: usize,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -471,6 +474,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("brush_domains", &json!(brush_domains).to_string());
     context.insert("aux_domains", &json!(aux_domains).to_string());
     context.insert("is_single_page", &is_single_page);
+    context.insert("page_size", &page_size);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
 
