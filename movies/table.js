@@ -54,7 +54,7 @@ $(document).ready(function() {
 
     $('#table').bootstrapTable({
         columns: bs_table_cols,
-        pagination: true,
+        pagination: true, pageSize: 100,
         data: [],
         
     })

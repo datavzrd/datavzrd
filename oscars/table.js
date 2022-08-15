@@ -48,9 +48,9 @@ $(document).ready(function() {
 
     $('#table').bootstrapTable({
         columns: bs_table_cols,
-        pagination: true,
+        pagination: true, pageSize: 25,
         data: [],
-        detailView: true, detailFormatter: "detailFormatter",
+        detailView: true, detailFormatter: "detailFormatter"
     })
 
     let additional_headers = [];
