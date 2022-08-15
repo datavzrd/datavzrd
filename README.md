@@ -121,13 +121,16 @@ views:
 
 `max-in-memory-rows` defines the threshold for the maximum number of rows in memory. If the given dataset exceeds the threshold the data will be split across multiple pages and their html files. Defaults to 1000 rows.
 
+### aux-libraries
+
+`aux-libraries` allows to add one or more js libraries via cdn links for usage in [render-html](#render-html). The keyword expects a list of urls that link to the js libraries.
+
 | keyword          | explanation                                                                                                                                                      | default |
 |------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------- |
 | path             | The path of the CSV/TSV file                                                                                                                                     |         |
 | separator        | The delimiter of the file                                                                                                                                        | ,       |
 | header-rows      | Number of header-rows of the file                                                                                                                                | 1       |
 | [links](#links)  | Configuration linking between items                                                                                                                              |         |
-| aux-libraries    | Allows to add one or more js libraries via cdn links for usage in [render-html](#render-html). The keyword expects a list of urls that link to the js libraries. |         |
 
 ### views
 
