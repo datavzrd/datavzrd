@@ -618,7 +618,7 @@ mod tests {
     use crate::spec::{
         default_display_mode, default_links, default_render_table, default_single_page_threshold,
         AuxDomainColumns, DatasetSpecs, ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec,
-        RenderPlotSpec, TickPlot,
+        RenderHtmlSpec, RenderPlotSpec, TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -629,7 +629,7 @@ mod tests {
             optional: false,
             custom: None,
             display_mode: "normal".to_string(),
-            link_to_url: Some(String::from("https://www.rust-lang.org")),
+            link_to_url: Some("https://www.rust-lang.org".to_string()),
             plot: None,
             custom_plot: None,
             ellipsis: None,
@@ -648,22 +648,19 @@ mod tests {
             datasets: None,
             page_size: 100,
             description: None,
-            render_table: Some(HashMap::from([(
-                String::from("x"),
-                expected_render_columns,
-            )])),
+            render_table: Some(HashMap::from([("x".to_string(), expected_render_columns)])),
             render_plot: None,
             render_html: None,
             max_in_memory_rows: None,
         };
 
         let expected_config = ItemsSpec {
-            datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
+            datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
             default_view: None,
             max_in_memory_rows: 1000,
-            views: HashMap::from([(String::from("table-a"), expected_table_spec)]),
+            views: HashMap::from([("table-a".to_string(), expected_table_spec)]),
             report_name: "my_report".to_string(),
-            aux_libraries: None
+            aux_libraries: None,
         };
 
         let raw_config = r#"
@@ -723,12 +720,12 @@ mod tests {
         };
 
         let expected_config = ItemsSpec {
-            datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
+            datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
             default_view: Some("table-a".to_string()),
             max_in_memory_rows: 1000,
-            views: HashMap::from([(String::from("plot-a"), expected_item_spec)]),
+            views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
-            aux_libraries: None
+            aux_libraries: None,
         };
 
         let raw_config = r#"
@@ -747,6 +744,58 @@ mod tests {
                     render-plot:
                         spec: |
                             {'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}
+            "#;
+
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert_eq!(config, expected_config);
+    }
+
+    #[test]
+    fn test_html_config_deserialization() {
+        let expected_render_html = RenderHtmlSpec {
+            script_path: "my-script.js".to_string(),
+        };
+
+        let expected_dataset_spec = DatasetSpecs {
+            path: PathBuf::from("test.tsv"),
+            separator: ',',
+            header_rows: 1,
+            links: Some(HashMap::from([])),
+        };
+
+        let expected_item_spec = ItemSpecs {
+            hidden: false,
+            dataset: Some("table-a".to_string()),
+            datasets: None,
+            page_size: 100,
+            description: Some("my table".parse().unwrap()),
+            render_table: default_render_table(),
+            render_plot: None,
+            render_html: Some(expected_render_html),
+            max_in_memory_rows: None,
+        };
+
+        let expected_config = ItemsSpec {
+            datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
+            default_view: None,
+            max_in_memory_rows: 1000,
+            views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
+            report_name: "".to_string(),
+            aux_libraries: Some(Vec::from(["https://cdnjs.org/d3.js".to_string()])),
+        };
+
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: test.tsv
+            views:
+                plot-a:
+                    dataset: table-a
+                    desc: "my table"
+                    render-html:
+                        script-path: my-script.js
+            aux-libraries:
+                - https://cdnjs.org/d3.js
             "#;
 
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
