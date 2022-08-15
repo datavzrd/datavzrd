@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.17.2](https://www.github.com/koesterlab/datavzrd/compare/v1.17.1...v1.17.2) (2022-08-15)
+
+
+### Bug Fixes
+
+* Fix usage of page-size for single page views ([#162](https://www.github.com/koesterlab/datavzrd/issues/162)) ([648bcd3](https://www.github.com/koesterlab/datavzrd/commit/648bcd346d19ace7a8210fb6bea7e3512a102266))
+
 ### [1.17.1](https://www.github.com/koesterlab/datavzrd/compare/v1.17.0...v1.17.1) (2022-08-04)
 
 
