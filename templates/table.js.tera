@@ -86,10 +86,12 @@ $(document).ready(function() {
     $("#btnPrint").on("click", function () {
         $('#table').bootstrapTable('togglePagination');
         render(additional_headers, displayed_columns, table_rows, columns);
+        $('.detail-icon').css('display', 'none');
+        $('.dropdown').css('display', 'none');
+        $('.form-control').css('display', 'none');
         setTimeout(function (){
         window.print();
         }, 0);
-
      });
 
     $( ".btn-sm" ).click(function() {
