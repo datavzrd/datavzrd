@@ -33,6 +33,7 @@ pub(crate) struct ItemsSpec {
     #[serde(default = "default_single_page_threshold")]
     pub(crate) max_in_memory_rows: usize,
     pub(crate) views: HashMap<String, ItemSpecs>,
+    pub(crate) aux_libraries: Option<Vec<String>>,
 }
 
 impl ItemsSpec {
@@ -248,12 +249,16 @@ pub(crate) struct ItemSpecs {
     pub(crate) datasets: Option<HashMap<String, String>>,
     #[serde(default = "default_page_size")]
     pub(crate) page_size: usize,
+    #[serde(skip)]
+    pub(crate) single_page_page_size: usize,
     #[serde(rename = "desc")]
     pub(crate) description: Option<String>,
     #[serde(default = "default_render_table")]
     pub(crate) render_table: Option<HashMap<String, RenderColumnSpec>>,
     #[serde(default)]
     pub(crate) render_plot: Option<RenderPlotSpec>,
+    #[serde(default)]
+    pub(crate) render_html: Option<RenderHtmlSpec>,
     #[serde(default)]
     pub(crate) max_in_memory_rows: Option<usize>,
 }
@@ -279,6 +284,7 @@ impl ItemSpecs {
             .from_path(&dataset.path)
             .context(format!("Could not read file with path {:?}", &dataset.path))?;
         let rows = &reader.records().count();
+        self.single_page_page_size = self.page_size;
         if rows <= &single_page_threshold {
             self.page_size = *rows;
         }
@@ -425,6 +431,12 @@ impl RenderPlotSpec {
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
+pub(crate) struct RenderHtmlSpec {
+    pub(crate) script_path: String,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct LinkSpec {
     #[serde(default)]
     pub(crate) column: String,
@@ -499,7 +511,7 @@ pub(crate) struct Heatmap {
     pub(crate) aux_domain_columns: AuxDomainColumns,
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
 pub struct AuxDomainColumns(pub(crate) Option<Vec<String>>);
 
 impl AuxDomainColumns {
@@ -609,7 +621,7 @@ mod tests {
     use crate::spec::{
         default_display_mode, default_links, default_render_table, default_single_page_threshold,
         AuxDomainColumns, DatasetSpecs, ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec,
-        RenderPlotSpec, TickPlot,
+        RenderHtmlSpec, RenderPlotSpec, TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -620,7 +632,7 @@ mod tests {
             optional: false,
             custom: None,
             display_mode: "normal".to_string(),
-            link_to_url: Some(String::from("https://www.rust-lang.org")),
+            link_to_url: Some("https://www.rust-lang.org".to_string()),
             plot: None,
             custom_plot: None,
             ellipsis: None,
@@ -638,21 +650,21 @@ mod tests {
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: 100,
+            single_page_page_size: 0,
             description: None,
-            render_table: Some(HashMap::from([(
-                String::from("x"),
-                expected_render_columns,
-            )])),
+            render_table: Some(HashMap::from([("x".to_string(), expected_render_columns)])),
             render_plot: None,
+            render_html: None,
             max_in_memory_rows: None,
         };
 
         let expected_config = ItemsSpec {
-            datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
+            datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
             default_view: None,
             max_in_memory_rows: 1000,
-            views: HashMap::from([(String::from("table-a"), expected_table_spec)]),
+            views: HashMap::from([("table-a".to_string(), expected_table_spec)]),
             report_name: "my_report".to_string(),
+            aux_libraries: None,
         };
 
         let raw_config = r#"
@@ -704,18 +716,21 @@ mod tests {
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: 100,
+            single_page_page_size: 0,
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
             render_plot: Some(expected_render_plot),
+            render_html: None,
             max_in_memory_rows: None,
         };
 
         let expected_config = ItemsSpec {
-            datasets: HashMap::from([(String::from("table-a"), expected_dataset_spec)]),
+            datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
             default_view: Some("table-a".to_string()),
             max_in_memory_rows: 1000,
-            views: HashMap::from([(String::from("plot-a"), expected_item_spec)]),
+            views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
+            aux_libraries: None,
         };
 
         let raw_config = r#"
@@ -734,6 +749,59 @@ mod tests {
                     render-plot:
                         spec: |
                             {'$schema': 'https://vega.github.io/schema/vega-lite/v5.json'}
+            "#;
+
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert_eq!(config, expected_config);
+    }
+
+    #[test]
+    fn test_html_config_deserialization() {
+        let expected_render_html = RenderHtmlSpec {
+            script_path: "my-script.js".to_string(),
+        };
+
+        let expected_dataset_spec = DatasetSpecs {
+            path: PathBuf::from("test.tsv"),
+            separator: ',',
+            header_rows: 1,
+            links: Some(HashMap::from([])),
+        };
+
+        let expected_item_spec = ItemSpecs {
+            hidden: false,
+            dataset: Some("table-a".to_string()),
+            datasets: None,
+            page_size: 100,
+            single_page_page_size: 0,
+            description: Some("my table".parse().unwrap()),
+            render_table: default_render_table(),
+            render_plot: None,
+            render_html: Some(expected_render_html),
+            max_in_memory_rows: None,
+        };
+
+        let expected_config = ItemsSpec {
+            datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
+            default_view: None,
+            max_in_memory_rows: 1000,
+            views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
+            report_name: "".to_string(),
+            aux_libraries: Some(Vec::from(["https://cdnjs.org/d3.js".to_string()])),
+        };
+
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: test.tsv
+            views:
+                plot-a:
+                    dataset: table-a
+                    desc: "my table"
+                    render-html:
+                        script-path: my-script.js
+            aux-libraries:
+                - https://cdnjs.org/d3.js
             "#;
 
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
@@ -989,12 +1057,14 @@ mod tests {
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: 184_usize,
+            single_page_page_size: 100,
             description: None,
             render_table: Some(HashMap::from([(
                 "age".to_string(),
                 expected_render_columns,
             )])),
             render_plot: None,
+            render_html: None,
             max_in_memory_rows: None,
         };
 

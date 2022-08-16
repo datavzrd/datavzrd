@@ -121,12 +121,16 @@ views:
 
 `max-in-memory-rows` defines the threshold for the maximum number of rows in memory. If the given dataset exceeds the threshold the data will be split across multiple pages and their html files. Defaults to 1000 rows.
 
-| keyword         | explanation                         | default |
-| --------------- | ----------------------------------- | ------- |
-| path            | The path of the CSV/TSV file        |         |
-| separator       | The delimiter of the file           | ,       |
-| header-rows     | Number of header-rows of the file   | 1       |
-| [links](#links) | Configuration linking between items |         |
+### aux-libraries
+
+`aux-libraries` allows to add one or more js libraries via cdn links for usage in [render-html](#render-html). The keyword expects a list of urls that link to the js libraries.
+
+| keyword          | explanation                                                                                                                                                      | default |
+|------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------- |
+| path             | The path of the CSV/TSV file                                                                                                                                     |         |
+| separator        | The delimiter of the file                                                                                                                                        | ,       |
+| header-rows      | Number of header-rows of the file                                                                                                                                | 1       |
+| [links](#links)  | Configuration linking between items                                                                                                                              |         |
 
 ### views
 
@@ -140,6 +144,7 @@ views:
 | page-size                     | Number of rows per page                                                                                                                                                                                                                            | 100     |
 | [render-table](#render-table) | Configuration of individual column rendering                                                                                                                                                                                                       |         |
 | [render-plot](#render-plot)   | Configuration of a single plot                                                                                                                                                                                                                     |         |
+| [render-html](#render-html)   | Configuration of a custom html view                                                                                                                                                                                                                |         |
 | hidden                        | Whether or not the view is shown in the menu navigation                                                                                                                                                                                            | false   |
 | max-in-memory-rows            | Overwrites the global settings for [max-in-memory-rows](#max-in-memory-rows)                                                                                                                                                                       |         |
 
@@ -165,6 +170,14 @@ views:
 | --------- | -------------------------------------------------------------------------------------------------- |
 | spec      | A schema for a vega lite plot that will be rendered to a single view                               |
 | spec-path | The path to a file containing a schema for a vega lite plot that will be rendered to a single view |
+
+### render-html
+
+`render-html` contains individual configurations for generating a single custom view where a global variable `data` with the dataset in json format can be accessed in the given js file. The rendered view contains a `<div id="canvas">` that can then be manipulated with the given script. By default, the div uses the full width and centers its contents. Of course, the divs CSS can be overwritten via Javascript. jQuery is already available, any other necessary Javascript libraries can be loaded via [aux-libraries](#aux-libraries).
+
+| keyword     | explanation                                                                                                 |
+|-------------|-------------------------------------------------------------------------------------------------------------|
+| script-path | A path to a js file that has access to the dataset and can manipulate the given canvas of the rendered view |
 
 ### links
 
