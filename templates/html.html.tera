@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>datavzrd report</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/datavzrd.css">
+</head>
+
+<body>
+<script src="../static/jquery.min.js"></script>
+<script src="../static/bootstrap.bundle.min.js"></script>
+<script src="../static/bootstrap-table.min.js"></script>
+<script src="../static/bootstrap-select.min.js"></script>
+<script src="../static/vega.min.js"></script>
+<script src="../static/vega-lite.min.js"></script>
+<script src="../static/vega-embed.min.js"></script>
+<script src="../static/lz-string.min.js"></script>
+<script src="../static/showdown.min.js"></script>
+{% if aux_libraries %}
+{% for library in aux_libraries %}
+<script src="{{ library }}"></script>
+{% endfor %}
+{% endif %}
+
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">datavzrd</a>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools/blob/master/CHANGELOG.md">{{ version }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools">github</a>
+            </li>
+        </ul>
+        <span class="navbar-text">
+            created {{ time }}
+        </span>
+    </div>
+</nav>
+<nav class="navbar navbar-expand navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarText2">
+        <ul class="navbar-nav mr-auto">
+            <li><a href="#">{{ name }}</a></li>
+        </ul>
+        <span class="pull-right">
+            {% if description %}
+            <div class="btn-group">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                    </svg>
+                </button>
+            </div>
+            {% endif %}
+            <select id="view-selection" title="views" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." data-dropdown-align-right="true" class="selectpicker" data-style="btn-primary" data-live-search="true">
+                {% if default_view %}
+                <option value="../{{ default_view }}/index_1.html">{{ default_view }}</option>
+                {% endif %}
+                {% for table in tables | sort %}
+                <option value="../{{ table }}/index_1.html">{{ table }}</option>
+                {% endfor %}
+            </select>
+        </span>
+    </div>
+</nav>
+<div class="container-fluid">
+    {% if description %}
+    <script>
+        $(document).ready(function() {
+            var innerDescription = document.getElementById('innerDescription');
+            var converter = new showdown.Converter();
+            converter.setFlavor('github');
+            innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
+        });
+    </script>
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-md-12">
+            <div class="collapse" id="collapseDescription">
+                <div class="card card-body" id="innerDescription" data-markdown="{{ description | escape }}">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <script>
+    var data = {{ data | safe }};
+    {{ script | safe}}
+    </script>
+    <div class="row">
+        <div class="col-md-12 d-flex justify-content-center" id="canvas"></div>
+    </div>
+</div>
+</body>
+</html>

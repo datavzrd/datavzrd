@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.18.0](https://www.github.com/koesterlab/datavzrd/compare/v1.17.1...v1.18.0) (2022-08-15)
+
+
+### Features
+
+* Add new render-html keyword and allow integration of aux-libraries ([#163](https://www.github.com/koesterlab/datavzrd/issues/163)) ([9e8dc4e](https://www.github.com/koesterlab/datavzrd/commit/9e8dc4ec808e639750bd1d043c680c47163eabeb))
+
+
+### Bug Fixes
+
+* Fix test case for html config deserialization ([7512fd4](https://www.github.com/koesterlab/datavzrd/commit/7512fd4f1e9334224c66832b9bd15b8b170fc400))
+* Fix usage of page-size for single page views ([#162](https://www.github.com/koesterlab/datavzrd/issues/162)) ([648bcd3](https://www.github.com/koesterlab/datavzrd/commit/648bcd346d19ace7a8210fb6bea7e3512a102266))
+
+### [1.17.1](https://www.github.com/koesterlab/datavzrd/compare/v1.17.0...v1.17.1) (2022-08-04)
+
+
+### Bug Fixes
+
+* Remove detail view when columns are hidden ([#158](https://www.github.com/koesterlab/datavzrd/issues/158)) ([ea06cae](https://www.github.com/koesterlab/datavzrd/commit/ea06caee1296b0b4b46b3c02d5fc0284afc5429b))
+
 ## [1.17.0](https://www.github.com/koesterlab/datavzrd/compare/v1.16.2...v1.17.0) (2022-06-27)
 
 

@@ -118,6 +118,7 @@ mod tests {
             default_view: Some("my-view".to_string()),
             max_in_memory_rows: 1000,
             views: Default::default(),
+            aux_libraries: None,
         };
         render_index_file(Path::new("/tmp"), &spec).unwrap();
         let rendered_file_content = fs::read_to_string("/tmp/index.html")
