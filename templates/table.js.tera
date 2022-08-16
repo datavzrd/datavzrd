@@ -82,14 +82,14 @@ $(document).ready(function() {
         {% endfor %}
     })
 
-    window.addEventListener('beforeprint', (event) => {
-      console.log('Before print');
-      $('#table').bootstrapTable('togglePagination');
-      render(additional_headers, displayed_columns, table_rows, columns);
-    });
 
     $("#btnPrint").on("click", function () {
-         window.print();
+        $('#table').bootstrapTable('togglePagination');
+        render(additional_headers, displayed_columns, table_rows, columns);
+        setTimeout(function (){
+        window.print();
+        }, 0);
+
      });
 
     $( ".btn-sm" ).click(function() {
