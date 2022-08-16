@@ -168,6 +168,9 @@ fn generate_nominal_plot(
         if !value.is_empty() {
             let entry = count_values.entry(value.to_owned()).or_insert_with(|| 0);
             *entry += 1;
+        } else {
+            let entry = count_values.entry("NA".to_owned()).or_insert_with(|| 0);
+            *entry += 1;
         }
     }
 
