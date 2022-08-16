@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.18.1](https://www.github.com/koesterlab/datavzrd/compare/v1.18.0...v1.18.1) (2022-08-16)
+
+
+### Bug Fixes
+
+* Show empty values in separate category in histograms ([#166](https://www.github.com/koesterlab/datavzrd/issues/166)) ([6780625](https://www.github.com/koesterlab/datavzrd/commit/67806254f0c47bba556feac79e5f1a25e70f58ea))
+
 ## [1.18.0](https://www.github.com/koesterlab/datavzrd/compare/v1.17.1...v1.18.0) (2022-08-15)
 
 
