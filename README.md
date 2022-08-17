@@ -49,7 +49,9 @@ views:
     render-table:
       x:
         custom: |
-          function(value) {
+          function(value, row) {
+            // Access cell value or any other value of the same row (by row.<colname>)
+            // to render custom content.
             return `<b>${value}</b>`;
           }
       y:
@@ -61,7 +63,9 @@ views:
         optional: true
         custom-plot:
           data: |
-            function(value) {
+            function(value, row) {
+              // Generate data for this cell, having access to the value and any other values from
+              // the same row.
               return [{"significance": value, "threshold": value > 60}]
             }
           spec: |
