@@ -87,6 +87,13 @@ $(document).ready(function() {
         $('#table').bootstrapTable('togglePagination');
         render(additional_headers, displayed_columns, table_rows, columns);
         $('th').css("height", header_height - 15);
+        {% if detail_mode %}
+        $(`table > tbody > tr td:nth-child(1)`).each(function() {this.style.setProperty("display", "none");});
+        {% endif %}
+        if (links.length > 0) {
+            $(`table > tbody > tr td:last-child`).each(function() {this.style.setProperty("display", "none");});
+            $("table > thead > tr th:last-child").css("display", "none");
+        }
         setTimeout(function (){
         window.print();
         }, 0);

@@ -5,7 +5,7 @@
 }
 
 @media print {
-    .detail-icon, .dropdown, .form-control, .filter-brush-container, .sym, .navbar, .btn  {
+    .detail-icon, .dropdown, .form-control, .filter-brush-container, .sym, .navbar, .btn, .detail  {
         display: none;
     }
     @page {
