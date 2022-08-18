@@ -86,9 +86,7 @@ $(document).ready(function() {
     $("#btnPrint").on("click", function () {
         $('#table').bootstrapTable('togglePagination');
         render(additional_headers, displayed_columns, table_rows, columns);
-        $('.detail-icon').css('display', 'none');
-        $('.dropdown').css('display', 'none');
-        $('.form-control').css('display', 'none');
+        $('th').css("height", header_height - 15);
         setTimeout(function (){
         window.print();
         }, 0);
@@ -383,7 +381,7 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
             }
             value = this.innerHTML;
             if (value !== "" && !detail_mode) {
-                this.style.backgroundColor = scale(value);
+                this.style.setProperty("background-color", scale(value), "important");
             }
             row++;
         }

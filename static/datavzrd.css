@@ -1,5 +1,16 @@
-body {
-    -webkit-print-color-adjust:exact;
+* {
+    color-adjust: exact!important;
+    -webkit-print-color-adjust: exact!important;
+    print-color-adjust: exact!important;
+}
+
+@media print {
+    .detail-icon, .dropdown, .form-control, .filter-brush-container, .sym, .navbar, .btn  {
+        display: none;
+    }
+    @page {
+        margin: 0 0 0 0;
+    }
 }
 
 .sym {
