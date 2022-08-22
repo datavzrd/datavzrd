@@ -357,19 +357,25 @@ function renderDetailTickPlots{{ loop.index0 }}(value, div) {
 {% endfor %}
 
 {% for title, tuple in heatmaps %}
-function colorizeColumn{{ loop.index0 }}(ah, columns) {
+function colorizeColumn{{ loop.index0 }}(ah, columns, table_rows) {
     let detail_mode = columns.indexOf("{{ title }}") == -1;
     let index = columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
     var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
     var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
     let row = 0;
+    {% if tuple.0.custom_content %}
+    var custom_func = {{ tuple.0.custom_content }};
+    {% endif %}
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             if (row < ah) {
                 row++;
                 return;
             }
-            value = this.innerHTML;
+            var value = table_rows[row]["{{ title }}"];
+            {% if tuple.0.custom_content %}
+            value = custom_func(value, table_rows[row]);
+            {% endif %}
             if (value !== "" && !detail_mode) {
                 this.style.backgroundColor = scale(value);
             }
@@ -533,7 +539,7 @@ function render(additional_headers, displayed_columns, table_rows, columns) {
 {% endfor %}
 
 {% for title, tick_plot in heatmaps %}
-    colorizeColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
+    colorizeColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, table_rows);
 {% endfor %}
 
 {% for title, ellipsis in ellipses %}

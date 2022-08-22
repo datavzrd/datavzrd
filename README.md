@@ -228,13 +228,14 @@ views:
 
 `heatmap` defines the attributes of a heatmap for numeric or nominal values.
 
-| keyword            | explanation                                                                                                                                                                                                                                                        |
-|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| scale              | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the heatmap                                                                                                                                                                               |
-| color-scheme       | Defines the [color-scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap for nominal values                                                                                                                                                |
-| range              | Defines the color range of the heatmap as a list                                                                                                                                                                                                                   |
-| domain             | Defines the domain of the heatmap as a list                                                                                                                                                                                                                        |
-| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported.                                   |
+| keyword             | explanation                                                                                                                                                                                                                     |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| scale               | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the heatmap                                                                                                                                            |
+| color-scheme        | Defines the [color-scheme](https://vega.github.io/vega/docs/schemes/#categorical) of the heatmap for nominal values                                                                                                             |
+| range               | Defines the color range of the heatmap as a list                                                                                                                                                                                |
+| domain              | Defines the domain of the heatmap as a list                                                                                                                                                                                     |
+| aux-domain-columns  | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported. |
+| custom-content      | Allows to render custom content into any heatmap cell. Requires a function(value, row) that returns the value that will be used for the heatmap.                                                                                | 
 
 ## Authors
 
