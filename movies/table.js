@@ -103,6 +103,23 @@ $(document).ready(function() {
         
     })
 
+    window.addEventListener('beforeprint', (event) => {
+        setTimeout(function (){
+            $('#table').bootstrapTable('togglePagination');
+            render(additional_headers, displayed_columns, table_rows, columns);
+            $('th').css("height", header_height - 15);
+            
+            if (links.length > 0) {
+            $(`table > tbody > tr td:last-child`).each(function() {this.style.setProperty("display", "none");});
+            $("table > thead > tr th:last-child").css("display", "none");
+            }
+        }, 0);
+    });
+
+    $("#btnPrint").on("click", function () {
+        window.print();
+    });
+
     $( ".btn-sm" ).click(function() {
         var col = $(this).data( "col" );
         var field = $(this).data("val").toString();
@@ -486,7 +503,7 @@ function colorizeColumn0(ah, columns) {
             }
             value = this.innerHTML;
             if (value !== "" && !detail_mode) {
-                this.style.backgroundColor = scale(value);
+                this.style.setProperty("background-color", scale(value), "important");
             }
             row++;
         }
