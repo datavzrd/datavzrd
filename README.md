@@ -235,7 +235,7 @@ views:
 | range               | Defines the color range of the heatmap as a list                                                                                                                                                                                |
 | domain              | Defines the domain of the heatmap as a list                                                                                                                                                                                     |
 | aux-domain-columns  | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported. |
-| custom-content      | Allows to render custom content into any heatmap cell. Requires a `function(value, row)` that returns the value that will be used for the heatmap.                                                                                | 
+| custom-content      | Allows to render custom content into any heatmap cell (while using the actual cell content for the heatmap color). Requires a `function(value, row)` that returns the text value that will be displayed in the cell.                                                                                | 
 
 ## Authors
 
