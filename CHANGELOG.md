@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.19.0](https://www.github.com/koesterlab/datavzrd/compare/v1.18.1...v1.19.0) (2022-08-24)
+
+
+### Features
+
+* Add PDF generation for current view ([#171](https://www.github.com/koesterlab/datavzrd/issues/171)) ([4f2a4c4](https://www.github.com/koesterlab/datavzrd/commit/4f2a4c45a48824b39aacdf462d351ab6107009b4))
+* Allow rendering custom content into any heatmap cell ([#172](https://www.github.com/koesterlab/datavzrd/issues/172)) ([8c5ba92](https://www.github.com/koesterlab/datavzrd/commit/8c5ba92453f8fc29a71921fc0b1386e9d017e0d7))
+
 ### [1.18.1](https://www.github.com/koesterlab/datavzrd/compare/v1.18.0...v1.18.1) (2022-08-16)
 
 
