@@ -75,7 +75,12 @@ $(document).ready(function() {
         renderCustomPlotDetailView{{ loop.index0 }}(row[cp[{{ loop.index0 }}]], `#detail-plot-${index}-cp-{{ loop.index0 }}`);
         {% endfor %}
         {% for title, tuple in heatmaps %}
+        {% if tuple.0.custom_content %}
+        var custom_func{{ loop.index0 }} =  {{ tuple.0.custom_content }};
+        colorizeDetailCard{{ loop.index0 }}(custom_func{{ loop.index0 }}(row[heatmaps[{{ loop.index0 }}]], row), `#heatmap-${index}-{{ loop.index0 }}`);
+        {% else %}
         colorizeDetailCard{{ loop.index0 }}(row[heatmaps[{{ loop.index0 }}]], `#heatmap-${index}-{{ loop.index0 }}`);
+        {% endif %}
         {% endfor %}
         {% for title, tick_plot in tick_plots %}
         renderDetailTickPlots{{ loop.index0 }}(row[ticks[{{ loop.index0 }}]], `#detail-plot-${index}-ticks-{{ loop.index0 }}`);
@@ -382,13 +387,20 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
     var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
     var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
     let row = 0;
+    var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
+    {% if tuple.0.custom_content %}
+    var custom_func = {{ tuple.0.custom_content }};
+    {% endif %}
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             if (row < ah) {
                 row++;
                 return;
             }
-            value = this.innerHTML;
+            var value = table_rows[row]["{{ title }}"];
+            {% if tuple.0.custom_content %}
+            value = custom_func(value, table_rows[row]);
+            {% endif %}
             if (value !== "" && !detail_mode) {
                 this.style.setProperty("background-color", scale(value), "important");
             }

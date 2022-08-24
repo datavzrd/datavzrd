@@ -509,6 +509,8 @@ pub(crate) struct Heatmap {
     pub(crate) domain: Option<Vec<String>>,
     #[serde(default)]
     pub(crate) aux_domain_columns: AuxDomainColumns,
+    #[serde(default)]
+    pub(crate) custom_content: Option<String>,
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]

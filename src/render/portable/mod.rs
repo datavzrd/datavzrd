@@ -373,6 +373,7 @@ fn render_table_javascript<P: AsRef<Path>>(
                 .filter(|(title, _)| *numeric.get(&title.to_string()).unwrap_or(&false))
                 .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
                 .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
+                .filter(|(_, k)| k.custom_content.is_none())
                 .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
                 .map(|(title, k)| {
                     (
