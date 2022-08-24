@@ -96,7 +96,9 @@ $(document).ready(function() {
         let columns = ["Title","Year","Rated","Released","Runtime","Genre","Director","imdbRating","imdbID"];
         
         
+        
         colorizeDetailCard0(row[heatmaps[0]], `#heatmap-${index}-0`);
+        
         
         
         renderDetailTickPlots0(row[ticks[0]], `#detail-plot-${index}-ticks-0`);
@@ -495,13 +497,16 @@ function colorizeColumn0(ah, columns) {
     var ordinal = vega.scale('ordinal');
     var scale = ordinal().domain(["Unrated","Passed","PG-13","R","Approved","Not Rated","M/PG","G","TV-MA","PG","N/A","M"]).range(vega.scheme('accent'));
     let row = 0;
+    var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
+    
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             if (row < ah) {
                 row++;
                 return;
             }
-            value = this.innerHTML;
+            var value = table_rows[row]["Rated"];
+            
             if (value !== "" && !detail_mode) {
                 this.style.setProperty("background-color", scale(value), "important");
             }

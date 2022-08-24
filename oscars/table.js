@@ -90,7 +90,9 @@ $(document).ready(function() {
         let columns = ["oscar_no","oscar_yr","award","name","movie","age","birth place","birth date","birth_mo","birth_d","birth_y"];
         
         
+        
         colorizeDetailCard0(row[heatmaps[0]], `#heatmap-${index}-0`);
+        
         
         
         renderDetailTickPlots0(row[ticks[0]], `#detail-plot-${index}-ticks-0`);
@@ -507,13 +509,16 @@ function colorizeColumn0(ah, columns) {
     var ordinal = vega.scale('ordinal');
     var scale = ordinal().domain(["Best actor","Best actress"]).range(["#add8e6","#ffb6c1"]);
     let row = 0;
+    var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
+    
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             if (row < ah) {
                 row++;
                 return;
             }
-            value = this.innerHTML;
+            var value = table_rows[row]["award"];
+            
             if (value !== "" && !detail_mode) {
                 this.style.setProperty("background-color", scale(value), "important");
             }
