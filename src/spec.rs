@@ -220,8 +220,11 @@ fn default_header_size() -> usize {
     1_usize
 }
 
-fn default_render_table() -> Option<HashMap<String, RenderColumnSpec>> {
-    Some(HashMap::new())
+fn default_render_table() -> Option<RenderTableSpecs> {
+    Some(RenderTableSpecs {
+        render_table: None,
+        additional_headers: None
+    })
 }
 
 fn default_links() -> Option<HashMap<String, LinkSpec>> {
@@ -254,13 +257,24 @@ pub(crate) struct ItemSpecs {
     #[serde(rename = "desc")]
     pub(crate) description: Option<String>,
     #[serde(default = "default_render_table")]
-    pub(crate) render_table: Option<HashMap<String, RenderColumnSpec>>,
+    pub(crate) render_table: Option<RenderTableSpecs>,
     #[serde(default)]
     pub(crate) render_plot: Option<RenderPlotSpec>,
     #[serde(default)]
     pub(crate) render_html: Option<RenderHtmlSpec>,
     #[serde(default)]
     pub(crate) max_in_memory_rows: Option<usize>,
+    #[serde(default)]
+    pub(crate) additional_headers: Option<HashMap<u32, PlotSpec>>
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
+pub(crate) struct RenderTableSpecs {
+    #[serde(default)]
+    pub(crate) render_table: Option<HashMap<String, RenderColumnSpec>>,
+    #[serde(default)]
+    pub(crate) additional_headers: Option<HashMap<u32, PlotSpec>>
 }
 
 lazy_static! {
