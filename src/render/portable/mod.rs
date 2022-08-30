@@ -130,7 +130,8 @@ impl Renderer for ItemRenderer {
                         .context(format!("Could not read file with path {:?}", &dataset.path))?;
                     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
 
-                    let table_specs = &table_specs.columns
+                    let table_specs = &table_specs
+                        .columns
                         .clone()
                         .into_iter()
                         .filter(|(k, s)| !s.optional || headers.contains(k))
