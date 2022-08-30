@@ -80,7 +80,7 @@ impl ItemsSpec {
                             dataset: view.dataset.as_ref().unwrap().to_string()
                         })
                     }
-                    if !render_table.is_empty() && view.render_plot.is_some() {
+                    if !render_table.columns.is_empty() && view.render_plot.is_some() {
                         bail!(PlotAndTablePresentConfiguration {
                             view: name.to_string()
                         });
@@ -90,8 +90,8 @@ impl ItemsSpec {
                         .delimiter(dataset.separator as u8)
                         .from_path(&dataset.path)?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                    for (column, render_columns) in render_table {
-                        if !titles.contains(column) && !render_columns.optional {
+                    for (column, render_columns) in &render_table.columns {
+                        if !titles.contains(&column) && !render_columns.optional {
                             warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
                         }
                         let mut possible_conflicting = Vec::new();
@@ -222,7 +222,7 @@ fn default_header_size() -> usize {
 
 fn default_render_table() -> Option<RenderTableSpecs> {
     Some(RenderTableSpecs {
-        render_table: None,
+        columns: HashMap::from([]),
         additional_headers: None
     })
 }
@@ -272,7 +272,7 @@ pub(crate) struct ItemSpecs {
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct RenderTableSpecs {
     #[serde(default)]
-    pub(crate) render_table: Option<HashMap<String, RenderColumnSpec>>,
+    pub(crate) columns: HashMap<String, RenderColumnSpec>,
     #[serde(default)]
     pub(crate) additional_headers: Option<HashMap<u32, PlotSpec>>
 }
@@ -304,11 +304,11 @@ impl ItemSpecs {
         }
         let headers = reader.headers()?;
         if let Some(render_table) = self.render_table.borrow_mut() {
-            for (_, render_column_specs) in render_table.iter_mut() {
+            for (_, render_column_specs) in render_table.columns.iter_mut() {
                 render_column_specs.preprocess(dataset)?;
             }
         }
-        for (key, render_column_specs) in self.render_table.as_ref().unwrap().iter() {
+        for (key, render_column_specs) in self.render_table.as_ref().unwrap().columns.iter() {
             let get_first_match_group = |regex: &Regex| {
                 regex
                     .captures_iter(key)
@@ -368,7 +368,10 @@ impl ItemSpecs {
                 })
             }
         }
-        self.render_table = Some(indexed_keys);
+        self.render_table = Some(RenderTableSpecs{
+            columns: indexed_keys,
+            additional_headers: self.render_table.clone().unwrap().additional_headers
+        });
         Ok(())
     }
 }

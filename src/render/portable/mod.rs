@@ -130,7 +130,7 @@ impl Renderer for ItemRenderer {
                         .context(format!("Could not read file with path {:?}", &dataset.path))?;
                     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
 
-                    let table_specs = &table_specs
+                    let table_specs = &table_specs.columns
                         .clone()
                         .into_iter()
                         .filter(|(k, s)| !s.optional || headers.contains(k))
@@ -432,28 +432,28 @@ fn render_table_javascript<P: AsRef<Path>>(
         })
         .collect();
 
-    let header_heatmaps: HashMap<String, (&Heatmap, String)> = render_columns
-        .iter()
-        .filter_map(|(_, k)| k.additional_headers)
-        .map(|h| h.iter()
-            .filter_map(|(_, k)| k.heatmap)
-            .map(|(k, v)| {
-                (
-                    k.to_owned(),
-                    (
-                        v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
-                        get_row_domain(
-                            k,
-                            csv_path,
-                            separator,
-                            header_row_length,
-                            v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
-                        )
-                            .unwrap(),
-                    ),
-                )
-            })
-            .collect()
+    // let header_heatmaps: HashMap<String, (&Heatmap, String)> = render_columns
+    //     .iter()
+    //     .filter_map(|(_, k)| k.additional_headers)
+    //     .map(|h| h.iter()
+    //         .filter_map(|(_, k)| k.heatmap)
+    //         .map(|(k, v)| {
+    //             (
+    //                 k.to_owned(),
+    //                 (
+    //                     v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
+    //                     get_row_domain(
+    //                         k,
+    //                         csv_path,
+    //                         separator,
+    //                         header_row_length,
+    //                         v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
+    //                     )
+    //                         .unwrap(),
+    //                 ),
+    //             )
+    //         })
+    //         .collect()
 
     let link_urls: HashMap<String, String> = render_columns
         .iter()

@@ -47,66 +47,69 @@ views:
       # A header
       This is the **description** for *table-a*.
     render-table:
-      x:
-        custom: |
-          function(value, row) {
-            // Access cell value or any other value of the same row (by row.<colname>)
-            // to render custom content.
-            return `<b>${value}</b>`;
-          }
-      y:
-        link-to-url: 'https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={value}'
+      columns:
+        x:
+          custom: |
+            function(value, row) {
+              // Access cell value or any other value of the same row (by row.<colname>)
+              // to render custom content.
+              return `<b>${value}</b>`;
+            }
+        y:
+          link-to-url: 'https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={value}'
   table-b:
     dataset: table-b
     render-table:
-      significance:
-        optional: true
-        custom-plot:
-          data: |
-            function(value, row) {
-              // Generate data for this cell, having access to the value and any other values from
-              // the same row.
-              return [{"significance": value, "threshold": value > 60}]
-            }
-          spec: |
-            {
-              "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-              "mark": "circle",
-              "encoding": {
-                "size": {"field": "significance", "type": "quantitative", "scale": {"domain": [0,100]}},
-                "color": {"field": "threshold", "scale": {"domain": [true,false]}}
-              },
-              "config": {"legend": {"disable": true}}
-            }
+      columns:
+        significance:
+          optional: true
+          custom-plot:
+            data: |
+              function(value, row) {
+                // Generate data for this cell, having access to the value and any other values from
+                // the same row.
+                return [{"significance": value, "threshold": value > 60}]
+              }
+            spec: |
+              {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                "mark": "circle",
+                "encoding": {
+                  "size": {"field": "significance", "type": "quantitative", "scale": {"domain": [0,100]}},
+                  "color": {"field": "threshold", "scale": {"domain": [true,false]}}
+                },
+                "config": {"legend": {"disable": true}}
+              }
   gene-mycn:
     dataset: gene-mycn
     page-size: 40
     render-table:
-      frequency:
-        plot:
-          ticks:
-            scale: linear
-      quality:
-        plot:
-          heatmap:
-            scale: linear
-            range:
-              - green
-              - red
+      columns:
+        frequency:
+          plot:
+            ticks:
+              scale: linear
+        quality:
+          plot:
+            heatmap:
+              scale: linear
+              range:
+                - green
+                - red
   gene-mycn-plot:
     dataset: gene-mycn
     render-plot:
       spec: |
         {
-              "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-              "mark": "circle",
-              "encoding": {
-                "size": {"field": "significance", "type": "quantitative", "scale": {"domain": [0,100]}},
-                "color": {"field": "threshold", "scale": {"domain": [true,false]}},
-                "href": {"field": "some expression"}
-              },
-              "config": {"legend": {"disable": true}}
-            }
+          "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+          "mark": "circle",
+          "encoding": {
+            "size": {"field": "significance", "type": "quantitative", "scale": {"domain": [0,100]}},
+            "color": {"field": "threshold", "scale": {"domain": [true,false]}},
+            "href": {"field": "some expression"}
+          },
+          "config": {"legend": {"disable": true}}
+        }
 ```
 
 ### name
@@ -152,9 +155,18 @@ views:
 | hidden                        | Whether or not the view is shown in the menu navigation                                                                                                                                                                                            | false   |
 | max-in-memory-rows            | Overwrites the global settings for [max-in-memory-rows](#max-in-memory-rows)                                                                                                                                                                       |         |
 
-### render-table 
+### render-table
 
-`render-table` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file, its 0-based index (e.g. `index(5)` for the 6th column), or a regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`):
+`render-table` contains definitions for a table view
+
+| keyword                                    | explanation                                   |
+| -------------------------------------------|-----------------------------------------------|
+| [columns](#columns)                        | Configuration of columns                      |
+| [additional-headers](#additional-headers)  | Configuration of the additional headers       |
+
+### columns
+
+`columns` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file, its 0-based index (e.g. `index(5)` for the 6th column), or a regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`):
 
 | keyword                     | explanation                                                                                                                                                                                                   | default | possible values        |
 | --------------------------- |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------- |------------------------|
@@ -165,6 +177,15 @@ views:
 | ellipsis                    | Shortens values to the first *n* given characters with the rest hidden behind a popover                                                                                                                       |         |                        |
 | optional                    | Allows to have a column specified in render-table that is actually not present.                                                                                                                               | false   | true, false            |
 | display-mode                | Allows to hide columns from views by setting this to `hidden` or have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`. | normal  | detail, normal, hidden |
+
+
+### additional-headers
+
+`additional-headers` contains definitions for additional header rows. Each row can be accessed with its index strating from `0`:
+
+| keyword                                    | explanation                                                                                                                                      |
+| -------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| [plot](#plot)               | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell (currently only the [heatmap](#heatmap) type is supported in header rows)   |
 
 ### render-plot
 
