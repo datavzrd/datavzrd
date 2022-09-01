@@ -644,8 +644,9 @@ pub enum ConfigError {
 mod tests {
     use crate::spec::{
         default_display_mode, default_links, default_render_table, default_single_page_threshold,
-        AuxDomainColumns, DatasetSpecs, ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec,
-        RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, TickPlot,
+        AdditionalHeaderSpecs, AuxDomainColumns, DatasetSpecs, Heatmap, ItemSpecs, ItemsSpec,
+        LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs,
+        TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -830,6 +831,77 @@ mod tests {
                         script-path: my-script.js
             aux-libraries:
                 - https://cdnjs.org/d3.js
+            "#;
+
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert_eq!(config, expected_config);
+    }
+
+    #[test]
+    fn test_additional_header_config_deserialization() {
+        let expected_item_spec = ItemSpecs {
+            hidden: false,
+            dataset: Some("table-a".to_string()),
+            datasets: None,
+            page_size: 100,
+            single_page_page_size: 0,
+            description: None,
+            render_table: Some(RenderTableSpecs {
+                columns: Default::default(),
+                additional_headers: Some(HashMap::from([(
+                    0_u32,
+                    AdditionalHeaderSpecs {
+                        plot: Some(PlotSpec {
+                            tick_plot: None,
+                            heatmap: Some(Heatmap {
+                                scale_type: "ordinal".to_string(),
+                                color_scheme: "category20".to_string(),
+                                color_range: vec![],
+                                domain: None,
+                                aux_domain_columns: Default::default(),
+                                custom_content: None,
+                            }),
+                        }),
+                    },
+                )])),
+            }),
+            render_plot: None,
+            render_html: None,
+            max_in_memory_rows: None,
+        };
+
+        let expected_config = ItemsSpec {
+            datasets: HashMap::from([(
+                "table-a".to_string(),
+                DatasetSpecs {
+                    path: PathBuf::from("test.tsv"),
+                    separator: ',',
+                    header_rows: 2,
+                    links: Some(HashMap::from([])),
+                },
+            )]),
+            default_view: None,
+            max_in_memory_rows: 1000,
+            views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
+            report_name: "".to_string(),
+            aux_libraries: None,
+        };
+
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    header-rows: 2
+                    path: test.tsv
+            views:
+                plot-a:
+                    dataset: table-a
+                    render-table:
+                        additional-headers:
+                            0:
+                                plot:
+                                    heatmap:
+                                        scale: ordinal
+                                        color-scheme: category20
             "#;
 
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();

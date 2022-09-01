@@ -71,6 +71,7 @@ mod tests {
             char::from_str(",").unwrap(),
             "first",
             3,
+            1,
         )
         .unwrap();
         let expected_column_index = ColumnIndex {
