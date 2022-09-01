@@ -80,7 +80,7 @@ impl ItemsSpec {
                             dataset: view.dataset.as_ref().unwrap().to_string()
                         })
                     }
-                    if !render_table.is_empty() && view.render_plot.is_some() {
+                    if !render_table.columns.is_empty() && view.render_plot.is_some() {
                         bail!(PlotAndTablePresentConfiguration {
                             view: name.to_string()
                         });
@@ -90,7 +90,7 @@ impl ItemsSpec {
                         .delimiter(dataset.separator as u8)
                         .from_path(&dataset.path)?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                    for (column, render_columns) in render_table {
+                    for (column, render_columns) in &render_table.columns {
                         if !titles.contains(column) && !render_columns.optional {
                             warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
                         }
@@ -220,8 +220,11 @@ fn default_header_size() -> usize {
     1_usize
 }
 
-fn default_render_table() -> Option<HashMap<String, RenderColumnSpec>> {
-    Some(HashMap::new())
+fn default_render_table() -> Option<RenderTableSpecs> {
+    Some(RenderTableSpecs {
+        columns: HashMap::from([]),
+        additional_headers: None,
+    })
 }
 
 fn default_links() -> Option<HashMap<String, LinkSpec>> {
@@ -254,13 +257,29 @@ pub(crate) struct ItemSpecs {
     #[serde(rename = "desc")]
     pub(crate) description: Option<String>,
     #[serde(default = "default_render_table")]
-    pub(crate) render_table: Option<HashMap<String, RenderColumnSpec>>,
+    pub(crate) render_table: Option<RenderTableSpecs>,
     #[serde(default)]
     pub(crate) render_plot: Option<RenderPlotSpec>,
     #[serde(default)]
     pub(crate) render_html: Option<RenderHtmlSpec>,
     #[serde(default)]
     pub(crate) max_in_memory_rows: Option<usize>,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
+pub(crate) struct RenderTableSpecs {
+    #[serde(default)]
+    pub(crate) columns: HashMap<String, RenderColumnSpec>,
+    #[serde(default)]
+    pub(crate) additional_headers: Option<HashMap<u32, AdditionalHeaderSpecs>>,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
+pub(crate) struct AdditionalHeaderSpecs {
+    #[serde(default)]
+    pub(crate) plot: Option<PlotSpec>,
 }
 
 lazy_static! {
@@ -290,11 +309,11 @@ impl ItemSpecs {
         }
         let headers = reader.headers()?;
         if let Some(render_table) = self.render_table.borrow_mut() {
-            for (_, render_column_specs) in render_table.iter_mut() {
+            for (_, render_column_specs) in render_table.columns.iter_mut() {
                 render_column_specs.preprocess(dataset)?;
             }
         }
-        for (key, render_column_specs) in self.render_table.as_ref().unwrap().iter() {
+        for (key, render_column_specs) in self.render_table.as_ref().unwrap().columns.iter() {
             let get_first_match_group = |regex: &Regex| {
                 regex
                     .captures_iter(key)
@@ -354,7 +373,10 @@ impl ItemSpecs {
                 })
             }
         }
-        self.render_table = Some(indexed_keys);
+        self.render_table = Some(RenderTableSpecs {
+            columns: indexed_keys,
+            additional_headers: self.render_table.clone().unwrap().additional_headers,
+        });
         Ok(())
     }
 }
@@ -622,8 +644,9 @@ pub enum ConfigError {
 mod tests {
     use crate::spec::{
         default_display_mode, default_links, default_render_table, default_single_page_threshold,
-        AuxDomainColumns, DatasetSpecs, ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec,
-        RenderHtmlSpec, RenderPlotSpec, TickPlot,
+        AdditionalHeaderSpecs, AuxDomainColumns, DatasetSpecs, Heatmap, ItemSpecs, ItemsSpec,
+        LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs,
+        TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -654,7 +677,10 @@ mod tests {
             page_size: 100,
             single_page_page_size: 0,
             description: None,
-            render_table: Some(HashMap::from([("x".to_string(), expected_render_columns)])),
+            render_table: Some(RenderTableSpecs {
+                columns: HashMap::from([("x".to_string(), expected_render_columns)]),
+                additional_headers: None,
+            }),
             render_plot: None,
             render_html: None,
             max_in_memory_rows: None,
@@ -679,8 +705,9 @@ mod tests {
             dataset: table-a
             page-size: 100
             render-table:
-                x:
-                    link-to-url: https://www.rust-lang.org
+                columns:
+                    x:
+                        link-to-url: https://www.rust-lang.org
     "#;
 
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
@@ -811,6 +838,77 @@ mod tests {
     }
 
     #[test]
+    fn test_additional_header_config_deserialization() {
+        let expected_item_spec = ItemSpecs {
+            hidden: false,
+            dataset: Some("table-a".to_string()),
+            datasets: None,
+            page_size: 100,
+            single_page_page_size: 0,
+            description: None,
+            render_table: Some(RenderTableSpecs {
+                columns: Default::default(),
+                additional_headers: Some(HashMap::from([(
+                    0_u32,
+                    AdditionalHeaderSpecs {
+                        plot: Some(PlotSpec {
+                            tick_plot: None,
+                            heatmap: Some(Heatmap {
+                                scale_type: "ordinal".to_string(),
+                                color_scheme: "category20".to_string(),
+                                color_range: vec![],
+                                domain: None,
+                                aux_domain_columns: Default::default(),
+                                custom_content: None,
+                            }),
+                        }),
+                    },
+                )])),
+            }),
+            render_plot: None,
+            render_html: None,
+            max_in_memory_rows: None,
+        };
+
+        let expected_config = ItemsSpec {
+            datasets: HashMap::from([(
+                "table-a".to_string(),
+                DatasetSpecs {
+                    path: PathBuf::from("test.tsv"),
+                    separator: ',',
+                    header_rows: 2,
+                    links: Some(HashMap::from([])),
+                },
+            )]),
+            default_view: None,
+            max_in_memory_rows: 1000,
+            views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
+            report_name: "".to_string(),
+            aux_libraries: None,
+        };
+
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    header-rows: 2
+                    path: test.tsv
+            views:
+                plot-a:
+                    dataset: table-a
+                    render-table:
+                        additional-headers:
+                            0:
+                                plot:
+                                    heatmap:
+                                        scale: ordinal
+                                        color-scheme: category20
+            "#;
+
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert_eq!(config, expected_config);
+    }
+
+    #[test]
     fn test_valid_config_validation() {
         let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
         assert!(config.validate().is_ok());
@@ -913,11 +1011,12 @@ mod tests {
                 table-a:
                     dataset: table-a
                     render-table:
-                        some-column:
-                            plot:
-                                ticks:
-                                    scale: linear
-                            ellipsis: 25
+                        columns:
+                            some-column:
+                                plot:
+                                    ticks:
+                                        scale: linear
+                                ellipsis: 25
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_err());
@@ -933,10 +1032,11 @@ mod tests {
                 table-a:
                     dataset: table-a
                     render-table:
-                        some-column:
-                            plot:
-                                heatmap:
-                                    scale: inverse-quadruplic
+                        columns:
+                            some-column:
+                                plot:
+                                    heatmap:
+                                        scale: inverse-quadruplic
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_err());
@@ -952,8 +1052,9 @@ mod tests {
                 table-a:
                     dataset: table-a
                     render-table:
-                        x:
-                            link-to-url: "https://lmgtfy.app/?q=Is {name} in {movie}?"
+                        columns:
+                            x:
+                                link-to-url: "https://lmgtfy.app/?q=Is {name} in {movie}?"
                     render-plot:
                         spec-path: ".examples/specs/movies.vl.json"
             "#;
@@ -964,13 +1065,14 @@ mod tests {
     #[test]
     fn test_config_preprocessing() {
         let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
-        let oscar_config = config
+        let oscar_config = &config
             .views
             .get("oscars")
             .unwrap()
             .render_table
             .as_ref()
-            .unwrap();
+            .unwrap()
+            .columns;
         let expected_render_column_spec = RenderColumnSpec {
             optional: false,
             custom: None,
@@ -1017,12 +1119,13 @@ mod tests {
                 table-a:
                     dataset: table-a
                     render-table:
-                        age:
-                            plot:
-                                ticks:
-                                    scale: linear
-                                    aux-domain-columns:
-                                        - regex('birth_.+')
+                        columns:
+                            age:
+                                plot:
+                                    ticks:
+                                        scale: linear
+                                        aux-domain-columns:
+                                            - regex('birth_.+')
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         let mut item_specs = config.views.get("table-a").unwrap().clone();
@@ -1061,10 +1164,10 @@ mod tests {
             page_size: 184_usize,
             single_page_page_size: 100,
             description: None,
-            render_table: Some(HashMap::from([(
-                "age".to_string(),
-                expected_render_columns,
-            )])),
+            render_table: Some(RenderTableSpecs {
+                columns: HashMap::from([("age".to_string(), expected_render_columns)]),
+                additional_headers: None,
+            }),
             render_plot: None,
             render_html: None,
             max_in_memory_rows: None,

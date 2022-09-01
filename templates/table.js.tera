@@ -36,7 +36,7 @@ $(document).ready(function() {
         {% if detail_mode %}detailView: true, detailFormatter: "detailFormatter"{% endif %}
     })
 
-    let additional_headers = [{% if additional_headers %}{% for ah in additional_headers %}{{ "{" }}{% for title in titles %}"{{ title }}":"<b>{{ ah[title] }}</b>"{% if not loop.last %},{% endif %}{% endfor %}{{ "}" }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}];
+    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr>{% if detail_mode %}<td style='border: 0 !important;'></td>{% endif %}{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
     let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let num = [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}];
@@ -63,8 +63,8 @@ $(document).ready(function() {
         j++;
         table_rows.push(row);
     }
-    $('#table').bootstrapTable('append', additional_headers)
-    $('#table').bootstrapTable('append', table_rows)
+    $('#table').find('thead').append(additional_headers);
+    $('#table').bootstrapTable('append', table_rows);
 
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
         let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
@@ -86,6 +86,11 @@ $(document).ready(function() {
         renderDetailTickPlots{{ loop.index0 }}(row[ticks[{{ loop.index0 }}]], `#detail-plot-${index}-ticks-{{ loop.index0 }}`);
         {% endfor %}
     })
+
+    if (linkouts != null) {
+        $(`table > thead > tr:first-child > th:last-child`).attr('style', 'border:0 !important');
+    }
+    {% if detail_mode %}$(`table > thead > tr:first-child > th:first-child`).attr('style', 'border:0 !important');{% endif %}
 
     window.addEventListener('beforeprint', (event) => {
         setTimeout(function (){
@@ -272,7 +277,7 @@ $(document).ready(function() {
         }, 0);
     }){% endif %}
 
-    let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
+    let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10);
     {% if is_single_page %}
     let page_size = $('#table').bootstrapTable('getOptions').pageSize;
     $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
@@ -308,10 +313,6 @@ function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
     let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
-            if (row < ah) {
-                row++;
-                return;
-            }
             if (!detail_mode) {
                 var id = `{{ title | slugify }}-${row}`;
                 this.classList.add("plotcell");
@@ -341,10 +342,6 @@ function renderTickPlots{{ loop.index0 }}(ah, columns) {
     let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
-            if (row < ah) {
-                row++;
-                return;
-            }
             var id = `{{ title | slugify }}-${row}`;
             this.classList.add("plotcell");
             const div = document.createElement("div");
@@ -369,7 +366,6 @@ function renderTickPlots{{ loop.index0 }}(ah, columns) {
 function renderDetailTickPlots{{ loop.index0 }}(value, div) {
     var specs =  {{ tick_plot }};
     if (value != "") {
-        console.log(value);
         var data = [{"{{ title }}": value}];
         var s = specs;
         s.data = {};
@@ -393,10 +389,6 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
     {% endif %}
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
-            if (row < ah) {
-                row++;
-                return;
-            }
             var value = table_rows[row]["{{ title }}"];
             {% if tuple.0.custom_content %}
             value = custom_func(value, table_rows[row]);
@@ -405,6 +397,23 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
                 this.style.setProperty("background-color", scale(value), "important");
             }
             row++;
+        }
+    );
+}
+{% endfor %}
+
+{% for row, heatmap in header_heatmaps %}
+function colorizeHeaderRow{{ loop.index0 }}() {
+    var {{ heatmap.scale }} = vega.scale('{{ heatmap.scale }}');
+    var scale = {{ heatmap.scale }}(){% if heatmap.domain %}.domain({{ heatmap.domain | json }}){% endif %}.range({% if heatmap.color_scheme %}vega.scheme('{{ heatmap.color_scheme }}'){% else %}[{% for color in heatmap.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
+    var row = {{ row }};
+    $(`table > thead > tr:nth-child(${row + 2}) > td`).each(
+        function() {
+            var value = this.innerHTML;
+    console.log(value);
+            if (value !== "") {
+                this.style.setProperty("background-color", scale(value), "important");
+            }
         }
     );
 }
@@ -426,10 +435,6 @@ function colorizeDetailCard{{ loop.index0 }}(value, div) {
         let row = 0;
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
-                if (row < ah) {
-                    row++;
-                    return;
-                }
                 value = this.innerHTML;
                 if (value.length > {{ ellipsis }}) {
                     this.innerHTML = `${value.substring(0,{{ ellipsis }})}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${value}</div>'>...</a>`;
@@ -538,10 +543,6 @@ function addNumClass(dp_num, ah) {
             let n = parseInt(i) + {% if detail_mode %} + 2{% else %} + 1{% endif %};
             $(`table > tbody > tr td:nth-child(${n})`).each(
                 function() {
-                    if (row < ah) {
-                        row++;
-                        return;
-                    }
                     this.classList.add("num-cell");
                     row++;
                 }
@@ -569,6 +570,10 @@ function render(additional_headers, displayed_columns, table_rows, columns) {
 
 {% for title, ellipsis in ellipses %}
     shortenColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
+{% endfor %}
+
+{% for row, heatmap in header_heatmaps %}
+    colorizeHeaderRow{{ loop.index0 }}();
 {% endfor %}
 $('[data-toggle="popover"]').popover()
 }

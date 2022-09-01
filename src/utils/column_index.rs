@@ -17,6 +17,7 @@ impl ColumnIndex {
         separator: char,
         column_name: &str,
         page_size: usize,
+        header_rows: usize,
     ) -> Result<Self>
     where
         P: AsRef<Path>,
@@ -30,7 +31,7 @@ impl ColumnIndex {
         let column_index = headers.iter().position(|r| r == column_name).unwrap();
         let mut index = HashMap::new();
         let address_factory = RowAddressFactory::new(page_size);
-        for (i, result) in reader.records().enumerate() {
+        for (i, result) in reader.records().skip(header_rows - 1).enumerate() {
             index.insert(
                 result?.get(column_index).unwrap().to_owned(),
                 address_factory.get(i),
@@ -70,6 +71,7 @@ mod tests {
             char::from_str(",").unwrap(),
             "first",
             3,
+            1,
         )
         .unwrap();
         let expected_column_index = ColumnIndex {

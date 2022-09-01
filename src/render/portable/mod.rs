@@ -5,7 +5,8 @@ use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
 use crate::spec::{
-    CustomPlot, DatasetSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, RenderColumnSpec, TickPlot,
+    AdditionalHeaderSpecs, CustomPlot, DatasetSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
+    RenderColumnSpec, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -131,6 +132,7 @@ impl Renderer for ItemRenderer {
                     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
 
                     let table_specs = &table_specs
+                        .columns
                         .clone()
                         .into_iter()
                         .filter(|(k, s)| !s.optional || headers.contains(k))
@@ -186,6 +188,7 @@ impl Renderer for ItemRenderer {
                         dataset.separator,
                         table_specs,
                         additional_headers,
+                        &table.render_table.as_ref().unwrap().additional_headers,
                         is_single_page,
                         table.single_page_page_size,
                     )?;
@@ -306,6 +309,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_headers: Option<Vec<StringRecord>>,
+    header_plots: &Option<HashMap<u32, AdditionalHeaderSpecs>>,
     is_single_page: bool,
     page_size: usize,
 ) -> Result<()> {
@@ -432,6 +436,17 @@ fn render_table_javascript<P: AsRef<Path>>(
         })
         .collect();
 
+    let header_heatmaps: HashMap<u32, Heatmap> = if let Some(headers) = header_plots {
+        headers
+            .iter()
+            .filter_map(|(k, v)| v.plot.as_ref().map(|heatmap| (k.to_owned(), heatmap)))
+            .filter(|(_, k)| k.heatmap.is_some())
+            .map(|(k, v)| (k.to_owned(), v.heatmap.as_ref().unwrap().to_owned()))
+            .collect()
+    } else {
+        HashMap::new()
+    };
+
     let link_urls: HashMap<String, String> = render_columns
         .iter()
         .filter(|(_, k)| k.link_to_url.is_some())
@@ -476,6 +491,7 @@ fn render_table_javascript<P: AsRef<Path>>(
 
     context.insert("titles", &titles.iter().collect_vec());
     context.insert("additional_headers", &header_rows);
+    context.insert("header_heatmaps", &header_heatmaps);
     context.insert("formatter", &Some(formatters));
     context.insert("custom_plots", &custom_plots);
     context.insert("tick_plots", &tick_plots);
@@ -615,6 +631,7 @@ fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
             other_dataset.separator,
             column,
             page_size,
+            other_dataset.header_rows,
         )?;
 
         result.insert((table.to_string(), column.to_string()), column_index);
@@ -822,6 +839,7 @@ fn render_plot_page<P: AsRef<Path>>(
             .context(format!("Could not read file with path {:?}", &dataset.path))?;
         let linkouts = linkout_reader
             .records()
+            .skip(&dataset.header_rows - 1)
             .map(|row| {
                 render_linkouts(
                     &row.unwrap().iter().map(|s| s.to_owned()).collect_vec(),
