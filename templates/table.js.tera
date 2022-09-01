@@ -36,7 +36,7 @@ $(document).ready(function() {
         {% if detail_mode %}detailView: true, detailFormatter: "detailFormatter"{% endif %}
     })
 
-    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr>{% if detail_mode %}<td></td>{% endif %}{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
+    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr>{% if detail_mode %}<td style='border: 0 !important;'></td>{% endif %}{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
     let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let num = [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}];
@@ -86,6 +86,11 @@ $(document).ready(function() {
         renderDetailTickPlots{{ loop.index0 }}(row[ticks[{{ loop.index0 }}]], `#detail-plot-${index}-ticks-{{ loop.index0 }}`);
         {% endfor %}
     })
+
+    if (linkouts != null) {
+        $(`table > thead > tr:first-child > th:last-child`).attr('style', 'border:0 !important');
+    }
+    {% if detail_mode %}$(`table > thead > tr:first-child > th:first-child`).attr('style', 'border:0 !important');{% endif %}
 
     window.addEventListener('beforeprint', (event) => {
         setTimeout(function (){
