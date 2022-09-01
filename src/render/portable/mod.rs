@@ -4,7 +4,10 @@ pub(crate) mod utils;
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
-use crate::spec::{CustomPlot, DatasetSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec, TickPlot};
+use crate::spec::{
+    AdditionalHeaderSpecs, CustomPlot, DatasetSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
+    RenderColumnSpec, TickPlot,
+};
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
@@ -306,7 +309,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_headers: Option<Vec<StringRecord>>,
-    header_plots: &Option<HashMap<u32, PlotSpec>>,
+    header_plots: &Option<HashMap<u32, AdditionalHeaderSpecs>>,
     is_single_page: bool,
     page_size: usize,
 ) -> Result<()> {
@@ -436,6 +439,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     let header_heatmaps: HashMap<u32, Heatmap> = if let Some(headers) = header_plots {
         headers
             .iter()
+            .filter_map(|(k, v)| v.plot.as_ref().map(|heatmap| (k.to_owned(), heatmap)))
             .filter(|(_, k)| k.heatmap.is_some())
             .map(|(k, v)| (k.to_owned(), v.heatmap.as_ref().unwrap().to_owned()))
             .collect()

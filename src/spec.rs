@@ -272,7 +272,14 @@ pub(crate) struct RenderTableSpecs {
     #[serde(default)]
     pub(crate) columns: HashMap<String, RenderColumnSpec>,
     #[serde(default)]
-    pub(crate) additional_headers: Option<HashMap<u32, PlotSpec>>,
+    pub(crate) additional_headers: Option<HashMap<u32, AdditionalHeaderSpecs>>,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"))]
+pub(crate) struct AdditionalHeaderSpecs {
+    #[serde(default)]
+    pub(crate) plot: Option<PlotSpec>,
 }
 
 lazy_static! {
