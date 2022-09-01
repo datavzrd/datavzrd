@@ -53,7 +53,7 @@ $(document).ready(function() {
         detailView: true, detailFormatter: "detailFormatter"
     })
 
-    let additional_headers = [];
+    let additional_headers = "";
     let columns = ["oscar_no","oscar_yr","award","name","movie","age","birth place","birth date","birth_mo","birth_d","birth_y"];
     let displayed_columns = ["oscar_yr","award","name","movie","age","birth place","birth date",];
     let num = [true,true,false,false,false,true,false,false,true,true,true];
@@ -80,8 +80,8 @@ $(document).ready(function() {
         j++;
         table_rows.push(row);
     }
-    $('#table').bootstrapTable('append', additional_headers)
-    $('#table').bootstrapTable('append', table_rows)
+    $('#table').find('thead').append(additional_headers);
+    $('#table').bootstrapTable('append', table_rows);
 
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
         let cp = [];
@@ -98,6 +98,11 @@ $(document).ready(function() {
         renderDetailTickPlots0(row[ticks[0]], `#detail-plot-${index}-ticks-0`);
         
     })
+
+    if (linkouts != null) {
+        $(`table > thead > tr:first-child > th:last-child`).attr('style', 'border:0 !important');
+    }
+    $(`table > thead > tr:first-child > th:first-child`).attr('style', 'border:0 !important');
 
     window.addEventListener('beforeprint', (event) => {
         setTimeout(function (){
@@ -364,7 +369,7 @@ $(document).ready(function() {
         }, 0);
     })
 
-    let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
+    let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10);
     
     let page_size = $('#table').bootstrapTable('getOptions').pageSize;
     $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
@@ -432,10 +437,6 @@ function renderTickPlots0(ah, columns) {
     let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
-            if (row < ah) {
-                row++;
-                return;
-            }
             var id = `age-${row}`;
             this.classList.add("plotcell");
             const div = document.createElement("div");
@@ -491,7 +492,6 @@ function renderDetailTickPlots0(value, div) {
     }
 };
     if (value != "") {
-        console.log(value);
         var data = [{"age": value}];
         var s = specs;
         s.data = {};
@@ -513,10 +513,6 @@ function colorizeColumn0(ah, columns) {
     
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
-            if (row < ah) {
-                row++;
-                return;
-            }
             var value = table_rows[row]["award"];
             
             if (value !== "" && !detail_mode) {
@@ -526,6 +522,8 @@ function colorizeColumn0(ah, columns) {
         }
     );
 }
+
+
 
 
 
@@ -645,10 +643,6 @@ function addNumClass(dp_num, ah) {
             let n = parseInt(i) +  + 2;
             $(`table > tbody > tr td:nth-child(${n})`).each(
                 function() {
-                    if (row < ah) {
-                        row++;
-                        return;
-                    }
                     this.classList.add("num-cell");
                     row++;
                 }
@@ -672,6 +666,8 @@ function render(additional_headers, displayed_columns, table_rows, columns) {
 
 
     colorizeColumn0(additional_headers.length, displayed_columns);
+
+
 
 
 

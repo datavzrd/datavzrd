@@ -59,7 +59,7 @@ $(document).ready(function() {
         
     })
 
-    let additional_headers = [];
+    let additional_headers = "";
     let columns = ["Title","Year","Rated","Released","Runtime","Genre","Director","imdbRating","imdbID"];
     let displayed_columns = ["Title","Year","Rated","Released","Runtime","Genre","Director","imdbRating","imdbID"];
     let num = [false,true,false,false,false,false,false,true,false];
@@ -86,8 +86,8 @@ $(document).ready(function() {
         j++;
         table_rows.push(row);
     }
-    $('#table').bootstrapTable('append', additional_headers)
-    $('#table').bootstrapTable('append', table_rows)
+    $('#table').find('thead').append(additional_headers);
+    $('#table').bootstrapTable('append', table_rows);
 
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
         let cp = [];
@@ -104,6 +104,11 @@ $(document).ready(function() {
         renderDetailTickPlots0(row[ticks[0]], `#detail-plot-${index}-ticks-0`);
         
     })
+
+    if (linkouts != null) {
+        $(`table > thead > tr:first-child > th:last-child`).attr('style', 'border:0 !important');
+    }
+    
 
     window.addEventListener('beforeprint', (event) => {
         setTimeout(function (){
@@ -352,7 +357,7 @@ $(document).ready(function() {
         }, 0);
     })
 
-    let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10) + additional_headers.length;
+    let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10);
     
     let page_size = $('#table').bootstrapTable('getOptions').pageSize;
     $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
@@ -420,10 +425,6 @@ function renderTickPlots0(ah, columns) {
     let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
-            if (row < ah) {
-                row++;
-                return;
-            }
             var id = `imdbrating-${row}`;
             this.classList.add("plotcell");
             const div = document.createElement("div");
@@ -479,7 +480,6 @@ function renderDetailTickPlots0(value, div) {
     }
 };
     if (value != "") {
-        console.log(value);
         var data = [{"imdbRating": value}];
         var s = specs;
         s.data = {};
@@ -501,10 +501,6 @@ function colorizeColumn0(ah, columns) {
     
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
-            if (row < ah) {
-                row++;
-                return;
-            }
             var value = table_rows[row]["Rated"];
             
             if (value !== "" && !detail_mode) {
@@ -514,6 +510,8 @@ function colorizeColumn0(ah, columns) {
         }
     );
 }
+
+
 
 
 
@@ -532,10 +530,6 @@ function colorizeDetailCard0(value, div) {
         let row = 0;
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
-                if (row < ah) {
-                    row++;
-                    return;
-                }
                 value = this.innerHTML;
                 if (value.length > 15) {
                     this.innerHTML = `${value.substring(0,15)}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${value}</div>'>...</a>`;
@@ -600,10 +594,6 @@ function addNumClass(dp_num, ah) {
             let n = parseInt(i) +  + 1;
             $(`table > tbody > tr td:nth-child(${n})`).each(
                 function() {
-                    if (row < ah) {
-                        row++;
-                        return;
-                    }
                     this.classList.add("num-cell");
                     row++;
                 }
@@ -631,6 +621,8 @@ function render(additional_headers, displayed_columns, table_rows, columns) {
 
 
     shortenColumn0(additional_headers.length, displayed_columns);
+
+
 
 $('[data-toggle="popover"]').popover()
 }
