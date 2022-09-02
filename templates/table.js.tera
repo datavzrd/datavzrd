@@ -407,7 +407,7 @@ function colorizeHeaderRow{{ loop.index0 }}() {
     var {{ heatmap.scale }} = vega.scale('{{ heatmap.scale }}');
     var scale = {{ heatmap.scale }}(){% if heatmap.domain %}.domain({{ heatmap.domain | json }}){% endif %}.range({% if heatmap.color_scheme %}vega.scheme('{{ heatmap.color_scheme }}'){% else %}[{% for color in heatmap.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
     var row = {{ row }};
-    $(`table > thead > tr:nth-child(${row + 2}) > td`).each(
+    $(`table > thead > tr:nth-child(${row + 1}) > td`).each(
         function() {
             var value = this.innerHTML;
     console.log(value);

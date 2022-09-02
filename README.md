@@ -35,7 +35,7 @@ datasets:
     separator: ;
   gene-mycn:
     path: "genes/table-mycn.csv"
-    header-rows: 2
+    headers: 2
     links:
       some expression:
         column: quality
@@ -159,10 +159,10 @@ views:
 
 `render-table` contains definitions for a table view
 
-| keyword                                    | explanation                                   |
-| -------------------------------------------|-----------------------------------------------|
-| [columns](#columns)                        | Configuration of columns                      |
-| [additional-headers](#additional-headers)  | Configuration of the additional headers       |
+| keyword                                   | explanation                                   |
+| ------------------------------------------|-----------------------------------------------|
+| [columns](#columns)                       | Configuration of columns                      |
+| [headers](#headers)  | Configuration of the additional headers       |
 
 ### columns
 
@@ -179,13 +179,13 @@ views:
 | display-mode                | Allows to hide columns from views by setting this to `hidden` or have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`. | normal  | detail, normal, hidden |
 
 
-### additional-headers
+### headers
 
-`additional-headers` contains definitions for additional header rows. Each row can be accessed with its index strating from `0`:
+`headers` contains definitions for additional header rows. Each row can be accessed with its index starting at `1` (`0` is the first header row that can't be customized).
 
-| keyword                                    | explanation                                                                                                                                      |
-| -------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| [plot](#plot)               | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell (currently only the [heatmap](#heatmap) type is supported in header rows)   |
+| keyword                       | explanation                                                                                                                                      |
+|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| [plot](#plot)                 | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell (currently only the [heatmap](#heatmap) type is supported in header rows)   |
 
 ### render-plot
 

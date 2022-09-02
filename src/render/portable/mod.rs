@@ -5,7 +5,7 @@ use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::Renderer;
 use crate::spec::{
-    AdditionalHeaderSpecs, CustomPlot, DatasetSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
+    CustomPlot, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
     RenderColumnSpec, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
@@ -188,7 +188,7 @@ impl Renderer for ItemRenderer {
                         dataset.separator,
                         table_specs,
                         additional_headers,
-                        &table.render_table.as_ref().unwrap().additional_headers,
+                        &table.render_table.as_ref().unwrap().headers,
                         is_single_page,
                         table.single_page_page_size,
                     )?;
@@ -309,7 +309,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_headers: Option<Vec<StringRecord>>,
-    header_plots: &Option<HashMap<u32, AdditionalHeaderSpecs>>,
+    header_plots: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
     page_size: usize,
 ) -> Result<()> {

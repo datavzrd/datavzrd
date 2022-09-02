@@ -85,6 +85,13 @@ impl ItemsSpec {
                             view: name.to_string()
                         });
                     }
+                    if let Some(headers) = &render_table.headers {
+                        if headers.get(&0_u32).is_some() {
+                            bail!(ConfigError::HeadersFirstColumnCustomized {
+                                view: name.to_string()
+                            })
+                        }
+                    }
                     let dataset = self.datasets.get(view.dataset.as_ref().unwrap()).unwrap();
                     let mut reader = csv::ReaderBuilder::new()
                         .delimiter(dataset.separator as u8)
@@ -223,7 +230,7 @@ fn default_header_size() -> usize {
 fn default_render_table() -> Option<RenderTableSpecs> {
     Some(RenderTableSpecs {
         columns: HashMap::from([]),
-        additional_headers: None,
+        headers: None,
     })
 }
 
@@ -237,7 +244,7 @@ pub(crate) struct DatasetSpecs {
     pub(crate) path: PathBuf,
     #[serde(default = "default_separator")]
     pub(crate) separator: char,
-    #[serde(default = "default_header_size")]
+    #[serde(default = "default_header_size", rename = "headers")]
     pub(crate) header_rows: usize,
     #[serde(default = "default_links")]
     pub(crate) links: Option<HashMap<String, LinkSpec>>,
@@ -272,12 +279,12 @@ pub(crate) struct RenderTableSpecs {
     #[serde(default)]
     pub(crate) columns: HashMap<String, RenderColumnSpec>,
     #[serde(default)]
-    pub(crate) additional_headers: Option<HashMap<u32, AdditionalHeaderSpecs>>,
+    pub(crate) headers: Option<HashMap<u32, HeaderSpecs>>,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
-pub(crate) struct AdditionalHeaderSpecs {
+pub(crate) struct HeaderSpecs {
     #[serde(default)]
     pub(crate) plot: Option<PlotSpec>,
 }
@@ -375,7 +382,7 @@ impl ItemSpecs {
         }
         self.render_table = Some(RenderTableSpecs {
             columns: indexed_keys,
-            additional_headers: self.render_table.clone().unwrap().additional_headers,
+            headers: self.render_table.clone().unwrap().headers,
         });
         Ok(())
     }
@@ -638,15 +645,16 @@ pub enum ConfigError {
         column: String,
         link: String,
     },
+    #[error("Cannot customize the first header row of view {view:?} in given config. Please start customizing additional headers at index 1.")]
+    HeadersFirstColumnCustomized { view: String },
 }
 
 #[cfg(test)]
 mod tests {
     use crate::spec::{
         default_display_mode, default_links, default_render_table, default_single_page_threshold,
-        AdditionalHeaderSpecs, AuxDomainColumns, DatasetSpecs, Heatmap, ItemSpecs, ItemsSpec,
-        LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs,
-        TickPlot,
+        AuxDomainColumns, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
+        PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -679,7 +687,7 @@ mod tests {
             description: None,
             render_table: Some(RenderTableSpecs {
                 columns: HashMap::from([("x".to_string(), expected_render_columns)]),
-                additional_headers: None,
+                headers: None,
             }),
             render_plot: None,
             render_html: None,
@@ -848,9 +856,9 @@ mod tests {
             description: None,
             render_table: Some(RenderTableSpecs {
                 columns: Default::default(),
-                additional_headers: Some(HashMap::from([(
-                    0_u32,
-                    AdditionalHeaderSpecs {
+                headers: Some(HashMap::from([(
+                    1_u32,
+                    HeaderSpecs {
                         plot: Some(PlotSpec {
                             tick_plot: None,
                             heatmap: Some(Heatmap {
@@ -890,14 +898,14 @@ mod tests {
         let raw_config = r#"
             datasets:
                 table-a:
-                    header-rows: 2
+                    headers: 2
                     path: test.tsv
             views:
                 plot-a:
                     dataset: table-a
                     render-table:
-                        additional-headers:
-                            0:
+                        headers:
+                            1:
                                 plot:
                                     heatmap:
                                         scale: ordinal
@@ -938,6 +946,27 @@ mod tests {
             views:
                 table-a:
                     dataset: table-a
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_customize_first_header_row_view_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        headers:
+                            0:
+                                plot:
+                                    heatmap:
+                                        scale: ordinal
+                                        color-scheme: category20
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_err());
@@ -1166,7 +1195,7 @@ mod tests {
             description: None,
             render_table: Some(RenderTableSpecs {
                 columns: HashMap::from([("age".to_string(), expected_render_columns)]),
-                additional_headers: None,
+                headers: None,
             }),
             render_plot: None,
             render_html: None,
