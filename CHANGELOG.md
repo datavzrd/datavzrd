@@ -6,6 +6,7 @@
 ### ⚠ BREAKING CHANGES
 
 * Add heatmap option for additional headers (#174)
+* Rename header-rows setting into headers (#176)
 
 ### Features
 
