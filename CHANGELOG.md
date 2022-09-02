@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://www.github.com/koesterlab/datavzrd/compare/v1.19.0...v2.0.0) (2022-09-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* Add heatmap option for additional headers (#174)
+
+### Features
+
+* Add heatmap option for additional headers ([#174](https://www.github.com/koesterlab/datavzrd/issues/174)) ([6f91cd8](https://www.github.com/koesterlab/datavzrd/commit/6f91cd8e8b899228d170dfffb5af3567acc76acc))
+
 ## [1.19.0](https://www.github.com/koesterlab/datavzrd/compare/v1.18.1...v1.19.0) (2022-08-24)
 
 
