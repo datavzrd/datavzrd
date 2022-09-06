@@ -287,6 +287,8 @@ pub(crate) struct RenderTableSpecs {
 pub(crate) struct HeaderSpecs {
     #[serde(default)]
     pub(crate) plot: Option<PlotSpec>,
+    #[serde(default)]
+    pub(crate) rotate: bool,
 }
 
 lazy_static! {
@@ -859,6 +861,7 @@ mod tests {
                 headers: Some(HashMap::from([(
                     1_u32,
                     HeaderSpecs {
+                        rotate: false,
                         plot: Some(PlotSpec {
                             tick_plot: None,
                             heatmap: Some(Heatmap {
