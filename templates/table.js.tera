@@ -36,7 +36,7 @@ $(document).ready(function() {
         {% if detail_mode %}detailView: true, detailFormatter: "detailFormatter"{% endif %}
     })
 
-    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr>{% if detail_mode %}<td style='border: 0 !important;'></td>{% endif %}{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
+    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr>{% if detail_mode %}<td style='border: 0 !important;'></td>{% endif %}{% for title in titles %}{% if display_modes[title] == "normal" %}<td><div>{{ ah[title] }}</div></td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
     let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let num = [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}];
@@ -135,6 +135,10 @@ $(document).ready(function() {
     addNumClass(dp_num, additional_headers.length);
 
     render(additional_headers, displayed_columns, table_rows, columns);
+
+    {% for row in rotated_headers %}
+    $("table > thead > tr:nth-child({{ row + 1 }}) > td > div").each(function() {this.style.setProperty("transform", "rotate(-90deg)"); this.style.setProperty("overflow", "visible !important");});
+    {% endfor %}
 
     {% if is_single_page %}
     $('.btn-group + .bootstrap-select').before($('<div class="btn-group" style="padding-right: 4px;"><button class="btn btn-primary" type="button" id="clear-filter">clear filters</button></div>'))

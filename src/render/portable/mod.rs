@@ -447,6 +447,16 @@ fn render_table_javascript<P: AsRef<Path>>(
         HashMap::new()
     };
 
+    let rotated_headers: Vec<u32> = if let Some(headers) = header_plots {
+        headers
+            .iter()
+            .filter(|(_, v)| v.rotate)
+            .map(|(k, _)| *k)
+            .collect()
+    } else {
+        Vec::new()
+    };
+
     let link_urls: HashMap<String, String> = render_columns
         .iter()
         .filter(|(_, k)| k.link_to_url.is_some())
@@ -490,6 +500,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     });
 
     context.insert("titles", &titles.iter().collect_vec());
+    context.insert("rotated_headers", &rotated_headers);
     context.insert("additional_headers", &header_rows);
     context.insert("header_heatmaps", &header_heatmaps);
     context.insert("formatter", &Some(formatters));
