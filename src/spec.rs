@@ -392,11 +392,17 @@ fn default_display_mode() -> String {
     String::from("normal")
 }
 
+fn default_precision() -> u32 {
+    2_u32
+}
+
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) optional: bool,
+    #[serde(default = "default_precision")]
+    precision: u32,
     #[serde(default)]
     pub(crate) custom: Option<String>,
     #[serde(default = "default_display_mode")]
@@ -651,17 +657,14 @@ pub enum ConfigError {
 
 #[cfg(test)]
 mod tests {
-    use crate::spec::{
-        default_display_mode, default_links, default_render_table, default_single_page_threshold,
-        AuxDomainColumns, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
-        PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, TickPlot,
-    };
+    use crate::spec::{default_display_mode, default_links, default_render_table, default_single_page_threshold, AuxDomainColumns, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, TickPlot, default_precision};
     use std::collections::HashMap;
     use std::path::PathBuf;
 
     #[test]
     fn test_table_config_deserialization() {
         let expected_render_columns = RenderColumnSpec {
+            precision: default_precision(),
             optional: false,
             custom: None,
             display_mode: "normal".to_string(),
@@ -1103,6 +1106,7 @@ mod tests {
             .unwrap()
             .columns;
         let expected_render_column_spec = RenderColumnSpec {
+            precision: default_precision(),
             optional: false,
             custom: None,
             display_mode: "detail".to_string(),
@@ -1112,6 +1116,7 @@ mod tests {
             ellipsis: None,
         };
         let expected_render_column_spec_oscar_no = RenderColumnSpec {
+            precision: default_precision(),
             optional: false,
             custom: None,
             display_mode: "hidden".to_string(),
@@ -1179,6 +1184,7 @@ mod tests {
         };
         let expected_render_columns = RenderColumnSpec {
             optional: false,
+            precision: default_precision(),
             custom: None,
             display_mode: default_display_mode(),
             link_to_url: None,
