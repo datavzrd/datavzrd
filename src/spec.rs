@@ -402,7 +402,7 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) optional: bool,
     #[serde(default = "default_precision")]
-    precision: u32,
+    pub(crate) precision: u32,
     #[serde(default)]
     pub(crate) custom: Option<String>,
     #[serde(default = "default_display_mode")]
