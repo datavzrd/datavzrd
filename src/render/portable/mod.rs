@@ -447,7 +447,10 @@ fn render_table_javascript<P: AsRef<Path>>(
         HashMap::new()
     };
 
-    let precisions: HashMap<String, u32> = render_columns.iter().map(|(k,v)| (k.to_owned(), v.precision)).collect();
+    let precisions: HashMap<String, u32> = render_columns
+        .iter()
+        .map(|(k, v)| (k.to_owned(), v.precision))
+        .collect();
 
     let link_urls: HashMap<String, String> = render_columns
         .iter()
