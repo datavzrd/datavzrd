@@ -336,6 +336,11 @@ fn render_table_javascript<P: AsRef<Path>>(
         .map(|(k, v)| (k.to_owned(), *v != ColumnType::String))
         .collect();
 
+    let is_float: HashMap<String, bool> = classify_table(csv_path, separator)?
+        .iter()
+        .map(|(k, v)| (k.to_owned(), *v == ColumnType::Float))
+        .collect();
+
     let custom_plots: HashMap<String, CustomPlot> = render_columns
         .iter()
         .filter(|(_, k)| k.custom_plot.is_some())
@@ -507,6 +512,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("detail_mode", &detail_mode);
     context.insert("link_urls", &link_urls);
     context.insert("num", &numeric);
+    context.insert("is_float", &is_float);
     context.insert("brush_domains", &json!(brush_domains).to_string());
     context.insert("aux_domains", &json!(aux_domains).to_string());
     context.insert("is_single_page", &is_single_page);
