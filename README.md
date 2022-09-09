@@ -177,7 +177,7 @@ views:
 | ellipsis                    | Shortens values to the first *n* given characters with the rest hidden behind a popover                                                                                                                       |         |                        |
 | optional                    | Allows to have a column specified in render-table that is actually not present.                                                                                                                               | false   | true, false            |
 | display-mode                | Allows to hide columns from views by setting this to `hidden` or have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`. | normal  | detail, normal, hidden |
-
+| precision                   | Allows to specify the precision of floats.                                                                                                                                                                        | w       |                        |
 
 ### headers
 
