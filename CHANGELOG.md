@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://www.github.com/koesterlab/datavzrd/compare/v2.0.0...v2.1.0) (2022-09-09)
+
+
+### Features
+
+* Add precision keyword for displaying numeric values ([#179](https://www.github.com/koesterlab/datavzrd/issues/179)) ([a899ff2](https://www.github.com/koesterlab/datavzrd/commit/a899ff212d17e5b21d41cd29bdba729ee4eb77ca))
+
 ## [2.0.0](https://www.github.com/koesterlab/datavzrd/compare/v1.19.0...v2.0.0) (2022-09-02)
 
 
