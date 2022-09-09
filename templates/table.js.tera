@@ -17,15 +17,6 @@ $(document).ready(function() {
         var decompressed_linkouts = JSON.parse(LZString.decompressFromUTF16(linkouts));
     }
 
-    var precision_formatter = function(precision, value) {
-        value = parseFloat(value)
-        if (1 / (10 ** precision) < value) {
-            return value.toString()
-        } else {
-            return value.toExponential(precision)
-        }
-    }
-
     var format = {% if formatter %}{{ '{' }}{% for f,v in formatter %}"{{ f }}":{{ v }}{% if not loop.last %},{% endif %}{% endfor %}{{ '}' }}{% else %}[];{% endif %}
 
     let bs_table_cols = [{% for title in titles %}{% if display_modes[title] == "normal" %}{
