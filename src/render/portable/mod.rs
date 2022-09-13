@@ -452,6 +452,16 @@ fn render_table_javascript<P: AsRef<Path>>(
         HashMap::new()
     };
 
+    let header_labels: HashMap<u32, String> = if let Some(headers) = header_specs {
+        headers
+            .iter()
+            .filter(|(_, v)| v.label.is_some())
+            .map(|(k, v)| (k.to_owned(), v.label.as_ref().unwrap().to_owned()))
+            .collect()
+    } else {
+        HashMap::new()
+    };
+
     let precisions: HashMap<String, u32> = render_columns
         .iter()
         .map(|(k, v)| (k.to_owned(), v.precision))
@@ -503,6 +513,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("precisions", &precisions);
     context.insert("additional_headers", &header_rows);
     context.insert("header_heatmaps", &header_heatmaps);
+    context.insert("header_labels", &header_labels);
     context.insert("formatter", &Some(formatters));
     context.insert("custom_plots", &custom_plots);
     context.insert("tick_plots", &tick_plots);
