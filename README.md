@@ -169,7 +169,7 @@ views:
 `columns` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file, its 0-based index (e.g. `index(5)` for the 6th column), or a regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`):
 
 | keyword                     | explanation                                                                                                                                                                                                   | default | possible values        |
-| --------------------------- |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------- |------------------------|
+| --------------------------- |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|------------------------|
 | link-to-url                 | Renders a link to the given url with {value} replace by the value of the table. Other values of the same row can be accessed by their column header (e.g. {age} for a column named age).                      |         |                        |
 | custom                      | Applies the given js function to render column content. The parameters of the function are similar to the ones defined [here](https://bootstrap-table.com/docs/api/column-options/#formatter)                 |         |                        |
 | [custom-plot](#custom-plot) | Renders a custom vega-lite plot to the corresponding table cell                                                                                                                                               |         |                        |
@@ -177,7 +177,7 @@ views:
 | ellipsis                    | Shortens values to the first *n* given characters with the rest hidden behind a popover                                                                                                                       |         |                        |
 | optional                    | Allows to have a column specified in render-table that is actually not present.                                                                                                                               | false   | true, false            |
 | display-mode                | Allows to hide columns from views by setting this to `hidden` or have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`. | normal  | detail, normal, hidden |
-| precision                   | Allows to specify the precision of floats.                                                                                                                                                                        | w       |                        |
+| precision                   | Allows to specify the precision of floats. It expects an integer specifying the decimal places that will be shown. Values smaller than $1 / (10^{precision})$ will be displayed in scientific notation with the same number of decimal places.       | 2       |                        |
 
 ### headers
 
