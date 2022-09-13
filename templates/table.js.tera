@@ -36,7 +36,7 @@ $(document).ready(function() {
         {% if detail_mode %}detailView: true, detailFormatter: "detailFormatter"{% endif %}
     })
 
-    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr>{% if detail_mode %}<td {% if not header_labels[loop.index] %}style='border: 0 !important;'{% endif %}>{% if header_labels[loop.index] %}{{ header_labels[loop.index] }}{% endif %}</td>{% endif %}{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
+    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr>{% if detail_mode %}<td {% if not header_labels[loop.index] %}style='border: 0 !important;'{% endif %}>{% if header_labels[loop.index] %}<b>{{ header_labels[loop.index] }}</b>{% endif %}</td>{% endif %}{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
     let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let num = [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}];
@@ -90,7 +90,7 @@ $(document).ready(function() {
     if (linkouts != null) {
         $(`table > thead > tr:first-child > th:last-child`).attr('style', 'border:0 !important');
     }
-    {% if detail_mode and not header_labels[loop.index] %}$(`table > thead > tr:first-child > th:first-child`).attr('style', 'border:0 !important');{% endif %}
+    {% if detail_mode and header_labels | length == 0 %}$(`table > thead > tr:first-child > th:first-child`).attr('style', 'border:0 !important');{% endif %}
 
     window.addEventListener('beforeprint', (event) => {
         setTimeout(function (){
