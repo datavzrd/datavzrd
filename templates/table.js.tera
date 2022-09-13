@@ -137,7 +137,7 @@ $(document).ready(function() {
     render(additional_headers, displayed_columns, table_rows, columns);
 
     {% for row in rotated_headers %}
-    $("table > thead > tr:nth-child({{ row + 1 }}) > td > div").each(function() {this.style.setProperty("transform", "rotate(-90deg)"); this.style.setProperty("overflow", "visible !important");});
+    $("table > thead > tr:nth-child({{ row + 1 }}) > td > div").each(function() {this.style.setProperty("transform", "rotate(-90deg)"); this.style.setProperty("white-space", "nowrap"); this.parentElement.style.setProperty("height", `${$(this).width()}px`); this.parentElement.style.setProperty("width", `${$(this).height()}px`);});
     {% endfor %}
 
     {% if is_single_page %}
@@ -411,7 +411,7 @@ function colorizeHeaderRow{{ loop.index0 }}() {
     var {{ heatmap.scale }} = vega.scale('{{ heatmap.scale }}');
     var scale = {{ heatmap.scale }}(){% if heatmap.domain %}.domain({{ heatmap.domain | json }}){% endif %}.range({% if heatmap.color_scheme %}vega.scheme('{{ heatmap.color_scheme }}'){% else %}[{% for color in heatmap.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
     var row = {{ row }};
-    $(`table > thead > tr:nth-child(${row + 1}) > td`).each(
+    $(`table > thead > tr:nth-child(${row + 1}) > td > div`).each(
         function() {
             var value = this.innerHTML;
     console.log(value);
