@@ -309,7 +309,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_headers: Option<Vec<StringRecord>>,
-    header_plots: &Option<HashMap<u32, HeaderSpecs>>,
+    header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
     page_size: usize,
 ) -> Result<()> {
@@ -441,7 +441,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         })
         .collect();
 
-    let header_heatmaps: HashMap<u32, Heatmap> = if let Some(headers) = header_plots {
+    let header_heatmaps: HashMap<u32, Heatmap> = if let Some(headers) = header_specs {
         headers
             .iter()
             .filter_map(|(k, v)| v.plot.as_ref().map(|heatmap| (k.to_owned(), heatmap)))
