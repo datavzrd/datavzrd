@@ -309,7 +309,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_headers: Option<Vec<StringRecord>>,
-    header_plots: &Option<HashMap<u32, HeaderSpecs>>,
+    header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
     page_size: usize,
 ) -> Result<()> {
@@ -441,12 +441,22 @@ fn render_table_javascript<P: AsRef<Path>>(
         })
         .collect();
 
-    let header_heatmaps: HashMap<u32, Heatmap> = if let Some(headers) = header_plots {
+    let header_heatmaps: HashMap<u32, Heatmap> = if let Some(headers) = header_specs {
         headers
             .iter()
             .filter_map(|(k, v)| v.plot.as_ref().map(|heatmap| (k.to_owned(), heatmap)))
             .filter(|(_, k)| k.heatmap.is_some())
             .map(|(k, v)| (k.to_owned(), v.heatmap.as_ref().unwrap().to_owned()))
+            .collect()
+    } else {
+        HashMap::new()
+    };
+
+    let header_labels: HashMap<u32, String> = if let Some(headers) = header_specs {
+        headers
+            .iter()
+            .filter(|(_, v)| v.label.is_some())
+            .map(|(k, v)| (k.to_owned(), v.label.as_ref().unwrap().to_owned()))
             .collect()
     } else {
         HashMap::new()
@@ -503,6 +513,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("precisions", &precisions);
     context.insert("additional_headers", &header_rows);
     context.insert("header_heatmaps", &header_heatmaps);
+    context.insert("header_labels", &header_labels);
     context.insert("formatter", &Some(formatters));
     context.insert("custom_plots", &custom_plots);
     context.insert("tick_plots", &tick_plots);

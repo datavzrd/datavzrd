@@ -183,9 +183,10 @@ views:
 
 `headers` contains definitions for additional header rows. Each row can be accessed with its index starting at `1` (`0` is the first header row that can't be customized).
 
-| keyword                       | explanation                                                                                                                                      |
-|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| [plot](#plot)                 | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell (currently only the [heatmap](#heatmap) type is supported in header rows)   |
+| keyword       | explanation                                                                                                                                                   |
+|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| label         | Allows to add an additional label to the corresponding header                                                                                                 |
+| [plot](#plot) | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell (currently only the [heatmap](#heatmap) type is supported in header rows) |
 
 ### render-plot
 

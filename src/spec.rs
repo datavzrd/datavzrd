@@ -286,6 +286,8 @@ pub(crate) struct RenderTableSpecs {
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct HeaderSpecs {
     #[serde(default)]
+    pub(crate) label: Option<String>,
+    #[serde(default)]
     pub(crate) plot: Option<PlotSpec>,
 }
 
@@ -867,6 +869,7 @@ mod tests {
                 headers: Some(HashMap::from([(
                     1_u32,
                     HeaderSpecs {
+                        label: Some("my header".to_string()),
                         plot: Some(PlotSpec {
                             tick_plot: None,
                             heatmap: Some(Heatmap {
@@ -914,6 +917,7 @@ mod tests {
                     render-table:
                         headers:
                             1:
+                                label: my header
                                 plot:
                                     heatmap:
                                         scale: ordinal
