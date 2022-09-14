@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://www.github.com/koesterlab/datavzrd/compare/v2.1.0...v2.2.0) (2022-09-14)
+
+
+### Features
+
+* Add optional labeling for headers ([#183](https://www.github.com/koesterlab/datavzrd/issues/183)) ([731732a](https://www.github.com/koesterlab/datavzrd/commit/731732a1e578181f2949ab2faf0ec57b2700c692))
+
 ## [2.1.0](https://www.github.com/koesterlab/datavzrd/compare/v2.0.0...v2.1.0) (2022-09-09)
 
 
