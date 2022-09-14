@@ -19,7 +19,7 @@ $(document).ready(function() {
 
     var format = {% if formatter %}{{ '{' }}{% for f,v in formatter %}"{{ f }}":{{ v }}{% if not loop.last %},{% endif %}{% endfor %}{{ '}' }}{% else %}[];{% endif %}
 
-    let bs_table_cols = [{% for title in titles %}{% if display_modes[title] == "normal" %}{
+    let bs_table_cols = [{% if not detail_mode and not header_labels | length == 0 %}{field: '', title: '', formatter: function(value){ return value }},{% endif %}{% for title in titles %}{% if display_modes[title] == "normal" %}{
     field: '{{ title }}',
     title: '{{ title }}\r\n                        <a class=\"sym\" data-toggle=\"modal\" data-target=\"#modal_{{ loop.index0 }}\" onclick=\"if (show_plot_{{ loop.index0 }}) {vegaEmbed(\'#plot_{{ loop.index0 }}\', plot_{{ loop.index0 }})} else {document.getElementById(\'plot_{{ loop.index0 }}\').innerHTML = \'<p>No reasonable plot possible.</p>\'}\">\r\n                            <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi-bar-chart-fill\" fill=\"currentColor\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n                                <rect width=\"4\" height=\"5\" x=\"1\" y=\"10\" rx=\"1\"\/>\r\n                                <rect width=\"4\" height=\"9\" x=\"6\" y=\"6\" rx=\"1\"\/>\r\n                                <rect width=\"4\" height=\"14\" x=\"11\" y=\"1\" rx=\"1\"\/>\r\n                            <\/svg>\r\n                        <\/a>\r\n                        {% if not is_single_page %}<a class=\"sym\" data-toggle=\"modal\" onclick=\"embedSearch({{ loop.index0 }})\" data-target=\"#search\">\r\n                        <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi-search\" fill=\"currentColor\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n                                <path fill-rule=\"evenodd\" d=\"M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z\"\/>\r\n                                <path fill-rule=\"evenodd\" d=\"M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z\"\/>\r\n                            <\/svg>\r\n                        <\/a>{% endif %}'{% if is_single_page %},filterControl: "input"{% endif %},
         formatter: function(value, row, index, field) { if (format["{{ title }}"] != undefined){ return format["{{ title }}"](value, row, index, field) } else {% if precisions[title] and is_float[title] %}{ return precision_formatter({{ precisions[title] }},value) }{% else %}{ return value }{% endif %} }
@@ -36,7 +36,7 @@ $(document).ready(function() {
         {% if detail_mode %}detailView: true, detailFormatter: "detailFormatter"{% endif %}
     })
 
-    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr>{% if detail_mode %}<td>{% if header_labels[loop.index] %}<b>{{ header_labels[loop.index] }}</b>{% endif %}</td>{% endif %}{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
+    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr><td {% if not detail_mode %}style='border: none !important;'{% endif%}>{% if header_labels[loop.index] %}<b>{{ header_labels[loop.index] }}</b>{% endif %}</td>{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
     let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let num = [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}];
@@ -131,6 +131,11 @@ $(document).ready(function() {
 
     render(additional_headers, displayed_columns, table_rows, columns);
 
+    {% if not detail_mode and not header_labels | length == 0 %}
+    $("table > thead > tr:first-child th:first-child").css("visibility", "hidden");
+    $(`table > tbody > tr td:first-child`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});
+    {% endif %}
+
     {% if is_single_page %}
     $('.btn-group + .bootstrap-select').before($('<div class="btn-group" style="padding-right: 4px;"><button class="btn btn-primary" type="button" id="clear-filter">clear filters</button></div>'))
     let filter_boundaries = {};
@@ -165,7 +170,7 @@ $(document).ready(function() {
    function render_brush_plots(reset) {
    let tick_brush = 0;
        for (title of displayed_columns) {
-           let index = tick_brush + 1{% if detail_mode %} + 1{% endif %};
+           let index = tick_brush + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
            if (dp_num[tick_brush]) {
                let plot_data = [];
                let values = []
@@ -281,6 +286,7 @@ $(document).ready(function() {
     rows.each(function() {
         if (this.dataset.index == to_be_highlighted) {
             $(this).children().addClass('active-row');
+            {% if not detail_mode and not header_labels | length == 0 %}$(this).children().first().removeClass('active-row');{% endif %}
             $('#table').bootstrapTable('scrollTo', {unit: 'rows', value: to_be_highlighted {% if is_single_page %} % page_size{% endif %}})
         }
     });
@@ -309,7 +315,7 @@ function precision_formatter(precision, value) {
 
 {% for title, custom_plot in custom_plots %}
 function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
-    let index = dp_columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
+    let index = dp_columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
     let detail_mode = dp_columns.indexOf("{{ title }}") == -1;
     var data_function = {{ custom_plot.data }};
     var specs =  {{ custom_plot.spec }};
@@ -339,7 +345,7 @@ function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
 
 {% for title, tick_plot in tick_plots %}
 function renderTickPlots{{ loop.index0 }}(ah, columns) {
-    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
+    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
     let detail_mode = columns.indexOf("{{ title }}") == -1;
     var specs =  {{ tick_plot }};
     let row = 0;
@@ -385,7 +391,7 @@ function renderDetailTickPlots{{ loop.index0 }}(value, div) {
 {% for title, tuple in heatmaps %}
 function colorizeColumn{{ loop.index0 }}(ah, columns) {
     let detail_mode = columns.indexOf("{{ title }}") == -1;
-    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
+    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
     var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
     var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
     let row = 0;
@@ -413,13 +419,14 @@ function colorizeHeaderRow{{ loop.index0 }}() {
     var {{ heatmap.scale }} = vega.scale('{{ heatmap.scale }}');
     var scale = {{ heatmap.scale }}(){% if heatmap.domain %}.domain({{ heatmap.domain | json }}){% endif %}.range({% if heatmap.color_scheme %}vega.scheme('{{ heatmap.color_scheme }}'){% else %}[{% for color in heatmap.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
     var row = {{ row }};
+    var skip_label = {% if not header_labels | length == 0 %}true{% else %}false{% endif %};
     $(`table > thead > tr:nth-child(${row + 1}) > td`).each(
         function() {
             var value = this.innerHTML;
-    console.log(value);
-            if (value !== "") {
+            if (value !== "" && !skip_label) {
                 this.style.setProperty("background-color", scale(value), "important");
             }
+            skip_label = false;
         }
     );
 }
@@ -437,7 +444,7 @@ function colorizeDetailCard{{ loop.index0 }}(value, div) {
 
 {% for title, ellipsis in ellipses %}
     function shortenColumn{{ loop.index0 }}(ah, columns) {
-        let index = columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
+        let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
         let row = 0;
         $(`table > tbody > tr td:nth-child(${index})`).each(
             function() {
@@ -453,7 +460,7 @@ function colorizeDetailCard{{ loop.index0 }}(value, div) {
 
 {% for title, link_url in link_urls %}
     function linkUrlColumn{{ loop.index0 }}(ah, dp_columns, columns) {
-        let index = dp_columns.indexOf("{{ title }}") + 1{% if detail_mode %} + 1{% endif %};
+        let index = dp_columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
         let link_url = "{{ link_url }}";
         let table_rows = $('#table').bootstrapTable('getData');
         $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -582,4 +589,7 @@ function render(additional_headers, displayed_columns, table_rows, columns) {
     colorizeHeaderRow{{ loop.index0 }}();
 {% endfor %}
 $('[data-toggle="popover"]').popover()
+{% if not detail_mode and not header_labels | length == 0 %}
+$(`table > tbody > tr td:first-child`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});
+{% endif %}
 }
