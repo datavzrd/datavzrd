@@ -45,7 +45,7 @@
 th {
     white-space: nowrap;
     height: 150px;
-    border-top: 0 !important;
+    border: 0 !important;
     overflow: visible;
 }
 
