@@ -24,7 +24,7 @@ chrono = "0.4"
 ndhistogram = "0.6.2"
 lazy_static = "1.4.0"
 regex = "1.6.0"
-log = "0.4.16"
+log = "0.4.17"
 simplelog = "0.11.2"
 
 [dev-dependencies]
