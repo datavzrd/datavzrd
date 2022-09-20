@@ -423,7 +423,7 @@ function renderTickPlots0(ah, columns) {
         "x": {
             "field": "age",
             "type": "quantitative",
-            "scale": {"type": "linear","domain": [20, 100]},
+            "scale": {"type": "linear","domain": [20.0, 100.0]},
             "axis": {
                 "title": null,
                 "ticks": false,
@@ -482,7 +482,7 @@ function renderDetailTickPlots0(value, div) {
         "x": {
             "field": "age",
             "type": "quantitative",
-            "scale": {"type": "linear","domain": [20, 100]},
+            "scale": {"type": "linear","domain": [20.0, 100.0]},
             "axis": {
                 "title": null,
                 "ticks": false,
