@@ -25,7 +25,7 @@ ndhistogram = "0.8.0"
 lazy_static = "1.4.0"
 regex = "1.6.0"
 log = "0.4.17"
-simplelog = "0.11.2"
+simplelog = "0.12.0"
 
 [dev-dependencies]
 dir-assert = "0.2.0"
