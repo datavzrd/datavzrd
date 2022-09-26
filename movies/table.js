@@ -413,7 +413,7 @@ function renderTickPlots0(ah, columns) {
         "x": {
             "field": "imdbRating",
             "type": "quantitative",
-            "scale": {"type": "linear","domain": [1.0, 10.0]},
+            "scale": {"type": "linear","domain": [1, 10]},
             "axis": {
                 "title": null,
                 "ticks": false,
@@ -473,7 +473,7 @@ function renderDetailTickPlots0(value, div) {
         "x": {
             "field": "imdbRating",
             "type": "quantitative",
-            "scale": {"type": "linear","domain": [1.0, 10.0]},
+            "scale": {"type": "linear","domain": [1, 10]},
             "axis": {
                 "title": null,
                 "ticks": false,
