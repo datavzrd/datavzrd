@@ -1,0 +1,22 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {
+        "values": []
+    },
+    "hconcat": [
+        {
+            "mark": "rect",
+            "encoding": {
+                "color": {
+                    "field": "num_cars",
+                    "type": "quantitative",
+                    "title": "Count of Records",
+                    "legend": {
+                        "direction": "horizontal",
+                        "gradientLength": 120
+                    }
+                }
+            }
+        }
+    ]
+}

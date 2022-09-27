@@ -1,30 +1,50 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "A scatterplot showing movie ratings.",
-  "width": "container",
-  "height": 400,
-  "transform": [
-    {"calculate": "parseInt(datum.Runtime)", "as": "parsed_runtime"}
-  ],
-  "mark": {"type": "circle", "opacity": 0.8, "tooltip": {"content": "data"}},
-  "encoding": {
-    "x": {
-      "field": "Year",
-      "type": "quantitative",
-      "scale": {"zero": false}
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "description": "A scatterplot showing movie ratings.",
+    "width": "container",
+    "height": 400,
+    "transform": [
+        {
+            "calculate": "parseInt(datum.Runtime)",
+            "as": "parsed_runtime"
+        }
+    ],
+    "mark": {
+        "type": "circle",
+        "opacity": 0.8,
+        "tooltip": {
+            "content": "data"
+        }
     },
-    "size": {
-      "title": "Runtime",
-      "field": "parsed_runtime",
-      "type": "quantitative",
-      "scale": {"zero": false}
-    },
-    "y": {
-      "field": "imdbRating",
-      "type": "quantitative",
-      "scale": {"zero": false}
-    },
-    "href": {"field": "link to oscar entry"},
-    "color": {"field": "Rated", "type": "nominal"}
-  }
+    "encoding": {
+        "x": {
+            "field": "Year",
+            "type": "quantitative",
+            "scale": {
+                "zero": false
+            }
+        },
+        "size": {
+            "title": "Runtime",
+            "field": "parsed_runtime",
+            "type": "quantitative",
+            "scale": {
+                "zero": false
+            }
+        },
+        "y": {
+            "field": "imdbRating",
+            "type": "quantitative",
+            "scale": {
+                "zero": false
+            }
+        },
+        "href": {
+            "field": "link to oscar entry"
+        },
+        "color": {
+            "field": "Rated",
+            "type": "nominal"
+        }
+    }
 }

@@ -181,6 +181,13 @@ impl Renderer for ItemRenderer {
                             &self.specs.default_view,
                         )?;
                     }
+                    render_table_heatmap(
+                        &out_path,
+                        &dataset.path,
+                        dataset.separator,
+                        table_specs,
+                        &headers,
+                    )?;
                     render_table_javascript(
                         &out_path,
                         &headers,
@@ -296,6 +303,28 @@ fn render_page<P: AsRef<Path>>(
 
     let mut file = fs::File::create(file_path)?;
     file.write_all(html.as_bytes())?;
+
+    Ok(())
+}
+
+fn render_table_heatmap<P: AsRef<Path>>(
+    output_path: P,
+    csv_path: &Path,
+    separator: char,
+    render_columns: &HashMap<String, RenderColumnSpec>,
+    titles: &[String],
+) -> Result<()> {
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "table_heatmap.vl.tera",
+        include_str!("../../../templates/table_heatmap.vl.tera"),
+    )?;
+    let mut context = Context::new();
+
+    let js = templates.render("table_heatmap.vl.tera", &context)?;
+
+    let mut file = fs::File::create(file_path)?;
+    file.write_all(js.as_bytes())?;
 
     Ok(())
 }
