@@ -225,7 +225,7 @@ $(document).ready(function() {
                })
            } else {
            if(!reset){
-               $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="Filter...">`);
+               $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="&#128269;">`);
                    $(`#filter-${index}`).on('input', function(event) {
                        filters[event.target.dataset.title] = $(`#filter-${index}`).val();
                        $('#table').bootstrapTable('filterBy', {"":""}, {
