@@ -21,7 +21,7 @@
         {"mark": "tick"},
         {
         "mark": {"type": "text", "yOffset": -8, "xOffset": 12},
-        "encoding": {"text": {"field": "{{ field }}"}}
+        "encoding": {"x": {"value": 0}, "text": {"field": "{{ field }}"}}
         }
     ],
     "config": {
