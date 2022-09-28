@@ -140,3 +140,7 @@ th .th-inner {
 .card {
     margin: 0.5em;
 }
+
+.container-fluid {
+    overflow: auto;
+}
