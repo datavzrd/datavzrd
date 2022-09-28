@@ -21,20 +21,22 @@ impl Default for ColumnType {
 
 impl ColumnType {
     fn update(&mut self, value: &str) -> Result<()> {
-        *self = match (
-            f64::from_str(value).is_ok(),
-            i64::from_str(value).is_ok(),
-            &self,
-        ) {
-            (true, true, ColumnType::None) | (true, true, ColumnType::Integer) => {
-                ColumnType::Integer
-            }
-            (true, false, ColumnType::None)
-            | (true, _, ColumnType::Float)
-            | (true, false, ColumnType::Integer) => ColumnType::Float,
-            (false, false, _) | (_, _, ColumnType::String) => ColumnType::String,
-            (false, true, _) => unreachable!(),
-        };
+        if !value.is_empty() {
+            *self = match (
+                f64::from_str(value).is_ok(),
+                i64::from_str(value).is_ok(),
+                &self,
+            ) {
+                (true, true, ColumnType::None) | (true, true, ColumnType::Integer) => {
+                    ColumnType::Integer
+                }
+                (true, false, ColumnType::None)
+                | (true, _, ColumnType::Float)
+                | (true, false, ColumnType::Integer) => ColumnType::Float,
+                (false, false, _) | (_, _, ColumnType::String) => ColumnType::String,
+                (false, true, _) => unreachable!(),
+            };
+        }
         Ok(())
     }
 }
@@ -109,7 +111,7 @@ mod tests {
         let classification =
             classify_table("tests/data/empty_table.csv", char::from_str(",").unwrap()).unwrap();
         for column_type in classification.values() {
-            assert_eq!(&ColumnType::String, column_type)
+            assert_eq!(&ColumnType::None, column_type)
         }
     }
 }
