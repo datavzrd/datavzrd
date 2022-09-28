@@ -4,7 +4,7 @@ let plot_6 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"William Wyler","value":7},{"key":"George Cukor","value":5},{"key":"James L. Brooks","value":3},{"key":"Milos Forman","value":3},{"key":"Martin Scorsese","value":3},{"key":"Jonathan Demme","value":3},{"key":"Daniel Mann","value":3},{"key":"Elia Kazan","value":2},{"key":"Woody Allen","value":2},{"key":"Hal Ashby","value":2}]},
+            "data": {"values": [{"key":"William Wyler","value":7},{"key":"George Cukor","value":5},{"key":"James L. Brooks","value":3},{"key":"Daniel Mann","value":3},{"key":"Milos Forman","value":3},{"key":"Jonathan Demme","value":3},{"key":"Martin Scorsese","value":3},{"key":"Ralph Nelson","value":2},{"key":"Fred Zinnemann","value":2},{"key":"Woody Allen","value":2}]},
             "mark": "bar",
             "encoding": {
                 "x": {

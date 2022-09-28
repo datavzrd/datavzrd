@@ -428,7 +428,7 @@ function renderTickPlots0(ah, columns) {
         {"mark": "tick"},
         {
         "mark": {"type": "text", "yOffset": -8, "xOffset": 12},
-        "encoding": {"text": {"field": "imdbRating"}}
+        "encoding": {"x": {"value": 0}, "text": {"field": "imdbRating"}}
         }
     ],
     "config": {
@@ -488,7 +488,7 @@ function renderDetailTickPlots0(value, div) {
         {"mark": "tick"},
         {
         "mark": {"type": "text", "yOffset": -8, "xOffset": 12},
-        "encoding": {"text": {"field": "imdbRating"}}
+        "encoding": {"x": {"value": 0}, "text": {"field": "imdbRating"}}
         }
     ],
     "config": {
