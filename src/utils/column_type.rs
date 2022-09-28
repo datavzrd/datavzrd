@@ -4,19 +4,13 @@ use std::iter::FromIterator;
 use std::path::Path;
 use std::str::FromStr;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Default)]
 pub(crate) enum ColumnType {
+    #[default]
     None,
     String,
     Integer,
     Float,
-}
-
-// TODO: Use Derive once its stabilized: https://github.com/rust-lang/rust/issues/86985
-impl Default for ColumnType {
-    fn default() -> Self {
-        ColumnType::None
-    }
 }
 
 impl ColumnType {
