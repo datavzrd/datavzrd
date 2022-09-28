@@ -4,7 +4,7 @@ let plot_0 = {
     "width": "container",
     "layer": [
         {
-            "data": {"values": [{"key":"Network","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"On Golden Pond","value":2},{"key":"Coming Home","value":2},{"key":"It Happened One Night","value":2},{"key":"Still Alice","value":1},{"key":"Kramer vs. Kramer","value":1},{"key":"The Private Life of Henry VIII","value":1},{"key":"One Flew Over The Cuckoo's Nest","value":1},{"key":"Tender Mercies","value":1}]},
+            "data": {"values": [{"key":"Network","value":2},{"key":"Coming Home","value":2},{"key":"On Golden Pond","value":2},{"key":"It Happened One Night","value":2},{"key":"The Silence of the Lambs","value":2},{"key":"La La Land","value":1},{"key":"Gladiator","value":1},{"key":"Johnny Belinda","value":1},{"key":"Dr. Jekyll and Mr. Hyde","value":1},{"key":"Mystic River","value":1}]},
             "mark": "bar",
             "encoding": {
                 "x": {
