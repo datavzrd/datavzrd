@@ -1,3 +1,4 @@
+use crate::render::portable::utils::minify_js;
 use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::{Context as AnyhowContext, Result};
 use csv::Reader;
@@ -13,7 +14,6 @@ use std::io::Write;
 use std::path::Path;
 use std::str::FromStr;
 use tera::{Context, Tera};
-use crate::render::portable::utils::minify_js;
 
 /// Renders plots to javascript file
 pub(crate) fn render_plots<P: AsRef<Path>>(
