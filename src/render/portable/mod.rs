@@ -321,9 +321,24 @@ fn render_table_heatmap<P: AsRef<Path>>(
     )?;
     let mut context = Context::new();
 
+    let hidden_columns: HashSet<_> = render_columns
+        .iter()
+        .filter(|(_, v)| v.display_mode == "hidden")
+        .map(|(k, _)| k)
+        .collect();
+
+    let titles = HashSet::from_iter(titles.iter());
+
+    let columns: HashSet<_> = titles.difference(&hidden_columns).collect();
+
+    context.insert("columns", &columns);
+
     let js = templates.render("table_heatmap.vl.tera", &context)?;
 
-    let mut file = fs::File::create(file_path)?;
+    let file_path = Path::new(output_path.as_ref())
+        .join(Path::new("heatmap").with_extension("html"));
+
+    let mut file = File::create(file_path)?;
     file.write_all(js.as_bytes())?;
 
     Ok(())
