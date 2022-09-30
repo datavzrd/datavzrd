@@ -74,8 +74,7 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
 
     for (name, file) in files {
         let mut out = File::create(path.join(Path::new(name)))?;
-        let minified = minify_js(file)?;
-        out.write_all(&minified)?;
+        out.write_all(file.as_bytes())?;
     }
     Ok(())
 }
