@@ -23,7 +23,7 @@ use std::str::FromStr;
 use thiserror::Error;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct ItemsSpec {
     #[serde(default, rename = "name")]
     pub(crate) report_name: String,
@@ -239,7 +239,7 @@ fn default_links() -> Option<HashMap<String, LinkSpec>> {
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct DatasetSpecs {
     pub(crate) path: PathBuf,
     #[serde(default = "default_separator")]
@@ -251,7 +251,7 @@ pub(crate) struct DatasetSpecs {
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct ItemSpecs {
     #[serde(default)]
     pub(crate) hidden: bool,
@@ -274,7 +274,7 @@ pub(crate) struct ItemSpecs {
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderTableSpecs {
     #[serde(default)]
     pub(crate) columns: HashMap<String, RenderColumnSpec>,
@@ -283,7 +283,7 @@ pub(crate) struct RenderTableSpecs {
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct HeaderSpecs {
     #[serde(default)]
     pub(crate) label: Option<String>,
@@ -399,7 +399,7 @@ fn default_precision() -> u32 {
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) optional: bool,
@@ -445,7 +445,7 @@ impl Heatmap {
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderPlotSpec {
     #[serde(default, rename = "spec")]
     pub(crate) schema: Option<String>,
@@ -467,13 +467,13 @@ impl RenderPlotSpec {
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderHtmlSpec {
     pub(crate) script_path: String,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct LinkSpec {
     #[serde(default)]
     pub(crate) column: String,
@@ -486,7 +486,7 @@ pub(crate) struct LinkSpec {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct CustomPlot {
     #[serde(default, rename = "data")]
     plot_data: String,
@@ -516,6 +516,7 @@ fn default_vega_controls() -> String {
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct PlotSpec {
     #[serde(rename = "ticks")]
     pub(crate) tick_plot: Option<TickPlot>,
@@ -523,7 +524,7 @@ pub(crate) struct PlotSpec {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct TickPlot {
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: String,
@@ -534,7 +535,7 @@ pub(crate) struct TickPlot {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct Heatmap {
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: String,
@@ -1101,6 +1102,21 @@ mod tests {
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_unknown_keyword() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: tests/data/uniform_datatypes.csv
+            non-existing-keyword: 42
+            views:
+                table-a:
+                    dataset: table-a
+            "#;
+        let err = serde_yaml::from_str::<ItemsSpec>(raw_config).unwrap_err();
+        assert_eq!(err.to_string(), "unknown field `non-existing-keyword`, expected one of `name`, `datasets`, `default-view`, `max-in-memory-rows`, `views`, `aux-libraries` at line 5 column 13");
     }
 
     #[test]
