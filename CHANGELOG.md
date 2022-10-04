@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.3.1](https://www.github.com/koesterlab/datavzrd/compare/v2.3.0...v2.3.1) (2022-10-04)
+
+
+### Bug Fixes
+
+* Deny unknown fields for configs ([#208](https://www.github.com/koesterlab/datavzrd/issues/208)) ([7ca295f](https://www.github.com/koesterlab/datavzrd/commit/7ca295f3f5da131b04ec53fe916da13e29319fd4))
+* Fix entering of unreachable code when data contains empty columns ([#212](https://www.github.com/koesterlab/datavzrd/issues/212)) ([c1df3fa](https://www.github.com/koesterlab/datavzrd/commit/c1df3fa1c0d621720399df2d51e962528eff29df))
+
 ## [2.3.0](https://www.github.com/koesterlab/datavzrd/compare/v2.2.0...v2.3.0) (2022-09-28)
 
 
