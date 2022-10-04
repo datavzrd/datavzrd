@@ -37,8 +37,8 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
         context.insert("title", &column);
         context.insert("index", &index);
         match column_types.get(column) {
-            None | Some(ColumnType::None) => unreachable!(),
-            Some(ColumnType::String) => {
+            None => unreachable!(),
+            Some(ColumnType::String) | Some(ColumnType::None) => {
                 let plot = generate_nominal_plot(csv_path, separator, index, header_rows)?;
                 templates.add_raw_template(
                     "plot.js.tera",
