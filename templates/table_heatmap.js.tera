@@ -16,11 +16,16 @@ const heatmap_plot = {
                 "{% if marks[column] == "text" %}text{% else %}color{% endif %}": {
                     "field": "{{ column }}",
                     "type": "{{ types[column]}}",
+                    {% if marks[column] = "rect"%}
+                    "scale": {
+                        {% if domains[column] %}"domain": {{ domains[column] | json }}{% endif%}
+                    },
+                    {% endif %}
                     "title": "{{ column}}"{% if marks[column] == "rect" %},
                     "legend": {
-                        "orient": "bottom",
+                        "orient": "top",
                         "direction": "vertical",
-                        "gradientLength": 80
+                        "gradientLength": 50
                     }{% endif %}
                 }
             }
