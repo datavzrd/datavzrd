@@ -321,8 +321,8 @@ fn render_table_heatmap<P: AsRef<Path>>(
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
-        "table_heatmap.vl.tera",
-        include_str!("../../../templates/table_heatmap.vl.tera"),
+        "table_heatmap.js.tera",
+        include_str!("../../../templates/table_heatmap.js.tera"),
     )?;
     let mut context = Context::new();
 
@@ -359,7 +359,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
     context.insert("types", &column_types);
     context.insert("marks", &marks);
 
-    let js = templates.render("table_heatmap.vl.tera", &context)?;
+    let js = templates.render("table_heatmap.js.tera", &context)?;
 
     let file_path = Path::new(output_path.as_ref())
         .join(Path::new("heatmap").with_extension("js"));

@@ -1,7 +1,7 @@
-{
+const heatmap_plot = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "data": {
-        "values": [{"index": 1,"Director": "Test", "imdbRating": 3}, {"index": 2,"Director": "Test2", "imdbRating": 5}]
+        "values": []
     },
     "hconcat": [
         {% for column in columns %}
@@ -11,12 +11,7 @@
                 "y": {
                     "field": "index",
                     "type": "ordinal",
-                    "axis": {
-                        "title": null,
-                        "ticks": false,
-                        "labels": false,
-                        "grid": false
-                    }
+                    "axis": null,
                 },
                 "{% if marks[column] == "text" %}text{% else %}color{% endif %}": {
                     "field": "{{ column }}",
@@ -25,7 +20,7 @@
                     "legend": {
                         "orient": "bottom",
                         "direction": "vertical",
-                        "gradientLength": 120
+                        "gradientLength": 80
                     }{% endif %}
                 }
             }
@@ -33,6 +28,7 @@
         {% endfor %}
     ],
     "config": {
-        "style": {"cell": {"stroke": "transparent"}}
+        "style": {"cell": {"stroke": "transparent"}},
+        "concat": {"spacing": 0}
     }
 }
