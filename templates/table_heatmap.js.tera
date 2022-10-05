@@ -16,11 +16,6 @@ const heatmap_plot = {
                 "{% if marks[column] == "text" %}text{% else %}color{% endif %}": {
                     "field": "{{ column }}",
                     "type": "{{ types[column]}}",
-                    {% if marks[column] = "rect"%}
-                    "scale": {
-                        {% if domains[column] %}"domain": {{ domains[column] | json }}{% endif%}
-                    },
-                    {% endif %}
                     "title": "{{ column}}"{% if marks[column] == "rect" %},
                     "legend": {
                         "orient": "top",
@@ -34,6 +29,7 @@ const heatmap_plot = {
     ],
     "config": {
         "style": {"cell": {"stroke": "transparent"}},
-        "concat": {"spacing": 0}
+        "concat": {"spacing": 4},
+        "text": {"limit": 135}
     }
 }
