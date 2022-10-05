@@ -1,5 +1,26 @@
 # Changelog
 
+### [2.3.1](https://www.github.com/koesterlab/datavzrd/compare/v2.3.0...v2.3.1) (2022-10-04)
+
+
+### Bug Fixes
+
+* Deny unknown fields for configs ([#208](https://www.github.com/koesterlab/datavzrd/issues/208)) ([7ca295f](https://www.github.com/koesterlab/datavzrd/commit/7ca295f3f5da131b04ec53fe916da13e29319fd4))
+* Fix entering of unreachable code when data contains empty columns ([#212](https://www.github.com/koesterlab/datavzrd/issues/212)) ([c1df3fa](https://www.github.com/koesterlab/datavzrd/commit/c1df3fa1c0d621720399df2d51e962528eff29df))
+
+## [2.3.0](https://www.github.com/koesterlab/datavzrd/compare/v2.2.0...v2.3.0) (2022-09-28)
+
+
+### Features
+
+* Align text markers of tick plots ([#203](https://www.github.com/koesterlab/datavzrd/issues/203)) ([ca3113d](https://www.github.com/koesterlab/datavzrd/commit/ca3113dd924409dd012f3eca382f4a06ef7696ac))
+
+
+### Bug Fixes
+
+* Fix column classification for NA values ([#206](https://www.github.com/koesterlab/datavzrd/issues/206)) ([f1df6db](https://www.github.com/koesterlab/datavzrd/commit/f1df6db89c50e84c86983848a3274cb2f5c21fc3))
+* Fix navbar for tables wider than viewport ([#207](https://www.github.com/koesterlab/datavzrd/issues/207)) ([a5cca79](https://www.github.com/koesterlab/datavzrd/commit/a5cca793bed28d2c2e5046454f1765afb8246f9f))
+
 ## [2.2.0](https://www.github.com/koesterlab/datavzrd/compare/v2.1.0...v2.2.0) (2022-09-14)
 
 
