@@ -1,22 +1,38 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "data": {
-        "values": []
+        "values": [{"index": 1,"Director": "Test", "imdbRating": 3}, {"index": 2,"Director": "Test2", "imdbRating": 5}]
     },
     "hconcat": [
+        {% for column in columns %}
         {
-            "mark": "rect",
+            "mark": "{{ marks[column] }}",
             "encoding": {
-                "color": {
-                    "field": "num_cars",
-                    "type": "quantitative",
-                    "title": "Count of Records",
-                    "legend": {
-                        "direction": "horizontal",
-                        "gradientLength": 120
+                "y": {
+                    "field": "index",
+                    "type": "ordinal",
+                    "axis": {
+                        "title": null,
+                        "ticks": false,
+                        "labels": false,
+                        "grid": false
                     }
+                },
+                "{% if marks[column] == "text" %}text{% else %}color{% endif %}": {
+                    "field": "{{ column }}",
+                    "type": "{{ types[column]}}",
+                    "title": "{{ column}}"{% if marks[column] == "rect" %},
+                    "legend": {
+                        "orient": "bottom",
+                        "direction": "vertical",
+                        "gradientLength": 120
+                    }{% endif %}
                 }
             }
-        }
-    ]
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ],
+    "config": {
+        "style": {"cell": {"stroke": "transparent"}}
+    }
 }

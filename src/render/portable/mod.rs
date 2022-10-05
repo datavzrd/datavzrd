@@ -179,15 +179,18 @@ impl Renderer for ItemRenderer {
                             &self.specs.report_name,
                             &self.specs.views,
                             &self.specs.default_view,
+                            is_single_page,
                         )?;
                     }
-                    render_table_heatmap(
-                        &out_path,
-                        &dataset.path,
-                        dataset.separator,
-                        table_specs,
-                        &headers,
-                    )?;
+                    if is_single_page {
+                        render_table_heatmap(
+                            &out_path,
+                            &dataset.path,
+                            dataset.separator,
+                            table_specs,
+                            &headers,
+                        )?;
+                    }
                     render_table_javascript(
                         &out_path,
                         &headers,
@@ -243,6 +246,7 @@ fn render_page<P: AsRef<Path>>(
     report_name: &str,
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
+    is_single_page: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -276,6 +280,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("current_page", &page_index);
     context.insert("pages", &pages);
     context.insert("description", &description);
+    context.insert("is_single_page", &is_single_page);
     context.insert(
         "tables",
         &tables
@@ -331,12 +336,33 @@ fn render_table_heatmap<P: AsRef<Path>>(
 
     let columns: HashSet<_> = titles.difference(&hidden_columns).collect();
 
+    let table_classes = classify_table(csv_path, separator)?;
+    let column_types: HashMap<_,_> = table_classes.iter().map(|(t, c)| {
+        match c {
+            ColumnType::None | ColumnType::String  => (t, "nominal"),
+            ColumnType::Float | ColumnType::Integer => (t, "quantitative"),
+        }
+    }).collect();
+    let marks: HashMap<_,_> = titles.iter().map(|title| {
+        if let Some(rc) = render_columns.get(&title.to_string()) {
+            if rc.plot.is_some() {
+                (title, "rect")
+            } else {
+                (title, "text")
+            }
+        } else {
+            (title, "text")
+        }
+    }).collect();
+
     context.insert("columns", &columns);
+    context.insert("types", &column_types);
+    context.insert("marks", &marks);
 
     let js = templates.render("table_heatmap.vl.tera", &context)?;
 
     let file_path = Path::new(output_path.as_ref())
-        .join(Path::new("heatmap").with_extension("html"));
+        .join(Path::new("heatmap").with_extension("js"));
 
     let mut file = File::create(file_path)?;
     file.write_all(js.as_bytes())?;
