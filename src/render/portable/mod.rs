@@ -401,8 +401,6 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .filter(|(_, s)| !s.is_empty())
         .collect();
 
-    dbg!(&schemes);
-
     context.insert("ranges", &ranges);
     context.insert("schemes", &schemes);
     context.insert("scales", &scales);
