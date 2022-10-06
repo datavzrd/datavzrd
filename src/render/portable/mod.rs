@@ -360,7 +360,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
         })
         .collect();
 
-    // TODO: Collect (aux-)domains and color schemes from render_columns and insert into context
+    // TODO: Collect (aux-)domains and insert into context
 
     let scales: HashMap<_, _> = render_columns
         .iter()
