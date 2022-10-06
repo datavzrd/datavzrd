@@ -362,6 +362,50 @@ fn render_table_heatmap<P: AsRef<Path>>(
 
     // TODO: Collect (aux-)domains and color schemes from render_columns and insert into context
 
+    let scales: HashMap<_, _> = render_columns
+        .iter()
+        .filter(|(_, r)| r.plot.is_some())
+        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
+        .map(|(t, p)| {
+            if let Some(heatmap) = &p.heatmap {
+                (t, heatmap.scale_type.to_string())
+            } else if let Some(ticks) = &p.tick_plot {
+                (t, ticks.scale_type.to_string())
+            } else {
+                (t, "".to_string())
+            }
+        })
+        .filter(|(_, s)| !s.is_empty())
+        .collect();
+
+    let ranges: HashMap<_, _> = render_columns
+        .iter()
+        .filter(|(_, r)| r.plot.is_some())
+        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
+        .filter(|(_, p)| p.heatmap.is_some())
+        .map(|(t, p)| {
+            let heatmap = p.heatmap.as_ref().unwrap();
+            (t, &heatmap.color_range)
+        })
+        .collect();
+
+    let schemes: HashMap<_, _> = render_columns
+        .iter()
+        .filter(|(_, r)| r.plot.is_some())
+        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
+        .filter(|(_, p)| p.heatmap.is_some())
+        .map(|(t, p)| {
+            let heatmap = p.heatmap.as_ref().unwrap();
+            (t, &heatmap.color_scheme)
+        })
+        .filter(|(_, s)| !s.is_empty())
+        .collect();
+
+    dbg!(&schemes);
+
+    context.insert("ranges", &ranges);
+    context.insert("schemes", &schemes);
+    context.insert("scales", &scales);
     context.insert("columns", &columns);
     context.insert("types", &column_types);
     context.insert("marks", &marks);

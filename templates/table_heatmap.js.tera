@@ -16,12 +16,17 @@ const heatmap_plot = {
                 "{% if marks[column] == "text" %}text{% else %}color{% endif %}": {
                     "field": "{{ column }}",
                     "type": "{{ types[column]}}",
-                    "title": "{{ column}}"{% if marks[column] == "rect" %},
+                    "title": "{{ column}}",{% if marks[column] == "rect" %}
+                    "scale": {
+                        {% if scales[column] %}"type": "{{ scales[column] }}",{% endif %}
+                        {% if schemes[column] %}"scheme": "{{ schemes[column] }}",{% endif %}
+                        {% if ranges[column] %}"range": {{ ranges[column] | json_encode }},{% endif %}
+                    },{% endif %}
                     "legend": {
                         "orient": "top",
                         "direction": "vertical",
                         "gradientLength": 50
-                    }{% endif %}
+                    }
                 }
             }
         }{% if not loop.last %},{% endif %}
