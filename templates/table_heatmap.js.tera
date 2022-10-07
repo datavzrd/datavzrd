@@ -34,7 +34,7 @@ const heatmap_plot = {
                         {% if ranges[column] %}"range": {{ ranges[column] | json_encode }},{% endif %}
                     },{% endif %}
                     "legend": {
-                        "orient": "top",
+                        "orient": "bottom",
                         "direction": "vertical",
                         "gradientLength": 50
                     }
