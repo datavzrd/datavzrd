@@ -8,6 +8,17 @@ const heatmap_plot = {
         {
             "mark": "{{ marks[column] }}",
             "encoding": {
+                "x": {
+                "field": "dummy",
+                    "axis": {
+                        "labelExpr": "'{{ column }}'",
+                        "labelAngle": -45,
+                        "title": null,
+                        "ticks": false,
+                        "orient": "top",
+                        "domain": false
+                    }
+                },
                 "y": {
                     "field": "index",
                     "type": "ordinal",
@@ -15,11 +26,11 @@ const heatmap_plot = {
                 },
                 "{% if marks[column] == "text" %}text{% else %}color{% endif %}": {
                     "field": "{{ column }}",
-                    "type": "{{ types[column]}}",
+                    "type": "{{ types[column] }}",
                     "title": "{{ column}}",{% if marks[column] == "rect" %}
                     "scale": {
                         {% if scales[column] %}"type": "{{ scales[column] }}",{% endif %}
-                        {% if schemes[column] %}"scheme": "{{ schemes[column] }}",{% endif %}
+                        {% if schemes[column] %}"scheme": "{{ schemes[column] }}",{% elif not ranges[column] and types[column] == "quantitative" %}"scheme": "blues",{% endif %}
                         {% if ranges[column] %}"range": {{ ranges[column] | json_encode }},{% endif %}
                     },{% endif %}
                     "legend": {
@@ -33,7 +44,7 @@ const heatmap_plot = {
         {% endfor %}
     ],
     "config": {
-        "style": {"cell": {"stroke": "transparent"}},
+        "style": {"cell": {"stroke": "transparent"}, "guide-label": {"fontWeight": "bold"}},
         "concat": {"spacing": 4},
         "text": {"limit": 135}
     }
