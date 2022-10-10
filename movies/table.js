@@ -267,8 +267,8 @@ $(document).ready(function() {
                let min = Math.min(...values);
                let max = Math.max(...values);
                if (brush_domains[title] != undefined) {
-                   min = brush_domains[title][0];
-                   max = brush_domains[title][1];
+                   min = Math.min(...brush_domains[title]);
+                   max = Math.max(...brush_domains[title]);
                } else if (aux_domains[title] != undefined) {
                    aux_values = [min, max];
                    for (col of aux_domains[title]) {
