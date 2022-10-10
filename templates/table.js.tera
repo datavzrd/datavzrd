@@ -181,7 +181,6 @@ $(document).ready(function() {
                let min = Math.min(...values);
                let max = Math.max(...values);
                if (brush_domains[title] != undefined) {
-                    console.log(brush_domains[title])
                    min = Math.min(...brush_domains[title]);
                    max = Math.max(...brush_domains[title]);
                } else if (aux_domains[title] != undefined) {
