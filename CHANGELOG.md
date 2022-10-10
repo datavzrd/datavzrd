@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.3.2](https://www.github.com/koesterlab/datavzrd/compare/v2.3.1...v2.3.2) (2022-10-10)
+
+
+### Bug Fixes
+
+* Fix brush filter domain for numeric heatmap plots ([#214](https://www.github.com/koesterlab/datavzrd/issues/214)) ([2de96a8](https://www.github.com/koesterlab/datavzrd/commit/2de96a85970588c03431e3363a4b9dd8a8ccd993))
+
 ### [2.3.1](https://www.github.com/koesterlab/datavzrd/compare/v2.3.0...v2.3.1) (2022-10-04)
 
 
