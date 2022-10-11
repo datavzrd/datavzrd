@@ -180,7 +180,7 @@ $(document).ready(function() {
                }
                let min = Math.min(...values);
                let max = Math.max(...values);
-               if (brush_domains[title] != undefined) {
+               if (brush_domains[title] != undefined && ticks.includes(title)) {
                    min = Math.min(...brush_domains[title]);
                    max = Math.max(...brush_domains[title]);
                } else if (aux_domains[title] != undefined) {
@@ -393,7 +393,7 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
     let detail_mode = columns.indexOf("{{ title }}") == -1;
     let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
     var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
-    var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
+    var scale = {{ tuple.0.scale }}(){% if tuple.0.scale != "ordinal" %}.clamp({{ tuple.0.clamp }}){% endif %}.domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
     let row = 0;
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
     {% if tuple.0.custom_content %}
@@ -435,7 +435,7 @@ function colorizeHeaderRow{{ loop.index0 }}() {
 {% for title, tuple in heatmaps %}
 function colorizeDetailCard{{ loop.index0 }}(value, div) {
     var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
-    var scale = {{ tuple.0.scale }}().domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
+    var scale = {{ tuple.0.scale }}(){% if tuple.0.scale != "ordinal" %}.clamp({{ tuple.0.clamp }}){% endif %}.domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
     if (value !== "") {
         $(`${div}`).css( "background-color", scale(value) );
     }
