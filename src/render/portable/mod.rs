@@ -362,6 +362,14 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .collect();
 
     // TODO: Collect (aux-)domains and insert into context
+    let tick_domains: HashMap<_, _> = render_columns
+        .iter()
+        .filter(|(_, r)| r.plot.is_some())
+        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
+        .filter(|(_, heatmap)| r.plot.is_some())
+        .map(|(t, p)| (t, p.heatmap.as_ref().unwrap()))
+        .filter(|(_, h)| h.domain.is_some() || h.aux_domain_columns.0.is_some())
+        .collect();
 
     let scales: HashMap<_, _> = render_columns
         .iter()
