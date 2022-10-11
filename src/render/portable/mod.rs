@@ -3,6 +3,7 @@ pub(crate) mod utils;
 
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
+use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
 use crate::spec::{
     CustomPlot, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
@@ -651,8 +652,9 @@ fn render_table_javascript<P: AsRef<Path>>(
 
     let js = templates.render("table.js.tera", &context)?;
 
-    let mut file = fs::File::create(file_path)?;
-    file.write_all(js.as_bytes())?;
+    let mut file = File::create(file_path)?;
+    let minified = minify_js(&js)?;
+    file.write_all(&minified)?;
 
     Ok(())
 }
