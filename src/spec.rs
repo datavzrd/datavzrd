@@ -534,11 +534,17 @@ pub(crate) struct TickPlot {
     pub(crate) aux_domain_columns: AuxDomainColumns,
 }
 
+fn default_clamp() -> bool {
+    true
+}
+
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct Heatmap {
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: String,
+    #[serde(default = "default_clamp")]
+    pub(crate) clamp: bool,
     #[serde(default)]
     color_scheme: String,
     #[serde(default, rename = "range")]
@@ -875,6 +881,7 @@ mod tests {
                             tick_plot: None,
                             heatmap: Some(Heatmap {
                                 scale_type: "ordinal".to_string(),
+                                clamp: true,
                                 color_scheme: "category20".to_string(),
                                 color_range: vec![],
                                 domain: None,
