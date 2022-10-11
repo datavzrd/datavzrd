@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.4.0](https://www.github.com/koesterlab/datavzrd/compare/v2.3.2...v2.4.0) (2022-10-11)
+
+
+### Features
+
+* Add minify_js to decrease file sizes ([#210](https://www.github.com/koesterlab/datavzrd/issues/210)) ([7515317](https://www.github.com/koesterlab/datavzrd/commit/7515317e6bcf56df2142b45dce72fe91f0c7341d))
+* Add new heatmap option clamp ([#216](https://www.github.com/koesterlab/datavzrd/issues/216)) ([7e07df1](https://www.github.com/koesterlab/datavzrd/commit/7e07df111fbe7c17e028212437067e81e46464b9))
+
 ### [2.3.2](https://www.github.com/koesterlab/datavzrd/compare/v2.3.1...v2.3.2) (2022-10-10)
 
 
