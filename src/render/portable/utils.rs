@@ -1,5 +1,6 @@
 use crate::spec::ItemsSpec;
 use anyhow::Result;
+use minify_js::{minify, TopLevelMode};
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -76,6 +77,17 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
         out.write_all(file.as_bytes())?;
     }
     Ok(())
+}
+
+pub(crate) fn minify_js(file: &str) -> Result<Vec<u8>> {
+    let mut minified: Vec<u8> = Vec::new();
+    minify(
+        TopLevelMode::Global,
+        file.as_bytes().to_vec(),
+        &mut minified,
+    )
+    .expect("Failed minifying js");
+    Ok(minified)
 }
 
 pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> Result<()> {

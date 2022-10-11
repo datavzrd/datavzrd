@@ -1,3 +1,4 @@
+use crate::render::portable::utils::minify_js;
 use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::{Context as AnyhowContext, Result};
 use csv::Reader;
@@ -58,7 +59,8 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
         let js = templates.render("plot.js.tera", &context)?;
         let file_path = path.join(Path::new(&format!("plot_{}", index)).with_extension("js"));
         let mut file = fs::File::create(file_path)?;
-        file.write_all(js.as_bytes())?;
+        let minified = minify_js(&js)?;
+        file.write_all(&minified)?;
     }
     Ok(())
 }

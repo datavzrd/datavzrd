@@ -214,6 +214,7 @@ dependencies = [
  "lazy_static",
  "log",
  "lz-str",
+ "minify-js",
  "ndhistogram",
  "regex",
  "serde",
@@ -461,6 +462,17 @@ name = "memchr"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
+
+[[package]]
+name = "minify-js"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "35e057de7e5b920675f6c9de1a7d1b6862685f4e57953ee083ce01233e4b5cac"
+dependencies = [
+ "aho-corasick",
+ "lazy_static",
+ "memchr",
+]
 
 [[package]]
 name = "ndhistogram"
