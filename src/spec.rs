@@ -881,6 +881,7 @@ mod tests {
                             tick_plot: None,
                             heatmap: Some(Heatmap {
                                 scale_type: "ordinal".to_string(),
+                                clamp: true,
                                 color_scheme: "category20".to_string(),
                                 color_range: vec![],
                                 domain: None,
