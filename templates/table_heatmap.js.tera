@@ -29,6 +29,7 @@ const heatmap_plot = {
                     "type": "{{ types[column] }}",
                     "title": "{{ column}}",{% if marks[column] == "rect" %}
                     "scale": {
+                        {% if tick_domains[column] %}"domain": {{ tick_domains[column] | json_encode }},{% elif heatmap_domains[column] %}"domain": {{ heatmap_domains[column] }},{% endif %}
                         {% if scales[column] %}"type": "{{ scales[column] }}",{% endif %}
                         {% if schemes[column] %}"scheme": "{{ schemes[column] }}",{% elif not ranges[column] and types[column] == "quantitative" %}"scheme": "blues",{% endif %}
                         {% if ranges[column] %}"range": {{ ranges[column] | json_encode }},{% endif %}

@@ -190,6 +190,7 @@ impl Renderer for ItemRenderer {
                             dataset.separator,
                             table_specs,
                             &headers,
+                            dataset.header_rows,
                         )?;
                     }
                     render_table_javascript(
@@ -319,6 +320,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
     titles: &[String],
+    header_rows: usize,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -361,14 +363,36 @@ fn render_table_heatmap<P: AsRef<Path>>(
         })
         .collect();
 
-    // TODO: Collect (aux-)domains and insert into context
     let tick_domains: HashMap<_, _> = render_columns
+        .iter()
+        .filter(|(_, r)| r.plot.is_some())
+        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
+        .filter(|(_, p)| p.tick_plot.is_some())
+        .map(|(t, p)| (t, p.tick_plot.as_ref().unwrap()))
+        .filter(|(_, h)| h.domain.is_some() || h.aux_domain_columns.0.is_some())
+        .map(|(t, h)| {
+            let domain = if let Some(domain) = h.domain.as_ref() {
+                domain.clone()
+            } else {
+                let mut aux_domains = h.aux_domain_columns.0.as_ref().unwrap().to_vec();
+                aux_domains.push(t.to_string());
+                let d = get_min_max_multiple_columns(csv_path, separator, header_rows, aux_domains).unwrap();
+                vec![d.0, d.1]
+            };
+            (t, domain)
+        })
+        .collect();
+
+    let heatmap_domains: HashMap<_,_> = render_columns
         .iter()
         .filter(|(_, r)| r.plot.is_some())
         .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
         .filter(|(_, p)| p.heatmap.is_some())
         .map(|(t, p)| (t, p.heatmap.as_ref().unwrap()))
         .filter(|(_, h)| h.domain.is_some() || h.aux_domain_columns.0.is_some())
+        .map(|(t, h)| {
+            (t, get_column_domain(t, csv_path, separator, header_rows, h).unwrap())
+        })
         .collect();
 
     let scales: HashMap<_, _> = render_columns
@@ -410,6 +434,8 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .filter(|(_, s)| !s.is_empty())
         .collect();
 
+    context.insert("tick_domains", &tick_domains);
+    context.insert("heatmap_domains", &heatmap_domains);
     context.insert("ranges", &ranges);
     context.insert("schemes", &schemes);
     context.insert("scales", &scales);
