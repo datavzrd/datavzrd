@@ -376,14 +376,15 @@ fn render_table_heatmap<P: AsRef<Path>>(
             } else {
                 let mut aux_domains = h.aux_domain_columns.0.as_ref().unwrap().to_vec();
                 aux_domains.push(t.to_string());
-                let d = get_min_max_multiple_columns(csv_path, separator, header_rows, aux_domains).unwrap();
+                let d = get_min_max_multiple_columns(csv_path, separator, header_rows, aux_domains)
+                    .unwrap();
                 vec![d.0, d.1]
             };
             (t, domain)
         })
         .collect();
 
-    let heatmap_domains: HashMap<_,_> = render_columns
+    let heatmap_domains: HashMap<_, _> = render_columns
         .iter()
         .filter(|(_, r)| r.plot.is_some())
         .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
@@ -391,7 +392,10 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .map(|(t, p)| (t, p.heatmap.as_ref().unwrap()))
         .filter(|(_, h)| h.domain.is_some() || h.aux_domain_columns.0.is_some())
         .map(|(t, h)| {
-            (t, get_column_domain(t, csv_path, separator, header_rows, h).unwrap())
+            (
+                t,
+                get_column_domain(t, csv_path, separator, header_rows, h).unwrap(),
+            )
         })
         .collect();
 
