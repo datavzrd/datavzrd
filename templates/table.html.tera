@@ -165,7 +165,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Click "..."-button for export options
+                    <p class="text-right small">Click "..."-button for export options</p>
                     <div id="heatmap-plot">
                 </div>
                 <div class="modal-footer">
