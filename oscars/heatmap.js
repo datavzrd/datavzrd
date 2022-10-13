@@ -6,13 +6,17 @@ const heatmap_plot = {
     "hconcat": [
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'oscar_yr'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -28,23 +32,22 @@ const heatmap_plot = {
                     "field": "oscar_yr",
                     "type": "quantitative",
                     "title": "oscar_yr",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "rect",
+            "mark": {
+                "type": "rect"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'award'",
                         "labelAngle": -45,
+                        
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -76,13 +79,17 @@ const heatmap_plot = {
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'name'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -98,23 +105,23 @@ const heatmap_plot = {
                     "field": "name",
                     "type": "nominal",
                     "title": "name",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'movie'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -130,23 +137,22 @@ const heatmap_plot = {
                     "field": "movie",
                     "type": "nominal",
                     "title": "movie",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "rect",
+            "mark": {
+                "type": "rect"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'age'",
                         "labelAngle": -45,
+                        
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -178,13 +184,17 @@ const heatmap_plot = {
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'birth place'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -200,23 +210,23 @@ const heatmap_plot = {
                     "field": "birth place",
                     "type": "nominal",
                     "title": "birth place",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'birth date'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -232,23 +242,23 @@ const heatmap_plot = {
                     "field": "birth date",
                     "type": "nominal",
                     "title": "birth date",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'birth_mo'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -264,23 +274,23 @@ const heatmap_plot = {
                     "field": "birth_mo",
                     "type": "quantitative",
                     "title": "birth_mo",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'birth_d'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -296,23 +306,23 @@ const heatmap_plot = {
                     "field": "birth_d",
                     "type": "quantitative",
                     "title": "birth_d",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'birth_y'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -328,11 +338,7 @@ const heatmap_plot = {
                     "field": "birth_y",
                     "type": "quantitative",
                     "title": "birth_y",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         }

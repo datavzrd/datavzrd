@@ -6,13 +6,17 @@ const heatmap_plot = {
     "hconcat": [
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Title'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -28,23 +32,23 @@ const heatmap_plot = {
                     "field": "Title",
                     "type": "nominal",
                     "title": "Title",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Year'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -60,23 +64,22 @@ const heatmap_plot = {
                     "field": "Year",
                     "type": "quantitative",
                     "title": "Year",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "rect",
+            "mark": {
+                "type": "rect"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Rated'",
                         "labelAngle": -45,
+                        
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -108,13 +111,17 @@ const heatmap_plot = {
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Released'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -130,23 +137,23 @@ const heatmap_plot = {
                     "field": "Released",
                     "type": "nominal",
                     "title": "Released",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Runtime'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -162,23 +169,23 @@ const heatmap_plot = {
                     "field": "Runtime",
                     "type": "nominal",
                     "title": "Runtime",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Genre'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -194,23 +201,23 @@ const heatmap_plot = {
                     "field": "Genre",
                     "type": "nominal",
                     "title": "Genre",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Director'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -226,23 +233,22 @@ const heatmap_plot = {
                     "field": "Director",
                     "type": "nominal",
                     "title": "Director",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         },
         
         {
-            "mark": "rect",
+            "mark": {
+                "type": "rect"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'imdbRating'",
                         "labelAngle": -45,
+                        
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -274,13 +280,17 @@ const heatmap_plot = {
         },
         
         {
-            "mark": "text",
+            "mark": {
+                "type": "text",
+                "align":"left"
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'imdbID'",
                         "labelAngle": -45,
+                        "labelOffset": 7,
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -296,11 +306,7 @@ const heatmap_plot = {
                     "field": "imdbID",
                     "type": "nominal",
                     "title": "imdbID",
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
+                    
                 }
             }
         }
