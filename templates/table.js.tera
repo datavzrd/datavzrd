@@ -69,6 +69,7 @@ $(document).ready(function() {
         var i = 0;
         var heatmap_data = JSON.parse(JSON.stringify(table_rows));
         for (const r of heatmap_data) {
+            if (r.hasOwnProperty('linkouts')) delete r['linkouts']
             r.index = i;
             i++;
         }
