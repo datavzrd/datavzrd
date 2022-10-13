@@ -117,10 +117,6 @@ $(document).ready(function() {
         }, 0);
     });
 
-    $("#btnPrint").on("click", function () {
-        window.print();
-    });
-
     $( ".btn-sm" ).click(function() {
         var col = $(this).data( "col" );
         var field = $(this).data("val").toString();
