@@ -180,6 +180,17 @@ impl Renderer for ItemRenderer {
                             &self.specs.report_name,
                             &self.specs.views,
                             &self.specs.default_view,
+                            is_single_page,
+                        )?;
+                    }
+                    if is_single_page {
+                        render_table_heatmap(
+                            &out_path,
+                            &dataset.path,
+                            dataset.separator,
+                            table_specs,
+                            &headers,
+                            dataset.header_rows,
                         )?;
                     }
                     render_table_javascript(
@@ -237,6 +248,7 @@ fn render_page<P: AsRef<Path>>(
     report_name: &str,
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
+    is_single_page: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -270,6 +282,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("current_page", &page_index);
     context.insert("pages", &pages);
     context.insert("description", &description);
+    context.insert("is_single_page", &is_single_page);
     context.insert(
         "tables",
         &tables
@@ -297,6 +310,149 @@ fn render_page<P: AsRef<Path>>(
 
     let mut file = fs::File::create(file_path)?;
     file.write_all(html.as_bytes())?;
+
+    Ok(())
+}
+
+fn render_table_heatmap<P: AsRef<Path>>(
+    output_path: P,
+    csv_path: &Path,
+    separator: char,
+    render_columns: &HashMap<String, RenderColumnSpec>,
+    titles: &[String],
+    header_rows: usize,
+) -> Result<()> {
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "table_heatmap.js.tera",
+        include_str!("../../../templates/table_heatmap.js.tera"),
+    )?;
+    let mut context = Context::new();
+
+    let hidden_columns: HashSet<_> = render_columns
+        .iter()
+        .filter(|(_, v)| v.display_mode == "hidden")
+        .map(|(k, _)| k)
+        .collect();
+
+    let columns = titles
+        .iter()
+        .filter(|t| !hidden_columns.contains(t))
+        .collect_vec();
+
+    let table_classes = classify_table(csv_path, separator)?;
+    let column_types: HashMap<_, _> = table_classes
+        .iter()
+        .map(|(t, c)| match c {
+            ColumnType::None | ColumnType::String => (t, "nominal"),
+            ColumnType::Float | ColumnType::Integer => (t, "quantitative"),
+        })
+        .collect();
+    let marks: HashMap<_, _> = titles
+        .iter()
+        .map(|title| {
+            if let Some(rc) = render_columns.get(&title.to_string()) {
+                if rc.plot.is_some() {
+                    (title, "rect")
+                } else {
+                    (title, "text")
+                }
+            } else {
+                (title, "text")
+            }
+        })
+        .collect();
+
+    let tick_domains: HashMap<_, _> = render_columns
+        .iter()
+        .filter(|(_, r)| r.plot.is_some())
+        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
+        .filter(|(_, p)| p.tick_plot.is_some())
+        .map(|(t, p)| (t, p.tick_plot.as_ref().unwrap()))
+        .filter(|(_, h)| h.domain.is_some() || h.aux_domain_columns.0.is_some())
+        .map(|(t, h)| {
+            let domain = if let Some(domain) = h.domain.as_ref() {
+                domain.clone()
+            } else {
+                let mut aux_domains = h.aux_domain_columns.0.as_ref().unwrap().to_vec();
+                aux_domains.push(t.to_string());
+                let d = get_min_max_multiple_columns(csv_path, separator, header_rows, aux_domains)
+                    .unwrap();
+                vec![d.0, d.1]
+            };
+            (t, domain)
+        })
+        .collect();
+
+    let heatmap_domains: HashMap<_, _> = render_columns
+        .iter()
+        .filter(|(_, r)| r.plot.is_some())
+        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
+        .filter(|(_, p)| p.heatmap.is_some())
+        .map(|(t, p)| (t, p.heatmap.as_ref().unwrap()))
+        .filter(|(_, h)| h.domain.is_some() || h.aux_domain_columns.0.is_some())
+        .map(|(t, h)| {
+            (
+                t,
+                get_column_domain(t, csv_path, separator, header_rows, h).unwrap(),
+            )
+        })
+        .collect();
+
+    let scales: HashMap<_, _> = render_columns
+        .iter()
+        .filter(|(_, r)| r.plot.is_some())
+        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
+        .map(|(t, p)| {
+            if let Some(heatmap) = &p.heatmap {
+                (t, heatmap.scale_type.to_string())
+            } else if let Some(ticks) = &p.tick_plot {
+                (t, ticks.scale_type.to_string())
+            } else {
+                (t, "".to_string())
+            }
+        })
+        .filter(|(_, s)| !s.is_empty())
+        .collect();
+
+    let ranges: HashMap<_, _> = render_columns
+        .iter()
+        .filter(|(_, r)| r.plot.is_some())
+        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
+        .filter(|(_, p)| p.heatmap.is_some())
+        .map(|(t, p)| {
+            let heatmap = p.heatmap.as_ref().unwrap();
+            (t, &heatmap.color_range)
+        })
+        .collect();
+
+    let schemes: HashMap<_, _> = render_columns
+        .iter()
+        .filter(|(_, r)| r.plot.is_some())
+        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
+        .filter(|(_, p)| p.heatmap.is_some())
+        .map(|(t, p)| {
+            let heatmap = p.heatmap.as_ref().unwrap();
+            (t, &heatmap.color_scheme)
+        })
+        .filter(|(_, s)| !s.is_empty())
+        .collect();
+
+    context.insert("tick_domains", &tick_domains);
+    context.insert("heatmap_domains", &heatmap_domains);
+    context.insert("ranges", &ranges);
+    context.insert("schemes", &schemes);
+    context.insert("scales", &scales);
+    context.insert("columns", &columns);
+    context.insert("types", &column_types);
+    context.insert("marks", &marks);
+
+    let js = templates.render("table_heatmap.js.tera", &context)?;
+
+    let file_path = Path::new(output_path.as_ref()).join(Path::new("heatmap").with_extension("js"));
+
+    let mut file = File::create(file_path)?;
+    file.write_all(js.as_bytes())?;
 
     Ok(())
 }

@@ -546,9 +546,9 @@ pub(crate) struct Heatmap {
     #[serde(default = "default_clamp")]
     pub(crate) clamp: bool,
     #[serde(default)]
-    color_scheme: String,
+    pub(crate) color_scheme: String,
     #[serde(default, rename = "range")]
-    color_range: Vec<String>,
+    pub(crate) color_range: Vec<String>,
     #[serde(default)]
     pub(crate) domain: Option<Vec<String>>,
     #[serde(default)]

@@ -63,6 +63,20 @@ $(document).ready(function() {
         j++;
         table_rows.push(row);
     }
+
+    {% if is_single_page %}
+    $( "#btnHeatmap" ).on( "click", function() {
+        var i = 0;
+        var heatmap_data = JSON.parse(JSON.stringify(table_rows));
+        for (const r of heatmap_data) {
+            r.index = i;
+            i++;
+        }
+        heatmap_plot.data.values = heatmap_data;
+        vegaEmbed('#heatmap-plot', heatmap_plot);
+    });
+    {% endif %}
+
     $('#table').find('thead').append(additional_headers);
     $('#table').bootstrapTable('append', table_rows);
 
