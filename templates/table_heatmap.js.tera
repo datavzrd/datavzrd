@@ -6,13 +6,17 @@ const heatmap_plot = {
     "hconcat": [
         {% for column in columns %}
         {
-            "mark": "{{ marks[column] }}",
+            "mark": {
+                "type": "{{ marks[column] }}"{% if marks[column] == "text" %},
+                "align":"left"{% endif %}
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'{{ column }}'",
                         "labelAngle": -45,
+                        {% if marks[column] == "text" %}"labelOffset": 7,{% endif %}
                         "title": null,
                         "ticks": false,
                         "orient": "top",
@@ -34,11 +38,11 @@ const heatmap_plot = {
                         {% if schemes[column] %}"scheme": "{{ schemes[column] }}",{% elif not ranges[column] and types[column] == "quantitative" %}"scheme": "blues",{% endif %}
                         {% if ranges[column] %}"range": {{ ranges[column] | json_encode }},{% endif %}
                     },{% endif %}
-                    "legend": {
+                    {% if marks[column] != "text" %}"legend": {
                         "orient": "bottom",
                         "direction": "vertical",
                         "gradientLength": 50
-                    }
+                    }{% endif %}
                 }
             }
         }{% if not loop.last %},{% endif %}
