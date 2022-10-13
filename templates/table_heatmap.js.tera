@@ -6,13 +6,17 @@ const heatmap_plot = {
     "hconcat": [
         {% for column in columns %}
         {
-            "mark": "{{ marks[column] }}",
+            "mark": {
+                "type": "{{ marks[column] }}"{% if marks[column] == "text" %},
+                "align":"left"{% endif %}
+            },
             "encoding": {
                 "x": {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'{{ column }}'",
                         "labelAngle": -45,
+                        {% if marks[column] == "text" %}"labelOffset": 7,{% endif %}
                         "title": null,
                         "ticks": false,
                         "orient": "top",
