@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.5.1](https://www.github.com/koesterlab/datavzrd/compare/v2.5.0...v2.5.1) (2022-10-13)
+
+
+### Bug Fixes
+
+* Reformat button help text ([66384bf](https://www.github.com/koesterlab/datavzrd/commit/66384bfbc452990bb62341f36f3a9c49ef32cb67))
+
 ## [2.5.0](https://www.github.com/koesterlab/datavzrd/compare/v2.4.0...v2.5.0) (2022-10-13)
 
 
