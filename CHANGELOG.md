@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.5.0](https://www.github.com/koesterlab/datavzrd/compare/v2.4.0...v2.5.0) (2022-10-13)
+
+
+### Features
+
+* Add ability to export whole table to vega-lite heatmap ([#218](https://www.github.com/koesterlab/datavzrd/issues/218)) ([44a9644](https://www.github.com/koesterlab/datavzrd/commit/44a9644e264f8f5ba5b4d5f6e15a49605abc481f))
+
+
+### Bug Fixes
+
+* Align text marks of heatmap table ([#220](https://www.github.com/koesterlab/datavzrd/issues/220)) ([9c7333e](https://www.github.com/koesterlab/datavzrd/commit/9c7333e9a6b2b16250fd7f5bc9eca02f1ed2592c))
+
+
+### Performance Improvements
+
+* Remove unused data field from heatmap spec ([#221](https://www.github.com/koesterlab/datavzrd/issues/221)) ([74e9b4e](https://www.github.com/koesterlab/datavzrd/commit/74e9b4eb6fe873ab79bae6d48f091bcb514b9e91))
+
 ## [2.4.0](https://www.github.com/koesterlab/datavzrd/compare/v2.3.2...v2.4.0) (2022-10-11)
 
 
