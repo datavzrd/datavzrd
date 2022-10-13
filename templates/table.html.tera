@@ -57,11 +57,11 @@
             <li class="nav-item"><div>{{ report_name }}</div></li>
         </ul>
         <span class="pull-right">
-            {% if is_single_page %}<button class="btn btn-primary" id="btnHeatmap" data-toggle="modal" data-target="#heatmap-plot-modal">
+            {% if is_single_page %}<span data-toggle="tooltip" data-placement="left" title="View as Plot"><button class="btn btn-primary" id="btnHeatmap" data-toggle="modal" data-target="#heatmap-plot-modal">
                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
                      <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/>
                 </svg>
-            </button>{% endif %}
+            </button></span>{% endif %}
             {% if description %}
             <div class="btn-group">
                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
@@ -159,12 +159,13 @@
         <div class="modal-dialog modal-lg" id="modal-dialog-heatmap">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Heatmap plot</h5>
+                    <h5 class="modal-title">Plot-View</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
+                    Click "..."-button for export options
                     <div id="heatmap-plot">
                 </div>
                 <div class="modal-footer">
