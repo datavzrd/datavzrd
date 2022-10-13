@@ -23,6 +23,7 @@
 <script src="../static/lz-string.min.js"></script>
 <script src="../static/showdown.min.js"></script>
 <script src="table.js"></script>
+<script src="heatmap.js"></script>
 
 <script src="plots/plot_0.js"></script>
 <script src="plots/plot_1.js"></script>
@@ -51,7 +52,7 @@
             </li>
         </ul>
         <span class="navbar-text">
-            created Tue Oct 11 08:42:12 2022
+            created Thu Oct 13 09:44:03 2022
         </span>
     </div>
 </nav>
@@ -64,6 +65,11 @@
             <li class="nav-item"><div>My oscar report</div></li>
         </ul>
         <span class="pull-right">
+            <button class="btn btn-primary" id="btnHeatmap" data-toggle="modal" data-target="#heatmap-plot-modal">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                     <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/>
+                </svg>
+            </button>
             <button class="btn btn-primary" id="btnPrint">
                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
@@ -278,6 +284,26 @@
                 <div class="modal-body">
                     <div id="plot_8" style="width: 100%; height: 300px; border:none;">
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="heatmap-plot-modal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" id="modal-dialog-heatmap">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Heatmap plot</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="heatmap-plot">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
