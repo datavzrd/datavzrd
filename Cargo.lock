@@ -465,13 +465,12 @@ checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
 
 [[package]]
 name = "minify-js"
-version = "0.2.4"
+version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "35e057de7e5b920675f6c9de1a7d1b6862685f4e57953ee083ce01233e4b5cac"
+checksum = "7fe033709f5a1159736cf7e22748518ffb75af26f3a6264d52ecc8bb38c68c36"
 dependencies = [
- "aho-corasick",
  "lazy_static",
- "memchr",
+ "parse-js",
 ]
 
 [[package]]
@@ -517,6 +516,17 @@ name = "once_cell"
 version = "1.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2f7254b99e31cad77da24b08ebf628882739a608578bb1bcdfc1f9c21260d7c0"
+
+[[package]]
+name = "parse-js"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "66bb85ec60d22b9e6d4adac1e3dbdaf3903a4485f476c5f4dd7ed1285cbf4dad"
+dependencies = [
+ "aho-corasick",
+ "lazy_static",
+ "memchr",
+]
 
 [[package]]
 name = "parse-zoneinfo"
