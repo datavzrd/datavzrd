@@ -15,7 +15,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'{{ column }}'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         {% if marks[column] == "text" %}"labelOffset": 7,{% endif %}
                         "title": null,
                         "ticks": false,
@@ -38,11 +38,11 @@ const heatmap_plot = {
                         {% if schemes[column] %}"scheme": "{{ schemes[column] }}",{% elif not ranges[column] and types[column] == "quantitative" %}"scheme": "blues",{% endif %}
                         {% if ranges[column] %}"range": {{ ranges[column] | json_encode }},{% endif %}
                     },{% endif %}
-                    {% if marks[column] != "text" %}"legend": {
+                    {% if marks[column] != "text" %}"legend": {% if remove_legend[column] %}null{% else %}{
                         "orient": "bottom",
                         "direction": "vertical",
                         "gradientLength": 50
-                    }{% endif %}
+                    }{% endif %}{% endif %}
                 }
             }
         }{% if not loop.last %},{% endif %}
@@ -50,7 +50,7 @@ const heatmap_plot = {
     ],
     "config": {
         "style": {"cell": {"stroke": "transparent"}, "guide-label": {"fontWeight": "bold"}},
-        "concat": {"spacing": 4},
+        "concat": {"spacing": 0},
         "text": {"limit": 135}
     }
 }

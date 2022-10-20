@@ -438,6 +438,24 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .filter(|(_, s)| !s.is_empty())
         .collect();
 
+    let remove_legend: HashMap<_, _> = titles
+        .iter()
+        .tuple_windows()
+        .map(|(t1, t2)| {
+            match (
+                tick_domains.get(t1),
+                tick_domains.get(t2),
+                heatmap_domains.get(t1),
+                heatmap_domains.get(t2),
+            ) {
+                (Some(d1), Some(d2), _, _) => (t1, d1 == d2),
+                (_, _, Some(d1), Some(d2)) => (t1, d1 == d2),
+                _ => (t1, false),
+            }
+        })
+        .collect();
+
+    context.insert("remove_legend", &remove_legend);
     context.insert("tick_domains", &tick_domains);
     context.insert("heatmap_domains", &heatmap_domains);
     context.insert("ranges", &ranges);
@@ -915,6 +933,7 @@ fn get_column_domain(
                         .map(|(_, value)| value.to_string())
                         .collect_vec())
                     .unique()
+                    .sorted()
                     .collect_vec())
                 .to_string())
             } else {
@@ -923,6 +942,7 @@ fn get_column_domain(
                     .map(|r| r.unwrap())
                     .map(|r| r.get(column_index).unwrap().to_owned())
                     .unique()
+                    .sorted()
                     .collect_vec())
                 .to_string())
             }
