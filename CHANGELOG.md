@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.5.2](https://www.github.com/koesterlab/datavzrd/compare/v2.5.1...v2.5.2) (2022-10-20)
+
+
+### Bug Fixes
+
+* Fix precision for non-scientific notation ([#225](https://www.github.com/koesterlab/datavzrd/issues/225)) ([9105d77](https://www.github.com/koesterlab/datavzrd/commit/9105d7748f783ff06848b87b494e3ba504cab184))
+
 ### [2.5.1](https://www.github.com/koesterlab/datavzrd/compare/v2.5.0...v2.5.1) (2022-10-13)
 
 
