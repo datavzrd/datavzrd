@@ -15,7 +15,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Title'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -47,7 +47,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Year'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -78,7 +78,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Rated'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         
                         "title": null,
                         "ticks": false,
@@ -96,7 +96,7 @@ const heatmap_plot = {
                     "type": "nominal",
                     "title": "Rated",
                     "scale": {
-                        "domain": ["Unrated","Passed","PG-13","R","Approved","Not Rated","M/PG","G","TV-MA","PG","N/A","M"],
+                        "domain": ["Approved","G","M","M/PG","N/A","Not Rated","PG","PG-13","Passed","R","TV-MA","Unrated"],
                         "type": "ordinal",
                         "scheme": "accent",
                         
@@ -120,7 +120,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Released'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -152,7 +152,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Runtime'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -184,7 +184,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Genre'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -216,7 +216,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'Director'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -247,7 +247,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'imdbRating'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         
                         "title": null,
                         "ticks": false,
@@ -289,7 +289,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'imdbID'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -314,7 +314,7 @@ const heatmap_plot = {
     ],
     "config": {
         "style": {"cell": {"stroke": "transparent"}, "guide-label": {"fontWeight": "bold"}},
-        "concat": {"spacing": 4},
+        "concat": {"spacing": 0},
         "text": {"limit": 135}
     }
 }

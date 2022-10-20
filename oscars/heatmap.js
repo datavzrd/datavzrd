@@ -15,7 +15,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'oscar_yr'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -46,7 +46,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'award'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         
                         "title": null,
                         "ticks": false,
@@ -88,7 +88,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'name'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -120,7 +120,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'movie'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -151,7 +151,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'age'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         
                         "title": null,
                         "ticks": false,
@@ -193,7 +193,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'birth place'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -225,7 +225,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'birth date'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -257,7 +257,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'birth_mo'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -289,7 +289,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'birth_d'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -321,7 +321,7 @@ const heatmap_plot = {
                 "field": "dummy",
                     "axis": {
                         "labelExpr": "'birth_y'",
-                        "labelAngle": -45,
+                        "labelAngle": -90,
                         "labelOffset": 7,
                         "title": null,
                         "ticks": false,
@@ -346,7 +346,7 @@ const heatmap_plot = {
     ],
     "config": {
         "style": {"cell": {"stroke": "transparent"}, "guide-label": {"fontWeight": "bold"}},
-        "concat": {"spacing": 4},
+        "concat": {"spacing": 0},
         "text": {"limit": 135}
     }
 }
