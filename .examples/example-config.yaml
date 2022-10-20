@@ -68,6 +68,7 @@ views:
         Title:
           link-to-url: "https://de.wikipedia.org/wiki/{value}"
         imdbRating:
+          precision: 1
           plot:
             ticks:
               scale: linear

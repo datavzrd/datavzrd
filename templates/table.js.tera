@@ -318,7 +318,7 @@ function renderMarkdownDescription() {
 function precision_formatter(precision, value) {
     value = parseFloat(value)
     if (1 / (10 ** precision) < value) {
-        return value.toString()
+        return value.toFixed(precision).toString()
     } else {
         return value.toExponential(precision)
     }
