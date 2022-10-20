@@ -448,9 +448,9 @@ fn render_table_heatmap<P: AsRef<Path>>(
                 heatmap_domains.get(t1),
                 heatmap_domains.get(t2),
             ) {
-                (Some(d1), Some(d2), _, _) => (t2, d1 == d2),
-                (_, _, Some(d1), Some(d2)) => (t2, d1 == d2),
-                _ => (t2, false),
+                (Some(d1), Some(d2), _, _) => (t1, d1 == d2),
+                (_, _, Some(d1), Some(d2)) => (t1, d1 == d2),
+                _ => (t1, false),
             }
         })
         .collect();

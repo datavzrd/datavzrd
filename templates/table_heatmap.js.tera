@@ -50,7 +50,7 @@ const heatmap_plot = {
     ],
     "config": {
         "style": {"cell": {"stroke": "transparent"}, "guide-label": {"fontWeight": "bold"}},
-        "concat": {"spacing": 4},
+        "concat": {"spacing": 0},
         "text": {"limit": 135}
     }
 }
