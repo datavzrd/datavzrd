@@ -120,10 +120,6 @@ views:
 
 `default-view` allows the user to optionally specify a view for the generated report that will be shown when opening the index file.
 
-### datasets
-
-`datasets` defines the different datasets of the report. This is also the place to define links between your individual datasets.
-
 ### max-in-memory-rows
 
 `max-in-memory-rows` defines the threshold for the maximum number of rows in memory. If the given dataset exceeds the threshold the data will be split across multiple pages and their html files. Defaults to 1000 rows.
@@ -131,6 +127,10 @@ views:
 ### aux-libraries
 
 `aux-libraries` allows to add one or more js libraries via cdn links for usage in [render-html](#render-html). The keyword expects a list of urls that link to the js libraries.
+
+### datasets
+
+`datasets` defines the different datasets of the report. This is also the place to define links between your individual datasets.
 
 | keyword          | explanation                                                                                                                                                      | default |
 |------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------- |
