@@ -453,9 +453,9 @@ dependencies = [
 
 [[package]]
 name = "lz-str"
-version = "0.1.0"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a081ef1e55c0f1fef4a0a0c48ad7a3acbc1a0f3881c27c090f8ed48156d5b8c"
+checksum = "800f8a7e64e7d69d7d1ba6a42a6e1b48af3a27a1133861a2dc054cd9b562e970"
 
 [[package]]
 name = "memchr"
