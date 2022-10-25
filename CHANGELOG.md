@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.6.0](https://www.github.com/koesterlab/datavzrd/compare/v2.5.2...v2.6.0) (2022-10-24)
+
+
+### Features
+
+* Merge legends when domains are equal ([#227](https://www.github.com/koesterlab/datavzrd/issues/227)) ([aa220cb](https://www.github.com/koesterlab/datavzrd/commit/aa220cb786e071b400220d4f67ce3f8cb7e3e241))
+
+
+### Bug Fixes
+
+* Fix precision behaviour for zero and negative values ([#234](https://www.github.com/koesterlab/datavzrd/issues/234)) ([6b13cda](https://www.github.com/koesterlab/datavzrd/commit/6b13cdac83c005a6b255339b43b3b38a90bd41af))
+
 ### [2.5.2](https://www.github.com/koesterlab/datavzrd/compare/v2.5.1...v2.5.2) (2022-10-20)
 
 
