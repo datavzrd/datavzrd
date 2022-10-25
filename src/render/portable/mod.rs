@@ -508,7 +508,7 @@ fn render_table_javascript<P: AsRef<Path>>(
 
     let numeric: HashMap<String, bool> = classify_table(csv_path, separator)?
         .iter()
-        .map(|(k, v)| (k.to_owned(), *v != ColumnType::String))
+        .map(|(k, v)| (k.to_owned(), v.is_numeric()))
         .collect();
 
     let is_float: HashMap<String, bool> = classify_table(csv_path, separator)?
