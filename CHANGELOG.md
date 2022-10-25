@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.6.1](https://www.github.com/koesterlab/datavzrd/compare/v2.6.0...v2.6.1) (2022-10-25)
+
+
+### Bug Fixes
+
+* Add context to error when parsing numeric domain ([#238](https://www.github.com/koesterlab/datavzrd/issues/238)) ([3e166cd](https://www.github.com/koesterlab/datavzrd/commit/3e166cd0eb7d71df02f788e2813b65453389049b))
+* Fix wrong classification of empty columns ([#239](https://www.github.com/koesterlab/datavzrd/issues/239)) ([c02335d](https://www.github.com/koesterlab/datavzrd/commit/c02335d4fce596b37de867716548a99b4ea33777))
+
 ## [2.6.0](https://www.github.com/koesterlab/datavzrd/compare/v2.5.2...v2.6.0) (2022-10-24)
 
 
