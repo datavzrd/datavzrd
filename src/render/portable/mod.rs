@@ -562,7 +562,7 @@ fn render_table_javascript<P: AsRef<Path>>(
                 .map(|(title, k)| {
                     (
                         title.to_string(),
-                        k.iter().map(|s| f32::from_str(s).unwrap()).collect_vec(),
+                        k.iter().map(|s| f32::from_str(s).context(format!("Could not parse given domain value {s} for column {title}.")).unwrap()).collect_vec(),
                     )
                 }),
         )
