@@ -136,7 +136,7 @@ views:
 |------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------- |
 | path             | The path of the CSV/TSV file                                                                                                                                     |         |
 | separator        | The delimiter of the file                                                                                                                                        | ,       |
-| header-rows      | Number of header-rows of the file                                                                                                                                | 1       |
+| headers      | Number of header rows in the file                                                                                                                                | 1       |
 | [links](#links)  | Configuration linking between items                                                                                                                              |         |
 
 ### views
