@@ -33,6 +33,10 @@ impl ColumnType {
         }
         Ok(())
     }
+
+    pub(crate) fn is_numeric(&self) -> bool {
+        self == &ColumnType::Integer || self == &ColumnType::Float
+    }
 }
 
 /// Classifies table columns as String, Integer or Float
@@ -107,5 +111,17 @@ mod tests {
         for column_type in classification.values() {
             assert_eq!(&ColumnType::None, column_type)
         }
+    }
+
+    #[test]
+    fn test_is_numeric() {
+        let integer = ColumnType::Integer;
+        let float = ColumnType::Float;
+        let string = ColumnType::String;
+        let none = ColumnType::None;
+        assert!(integer.is_numeric());
+        assert!(float.is_numeric());
+        assert!(!string.is_numeric());
+        assert!(!none.is_numeric())
     }
 }
