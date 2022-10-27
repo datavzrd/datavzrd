@@ -426,6 +426,8 @@ impl RenderColumnSpec {
                 ticks.preprocess(dataset)?;
             } else if let Some(heatmap) = &mut plot.heatmap {
                 heatmap.preprocess(dataset)?;
+            } else if let Some(bars) = &mut plot.bar_plot {
+                bars.preprocess(dataset)?;
             }
         }
         Ok(())
@@ -439,6 +441,12 @@ impl TickPlot {
 }
 
 impl Heatmap {
+    fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+        self.aux_domain_columns.preprocess(dataset)
+    }
+}
+
+impl BarPlot {
     fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
         self.aux_domain_columns.preprocess(dataset)
     }
