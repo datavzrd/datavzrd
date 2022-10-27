@@ -909,7 +909,7 @@ mod tests {
                                 aux_domain_columns: Default::default(),
                                 custom_content: None,
                             }),
-                            bar_plot: None
+                            bar_plot: None,
                         }),
                     },
                 )])),
@@ -1235,7 +1235,7 @@ mod tests {
         let expected_plot = PlotSpec {
             tick_plot: Some(expected_ticks),
             heatmap: None,
-            bar_plot: None
+            bar_plot: None,
         };
         let expected_render_columns = RenderColumnSpec {
             optional: false,

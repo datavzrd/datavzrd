@@ -5,7 +5,10 @@ use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
-use crate::spec::{BarPlot, CustomPlot, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, RenderColumnSpec, TickPlot};
+use crate::spec::{
+    BarPlot, CustomPlot, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
+    RenderColumnSpec, TickPlot,
+};
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
@@ -556,7 +559,7 @@ fn render_table_javascript<P: AsRef<Path>>(
                     header_row_length,
                     v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
                 )
-                    .unwrap(),
+                .unwrap(),
             )
         })
         .collect();
