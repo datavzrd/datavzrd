@@ -10,7 +10,7 @@
             "axis": null
         },
         "y": {"value": 0, "scale": {"domain": [0, 1]}},
-        "color": {"value": "#0275d8"}
+        "color": {"value": "#6baed6"}
     },
     "layer": [
         {"mark": {"type":"bar", "height": 12, "yOffset": 11}},
