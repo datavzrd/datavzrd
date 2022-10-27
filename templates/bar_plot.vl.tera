@@ -1,0 +1,32 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 50,
+    "height": 10,
+    "encoding": {
+        "x": {
+            "field": "{{ field }}",
+            "type": "quantitative",
+            "scale": {"type": "{{ scale_type }}","domain": [{{ minimum }}, {{ maximum }}]},
+            "axis": {
+                "title": null,
+                "ticks": false,
+                "labels": false,
+                "grid": false,
+                "offset": -11
+            }
+        },
+        "y": {"value": 0, "scale": {"domain": [0, 1]}}
+    },
+    "layer": [
+        {"mark": "bar"},
+        {
+        "mark": {"type": "text", "yOffset": -8, "xOffset": 12},
+        "encoding": {"x": {"value": 0}, "text": {"field": "{{ field }}"}}
+        }
+    ],
+    "config": {
+        "tick": {"thickness": 2},
+        "background": null,
+        "style": {"cell": {"stroke": "transparent"}}
+    }
+}
