@@ -7,21 +7,16 @@
             "field": "{{ field }}",
             "type": "quantitative",
             "scale": {"type": "{{ scale_type }}","domain": [{{ minimum }}, {{ maximum }}]},
-            "axis": {
-                "title": null,
-                "ticks": false,
-                "labels": false,
-                "grid": false,
-                "offset": -11
-            }
+            "axis": null
         },
-        "y": {"value": 0, "scale": {"domain": [0, 1]}}
+        "y": {"value": 0, "scale": {"domain": [0, 1]}},
+        "color": {"value": "#0275d8"}
     },
     "layer": [
-        {"mark": "bar"},
+        {"mark": {"type":"bar", "height": 12, "yOffset": 11}},
         {
-        "mark": {"type": "text", "yOffset": -8, "xOffset": 12},
-        "encoding": {"x": {"value": 0}, "text": {"field": "{{ field }}"}}
+        "mark": {"type": "text", "yOffset": 11, "xOffset": 12},
+        "encoding": {"x": {"value": 0}, "text": {"field": "{{ field }}"}, "color": {"value": "black"}}
         }
     ],
     "config": {
