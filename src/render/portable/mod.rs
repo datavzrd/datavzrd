@@ -438,7 +438,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .filter(|(_, s)| !s.is_empty())
         .collect();
 
-    let remove_legend: HashMap<_, _> = titles
+    let mut remove_legend: HashMap<_, _> = titles
         .iter()
         .tuple_windows()
         .map(|(t1, t2)| {
@@ -454,6 +454,12 @@ fn render_table_heatmap<P: AsRef<Path>>(
             }
         })
         .collect();
+
+    for (t, rc) in render_columns.iter() {
+        if !rc.plot_view_legend {
+            remove_legend.insert(t, true);
+        }
+    }
 
     context.insert("remove_legend", &remove_legend);
     context.insert("tick_domains", &tick_domains);
