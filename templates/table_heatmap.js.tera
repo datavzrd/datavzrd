@@ -5,47 +5,64 @@ const heatmap_plot = {
     },
     "hconcat": [
         {% for column in columns %}
-        {
-            "mark": {
-                "type": "{{ marks[column] }}"{% if marks[column] == "text" %},
-                "align":"left"{% endif %}
-            },
-            "encoding": {
-                "x": {
-                "field": "dummy",
-                    "axis": {
-                        "labelExpr": "'{{ column }}'",
-                        "labelAngle": -90,
-                        {% if marks[column] == "text" %}"labelOffset": 7,{% endif %}
-                        "title": null,
-                        "ticks": false,
-                        "orient": "top",
-                        "domain": false
+        {"layer": [
+            {
+                "mark": {
+                    "type": "{{ marks[column] }}"{% if marks[column] == "text" %},
+                    "align":"left"{% endif %}
+                },
+                "encoding": {
+                    "x": {
+                    "field": "dummy",
+                        "axis": {
+                            "labelExpr": "'{{ column }}'",
+                            "labelAngle": -90,
+                            {% if marks[column] == "text" %}"labelOffset": 7,{% endif %}
+                            "title": null,
+                            "ticks": false,
+                            "orient": "top",
+                            "domain": false
+                        }
+                    },
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "{% if marks[column] == "text" %}text{% else %}color{% endif %}": {
+                        "field": "{{ column }}",
+                        "type": "{{ types[column] }}",
+                        "title": "{{ column}}",{% if marks[column] == "rect" %}
+                        "scale": {
+                            {% if tick_domains[column] %}"domain": {{ tick_domains[column] | json_encode }},{% elif heatmap_domains[column] %}"domain": {{ heatmap_domains[column] }},{% endif %}
+                            {% if scales[column] %}"type": "{{ scales[column] }}",{% endif %}
+                            {% if schemes[column] %}"scheme": "{{ schemes[column] }}",{% elif not ranges[column] and types[column] == "quantitative" %}"scheme": "blues",{% endif %}
+                            {% if ranges[column] %}"range": {{ ranges[column] | json_encode }},{% endif %}
+                        },{% endif %}
+                        {% if marks[column] != "text" %}"legend": {% if remove_legend[column] or not plot_legend[column] %}null{% else %}{
+                            "orient": "bottom",
+                            "direction": "vertical",
+                            "gradientLength": 50
+                        }{% endif %}{% endif %}
                     }
+                }
+            }{% if not plot_legend[column] and marks[column] != "text" %},
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left"
                 },
-                "y": {
-                    "field": "index",
-                    "type": "ordinal",
-                    "axis": null,
-                },
-                "{% if marks[column] == "text" %}text{% else %}color{% endif %}": {
-                    "field": "{{ column }}",
-                    "type": "{{ types[column] }}",
-                    "title": "{{ column}}",{% if marks[column] == "rect" %}
-                    "scale": {
-                        {% if tick_domains[column] %}"domain": {{ tick_domains[column] | json_encode }},{% elif heatmap_domains[column] %}"domain": {{ heatmap_domains[column] }},{% endif %}
-                        {% if scales[column] %}"type": "{{ scales[column] }}",{% endif %}
-                        {% if schemes[column] %}"scheme": "{{ schemes[column] }}",{% elif not ranges[column] and types[column] == "quantitative" %}"scheme": "blues",{% endif %}
-                        {% if ranges[column] %}"range": {{ ranges[column] | json_encode }},{% endif %}
-                    },{% endif %}
-                    {% if marks[column] != "text" %}"legend": {% if remove_legend[column] %}null{% else %}{
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }{% endif %}{% endif %}
+                "encoding": {
+                    "text": {"field": "{{column}}"},
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    }
                 }
             }
-        }{% if not loop.last %},{% endif %}
+        {% endif %}
+        ]}{% if not loop.last %},{% endif %}
         {% endfor %}
     ],
     "config": {
