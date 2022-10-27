@@ -42,6 +42,7 @@ $(document).ready(function() {
     let num = [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}];
     let dp_num = [{% for title in titles %}{% if display_modes[title] == "normal" %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let ticks = [{% for title, tick_plot in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+    let bars = [{% for title, bar_plot in bar_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let links = [{% for title, link_url in link_urls %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
 
@@ -84,6 +85,7 @@ $(document).ready(function() {
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
         let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
         let ticks = [{% for title, tick in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+        let bars = [{% for title, bar in bar_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
         let heatmaps = [{% for title, custom_plot in heatmaps %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
         let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
         {% for title, custom_plot in custom_plots %}
@@ -99,6 +101,9 @@ $(document).ready(function() {
         {% endfor %}
         {% for title, tick_plot in tick_plots %}
         renderDetailTickPlots{{ loop.index0 }}(row[ticks[{{ loop.index0 }}]], `#detail-plot-${index}-ticks-{{ loop.index0 }}`);
+        {% endfor %}
+        {% for title, bar_plot in bar_plots %}
+        renderDetailBarPlots{{ loop.index0 }}(row[bars[{{ loop.index0 }}]], `#detail-plot-${index}-bars-{{ loop.index0 }}`);
         {% endfor %}
     })
 
@@ -385,9 +390,54 @@ function renderTickPlots{{ loop.index0 }}(ah, columns) {
 }
 {% endfor %}
 
+{% for title, bar_plot in bar_plots %}
+function renderBarPlots{{ loop.index0 }}(ah, columns) {
+    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
+    let detail_mode = columns.indexOf("{{ title }}") == -1;
+    var specs =  {{ bar_plot }};
+    let row = 0;
+    let table_rows = $('#table').bootstrapTable('getData');
+    $(`table > tbody > tr td:nth-child(${index})`).each(
+        function() {
+            var id = `{{ title | slugify }}-${row}`;
+            this.classList.add("plotcell");
+            const div = document.createElement("div");
+            let value = table_rows[row]["{{ title }}"];
+            {% if precisions[title] and is_float[title] %}
+            value = precision_formatter({{ precisions[title] }},value);{% endif %}
+            if (value != "" && !detail_mode) {
+                this.innerHTML = "";
+                this.appendChild(div);
+                var data = [{"{{ title }}": value}];
+                var s = specs;
+                s.data = {};
+                s.data.values = data;
+                var opt = {"actions": false};
+                vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+            }
+            row++;
+        }
+    );
+}
+{% endfor %}
+
 {% for title, tick_plot in tick_plots %}
 function renderDetailTickPlots{{ loop.index0 }}(value, div) {
     var specs =  {{ tick_plot }};
+    if (value != "") {
+        var data = [{"{{ title }}": value}];
+        var s = specs;
+        s.data = {};
+        s.data.values = data;
+        var opt = {"actions": true};
+        vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+    }
+}
+{% endfor %}
+
+{% for title, bar_plot in bar_plots %}
+function renderDetailBarPlots{{ loop.index0 }}(value, div) {
+    var specs =  {{ bar_plot }};
     if (value != "") {
         var data = [{"{{ title }}": value}];
         var s = specs;
@@ -498,15 +548,18 @@ function embedSearch(index) {
 function detailFormatter(index, row) {
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let ticks = [{% for title, tick in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
+    let bars = [{% for title, bar in bar_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let heatmaps = [{% for title, custom_plot in heatmaps %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let hidden_columns = [{% for title in titles %}{% if display_modes[title] == "hidden" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     var html = []
     $.each(row, function (key, value) {
         if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts") {
-            if (cp.includes(key) || ticks.includes(key)) {
+            if (cp.includes(key) || ticks.includes(key) || bars.includes(key)) {
                 if (cp.includes(key)) {
                     id = `detail-plot-${index}-cp-${cp.indexOf(key)}`;
+                } else if (bars.includes(key)) {
+                    id = `detail-plot-${index}-bars-${bars.indexOf(key)}`;
                 } else {
                     id = `detail-plot-${index}-ticks-${ticks.indexOf(key)}`;
                 }
@@ -582,6 +635,10 @@ function render(additional_headers, displayed_columns, table_rows, columns) {
 
 {% for title, tick_plot in tick_plots %}
     renderTickPlots{{ loop.index0 }}(additional_headers.length, displayed_columns);
+{% endfor %}
+
+{% for title, bar_plot in bar_plots %}
+    renderBarPlots{{ loop.index0 }}(additional_headers.length, displayed_columns);
 {% endfor %}
 
 {% for title, link_url in link_urls %}

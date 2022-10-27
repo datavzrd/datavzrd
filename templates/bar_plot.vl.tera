@@ -25,7 +25,6 @@
         }
     ],
     "config": {
-        "tick": {"thickness": 2},
         "background": null,
         "style": {"cell": {"stroke": "transparent"}}
     }
