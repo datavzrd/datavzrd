@@ -232,9 +232,10 @@ views:
 `plot` allows the rendering of either a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values or a heatmap for nominal values.
 
 | keyword             | explanation                                                                               |
-| ------------------- | ----------------------------------------------------------------------------------------- |
+|---------------------|-------------------------------------------------------------------------------------------|
 | [ticks](#ticks)     | Defines a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values |
 | [heatmap](#heatmap) | Defines a heatmap for numeric or nominal values                                           |
+| [bars](#bars)       | Defines a [bar-plot](https://vega.github.io/vega-lite/docs/bar.html) for numeric values   |
 
 ### ticks
 
@@ -259,6 +260,16 @@ views:
 | clamp               | Defines whether values exceeding the given domain for continuous scales will be clamped to the minimum or maximum value.                                                                                                         | true    |
 | aux-domain-columns  | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported. |         |
 | custom-content      | Allows to render custom content into any heatmap cell (while using the actual cell content for the heatmap color). Requires a `function(value, row)` that returns the text value that will be displayed in the cell.             |         | 
+
+### ticks
+
+`bars` defines the attributes of a [bar-plot](https://vega.github.io/vega-lite/docs/bar.html) for numeric values.
+
+| keyword            | explanation                                                                                                                                                                                                                       |
+|--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| scale              | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the bar plot                                                                                                                                             |
+| domain             | Defines the domain of the bar plot. If not present datavzrd will automatically use the minimum and maximum values for the domain                                                                                                  |
+| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the bar plot. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported. |
 
 ## Authors
 
