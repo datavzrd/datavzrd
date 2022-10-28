@@ -8,8 +8,9 @@ const heatmap_plot = {
         {"layer": [
             {
                 "mark": {
-                    "type": "{{ marks[column] }}"{% if marks[column] == "text" %},
-                    "align":"left"{% endif %}
+                    "type": "{{ marks[column] }}",
+                    "align":"left"{% if marks[column] != "text" %},
+                    "width": {{ column_widths[column] }}{% endif %}
                 },
                 "encoding": {
                     "x": {
@@ -46,11 +47,12 @@ const heatmap_plot = {
                         }{% endif %}{% endif %}
                     }
                 }
-            }{% if not plot_legend[column] and marks[column] != "text" %},
+            }{% if not plot_legend[column] and marks[column] == "rect" %},
             {
                 "mark": {
                     "type": "text",
-                    "align":"left"
+                    "align":"left",
+                    "xOffset": -6
                 },
                 "encoding": {
                     "text": {"field": "{{column}}"},

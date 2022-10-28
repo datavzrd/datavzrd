@@ -20,6 +20,7 @@ use itertools::Itertools;
 use lz_str::compress_to_utf16;
 use serde::Serialize;
 use serde_json::json;
+use std::cmp::max;
 use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::fs::File;
@@ -460,7 +461,22 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .map(|(t, rc)| (t, rc.plot_view_legend))
         .collect();
 
+    let column_widths: HashMap<_, _> = marks
+        .iter()
+        .filter(|(_, m)| *m != &"text")
+        .map(|(t, _)| {
+            (
+                t,
+                max(
+                    20,
+                    6 * get_column_width(t, csv_path, separator, header_rows).unwrap(),
+                ),
+            )
+        })
+        .collect();
+
     context.insert("remove_legend", &remove_legend);
+    context.insert("column_widths", &column_widths);
     context.insert("plot_legends", &plot_legends);
     context.insert("tick_domains", &tick_domains);
     context.insert("heatmap_domains", &heatmap_domains);
@@ -479,6 +495,39 @@ fn render_table_heatmap<P: AsRef<Path>>(
     file.write_all(js.as_bytes())?;
 
     Ok(())
+}
+
+fn get_column_width(
+    column: &str,
+    csv_path: &Path,
+    separator: char,
+    header_rows: usize,
+) -> Result<i32> {
+    let mut reader = csv::ReaderBuilder::new()
+        .delimiter(separator as u8)
+        .from_path(csv_path)
+        .context(format!("Could not read file with path {:?}", csv_path))?;
+
+    let column_index = reader.headers().map(|s| {
+        s.iter()
+            .position(|t| t == column)
+            .context(ColumnError::NotFound {
+                column: column.to_string(),
+                path: csv_path.to_str().unwrap().to_string(),
+            })
+            .unwrap()
+    })?;
+
+    let width = reader
+        .records()
+        .skip(header_rows - 1)
+        .map(|row| row.unwrap())
+        .map(|row| row.get(column_index).unwrap().to_string())
+        .map(|s| s.len())
+        .max()
+        .unwrap();
+
+    Ok(width as i32)
 }
 
 #[allow(clippy::too_many_arguments)]
