@@ -306,9 +306,7 @@ const heatmap_plot = {
                     "x": {
                         "field": "imdbRating",
                         "type": "quantitative",
-                        "axis": {
-                            "title": null
-                        }
+                        "axis": null
                     },
                     "y": {
                         "field": "index",
