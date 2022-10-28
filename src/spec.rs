@@ -417,6 +417,8 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) custom_plot: Option<CustomPlot>,
     #[serde(default)]
     pub(crate) ellipsis: Option<u32>,
+    #[serde(default)]
+    pub(crate) plot_view_legend: bool,
 }
 
 impl RenderColumnSpec {
@@ -707,6 +709,7 @@ mod tests {
             plot: None,
             custom_plot: None,
             ellipsis: None,
+            plot_view_legend: false,
         };
 
         let expected_dataset_spec = DatasetSpecs {
@@ -1168,6 +1171,7 @@ mod tests {
             plot: None,
             custom_plot: None,
             ellipsis: None,
+            plot_view_legend: false,
         };
         let expected_render_column_spec_oscar_no = RenderColumnSpec {
             precision: default_precision(),
@@ -1178,6 +1182,7 @@ mod tests {
             plot: None,
             custom_plot: None,
             ellipsis: None,
+            plot_view_legend: false,
         };
         assert_eq!(
             oscar_config.get("oscar_no").unwrap().to_owned(),
@@ -1246,6 +1251,7 @@ mod tests {
             plot: Some(expected_plot),
             custom_plot: None,
             ellipsis: None,
+            plot_view_legend: false,
         };
         let expected_item_specs = ItemSpecs {
             hidden: false,
