@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.0](https://www.github.com/koesterlab/datavzrd/compare/v2.6.1...v2.7.0) (2022-10-28)
+
+
+### Features
+
+* Add config keyword plot-view-legend ([#241](https://www.github.com/koesterlab/datavzrd/issues/241)) ([0f74b72](https://www.github.com/koesterlab/datavzrd/commit/0f74b7261a5ccef447f472a4b4fc2b46d5d002d5))
+* Add new keyword bars ([#242](https://www.github.com/koesterlab/datavzrd/issues/242)) ([fc1add6](https://www.github.com/koesterlab/datavzrd/commit/fc1add6aa4bcdd58fd95ff9d38b081f915751248))
+
 ### [2.6.1](https://www.github.com/koesterlab/datavzrd/compare/v2.6.0...v2.6.1) (2022-10-25)
 
 
