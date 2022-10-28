@@ -5,311 +5,357 @@ const heatmap_plot = {
     },
     "hconcat": [
         
-        {
-            "mark": {
-                "type": "text",
-                "align":"left"
-            },
-            "encoding": {
-                "x": {
-                "field": "dummy",
-                    "axis": {
-                        "labelExpr": "'Title'",
-                        "labelAngle": -90,
-                        "labelOffset": 7,
-                        "title": null,
-                        "ticks": false,
-                        "orient": "top",
-                        "domain": false
-                    }
+        {"layer": [
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left"
                 },
-                "y": {
-                    "field": "index",
-                    "type": "ordinal",
-                    "axis": null,
-                },
-                "text": {
-                    "field": "Title",
-                    "type": "nominal",
-                    "title": "Title",
-                    
-                }
-            }
-        },
-        
-        {
-            "mark": {
-                "type": "text",
-                "align":"left"
-            },
-            "encoding": {
-                "x": {
-                "field": "dummy",
-                    "axis": {
-                        "labelExpr": "'Year'",
-                        "labelAngle": -90,
-                        "labelOffset": 7,
-                        "title": null,
-                        "ticks": false,
-                        "orient": "top",
-                        "domain": false
-                    }
-                },
-                "y": {
-                    "field": "index",
-                    "type": "ordinal",
-                    "axis": null,
-                },
-                "text": {
-                    "field": "Year",
-                    "type": "quantitative",
-                    "title": "Year",
-                    
-                }
-            }
-        },
-        
-        {
-            "mark": {
-                "type": "rect"
-            },
-            "encoding": {
-                "x": {
-                "field": "dummy",
-                    "axis": {
-                        "labelExpr": "'Rated'",
-                        "labelAngle": -90,
-                        
-                        "title": null,
-                        "ticks": false,
-                        "orient": "top",
-                        "domain": false
-                    }
-                },
-                "y": {
-                    "field": "index",
-                    "type": "ordinal",
-                    "axis": null,
-                },
-                "color": {
-                    "field": "Rated",
-                    "type": "nominal",
-                    "title": "Rated",
-                    "scale": {
-                        "domain": ["Approved","G","M","M/PG","N/A","Not Rated","PG","PG-13","Passed","R","TV-MA","Unrated"],
+                "encoding": {
+                    "x": {
+                    "field": "dummy",
+                        "axis": {
+                            "labelExpr": "'Title'",
+                            "labelAngle": -90,
+                            "labelOffset": 7,
+                            "title": null,
+                            "ticks": false,
+                            "orient": "top",
+                            "domain": false
+                        }
+                    },
+                    "y": {
+                        "field": "index",
                         "type": "ordinal",
-                        "scheme": "accent",
-                        
+                        "axis": null,
                     },
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
-                    }
-                }
-            }
-        },
-        
-        {
-            "mark": {
-                "type": "text",
-                "align":"left"
-            },
-            "encoding": {
-                "x": {
-                "field": "dummy",
-                    "axis": {
-                        "labelExpr": "'Released'",
-                        "labelAngle": -90,
-                        "labelOffset": 7,
-                        "title": null,
-                        "ticks": false,
-                        "orient": "top",
-                        "domain": false
-                    }
-                },
-                "y": {
-                    "field": "index",
-                    "type": "ordinal",
-                    "axis": null,
-                },
-                "text": {
-                    "field": "Released",
-                    "type": "nominal",
-                    "title": "Released",
-                    
-                }
-            }
-        },
-        
-        {
-            "mark": {
-                "type": "text",
-                "align":"left"
-            },
-            "encoding": {
-                "x": {
-                "field": "dummy",
-                    "axis": {
-                        "labelExpr": "'Runtime'",
-                        "labelAngle": -90,
-                        "labelOffset": 7,
-                        "title": null,
-                        "ticks": false,
-                        "orient": "top",
-                        "domain": false
-                    }
-                },
-                "y": {
-                    "field": "index",
-                    "type": "ordinal",
-                    "axis": null,
-                },
-                "text": {
-                    "field": "Runtime",
-                    "type": "nominal",
-                    "title": "Runtime",
-                    
-                }
-            }
-        },
-        
-        {
-            "mark": {
-                "type": "text",
-                "align":"left"
-            },
-            "encoding": {
-                "x": {
-                "field": "dummy",
-                    "axis": {
-                        "labelExpr": "'Genre'",
-                        "labelAngle": -90,
-                        "labelOffset": 7,
-                        "title": null,
-                        "ticks": false,
-                        "orient": "top",
-                        "domain": false
-                    }
-                },
-                "y": {
-                    "field": "index",
-                    "type": "ordinal",
-                    "axis": null,
-                },
-                "text": {
-                    "field": "Genre",
-                    "type": "nominal",
-                    "title": "Genre",
-                    
-                }
-            }
-        },
-        
-        {
-            "mark": {
-                "type": "text",
-                "align":"left"
-            },
-            "encoding": {
-                "x": {
-                "field": "dummy",
-                    "axis": {
-                        "labelExpr": "'Director'",
-                        "labelAngle": -90,
-                        "labelOffset": 7,
-                        "title": null,
-                        "ticks": false,
-                        "orient": "top",
-                        "domain": false
-                    }
-                },
-                "y": {
-                    "field": "index",
-                    "type": "ordinal",
-                    "axis": null,
-                },
-                "text": {
-                    "field": "Director",
-                    "type": "nominal",
-                    "title": "Director",
-                    
-                }
-            }
-        },
-        
-        {
-            "mark": {
-                "type": "rect"
-            },
-            "encoding": {
-                "x": {
-                "field": "dummy",
-                    "axis": {
-                        "labelExpr": "'imdbRating'",
-                        "labelAngle": -90,
+                    "text": {
+                        "field": "Title",
+                        "type": "nominal",
+                        "title": "Title",
                         
-                        "title": null,
-                        "ticks": false,
-                        "orient": "top",
-                        "domain": false
                     }
+                }
+            }
+        ]},
+        
+        {"layer": [
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left"
                 },
-                "y": {
-                    "field": "index",
-                    "type": "ordinal",
-                    "axis": null,
-                },
-                "color": {
-                    "field": "imdbRating",
-                    "type": "quantitative",
-                    "title": "imdbRating",
-                    "scale": {
-                        "domain": [1.0,10.0],
-                        "type": "linear",
-                        "scheme": "blues",
-                        
+                "encoding": {
+                    "x": {
+                    "field": "dummy",
+                        "axis": {
+                            "labelExpr": "'Year'",
+                            "labelAngle": -90,
+                            "labelOffset": 7,
+                            "title": null,
+                            "ticks": false,
+                            "orient": "top",
+                            "domain": false
+                        }
                     },
-                    "legend": {
-                        "orient": "bottom",
-                        "direction": "vertical",
-                        "gradientLength": 50
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "text": {
+                        "field": "Year",
+                        "type": "quantitative",
+                        "title": "Year",
+                        
                     }
                 }
             }
-        },
+        ]},
         
-        {
-            "mark": {
-                "type": "text",
-                "align":"left"
-            },
-            "encoding": {
-                "x": {
-                "field": "dummy",
-                    "axis": {
-                        "labelExpr": "'imdbID'",
-                        "labelAngle": -90,
-                        "labelOffset": 7,
-                        "title": null,
-                        "ticks": false,
-                        "orient": "top",
-                        "domain": false
+        {"layer": [
+            {
+                "mark": {
+                    "type": "rect",
+                    "align":"left",
+                    "width": 54
+                },
+                "encoding": {
+                    "x": {
+                    "field": "dummy",
+                        "axis": {
+                            "labelExpr": "'Rated'",
+                            "labelAngle": -90,
+                            
+                            "title": null,
+                            "ticks": false,
+                            "orient": "top",
+                            "domain": false
+                        }
+                    },
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "color": {
+                        "field": "Rated",
+                        "type": "nominal",
+                        "title": "Rated",
+                        "scale": {
+                            "domain": ["Approved","G","M","M/PG","N/A","Not Rated","PG","PG-13","Passed","R","TV-MA","Unrated"],
+                            "type": "ordinal",
+                            "scheme": "accent",
+                            
+                        },
+                        "legend": null
                     }
+                }
+            },
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left",
+                    "xOffset": -6
                 },
-                "y": {
-                    "field": "index",
-                    "type": "ordinal",
-                    "axis": null,
-                },
-                "text": {
-                    "field": "imdbID",
-                    "type": "nominal",
-                    "title": "imdbID",
-                    
+                "encoding": {
+                    "text": {"field": "Rated"},
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    }
                 }
             }
-        }
+        
+        ]},
+        
+        {"layer": [
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left"
+                },
+                "encoding": {
+                    "x": {
+                    "field": "dummy",
+                        "axis": {
+                            "labelExpr": "'Released'",
+                            "labelAngle": -90,
+                            "labelOffset": 7,
+                            "title": null,
+                            "ticks": false,
+                            "orient": "top",
+                            "domain": false
+                        }
+                    },
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "text": {
+                        "field": "Released",
+                        "type": "nominal",
+                        "title": "Released",
+                        
+                    }
+                }
+            }
+        ]},
+        
+        {"layer": [
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left"
+                },
+                "encoding": {
+                    "x": {
+                    "field": "dummy",
+                        "axis": {
+                            "labelExpr": "'Runtime'",
+                            "labelAngle": -90,
+                            "labelOffset": 7,
+                            "title": null,
+                            "ticks": false,
+                            "orient": "top",
+                            "domain": false
+                        }
+                    },
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "text": {
+                        "field": "Runtime",
+                        "type": "nominal",
+                        "title": "Runtime",
+                        
+                    }
+                }
+            }
+        ]},
+        
+        {"layer": [
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left"
+                },
+                "encoding": {
+                    "x": {
+                    "field": "dummy",
+                        "axis": {
+                            "labelExpr": "'Genre'",
+                            "labelAngle": -90,
+                            "labelOffset": 7,
+                            "title": null,
+                            "ticks": false,
+                            "orient": "top",
+                            "domain": false
+                        }
+                    },
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "text": {
+                        "field": "Genre",
+                        "type": "nominal",
+                        "title": "Genre",
+                        
+                    }
+                }
+            }
+        ]},
+        
+        {"layer": [
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left"
+                },
+                "encoding": {
+                    "x": {
+                    "field": "dummy",
+                        "axis": {
+                            "labelExpr": "'Director'",
+                            "labelAngle": -90,
+                            "labelOffset": 7,
+                            "title": null,
+                            "ticks": false,
+                            "orient": "top",
+                            "domain": false
+                        }
+                    },
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "text": {
+                        "field": "Director",
+                        "type": "nominal",
+                        "title": "Director",
+                        
+                    }
+                }
+            }
+        ]},
+        
+        {"layer": [
+            {
+                "mark": {
+                    "type": "rect",
+                    "align":"left",
+                    "width": 20
+                },
+                "encoding": {
+                    "x": {
+                    "field": "dummy",
+                        "axis": {
+                            "labelExpr": "'imdbRating'",
+                            "labelAngle": -90,
+                            
+                            "title": null,
+                            "ticks": false,
+                            "orient": "top",
+                            "domain": false
+                        }
+                    },
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "color": {
+                        "field": "imdbRating",
+                        "type": "quantitative",
+                        "title": "imdbRating",
+                        "scale": {
+                            "domain": [1.0,10.0],
+                            "type": "linear",
+                            "scheme": "blues",
+                            
+                        },
+                        "legend": null
+                    }
+                }
+            },
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left",
+                    "xOffset": -6
+                },
+                "encoding": {
+                    "text": {"field": "imdbRating"},
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    }
+                }
+            }
+        
+        ]},
+        
+        {"layer": [
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left"
+                },
+                "encoding": {
+                    "x": {
+                    "field": "dummy",
+                        "axis": {
+                            "labelExpr": "'imdbID'",
+                            "labelAngle": -90,
+                            "labelOffset": 7,
+                            "title": null,
+                            "ticks": false,
+                            "orient": "top",
+                            "domain": false
+                        }
+                    },
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "text": {
+                        "field": "imdbID",
+                        "type": "nominal",
+                        "title": "imdbID",
+                        
+                    }
+                }
+            }
+        ]}
         
     ],
     "config": {
