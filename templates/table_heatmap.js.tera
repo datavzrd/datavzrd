@@ -17,9 +17,7 @@ const heatmap_plot = {
                     "x": {
                         "field": "{{ column }}",
                         "type": "quantitative",
-                        "axis": {
-                            "title": null
-                        }
+                        "axis": null
                     },
                     "y": {
                         "field": "index",
