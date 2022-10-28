@@ -353,8 +353,12 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .iter()
         .map(|title| {
             if let Some(rc) = render_columns.get(&title.to_string()) {
-                if rc.plot.is_some() {
-                    (title, "rect")
+                if let Some(plot) = &rc.plot {
+                    if plot.bar_plot.is_some() {
+                        (title, "bar")
+                    } else {
+                        (title, "rect")
+                    }
                 } else {
                     (title, "text")
                 }

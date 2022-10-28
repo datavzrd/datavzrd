@@ -5,16 +5,43 @@ const heatmap_plot = {
     },
     "hconcat": [
         {% for column in columns %}
-        {"layer": [
-            {
+        {
+            {% if marks[column] == "bar" %}"width": 50,{% endif %}
+            "layer": [
+            {% if marks[column] == "bar" %}{
                 "mark": {
                     "type": "{{ marks[column] }}",
-                    "align":"left"{% if marks[column] != "text" %},
-                    "width": {{ column_widths[column] }}{% endif %}
+                    "align":"left"
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "{{ column }}",
+                        "type": "quantitative",
+                        "axis": {
+                            "title": null
+                        }
+                    },
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "color": {"value": "#6baed6"},
+                    "axis": null,
+                    "legend": {"title": null}
+                }
+            },
+            {% endif %}
+            {
+                "mark": {
+                    "type": "{% if marks[column] == "bar" %}text{% else %}{{ marks[column] }}{% endif %}",
+                    "align":"left"{% if marks[column] == "rect" %},
+                    "width": {{ column_widths[column] }}{% endif %}{% if marks[column] == "bar" %},
+                    "xOffset": -20{% endif %}
+                },
+                "encoding": {
+                    "x": {
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'{{ column }}'",
                             "labelAngle": -90,
@@ -30,7 +57,7 @@ const heatmap_plot = {
                         "type": "ordinal",
                         "axis": null,
                     },
-                    "{% if marks[column] == "text" %}text{% else %}color{% endif %}": {
+                    "{% if marks[column] != "rect" %}text{% else %}color{% endif %}": {
                         "field": "{{ column }}",
                         "type": "{{ types[column] }}",
                         "title": "{{ column}}",{% if marks[column] == "rect" %}
@@ -47,7 +74,8 @@ const heatmap_plot = {
                         }{% endif %}{% endif %}
                     }
                 }
-            }{% if not plot_legend[column] and marks[column] == "rect" %},
+            }
+            {% if not plot_legend[column] and marks[column] == "rect" %},
             {
                 "mark": {
                     "type": "text",
