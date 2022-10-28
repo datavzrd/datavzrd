@@ -5,7 +5,10 @@ const heatmap_plot = {
     },
     "hconcat": [
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -13,7 +16,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'Title'",
                             "labelAngle": -90,
@@ -37,9 +40,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -47,7 +54,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'Year'",
                             "labelAngle": -90,
@@ -71,9 +78,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "rect",
@@ -82,7 +93,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'Rated'",
                             "labelAngle": -90,
@@ -111,7 +122,8 @@ const heatmap_plot = {
                         "legend": null
                     }
                 }
-            },
+            }
+            ,
             {
                 "mark": {
                     "type": "text",
@@ -130,7 +142,10 @@ const heatmap_plot = {
         
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -138,7 +153,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'Released'",
                             "labelAngle": -90,
@@ -162,9 +177,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -172,7 +191,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'Runtime'",
                             "labelAngle": -90,
@@ -196,9 +215,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -206,7 +229,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'Genre'",
                             "labelAngle": -90,
@@ -230,9 +253,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -240,7 +267,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'Director'",
                             "labelAngle": -90,
@@ -264,18 +291,45 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            "width": 50,
+            "layer": [
             {
                 "mark": {
-                    "type": "rect",
-                    "align":"left",
-                    "width": 20
+                    "type": "bar",
+                    "align":"left"
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "imdbRating",
+                        "type": "quantitative",
+                        "axis": {
+                            "title": null
+                        }
+                    },
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "color": {"value": "#6baed6"},
+                    "axis": null,
+                    "legend": {"title": null}
+                }
+            },
+            
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left",
+                    "xOffset": -20
+                },
+                "encoding": {
+                    "x": {
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'imdbRating'",
                             "labelAngle": -90,
@@ -291,39 +345,21 @@ const heatmap_plot = {
                         "type": "ordinal",
                         "axis": null,
                     },
-                    "color": {
+                    "text": {
                         "field": "imdbRating",
                         "type": "quantitative",
                         "title": "imdbRating",
-                        "scale": {
-                            "domain": [1.0,10.0],
-                            "type": "linear",
-                            "scheme": "blues",
-                            
-                        },
                         "legend": null
                     }
                 }
-            },
-            {
-                "mark": {
-                    "type": "text",
-                    "align":"left",
-                    "xOffset": -6
-                },
-                "encoding": {
-                    "text": {"field": "imdbRating"},
-                    "y": {
-                        "field": "index",
-                        "type": "ordinal",
-                        "axis": null,
-                    }
-                }
             }
-        
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -331,7 +367,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'imdbID'",
                             "labelAngle": -90,
@@ -355,6 +391,7 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]}
         
     ],

@@ -5,7 +5,10 @@ const heatmap_plot = {
     },
     "hconcat": [
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -13,7 +16,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'oscar_yr'",
                             "labelAngle": -90,
@@ -37,9 +40,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "rect",
@@ -48,7 +55,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'award'",
                             "labelAngle": -90,
@@ -77,7 +84,8 @@ const heatmap_plot = {
                         "legend": null
                     }
                 }
-            },
+            }
+            ,
             {
                 "mark": {
                     "type": "text",
@@ -96,7 +104,10 @@ const heatmap_plot = {
         
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -104,7 +115,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'name'",
                             "labelAngle": -90,
@@ -128,9 +139,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -138,7 +153,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'movie'",
                             "labelAngle": -90,
@@ -162,9 +177,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "rect",
@@ -173,7 +192,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'age'",
                             "labelAngle": -90,
@@ -202,7 +221,8 @@ const heatmap_plot = {
                         "legend": null
                     }
                 }
-            },
+            }
+            ,
             {
                 "mark": {
                     "type": "text",
@@ -221,7 +241,10 @@ const heatmap_plot = {
         
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -229,7 +252,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'birth place'",
                             "labelAngle": -90,
@@ -253,9 +276,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -263,7 +290,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'birth date'",
                             "labelAngle": -90,
@@ -287,9 +314,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -297,7 +328,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'birth_mo'",
                             "labelAngle": -90,
@@ -321,9 +352,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -331,7 +366,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'birth_d'",
                             "labelAngle": -90,
@@ -355,9 +390,13 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]},
         
-        {"layer": [
+        {
+            
+            "layer": [
+            
             {
                 "mark": {
                     "type": "text",
@@ -365,7 +404,7 @@ const heatmap_plot = {
                 },
                 "encoding": {
                     "x": {
-                    "field": "dummy",
+                        "field": "dummy",
                         "axis": {
                             "labelExpr": "'birth_y'",
                             "labelAngle": -90,
@@ -389,6 +428,7 @@ const heatmap_plot = {
                     }
                 }
             }
+            
         ]}
         
     ],
