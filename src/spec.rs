@@ -428,6 +428,8 @@ impl RenderColumnSpec {
                 ticks.preprocess(dataset)?;
             } else if let Some(heatmap) = &mut plot.heatmap {
                 heatmap.preprocess(dataset)?;
+            } else if let Some(bars) = &mut plot.bar_plot {
+                bars.preprocess(dataset)?;
             }
         }
         Ok(())
@@ -441,6 +443,12 @@ impl TickPlot {
 }
 
 impl Heatmap {
+    fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+        self.aux_domain_columns.preprocess(dataset)
+    }
+}
+
+impl BarPlot {
     fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
         self.aux_domain_columns.preprocess(dataset)
     }
@@ -523,6 +531,8 @@ pub(crate) struct PlotSpec {
     #[serde(rename = "ticks")]
     pub(crate) tick_plot: Option<TickPlot>,
     pub(crate) heatmap: Option<Heatmap>,
+    #[serde(rename = "bars")]
+    pub(crate) bar_plot: Option<BarPlot>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -557,6 +567,17 @@ pub(crate) struct Heatmap {
     pub(crate) aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
     pub(crate) custom_content: Option<String>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+pub(crate) struct BarPlot {
+    #[serde(default, rename = "scale")]
+    pub(crate) scale_type: String,
+    #[serde(default)]
+    pub(crate) domain: Option<Vec<f32>>,
+    #[serde(default)]
+    pub(crate) aux_domain_columns: AuxDomainColumns,
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
@@ -891,6 +912,7 @@ mod tests {
                                 aux_domain_columns: Default::default(),
                                 custom_content: None,
                             }),
+                            bar_plot: None,
                         }),
                     },
                 )])),
@@ -1218,6 +1240,7 @@ mod tests {
         let expected_plot = PlotSpec {
             tick_plot: Some(expected_ticks),
             heatmap: None,
+            bar_plot: None,
         };
         let expected_render_columns = RenderColumnSpec {
             optional: false,

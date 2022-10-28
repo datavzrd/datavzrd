@@ -6,7 +6,7 @@ use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
 use crate::spec::{
-    CustomPlot, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
+    BarPlot, CustomPlot, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
     RenderColumnSpec, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
@@ -353,8 +353,12 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .iter()
         .map(|title| {
             if let Some(rc) = render_columns.get(&title.to_string()) {
-                if rc.plot.is_some() {
-                    (title, "rect")
+                if let Some(plot) = &rc.plot {
+                    if plot.bar_plot.is_some() {
+                        (title, "bar")
+                    } else {
+                        (title, "rect")
+                    }
                 } else {
                     (title, "text")
                 }
@@ -600,6 +604,25 @@ fn render_table_javascript<P: AsRef<Path>>(
         })
         .collect();
 
+    let bar_plots: HashMap<String, String> = render_columns
+        .iter()
+        .filter(|(_, k)| k.plot.is_some())
+        .filter(|(_, k)| k.plot.as_ref().unwrap().bar_plot.is_some())
+        .map(|(k, v)| {
+            (
+                k.to_owned(),
+                render_bar_plot(
+                    k,
+                    csv_path,
+                    separator,
+                    header_row_length,
+                    v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
+                )
+                .unwrap(),
+            )
+        })
+        .collect();
+
     let brush_domains: HashMap<String, Vec<f32>> = render_columns
         .iter()
         .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
@@ -747,6 +770,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("formatter", &Some(formatters));
     context.insert("custom_plots", &custom_plots);
     context.insert("tick_plots", &tick_plots);
+    context.insert("bar_plots", &bar_plots);
     context.insert("heatmaps", &heatmaps);
     context.insert("ellipses", &ellipses);
     context.insert("display_modes", &display_modes);
@@ -941,6 +965,56 @@ fn render_tick_plot(
     context.insert("scale_type", &tick_plot.scale_type);
 
     Ok(templates.render("tick_plot.vl.tera", &context)?)
+}
+
+/// Renders bar plots for given csv column
+fn render_bar_plot(
+    title: &str,
+    csv_path: &Path,
+    separator: char,
+    header_rows: usize,
+    bar_plot: &BarPlot,
+) -> Result<String> {
+    let mut reader = csv::ReaderBuilder::new()
+        .delimiter(separator as u8)
+        .from_path(csv_path)
+        .context(format!("Could not read file with path {:?}", csv_path))?;
+
+    let column_index = reader.headers().map(|s| {
+        s.iter()
+            .position(|t| t == title)
+            .context(ColumnError::NotFound {
+                column: title.to_string(),
+                path: csv_path.to_str().unwrap().to_string(),
+            })
+            .unwrap()
+    })?;
+
+    let (min, max) = if let Some(domain) = &bar_plot.domain {
+        (domain[0], domain[1])
+    } else if let Some(aux_domain_columns) = &bar_plot.aux_domain_columns.0 {
+        let columns = aux_domain_columns
+            .iter()
+            .map(|s| s.to_string())
+            .chain(vec![title.to_string()].into_iter())
+            .collect();
+        get_min_max_multiple_columns(csv_path, separator, header_rows, columns)?
+    } else {
+        get_min_max(csv_path, separator, column_index, header_rows)?
+    };
+
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "bar_plot.vl.tera",
+        include_str!("../../../templates/bar_plot.vl.tera"),
+    )?;
+    let mut context = Context::new();
+    context.insert("minimum", &min);
+    context.insert("maximum", &max);
+    context.insert("field", &title);
+    context.insert("scale_type", &bar_plot.scale_type);
+
+    Ok(templates.render("bar_plot.vl.tera", &context)?)
 }
 
 fn get_column_domain(
