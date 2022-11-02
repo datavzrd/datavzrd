@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.1](https://www.github.com/koesterlab/datavzrd/compare/v2.7.0...v2.7.1) (2022-11-02)
+
+
+### Bug Fixes
+
+* lighter UI ([dd67b5b](https://www.github.com/koesterlab/datavzrd/commit/dd67b5b5ee5957cdccde592fe625158a300b1d8b))
+
 ## [2.7.0](https://www.github.com/koesterlab/datavzrd/compare/v2.6.1...v2.7.0) (2022-10-28)
 
 
