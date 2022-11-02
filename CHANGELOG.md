@@ -5,7 +5,7 @@
 
 ### Bug Fixes
 
-* lighter UI ([dd67b5b](https://www.github.com/koesterlab/datavzrd/commit/dd67b5b5ee5957cdccde592fe625158a300b1d8b))
+* more lighweight UI
 
 ## [2.7.0](https://www.github.com/koesterlab/datavzrd/compare/v2.6.1...v2.7.0) (2022-10-28)
 
