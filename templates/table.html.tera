@@ -32,167 +32,172 @@
     const linkouts = {{ linkouts | safe }};
 </script>
 
-<nav class="navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">datavzrd</a>
-    <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools/blob/master/CHANGELOG.md">{{ version }}</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools">github</a>
-            </li>
-        </ul>
-        <span class="navbar-text">
-            created {{ time }}
-        </span>
-    </div>
-</nav>
-<nav class="navbar navbar-expand navbar-light bg-light">
-    <div class="collapse navbar-collapse" id="navbarText2">
-        <ul class="navbar-nav mr-auto">
-            <li><a href="index_{{ current_page }}.html">{{ name }}</a></li>
-        </ul>
-        <ul class="nav navbar-nav mr-auto">
-            <li class="nav-item"><div>{{ report_name }}</div></li>
-        </ul>
-        <span class="pull-right">
-            {% if is_single_page %}<span data-toggle="tooltip" data-placement="left" title="View as Plot"><button class="btn btn-primary" id="btnHeatmap" data-toggle="modal" data-target="#heatmap-plot-modal">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
-                     <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/>
-                </svg>
-            </button></span>{% endif %}
+<div id="page-container">
+    <div id="content-wrap">
+        <nav class="navbar navbar-expand navbar-light navbar-top">
+            <div class="collapse navbar-collapse" id="navbarText2">
+                <ol class="navbar-nav mr-auto breadcrumb">
+                    {% if report_name %}<li class="breadcrumb-item"><div>{{ report_name }}</div></li>{% endif %}
+                    <li class="breadcrumb-item">
+                        <select id="view-selection" title="{{ name }}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." data-dropdown-align-right="true" class="selectpicker" data-style="select-view" data-live-search="true">
+                            {% if default_view %}
+                            <option value="../{{ default_view }}/index_1.html">{{ default_view }}</option>
+                            {% endif %}
+                            {% for table in tables | sort %}
+                            <option value="../{{ table }}/index_1.html">{{ table }}</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                </ol>
+                <span class="pull-right" id="right-top-nav">
+                    {% if is_single_page %}<span data-toggle="tooltip" data-placement="left" title="View as Plot"><button class="btn btn-outline-secondary" id="btnHeatmap" data-toggle="modal" data-target="#heatmap-plot-modal">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                             <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/>
+                        </svg>
+                    </button></span>{% endif %}
+                    {% if description %}
+                    <div class="btn-group">
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    {% endif %}
+                </span>
+            </div>
+        </nav>
+        <div class="container-fluid">
             {% if description %}
-            <div class="btn-group">
-                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
-                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-                    </svg>
-                </button>
-            </div>
-            {% endif %}
-            <select id="view-selection" title="views" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." data-dropdown-align-right="true" class="selectpicker" data-style="btn-primary" data-live-search="true">
-                {% if default_view %}
-                <option value="../{{ default_view }}/index_1.html">{{ default_view }}</option>
-                {% endif %}
-                {% for table in tables | sort %}
-                <option value="../{{ table }}/index_1.html">{{ table }}</option>
-                {% endfor %}
-            </select>
-        </span>
-    </div>
-</nav>
-<div class="container-fluid">
-    {% if description %}
-    <script>$(document).ready(function() {renderMarkdownDescription();});</script>
-    <div class="row" style="margin-top: 15px;">
-        <div class="col-md-12">
-            <div class="collapse" id="collapseDescription">
-                <div class="card card-body" id="innerDescription" data-markdown="{{ description | escape }}">
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-    <div class="row justify-content-center">
-        <div class="col-md-12 loading text-center">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <div class="col-md-12 table-container" style="margin-top: 15px;">
-            <table id="table" class="table" data-classes="table">
-            </table>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-        {% if pages > 1 %}
-        <div id="pagination">
-            <nav aria-label="page navigation">
-                <ul class="pagination justify-content-center">
-                    {% if current_page > 1 %}
-                    {% if current_page != 2 %}
-                    <li class="page-item"><a class="page-link" href="index_1.html">First</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="">...</a></li>
-                    {% endif %}
-                    <li class="page-item"><a class="page-link" href="index_{{ current_page - 1 }}.html">{{  current_page - 1 }}</a></li>
-                    {% endif %}
-                    <li class="page-item active"><a class="page-link" href="index_{{ current_page }}.html">{{  current_page  }}</a></li>
-                    {% if current_page < pages %}
-                    <li class="page-item"><a class="page-link" href="index_{{ current_page + 1 }}.html">{{  current_page + 1 }}</a></li>
-                    {% if current_page != (pages - 1) %}
-                    <li class="page-item disabled"><a class="page-link" href="">...</a></li>
-                    <li class="page-item"><a class="page-link" href="index_{{ pages }}.html">Last</a></li>
-                    {% endif %}
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-        {% endif %}
-        </div>
-    </div>
-    <!-- Modal -->
-    {% for title in titles %}
-    <div class="modal fade" id="modal_{{ loop.index0 }}" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ title }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id="plot_{{ loop.index0 }}" style="width: 100%; height: 300px; border:none;">
+            <script>$(document).ready(function() {renderMarkdownDescription();});</script>
+            <div class="row" style="margin-top: 15px;">
+                <div class="col-md-12">
+                    <div class="collapse" id="collapseDescription">
+                        <div class="card card-body" id="innerDescription" data-markdown="{{ description | escape }}">
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            {% endif %}
+            <div class="row justify-content-center">
+                <div class="col-md-12 loading text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div class="col-md-12 table-container" style="margin-top: 15px;">
+                    <table id="table" class="table" data-classes="table">
+                    </table>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                {% if pages > 1 %}
+                <div id="pagination">
+                    <nav aria-label="page navigation">
+                        <ul class="pagination justify-content-center">
+                            {% if current_page > 1 %}
+                            {% if current_page != 2 %}
+                            <li class="page-item"><a class="page-link" href="index_1.html">First</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="">...</a></li>
+                            {% endif %}
+                            <li class="page-item"><a class="page-link" href="index_{{ current_page - 1 }}.html">{{  current_page - 1 }}</a></li>
+                            {% endif %}
+                            <li class="page-item active"><a class="page-link" href="index_{{ current_page }}.html">{{  current_page  }}</a></li>
+                            {% if current_page < pages %}
+                            <li class="page-item"><a class="page-link" href="index_{{ current_page + 1 }}.html">{{  current_page + 1 }}</a></li>
+                            {% if current_page != (pages - 1) %}
+                            <li class="page-item disabled"><a class="page-link" href="">...</a></li>
+                            <li class="page-item"><a class="page-link" href="index_{{ pages }}.html">Last</a></li>
+                            {% endif %}
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+                </div>
+            </div>
+            <!-- Modal -->
+            {% for title in titles %}
+            <div class="modal fade" id="modal_{{ loop.index0 }}" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ title }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="plot_{{ loop.index0 }}" style="width: 100%; height: 300px; border:none;">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if is_single_page %}
+            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="heatmap-plot-modal" aria-hidden="true">
+                <div class="modal-dialog modal-lg" id="modal-dialog-heatmap">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Plot-View</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-right small">Click "..."-button for export options</p>
+                            <div id="heatmap-plot">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="modal fade" id="search" tabindex="-1" role="dialog" aria-hidden="true" data-focus="false">
+                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Search</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <iframe id="search-iframe" src="" frameBorder="0" style="width: 100%; height: min(530px, 50vh)"></iframe>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    {% endfor %}
-    {% if is_single_page %}
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="heatmap-plot-modal" aria-hidden="true">
-        <div class="modal-dialog modal-lg" id="modal-dialog-heatmap">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Plot-View</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p class="text-right small">Click "..."-button for export options</p>
-                    <div id="heatmap-plot">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+    <footer class="footer">
+        <nav class="navbar navbar-expand navbar-light navbar-top">
+            <a class="navbar-brand" href="#">datavzrd</a>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools/blob/master/CHANGELOG.md">{{ version }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools">github</a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                    created {{ time }}
+                </span>
             </div>
-        </div>
-    </div>
-    {% endif %}
-    <div class="modal fade" id="search" tabindex="-1" role="dialog" aria-hidden="true" data-focus="false">
-        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Search</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <iframe id="search-iframe" src="" frameBorder="0" style="width: 100%; height: min(530px, 50vh)"></iframe>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+        </nav>
+    </footer>
 </div>
 </body>
 </html>

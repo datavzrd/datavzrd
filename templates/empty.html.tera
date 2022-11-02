@@ -21,50 +21,52 @@
 <script src="../static/showdown.min.js"></script>
 <script src="table.js"></script>
 
-<nav class="navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">datavzrd</a>
-    <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools/blob/master/CHANGELOG.md">{{ version }}</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools">github</a>
-            </li>
-        </ul>
-        <span class="navbar-text">
-            created {{ time }}
-        </span>
-    </div>
-</nav>
-<nav class="navbar navbar-expand navbar-light bg-light">
-    <div class="collapse navbar-collapse" id="navbarText2">
-        <ul class="navbar-nav mr-auto">
-            <li><a href="#">{{ name }}</a></li>
-        </ul>
-        <ul class="nav navbar-nav mr-auto">
-            <li class="nav-item"><div>{{ report_name }}</div></li>
-        </ul>
-        <span class="pull-right">
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                views
-                </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    {% for table in tables %}
-                    <a class="dropdown-item" href="../{{ table }}/index_1.html">{{ table }}</a>
-                    {% endfor %}
+
+<div id="page-container">
+    <div id="content-wrap">
+        <nav class="navbar navbar-expand navbar-light navbar-top">
+            <div class="collapse navbar-collapse" id="navbarText2">
+                <ol class="navbar-nav mr-auto breadcrumb">
+                    {% if report_name %}<li class="breadcrumb-item"><div>{{ report_name }}</div></li>{% endif %}
+                    <li class="breadcrumb-item">
+                        <select id="view-selection" title="{{ name }}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." data-dropdown-align-right="true" class="selectpicker" data-style="select-view" data-live-search="true">
+                            {% if default_view %}
+                            <option value="../{{ default_view }}/index_1.html">{{ default_view }}</option>
+                            {% endif %}
+                            {% for table in tables | sort %}
+                            <option value="../{{ table }}/index_1.html">{{ table }}</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                </ol>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row" style="height: calc(100vh - 190px);">
+                <div class="col-md-12 d-flex justify-content-center align-items-center">
+                    <h4>No data</h4>
                 </div>
             </div>
-        </span>
-    </div>
-</nav>
-<div class="container">
-    <div class="row" style="height: calc(100vh - 190px);">
-        <div class="col-md-12 d-flex justify-content-center align-items-center">
-            <h4>No data</h4>
         </div>
-    </div>
+        </div>
+    <footer class="footer">
+        <nav class="navbar navbar-expand navbar-light navbar-top">
+            <a class="navbar-brand" href="#">datavzrd</a>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools/blob/master/CHANGELOG.md">{{ version }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools">github</a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                        created {{ time }}
+                    </span>
+            </div>
+        </nav>
+    </footer>
 </div>
 </body>
 </html>
