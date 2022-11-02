@@ -100,6 +100,7 @@ impl Renderer for ItemRenderer {
                         dataset.links.as_ref().unwrap(),
                         &self.specs.views,
                         &self.specs.default_view,
+                        &self.specs.report_name,
                     )?;
                 // Render HTML
                 } else if let Some(table_specs) = &table.render_html {
@@ -113,6 +114,7 @@ impl Renderer for ItemRenderer {
                         &self.specs.default_view,
                         table_specs.script_path.to_string(),
                         &self.specs.aux_libraries,
+                        &self.specs.report_name,
                     )?;
                 }
                 // Render table
@@ -1142,6 +1144,7 @@ fn render_plot_page<P: AsRef<Path>>(
     links: &HashMap<String, LinkSpec>,
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
+    report_name: &String,
 ) -> Result<()> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
@@ -1219,6 +1222,7 @@ fn render_plot_page<P: AsRef<Path>>(
             .collect_vec(),
     );
     context.insert("default_view", default_view);
+    context.insert("report_name", report_name);
     context.insert("name", name);
     context.insert("specs", &render_plot_specs.schema.as_ref().unwrap());
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
@@ -1247,6 +1251,7 @@ fn render_html_page<P: AsRef<Path>>(
     default_view: &Option<String>,
     script_path: String,
     aux_libraries: &Option<Vec<String>>,
+    report_name: &String,
 ) -> Result<()> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
@@ -1299,6 +1304,7 @@ fn render_html_page<P: AsRef<Path>>(
             .collect_vec(),
     );
     context.insert("default_view", default_view);
+    context.insert("report_name", report_name);
     context.insert("name", name);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
     context.insert("version", &env!("CARGO_PKG_VERSION"));
