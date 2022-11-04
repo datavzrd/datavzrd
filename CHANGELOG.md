@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.2](https://www.github.com/koesterlab/datavzrd/compare/v2.7.1...v2.7.2) (2022-11-04)
+
+
+### Bug Fixes
+
+* Fix overlapping fonts by removing line breaks ([#249](https://www.github.com/koesterlab/datavzrd/issues/249)) ([077afdd](https://www.github.com/koesterlab/datavzrd/commit/077afdd654bb88d77c7363ff893d2ab784510ad9))
+
 ### [2.7.1](https://www.github.com/koesterlab/datavzrd/compare/v2.7.0...v2.7.1) (2022-11-02)
 
 
