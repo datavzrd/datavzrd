@@ -26,7 +26,7 @@ lazy_static = "1.4.0"
 regex = "1.7.0"
 log = "0.4.17"
 simplelog = "0.12.0"
-minify-js = "0.2.10"
+minify-js = "0.4.0"
 
 [dev-dependencies]
 dir-assert = "0.2.0"
