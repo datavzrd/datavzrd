@@ -465,9 +465,9 @@ checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
 
 [[package]]
 name = "minify-js"
-version = "0.2.10"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b825a24496146b058d0b0ee1c1b8ba08609b464d0f4b938024336a8d30bab81"
+checksum = "210b20f0628732d5a4a9d892477748da218d70715247004a263cbcb9382f1b9b"
 dependencies = [
  "lazy_static",
  "parse-js",
@@ -519,9 +519,9 @@ checksum = "2f7254b99e31cad77da24b08ebf628882739a608578bb1bcdfc1f9c21260d7c0"
 
 [[package]]
 name = "parse-js"
-version = "0.3.2"
+version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b494997e8fc02c4da5bd975d45cfede3b972b19d19f90dfa9948c354b2bf8209"
+checksum = "6f6ab6c16a65d385210198bf50369a59de51be7c4c1ecc98128fc974c081fa38"
 dependencies = [
  "aho-corasick",
  "lazy_static",
