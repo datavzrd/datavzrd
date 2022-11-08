@@ -263,7 +263,7 @@ views:
 | aux-domain-columns  | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported. |         |
 | custom-content      | Allows to render custom content into any heatmap cell (while using the actual cell content for the heatmap color). Requires a `function(value, row)` that returns the text value that will be displayed in the cell.             |         | 
 
-### ticks
+### bars
 
 `bars` defines the attributes of a [bar-plot](https://vega.github.io/vega-lite/docs/bar.html) for numeric values.
 
