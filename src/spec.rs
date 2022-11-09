@@ -1,7 +1,6 @@
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, MissingColumn, PlotAndTablePresentConfiguration,
-    WrongScaleType,
 };
 use anyhow::Result;
 use anyhow::{bail, Context};
@@ -15,11 +14,11 @@ use serde::Serialize;
 use std::borrow::BorrowMut;
 use std::collections::HashMap;
 use std::fmt::Debug;
-use std::fs;
 use std::fs::File;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
+use std::{fmt, fs};
 use thiserror::Error;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
@@ -131,25 +130,6 @@ impl ItemsSpec {
                                 column: column.to_string(),
                                 conflict: possible_conflicting
                             })
-                        }
-
-                        if let Some(plot) = &render_columns.plot {
-                            if let Some(heatmap) = &plot.heatmap {
-                                if !SCALE_TYPES.contains(&&*heatmap.scale_type) {
-                                    bail!(WrongScaleType {
-                                        scale_type: heatmap.scale_type.clone(),
-                                        possible_scale_types: SCALE_TYPES.to_vec(),
-                                    })
-                                }
-                            }
-                            if let Some(tick_plot) = &plot.tick_plot {
-                                if !SCALE_TYPES.contains(&&*tick_plot.scale_type) {
-                                    bail!(WrongScaleType {
-                                        scale_type: tick_plot.scale_type.clone(),
-                                        possible_scale_types: SCALE_TYPES.to_vec(),
-                                    })
-                                }
-                            }
                         }
                     }
                 }
@@ -539,7 +519,7 @@ pub(crate) struct PlotSpec {
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct TickPlot {
     #[serde(default, rename = "scale")]
-    pub(crate) scale_type: String,
+    pub(crate) scale_type: ScaleType,
     #[serde(default)]
     pub(crate) domain: Option<Vec<f32>>,
     #[serde(default)]
@@ -554,7 +534,7 @@ fn default_clamp() -> bool {
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct Heatmap {
     #[serde(default, rename = "scale")]
-    pub(crate) scale_type: String,
+    pub(crate) scale_type: ScaleType,
     #[serde(default = "default_clamp")]
     pub(crate) clamp: bool,
     #[serde(default)]
@@ -573,11 +553,47 @@ pub(crate) struct Heatmap {
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct BarPlot {
     #[serde(default, rename = "scale")]
-    pub(crate) scale_type: String,
+    pub(crate) scale_type: ScaleType,
     #[serde(default)]
     pub(crate) domain: Option<Vec<f32>>,
     #[serde(default)]
     pub(crate) aux_domain_columns: AuxDomainColumns,
+}
+
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum ScaleType {
+    Linear,
+    Pow,
+    Sqrt,
+    SymLog,
+    Log,
+    Time,
+    Utc,
+    Ordinal,
+    Band,
+    Point,
+    #[default]
+    None,
+}
+
+impl ScaleType {
+    pub(crate) fn is_quantitative(&self) -> bool {
+        match self {
+            ScaleType::Linear
+            | ScaleType::Pow
+            | ScaleType::Sqrt
+            | ScaleType::SymLog
+            | ScaleType::Log => true,
+            _ => false,
+        }
+    }
+}
+
+impl fmt::Display for ScaleType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self)
+    }
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
@@ -619,23 +635,6 @@ impl AuxDomainColumns {
     }
 }
 
-static SCALE_TYPES: [&str; 14] = [
-    "linear",
-    "pow",
-    "sqrt",
-    "symlog",
-    "log",
-    "time",
-    "utc",
-    "ordinal",
-    "band",
-    "point",
-    "bin-ordinal",
-    "quantile",
-    "quantize",
-    "threshold",
-];
-
 #[derive(Error, Debug)]
 pub enum ConfigError {
     #[error("Could not find column with index {index:?} under path {table_path:?} with only {header_length:?} columns.")]
@@ -659,11 +658,6 @@ pub enum ConfigError {
         view: String,
         column: String,
         conflict: Vec<String>,
-    },
-    #[error("Given scale type {scale_type:?} is not valid, please choose one of the following scale types: {possible_scale_types:?}.")]
-    WrongScaleType {
-        scale_type: String,
-        possible_scale_types: Vec<&'static str>,
     },
     #[error(
         "Could not find column named {column:?} in given dataset {dataset:?} in linkout {link:?}."

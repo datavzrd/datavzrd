@@ -1039,62 +1039,59 @@ fn get_column_domain(
         .headers()
         .map(|s| s.iter().position(|t| t == title).unwrap())?;
 
-    match heatmap.scale_type.as_str() {
-        "ordinal" => {
-            if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
-                let columns = aux_domain_columns
+    if !heatmap.scale_type.is_quantitative() {
+        if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
+            let columns = aux_domain_columns
+                .iter()
+                .map(|s| s.to_string())
+                .chain(vec![title.to_string()].into_iter())
+                .collect_vec();
+            let column_indexes: HashSet<_> = reader.headers().map(|s| {
+                s.iter()
+                    .enumerate()
+                    .filter(|(_, title)| columns.contains(&title.to_string()))
+                    .map(|(index, _)| index)
+                    .collect()
+            })?;
+            Ok(json!(reader
+                .records()
+                .map(|r| r.unwrap())
+                .flat_map(|r| r
                     .iter()
-                    .map(|s| s.to_string())
-                    .chain(vec![title.to_string()].into_iter())
-                    .collect_vec();
-                let column_indexes: HashSet<_> = reader.headers().map(|s| {
-                    s.iter()
-                        .enumerate()
-                        .filter(|(_, title)| columns.contains(&title.to_string()))
-                        .map(|(index, _)| index)
-                        .collect()
-                })?;
-                Ok(json!(reader
-                    .records()
-                    .map(|r| r.unwrap())
-                    .flat_map(|r| r
-                        .iter()
-                        .enumerate()
-                        .filter(|(index, _)| column_indexes.contains(index))
-                        .map(|(_, value)| value.to_string())
-                        .collect_vec())
-                    .unique()
-                    .sorted()
+                    .enumerate()
+                    .filter(|(index, _)| column_indexes.contains(index))
+                    .map(|(_, value)| value.to_string())
                     .collect_vec())
-                .to_string())
-            } else {
-                Ok(json!(reader
-                    .records()
-                    .map(|r| r.unwrap())
-                    .map(|r| r.get(column_index).unwrap().to_owned())
-                    .unique()
-                    .sorted()
-                    .collect_vec())
-                .to_string())
-            }
+                .unique()
+                .sorted()
+                .collect_vec())
+            .to_string())
+        } else {
+            Ok(json!(reader
+                .records()
+                .map(|r| r.unwrap())
+                .map(|r| r.get(column_index).unwrap().to_owned())
+                .unique()
+                .sorted()
+                .collect_vec())
+            .to_string())
         }
-        _ => {
-            if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
-                let columns = aux_domain_columns
-                    .iter()
-                    .map(|s| s.to_string())
-                    .chain(vec![title.to_string()].into_iter())
-                    .collect();
-                Ok(json!(get_min_max_multiple_columns(
-                    csv_path,
-                    separator,
-                    header_rows,
-                    columns
-                )?)
-                .to_string())
-            } else {
-                Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string())
-            }
+    } else {
+        if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
+            let columns = aux_domain_columns
+                .iter()
+                .map(|s| s.to_string())
+                .chain(vec![title.to_string()].into_iter())
+                .collect();
+            Ok(json!(get_min_max_multiple_columns(
+                csv_path,
+                separator,
+                header_rows,
+                columns
+            )?)
+            .to_string())
+        } else {
+            Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string())
         }
     }
 }
