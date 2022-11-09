@@ -231,6 +231,7 @@ impl Renderer for ItemRenderer {
                 )?;
             }
         }
+        render_excel_sheet(&self.specs, path)?;
         Ok(())
     }
 }
@@ -1479,6 +1480,54 @@ fn render_linkouts(
         }
     }
     Ok(linkouts)
+}
+
+/// Coverts all given csv files to a single xlxs file with one worksheet per csv file
+fn render_excel_sheet<P: AsRef<Path>>(specs: &ItemsSpec, output_path: P) -> Result<()> {
+    let mut wb = simple_excel_writer::Workbook::create(
+        output_path
+            .as_ref()
+            .join("data")
+            .with_extension("xlsx")
+            .to_str()
+            .unwrap(),
+    );
+
+    for (view, spec) in &specs.views {
+        let mut rdr = csv::ReaderBuilder::new()
+            .has_headers(false)
+            .flexible(true)
+            .delimiter(
+                specs
+                    .datasets
+                    .get(spec.dataset.as_ref().unwrap())
+                    .unwrap()
+                    .separator as u8,
+            )
+            .from_path(
+                &specs
+                    .datasets
+                    .get(spec.dataset.as_ref().unwrap())
+                    .unwrap()
+                    .path,
+            )?;
+
+        let mut sheet = wb.create_sheet(view);
+
+        wb.write_sheet(&mut sheet, |sw| {
+            for result in rdr.records() {
+                let mut row = simple_excel_writer::Row::new();
+                for field in result?.iter() {
+                    row.add_cell(field);
+                }
+                sw.append_row(row)?;
+            }
+            Ok(())
+        })?;
+    }
+
+    wb.close()?;
+    Ok(())
 }
 
 #[derive(Error, Debug)]
