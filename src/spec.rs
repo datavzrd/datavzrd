@@ -484,8 +484,8 @@ pub(crate) struct CustomPlot {
     schema: Option<String>,
     #[serde(default, rename = "spec-path")]
     schema_path: Option<String>,
-    #[serde(default = "default_vega_controls")]
-    vega_controls: String,
+    #[serde(default)]
+    vega_controls: bool,
 }
 
 impl CustomPlot {
@@ -499,10 +499,6 @@ impl CustomPlot {
         }
         Ok(())
     }
-}
-
-fn default_vega_controls() -> String {
-    "false".to_string()
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
