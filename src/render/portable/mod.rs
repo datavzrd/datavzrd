@@ -6,8 +6,8 @@ use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
 use crate::spec::{
-    BarPlot, CustomPlot, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
-    RenderColumnSpec, ScaleType, TickPlot,
+    BarPlot, CustomPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec,
+    LinkSpec, RenderColumnSpec, ScaleType, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -334,7 +334,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
 
     let hidden_columns: HashSet<_> = render_columns
         .iter()
-        .filter(|(_, v)| v.display_mode == "hidden")
+        .filter(|(_, v)| v.display_mode == DisplayMode::Hidden)
         .map(|(k, _)| k)
         .collect();
 
@@ -739,16 +739,16 @@ fn render_table_javascript<P: AsRef<Path>>(
         .map(|(t, spec)| (t.to_string(), spec.ellipsis.unwrap()))
         .collect();
 
-    let mut display_modes: HashMap<String, String> = titles
+    let mut display_modes: HashMap<String, DisplayMode> = titles
         .iter()
-        .map(|t| (t.to_string(), "normal".to_string()))
+        .map(|t| (t.to_string(), DisplayMode::Normal))
         .collect();
     for (title, rc) in render_columns {
-        display_modes.insert(title.to_string(), rc.display_mode.to_string());
+        display_modes.insert(title.to_string(), rc.display_mode);
     }
     let detail_mode = display_modes
         .iter()
-        .filter(|(_, mode)| *mode == "detail")
+        .filter(|(_, mode)| *mode == &DisplayMode::Detail)
         .count()
         > 0;
 

@@ -370,10 +370,6 @@ impl ItemSpecs {
     }
 }
 
-fn default_display_mode() -> String {
-    String::from("normal")
-}
-
 fn default_precision() -> u32 {
     2_u32
 }
@@ -387,8 +383,8 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) precision: u32,
     #[serde(default)]
     pub(crate) custom: Option<String>,
-    #[serde(default = "default_display_mode")]
-    pub(crate) display_mode: String,
+    #[serde(default)]
+    pub(crate) display_mode: DisplayMode,
     #[serde(default)]
     pub(crate) link_to_url: Option<String>,
     #[serde(default)]
@@ -399,6 +395,15 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) ellipsis: Option<u32>,
     #[serde(default)]
     pub(crate) plot_view_legend: bool,
+}
+
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum DisplayMode {
+    #[default]
+    Normal,
+    Detail,
+    Hidden,
 }
 
 impl RenderColumnSpec {
