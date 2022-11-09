@@ -678,7 +678,12 @@ pub enum ConfigError {
 
 #[cfg(test)]
 mod tests {
-    use crate::spec::{default_links, default_precision, default_render_table, default_single_page_threshold, AuxDomainColumns, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, ScaleType, TickPlot, DisplayMode};
+    use crate::spec::{
+        default_links, default_precision, default_render_table, default_single_page_threshold,
+        AuxDomainColumns, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec,
+        LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs,
+        ScaleType, TickPlot,
+    };
     use std::collections::HashMap;
     use std::path::PathBuf;
 
