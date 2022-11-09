@@ -678,12 +678,7 @@ pub enum ConfigError {
 
 #[cfg(test)]
 mod tests {
-    use crate::spec::{
-        default_display_mode, default_links, default_precision, default_render_table,
-        default_single_page_threshold, AuxDomainColumns, DatasetSpecs, HeaderSpecs, Heatmap,
-        ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
-        RenderTableSpecs, ScaleType, TickPlot,
-    };
+    use crate::spec::{default_links, default_precision, default_render_table, default_single_page_threshold, AuxDomainColumns, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, ScaleType, TickPlot, DisplayMode};
     use std::collections::HashMap;
     use std::path::PathBuf;
 
@@ -693,7 +688,7 @@ mod tests {
             precision: default_precision(),
             optional: false,
             custom: None,
-            display_mode: "normal".to_string(),
+            display_mode: DisplayMode::Normal,
             link_to_url: Some("https://www.rust-lang.org".to_string()),
             plot: None,
             custom_plot: None,
@@ -1155,7 +1150,7 @@ mod tests {
             precision: default_precision(),
             optional: false,
             custom: None,
-            display_mode: "detail".to_string(),
+            display_mode: DisplayMode::Detail,
             link_to_url: None,
             plot: None,
             custom_plot: None,
@@ -1166,7 +1161,7 @@ mod tests {
             precision: default_precision(),
             optional: false,
             custom: None,
-            display_mode: "hidden".to_string(),
+            display_mode: DisplayMode::Hidden,
             link_to_url: None,
             plot: None,
             custom_plot: None,
@@ -1235,7 +1230,7 @@ mod tests {
             optional: false,
             precision: default_precision(),
             custom: None,
-            display_mode: default_display_mode(),
+            display_mode: DisplayMode::default(),
             link_to_url: None,
             plot: Some(expected_plot),
             custom_plot: None,
