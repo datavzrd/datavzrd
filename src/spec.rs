@@ -14,11 +14,11 @@ use serde::Serialize;
 use std::borrow::BorrowMut;
 use std::collections::HashMap;
 use std::fmt::Debug;
+use std::fs;
 use std::fs::File;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
-use std::{fmt, fs};
 use thiserror::Error;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
@@ -579,20 +579,14 @@ pub(crate) enum ScaleType {
 
 impl ScaleType {
     pub(crate) fn is_quantitative(&self) -> bool {
-        match self {
+        matches!(
+            self,
             ScaleType::Linear
-            | ScaleType::Pow
-            | ScaleType::Sqrt
-            | ScaleType::SymLog
-            | ScaleType::Log => true,
-            _ => false,
-        }
-    }
-}
-
-impl fmt::Display for ScaleType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self)
+                | ScaleType::Pow
+                | ScaleType::Sqrt
+                | ScaleType::SymLog
+                | ScaleType::Log
+        )
     }
 }
 
@@ -687,7 +681,7 @@ mod tests {
         default_display_mode, default_links, default_precision, default_render_table,
         default_single_page_threshold, AuxDomainColumns, DatasetSpecs, HeaderSpecs, Heatmap,
         ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
-        RenderTableSpecs, TickPlot,
+        RenderTableSpecs, ScaleType, TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -898,7 +892,7 @@ mod tests {
                         plot: Some(PlotSpec {
                             tick_plot: None,
                             heatmap: Some(Heatmap {
-                                scale_type: "ordinal".to_string(),
+                                scale_type: ScaleType::Ordinal,
                                 clamp: true,
                                 color_scheme: "category20".to_string(),
                                 color_range: vec![],
@@ -1106,8 +1100,8 @@ mod tests {
                                     heatmap:
                                         scale: inverse-quadruplic
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        let config = serde_yaml::from_str::<ItemSpecs>(raw_config).is_err();
+        assert!(config);
     }
 
     #[test]
@@ -1223,7 +1217,7 @@ mod tests {
             )
             .unwrap();
         let expected_ticks = TickPlot {
-            scale_type: "linear".to_string(),
+            scale_type: ScaleType::Linear,
             domain: None,
             aux_domain_columns: AuxDomainColumns(Some(vec![
                 "birth_mo".to_string(),

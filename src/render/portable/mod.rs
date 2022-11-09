@@ -7,7 +7,7 @@ use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
 use crate::spec::{
     BarPlot, CustomPlot, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
-    RenderColumnSpec, TickPlot,
+    RenderColumnSpec, ScaleType, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -412,14 +412,14 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
         .map(|(t, p)| {
             if let Some(heatmap) = &p.heatmap {
-                (t, heatmap.scale_type.to_string())
+                (t, &heatmap.scale_type)
             } else if let Some(ticks) = &p.tick_plot {
-                (t, ticks.scale_type.to_string())
+                (t, &ticks.scale_type)
             } else {
-                (t, "".to_string())
+                (t, &ScaleType::None)
             }
         })
-        .filter(|(_, s)| !s.is_empty())
+        .filter(|(_, s)| s != &&ScaleType::None)
         .collect();
 
     let ranges: HashMap<_, _> = render_columns
@@ -1076,23 +1076,21 @@ fn get_column_domain(
                 .collect_vec())
             .to_string())
         }
+    } else if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
+        let columns = aux_domain_columns
+            .iter()
+            .map(|s| s.to_string())
+            .chain(vec![title.to_string()].into_iter())
+            .collect();
+        Ok(json!(get_min_max_multiple_columns(
+            csv_path,
+            separator,
+            header_rows,
+            columns
+        )?)
+        .to_string())
     } else {
-        if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
-            let columns = aux_domain_columns
-                .iter()
-                .map(|s| s.to_string())
-                .chain(vec![title.to_string()].into_iter())
-                .collect();
-            Ok(json!(get_min_max_multiple_columns(
-                csv_path,
-                separator,
-                header_rows,
-                columns
-            )?)
-            .to_string())
-        } else {
-            Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string())
-        }
+        Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string())
     }
 }
 
