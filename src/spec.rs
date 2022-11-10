@@ -1,6 +1,7 @@
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, MissingColumn, PlotAndTablePresentConfiguration,
+    ValueOutsideDomain,
 };
 use anyhow::Result;
 use anyhow::{bail, Context};
@@ -130,6 +131,36 @@ impl ItemsSpec {
                                 column: column.to_string(),
                                 conflict: possible_conflicting
                             })
+                        }
+                        if let Some(plot_spec) = &render_columns.plot {
+                            let domain = if let Some(tick_plot) = &plot_spec.tick_plot {
+                                tick_plot.domain.clone()
+                            } else if let Some(bar_plot) = &plot_spec.bar_plot {
+                                bar_plot.domain.clone()
+                            } else {
+                                None
+                            };
+                            if let Some(domain) = domain {
+                                let mut reader = csv::ReaderBuilder::new()
+                                    .delimiter(dataset.separator as u8)
+                                    .from_path(&dataset.path)?;
+                                let titles =
+                                    reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+                                let colum_pos = titles.iter().position(|c| c == column).unwrap();
+                                for record in reader.records() {
+                                    let record = record?;
+                                    let value = record.get(colum_pos).unwrap();
+                                    if let Ok(value) = value.parse::<f32>() {
+                                        if value < domain[0] || value > domain[domain.len() - 1] {
+                                            bail!(ValueOutsideDomain {
+                                                view: name.to_string(),
+                                                column: column.to_string(),
+                                                value
+                                            })
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -654,6 +685,12 @@ pub enum ConfigError {
         column: String,
         conflict: Vec<String>,
     },
+    #[error("Given domain for column {column:?} of view {view:?} does not fit value {value:?}.")]
+    ValueOutsideDomain {
+        view: String,
+        column: String,
+        value: f32,
+    },
     #[error(
         "Could not find column named {column:?} in given dataset {dataset:?} in linkout {link:?}."
     )]
@@ -980,6 +1017,29 @@ mod tests {
             views:
                 table-a:
                     dataset: table-a
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_value_outside_domain_config_validation() {
+        let raw_config = r#"
+            datasets:
+                oscars:
+                    path: ".examples/data/oscars.csv"
+            views:
+                oscars:
+                    dataset: oscars
+                    render-table:
+                        columns:
+                            age:
+                                plot:
+                                    ticks:
+                                        scale: linear
+                                        domain:
+                                            - 50
+                                            - 60
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_err());
