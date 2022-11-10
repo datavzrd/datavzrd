@@ -6,8 +6,8 @@ use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
 use crate::spec::{
-    BarPlot, CustomPlot, DatasetSpecs, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
-    RenderColumnSpec, TickPlot,
+    BarPlot, CustomPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec,
+    LinkSpec, RenderColumnSpec, ScaleType, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -334,7 +334,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
 
     let hidden_columns: HashSet<_> = render_columns
         .iter()
-        .filter(|(_, v)| v.display_mode == "hidden")
+        .filter(|(_, v)| v.display_mode == DisplayMode::Hidden)
         .map(|(k, _)| k)
         .collect();
 
@@ -412,14 +412,14 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
         .map(|(t, p)| {
             if let Some(heatmap) = &p.heatmap {
-                (t, heatmap.scale_type.to_string())
+                (t, heatmap.scale_type)
             } else if let Some(ticks) = &p.tick_plot {
-                (t, ticks.scale_type.to_string())
+                (t, ticks.scale_type)
             } else {
-                (t, "".to_string())
+                (t, ScaleType::None)
             }
         })
-        .filter(|(_, s)| !s.is_empty())
+        .filter(|(_, s)| s != &ScaleType::None)
         .collect();
 
     let ranges: HashMap<_, _> = render_columns
@@ -739,16 +739,16 @@ fn render_table_javascript<P: AsRef<Path>>(
         .map(|(t, spec)| (t.to_string(), spec.ellipsis.unwrap()))
         .collect();
 
-    let mut display_modes: HashMap<String, String> = titles
+    let mut display_modes: HashMap<String, DisplayMode> = titles
         .iter()
-        .map(|t| (t.to_string(), "normal".to_string()))
+        .map(|t| (t.to_string(), DisplayMode::Normal))
         .collect();
     for (title, rc) in render_columns {
-        display_modes.insert(title.to_string(), rc.display_mode.to_string());
+        display_modes.insert(title.to_string(), rc.display_mode);
     }
     let detail_mode = display_modes
         .iter()
-        .filter(|(_, mode)| *mode == "detail")
+        .filter(|(_, mode)| *mode == &DisplayMode::Detail)
         .count()
         > 0;
 
@@ -1039,63 +1039,58 @@ fn get_column_domain(
         .headers()
         .map(|s| s.iter().position(|t| t == title).unwrap())?;
 
-    match heatmap.scale_type.as_str() {
-        "ordinal" => {
-            if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
-                let columns = aux_domain_columns
+    if !heatmap.scale_type.is_quantitative() {
+        if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
+            let columns = aux_domain_columns
+                .iter()
+                .map(|s| s.to_string())
+                .chain(vec![title.to_string()].into_iter())
+                .collect_vec();
+            let column_indexes: HashSet<_> = reader.headers().map(|s| {
+                s.iter()
+                    .enumerate()
+                    .filter(|(_, title)| columns.contains(&title.to_string()))
+                    .map(|(index, _)| index)
+                    .collect()
+            })?;
+            Ok(json!(reader
+                .records()
+                .map(|r| r.unwrap())
+                .flat_map(|r| r
                     .iter()
-                    .map(|s| s.to_string())
-                    .chain(vec![title.to_string()].into_iter())
-                    .collect_vec();
-                let column_indexes: HashSet<_> = reader.headers().map(|s| {
-                    s.iter()
-                        .enumerate()
-                        .filter(|(_, title)| columns.contains(&title.to_string()))
-                        .map(|(index, _)| index)
-                        .collect()
-                })?;
-                Ok(json!(reader
-                    .records()
-                    .map(|r| r.unwrap())
-                    .flat_map(|r| r
-                        .iter()
-                        .enumerate()
-                        .filter(|(index, _)| column_indexes.contains(index))
-                        .map(|(_, value)| value.to_string())
-                        .collect_vec())
-                    .unique()
-                    .sorted()
+                    .enumerate()
+                    .filter(|(index, _)| column_indexes.contains(index))
+                    .map(|(_, value)| value.to_string())
                     .collect_vec())
-                .to_string())
-            } else {
-                Ok(json!(reader
-                    .records()
-                    .map(|r| r.unwrap())
-                    .map(|r| r.get(column_index).unwrap().to_owned())
-                    .unique()
-                    .sorted()
-                    .collect_vec())
-                .to_string())
-            }
+                .unique()
+                .sorted()
+                .collect_vec())
+            .to_string())
+        } else {
+            Ok(json!(reader
+                .records()
+                .map(|r| r.unwrap())
+                .map(|r| r.get(column_index).unwrap().to_owned())
+                .unique()
+                .sorted()
+                .collect_vec())
+            .to_string())
         }
-        _ => {
-            if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
-                let columns = aux_domain_columns
-                    .iter()
-                    .map(|s| s.to_string())
-                    .chain(vec![title.to_string()].into_iter())
-                    .collect();
-                Ok(json!(get_min_max_multiple_columns(
-                    csv_path,
-                    separator,
-                    header_rows,
-                    columns
-                )?)
-                .to_string())
-            } else {
-                Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string())
-            }
-        }
+    } else if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
+        let columns = aux_domain_columns
+            .iter()
+            .map(|s| s.to_string())
+            .chain(vec![title.to_string()].into_iter())
+            .collect();
+        Ok(json!(get_min_max_multiple_columns(
+            csv_path,
+            separator,
+            header_rows,
+            columns
+        )?)
+        .to_string())
+    } else {
+        Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string())
     }
 }
 

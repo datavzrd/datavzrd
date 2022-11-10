@@ -1,7 +1,6 @@
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, MissingColumn, PlotAndTablePresentConfiguration,
-    WrongScaleType,
 };
 use anyhow::Result;
 use anyhow::{bail, Context};
@@ -131,25 +130,6 @@ impl ItemsSpec {
                                 column: column.to_string(),
                                 conflict: possible_conflicting
                             })
-                        }
-
-                        if let Some(plot) = &render_columns.plot {
-                            if let Some(heatmap) = &plot.heatmap {
-                                if !SCALE_TYPES.contains(&&*heatmap.scale_type) {
-                                    bail!(WrongScaleType {
-                                        scale_type: heatmap.scale_type.clone(),
-                                        possible_scale_types: SCALE_TYPES.to_vec(),
-                                    })
-                                }
-                            }
-                            if let Some(tick_plot) = &plot.tick_plot {
-                                if !SCALE_TYPES.contains(&&*tick_plot.scale_type) {
-                                    bail!(WrongScaleType {
-                                        scale_type: tick_plot.scale_type.clone(),
-                                        possible_scale_types: SCALE_TYPES.to_vec(),
-                                    })
-                                }
-                            }
                         }
                     }
                 }
@@ -390,10 +370,6 @@ impl ItemSpecs {
     }
 }
 
-fn default_display_mode() -> String {
-    String::from("normal")
-}
-
 fn default_precision() -> u32 {
     2_u32
 }
@@ -407,8 +383,8 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) precision: u32,
     #[serde(default)]
     pub(crate) custom: Option<String>,
-    #[serde(default = "default_display_mode")]
-    pub(crate) display_mode: String,
+    #[serde(default)]
+    pub(crate) display_mode: DisplayMode,
     #[serde(default)]
     pub(crate) link_to_url: Option<String>,
     #[serde(default)]
@@ -419,6 +395,15 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) ellipsis: Option<u32>,
     #[serde(default)]
     pub(crate) plot_view_legend: bool,
+}
+
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum DisplayMode {
+    #[default]
+    Normal,
+    Detail,
+    Hidden,
 }
 
 impl RenderColumnSpec {
@@ -504,8 +489,8 @@ pub(crate) struct CustomPlot {
     schema: Option<String>,
     #[serde(default, rename = "spec-path")]
     schema_path: Option<String>,
-    #[serde(default = "default_vega_controls")]
-    vega_controls: String,
+    #[serde(default)]
+    vega_controls: bool,
 }
 
 impl CustomPlot {
@@ -519,10 +504,6 @@ impl CustomPlot {
         }
         Ok(())
     }
-}
-
-fn default_vega_controls() -> String {
-    "false".to_string()
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -539,7 +520,7 @@ pub(crate) struct PlotSpec {
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct TickPlot {
     #[serde(default, rename = "scale")]
-    pub(crate) scale_type: String,
+    pub(crate) scale_type: ScaleType,
     #[serde(default)]
     pub(crate) domain: Option<Vec<f32>>,
     #[serde(default)]
@@ -554,7 +535,7 @@ fn default_clamp() -> bool {
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct Heatmap {
     #[serde(default, rename = "scale")]
-    pub(crate) scale_type: String,
+    pub(crate) scale_type: ScaleType,
     #[serde(default = "default_clamp")]
     pub(crate) clamp: bool,
     #[serde(default)]
@@ -573,11 +554,41 @@ pub(crate) struct Heatmap {
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct BarPlot {
     #[serde(default, rename = "scale")]
-    pub(crate) scale_type: String,
+    pub(crate) scale_type: ScaleType,
     #[serde(default)]
     pub(crate) domain: Option<Vec<f32>>,
     #[serde(default)]
     pub(crate) aux_domain_columns: AuxDomainColumns,
+}
+
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum ScaleType {
+    Linear,
+    Pow,
+    Sqrt,
+    SymLog,
+    Log,
+    Time,
+    Utc,
+    Ordinal,
+    Band,
+    Point,
+    #[default]
+    None,
+}
+
+impl ScaleType {
+    pub(crate) fn is_quantitative(&self) -> bool {
+        matches!(
+            self,
+            ScaleType::Linear
+                | ScaleType::Pow
+                | ScaleType::Sqrt
+                | ScaleType::SymLog
+                | ScaleType::Log
+        )
+    }
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
@@ -619,23 +630,6 @@ impl AuxDomainColumns {
     }
 }
 
-static SCALE_TYPES: [&str; 14] = [
-    "linear",
-    "pow",
-    "sqrt",
-    "symlog",
-    "log",
-    "time",
-    "utc",
-    "ordinal",
-    "band",
-    "point",
-    "bin-ordinal",
-    "quantile",
-    "quantize",
-    "threshold",
-];
-
 #[derive(Error, Debug)]
 pub enum ConfigError {
     #[error("Could not find column with index {index:?} under path {table_path:?} with only {header_length:?} columns.")]
@@ -659,11 +653,6 @@ pub enum ConfigError {
         view: String,
         column: String,
         conflict: Vec<String>,
-    },
-    #[error("Given scale type {scale_type:?} is not valid, please choose one of the following scale types: {possible_scale_types:?}.")]
-    WrongScaleType {
-        scale_type: String,
-        possible_scale_types: Vec<&'static str>,
     },
     #[error(
         "Could not find column named {column:?} in given dataset {dataset:?} in linkout {link:?}."
@@ -690,10 +679,10 @@ pub enum ConfigError {
 #[cfg(test)]
 mod tests {
     use crate::spec::{
-        default_display_mode, default_links, default_precision, default_render_table,
-        default_single_page_threshold, AuxDomainColumns, DatasetSpecs, HeaderSpecs, Heatmap,
-        ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
-        RenderTableSpecs, TickPlot,
+        default_links, default_precision, default_render_table, default_single_page_threshold,
+        AuxDomainColumns, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec,
+        LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs,
+        ScaleType, TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -704,7 +693,7 @@ mod tests {
             precision: default_precision(),
             optional: false,
             custom: None,
-            display_mode: "normal".to_string(),
+            display_mode: DisplayMode::Normal,
             link_to_url: Some("https://www.rust-lang.org".to_string()),
             plot: None,
             custom_plot: None,
@@ -904,7 +893,7 @@ mod tests {
                         plot: Some(PlotSpec {
                             tick_plot: None,
                             heatmap: Some(Heatmap {
-                                scale_type: "ordinal".to_string(),
+                                scale_type: ScaleType::Ordinal,
                                 clamp: true,
                                 color_scheme: "category20".to_string(),
                                 color_range: vec![],
@@ -1112,8 +1101,8 @@ mod tests {
                                     heatmap:
                                         scale: inverse-quadruplic
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        let config = serde_yaml::from_str::<ItemSpecs>(raw_config).is_err();
+        assert!(config);
     }
 
     #[test]
@@ -1166,7 +1155,7 @@ mod tests {
             precision: default_precision(),
             optional: false,
             custom: None,
-            display_mode: "detail".to_string(),
+            display_mode: DisplayMode::Detail,
             link_to_url: None,
             plot: None,
             custom_plot: None,
@@ -1177,7 +1166,7 @@ mod tests {
             precision: default_precision(),
             optional: false,
             custom: None,
-            display_mode: "hidden".to_string(),
+            display_mode: DisplayMode::Hidden,
             link_to_url: None,
             plot: None,
             custom_plot: None,
@@ -1229,7 +1218,7 @@ mod tests {
             )
             .unwrap();
         let expected_ticks = TickPlot {
-            scale_type: "linear".to_string(),
+            scale_type: ScaleType::Linear,
             domain: None,
             aux_domain_columns: AuxDomainColumns(Some(vec![
                 "birth_mo".to_string(),
@@ -1246,7 +1235,7 @@ mod tests {
             optional: false,
             precision: default_precision(),
             custom: None,
-            display_mode: default_display_mode(),
+            display_mode: DisplayMode::default(),
             link_to_url: None,
             plot: Some(expected_plot),
             custom_plot: None,
