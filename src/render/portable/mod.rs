@@ -412,14 +412,14 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
         .map(|(t, p)| {
             if let Some(heatmap) = &p.heatmap {
-                (t, &heatmap.scale_type)
+                (t, heatmap.scale_type)
             } else if let Some(ticks) = &p.tick_plot {
-                (t, &ticks.scale_type)
+                (t, ticks.scale_type)
             } else {
-                (t, &ScaleType::None)
+                (t, ScaleType::None)
             }
         })
-        .filter(|(_, s)| s != &&ScaleType::None)
+        .filter(|(_, s)| s != &ScaleType::None)
         .collect();
 
     let ranges: HashMap<_, _> = render_columns

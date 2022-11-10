@@ -561,7 +561,7 @@ pub(crate) struct BarPlot {
     pub(crate) aux_domain_columns: AuxDomainColumns,
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
 pub(crate) enum ScaleType {
     Linear,
