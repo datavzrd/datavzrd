@@ -1494,36 +1494,38 @@ fn render_excel_sheet<P: AsRef<Path>>(specs: &ItemsSpec, output_path: P) -> Resu
     );
 
     for (view, spec) in &specs.views {
-        let mut rdr = csv::ReaderBuilder::new()
-            .has_headers(false)
-            .flexible(true)
-            .delimiter(
-                specs
-                    .datasets
-                    .get(spec.dataset.as_ref().unwrap())
-                    .unwrap()
-                    .separator as u8,
-            )
-            .from_path(
-                &specs
-                    .datasets
-                    .get(spec.dataset.as_ref().unwrap())
-                    .unwrap()
-                    .path,
-            )?;
+        if spec.render_plot.is_none() && spec.render_html.is_none() {
+            let mut rdr = csv::ReaderBuilder::new()
+                .has_headers(false)
+                .flexible(true)
+                .delimiter(
+                    specs
+                        .datasets
+                        .get(spec.dataset.as_ref().unwrap())
+                        .unwrap()
+                        .separator as u8,
+                )
+                .from_path(
+                    &specs
+                        .datasets
+                        .get(spec.dataset.as_ref().unwrap())
+                        .unwrap()
+                        .path,
+                )?;
 
-        let mut sheet = wb.create_sheet(view);
+            let mut sheet = wb.create_sheet(view);
 
-        wb.write_sheet(&mut sheet, |sw| {
-            for result in rdr.records() {
-                let mut row = simple_excel_writer::Row::new();
-                for field in result?.iter() {
-                    row.add_cell(field);
+            wb.write_sheet(&mut sheet, |sw| {
+                for result in rdr.records() {
+                    let mut row = simple_excel_writer::Row::new();
+                    for field in result?.iter() {
+                        row.add_cell(field);
+                    }
+                    sw.append_row(row)?;
                 }
-                sw.append_row(row)?;
-            }
-            Ok(())
-        })?;
+                Ok(())
+            })?;
+        }
     }
 
     wb.close()?;
