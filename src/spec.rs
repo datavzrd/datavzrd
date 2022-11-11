@@ -1,7 +1,7 @@
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
-    ConflictingConfiguration, LinkToMissingView, MissingColumn, PlotAndTablePresentConfiguration,
-    ValueOutsideDomain,
+    ConflictingConfiguration, LinkToMissingView, LogScaleIncludesZero, MissingColumn,
+    PlotAndTablePresentConfiguration, ValueOutsideDomain,
 };
 use anyhow::Result;
 use anyhow::{bail, Context};
@@ -140,6 +140,14 @@ impl ItemsSpec {
                             } else {
                                 None
                             };
+                            let scale_type = if let Some(tick_plot) = &plot_spec.tick_plot {
+                                Some(tick_plot.scale_type)
+                            } else {
+                                plot_spec
+                                    .bar_plot
+                                    .as_ref()
+                                    .map(|bar_plot| bar_plot.scale_type)
+                            };
                             if let Some(domain) = domain {
                                 let mut reader = csv::ReaderBuilder::new()
                                     .delimiter(dataset.separator as u8)
@@ -158,6 +166,17 @@ impl ItemsSpec {
                                                 value
                                             })
                                         }
+                                    }
+                                }
+                                if let Some(scale) = scale_type {
+                                    if scale == ScaleType::Log
+                                        && domain[0] <= 0_f32
+                                        && 0_f32 <= domain[domain.len() - 1]
+                                    {
+                                        bail!(LogScaleIncludesZero {
+                                            view: name.to_string(),
+                                            column: column.to_string(),
+                                        })
                                     }
                                 }
                             }
@@ -692,6 +711,10 @@ pub enum ConfigError {
         value: f32,
     },
     #[error(
+        "Given domain for column {column:?} of view {view:?} with scale type log cannot include 0."
+    )]
+    LogScaleIncludesZero { view: String, column: String },
+    #[error(
         "Could not find column named {column:?} in given dataset {dataset:?} in linkout {link:?}."
     )]
     MissingColumn {
@@ -1040,6 +1063,29 @@ mod tests {
                                         domain:
                                             - 50
                                             - 60
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_log_scale_includes_zero_config_validation() {
+        let raw_config = r#"
+            datasets:
+                oscars:
+                    path: ".examples/data/oscars.csv"
+            views:
+                oscars:
+                    dataset: oscars
+                    render-table:
+                        columns:
+                            age:
+                                plot:
+                                    ticks:
+                                        scale: log
+                                        domain:
+                                            - 0
+                                            - 100
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_err());
