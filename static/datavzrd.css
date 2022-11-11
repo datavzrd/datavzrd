@@ -103,11 +103,12 @@ td {
 .table td,
 .table th {
     padding: 0 5px !important;
-    line-height: 0.2;
     font-size: 12px !important;
     /* Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=688556 see https://github.com/koesterlab/datavzrd/issues/144 */
     background-clip: padding-box;
     white-space: nowrap;
+    height: 18px;
+    line-height: 0.8;
 }
 
 .table td.plotcell {
