@@ -142,10 +142,11 @@ impl ItemsSpec {
                             };
                             let scale_type = if let Some(tick_plot) = &plot_spec.tick_plot {
                                 Some(tick_plot.scale_type)
-                            } else if let Some(bar_plot) = &plot_spec.bar_plot {
-                                Some(bar_plot.scale_type)
                             } else {
-                                None
+                                plot_spec
+                                    .bar_plot
+                                    .as_ref()
+                                    .map(|bar_plot| bar_plot.scale_type)
                             };
                             if let Some(domain) = domain {
                                 let mut reader = csv::ReaderBuilder::new()
@@ -168,13 +169,14 @@ impl ItemsSpec {
                                     }
                                 }
                                 if let Some(scale) = scale_type {
-                                    if scale == ScaleType::Log {
-                                        if domain[0] <= 0_f32 && 0_f32 <= domain[domain.len() - 1] {
-                                            bail!(LogScaleIncludesZero {
-                                                view: name.to_string(),
-                                                column: column.to_string(),
-                                            })
-                                        }
+                                    if scale == ScaleType::Log
+                                        && domain[0] <= 0_f32
+                                        && 0_f32 <= domain[domain.len() - 1]
+                                    {
+                                        bail!(LogScaleIncludesZero {
+                                            view: name.to_string(),
+                                            column: column.to_string(),
+                                        })
                                     }
                                 }
                             }
