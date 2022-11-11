@@ -27,6 +27,7 @@ regex = "1.7.0"
 log = "0.4.17"
 simplelog = "0.12.0"
 minify-js = "0.4.0"
+simple_excel_writer = "0.2"
 
 [dev-dependencies]
 dir-assert = "0.2.0"
