@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.8.1](https://www.github.com/koesterlab/datavzrd/compare/v2.8.0...v2.8.1) (2022-11-11)
+
+
+### Bug Fixes
+
+* Fix row height ([#264](https://www.github.com/koesterlab/datavzrd/issues/264)) ([0af7952](https://www.github.com/koesterlab/datavzrd/commit/0af7952d92bf5c027378cfa3e46b223c8c31ebae))
+
 ## [2.8.0](https://www.github.com/koesterlab/datavzrd/compare/v2.7.2...v2.8.0) (2022-11-11)
 
 
