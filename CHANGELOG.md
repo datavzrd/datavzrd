@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.8.0](https://www.github.com/koesterlab/datavzrd/compare/v2.7.2...v2.8.0) (2022-11-11)
+
+
+### Features
+
+* Add basic excel export option ([#258](https://www.github.com/koesterlab/datavzrd/issues/258)) ([b684381](https://www.github.com/koesterlab/datavzrd/commit/b684381ad64286ce54e93f354a02001b9d0fe7dc))
+* Panic if log scale includes zero ([#262](https://www.github.com/koesterlab/datavzrd/issues/262)) ([eb35932](https://www.github.com/koesterlab/datavzrd/commit/eb359325fc2dde93f437f09f9cb1749174595301))
+* Validate domains of plots ([#260](https://www.github.com/koesterlab/datavzrd/issues/260)) ([fb3d87a](https://www.github.com/koesterlab/datavzrd/commit/fb3d87af17a71ba263a2f0fe04a3191f28a9065b))
+
 ### [2.7.2](https://www.github.com/koesterlab/datavzrd/compare/v2.7.1...v2.7.2) (2022-11-04)
 
 
