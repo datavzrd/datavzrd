@@ -532,7 +532,7 @@ fn get_column_width(
         .map(|row| row.get(column_index).unwrap().to_string())
         .map(|s| s.len())
         .max()
-        .unwrap();
+        .unwrap_or(0);
 
     Ok(width as i32)
 }
