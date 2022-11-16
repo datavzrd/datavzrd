@@ -81,6 +81,8 @@ views:
             heatmap:
               scale: ordinal
               color-scheme: accent
+        Runtime:
+          custom-path: ".examples/specs/time-formatter.js"
   movies-plot:
     dataset: movies
     desc: |

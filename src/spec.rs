@@ -434,6 +434,8 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) custom: Option<String>,
     #[serde(default)]
+    pub(crate) custom_path: Option<String>,
+    #[serde(default)]
     pub(crate) display_mode: DisplayMode,
     #[serde(default)]
     pub(crate) link_to_url: Option<String>,
@@ -466,6 +468,12 @@ impl RenderColumnSpec {
             } else if let Some(bars) = &mut plot.bar_plot {
                 bars.preprocess(dataset)?;
             }
+        }
+        if let Some(path) = self.custom_path.as_ref() {
+            let mut file = File::open(path)?;
+            let mut contents = String::new();
+            file.read_to_string(&mut contents)?;
+            self.custom = Some(contents);
         }
         Ok(())
     }
@@ -753,6 +761,7 @@ mod tests {
             precision: default_precision(),
             optional: false,
             custom: None,
+            custom_path: None,
             display_mode: DisplayMode::Normal,
             link_to_url: Some("https://www.rust-lang.org".to_string()),
             plot: None,
@@ -1261,6 +1270,7 @@ mod tests {
             precision: default_precision(),
             optional: false,
             custom: None,
+            custom_path: None,
             display_mode: DisplayMode::Detail,
             link_to_url: None,
             plot: None,
@@ -1272,6 +1282,7 @@ mod tests {
             precision: default_precision(),
             optional: false,
             custom: None,
+            custom_path: None,
             display_mode: DisplayMode::Hidden,
             link_to_url: None,
             plot: None,
@@ -1341,6 +1352,7 @@ mod tests {
             optional: false,
             precision: default_precision(),
             custom: None,
+            custom_path: None,
             display_mode: DisplayMode::default(),
             link_to_url: None,
             plot: Some(expected_plot),
