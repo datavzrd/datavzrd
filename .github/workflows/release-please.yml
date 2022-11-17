@@ -7,7 +7,7 @@ name: release-please
 
 jobs:
   release-please:
-    if: github.repository_owner == 'koesterlab'
+    if: github.repository_owner == 'datavzrd'
     runs-on: ubuntu-latest
     steps:
 
