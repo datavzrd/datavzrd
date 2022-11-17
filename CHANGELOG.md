@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.8.2](https://www.github.com/koesterlab/datavzrd/compare/v2.8.1...v2.8.2) (2022-11-17)
+
+
+### Bug Fixes
+
+* Fix error when rendering empty multi header files ([#268](https://www.github.com/koesterlab/datavzrd/issues/268)) ([9c2b464](https://www.github.com/koesterlab/datavzrd/commit/9c2b4649cc6ab170a048d7a7154625b28f5be309))
+
 ### [2.8.1](https://www.github.com/koesterlab/datavzrd/compare/v2.8.0...v2.8.1) (2022-11-11)
 
 
