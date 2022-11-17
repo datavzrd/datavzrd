@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.9.0](https://www.github.com/datavzrd/datavzrd/compare/v2.8.1...v2.9.0) (2022-11-17)
+
+
+### Features
+
+* Allow specifying a path to a custom js function ([#267](https://www.github.com/datavzrd/datavzrd/issues/267)) ([1eb1453](https://www.github.com/datavzrd/datavzrd/commit/1eb145338b551285926ff8449ebd90664688f2d3))
+
+
+### Bug Fixes
+
+* Fix error when rendering empty multi header files ([#268](https://www.github.com/datavzrd/datavzrd/issues/268)) ([9c2b464](https://www.github.com/datavzrd/datavzrd/commit/9c2b4649cc6ab170a048d7a7154625b28f5be309))
+
 ### [2.8.1](https://www.github.com/koesterlab/datavzrd/compare/v2.8.0...v2.8.1) (2022-11-11)
 
 
