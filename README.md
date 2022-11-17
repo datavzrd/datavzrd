@@ -7,7 +7,7 @@
 
 A tool to create visual and interactive HTML reports from collections of CSV/TSV tables. Reports include automatically generated vega-lite histograms per column. 
 Plots can be fully customized by users via a config file. These also allow the user to add linkouts to other websites or link between multiple tables. 
-An example report can be [viewed online](https://koesterlab.github.io/datavzrd/index.html) with the [corresponding config file](https://github.com/koesterlab/datavzrd/tree/main/.examples/example-config.yaml).
+An example report can be [viewed online](https://datavzrd.github.io/datavzrd/index.html) with the [corresponding config file](https://github.com/datavzrd/datavzrd/tree/main/.examples/example-config.yaml).
 
 ## Usage
 
