@@ -1329,7 +1329,7 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
     let generate_reader = |separator: char, path: &PathBuf| -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
             .delimiter(separator as u8)
-            .from_path(&path)
+            .from_path(path)
     };
 
     let mut data = HashMap::new();

@@ -75,7 +75,7 @@ fn generate_numeric_plot(
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
             .delimiter(separator as u8)
-            .from_path(&path)
+            .from_path(path)
     };
 
     let mut reader =
@@ -126,7 +126,7 @@ pub(crate) fn get_min_max(
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
             .delimiter(separator as u8)
-            .from_path(&path)
+            .from_path(path)
     };
 
     let mut min_reader =
