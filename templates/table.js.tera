@@ -35,6 +35,15 @@ $(document).ready(function() {
             },
             {% endfor %}
         ],
+        "bars": [
+            {% for title, bar_plot in bar_plots %}
+            {
+            "title": "{{ title }}",
+            "slug_title": "{{ title | slugify }}",
+            "specs": {{ bar_plot }}
+            },
+            {% endfor %}
+        ],
         "heatmaps": [
             {% for title, tuple in heatmaps %}
             {
@@ -406,7 +415,7 @@ function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precisi
             if (is_float && precision !== undefined) {
                 value = precision_formatter(precision,value);
             }
-            if (value != "" && !detail_mode) {
+            if (value != "") {
                 this.innerHTML = "";
                 this.appendChild(div);
                 var data = [];
@@ -424,25 +433,29 @@ function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precisi
     );
 }
 
-{% for title, bar_plot in bar_plots %}
-function renderBarPlots{{ loop.index0 }}(ah, columns) {
-    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-    let detail_mode = columns.indexOf("{{ title }}") == -1;
-    var specs =  {{ bar_plot }};
+function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
+    let index = columns.indexOf(title) + 1;
+    if (detail_mode || header_label_length !== 0) {
+        index += 1;
+    }
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
-            var id = `{{ title | slugify }}-${row}`;
+            var id = `${slug_title}-${row}`;
             this.classList.add("plotcell");
             const div = document.createElement("div");
-            let value = table_rows[row]["{{ title }}"];
-            {% if precisions[title] and is_float[title] %}
-            value = precision_formatter({{ precisions[title] }},value);{% endif %}
-            if (value != "" && !detail_mode) {
+            let value = table_rows[row][title];
+            if (is_float && precision !== undefined) {
+                value = precision_formatter(precision,value);
+            }
+            if (value != "") {
                 this.innerHTML = "";
                 this.appendChild(div);
-                var data = [{"{{ title }}": value}];
+                var data = [];
+                var v = {};
+                v[title] = value;
+                data.push(v);
                 var s = specs;
                 s.data = {};
                 s.data.values = data;
@@ -453,7 +466,6 @@ function renderBarPlots{{ loop.index0 }}(ah, columns) {
         }
     );
 }
-{% endfor %}
 
 function renderDetailTickPlot(value, div, specs) {
     if (value != "") {
@@ -497,7 +509,7 @@ function colorizeColumn(ah, columns, title, heatmap, scale, detail_mode, header_
             if (custom_func !== null) {
                 value = custom_func(value, table_rows[row]);
             }
-            if (value !== "" && !detail_mode) {
+            if (value !== "") {
                 this.style.setProperty("background-color", scale(value), "important");
             }
             row++;
@@ -664,19 +676,19 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 {% endfor %}
 
 for (o of config.ticks) {
-    renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, o.is_float, o.precision, o.detail_mode, o.header_label_length);
+    renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, o.is_float, o.precision, config.detail_mode, config.header_label_length);
 }
 
-{% for title, bar_plot in bar_plots %}
-    renderBarPlots{{ loop.index0 }}(additional_headers.length, displayed_columns);
-{% endfor %}
+for (o of config.bars) {
+    renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, o.is_float, o.precision, config.detail_mode, config.header_label_length);
+}
 
 {% for title, link_url in link_urls %}
     linkUrlColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, columns);
 {% endfor %}
 
 for (o of config.heatmaps) {
-    colorizeColumn(additional_headers.length, displayed_columns, o.title, o.heatmap, o.scale, o.detail_mode, o.header_label_length);
+    colorizeColumn(additional_headers.length, displayed_columns, o.title, o.heatmap, o.scale, config.detail_mode, config.header_label_length);
 }
 
 {% for title, ellipsis in ellipses %}
