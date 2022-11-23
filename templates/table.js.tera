@@ -25,12 +25,24 @@ $(document).ready(function() {
         },
         {% endfor %}
         "detail_mode": {{ detail_mode }},
+        "header_label_length": {{ header_labels | length }},
         "ticks": [
             {% for title, tick_plot in tick_plots %}
             {
                 "title": "{{ title }}",
                 "slug_title": "{{ title | slugify }}",
                 "specs": {{ tick_plot }}
+            },
+            {% endfor %}
+        ],
+        "heatmaps": [
+            {% for title, tuple in heatmaps %}
+            {
+                "title": "{{ title }}",
+                "slug_title": "{{ title | slugify }}",
+                "heatmap": {{ tuple.0 | json_encode }},
+                "domain": {{ tuple.1 | json_encode }},
+                "scale": vega.scale('{{ tuple.0.scale }}')(){% if tuple.0.scale != "ordinal" %}.clamp({{ tuple.0.clamp }}){% endif %}.domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %}),
             },
             {% endfor %}
         ],
@@ -119,7 +131,7 @@ $(document).ready(function() {
         {% endif %}
         {% endfor %}
         {% for title, tick_plot in tick_plots %}
-        renderDetailTickPlots{{ loop.index0 }}(row[ticks[{{ loop.index0 }}]], `#detail-plot-${index}-ticks-{{ loop.index0 }}`);
+        renderDetailTickPlots{{ loop.index0 }}(row[ticks[{{ loop.index0 }}]], `#detail-plot-${index}-ticks-{{ loop.index0 }}`); // TODO: Update this to use the new tick plot function
         {% endfor %}
         {% for title, bar_plot in bar_plots %}
         renderDetailBarPlots{{ loop.index0 }}(row[bars[{{ loop.index0 }}]], `#detail-plot-${index}-bars-{{ loop.index0 }}`);
@@ -378,9 +390,11 @@ function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
 }
 {% endfor %}
 
-function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision) {
-    let index = columns.indexOf(title) + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-    let detail_mode = columns.indexOf(title) == -1;
+function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
+    let index = columns.indexOf(title) + 1;
+    if (detail_mode || header_label_length !== 0) {
+        index += 1;
+    }
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -441,11 +455,12 @@ function renderBarPlots{{ loop.index0 }}(ah, columns) {
 }
 {% endfor %}
 
-{% for title, tick_plot in tick_plots %}
-function renderDetailTickPlots{{ loop.index0 }}(value, div) {
-    var specs =  {{ tick_plot }};
+function renderDetailTickPlot(value, div, specs) {
     if (value != "") {
-        var data = [{"{{ title }}": value}];
+        var data = [];
+        var v = {};
+        v[title] = value;
+        data.push(v);
         var s = specs;
         s.data = {};
         s.data.values = data;
@@ -453,7 +468,6 @@ function renderDetailTickPlots{{ loop.index0 }}(value, div) {
         vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
     }
 }
-{% endfor %}
 
 {% for title, bar_plot in bar_plots %}
 function renderDetailBarPlots{{ loop.index0 }}(value, div) {
@@ -469,23 +483,20 @@ function renderDetailBarPlots{{ loop.index0 }}(value, div) {
 }
 {% endfor %}
 
-{% for title, tuple in heatmaps %}
-function colorizeColumn{{ loop.index0 }}(ah, columns) {
-    let detail_mode = columns.indexOf("{{ title }}") == -1;
-    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-    var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
-    var scale = {{ tuple.0.scale }}(){% if tuple.0.scale != "ordinal" %}.clamp({{ tuple.0.clamp }}){% endif %}.domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
+function colorizeColumn(ah, columns, title, heatmap, scale, detail_mode, header_label_length) {
+    let index = columns.indexOf(title) + 1;
+    if (detail_mode || header_label_length !== 0) {
+        index += 1;
+    }
     let row = 0;
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
-    {% if tuple.0.custom_content %}
-    var custom_func = {{ tuple.0.custom_content }};
-    {% endif %}
+    var custom_func = heatmap.custom_content;
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
-            var value = table_rows[row]["{{ title }}"];
-            {% if tuple.0.custom_content %}
-            value = custom_func(value, table_rows[row]);
-            {% endif %}
+            var value = table_rows[row][title];
+            if (custom_func !== null) {
+                value = custom_func(value, table_rows[row]);
+            }
             if (value !== "" && !detail_mode) {
                 this.style.setProperty("background-color", scale(value), "important");
             }
@@ -493,7 +504,6 @@ function colorizeColumn{{ loop.index0 }}(ah, columns) {
         }
     );
 }
-{% endfor %}
 
 {% for row, heatmap in header_heatmaps %}
 function colorizeHeaderRow{{ loop.index0 }}() {
@@ -654,7 +664,7 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 {% endfor %}
 
 for (o of config.ticks) {
-    renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, o.is_float, o.precision);
+    renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, o.is_float, o.precision, o.detail_mode, o.header_label_length);
 }
 
 {% for title, bar_plot in bar_plots %}
@@ -665,9 +675,9 @@ for (o of config.ticks) {
     linkUrlColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, columns);
 {% endfor %}
 
-{% for title, tick_plot in heatmaps %}
-    colorizeColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
-{% endfor %}
+for (o of config.heatmaps) {
+    colorizeColumn(additional_headers.length, displayed_columns, o.title, o.heatmap, o.scale, o.detail_mode, o.header_label_length);
+}
 
 {% for title, ellipsis in ellipses %}
     shortenColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
