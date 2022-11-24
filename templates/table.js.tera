@@ -35,6 +35,14 @@ $(document).ready(function() {
             },
             {% endfor %}
         ],
+        "ellipsis": [
+            {% for title, ellipsis in ellipses %}
+            {
+                "title": "{{ title }}",
+                "ellipsis": {{ ellipsis }}
+            },
+            {% endfor %}
+        ],
         "bars": [
             {% for title, bar_plot in bar_plots %}
             {
@@ -545,21 +553,22 @@ function colorizeDetailCard{{ loop.index0 }}(value, div) {
 }
 {% endfor %}
 
-{% for title, ellipsis in ellipses %}
-    function shortenColumn{{ loop.index0 }}(ah, columns) {
-        let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-        let row = 0;
-        $(`table > tbody > tr td:nth-child(${index})`).each(
-            function() {
-                value = this.innerHTML;
-                if (value.length > {{ ellipsis }}) {
-                    this.innerHTML = `${value.substring(0,{{ ellipsis }})}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${value}</div>'>...</a>`;
-                }
-                row++;
-            }
-        );
+function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_length) {
+    let index = columns.indexOf(title) + 1;
+    if (detail_mode || header_label_length !== 0) {
+        index += 1;
     }
-{% endfor %}
+    let row = 0;
+    $(`table > tbody > tr td:nth-child(${index})`).each(
+        function() {
+            value = this.innerHTML;
+            if (value.length > ellipsis) {
+                this.innerHTML = `${value.substring(0, ellipsis)}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${value}</div>'>...</a>`;
+            }
+            row++;
+        }
+    );
+}
 
 {% for title, link_url in link_urls %}
     function linkUrlColumn{{ loop.index0 }}(ah, dp_columns, columns) {
@@ -691,9 +700,9 @@ for (o of config.heatmaps) {
     colorizeColumn(additional_headers.length, displayed_columns, o.title, o.heatmap, o.scale, config.detail_mode, config.header_label_length);
 }
 
-{% for title, ellipsis in ellipses %}
-    shortenColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
-{% endfor %}
+for (o of config.ellipsis) {
+    shortenColumn(additional_headers.length, displayed_columns, o.title, o.ellipsis, config.detail_mode, config.header_label_length);
+}
 
 {% for row, heatmap in header_heatmaps %}
     colorizeHeaderRow{{ loop.index0 }}();
