@@ -35,6 +35,14 @@ $(document).ready(function() {
             },
             {% endfor %}
         ],
+        "link_urls": [
+            {% for title, link_url in link_urls %}
+            {
+                "title": "{{ title }}",
+                "url": "{{ link_url }}"
+            },
+            {% endfor %}
+        ],
         "ellipsis": [
             {% for title, ellipsis in ellipses %}
             {
@@ -570,25 +578,27 @@ function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_l
     );
 }
 
-{% for title, link_url in link_urls %}
-    function linkUrlColumn{{ loop.index0 }}(ah, dp_columns, columns) {
-        let index = dp_columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-        let link_url = "{{ link_url }}";
-        let table_rows = $('#table').bootstrapTable('getData');
-        $(`table > tbody > tr td:nth-child(${index})`).each(
-            function() {
-                let row = this.parentElement.dataset.index;
-                let value = table_rows[row]["{{ title }}"];
-                let link = link_url.replaceAll("{value}", value);
-                for (column of columns) {
-                {% raw %}link = link.replaceAll(`{${column}}`, table_rows[row][column]);{% endraw %}
-                }
-                this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
-                row++;
-            }
-        );
+
+function linkUrlColumn(ah, dp_columns, columns, title, link_url, detail_mode, header_label_length) {
+    let index = dp_columns.indexOf(title) + 1;
+    if (detail_mode || header_label_length !== 0) {
+        index += 1;
     }
-{% endfor %}
+    let table_rows = $('#table').bootstrapTable('getData');
+    $(`table > tbody > tr td:nth-child(${index})`).each(
+        function() {
+            let row = this.parentElement.dataset.index;
+            let value = table_rows[row][title];
+            let link = link_url.replaceAll("{value}", value);
+            for (column of columns) {
+                link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+            }
+            this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
+            row++;
+        }
+    );
+}
+
 
 function embedSearch(index) {
     var source = `search/column_${index}.html`;
@@ -692,9 +702,9 @@ for (o of config.bars) {
     renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, o.is_float, o.precision, config.detail_mode, config.header_label_length);
 }
 
-{% for title, link_url in link_urls %}
-    linkUrlColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, columns);
-{% endfor %}
+for (o of config.link_urls) {
+    linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.url, config.detail_mode, config.header_label_length);
+}
 
 for (o of config.heatmaps) {
     colorizeColumn(additional_headers.length, displayed_columns, o.title, o.heatmap, o.scale, config.detail_mode, config.header_label_length);
