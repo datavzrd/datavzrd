@@ -101,7 +101,7 @@ impl Renderer for ItemRenderer {
                         &self.specs.views,
                         &self.specs.default_view,
                         &self.specs.report_name,
-                        self.specs.needs_excel_sheet()
+                        self.specs.needs_excel_sheet(),
                     )?;
                 // Render HTML
                 } else if let Some(table_specs) = &table.render_html {
@@ -116,7 +116,7 @@ impl Renderer for ItemRenderer {
                         table_specs.script_path.to_string(),
                         &self.specs.aux_libraries,
                         &self.specs.report_name,
-                        self.specs.needs_excel_sheet()
+                        self.specs.needs_excel_sheet(),
                     )?;
                 }
                 // Render table
@@ -186,7 +186,7 @@ impl Renderer for ItemRenderer {
                             &self.specs.views,
                             &self.specs.default_view,
                             is_single_page,
-                            self.specs.needs_excel_sheet()
+                            self.specs.needs_excel_sheet(),
                         )?;
                     }
                     if is_single_page {
@@ -231,7 +231,7 @@ impl Renderer for ItemRenderer {
                     name,
                     &self.specs.report_name,
                     &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
-                    self.specs.needs_excel_sheet()
+                    self.specs.needs_excel_sheet(),
                 )?;
             }
         }
@@ -294,7 +294,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("pages", &pages);
     context.insert("description", &description);
     context.insert("is_single_page", &is_single_page);
-    context.insert("has_excel_sheet",&has_excel_sheet);
+    context.insert("has_excel_sheet", &has_excel_sheet);
     context.insert(
         "tables",
         &tables
@@ -826,7 +826,7 @@ fn render_empty_dataset<P: AsRef<Path>>(
     context.insert("report_name", report_name);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
     context.insert("version", &env!("CARGO_PKG_VERSION"));
-    context.insert("has_excel_sheet",&has_excel_sheet);
+    context.insert("has_excel_sheet", &has_excel_sheet);
 
     let file_path =
         Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
@@ -1214,7 +1214,7 @@ fn render_plot_page<P: AsRef<Path>>(
 
     context.insert("data", &json!(records).to_string());
     context.insert("description", &item_spec.description);
-    context.insert("has_excel_sheet",&has_excel_sheet);
+    context.insert("has_excel_sheet", &has_excel_sheet);
     context.insert(
         "tables",
         &tables
@@ -1298,7 +1298,7 @@ fn render_html_page<P: AsRef<Path>>(
     context.insert("script", &script);
     context.insert("aux_libraries", &aux_libraries);
     context.insert("description", &item_spec.description);
-    context.insert("has_excel_sheet",&has_excel_sheet);
+    context.insert("has_excel_sheet", &has_excel_sheet);
     context.insert(
         "tables",
         &tables
