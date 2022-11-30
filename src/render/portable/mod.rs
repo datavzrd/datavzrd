@@ -101,6 +101,7 @@ impl Renderer for ItemRenderer {
                         &self.specs.views,
                         &self.specs.default_view,
                         &self.specs.report_name,
+                        self.specs.needs_excel_sheet()
                     )?;
                 // Render HTML
                 } else if let Some(table_specs) = &table.render_html {
@@ -115,6 +116,7 @@ impl Renderer for ItemRenderer {
                         table_specs.script_path.to_string(),
                         &self.specs.aux_libraries,
                         &self.specs.report_name,
+                        self.specs.needs_excel_sheet()
                     )?;
                 }
                 // Render table
@@ -184,6 +186,7 @@ impl Renderer for ItemRenderer {
                             &self.specs.views,
                             &self.specs.default_view,
                             is_single_page,
+                            self.specs.needs_excel_sheet()
                         )?;
                     }
                     if is_single_page {
@@ -228,10 +231,13 @@ impl Renderer for ItemRenderer {
                     name,
                     &self.specs.report_name,
                     &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
+                    self.specs.needs_excel_sheet()
                 )?;
             }
         }
-        render_excel_sheet(&self.specs, path)?;
+        if self.specs.needs_excel_sheet() {
+            render_excel_sheet(&self.specs, path)?;
+        }
         Ok(())
     }
 }
@@ -253,6 +259,7 @@ fn render_page<P: AsRef<Path>>(
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
     is_single_page: bool,
+    has_excel_sheet: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -287,6 +294,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("pages", &pages);
     context.insert("description", &description);
     context.insert("is_single_page", &is_single_page);
+    context.insert("has_excel_sheet",&has_excel_sheet);
     context.insert(
         "tables",
         &tables
@@ -803,6 +811,7 @@ fn render_empty_dataset<P: AsRef<Path>>(
     name: &str,
     report_name: &str,
     tables: &[String],
+    has_excel_sheet: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -817,6 +826,7 @@ fn render_empty_dataset<P: AsRef<Path>>(
     context.insert("report_name", report_name);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
     context.insert("version", &env!("CARGO_PKG_VERSION"));
+    context.insert("has_excel_sheet",&has_excel_sheet);
 
     let file_path =
         Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
@@ -1141,6 +1151,7 @@ fn render_plot_page<P: AsRef<Path>>(
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
     report_name: &String,
+    has_excel_sheet: bool,
 ) -> Result<()> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
@@ -1203,6 +1214,7 @@ fn render_plot_page<P: AsRef<Path>>(
 
     context.insert("data", &json!(records).to_string());
     context.insert("description", &item_spec.description);
+    context.insert("has_excel_sheet",&has_excel_sheet);
     context.insert(
         "tables",
         &tables
@@ -1248,6 +1260,7 @@ fn render_html_page<P: AsRef<Path>>(
     script_path: String,
     aux_libraries: &Option<Vec<String>>,
     report_name: &String,
+    has_excel_sheet: bool,
 ) -> Result<()> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
@@ -1285,6 +1298,7 @@ fn render_html_page<P: AsRef<Path>>(
     context.insert("script", &script);
     context.insert("aux_libraries", &aux_libraries);
     context.insert("description", &item_spec.description);
+    context.insert("has_excel_sheet",&has_excel_sheet);
     context.insert(
         "tables",
         &tables
@@ -1489,7 +1503,12 @@ fn render_excel_sheet<P: AsRef<Path>>(specs: &ItemsSpec, output_path: P) -> Resu
     );
 
     for (view, spec) in &specs.views {
-        if spec.render_plot.is_none() && spec.render_html.is_none() {
+        let export = if let Some(dataset) = &spec.dataset {
+            specs.datasets.get(dataset).unwrap().offer_excel
+        } else {
+            false
+        };
+        if spec.render_plot.is_none() && spec.render_html.is_none() && export {
             let mut rdr = csv::ReaderBuilder::new()
                 .has_headers(false)
                 .flexible(true)

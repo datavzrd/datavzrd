@@ -133,12 +133,13 @@ views:
 
 `datasets` defines the different datasets of the report. This is also the place to define links between your individual datasets.
 
-| keyword          | explanation                                                                                                                                                      | default |
-|------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------- |
-| path             | The path of the CSV/TSV file                                                                                                                                     |         |
-| separator        | The delimiter of the file                                                                                                                                        | ,       |
-| headers      | Number of header rows in the file                                                                                                                                | 1       |
-| [links](#links)  | Configuration linking between items                                                                                                                              |         |
+| keyword         | explanation                                    | default |
+|-----------------|------------------------------------------------|---------|
+| path            | The path of the CSV/TSV file                   |         |
+| separator       | The delimiter of the file                      | ,       |
+| headers         | Number of header rows in the file              | 1       |
+| [links](#links) | Configuration linking between items            |         |
+| offer-excel     | Whether to offer the dataset as an excel file. | false   |
 
 ### views
 
