@@ -139,7 +139,7 @@ views:
 | separator       | The delimiter of the file                      | ,       |
 | headers         | Number of header rows in the file              | 1       |
 | [links](#links) | Configuration linking between items            |         |
-| offer-excel     | Whether to offer the dataset as an excel file. | false   |
+| offer-excel     | Whether to offer the dataset as an excel worksheet. | false   |
 
 ### views
 
