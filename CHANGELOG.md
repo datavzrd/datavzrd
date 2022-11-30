@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.0](https://www.github.com/datavzrd/datavzrd/compare/v2.9.0...v2.10.0) (2022-11-30)
+
+
+### Features
+
+* Make excel export option configurable per dataset ([#276](https://www.github.com/datavzrd/datavzrd/issues/276)) ([c73a6b4](https://www.github.com/datavzrd/datavzrd/commit/c73a6b4beb2d36e5ff94679fe082bd26378847f6))
+
 ## [2.9.0](https://www.github.com/datavzrd/datavzrd/compare/v2.8.1...v2.9.0) (2022-11-17)
 
 
