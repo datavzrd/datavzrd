@@ -59,6 +59,10 @@ impl ItemsSpec {
         Ok(items_spec)
     }
 
+    pub(crate) fn needs_excel_sheet(&self) -> bool {
+        self.datasets.values().any(|dataset| dataset.offer_excel)
+    }
+
     pub(crate) fn validate(&self) -> Result<()> {
         if let Some(view) = &self.default_view {
             if self.views.get(view).is_none() {
@@ -278,6 +282,8 @@ pub(crate) struct DatasetSpecs {
     pub(crate) header_rows: usize,
     #[serde(default = "default_links")]
     pub(crate) links: Option<HashMap<String, LinkSpec>>,
+    #[serde(default)]
+    pub(crate) offer_excel: bool,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -775,6 +781,7 @@ mod tests {
             separator: ',',
             header_rows: 1,
             links: default_links(),
+            offer_excel: false,
         };
 
         let expected_table_spec = ItemSpecs {
@@ -845,6 +852,7 @@ mod tests {
             separator: ',',
             header_rows: 1,
             links: Some(expected_links),
+            offer_excel: false,
         };
 
         let expected_item_spec = ItemSpecs {
@@ -902,6 +910,7 @@ mod tests {
             separator: ',',
             header_rows: 1,
             links: Some(HashMap::from([])),
+            offer_excel: false,
         };
 
         let expected_item_spec = ItemSpecs {
@@ -988,6 +997,7 @@ mod tests {
                     separator: ',',
                     header_rows: 2,
                     links: Some(HashMap::from([])),
+                    offer_excel: false,
                 },
             )]),
             default_view: None,
