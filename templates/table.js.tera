@@ -191,8 +191,10 @@ $(document).ready(function() {
                let plot_data = [];
                let values = []
                for (row of table_rows) {
-                   plot_data.push({"value": parseFloat(row[title])});
-                   values.push(parseFloat(row[title]));
+                   if (row[title] != "" && row[title] != "NA") {
+                       plot_data.push({"value": parseFloat(row[title])});
+                       values.push(parseFloat(row[title]));
+                   }
                }
                let min = Math.min(...values);
                let max = Math.max(...values);

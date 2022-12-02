@@ -1,5 +1,5 @@
 use crate::render::portable::utils::minify_js;
-use crate::utils::column_type::{classify_table, ColumnType};
+use crate::utils::column_type::{classify_table, ColumnType, IsNa};
 use anyhow::{Context as AnyhowContext, Result};
 use csv::Reader;
 use itertools::Itertools;
@@ -167,7 +167,7 @@ fn generate_nominal_plot(
     for record in reader.records().skip(header_rows - 1) {
         let result = record?;
         let value = result.get(column_index).unwrap();
-        if !value.is_empty() {
+        if !value.is_na() {
             let entry = count_values.entry(value.to_owned()).or_insert_with(|| 0);
             *entry += 1;
         } else {
