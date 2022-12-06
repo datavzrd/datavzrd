@@ -143,9 +143,6 @@ $(document).ready(function() {
 
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
         let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-        let bars = [{% for title, bar in bar_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-        let heatmaps = [{% for title, custom_plot in heatmaps %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-        let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
         {% for title, custom_plot in custom_plots %}
         renderCustomPlotDetailView{{ loop.index0 }}(row[cp[{{ loop.index0 }}]], `#detail-plot-${index}-cp-{{ loop.index0 }}`);
         {% endfor %}
