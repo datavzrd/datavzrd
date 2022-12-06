@@ -2,6 +2,7 @@ name: My oscar report
 datasets:
   oscars:
     path: ".examples/data/oscars.csv"
+    offer-excel: true
     links:
       link to oscar plot:
         column: age
@@ -11,6 +12,7 @@ datasets:
         table-row: movies/Title
   movies:
     path: ".examples/data/movies.csv"
+    offer-excel: true
     links:
       link to oscar entry:
         column: Title

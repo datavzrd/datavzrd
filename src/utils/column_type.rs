@@ -15,7 +15,7 @@ pub(crate) enum ColumnType {
 
 impl ColumnType {
     fn update(&mut self, value: &str) -> Result<()> {
-        if !value.is_empty() {
+        if !value.is_na() {
             *self = match (
                 f64::from_str(value).is_ok(),
                 i64::from_str(value).is_ok(),
@@ -64,6 +64,16 @@ pub(crate) fn classify_table<P: AsRef<Path>>(
     }
 
     Ok(classification)
+}
+
+pub(crate) trait IsNa {
+    fn is_na(&self) -> bool;
+}
+
+impl IsNa for &str {
+    fn is_na(&self) -> bool {
+        self.is_empty() || self == &"NA"
+    }
 }
 
 #[cfg(test)]

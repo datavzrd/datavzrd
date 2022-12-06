@@ -1,5 +1,19 @@
 # Changelog
 
+### [2.10.1](https://www.github.com/datavzrd/datavzrd/compare/v2.10.0...v2.10.1) (2022-12-01)
+
+
+### Bug Fixes
+
+* Don't show empty values an NaN for numeric columns ([#278](https://www.github.com/datavzrd/datavzrd/issues/278)) ([4806d0c](https://www.github.com/datavzrd/datavzrd/commit/4806d0cc415a2cefb7b3ce334712f0a9d5e73bf1))
+
+## [2.10.0](https://www.github.com/datavzrd/datavzrd/compare/v2.9.0...v2.10.0) (2022-11-30)
+
+
+### Features
+
+* Make excel export option configurable per dataset ([#276](https://www.github.com/datavzrd/datavzrd/issues/276)) ([c73a6b4](https://www.github.com/datavzrd/datavzrd/commit/c73a6b4beb2d36e5ff94679fe082bd26378847f6))
+
 ## [2.9.0](https://www.github.com/datavzrd/datavzrd/compare/v2.8.1...v2.9.0) (2022-11-17)
 
 
