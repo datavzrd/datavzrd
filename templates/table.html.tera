@@ -22,6 +22,7 @@
 <script src="../static/vega-embed.min.js"></script>
 <script src="../static/lz-string.min.js"></script>
 <script src="../static/showdown.min.js"></script>
+<script src="../static/datavzrd.js"></script>
 <script src="table.js"></script>
 {% if is_single_page %}<script src="heatmap.js"></script>{% endif %}
 {% for title in titles %}

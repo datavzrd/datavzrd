@@ -1,3 +1,69 @@
+const config = {
+    "columns" : [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
+    "displayed_columns" : [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}],
+    "num" : [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}],
+    "dp_num" : [{% for title in titles %}{% if display_modes[title] == "normal" %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}],
+    "tick_titles" : [{% for title, tick_plot in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
+    "heatmap_titles" : [{% for title, hm in heatmaps %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
+    "links" : [{% for title, link_url in link_urls %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
+    {% for title in titles %}
+    "{{ title }}": {
+        "is_float": {{ is_float[title] | json_encode }}
+        {% if precisions[title] %},"precision": {{ precisions[title] }}{% endif %}
+    },
+    {% endfor %}
+    "detail_mode": {{ detail_mode }},
+    "header_label_length": {{ header_labels | length }},
+    "ticks": [
+        {% for title, tick_plot in tick_plots %}
+        {
+            "index": {{ loop.index0 }},
+            "title": "{{ title }}",
+            "slug_title": "{{ title | slugify }}",
+            "specs": {{ tick_plot }}
+        },
+        {% endfor %}
+    ],
+    "link_urls": [
+        {% for title, link_url in link_urls %}
+        {
+            "title": "{{ title }}",
+            "url": "{{ link_url }}"
+        },
+        {% endfor %}
+    ],
+    "ellipsis": [
+        {% for title, ellipsis in ellipses %}
+        {
+            "title": "{{ title }}",
+            "ellipsis": {{ ellipsis }}
+        },
+        {% endfor %}
+    ],
+    "bars": [
+        {% for title, bar_plot in bar_plots %}
+        {
+            "index": {{ loop.index0 }},
+            "title": "{{ title }}",
+            "slug_title": "{{ title | slugify }}",
+            "specs": {{ bar_plot }}
+        },
+        {% endfor %}
+    ],
+    "heatmaps": [
+        {% for title, tuple in heatmaps %}
+        {
+            "index": {{ loop.index0 }},
+            "title": "{{ title }}",
+            "slug_title": "{{ title | slugify }}",
+            "heatmap": {{ tuple.0 | json_encode }},
+            "domain": {{ tuple.1 | json_encode }},
+            "scale": vega.scale('{{ tuple.0.scale }}')(){% if tuple.0.scale != "ordinal" %}.clamp({{ tuple.0.clamp }}){% endif %}.domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %}),
+        },
+        {% endfor %}
+    ],
+}
+
 $(document).ready(function() {
     $('.table-container').show();
     $('.loading').hide();
@@ -37,16 +103,9 @@ $(document).ready(function() {
     })
 
     let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr><td {% if not detail_mode %}style='border: none !important;'{% endif%}>{% if header_labels[loop.index] %}<b>{{ header_labels[loop.index] }}</b>{% endif %}</td>{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
-    let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-    let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
-    let num = [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}];
-    let dp_num = [{% for title in titles %}{% if display_modes[title] == "normal" %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
-    let ticks = [{% for title, tick_plot in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-    let bars = [{% for title, bar_plot in bar_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-    let links = [{% for title, link_url in link_urls %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
 
-    var header_height = (80+6*Math.max(...(displayed_columns.map(el => el.length)))*Math.SQRT2)/2 {% if is_single_page %} + 45{% endif %};
+    var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2 {% if is_single_page %} + 45{% endif %};
     $('th').css("height", header_height);
 
     var table_rows = [];
@@ -55,7 +114,7 @@ $(document).ready(function() {
         var i = 0;
         row = {};
         for (const element of r) {
-            row[columns[i]] = element;
+            row[config.columns[i]] = element;
             i++;
         }
         if (linkouts != null) {
@@ -84,38 +143,40 @@ $(document).ready(function() {
 
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
         let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-        let ticks = [{% for title, tick in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-        let bars = [{% for title, bar in bar_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-        let heatmaps = [{% for title, custom_plot in heatmaps %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-        let columns = [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
         {% for title, custom_plot in custom_plots %}
         renderCustomPlotDetailView{{ loop.index0 }}(row[cp[{{ loop.index0 }}]], `#detail-plot-${index}-cp-{{ loop.index0 }}`);
         {% endfor %}
-        {% for title, tuple in heatmaps %}
-        {% if tuple.0.custom_content %}
-        var custom_func{{ loop.index0 }} =  {{ tuple.0.custom_content }};
-        colorizeDetailCard{{ loop.index0 }}(custom_func{{ loop.index0 }}(row[heatmaps[{{ loop.index0 }}]], row), `#heatmap-${index}-{{ loop.index0 }}`);
-        {% else %}
-        colorizeDetailCard{{ loop.index0 }}(row[heatmaps[{{ loop.index0 }}]], `#heatmap-${index}-{{ loop.index0 }}`);
-        {% endif %}
-        {% endfor %}
-        {% for title, tick_plot in tick_plots %}
-        renderDetailTickPlots{{ loop.index0 }}(row[ticks[{{ loop.index0 }}]], `#detail-plot-${index}-ticks-{{ loop.index0 }}`);
-        {% endfor %}
-        {% for title, bar_plot in bar_plots %}
-        renderDetailBarPlots{{ loop.index0 }}(row[bars[{{ loop.index0 }}]], `#detail-plot-${index}-bars-{{ loop.index0 }}`);
-        {% endfor %}
+
+        for (o of config.heatmaps) {
+            if (o.heatmap.custom_func) {
+                colorizeDetailCard(custom_func(row[o.title], row), `#heatmap-${index}-${o.index}`, o.scale);
+            } else {
+                colorizeDetailCard(row[o.title], `#heatmap-${index}-${o.index}`, o.scale);
+            }
+        }
+
+        for (o of config.ticks) {
+            if (!config.displayed_columns.includes(o.title)) {
+                renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-ticks-${o.index}`, o.specs, o.title);
+            }
+        }
+
+        for (o of config.bars) {
+            if (!config.displayed_columns.includes(o.title)) {
+                renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-bars-${o.index}`, o.specs, o.title);
+            }
+        }
     })
 
     window.addEventListener('beforeprint', (event) => {
         setTimeout(function (){
             $('#table').bootstrapTable('togglePagination');
-            render(additional_headers, displayed_columns, table_rows, columns);
+            render(additional_headers, config.displayed_columns, table_rows, config.columns, config);
             $('th').css("height", header_height - 15);
             {% if detail_mode %}
                 $(`table > tbody > tr td:nth-child(1)`).each(function() {this.style.setProperty("display", "none");});
             {% endif %}
-            if (links.length > 0) {
+            if (config.length > 0) {
             $(`table > tbody > tr td:last-child`).each(function() {this.style.setProperty("display", "none");});
             $("table > thead > tr th:last-child").css("display", "none");
             }
@@ -130,7 +191,7 @@ $(document).ready(function() {
             field = temp[0].dataset.value;
         }
         var marker = { "bin_start": field};
-        var index = columns.indexOf(col);
+        var index = config.columns.indexOf(col);
         switch (index) {
             {% for title in titles %}case {{ loop.index0 }}:
                 if (plot_{{ loop.index0 }}["layer"].length > 1) {
@@ -143,9 +204,9 @@ $(document).ready(function() {
             {% endfor %}
         }
     });
-    addNumClass(dp_num, additional_headers.length);
+    addNumClass(config.dp_num, additional_headers.length);
 
-    render(additional_headers, displayed_columns, table_rows, columns);
+    render(additional_headers, config.displayed_columns, table_rows, config.columns, config);
 
     {% if not detail_mode and not header_labels | length == 0 %}
     $("table > thead > tr:first-child th:first-child").css("visibility", "hidden");
@@ -185,9 +246,9 @@ $(document).ready(function() {
 
    function render_brush_plots(reset) {
    let tick_brush = 0;
-       for (title of displayed_columns) {
+       for (title of config.displayed_columns) {
            let index = tick_brush + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-           if (dp_num[tick_brush]) {
+           if (config.dp_num[tick_brush]) {
                let plot_data = [];
                let values = []
                for (row of table_rows) {
@@ -198,7 +259,7 @@ $(document).ready(function() {
                }
                let min = Math.min(...values);
                let max = Math.max(...values);
-               if (brush_domains[title] != undefined && ticks.includes(title)) {
+               if (brush_domains[title] != undefined && config.tick_titles.includes(title)) {
                    min = Math.min(...brush_domains[title]);
                    max = Math.max(...brush_domains[title]);
                } else if (aux_domains[title] != undefined) {
@@ -260,7 +321,7 @@ $(document).ready(function() {
 
 
     function customFilter(row, filter) {
-        for (title of displayed_columns) {
+        for (title of config.displayed_columns) {
             if (filter_boundaries[title] !== undefined && !$.isEmptyObject(filter_boundaries[title])) {
                 if (row[title] < filter_boundaries[title]['value'][0] || row[title] > filter_boundaries[title]['value'][1]) {
                     return false;
@@ -291,7 +352,7 @@ $(document).ready(function() {
 
     {% if is_single_page %}$('#table').on('page-change.bs.table', (number, size) => {
         setTimeout(function (){
-        render(additional_headers, displayed_columns, table_rows, columns);
+        render(additional_headers, config.displayed_columns, table_rows, config.columns, config);
         }, 0);
     }){% endif %}
 
@@ -314,25 +375,6 @@ $(document).ready(function() {
         // $('#table').bootstrapTable('resetView',{height: he});
     })
 });
-
-function renderMarkdownDescription() {
-    var innerDescription = document.getElementById('innerDescription');
-    var converter = new showdown.Converter();
-    converter.setFlavor('github');
-    innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
-}
-
-function precision_formatter(precision, value) {
-    if (value == "") {
-        return "";
-    }
-    value = parseFloat(value)
-    if (1 / (10 ** precision) < Math.abs(value) || value == 0) {
-        return value.toFixed(precision).toString()
-    } else {
-        return value.toExponential(precision)
-    }
-}
 
 {% for title, custom_plot in custom_plots %}
 function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
@@ -364,122 +406,6 @@ function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
 }
 {% endfor %}
 
-{% for title, tick_plot in tick_plots %}
-function renderTickPlots{{ loop.index0 }}(ah, columns) {
-    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-    let detail_mode = columns.indexOf("{{ title }}") == -1;
-    var specs =  {{ tick_plot }};
-    let row = 0;
-    let table_rows = $('#table').bootstrapTable('getData');
-    $(`table > tbody > tr td:nth-child(${index})`).each(
-        function() {
-            var id = `{{ title | slugify }}-${row}`;
-            this.classList.add("plotcell");
-            const div = document.createElement("div");
-            let value = table_rows[row]["{{ title }}"];
-            {% if precisions[title] and is_float[title] %}
-            value = precision_formatter({{ precisions[title] }},value);{% endif %}
-            if (value != "" && !detail_mode) {
-                this.innerHTML = "";
-                this.appendChild(div);
-                var data = [{"{{ title }}": value}];
-                var s = specs;
-                s.data = {};
-                s.data.values = data;
-                var opt = {"actions": false};
-                vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
-            }
-            row++;
-        }
-    );
-}
-{% endfor %}
-
-{% for title, bar_plot in bar_plots %}
-function renderBarPlots{{ loop.index0 }}(ah, columns) {
-    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-    let detail_mode = columns.indexOf("{{ title }}") == -1;
-    var specs =  {{ bar_plot }};
-    let row = 0;
-    let table_rows = $('#table').bootstrapTable('getData');
-    $(`table > tbody > tr td:nth-child(${index})`).each(
-        function() {
-            var id = `{{ title | slugify }}-${row}`;
-            this.classList.add("plotcell");
-            const div = document.createElement("div");
-            let value = table_rows[row]["{{ title }}"];
-            {% if precisions[title] and is_float[title] %}
-            value = precision_formatter({{ precisions[title] }},value);{% endif %}
-            if (value != "" && !detail_mode) {
-                this.innerHTML = "";
-                this.appendChild(div);
-                var data = [{"{{ title }}": value}];
-                var s = specs;
-                s.data = {};
-                s.data.values = data;
-                var opt = {"actions": false};
-                vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
-            }
-            row++;
-        }
-    );
-}
-{% endfor %}
-
-{% for title, tick_plot in tick_plots %}
-function renderDetailTickPlots{{ loop.index0 }}(value, div) {
-    var specs =  {{ tick_plot }};
-    if (value != "") {
-        var data = [{"{{ title }}": value}];
-        var s = specs;
-        s.data = {};
-        s.data.values = data;
-        var opt = {"actions": true};
-        vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
-    }
-}
-{% endfor %}
-
-{% for title, bar_plot in bar_plots %}
-function renderDetailBarPlots{{ loop.index0 }}(value, div) {
-    var specs =  {{ bar_plot }};
-    if (value != "") {
-        var data = [{"{{ title }}": value}];
-        var s = specs;
-        s.data = {};
-        s.data.values = data;
-        var opt = {"actions": true};
-        vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
-    }
-}
-{% endfor %}
-
-{% for title, tuple in heatmaps %}
-function colorizeColumn{{ loop.index0 }}(ah, columns) {
-    let detail_mode = columns.indexOf("{{ title }}") == -1;
-    let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-    var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
-    var scale = {{ tuple.0.scale }}(){% if tuple.0.scale != "ordinal" %}.clamp({{ tuple.0.clamp }}){% endif %}.domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
-    let row = 0;
-    var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
-    {% if tuple.0.custom_content %}
-    var custom_func = {{ tuple.0.custom_content }};
-    {% endif %}
-    $(`table > tbody > tr td:nth-child(${index})`).each(
-        function() {
-            var value = table_rows[row]["{{ title }}"];
-            {% if tuple.0.custom_content %}
-            value = custom_func(value, table_rows[row]);
-            {% endif %}
-            if (value !== "" && !detail_mode) {
-                this.style.setProperty("background-color", scale(value), "important");
-            }
-            row++;
-        }
-    );
-}
-{% endfor %}
-
 {% for row, heatmap in header_heatmaps %}
 function colorizeHeaderRow{{ loop.index0 }}() {
     var {{ heatmap.scale }} = vega.scale('{{ heatmap.scale }}');
@@ -499,49 +425,11 @@ function colorizeHeaderRow{{ loop.index0 }}() {
 {% endfor %}
 
 {% for title, tuple in heatmaps %}
-function colorizeDetailCard{{ loop.index0 }}(value, div) {
-    var {{ tuple.0.scale }} = vega.scale('{{ tuple.0.scale }}');
-    var scale = {{ tuple.0.scale }}(){% if tuple.0.scale != "ordinal" %}.clamp({{ tuple.0.clamp }}){% endif %}.domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
+function colorizeDetailCard(value, div, scale) {
     if (value !== "") {
         $(`${div}`).css( "background-color", scale(value) );
     }
 }
-{% endfor %}
-
-{% for title, ellipsis in ellipses %}
-    function shortenColumn{{ loop.index0 }}(ah, columns) {
-        let index = columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-        let row = 0;
-        $(`table > tbody > tr td:nth-child(${index})`).each(
-            function() {
-                value = this.innerHTML;
-                if (value.length > {{ ellipsis }}) {
-                    this.innerHTML = `${value.substring(0,{{ ellipsis }})}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${value}</div>'>...</a>`;
-                }
-                row++;
-            }
-        );
-    }
-{% endfor %}
-
-{% for title, link_url in link_urls %}
-    function linkUrlColumn{{ loop.index0 }}(ah, dp_columns, columns) {
-        let index = dp_columns.indexOf("{{ title }}") + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-        let link_url = "{{ link_url }}";
-        let table_rows = $('#table').bootstrapTable('getData');
-        $(`table > tbody > tr td:nth-child(${index})`).each(
-            function() {
-                let row = this.parentElement.dataset.index;
-                let value = table_rows[row]["{{ title }}"];
-                let link = link_url.replaceAll("{value}", value);
-                for (column of columns) {
-                {% raw %}link = link.replaceAll(`{${column}}`, table_rows[row][column]);{% endraw %}
-                }
-                this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
-                row++;
-            }
-        );
-    }
 {% endfor %}
 
 function embedSearch(index) {
@@ -554,7 +442,6 @@ function detailFormatter(index, row) {
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let ticks = [{% for title, tick in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let bars = [{% for title, bar in bar_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-    let heatmaps = [{% for title, custom_plot in heatmaps %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
     let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     let hidden_columns = [{% for title in titles %}{% if display_modes[title] == "hidden" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     var html = []
@@ -577,8 +464,8 @@ function detailFormatter(index, row) {
                    </div>
                  </div>`;
                 html.push(card);
-            } else if (heatmaps.includes(key)) {
-               id = `heatmap-${index}-${heatmaps.indexOf(key)}`;
+            } else if (config.heatmap_titles.includes(key)) {
+               id = `heatmap-${index}-${config.heatmap_titles.indexOf(key)}`;
                var card = `<div class="card">
                   <div class="card-header">
                     ${key}
@@ -633,30 +520,40 @@ function addNumClass(dp_num, ah) {
     }
 }
 
-function render(additional_headers, displayed_columns, table_rows, columns) {
+function render(additional_headers, displayed_columns, table_rows, columns, config) {
 {% for title, custom_plot in custom_plots %}
     renderCustomPlots{{ loop.index0 }}(additional_headers.length, displayed_columns);
 {% endfor %}
 
-{% for title, tick_plot in tick_plots %}
-    renderTickPlots{{ loop.index0 }}(additional_headers.length, displayed_columns);
-{% endfor %}
+for (o of config.ticks) {
+    if (displayed_columns.includes(o.title)) {
+        renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, o.is_float, o.precision, config.detail_mode, config.header_label_length);
+    }
+}
 
-{% for title, bar_plot in bar_plots %}
-    renderBarPlots{{ loop.index0 }}(additional_headers.length, displayed_columns);
-{% endfor %}
+for (o of config.bars) {
+    if (displayed_columns.includes(o.title)) {
+        renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, o.is_float, o.precision, config.detail_mode, config.header_label_length);
+    }
+}
 
-{% for title, link_url in link_urls %}
-    linkUrlColumn{{ loop.index0 }}(additional_headers.length, displayed_columns, columns);
-{% endfor %}
+for (o of config.link_urls) {
+    if (displayed_columns.includes(o.title)) {
+        linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.url, config.detail_mode, config.header_label_length);
+    }
+}
 
-{% for title, tick_plot in heatmaps %}
-    colorizeColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
-{% endfor %}
+for (o of config.heatmaps) {
+    if (displayed_columns.includes(o.title)) {
+        colorizeColumn(additional_headers.length, displayed_columns, o.title, o.heatmap, o.scale, config.detail_mode, config.header_label_length);
+    }
+}
 
-{% for title, ellipsis in ellipses %}
-    shortenColumn{{ loop.index0 }}(additional_headers.length, displayed_columns);
-{% endfor %}
+for (o of config.ellipsis) {
+    if (displayed_columns.includes(o.title)) {
+        shortenColumn(additional_headers.length, displayed_columns, o.title, o.ellipsis, config.detail_mode, config.header_label_length);
+    }
+}
 
 {% for row, heatmap in header_heatmaps %}
     colorizeHeaderRow{{ loop.index0 }}();
