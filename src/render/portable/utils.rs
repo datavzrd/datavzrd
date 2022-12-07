@@ -70,6 +70,7 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
             "bootstrap-select.min.css",
             include_str!("../../../static/bootstrap-select.min.css"),
         ),
+        ("datavzrd.js", include_str!("../../../static/datavzrd.js")),
     ];
 
     for (name, file) in files {
