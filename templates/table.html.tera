@@ -22,6 +22,7 @@
 <script src="../static/vega-embed.min.js"></script>
 <script src="../static/lz-string.min.js"></script>
 <script src="../static/showdown.min.js"></script>
+<script src="../static/qrcode.min.js"></script>
 <script src="../static/datavzrd.js"></script>
 <script src="table.js"></script>
 {% if is_single_page %}<script src="heatmap.js"></script>{% endif %}
@@ -144,7 +145,25 @@
                     </div>
                 </div>
             </div>
-            {% endfor %}
+            {% endfor %}<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="qr-modal" aria-hidden="true">
+            <div class="modal-dialog modal-sm" id="modal-dialog-qr">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Share data</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-right small">Scan the QR code to view the shared data</p>
+                        <div id="qr-code">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% if is_single_page %}
             <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="heatmap-plot-modal" aria-hidden="true">
                 <div class="modal-dialog modal-lg" id="modal-dialog-heatmap">
@@ -158,9 +177,10 @@
                         <div class="modal-body">
                             <p class="text-right small">Click "..."-button for export options</p>
                             <div id="heatmap-plot">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
                         </div>
                     </div>
                 </div>
