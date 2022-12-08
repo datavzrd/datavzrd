@@ -504,7 +504,8 @@ function detailFormatter(index, row) {
 
 function shareRow(index) {
     console.log($('#table').bootstrapTable('getData')[index]);
-    $('#qr-modal').modal('show')
+    $('#qr-modal').modal('show');
+    document.getElementById("qr-code").innerHTML = "";
     new QRCode(document.getElementById("qr-code"), "https://github.com/datavzrd/datavzrd");
     console.log(index);
 }
