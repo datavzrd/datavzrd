@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.0](https://www.github.com/datavzrd/datavzrd/compare/v2.10.1...v2.11.0) (2022-12-07)
+
+
+### Features
+
+* Optimize NA value recognition ([#280](https://www.github.com/datavzrd/datavzrd/issues/280)) ([69ce037](https://www.github.com/datavzrd/datavzrd/commit/69ce037190074ae639af5f47ccb212f774d84151))
+
 ### [2.10.1](https://www.github.com/datavzrd/datavzrd/compare/v2.10.0...v2.10.1) (2022-12-01)
 
 
