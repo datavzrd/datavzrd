@@ -140,6 +140,7 @@ $(document).ready(function() {
         var heatmap_data = JSON.parse(JSON.stringify(table_rows));
         for (const r of heatmap_data) {
             if (r.hasOwnProperty('linkouts')) delete r['linkouts']
+            if (r.hasOwnProperty('share')) delete r['share']
             r.index = i;
             i++;
         }
@@ -456,7 +457,7 @@ function detailFormatter(index, row) {
     let hidden_columns = [{% for title in titles %}{% if display_modes[title] == "hidden" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
     var html = []
     $.each(row, function (key, value) {
-        if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts") {
+        if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share") {
             if (cp.includes(key) || ticks.includes(key) || bars.includes(key)) {
                 if (cp.includes(key)) {
                     id = `detail-plot-${index}-cp-${cp.indexOf(key)}`;
@@ -503,11 +504,16 @@ function detailFormatter(index, row) {
 {% endif %}
 
 function shareRow(index) {
-    console.log($('#table').bootstrapTable('getData')[index]);
+    var data = $('#table').bootstrapTable('getData')[index];
+    var c = JSON.parse(JSON.stringify(config));
+    c["data"] = data;
     $('#qr-modal').modal('show');
     document.getElementById("qr-code").innerHTML = "";
-    new QRCode(document.getElementById("qr-code"), "https://github.com/datavzrd/datavzrd");
-    console.log(index);
+    compressed = LZString.compressToEncodedURIComponent(JSON.stringify(c));
+    url = `https://datavzrd.github.io/datavzrd/oscars/index_1.html?data=${compressed}`;
+    console.log(url.length);
+    $('#open-url').attr("href", url);
+    new QRCode(document.getElementById("qr-code"), url);
 }
 
 {% for title, custom_plot in custom_plots %}
