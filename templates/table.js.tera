@@ -58,7 +58,6 @@ const config = {
             "slug_title": "{{ title | slugify }}",
             "heatmap": {{ tuple.0 | json_encode }},
             "domain": {{ tuple.1 | json_encode }},
-            "scale": vega.scale('{{ tuple.0.scale }}')(){% if tuple.0.scale != "ordinal" %}.clamp({{ tuple.0.clamp }}){% endif %}.domain({{ tuple.1 }}).range({% if tuple.0.color_scheme %}vega.scheme('{{ tuple.0.color_scheme }}'){% else %}[{% for color in tuple.0.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %}),
         },
         {% endfor %}
     ],
@@ -160,9 +159,9 @@ $(document).ready(function() {
 
         for (o of config.heatmaps) {
             if (o.heatmap.custom_func) {
-                colorizeDetailCard(custom_func(row[o.title], row), `#heatmap-${index}-${o.index}`, o.scale);
+                colorizeDetailCard(custom_func(row[o.title], row), `#heatmap-${index}-${o.index}`, o);
             } else {
-                colorizeDetailCard(row[o.title], `#heatmap-${index}-${o.index}`, o.scale);
+                colorizeDetailCard(row[o.title], `#heatmap-${index}-${o.index}`, o);
             }
         }
 
@@ -435,14 +434,6 @@ function colorizeHeaderRow{{ loop.index0 }}() {
 }
 {% endfor %}
 
-{% for title, tuple in heatmaps %}
-function colorizeDetailCard(value, div, scale) {
-    if (value !== "") {
-        $(`${div}`).css( "background-color", scale(value) );
-    }
-}
-{% endfor %}
-
 function embedSearch(index) {
     var source = `search/column_${index}.html`;
     document.getElementById('search-iframe').setAttribute("src",source);
@@ -510,7 +501,7 @@ function shareRow(index) {
     $('#qr-modal').modal('show');
     document.getElementById("qr-code").innerHTML = "";
     compressed = LZString.compressToEncodedURIComponent(JSON.stringify(c));
-    url = `https://datavzrd.github.io/datavzrd/oscars/index_1.html?data=${compressed}`;
+    url = `https://datavzrd.github.io/view/?config=${compressed}`;
     console.log(url.length);
     $('#open-url').attr("href", url);
     new QRCode(document.getElementById("qr-code"), url);
@@ -569,7 +560,7 @@ for (o of config.link_urls) {
 
 for (o of config.heatmaps) {
     if (displayed_columns.includes(o.title)) {
-        colorizeColumn(additional_headers.length, displayed_columns, o.title, o.heatmap, o.scale, config.detail_mode, config.header_label_length);
+        colorizeColumn(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
     }
 }
 

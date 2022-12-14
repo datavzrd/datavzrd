@@ -99,17 +99,58 @@ function renderDetailTickBarPlot(value, div, specs, title) {
     }
 }
 
-function colorizeColumn(ah, columns, title, heatmap, scale, detail_mode, header_label_length) {
-    let index = columns.indexOf(title) + 1;
+function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) {
+    let index = columns.indexOf(heatmap.title) + 1;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
     }
     let row = 0;
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
-    var custom_func = heatmap.custom_content;
+    var custom_func = heatmap.heatmap.custom_content;
+
+    let scale = null;
+
+    if (heatmap.heatmap.scale == "ordinal") {
+        if (heatmap.heatmap.domain != null) {
+            if (heatmap.heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
+            } else if (!heatmap.heatmap.range.length == 0) {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
+            }
+        } else {
+            if (heatmap.heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.heatmap.scale)().range(vega.scheme(heatmap.heatmap.color_scheme));
+            } else if (!heatmap.heatmap.range.length == 0) {
+                scale = vega.scale(heatmap.heatmap.scale)().range(heatmap.heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.heatmap.scale)();
+            }
+        }
+    } else {
+        if (heatmap.heatmap.domain != null) {
+            if (heatmap.heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
+            } else if (!heatmap.heatmap.range == 0) {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp);
+            }
+        } else {
+            if (heatmap.heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
+            } else if (!heatmap.heatmap.range == 0) {
+                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp);
+            }
+        }
+    }
+
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
-            var value = table_rows[row][title];
+            var value = table_rows[row][heatmap.title];
             if (custom_func !== null) {
                 value = custom_func(value, table_rows[row]);
             }
@@ -157,4 +198,50 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_url, detail_mode, he
             row++;
         }
     );
+}
+
+function colorizeDetailCard(value, div, heatmap) {
+    let scale = null;
+
+    if (heatmap.heatmap.scale == "ordinal") {
+        if (heatmap.heatmap.domain != null) {
+            if (heatmap.heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
+            } else if (!heatmap.heatmap.range.length == 0) {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
+            }
+        } else {
+            if (heatmap.heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.heatmap.scale)().range(vega.scheme(heatmap.heatmap.color_scheme));
+            } else if (!heatmap.heatmap.range.length == 0) {
+                scale = vega.scale(heatmap.heatmap.scale)().range(heatmap.heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.heatmap.scale)();
+            }
+        }
+    } else {
+        if (heatmap.heatmap.domain != null) {
+            if (heatmap.heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
+            } else if (!heatmap.heatmap.range == 0) {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp);
+            }
+        } else {
+            if (heatmap.heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
+            } else if (!heatmap.heatmap.range == 0) {
+                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp);
+            }
+        }
+    }
+
+    if (value !== "") {
+        $(`${div}`).css( "background-color", scale(value) );
+    }
 }
