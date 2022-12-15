@@ -1,9 +1,11 @@
 const config = {
     "columns" : [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
     "displayed_columns" : [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}],
+    "hidden_columns" : [{% for title in titles %}{% if display_modes[title] == "hidden" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}],
     "num" : [{% for title in titles %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endfor %}],
     "dp_num" : [{% for title in titles %}{% if display_modes[title] == "normal" %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}],
     "tick_titles" : [{% for title, tick_plot in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
+    "bar_titles" : [{% for title, tick_plot in bar_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
     "heatmap_titles" : [{% for title, hm in heatmaps %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
     "links" : [{% for title, link_url in link_urls %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
     {% for title in titles %}
