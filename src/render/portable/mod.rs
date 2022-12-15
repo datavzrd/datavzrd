@@ -1030,7 +1030,7 @@ fn render_bar_plot(
     Ok(templates.render("bar_plot.vl.tera", &context)?)
 }
 
-fn get_column_domain(
+pub(crate) fn get_column_domain(
     title: &str,
     csv_path: &Path,
     separator: char,
