@@ -64,6 +64,7 @@ const heatmap_plot = {
                             {% if scales[column] %}"type": "{{ scales[column] }}",{% endif %}
                             {% if schemes[column] %}"scheme": "{{ schemes[column] }}",{% elif not ranges[column] and types[column] == "quantitative" %}"scheme": "blues",{% endif %}
                             {% if ranges[column] %}"range": {{ ranges[column] | json_encode }},{% endif %}
+                            {% if clamps[column] and scales[column] != "ordinal" %}"clamp": {{ clamps[column] | json_encode }},{% endif %}
                         },{% endif %}
                         {% if marks[column] != "text" %}"legend": {% if remove_legend[column] or not plot_legend[column] %}null{% else %}{
                             "orient": "bottom",
