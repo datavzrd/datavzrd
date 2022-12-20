@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.11.1](https://www.github.com/datavzrd/datavzrd/compare/v2.11.0...v2.11.1) (2022-12-20)
+
+
+### Bug Fixes
+
+* Add missing clamp parameter to heatmap plot ([#294](https://www.github.com/datavzrd/datavzrd/issues/294)) ([c6b0ee3](https://www.github.com/datavzrd/datavzrd/commit/c6b0ee34fce555ba980a225c45bdc4f00478a5f9))
+* Fix wrong data values for tick and bar plots ([#290](https://www.github.com/datavzrd/datavzrd/issues/290)) ([3d5086a](https://www.github.com/datavzrd/datavzrd/commit/3d5086aa9ccef1e6b5eeb4177edaa051660d46c7))
+
 ## [2.11.0](https://www.github.com/datavzrd/datavzrd/compare/v2.10.1...v2.11.0) (2022-12-07)
 
 
