@@ -80,6 +80,7 @@ const heatmap_plot = {
                             "type": "ordinal",
                             
                             "range": ["#add8e6","#ffb6c1"],
+                            
                         },
                         "legend": null
                     }
@@ -216,6 +217,7 @@ const heatmap_plot = {
                             "domain": [20.0,100.0],
                             "type": "linear",
                             "scheme": "blues",
+                            
                             
                         },
                         "legend": null

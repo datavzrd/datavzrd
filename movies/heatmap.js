@@ -118,6 +118,7 @@ const heatmap_plot = {
                             "type": "ordinal",
                             "scheme": "accent",
                             
+                            
                         },
                         "legend": null
                     }
