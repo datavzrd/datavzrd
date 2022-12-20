@@ -454,6 +454,14 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .filter(|(_, s)| !s.is_empty())
         .collect();
 
+    let clamps: HashMap<_, _> = render_columns
+        .iter()
+        .filter(|(_, r)| r.plot.is_some())
+        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
+        .filter(|(_, p)| p.heatmap.is_some())
+        .map(|(t, p)| (t, &p.heatmap.as_ref().unwrap().clamp))
+        .collect();
+
     let remove_legend: HashMap<_, _> = titles
         .iter()
         .tuple_windows()
@@ -498,6 +506,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
     context.insert("ranges", &ranges);
     context.insert("schemes", &schemes);
     context.insert("scales", &scales);
+    context.insert("clamps", &clamps);
     context.insert("columns", &columns);
     context.insert("types", &column_types);
     context.insert("marks", &marks);
