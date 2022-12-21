@@ -23,7 +23,7 @@ function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precisi
         index += 1;
     }
     let row = 0;
-    let table_rows = $('#table').bootstrapTable('getData');
+    let table_rows = $('#table').bootstrapTable('getData', {useCurrentPage: true});
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             var id = `${slug_title}-${row}`;
@@ -57,7 +57,7 @@ function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precisio
         index += 1;
     }
     let row = 0;
-    let table_rows = $('#table').bootstrapTable('getData');
+    let table_rows = $('#table').bootstrapTable('getData', {useCurrentPage: true});
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             var id = `${slug_title}-${row}`;
