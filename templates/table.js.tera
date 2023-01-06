@@ -498,13 +498,17 @@ function detailFormatter(index, row) {
 
 function shareRow(index) {
     var data = $('#table').bootstrapTable('getData')[index];
+    delete data["linkouts"];
     var c = JSON.parse(JSON.stringify(config));
+    const packer = new jsonm.Packer();
+    let packedMessage = packer.pack(c);
     c["data"] = data;
+    compressed = LZString.compressToEncodedURIComponent(JSON.stringify(packedMessage))
     $('#qr-modal').modal('show');
     document.getElementById("qr-code").innerHTML = "";
-    compressed = LZString.compressToEncodedURIComponent(JSON.stringify(c));
     url = `https://datavzrd.github.io/view/?config=${compressed}`;
     console.log(url.length);
+    console.log(url);
     $('#open-url').attr("href", url);
     new QRCode(document.getElementById("qr-code"), url);
 }
