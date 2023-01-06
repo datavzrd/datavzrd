@@ -352,7 +352,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .filter(|t| !hidden_columns.contains(t))
         .collect_vec();
 
-    let table_classes = classify_table(csv_path, separator)?;
+    let table_classes = classify_table(csv_path, separator, header_rows)?;
     let column_types: HashMap<_, _> = table_classes
         .iter()
         .map(|(t, c)| match c {
@@ -574,10 +574,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     )?;
     let mut context = Context::new();
 
-    let header_row_length = additional_headers
-        .clone()
-        .unwrap_or_else(|| vec![StringRecord::from(vec![""])])
-        .len();
+    let header_row_length = additional_headers.clone().unwrap_or_default().len() + 1;
 
     let formatters: HashMap<String, String> = render_columns
         .iter()
@@ -585,12 +582,12 @@ fn render_table_javascript<P: AsRef<Path>>(
         .map(|(k, v)| (k.to_owned(), v.custom.as_ref().unwrap().to_owned()))
         .collect();
 
-    let numeric: HashMap<String, bool> = classify_table(csv_path, separator)?
+    let numeric: HashMap<String, bool> = classify_table(csv_path, separator, header_row_length)?
         .iter()
         .map(|(k, v)| (k.to_owned(), v.is_numeric()))
         .collect();
 
-    let is_float: HashMap<String, bool> = classify_table(csv_path, separator)?
+    let is_float: HashMap<String, bool> = classify_table(csv_path, separator, header_row_length)?
         .iter()
         .map(|(k, v)| (k.to_owned(), *v == ColumnType::Float))
         .collect();
