@@ -102,7 +102,8 @@ impl ItemsSpec {
                         .delimiter(dataset.separator as u8)
                         .from_path(&dataset.path)?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                    let column_types = classify_table(&dataset.path, dataset.separator, dataset.header_rows)?;
+                    let column_types =
+                        classify_table(&dataset.path, dataset.separator, dataset.header_rows)?;
                     for (column, render_columns) in &render_table.columns {
                         if !titles.contains(column) && !render_columns.optional {
                             warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
