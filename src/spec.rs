@@ -1,8 +1,9 @@
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
-    ConflictingConfiguration, LinkToMissingView, LogScaleIncludesZero, MissingColumn,
-    PlotAndTablePresentConfiguration, ValueOutsideDomain,
+    ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
+    MissingColumn, PlotAndTablePresentConfiguration, ValueOutsideDomain,
 };
+use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::Result;
 use anyhow::{bail, Context};
 use derefable::Derefable;
@@ -101,6 +102,7 @@ impl ItemsSpec {
                         .delimiter(dataset.separator as u8)
                         .from_path(&dataset.path)?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+                    let column_types = classify_table(&dataset.path, dataset.separator)?; // TODO: Add dataset.header_rows as third parameter when #298 is merged
                     for (column, render_columns) in &render_table.columns {
                         if !titles.contains(column) && !render_columns.optional {
                             warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
@@ -141,16 +143,34 @@ impl ItemsSpec {
                                 tick_plot.domain.clone()
                             } else if let Some(bar_plot) = &plot_spec.bar_plot {
                                 bar_plot.domain.clone()
+                            } else if let Some(heatmap) = &plot_spec.heatmap {
+                                if let Some(domain) = &heatmap.domain {
+                                    if let Some(colum_type) = column_types.get(column) {
+                                        if colum_type == &ColumnType::Float {
+                                            Some(
+                                                domain
+                                                    .iter()
+                                                    .map(|d| f32::from_str(d).unwrap())
+                                                    .collect_vec(),
+                                            )
+                                        } else {
+                                            None
+                                        }
+                                    } else {
+                                        None
+                                    }
+                                } else {
+                                    None
+                                }
                             } else {
                                 None
                             };
                             let scale_type = if let Some(tick_plot) = &plot_spec.tick_plot {
                                 Some(tick_plot.scale_type)
+                            } else if let Some(bar_plot) = &plot_spec.bar_plot {
+                                Some(bar_plot.scale_type)
                             } else {
-                                plot_spec
-                                    .bar_plot
-                                    .as_ref()
-                                    .map(|bar_plot| bar_plot.scale_type)
+                                plot_spec.heatmap.as_ref().map(|heatmap| heatmap.scale_type)
                             };
                             if let Some(domain) = domain {
                                 let mut reader = csv::ReaderBuilder::new()
@@ -170,6 +190,15 @@ impl ItemsSpec {
                                                 value
                                             })
                                         }
+                                        if let Some(scale_type) = scale_type {
+                                            if scale_type == ScaleType::Log && value <= 0_f32 {
+                                                bail!(LogScaleIncludesZero {
+                                                    view: name.to_string(),
+                                                    column: column.to_string(),
+                                                    value
+                                                })
+                                            }
+                                        }
                                     }
                                 }
                                 if let Some(scale) = scale_type {
@@ -177,7 +206,7 @@ impl ItemsSpec {
                                         && domain[0] <= 0_f32
                                         && 0_f32 <= domain[domain.len() - 1]
                                     {
-                                        bail!(LogScaleIncludesZero {
+                                        bail!(LogScaleDomainIncludesZero {
                                             view: name.to_string(),
                                             column: column.to_string(),
                                         })
@@ -727,7 +756,15 @@ pub enum ConfigError {
     #[error(
         "Given domain for column {column:?} of view {view:?} with scale type log cannot include 0."
     )]
-    LogScaleIncludesZero { view: String, column: String },
+    LogScaleDomainIncludesZero { view: String, column: String },
+    #[error(
+    "Given value for column {column:?} of view {view:?} with scale type log cannot include value {value:?}."
+    )]
+    LogScaleIncludesZero {
+        view: String,
+        column: String,
+        value: f32,
+    },
     #[error(
         "Could not find column named {column:?} in given dataset {dataset:?} in linkout {link:?}."
     )]
