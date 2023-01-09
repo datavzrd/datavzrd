@@ -43,6 +43,7 @@ impl ColumnType {
 pub(crate) fn classify_table<P: AsRef<Path>>(
     path: P,
     separator: char,
+    header_rows: usize,
 ) -> Result<HashMap<String, ColumnType>> {
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
@@ -54,8 +55,7 @@ pub(crate) fn classify_table<P: AsRef<Path>>(
             .iter()
             .map(|f| (f.to_owned(), ColumnType::default())),
     );
-
-    for record in reader.records() {
+    for record in reader.records().skip(header_rows - 1) {
         let result = record?;
         for (title, value) in headers.iter().zip(result.iter()) {
             let column_type = classification.get_mut(title).unwrap();
@@ -87,6 +87,7 @@ mod tests {
         let classification = classify_table(
             "tests/data/uniform_datatypes.csv",
             char::from_str(",").unwrap(),
+            1,
         )
         .unwrap();
         let expected = HashMap::from([
@@ -103,6 +104,7 @@ mod tests {
         let classification = classify_table(
             "tests/data/non_uniform_datatypes.csv",
             char::from_str(",").unwrap(),
+            1,
         )
         .unwrap();
         let expected = HashMap::from([
@@ -116,8 +118,12 @@ mod tests {
 
     #[test]
     fn test_empty_column() {
-        let classification =
-            classify_table("tests/data/empty_table.csv", char::from_str(",").unwrap()).unwrap();
+        let classification = classify_table(
+            "tests/data/empty_table.csv",
+            char::from_str(",").unwrap(),
+            1,
+        )
+        .unwrap();
         for column_type in classification.values() {
             assert_eq!(&ColumnType::None, column_type)
         }

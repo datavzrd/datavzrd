@@ -22,7 +22,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
     separator: char,
     header_rows: usize,
 ) -> Result<()> {
-    let column_types = classify_table(csv_path, separator)?;
+    let column_types = classify_table(csv_path, separator, header_rows)?;
 
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
