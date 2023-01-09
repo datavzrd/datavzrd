@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.12.0](https://www.github.com/datavzrd/datavzrd/compare/v2.11.1...v2.12.0) (2023-01-09)
+
+
+### Features
+
+* Add log scale value validation for plots ([#299](https://www.github.com/datavzrd/datavzrd/issues/299)) ([258c506](https://www.github.com/datavzrd/datavzrd/commit/258c506f7e0253424be9332bb71cc74479fc3dde))
+
+
+### Bug Fixes
+
+* Fix column classification for tables with additional header rows ([#298](https://www.github.com/datavzrd/datavzrd/issues/298)) ([756fdd0](https://www.github.com/datavzrd/datavzrd/commit/756fdd044b5180a885683280c13d77d7755d1286))
+* Fix precision keyword for bar and tick plots ([#301](https://www.github.com/datavzrd/datavzrd/issues/301)) ([bb1e763](https://www.github.com/datavzrd/datavzrd/commit/bb1e7634542f8f70159453b6a773ec07902af97e))
+
 ### [2.11.1](https://www.github.com/datavzrd/datavzrd/compare/v2.11.0...v2.11.1) (2022-12-20)
 
 
