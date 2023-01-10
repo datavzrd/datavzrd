@@ -352,6 +352,12 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .filter(|t| !hidden_columns.contains(t))
         .collect_vec();
 
+    let labels: HashMap<String, String> = render_columns
+        .iter()
+        .filter(|(_, v)| v.label.is_some())
+        .map(|(k, v)| (k.to_owned(), v.label.as_ref().unwrap().to_owned()))
+        .collect();
+
     let table_classes = classify_table(csv_path, separator, header_rows)?;
     let column_types: HashMap<_, _> = table_classes
         .iter()
@@ -510,6 +516,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
     context.insert("columns", &columns);
     context.insert("types", &column_types);
     context.insert("marks", &marks);
+    context.insert("labels", &labels);
 
     let js = templates.render("table_heatmap.js.tera", &context)?;
 
@@ -737,6 +744,12 @@ fn render_table_javascript<P: AsRef<Path>>(
         .map(|(k, v)| (k.to_owned(), v.precision))
         .collect();
 
+    let labels: HashMap<String, String> = render_columns
+        .iter()
+        .filter(|(_, v)| v.label.is_some())
+        .map(|(k, v)| (k.to_owned(), v.label.as_ref().unwrap().to_owned()))
+        .collect();
+
     let link_urls: HashMap<String, String> = render_columns
         .iter()
         .filter(|(_, k)| k.link_to_url.is_some())
@@ -795,6 +808,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("link_urls", &link_urls);
     context.insert("num", &numeric);
     context.insert("is_float", &is_float);
+    context.insert("labels", &labels);
     context.insert("brush_domains", &json!(brush_domains).to_string());
     context.insert("aux_domains", &json!(aux_domains).to_string());
     context.insert("is_single_page", &is_single_page);

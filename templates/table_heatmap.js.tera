@@ -41,7 +41,7 @@ const heatmap_plot = {
                     "x": {
                         "field": "dummy",
                         "axis": {
-                            "labelExpr": "'{{ column }}'",
+                            "labelExpr": "'{% if labels[column] %}{{ labels[column] }}{% else %}{{ column }}{% endif %}'",
                             "labelAngle": -90,
                             {% if marks[column] == "text" %}"labelOffset": 7,{% endif %}
                             "title": null,

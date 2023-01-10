@@ -468,6 +468,8 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default = "default_precision")]
     pub(crate) precision: u32,
     #[serde(default)]
+    pub(crate) label: Option<String>,
+    #[serde(default)]
     pub(crate) custom: Option<String>,
     #[serde(default)]
     pub(crate) custom_path: Option<String>,
@@ -812,6 +814,7 @@ mod tests {
             custom_plot: None,
             ellipsis: None,
             plot_view_legend: false,
+            label: None,
         };
 
         let expected_dataset_spec = DatasetSpecs {
@@ -1325,6 +1328,7 @@ mod tests {
             custom_plot: None,
             ellipsis: None,
             plot_view_legend: false,
+            label: None,
         };
         let expected_render_column_spec_oscar_no = RenderColumnSpec {
             precision: default_precision(),
@@ -1337,6 +1341,7 @@ mod tests {
             custom_plot: None,
             ellipsis: None,
             plot_view_legend: false,
+            label: None,
         };
         assert_eq!(
             oscar_config.get("oscar_no").unwrap().to_owned(),
@@ -1399,6 +1404,7 @@ mod tests {
         let expected_render_columns = RenderColumnSpec {
             optional: false,
             precision: default_precision(),
+            label: None,
             custom: None,
             custom_path: None,
             display_mode: DisplayMode::default(),

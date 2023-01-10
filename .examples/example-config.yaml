@@ -31,6 +31,8 @@ views:
           display-mode: hidden
         regex('birth_.+'):
           display-mode: detail
+        oscar_yr:
+          label: year
         age:
           plot:
             ticks:
