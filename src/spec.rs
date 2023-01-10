@@ -173,6 +173,11 @@ impl ItemsSpec {
                             } else {
                                 plot_spec.heatmap.as_ref().map(|heatmap| heatmap.scale_type)
                             };
+                            let clamp = if let Some(heatmap) = &plot_spec.heatmap {
+                                heatmap.clamp
+                            } else {
+                                false
+                            };
                             if let Some(domain) = domain {
                                 let mut reader = csv::ReaderBuilder::new()
                                     .delimiter(dataset.separator as u8)
@@ -184,7 +189,10 @@ impl ItemsSpec {
                                     let record = record?;
                                     let value = record.get(colum_pos).unwrap();
                                     if let Ok(value) = value.parse::<f32>() {
-                                        if value < domain[0] || value > domain[domain.len() - 1] {
+                                        if value < domain[0]
+                                            || value > domain[domain.len() - 1]
+                                            || clamp
+                                        {
                                             bail!(ValueOutsideDomain {
                                                 view: name.to_string(),
                                                 column: column.to_string(),
