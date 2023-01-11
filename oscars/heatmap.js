@@ -18,7 +18,7 @@ const heatmap_plot = {
                     "x": {
                         "field": "dummy",
                         "axis": {
-                            "labelExpr": "'oscar_yr'",
+                            "labelExpr": "'year'",
                             "labelAngle": -90,
                             "labelOffset": 7,
                             "title": null,
