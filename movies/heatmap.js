@@ -116,7 +116,7 @@ const heatmap_plot = {
                         "scale": {
                             "domain": ["Approved","G","M","M/PG","N/A","Not Rated","PG","PG-13","Passed","R","TV-MA","Unrated"],
                             "type": "ordinal",
-                            "scheme": "accent",
+                            "scheme": "tableau20",
                             
                             
                         },
