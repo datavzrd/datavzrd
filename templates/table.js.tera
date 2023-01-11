@@ -391,7 +391,8 @@ function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
                 this.classList.add("plotcell");
                 const div = document.createElement("div");
                 let value = table_rows[row]["{{ title }}"];
-                var data = data_function(value);
+                let value_row = table_rows[row];
+                var data = data_function(value, value_row);
                 var s = specs;
                 s.data = {};
                 s.data.values = data;

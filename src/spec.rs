@@ -362,6 +362,8 @@ pub(crate) struct HeaderSpecs {
     pub(crate) label: Option<String>,
     #[serde(default)]
     pub(crate) plot: Option<PlotSpec>,
+    #[serde(default)]
+    pub(crate) display_mode: HeaderDisplayMode,
 }
 
 lazy_static! {
@@ -500,6 +502,14 @@ pub(crate) enum DisplayMode {
     #[default]
     Normal,
     Detail,
+    Hidden,
+}
+
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum HeaderDisplayMode {
+    #[default]
+    Normal,
     Hidden,
 }
 
@@ -801,9 +811,9 @@ pub enum ConfigError {
 mod tests {
     use crate::spec::{
         default_links, default_precision, default_render_table, default_single_page_threshold,
-        AuxDomainColumns, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec,
-        LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs,
-        ScaleType, TickPlot,
+        AuxDomainColumns, DatasetSpecs, DisplayMode, HeaderDisplayMode, HeaderSpecs, Heatmap,
+        ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
+        RenderTableSpecs, ScaleType, TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -1029,6 +1039,7 @@ mod tests {
                             }),
                             bar_plot: None,
                         }),
+                        display_mode: HeaderDisplayMode::Normal,
                     },
                 )])),
             }),
