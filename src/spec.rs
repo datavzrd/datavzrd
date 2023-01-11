@@ -362,6 +362,8 @@ pub(crate) struct HeaderSpecs {
     pub(crate) label: Option<String>,
     #[serde(default)]
     pub(crate) plot: Option<PlotSpec>,
+    #[serde(default)]
+    pub(crate) display_mode: HeaderDisplayMode,
 }
 
 lazy_static! {
@@ -500,6 +502,14 @@ pub(crate) enum DisplayMode {
     #[default]
     Normal,
     Detail,
+    Hidden,
+}
+
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum HeaderDisplayMode {
+    #[default]
+    Normal,
     Hidden,
 }
 

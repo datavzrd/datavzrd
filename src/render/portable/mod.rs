@@ -6,6 +6,7 @@ use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
+use crate::spec::HeaderDisplayMode;
 use crate::spec::{
     BarPlot, CustomPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec,
     LinkSpec, RenderColumnSpec, ScaleType, TickPlot,
@@ -776,11 +777,28 @@ fn render_table_javascript<P: AsRef<Path>>(
     let header_rows = additional_headers.map(|headers| {
         headers
             .iter()
-            .map(|r| {
-                r.iter()
-                    .enumerate()
-                    .map(|(i, v)| (&titles[i], v.to_string()))
-                    .collect::<HashMap<_, _>>()
+            .enumerate()
+            .filter_map(|(row, r)| {
+                // Only keep header if label or heatmap is specified for it.
+                let row = row as u32 + 1;
+                if header_specs
+                    .as_ref()
+                    .map(|specs| {
+                        specs
+                            .get(&row)
+                            .map_or(false, |spec| spec.display_mode != HeaderDisplayMode::Hidden)
+                    })
+                    .unwrap_or(false)
+                {
+                    Some(
+                        r.iter()
+                            .enumerate()
+                            .map(|(i, v)| (&titles[i], v.to_string()))
+                            .collect::<HashMap<_, _>>(),
+                    )
+                } else {
+                    None
+                }
             })
             .collect_vec()
     });
