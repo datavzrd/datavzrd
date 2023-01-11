@@ -82,7 +82,7 @@ views:
           plot:
             heatmap:
               scale: ordinal
-              color-scheme: accent
+              color-scheme: tableau20
         Runtime:
           custom-path: ".examples/specs/time-formatter.js"
   movies-plot:
