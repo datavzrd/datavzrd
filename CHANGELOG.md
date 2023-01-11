@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.12.1](https://www.github.com/datavzrd/datavzrd/compare/v2.12.0...v2.12.1) (2023-01-11)
+
+
+### Bug Fixes
+
+* Remove validation error when values exceed given domain and clamp is set to true ([#304](https://www.github.com/datavzrd/datavzrd/issues/304)) ([3c5e9fd](https://www.github.com/datavzrd/datavzrd/commit/3c5e9fd8527cfe842cc8be6410f20f44fd18aa4e))
+
 ## [2.12.0](https://www.github.com/datavzrd/datavzrd/compare/v2.11.1...v2.12.0) (2023-01-09)
 
 
