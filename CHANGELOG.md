@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.13.0](https://www.github.com/datavzrd/datavzrd/compare/v2.12.0...v2.13.0) (2023-01-11)
+
+
+### Features
+
+* Add label keyword to column spec ([#305](https://www.github.com/datavzrd/datavzrd/issues/305)) ([b940656](https://www.github.com/datavzrd/datavzrd/commit/b94065600bb8ae3db3cefd5505720935c095d5de))
+
+
+### Bug Fixes
+
+* allow to access row in data function of custom plot ([#308](https://www.github.com/datavzrd/datavzrd/issues/308)) ([ad78d32](https://www.github.com/datavzrd/datavzrd/commit/ad78d3273694507229d66ce6f58f6a745952d943))
+* Fix headers for views without detail mode and no header labels ([#309](https://www.github.com/datavzrd/datavzrd/issues/309)) ([e731876](https://www.github.com/datavzrd/datavzrd/commit/e731876e4ac5ae5df64c4850dc3406c85593d9af))
+* Remove validation error when values exceed given domain and clamp is set to true ([#304](https://www.github.com/datavzrd/datavzrd/issues/304)) ([3c5e9fd](https://www.github.com/datavzrd/datavzrd/commit/3c5e9fd8527cfe842cc8be6410f20f44fd18aa4e))
+
 ## [2.12.0](https://www.github.com/datavzrd/datavzrd/compare/v2.11.1...v2.12.0) (2023-01-09)
 
 
