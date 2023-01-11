@@ -1,6 +1,7 @@
-use crate::spec::ItemsSpec;
+use crate::spec::{ItemsSpec, RenderColumnSpec};
 use anyhow::Result;
 use minify_js::{minify, TopLevelMode};
+use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -109,6 +110,16 @@ pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> R
     let mut file = fs::File::create(file_path)?;
     file.write_all(html.as_bytes())?;
     Ok(())
+}
+
+pub(crate) fn get_column_labels(
+    render_columns: &HashMap<String, RenderColumnSpec>,
+) -> HashMap<String, String> {
+    render_columns
+        .iter()
+        .filter(|(_, v)| v.label.is_some())
+        .map(|(k, v)| (k.to_owned(), v.label.as_ref().unwrap().to_owned()))
+        .collect()
 }
 
 #[cfg(test)]
