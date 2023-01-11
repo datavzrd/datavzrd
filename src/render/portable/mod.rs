@@ -3,6 +3,7 @@ pub(crate) mod utils;
 
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
+use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
 use crate::spec::{
@@ -352,11 +353,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .filter(|t| !hidden_columns.contains(t))
         .collect_vec();
 
-    let labels: HashMap<String, String> = render_columns
-        .iter()
-        .filter(|(_, v)| v.label.is_some())
-        .map(|(k, v)| (k.to_owned(), v.label.as_ref().unwrap().to_owned()))
-        .collect();
+    let labels = get_column_labels(render_columns);
 
     let table_classes = classify_table(csv_path, separator, header_rows)?;
     let column_types: HashMap<_, _> = table_classes
@@ -744,11 +741,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         .map(|(k, v)| (k.to_owned(), v.precision))
         .collect();
 
-    let labels: HashMap<String, String> = render_columns
-        .iter()
-        .filter(|(_, v)| v.label.is_some())
-        .map(|(k, v)| (k.to_owned(), v.label.as_ref().unwrap().to_owned()))
-        .collect();
+    let labels = get_column_labels(render_columns);
 
     let link_urls: HashMap<String, String> = render_columns
         .iter()
