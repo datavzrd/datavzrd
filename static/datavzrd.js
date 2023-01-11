@@ -23,15 +23,15 @@ function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precisi
         index += 1;
     }
     let row = 0;
-    let table_rows = $('#table').bootstrapTable('getData', {useCurrentPage: true});
+    let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
     $(`table > tbody > tr td:nth-child(${index})`).each(
-        function() {
+        function () {
             var id = `${slug_title}-${row}`;
             this.classList.add("plotcell");
             const div = document.createElement("div");
             let value = table_rows[row][title];
             if (is_float && precision !== undefined) {
-                value = precision_formatter(precision,value);
+                value = precision_formatter(precision, value);
             }
             if (value != "") {
                 this.innerHTML = "";
@@ -43,7 +43,7 @@ function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precisi
                 var s = specs;
                 s.data = {};
                 s.data.values = data;
-                var opt = {"actions": false};
+                var opt = { "actions": false };
                 vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
             }
             row++;
@@ -57,15 +57,15 @@ function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precisio
         index += 1;
     }
     let row = 0;
-    let table_rows = $('#table').bootstrapTable('getData', {useCurrentPage: true});
+    let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
     $(`table > tbody > tr td:nth-child(${index})`).each(
-        function() {
+        function () {
             var id = `${slug_title}-${row}`;
             this.classList.add("plotcell");
             const div = document.createElement("div");
             let value = table_rows[row][title];
             if (is_float && precision !== undefined) {
-                value = precision_formatter(precision,value);
+                value = precision_formatter(precision, value);
             }
             if (value != "") {
                 this.innerHTML = "";
@@ -77,7 +77,7 @@ function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precisio
                 var s = specs;
                 s.data = {};
                 s.data.values = data;
-                var opt = {"actions": false};
+                var opt = { "actions": false };
                 vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
             }
             row++;
@@ -94,7 +94,7 @@ function renderDetailTickBarPlot(value, div, specs, title) {
         var s = specs;
         s.data = {};
         s.data.values = data;
-        var opt = {"actions": false};
+        var opt = { "actions": false };
         vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
     }
 }
@@ -105,10 +105,10 @@ function colorizeColumn(ah, columns, title, heatmap, scale, detail_mode, header_
         index += 1;
     }
     let row = 0;
-    var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
+    var table_rows = $("#table").bootstrapTable('getData', { useCurrentPage: "true" });
     var custom_func = heatmap.custom_content;
     $(`table > tbody > tr td:nth-child(${index})`).each(
-        function() {
+        function () {
             var value = table_rows[row][title];
             if (custom_func !== null) {
                 value = custom_func(value, table_rows[row]);
@@ -128,7 +128,7 @@ function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_l
     }
     let row = 0;
     $(`table > tbody > tr td:nth-child(${index})`).each(
-        function() {
+        function () {
             value = this.innerHTML;
             if (value.length > ellipsis) {
                 this.innerHTML = `${value.substring(0, ellipsis)}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${value}</div>'>...</a>`;
@@ -146,7 +146,7 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_url, detail_mode, he
     }
     let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
-        function() {
+        function () {
             let row = this.parentElement.dataset.index;
             let value = table_rows[row][title];
             let link = link_url.replaceAll("{value}", value);
