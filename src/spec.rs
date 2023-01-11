@@ -189,9 +189,8 @@ impl ItemsSpec {
                                     let record = record?;
                                     let value = record.get(colum_pos).unwrap();
                                     if let Ok(value) = value.parse::<f32>() {
-                                        if value < domain[0]
-                                            || value > domain[domain.len() - 1]
-                                            || clamp
+                                        if (value < domain[0] || value > domain[domain.len() - 1])
+                                            && !clamp
                                         {
                                             bail!(ValueOutsideDomain {
                                                 view: name.to_string(),
