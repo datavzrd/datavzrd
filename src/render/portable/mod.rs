@@ -727,6 +727,16 @@ fn render_table_javascript<P: AsRef<Path>>(
         HashMap::new()
     };
 
+    let header_ellipsis: HashMap<u32, u32> = if let Some(headers) = header_specs {
+        headers
+            .iter()
+            .filter(|(_, h)| h.ellipsis.is_some())
+            .map(|(k, v)| (*k, v.ellipsis.unwrap()))
+            .collect()
+    } else {
+        HashMap::new()
+    };
+
     let header_labels: HashMap<u32, String> = if let Some(headers) = header_specs {
         headers
             .iter()
@@ -807,6 +817,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("precisions", &precisions);
     context.insert("additional_headers", &header_rows);
     context.insert("header_heatmaps", &header_heatmaps);
+    context.insert("header_ellipsis", &header_ellipsis);
     context.insert("header_labels", &header_labels);
     context.insert("formatter", &Some(formatters));
     context.insert("custom_plots", &custom_plots);

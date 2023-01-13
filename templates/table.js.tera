@@ -425,6 +425,23 @@ function colorizeHeaderRow{{ loop.index0 }}() {
 }
 {% endfor %}
 
+{% for row, l in header_ellipsis %}
+    function shortenHeaderRow{{ loop.index0 }}() {
+        var row = {{ row }};
+        var ellipsis = {{ l }};
+        var skip_label = {% if not header_labels | length == 0 %}true{% else %}false{% endif %};
+        $(`table > thead > tr:nth-child(${row + 1}) > td`).each(
+            function() {
+                value = this.innerHTML;
+                if (value.length > ellipsis && !skip_label) {
+                    this.innerHTML = `${value.substring(0, ellipsis)}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${value}</div>'>...</a>`;
+                }
+                skip_label = false;
+            }
+        );
+    }
+{% endfor %}
+
 {% for title, tuple in heatmaps %}
 function colorizeDetailCard(value, div, scale) {
     if (value !== "") {
@@ -558,6 +575,9 @@ for (o of config.ellipsis) {
 
 {% for row, heatmap in header_heatmaps %}
     colorizeHeaderRow{{ loop.index0 }}();
+{% endfor %}
+{% for row, l in header_ellipsis %}
+    shortenHeaderRow{{ loop.index0 }}();
 {% endfor %}
 $('[data-toggle="popover"]').popover()
 {% if not detail_mode and not header_labels | length == 0 %}
