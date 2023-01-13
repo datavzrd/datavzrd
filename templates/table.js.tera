@@ -565,8 +565,6 @@ for (o of config.header_ellipsis) {
     shortenHeaderRow(o.index, o.ellipsis, {% if not header_labels | length == 0 %}true{% else %}false{% endif %});
 }
 
-
-
 $('[data-toggle="popover"]').popover()
 {% if not detail_mode and not header_labels | length == 0 %}
 $(`table > tbody > tr td:first-child`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});
