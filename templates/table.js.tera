@@ -562,7 +562,7 @@ for (o of config.ellipsis) {
 {% endfor %}
 
 for (o of config.header_ellipsis) {
-    shortenHeaderRow(o.index, o.ellipsis, {% if not header_labels | length == 0 %}true{% else %}false{% endif %});
+    shortenHeaderRow(o.index, o.ellipsis, {{ header_labels | length > 0 }});
 }
 
 $('[data-toggle="popover"]').popover()
