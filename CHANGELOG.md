@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.14.0](https://www.github.com/datavzrd/datavzrd/compare/v2.13.0...v2.14.0) (2023-01-16)
+
+
+### Features
+
+* Add ellipsis option for header definitions ([#310](https://www.github.com/datavzrd/datavzrd/issues/310)) ([e9c82ed](https://www.github.com/datavzrd/datavzrd/commit/e9c82edddb188e3de218d6d01d7db273204309de))
+
 ## [2.13.0](https://www.github.com/datavzrd/datavzrd/compare/v2.12.0...v2.13.0) (2023-01-11)
 
 
