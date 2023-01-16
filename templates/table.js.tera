@@ -14,6 +14,7 @@ const config = {
     {% endfor %}
     "detail_mode": {{ detail_mode }},
     "header_label_length": {{ header_labels | length }},
+    "header_ellipsis": [{% for row, l in header_ellipsis %}{"index": {{ row }}, "ellipsis": {{ l }}}{% endfor %}],
     "ticks": [
         {% for title, tick_plot in tick_plots %}
         {
@@ -559,6 +560,11 @@ for (o of config.ellipsis) {
 {% for row, heatmap in header_heatmaps %}
     colorizeHeaderRow{{ loop.index0 }}();
 {% endfor %}
+
+for (o of config.header_ellipsis) {
+    shortenHeaderRow(o.index, o.ellipsis, {{ header_labels | length > 0 }});
+}
+
 $('[data-toggle="popover"]').popover()
 {% if not detail_mode and not header_labels | length == 0 %}
 $(`table > tbody > tr td:first-child`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});

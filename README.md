@@ -192,7 +192,8 @@ views:
 |---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | label         | Allows to add an additional label to the corresponding header                                                                                                 |
 | [plot](#plot) | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell (currently only the [heatmap](#heatmap) type is supported in header rows) |
-| display-mode  | Allows to hide the header row by setting this to `hidden`. |
+| display-mode  | Allows to hide the header row by setting this to `hidden`.  |
+| ellipsis      | Shortens values to the first *n* given characters with the rest hidden behind a popover.                                                                      |
 
 ### render-plot
 

@@ -364,6 +364,8 @@ pub(crate) struct HeaderSpecs {
     pub(crate) plot: Option<PlotSpec>,
     #[serde(default)]
     pub(crate) display_mode: HeaderDisplayMode,
+    #[serde(default)]
+    pub(crate) ellipsis: Option<u32>,
 }
 
 lazy_static! {
@@ -1040,6 +1042,7 @@ mod tests {
                             bar_plot: None,
                         }),
                         display_mode: HeaderDisplayMode::Normal,
+                        ellipsis: None,
                     },
                 )])),
             }),
