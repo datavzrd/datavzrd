@@ -1254,7 +1254,9 @@ fn render_plot_page<P: AsRef<Path>>(
 
     let local: DateTime<Local> = Local::now();
 
-    context.insert("data", &json!(records).to_string());
+    let compressed_data = compress_to_utf16(&json!(records).to_string());
+
+    context.insert("data", &json!(compressed_data).to_string());
     context.insert("description", &item_spec.description);
     context.insert("has_excel_sheet", &has_excel_sheet);
     context.insert(
@@ -1423,7 +1425,9 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
 
     let local: DateTime<Local> = Local::now();
 
-    context.insert("datasets", &json!(data).to_string());
+    let compressed_data = compress_to_utf16(&json!(data).to_string());
+
+    context.insert("datasets", &json!(compressed_data).to_string());
     context.insert("description", &item_spec.description);
     context.insert(
         "tables",

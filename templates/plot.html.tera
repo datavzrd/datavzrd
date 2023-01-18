@@ -82,12 +82,12 @@
                         {% if data %}
                         const data = {{ data | safe }};
                         specs.data = {};
-                        specs.data.values = data;
+                        specs.data.values = JSON.parse(LZString.decompressFromUTF16(data));
                         {% endif %}
                         {% if datasets %}
                         const data = {{ datasets | safe }};
                         specs.datasets = {};
-                        specs.datasets = data;
+                        specs.datasets = JSON.parse(LZString.decompressFromUTF16(data));
                         {% endif %}
                         if (specs.width == "container") { $("#vis").css("width", "100%"); }
                         vegaEmbed('#vis', specs);
