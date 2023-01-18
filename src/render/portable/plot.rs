@@ -184,7 +184,7 @@ fn generate_nominal_plot(
         })
         .collect_vec();
 
-    let unique_values = count_values.iter().map(|(_, v)| v).unique().count();
+    let unique_values = count_values.values().unique().count();
     if unique_values <= 1 {
         return Ok(None);
     };
