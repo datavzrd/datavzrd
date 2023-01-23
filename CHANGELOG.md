@@ -1,5 +1,17 @@
 # Changelog
 
+### [2.14.1](https://www.github.com/datavzrd/datavzrd/compare/v2.14.0...v2.14.1) (2023-01-23)
+
+
+### Bug Fixes
+
+* Round domains according to precision ([#319](https://www.github.com/datavzrd/datavzrd/issues/319)) ([a67c687](https://www.github.com/datavzrd/datavzrd/commit/a67c687b60744b43ec8e9c5c304d985ed3402c43))
+
+
+### Performance Improvements
+
+* Compress data for plot views with lz-string ([#312](https://www.github.com/datavzrd/datavzrd/issues/312)) ([f45f1fc](https://www.github.com/datavzrd/datavzrd/commit/f45f1fcba7add4f812b7ab1c513624046187ecb7))
+
 ## [2.14.0](https://www.github.com/datavzrd/datavzrd/compare/v2.13.0...v2.14.0) (2023-01-16)
 
 
