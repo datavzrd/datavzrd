@@ -396,8 +396,14 @@ fn render_table_heatmap<P: AsRef<Path>>(
             } else {
                 let mut aux_domains = h.aux_domain_columns.0.as_ref().unwrap().to_vec();
                 aux_domains.push(t.to_string());
-                let d = get_min_max_multiple_columns(csv_path, separator, header_rows, aux_domains)
-                    .unwrap();
+                let d = get_min_max_multiple_columns(
+                    csv_path,
+                    separator,
+                    header_rows,
+                    aux_domains,
+                    None,
+                )
+                .unwrap();
                 vec![d.0, d.1]
             };
             (t, domain)
@@ -620,6 +626,7 @@ fn render_table_javascript<P: AsRef<Path>>(
                     separator,
                     header_row_length,
                     v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
+                    v.precision,
                 )
                 .unwrap(),
             )
@@ -639,6 +646,7 @@ fn render_table_javascript<P: AsRef<Path>>(
                     separator,
                     header_row_length,
                     v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
+                    v.precision,
                 )
                 .unwrap(),
             )
@@ -979,6 +987,7 @@ fn render_tick_plot(
     separator: char,
     header_rows: usize,
     tick_plot: &TickPlot,
+    precision: u32,
 ) -> Result<String> {
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
@@ -1003,9 +1012,15 @@ fn render_tick_plot(
             .map(|s| s.to_string())
             .chain(vec![title.to_string()].into_iter())
             .collect();
-        get_min_max_multiple_columns(csv_path, separator, header_rows, columns)?
+        get_min_max_multiple_columns(csv_path, separator, header_rows, columns, Some(precision))?
     } else {
-        get_min_max(csv_path, separator, column_index, header_rows)?
+        get_min_max(
+            csv_path,
+            separator,
+            column_index,
+            header_rows,
+            Some(precision),
+        )?
     };
 
     let mut templates = Tera::default();
@@ -1029,6 +1044,7 @@ fn render_bar_plot(
     separator: char,
     header_rows: usize,
     bar_plot: &BarPlot,
+    precision: u32,
 ) -> Result<String> {
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
@@ -1053,9 +1069,15 @@ fn render_bar_plot(
             .map(|s| s.to_string())
             .chain(vec![title.to_string()].into_iter())
             .collect();
-        get_min_max_multiple_columns(csv_path, separator, header_rows, columns)?
+        get_min_max_multiple_columns(csv_path, separator, header_rows, columns, Some(precision))?
     } else {
-        get_min_max(csv_path, separator, column_index, header_rows)?
+        get_min_max(
+            csv_path,
+            separator,
+            column_index,
+            header_rows,
+            Some(precision),
+        )?
     };
 
     let mut templates = Tera::default();
@@ -1139,11 +1161,19 @@ fn get_column_domain(
             csv_path,
             separator,
             header_rows,
-            columns
+            columns,
+            None
         )?)
         .to_string())
     } else {
-        Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string())
+        Ok(json!(get_min_max(
+            csv_path,
+            separator,
+            column_index,
+            header_rows,
+            None
+        )?)
+        .to_string())
     }
 }
 
@@ -1153,6 +1183,7 @@ fn get_min_max_multiple_columns(
     separator: char,
     header_rows: usize,
     columns: Vec<String>,
+    precision: Option<u32>,
 ) -> Result<(f32, f32)> {
     let mut mins = Vec::new();
     let mut maxs = Vec::new();
@@ -1170,7 +1201,7 @@ fn get_min_max_multiple_columns(
                 })
                 .unwrap()
         })?;
-        let (min, max) = get_min_max(csv_path, separator, column_index, header_rows)?;
+        let (min, max) = get_min_max(csv_path, separator, column_index, header_rows, precision)?;
         mins.push(min);
         maxs.push(max);
     }

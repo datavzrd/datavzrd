@@ -122,6 +122,11 @@ pub(crate) fn get_column_labels(
         .collect()
 }
 
+pub(crate) fn round(x: f32, decimals: u32) -> f32 {
+    let y = 10i32.pow(decimals) as f32;
+    (x * y).round() / y
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{render_index_file, render_static_files, ItemsSpec};
