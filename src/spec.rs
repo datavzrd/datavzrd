@@ -1,8 +1,9 @@
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
-    ConflictingConfiguration, LinkToMissingView, LogScaleIncludesZero, MissingColumn,
-    PlotAndTablePresentConfiguration, ValueOutsideDomain,
+    ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
+    MissingColumn, PlotAndTablePresentConfiguration, ValueOutsideDomain,
 };
+use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::Result;
 use anyhow::{bail, Context};
 use derefable::Derefable;
@@ -102,6 +103,8 @@ impl ItemsSpec {
                         .delimiter(dataset.separator as u8)
                         .from_path(&dataset.path)?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+                    let column_types =
+                        classify_table(&dataset.path, dataset.separator, dataset.header_rows)?;
                     for (column, render_columns) in &render_table.columns {
                         if !titles.contains(column) && !render_columns.optional {
                             warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
@@ -142,16 +145,39 @@ impl ItemsSpec {
                                 tick_plot.domain.clone()
                             } else if let Some(bar_plot) = &plot_spec.bar_plot {
                                 bar_plot.domain.clone()
+                            } else if let Some(heatmap) = &plot_spec.heatmap {
+                                if let Some(domain) = &heatmap.domain {
+                                    if let Some(colum_type) = column_types.get(column) {
+                                        if colum_type == &ColumnType::Float {
+                                            Some(
+                                                domain
+                                                    .iter()
+                                                    .map(|d| f32::from_str(d).unwrap())
+                                                    .collect_vec(),
+                                            )
+                                        } else {
+                                            None
+                                        }
+                                    } else {
+                                        None
+                                    }
+                                } else {
+                                    None
+                                }
                             } else {
                                 None
                             };
                             let scale_type = if let Some(tick_plot) = &plot_spec.tick_plot {
                                 Some(tick_plot.scale_type)
+                            } else if let Some(bar_plot) = &plot_spec.bar_plot {
+                                Some(bar_plot.scale_type)
                             } else {
-                                plot_spec
-                                    .bar_plot
-                                    .as_ref()
-                                    .map(|bar_plot| bar_plot.scale_type)
+                                plot_spec.heatmap.as_ref().map(|heatmap| heatmap.scale_type)
+                            };
+                            let clamp = if let Some(heatmap) = &plot_spec.heatmap {
+                                heatmap.clamp
+                            } else {
+                                false
                             };
                             if let Some(domain) = domain {
                                 let mut reader = csv::ReaderBuilder::new()
@@ -164,12 +190,23 @@ impl ItemsSpec {
                                     let record = record?;
                                     let value = record.get(colum_pos).unwrap();
                                     if let Ok(value) = value.parse::<f32>() {
-                                        if value < domain[0] || value > domain[domain.len() - 1] {
+                                        if (value < domain[0] || value > domain[domain.len() - 1])
+                                            && !clamp
+                                        {
                                             bail!(ValueOutsideDomain {
                                                 view: name.to_string(),
                                                 column: column.to_string(),
                                                 value
                                             })
+                                        }
+                                        if let Some(scale_type) = scale_type {
+                                            if scale_type == ScaleType::Log && value <= 0_f32 {
+                                                bail!(LogScaleIncludesZero {
+                                                    view: name.to_string(),
+                                                    column: column.to_string(),
+                                                    value
+                                                })
+                                            }
                                         }
                                     }
                                 }
@@ -178,7 +215,7 @@ impl ItemsSpec {
                                         && domain[0] <= 0_f32
                                         && 0_f32 <= domain[domain.len() - 1]
                                     {
-                                        bail!(LogScaleIncludesZero {
+                                        bail!(LogScaleDomainIncludesZero {
                                             view: name.to_string(),
                                             column: column.to_string(),
                                         })
@@ -326,6 +363,10 @@ pub(crate) struct HeaderSpecs {
     pub(crate) label: Option<String>,
     #[serde(default)]
     pub(crate) plot: Option<PlotSpec>,
+    #[serde(default)]
+    pub(crate) display_mode: HeaderDisplayMode,
+    #[serde(default)]
+    pub(crate) ellipsis: Option<u32>,
 }
 
 lazy_static! {
@@ -439,6 +480,8 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default = "default_precision")]
     pub(crate) precision: u32,
     #[serde(default)]
+    pub(crate) label: Option<String>,
+    #[serde(default)]
     pub(crate) custom: Option<String>,
     #[serde(default)]
     pub(crate) custom_path: Option<String>,
@@ -462,6 +505,14 @@ pub(crate) enum DisplayMode {
     #[default]
     Normal,
     Detail,
+    Hidden,
+}
+
+#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum HeaderDisplayMode {
+    #[default]
+    Normal,
     Hidden,
 }
 
@@ -740,7 +791,15 @@ pub enum ConfigError {
     #[error(
         "Given domain for column {column:?} of view {view:?} with scale type log cannot include 0."
     )]
-    LogScaleIncludesZero { view: String, column: String },
+    LogScaleDomainIncludesZero { view: String, column: String },
+    #[error(
+    "Given value for column {column:?} of view {view:?} with scale type log cannot include value {value:?}."
+    )]
+    LogScaleIncludesZero {
+        view: String,
+        column: String,
+        value: f32,
+    },
     #[error(
         "Could not find column named {column:?} in given dataset {dataset:?} in linkout {link:?}."
     )]
@@ -767,9 +826,9 @@ pub enum ConfigError {
 mod tests {
     use crate::spec::{
         default_links, default_precision, default_render_table, default_single_page_threshold,
-        AuxDomainColumns, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec,
-        LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs,
-        ScaleType, TickPlot,
+        AuxDomainColumns, DatasetSpecs, DisplayMode, HeaderDisplayMode, HeaderSpecs, Heatmap,
+        ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
+        RenderTableSpecs, ScaleType, TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -787,6 +846,7 @@ mod tests {
             custom_plot: None,
             ellipsis: None,
             plot_view_legend: false,
+            label: None,
         };
 
         let expected_dataset_spec = DatasetSpecs {
@@ -994,6 +1054,8 @@ mod tests {
                             }),
                             bar_plot: None,
                         }),
+                        display_mode: HeaderDisplayMode::Normal,
+                        ellipsis: None,
                     },
                 )])),
             }),
@@ -1300,6 +1362,7 @@ mod tests {
             custom_plot: None,
             ellipsis: None,
             plot_view_legend: false,
+            label: None,
         };
         let expected_render_column_spec_oscar_no = RenderColumnSpec {
             precision: default_precision(),
@@ -1312,6 +1375,7 @@ mod tests {
             custom_plot: None,
             ellipsis: None,
             plot_view_legend: false,
+            label: None,
         };
         assert_eq!(
             oscar_config.get("oscar_no").unwrap().to_owned(),
@@ -1374,6 +1438,7 @@ mod tests {
         let expected_render_columns = RenderColumnSpec {
             optional: false,
             precision: default_precision(),
+            label: None,
             custom: None,
             custom_path: None,
             display_mode: DisplayMode::default(),

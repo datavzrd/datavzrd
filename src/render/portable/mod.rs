@@ -3,8 +3,10 @@ pub(crate) mod utils;
 
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
+use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
+use crate::spec::HeaderDisplayMode;
 use crate::spec::{
     BarPlot, CustomPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec,
     LinkSpec, RenderColumnSpec, ScaleType, TickPlot,
@@ -352,7 +354,9 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .filter(|t| !hidden_columns.contains(t))
         .collect_vec();
 
-    let table_classes = classify_table(csv_path, separator)?;
+    let labels = get_column_labels(render_columns);
+
+    let table_classes = classify_table(csv_path, separator, header_rows)?;
     let column_types: HashMap<_, _> = table_classes
         .iter()
         .map(|(t, c)| match c {
@@ -392,8 +396,14 @@ fn render_table_heatmap<P: AsRef<Path>>(
             } else {
                 let mut aux_domains = h.aux_domain_columns.0.as_ref().unwrap().to_vec();
                 aux_domains.push(t.to_string());
-                let d = get_min_max_multiple_columns(csv_path, separator, header_rows, aux_domains)
-                    .unwrap();
+                let d = get_min_max_multiple_columns(
+                    csv_path,
+                    separator,
+                    header_rows,
+                    aux_domains,
+                    None,
+                )
+                .unwrap();
                 vec![d.0, d.1]
             };
             (t, domain)
@@ -510,6 +520,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
     context.insert("columns", &columns);
     context.insert("types", &column_types);
     context.insert("marks", &marks);
+    context.insert("labels", &labels);
 
     let js = templates.render("table_heatmap.js.tera", &context)?;
 
@@ -574,10 +585,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     )?;
     let mut context = Context::new();
 
-    let header_row_length = additional_headers
-        .clone()
-        .unwrap_or_else(|| vec![StringRecord::from(vec![""])])
-        .len();
+    let header_row_length = additional_headers.clone().unwrap_or_default().len() + 1;
 
     let formatters: HashMap<String, String> = render_columns
         .iter()
@@ -585,12 +593,12 @@ fn render_table_javascript<P: AsRef<Path>>(
         .map(|(k, v)| (k.to_owned(), v.custom.as_ref().unwrap().to_owned()))
         .collect();
 
-    let numeric: HashMap<String, bool> = classify_table(csv_path, separator)?
+    let numeric: HashMap<String, bool> = classify_table(csv_path, separator, header_row_length)?
         .iter()
         .map(|(k, v)| (k.to_owned(), v.is_numeric()))
         .collect();
 
-    let is_float: HashMap<String, bool> = classify_table(csv_path, separator)?
+    let is_float: HashMap<String, bool> = classify_table(csv_path, separator, header_row_length)?
         .iter()
         .map(|(k, v)| (k.to_owned(), *v == ColumnType::Float))
         .collect();
@@ -618,6 +626,7 @@ fn render_table_javascript<P: AsRef<Path>>(
                     separator,
                     header_row_length,
                     v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
+                    v.precision,
                 )
                 .unwrap(),
             )
@@ -637,6 +646,7 @@ fn render_table_javascript<P: AsRef<Path>>(
                     separator,
                     header_row_length,
                     v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
+                    v.precision,
                 )
                 .unwrap(),
             )
@@ -725,6 +735,16 @@ fn render_table_javascript<P: AsRef<Path>>(
         HashMap::new()
     };
 
+    let header_ellipsis: HashMap<u32, u32> = if let Some(headers) = header_specs {
+        headers
+            .iter()
+            .filter(|(_, h)| h.ellipsis.is_some())
+            .map(|(k, v)| (*k, v.ellipsis.unwrap()))
+            .collect()
+    } else {
+        HashMap::new()
+    };
+
     let header_labels: HashMap<u32, String> = if let Some(headers) = header_specs {
         headers
             .iter()
@@ -739,6 +759,8 @@ fn render_table_javascript<P: AsRef<Path>>(
         .iter()
         .map(|(k, v)| (k.to_owned(), v.precision))
         .collect();
+
+    let labels = get_column_labels(render_columns);
 
     let link_urls: HashMap<String, String> = render_columns
         .iter()
@@ -773,11 +795,28 @@ fn render_table_javascript<P: AsRef<Path>>(
     let header_rows = additional_headers.map(|headers| {
         headers
             .iter()
-            .map(|r| {
-                r.iter()
-                    .enumerate()
-                    .map(|(i, v)| (&titles[i], v.to_string()))
-                    .collect::<HashMap<_, _>>()
+            .enumerate()
+            .filter_map(|(row, r)| {
+                // Only keep header if label or heatmap is specified for it.
+                let row = row as u32 + 1;
+                if header_specs
+                    .as_ref()
+                    .map(|specs| {
+                        specs
+                            .get(&row)
+                            .map_or(false, |spec| spec.display_mode != HeaderDisplayMode::Hidden)
+                    })
+                    .unwrap_or(false)
+                {
+                    Some(
+                        r.iter()
+                            .enumerate()
+                            .map(|(i, v)| (&titles[i], v.to_string()))
+                            .collect::<HashMap<_, _>>(),
+                    )
+                } else {
+                    None
+                }
             })
             .collect_vec()
     });
@@ -786,6 +825,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("precisions", &precisions);
     context.insert("additional_headers", &header_rows);
     context.insert("header_heatmaps", &header_heatmaps);
+    context.insert("header_ellipsis", &header_ellipsis);
     context.insert("header_labels", &header_labels);
     context.insert("formatter", &Some(formatters));
     context.insert("custom_plots", &custom_plots);
@@ -798,6 +838,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("link_urls", &link_urls);
     context.insert("num", &numeric);
     context.insert("is_float", &is_float);
+    context.insert("labels", &labels);
     context.insert("brush_domains", &json!(brush_domains).to_string());
     context.insert("aux_domains", &json!(aux_domains).to_string());
     context.insert("is_single_page", &is_single_page);
@@ -946,6 +987,7 @@ fn render_tick_plot(
     separator: char,
     header_rows: usize,
     tick_plot: &TickPlot,
+    precision: u32,
 ) -> Result<String> {
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
@@ -970,9 +1012,15 @@ fn render_tick_plot(
             .map(|s| s.to_string())
             .chain(vec![title.to_string()].into_iter())
             .collect();
-        get_min_max_multiple_columns(csv_path, separator, header_rows, columns)?
+        get_min_max_multiple_columns(csv_path, separator, header_rows, columns, Some(precision))?
     } else {
-        get_min_max(csv_path, separator, column_index, header_rows)?
+        get_min_max(
+            csv_path,
+            separator,
+            column_index,
+            header_rows,
+            Some(precision),
+        )?
     };
 
     let mut templates = Tera::default();
@@ -996,6 +1044,7 @@ fn render_bar_plot(
     separator: char,
     header_rows: usize,
     bar_plot: &BarPlot,
+    precision: u32,
 ) -> Result<String> {
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
@@ -1020,9 +1069,15 @@ fn render_bar_plot(
             .map(|s| s.to_string())
             .chain(vec![title.to_string()].into_iter())
             .collect();
-        get_min_max_multiple_columns(csv_path, separator, header_rows, columns)?
+        get_min_max_multiple_columns(csv_path, separator, header_rows, columns, Some(precision))?
     } else {
-        get_min_max(csv_path, separator, column_index, header_rows)?
+        get_min_max(
+            csv_path,
+            separator,
+            column_index,
+            header_rows,
+            Some(precision),
+        )?
     };
 
     let mut templates = Tera::default();
@@ -1106,11 +1161,19 @@ pub(crate) fn get_column_domain(
             csv_path,
             separator,
             header_rows,
-            columns
+            columns,
+            None
         )?)
         .to_string())
     } else {
-        Ok(json!(get_min_max(csv_path, separator, column_index, header_rows)?).to_string())
+        Ok(json!(get_min_max(
+            csv_path,
+            separator,
+            column_index,
+            header_rows,
+            None
+        )?)
+        .to_string())
     }
 }
 
@@ -1120,6 +1183,7 @@ fn get_min_max_multiple_columns(
     separator: char,
     header_rows: usize,
     columns: Vec<String>,
+    precision: Option<u32>,
 ) -> Result<(f32, f32)> {
     let mut mins = Vec::new();
     let mut maxs = Vec::new();
@@ -1137,7 +1201,7 @@ fn get_min_max_multiple_columns(
                 })
                 .unwrap()
         })?;
-        let (min, max) = get_min_max(csv_path, separator, column_index, header_rows)?;
+        let (min, max) = get_min_max(csv_path, separator, column_index, header_rows, precision)?;
         mins.push(min);
         maxs.push(max);
     }
@@ -1221,7 +1285,9 @@ fn render_plot_page<P: AsRef<Path>>(
 
     let local: DateTime<Local> = Local::now();
 
-    context.insert("data", &json!(records).to_string());
+    let compressed_data = compress_to_utf16(&json!(records).to_string());
+
+    context.insert("data", &json!(compressed_data).to_string());
     context.insert("description", &item_spec.description);
     context.insert("has_excel_sheet", &has_excel_sheet);
     context.insert(
@@ -1390,7 +1456,9 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
 
     let local: DateTime<Local> = Local::now();
 
-    context.insert("datasets", &json!(data).to_string());
+    let compressed_data = compress_to_utf16(&json!(data).to_string());
+
+    context.insert("datasets", &json!(compressed_data).to_string());
     context.insert("description", &item_spec.description);
     context.insert(
         "tables",

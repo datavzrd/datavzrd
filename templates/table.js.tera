@@ -16,6 +16,7 @@ const config = {
     {% endfor %}
     "detail_mode": {{ detail_mode }},
     "header_label_length": {{ header_labels | length }},
+    "header_ellipsis": [{% for row, l in header_ellipsis %}{"index": {{ row }}, "ellipsis": {{ l }}}{% endfor %}],
     "ticks": [
         {% for title, tick_plot in tick_plots %}
         {
@@ -88,7 +89,7 @@ $(document).ready(function() {
 
     let bs_table_cols = [{% if not detail_mode and not header_labels | length == 0 %}{field: '', title: '', formatter: function(value){ return value }},{% endif %}{% for title in titles %}{% if display_modes[title] == "normal" %}{
     field: '{{ title }}',
-    title: '{{ title }}\r\n                        <a class=\"sym\" data-toggle=\"modal\" data-target=\"#modal_{{ loop.index0 }}\" onclick=\"if (show_plot_{{ loop.index0 }}) {vegaEmbed(\'#plot_{{ loop.index0 }}\', plot_{{ loop.index0 }})} else {document.getElementById(\'plot_{{ loop.index0 }}\').innerHTML = \'<p>No reasonable plot possible.</p>\'}\">\r\n                            <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi-bar-chart-fill\" fill=\"currentColor\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n                                <rect width=\"4\" height=\"5\" x=\"1\" y=\"10\" rx=\"1\"\/>\r\n                                <rect width=\"4\" height=\"9\" x=\"6\" y=\"6\" rx=\"1\"\/>\r\n                                <rect width=\"4\" height=\"14\" x=\"11\" y=\"1\" rx=\"1\"\/>\r\n                            <\/svg>\r\n                        <\/a>\r\n                        {% if not is_single_page %}<a class=\"sym\" data-toggle=\"modal\" onclick=\"embedSearch({{ loop.index0 }})\" data-target=\"#search\">\r\n                        <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi-search\" fill=\"currentColor\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n                                <path fill-rule=\"evenodd\" d=\"M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z\"\/>\r\n                                <path fill-rule=\"evenodd\" d=\"M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z\"\/>\r\n                            <\/svg>\r\n                        <\/a>{% endif %}'{% if is_single_page %},filterControl: "input"{% endif %},
+    title: '{% if labels[title] %}{{ labels[title] }}{% else %}{{ title }}{% endif %}\r\n                        <a class=\"sym\" data-toggle=\"modal\" data-target=\"#modal_{{ loop.index0 }}\" onclick=\"if (show_plot_{{ loop.index0 }}) {vegaEmbed(\'#plot_{{ loop.index0 }}\', plot_{{ loop.index0 }})} else {document.getElementById(\'plot_{{ loop.index0 }}\').innerHTML = \'<p>No reasonable plot possible.</p>\'}\">\r\n                            <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi-bar-chart-fill\" fill=\"currentColor\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n                                <rect width=\"4\" height=\"5\" x=\"1\" y=\"10\" rx=\"1\"\/>\r\n                                <rect width=\"4\" height=\"9\" x=\"6\" y=\"6\" rx=\"1\"\/>\r\n                                <rect width=\"4\" height=\"14\" x=\"11\" y=\"1\" rx=\"1\"\/>\r\n                            <\/svg>\r\n                        <\/a>\r\n                        {% if not is_single_page %}<a class=\"sym\" data-toggle=\"modal\" onclick=\"embedSearch({{ loop.index0 }})\" data-target=\"#search\">\r\n                        <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi-search\" fill=\"currentColor\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n                                <path fill-rule=\"evenodd\" d=\"M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z\"\/>\r\n                                <path fill-rule=\"evenodd\" d=\"M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z\"\/>\r\n                            <\/svg>\r\n                        <\/a>{% endif %}'{% if is_single_page %},filterControl: "input"{% endif %},
         formatter: function(value, row, index, field) { if (format["{{ title }}"] != undefined){ return format["{{ title }}"](value, row, index, field) } else {% if precisions[title] and is_float[title] %}{ return precision_formatter({{ precisions[title] }},value) }{% else %}{ return value }{% endif %} }
     }{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
 
@@ -105,7 +106,7 @@ $(document).ready(function() {
         {% if detail_mode %}detailView: true, detailFormatter: "detailFormatter"{% endif %}
     })
 
-    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr><td {% if not detail_mode %}style='border: none !important;'{% endif%}>{% if header_labels[loop.index] %}<b>{{ header_labels[loop.index] }}</b>{% endif %}</td>{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
+    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr>{% if detail_mode or header_labels[loop.index] %}<td {% if not detail_mode %}style='border: none !important;'{% endif%}>{% endif%}{% if header_labels[loop.index] %}<b>{{ header_labels[loop.index] }}</b>{% endif %}</td>{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
 
     var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2 {% if is_single_page %} + 45{% endif %};
@@ -403,7 +404,8 @@ function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
                 this.classList.add("plotcell");
                 const div = document.createElement("div");
                 let value = table_rows[row]["{{ title }}"];
-                var data = data_function(value);
+                let value_row = table_rows[row];
+                var data = data_function(value, value_row);
                 var s = specs;
                 s.data = {};
                 s.data.values = data;
@@ -548,13 +550,13 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 
 for (o of config.ticks) {
     if (displayed_columns.includes(o.title)) {
-        renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, o.is_float, o.precision, config.detail_mode, config.header_label_length);
+        renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config[o.title].is_float, config[o.title].precision, config.detail_mode, config.header_label_length);
     }
 }
 
 for (o of config.bars) {
     if (displayed_columns.includes(o.title)) {
-        renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, o.is_float, o.precision, config.detail_mode, config.header_label_length);
+        renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config[o.title].is_float, config[o.title].precision, config.detail_mode, config.header_label_length);
     }
 }
 
@@ -579,6 +581,11 @@ for (o of config.ellipsis) {
 {% for row, heatmap in header_heatmaps %}
     colorizeHeaderRow{{ loop.index0 }}();
 {% endfor %}
+
+for (o of config.header_ellipsis) {
+    shortenHeaderRow(o.index, o.ellipsis, {{ header_labels | length > 0 }});
+}
+
 $('[data-toggle="popover"]').popover()
 {% if not detail_mode and not header_labels | length == 0 %}
 $(`table > tbody > tr td:first-child`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});

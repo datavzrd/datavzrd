@@ -31,6 +31,8 @@ views:
           display-mode: hidden
         regex('birth_.+'):
           display-mode: detail
+        oscar_yr:
+          label: year
         age:
           plot:
             ticks:
@@ -82,7 +84,7 @@ views:
           plot:
             heatmap:
               scale: ordinal
-              color-scheme: accent
+              color-scheme: tableau20
         Runtime:
           custom-path: ".examples/specs/time-formatter.js"
   movies-plot:
