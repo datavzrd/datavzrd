@@ -1,4 +1,4 @@
-use crate::render::portable::utils::minify_js;
+use crate::render::portable::utils::{minify_js, round};
 use crate::utils::column_type::{classify_table, ColumnType, IsNa};
 use anyhow::{Context as AnyhowContext, Result};
 use csv::Reader;
@@ -81,7 +81,7 @@ fn generate_numeric_plot(
     let mut reader =
         generate_reader().context(format!("Could not read file with path {:?}", path))?;
 
-    let (min, max) = get_min_max(path, separator, column_index, header_rows)?;
+    let (min, max) = get_min_max(path, separator, column_index, header_rows, None)?;
 
     if min == max {
         return Ok(None);
@@ -122,6 +122,7 @@ pub(crate) fn get_min_max(
     separator: char,
     column_index: usize,
     header_rows: usize,
+    precision: Option<u32>,
 ) -> Result<(f32, f32)> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
@@ -147,7 +148,11 @@ pub(crate) fn get_min_max(
         .filter_map(|s| s.parse().ok())
         .fold(f32::NEG_INFINITY, |a, b| a.max(b));
 
-    Ok((min, max))
+    if let Some(p) = precision {
+        Ok((round(min, p), round(max, p)))
+    } else {
+        Ok((min, max))
+    }
 }
 
 /// Generates plot records for columns of type String
