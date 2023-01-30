@@ -19,19 +19,25 @@ function precision_formatter(precision, value) {
     }
 }
 
-function shareRow(index) {
+function createShareURL(index, webhost_url) {
     var data = $('#table').bootstrapTable('getData')[index];
     delete data["linkouts"];
+    delete data["share"];
     var c = JSON.parse(JSON.stringify(config));
     c["data"] = data;
     // Update this version number when the config or datavzrd.js changes
     c["datavzrd_row_encoding_version"] = 1;
     const packer = new jsonm.Packer();
     let packedMessage = packer.pack(c);
-    compressed = LZString.compressToEncodedURIComponent(JSON.stringify(packedMessage))
+    let compressed = LZString.compressToEncodedURIComponent(JSON.stringify(packedMessage))
+    let url = `${webhost_url}?config=${compressed}`;
+    return url;
+}
+
+function shareRow(index, webhost_url) {
     $('#qr-modal').modal('show');
     document.getElementById("qr-code").innerHTML = "";
-    let url = `https://datavzrd.github.io/view/?config=${compressed}`;
+    let url = createShareURL(index, webhost_url);
     $('#open-url').attr("href", url);
     QRCode.toCanvas(document.getElementById('qr-code'), url)
 }
