@@ -1,3 +1,4 @@
+use crate::render::portable::get_column_domain;
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
@@ -22,7 +23,6 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use thiserror::Error;
-use crate::render::portable::get_column_domain;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]

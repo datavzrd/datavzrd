@@ -17,7 +17,12 @@ pub struct Datavzrd {
     pub(crate) config: PathBuf,
 
     /// Sets the URL of the webview host. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of the given webview host.
-    #[structopt(short = "w", long, default_value = "https://datavzrd.github.io/view/", env = "DATAVZRD_WEBVIEW_HOST")]
+    #[structopt(
+        short = "w",
+        long,
+        default_value = "https://datavzrd.github.io/view/",
+        env = "DATAVZRD_WEBVIEW_HOST"
+    )]
     pub(crate) webview_host: String,
 
     /// Output file
