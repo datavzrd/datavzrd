@@ -21,9 +21,9 @@ pub struct Datavzrd {
         short = "w",
         long,
         default_value = "https://datavzrd.github.io/view/",
-        env = "DATAVZRD_WEBVIEW_HOST"
+        env = "DATAVZRD_WEBVIEW_URL"
     )]
-    pub(crate) webview_host: String,
+    pub(crate) webview_url: String,
 
     /// Output file
     #[structopt(short, long, parse(from_os_str))]
