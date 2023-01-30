@@ -1,3 +1,5 @@
+// Changes to these functions should lead to incrementing datavzrd_row_encoding_version
+
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
     var converter = new showdown.Converter();
@@ -22,6 +24,8 @@ function shareRow(index) {
     delete data["linkouts"];
     var c = JSON.parse(JSON.stringify(config));
     c["data"] = data;
+    // Update this version number when the config or datavzrd.js changes
+    c["datavzrd_row_encoding_version"] = 1;
     const packer = new jsonm.Packer();
     let packedMessage = packer.pack(c);
     compressed = LZString.compressToEncodedURIComponent(JSON.stringify(packedMessage))

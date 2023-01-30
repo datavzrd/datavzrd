@@ -1,3 +1,4 @@
+// Changes to the config should lead to incrementing datavzrd_row_encoding_version
 const config = {
     "columns" : [{% for title in titles %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
     "displayed_columns" : [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}],
