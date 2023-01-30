@@ -17,6 +17,21 @@ function precision_formatter(precision, value) {
     }
 }
 
+function shareRow(index) {
+    var data = $('#table').bootstrapTable('getData')[index];
+    delete data["linkouts"];
+    var c = JSON.parse(JSON.stringify(config));
+    c["data"] = data;
+    const packer = new jsonm.Packer();
+    let packedMessage = packer.pack(c);
+    compressed = LZString.compressToEncodedURIComponent(JSON.stringify(packedMessage))
+    $('#qr-modal').modal('show');
+    document.getElementById("qr-code").innerHTML = "";
+    let url = `https://datavzrd.github.io/view/?config=${compressed}`;
+    $('#open-url').attr("href", url);
+    QRCode.toCanvas(document.getElementById('qr-code'), url)
+}
+
 function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
     let index = columns.indexOf(title) + 1;
     if (detail_mode || header_label_length !== 0) {
