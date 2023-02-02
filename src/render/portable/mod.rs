@@ -43,7 +43,7 @@ type LinkedTable = HashMap<(String, String), ColumnIndex>;
 
 impl Renderer for ItemRenderer {
     /// Render all items of user config
-    fn render_tables<P>(&self, path: P) -> Result<()>
+    fn render_tables<P>(&self, path: P, webview_host: String) -> Result<()>
     where
         P: AsRef<Path>,
     {
@@ -189,6 +189,7 @@ impl Renderer for ItemRenderer {
                             &self.specs.default_view,
                             is_single_page,
                             self.specs.needs_excel_sheet(),
+                            &webview_host,
                         )?;
                     }
                     if is_single_page {
@@ -211,6 +212,7 @@ impl Renderer for ItemRenderer {
                         &table.render_table.as_ref().unwrap().headers,
                         is_single_page,
                         table.single_page_page_size,
+                        &webview_host,
                     )?;
                     render_plots(
                         &out_path,
@@ -262,6 +264,7 @@ fn render_page<P: AsRef<Path>>(
     default_view: &Option<String>,
     is_single_page: bool,
     has_excel_sheet: bool,
+    webview_host: &String,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -316,6 +319,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("report_name", report_name);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
     context.insert("version", &env!("CARGO_PKG_VERSION"));
+    context.insert("webview_host", &webview_host);
 
     let file_path = Path::new(output_path.as_ref())
         .join(Path::new(&format!("index_{}", page_index)).with_extension("html"));
@@ -577,6 +581,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
     page_size: usize,
+    webview_host: &String,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -843,6 +848,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("aux_domains", &json!(aux_domains).to_string());
     context.insert("is_single_page", &is_single_page);
     context.insert("page_size", &page_size);
+    context.insert("webview_host", &webview_host);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
 
@@ -1094,7 +1100,7 @@ fn render_bar_plot(
     Ok(templates.render("bar_plot.vl.tera", &context)?)
 }
 
-fn get_column_domain(
+pub(crate) fn get_column_domain(
     title: &str,
     csv_path: &Path,
     separator: char,

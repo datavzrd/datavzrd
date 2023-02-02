@@ -102,10 +102,10 @@
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools/blob/master/CHANGELOG.md">{{ version }}</a>
+                        <a class="nav-link" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">{{ version }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="https://github.com/rust-bio/rust-bio-tools">github</a>
+                        <a class="nav-link" href="https://github.com/datavzrd/datavzrd">github</a>
                     </li>
                 </ul>
                 <span class="navbar-text">

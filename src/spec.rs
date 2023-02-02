@@ -1,3 +1,4 @@
+use crate::render::portable::get_column_domain;
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
@@ -395,8 +396,8 @@ impl ItemSpecs {
         }
         let headers = reader.headers()?;
         if let Some(render_table) = self.render_table.borrow_mut() {
-            for (_, render_column_specs) in render_table.columns.iter_mut() {
-                render_column_specs.preprocess(dataset)?;
+            for (title, render_column_specs) in render_table.columns.iter_mut() {
+                render_column_specs.preprocess(dataset, title)?;
             }
         }
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().columns.iter() {
@@ -516,12 +517,12 @@ pub(crate) enum HeaderDisplayMode {
 }
 
 impl RenderColumnSpec {
-    fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+    fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
         if let Some(plot) = &mut self.plot {
             if let Some(ticks) = &mut plot.tick_plot {
                 ticks.preprocess(dataset)?;
             } else if let Some(heatmap) = &mut plot.heatmap {
-                heatmap.preprocess(dataset)?;
+                heatmap.preprocess(dataset, title)?;
             } else if let Some(bars) = &mut plot.bar_plot {
                 bars.preprocess(dataset)?;
             }
@@ -543,8 +544,20 @@ impl TickPlot {
 }
 
 impl Heatmap {
-    fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
-        self.aux_domain_columns.preprocess(dataset)
+    fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
+        self.aux_domain_columns.preprocess(dataset)?;
+        if !self.scale_type.is_quantitative() && self.domain.is_none() {
+            let d = get_column_domain(
+                title,
+                &dataset.path,
+                dataset.separator,
+                dataset.header_rows,
+                self,
+            )?;
+            let domain: Vec<String> = serde_json::from_str(&d)?;
+            self.domain = Some(domain);
+        }
+        Ok(())
     }
 }
 
