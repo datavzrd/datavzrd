@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.15.0](https://www.github.com/datavzrd/datavzrd/compare/v2.14.1...v2.15.0) (2023-02-02)
+
+
+### Features
+
+* Add row sharing option ([#323](https://www.github.com/datavzrd/datavzrd/issues/323)) ([3dad613](https://www.github.com/datavzrd/datavzrd/commit/3dad6137e5ad1d6a6541e6b0ce0a0307aa46a13d))
+
+
+### Performance Improvements
+
+* Remove html search pages for views that don't use them ([#324](https://www.github.com/datavzrd/datavzrd/issues/324)) ([965eec0](https://www.github.com/datavzrd/datavzrd/commit/965eec091610f660ec26503c89414f7e38fc194f))
+
 ### [2.14.1](https://www.github.com/datavzrd/datavzrd/compare/v2.14.0...v2.14.1) (2023-01-23)
 
 
