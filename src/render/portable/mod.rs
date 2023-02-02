@@ -201,6 +201,15 @@ impl Renderer for ItemRenderer {
                             &headers,
                             dataset.header_rows,
                         )?;
+                    } else {
+                        render_search_dialogs(
+                            &out_path,
+                            &headers,
+                            &dataset.path,
+                            dataset.separator,
+                            table.page_size,
+                            dataset.header_rows,
+                        )?;
                     }
                     render_table_javascript(
                         &out_path,
@@ -218,14 +227,6 @@ impl Renderer for ItemRenderer {
                         &out_path,
                         &dataset.path,
                         dataset.separator,
-                        dataset.header_rows,
-                    )?;
-                    render_search_dialogs(
-                        &out_path,
-                        &headers,
-                        &dataset.path,
-                        dataset.separator,
-                        table.page_size,
                         dataset.header_rows,
                     )?;
                 }
