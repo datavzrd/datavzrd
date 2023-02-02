@@ -323,7 +323,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("webview_host", &webview_host);
 
     let file_path = Path::new(output_path.as_ref())
-        .join(Path::new(&format!("index_{}", page_index)).with_extension("html"));
+        .join(Path::new(&format!("index_{page_index}")).with_extension("html"));
 
     let html = templates.render("table.html.tera", &context)?;
 
@@ -546,7 +546,7 @@ fn get_column_width(
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
         .from_path(csv_path)
-        .context(format!("Could not read file with path {:?}", csv_path))?;
+        .context(format!("Could not read file with path {csv_path:?}"))?;
 
     let column_index = reader.headers().map(|s| {
         s.iter()
@@ -911,7 +911,7 @@ fn render_search_dialogs<P: AsRef<Path>>(
         let mut reader = csv::ReaderBuilder::new()
             .delimiter(separator as u8)
             .from_path(csv_path)
-            .context(format!("Could not read file with path {:?}", csv_path))?;
+            .context(format!("Could not read file with path {csv_path:?}"))?;
 
         let row_address_factory = RowAddressFactory::new(page_size);
 
@@ -935,7 +935,7 @@ fn render_search_dialogs<P: AsRef<Path>>(
         context.insert("title", &title);
 
         let file_path = Path::new(&output_path)
-            .join(Path::new(&format!("column_{}", column)).with_extension("html"));
+            .join(Path::new(&format!("column_{column}")).with_extension("html"));
 
         let html = templates.render("search_dialog.html.tera", &context)?;
 
@@ -999,7 +999,7 @@ fn render_tick_plot(
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
         .from_path(csv_path)
-        .context(format!("Could not read file with path {:?}", csv_path))?;
+        .context(format!("Could not read file with path {csv_path:?}"))?;
 
     let column_index = reader.headers().map(|s| {
         s.iter()
@@ -1056,7 +1056,7 @@ fn render_bar_plot(
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
         .from_path(csv_path)
-        .context(format!("Could not read file with path {:?}", csv_path))?;
+        .context(format!("Could not read file with path {csv_path:?}"))?;
 
     let column_index = reader.headers().map(|s| {
         s.iter()
@@ -1115,7 +1115,7 @@ pub(crate) fn get_column_domain(
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
         .from_path(csv_path)
-        .context(format!("Could not read file with path {:?}", csv_path))?;
+        .context(format!("Could not read file with path {csv_path:?}"))?;
 
     let column_index = reader
         .headers()
@@ -1198,7 +1198,7 @@ fn get_min_max_multiple_columns(
         let mut reader = csv::ReaderBuilder::new()
             .delimiter(separator as u8)
             .from_path(csv_path)
-            .context(format!("Could not read file with path {:?}", csv_path))?;
+            .context(format!("Could not read file with path {csv_path:?}"))?;
         let column_index = reader.headers().map(|s| {
             s.iter()
                 .position(|t| t == column)
@@ -1538,7 +1538,7 @@ fn render_linkouts(
             let val = table.replace("{value}", &row[index]);
             linkouts.push(Linkout {
                 name: name.to_string(),
-                url: format!("../{}/index_1.html", val),
+                url: format!("../{val}/index_1.html"),
             })
         } else if let Some(table_row) = &link_specs.table_row {
             let (table, linked_column) = table_row.split_once('/').unwrap();

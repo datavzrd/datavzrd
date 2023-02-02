@@ -27,7 +27,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
         .from_path(csv_path)
-        .context(format!("Could not read file with path {:?}", csv_path))?;
+        .context(format!("Could not read file with path {csv_path:?}"))?;
 
     let path = Path::new(output_path.as_ref()).join("plots");
     fs::create_dir(&path)?;
@@ -57,7 +57,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
             }
         };
         let js = templates.render("plot.js.tera", &context)?;
-        let file_path = path.join(Path::new(&format!("plot_{}", index)).with_extension("js"));
+        let file_path = path.join(Path::new(&format!("plot_{index}")).with_extension("js"));
         let mut file = fs::File::create(file_path)?;
         let minified = minify_js(&js)?;
         file.write_all(&minified)?;
@@ -79,7 +79,7 @@ fn generate_numeric_plot(
     };
 
     let mut reader =
-        generate_reader().context(format!("Could not read file with path {:?}", path))?;
+        generate_reader().context(format!("Could not read file with path {path:?}"))?;
 
     let (min, max) = get_min_max(path, separator, column_index, header_rows, None)?;
 
@@ -131,9 +131,9 @@ pub(crate) fn get_min_max(
     };
 
     let mut min_reader =
-        generate_reader().context(format!("Could not read file with path {:?}", path))?;
+        generate_reader().context(format!("Could not read file with path {path:?}"))?;
     let mut max_reader =
-        generate_reader().context(format!("Could not read file with path {:?}", path))?;
+        generate_reader().context(format!("Could not read file with path {path:?}"))?;
 
     let min = min_reader
         .records()
@@ -165,7 +165,7 @@ fn generate_nominal_plot(
     let mut reader = csv::ReaderBuilder::new()
         .delimiter(separator as u8)
         .from_path(path)
-        .context(format!("Could not read file with path {:?}", path))?;
+        .context(format!("Could not read file with path {path:?}"))?;
 
     let mut count_values = HashMap::new();
 
