@@ -435,10 +435,8 @@ impl ItemSpecs {
                 }
             } else if REGEX_RE.is_match(key) {
                 let pattern = get_first_match_group(&REGEX_RE);
-                let regex = Regex::new(pattern).context(format!(
-                    "Failed to parse provided column regex {key}.",
-                    key = key
-                ))?;
+                let regex = Regex::new(pattern)
+                    .context(format!("Failed to parse provided column regex {key}."))?;
                 for header in headers.iter().filter(|header| regex.is_match(header)) {
                     if indexed_keys
                         .insert(header.to_string(), render_column_specs.clone())
@@ -741,10 +739,8 @@ impl AuxDomainColumns {
                         .get(1)
                         .unwrap()
                         .as_str();
-                    let regex = Regex::new(pattern).context(format!(
-                        "Failed to parse provided column regex {column}.",
-                        column = column
-                    ))?;
+                    let regex = Regex::new(pattern)
+                        .context(format!("Failed to parse provided column regex {column}."))?;
                     for header in headers.iter().filter(|header| regex.is_match(header)) {
                         new_tick_plot_aux_domain_columns.push(header.to_string());
                     }
