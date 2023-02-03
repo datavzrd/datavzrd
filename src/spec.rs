@@ -292,7 +292,7 @@ fn default_separator() -> char {
 }
 
 fn default_page_size() -> usize {
-    100_usize
+    20
 }
 
 fn default_header_size() -> usize {
@@ -821,10 +821,10 @@ pub enum ConfigError {
 #[cfg(test)]
 mod tests {
     use crate::spec::{
-        default_links, default_precision, default_render_table, default_single_page_threshold,
-        AuxDomainColumns, DatasetSpecs, DisplayMode, HeaderDisplayMode, HeaderSpecs, Heatmap,
-        ItemSpecs, ItemsSpec, LinkSpec, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
-        RenderTableSpecs, ScaleType, TickPlot,
+        default_links, default_page_size, default_precision, default_render_table,
+        default_single_page_threshold, AuxDomainColumns, DatasetSpecs, DisplayMode,
+        HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, PlotSpec,
+        RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, ScaleType, TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -928,7 +928,7 @@ mod tests {
             hidden: false,
             dataset: Some("table-a".to_string()),
             datasets: None,
-            page_size: 100,
+            page_size: default_page_size(),
             single_page_page_size: 0,
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
@@ -986,7 +986,7 @@ mod tests {
             hidden: false,
             dataset: Some("table-a".to_string()),
             datasets: None,
-            page_size: 100,
+            page_size: default_page_size(),
             single_page_page_size: 0,
             description: Some("my table".parse().unwrap()),
             render_table: default_render_table(),
@@ -1028,7 +1028,7 @@ mod tests {
             hidden: false,
             dataset: Some("table-a".to_string()),
             datasets: None,
-            page_size: 100,
+            page_size: default_page_size(),
             single_page_page_size: 0,
             description: None,
             render_table: Some(RenderTableSpecs {
@@ -1449,7 +1449,7 @@ mod tests {
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: 184_usize,
-            single_page_page_size: 100,
+            single_page_page_size: default_page_size(),
             description: None,
             render_table: Some(RenderTableSpecs {
                 columns: HashMap::from([("age".to_string(), expected_render_columns)]),
