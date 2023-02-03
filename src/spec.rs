@@ -292,7 +292,7 @@ fn default_separator() -> char {
 }
 
 fn default_page_size() -> usize {
-    20_usize
+    20
 }
 
 fn default_header_size() -> usize {
