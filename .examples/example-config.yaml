@@ -18,6 +18,7 @@ datasets:
         column: Title
         table-row: oscars/movie
 default-view: oscars
+webview-controls: true
 views:
   oscars:
     dataset: oscars

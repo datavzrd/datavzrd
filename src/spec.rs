@@ -36,6 +36,8 @@ pub(crate) struct ItemsSpec {
     pub(crate) max_in_memory_rows: usize,
     pub(crate) views: HashMap<String, ItemSpecs>,
     pub(crate) aux_libraries: Option<Vec<String>>,
+    #[serde(default)]
+    pub(crate) webview_controls: bool,
 }
 
 impl ItemsSpec {

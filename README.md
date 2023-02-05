@@ -129,6 +129,10 @@ views:
 
 `aux-libraries` allows to add one or more js libraries via cdn links for usage in [render-html](#render-html). The keyword expects a list of urls that link to the js libraries.
 
+### webview-controls
+
+`webview-controls` allows to turn on sharing individual rows via a link with the data encoded into a url pointing to a webview that hosts a static version of datavzrd. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of the given webview host. Defaults to `false`.
+
 ### datasets
 
 `datasets` defines the different datasets of the report. This is also the place to define links between your individual datasets.

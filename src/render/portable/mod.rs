@@ -222,6 +222,7 @@ impl Renderer for ItemRenderer {
                         is_single_page,
                         table.single_page_page_size,
                         &webview_host,
+                        self.specs.webview_controls,
                     )?;
                     render_plots(
                         &out_path,
@@ -583,6 +584,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     is_single_page: bool,
     page_size: usize,
     webview_host: &String,
+    webview_controls: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -850,6 +852,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("is_single_page", &is_single_page);
     context.insert("page_size", &page_size);
     context.insert("webview_host", &webview_host);
+    context.insert("webview_controls", &webview_controls);
 
     let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
 
