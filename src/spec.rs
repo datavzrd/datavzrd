@@ -1339,7 +1339,7 @@ mod tests {
                     dataset: table-a
             "#;
         let err = serde_yaml::from_str::<ItemsSpec>(raw_config).unwrap_err();
-        assert_eq!(err.to_string(), "unknown field `non-existing-keyword`, expected one of `name`, `datasets`, `default-view`, `max-in-memory-rows`, `views`, `aux-libraries` at line 5 column 13");
+        assert_eq!(err.to_string(), "unknown field `non-existing-keyword`, expected one of `name`, `datasets`, `default-view`, `max-in-memory-rows`, `views`, `aux-libraries`, `webview-controls` at line 5 column 13");
     }
 
     #[test]
