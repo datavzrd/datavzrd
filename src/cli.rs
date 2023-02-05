@@ -25,6 +25,10 @@ pub struct Datavzrd {
     )]
     pub(crate) webview_url: String,
 
+    /// Overwrites the contents of the given output directory if it is not empty.
+    #[structopt(long)]
+    pub(crate) overwrite_output: bool,
+
     /// Output file
     #[structopt(short, long, parse(from_os_str))]
     pub(crate) output: PathBuf,
