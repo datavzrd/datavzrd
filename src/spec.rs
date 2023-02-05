@@ -878,7 +878,7 @@ mod tests {
             views: HashMap::from([("table-a".to_string(), expected_table_spec)]),
             report_name: "my_report".to_string(),
             aux_libraries: None,
-            webview_controls: false
+            webview_controls: false,
         };
 
         let raw_config = r#"
@@ -947,7 +947,7 @@ mod tests {
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: None,
-            webview_controls: false
+            webview_controls: false,
         };
 
         let raw_config = r#"
@@ -1006,7 +1006,7 @@ mod tests {
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: Some(Vec::from(["https://cdnjs.org/d3.js".to_string()])),
-            webview_controls: false
+            webview_controls: false,
         };
 
         let raw_config = r#"
@@ -1081,7 +1081,7 @@ mod tests {
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: None,
-            webview_controls: false
+            webview_controls: false,
         };
 
         let raw_config = r#"
