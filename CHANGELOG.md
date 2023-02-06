@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.15.1](https://www.github.com/datavzrd/datavzrd/compare/v2.15.0...v2.15.1) (2023-02-06)
+
+
+### Bug Fixes
+
+* Turn off webview controls by default ([#335](https://www.github.com/datavzrd/datavzrd/issues/335)) ([55245ff](https://www.github.com/datavzrd/datavzrd/commit/55245ff2c07da743d6ba41134eae3aba67e32384))
+
 ## [2.15.0](https://www.github.com/datavzrd/datavzrd/compare/v2.14.1...v2.15.0) (2023-02-02)
 
 
