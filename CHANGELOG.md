@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.16.0](https://www.github.com/datavzrd/datavzrd/compare/v2.15.0...v2.16.0) (2023-02-06)
+
+
+### Features
+
+* Add --overwrite-output option ([#336](https://www.github.com/datavzrd/datavzrd/issues/336)) ([a24f648](https://www.github.com/datavzrd/datavzrd/commit/a24f64866f7252278c9ba36121c7bc20cb1f2d9d))
+
+
+### Bug Fixes
+
+* Turn off webview controls by default ([#335](https://www.github.com/datavzrd/datavzrd/issues/335)) ([55245ff](https://www.github.com/datavzrd/datavzrd/commit/55245ff2c07da743d6ba41134eae3aba67e32384))
+
 ## [2.15.0](https://www.github.com/datavzrd/datavzrd/compare/v2.14.1...v2.15.0) (2023-02-02)
 
 
