@@ -131,7 +131,7 @@ views:
 
 ### webview-controls
 
-`webview-controls` allows to turn on sharing individual rows via a link with the data encoded into a url pointing to a webview that hosts a static version of datavzrd. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of the given webview host. Defaults to `false`.
+`webview-controls` allows to turn on sharing individual rows via a link with the data encoded into a url pointing to a webview that hosts a static version of datavzrd at https://datavzrd.github.io. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of the given webview host. Defaults to `false`.
 
 ### datasets
 
