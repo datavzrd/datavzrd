@@ -36,6 +36,8 @@ pub(crate) struct ItemsSpec {
     pub(crate) max_in_memory_rows: usize,
     pub(crate) views: HashMap<String, ItemSpecs>,
     pub(crate) aux_libraries: Option<Vec<String>>,
+    #[serde(default)]
+    pub(crate) webview_controls: bool,
 }
 
 impl ItemsSpec {
@@ -876,6 +878,7 @@ mod tests {
             views: HashMap::from([("table-a".to_string(), expected_table_spec)]),
             report_name: "my_report".to_string(),
             aux_libraries: None,
+            webview_controls: false,
         };
 
         let raw_config = r#"
@@ -944,6 +947,7 @@ mod tests {
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: None,
+            webview_controls: false,
         };
 
         let raw_config = r#"
@@ -1002,6 +1006,7 @@ mod tests {
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: Some(Vec::from(["https://cdnjs.org/d3.js".to_string()])),
+            webview_controls: false,
         };
 
         let raw_config = r#"
@@ -1076,6 +1081,7 @@ mod tests {
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: None,
+            webview_controls: false,
         };
 
         let raw_config = r#"
@@ -1333,7 +1339,7 @@ mod tests {
                     dataset: table-a
             "#;
         let err = serde_yaml::from_str::<ItemsSpec>(raw_config).unwrap_err();
-        assert_eq!(err.to_string(), "unknown field `non-existing-keyword`, expected one of `name`, `datasets`, `default-view`, `max-in-memory-rows`, `views`, `aux-libraries` at line 5 column 13");
+        assert_eq!(err.to_string(), "unknown field `non-existing-keyword`, expected one of `name`, `datasets`, `default-view`, `max-in-memory-rows`, `views`, `aux-libraries`, `webview-controls` at line 5 column 13");
     }
 
     #[test]

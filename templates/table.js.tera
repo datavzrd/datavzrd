@@ -98,7 +98,7 @@ $(document).ready(function() {
         bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
     }
 
-    bs_table_cols.push({field: 'share', title: '', formatter: function(value){ return value }});
+    {% if webview_controls %}bs_table_cols.push({field: 'share', title: '', formatter: function(value){ return value }});{% endif %}
 
     $('#table').bootstrapTable({
         columns: bs_table_cols,
@@ -125,7 +125,7 @@ $(document).ready(function() {
         if (linkouts != null) {
             row["linkouts"] = decompressed_linkouts[j];
         }
-        row["share"] = `<span data-toggle="tooltip" data-placement="left" title="Share link via QR code. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of {{webview_host}}.">
+        {% if webview_controls %}row["share"] = `<span data-toggle="tooltip" data-placement="left" title="Share link via QR code. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of {{webview_host}}.">
         <button class="btn btn-outline-secondary share-btn" onclick="shareRow(${j}, '{{webview_host}}')">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
             <path d="M2 2h2v2H2V2Z"/>
@@ -142,7 +142,7 @@ $(document).ready(function() {
                     <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5Z"/>
                 </svg>
             </button>
-        </span>`;
+        </span>`;{% endif %}
         j++;
         table_rows.push(row);
     }
