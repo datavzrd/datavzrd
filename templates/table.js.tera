@@ -17,7 +17,7 @@ const config = {
     {% endfor %}
     "detail_mode": {{ detail_mode }},
     "header_label_length": {{ header_labels | length }},
-    "header_ellipsis": [{% for row, l in header_ellipsis %}{"index": {{ row }}, "ellipsis": {{ l }}}{% endfor %}],
+    "header_ellipsis": [{% for row, l in header_ellipsis %}{"index": {{ row }}, "ellipsis": {{ l }}},{% endfor %}],
     "ticks": [
         {% for title, tick_plot in tick_plots %}
         {
