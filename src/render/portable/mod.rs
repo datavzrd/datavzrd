@@ -283,7 +283,16 @@ fn render_page<P: AsRef<Path>>(
     let compressed_linkouts = if !links.is_empty() {
         let linkouts = data
             .iter()
-            .map(|r| render_link_column(r, linked_tables, titles, links).unwrap())
+            .map(|r| {
+                render_link_column(
+                    r,
+                    linked_tables,
+                    titles,
+                    links,
+                    views.get(name).unwrap().dataset.as_ref().unwrap(),
+                )
+                .unwrap()
+            })
             .collect_vec();
         Some(compress_to_utf16(&json!(linkouts).to_string()))
     } else {
@@ -1269,6 +1278,7 @@ fn render_plot_page<P: AsRef<Path>>(
                     linked_tables,
                     &headers,
                     links,
+                    views.get(name).unwrap().dataset.as_ref().unwrap(),
                 )
                 .unwrap()
             })
@@ -1513,8 +1523,9 @@ fn render_link_column(
     linked_tables: &LinkedTable,
     titles: &[String],
     links: &HashMap<String, LinkSpec>,
+    dataset_name: &str,
 ) -> Result<String> {
-    let linkouts = render_linkouts(row, linked_tables, titles, links)?;
+    let linkouts = render_linkouts(row, linked_tables, titles, links, dataset_name)?;
 
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -1533,6 +1544,7 @@ fn render_linkouts(
     linked_tables: &LinkedTable,
     titles: &[String],
     links: &HashMap<String, LinkSpec>,
+    dataset_name: &str,
 ) -> Result<Vec<Linkout>> {
     let mut linkouts = Vec::new();
     for (name, link_specs) in links {
@@ -1556,6 +1568,8 @@ fn render_linkouts(
                             not_found: row[index].to_string(),
                             column: linked_column.to_string(),
                             table: table.to_string(),
+                            link_definition: name.to_string(),
+                            dataset_name: dataset_name.to_string()
                         })
                     } else {
                         continue;
@@ -1635,11 +1649,13 @@ fn render_excel_sheet<P: AsRef<Path>>(specs: &ItemsSpec, output_path: P) -> Resu
 
 #[derive(Error, Debug)]
 pub enum TableLinkingError {
-    #[error("Could not find {not_found:?} in column {column:?} of table {table:?}")]
+    #[error("Could not find {not_found:?} in column {column:?} of table {table:?} when calculating link definition {link_definition:?} of dataset {dataset_name:?}.")]
     NotFound {
         not_found: String,
         column: String,
         table: String,
+        link_definition: String,
+        dataset_name: String,
     },
 }
 
