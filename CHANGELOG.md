@@ -1,5 +1,15 @@
 # Changelog
 
+### [2.16.1](https://www.github.com/datavzrd/datavzrd/compare/v2.16.0...v2.16.1) (2023-02-08)
+
+
+### Bug Fixes
+
+* Accept double quotes on regexes ([#346](https://www.github.com/datavzrd/datavzrd/issues/346)) ([1c32c10](https://www.github.com/datavzrd/datavzrd/commit/1c32c101fff44649b7526787be8528cea6dfb24c))
+* Fix js for multiple header ellipsis usage ([#342](https://www.github.com/datavzrd/datavzrd/issues/342)) ([70aa282](https://www.github.com/datavzrd/datavzrd/commit/70aa282a7b08a884dc9865b84a7fd662886442c6))
+* Improve context when calculating links between datasets ([#349](https://www.github.com/datavzrd/datavzrd/issues/349)) ([e29cff1](https://www.github.com/datavzrd/datavzrd/commit/e29cff11f1bee171629891bd1c849fc640a6316e))
+* Show ellipsis as tooltip ([#350](https://www.github.com/datavzrd/datavzrd/issues/350)) ([a77509a](https://www.github.com/datavzrd/datavzrd/commit/a77509ac22c9d01ba40d42275013f206ef9b5b3e))
+
 ## [2.16.0](https://www.github.com/datavzrd/datavzrd/compare/v2.15.0...v2.16.0) (2023-02-06)
 
 
