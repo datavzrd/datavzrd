@@ -197,7 +197,7 @@ function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_l
         function () {
             value = this.innerHTML;
             if (value.length > ellipsis) {
-                this.innerHTML = `${value.substring(0, ellipsis)}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${value}</div>'>...</a>`;
+                this.innerHTML = `<span data-toggle="tooltip" data-trigger="hover click focus" title='${value}'>${value.substring(0, ellipsis)}...</span>`;
             }
             row++;
         }
@@ -209,7 +209,7 @@ function shortenHeaderRow(row, ellipsis, skip_label) {
         function() {
             value = this.innerHTML;
             if (value.length > ellipsis && !skip_label) {
-                this.innerHTML = `${value.substring(0, ellipsis)}<a tabindex="0" role="button" href="#" data-toggle="popover" data-trigger="focus" data-html='true' data-content='<div style="overflow: auto; max-height: 30vh; max-width: 25vw;">${value}</div>'>...</a>`;
+                this.innerHTML = `<span data-toggle="tooltip" data-trigger="hover click focus" title='${value}'>${value.substring(0, ellipsis)}...</span>`;
             }
             skip_label = false;
         }
