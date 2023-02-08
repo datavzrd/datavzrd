@@ -376,7 +376,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    static ref REGEX_RE: Regex = Regex::new(r"^regex\('(.+)'\)$").unwrap();
+    static ref REGEX_RE: Regex = Regex::new(r#"^regex\((?:'|")(.+)(?:'|")\)$"#).unwrap();
 }
 
 impl ItemSpecs {
