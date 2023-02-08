@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.16.2](https://www.github.com/datavzrd/datavzrd/compare/v2.16.1...v2.16.2) (2023-02-08)
+
+
+### Bug Fixes
+
+* Fix custom plots on multi page views ([#351](https://www.github.com/datavzrd/datavzrd/issues/351)) ([1618cf5](https://www.github.com/datavzrd/datavzrd/commit/1618cf5840fd66e5657f50cd37370c7072231183))
+
 ### [2.16.1](https://www.github.com/datavzrd/datavzrd/compare/v2.16.0...v2.16.1) (2023-02-08)
 
 
