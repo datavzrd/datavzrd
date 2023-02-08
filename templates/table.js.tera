@@ -407,7 +407,7 @@ function renderCustomPlots{{ loop.index0 }}(ah, dp_columns) {
     var data_function = {{ custom_plot.data }};
     var specs =  {{ custom_plot.spec }};
     let row = 0;
-    let table_rows = $('#table').bootstrapTable('getData');
+    let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             if (!detail_mode) {
