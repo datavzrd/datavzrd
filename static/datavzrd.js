@@ -26,7 +26,7 @@ function createShareURL(index, webhost_url) {
     var c = JSON.parse(JSON.stringify(config));
     c["data"] = data;
     // Update this version number when the config or datavzrd.js changes
-    c["datavzrd_row_encoding_version"] = 1;
+    c["datavzrd_row_encoding_version"] = 2;
     const packer = new jsonm.Packer();
     let packedMessage = packer.pack(c);
     let compressed = LZString.compressToEncodedURIComponent(JSON.stringify(packedMessage))
@@ -227,11 +227,33 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_url, detail_mode, he
         function () {
             let row = this.parentElement.dataset.index;
             let value = table_rows[row][title];
-            let link = link_url.replaceAll("{value}", value);
-            for (column of columns) {
-                link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+            if (typeof link_url === "string") {
+                let link = link_url.replaceAll("{value}", value);
+                for (column of columns) {
+                    link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+                }
+                this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
+            } else {
+                let links = "";
+                Object.keys(link_url).forEach(function (key) {
+                    let link = link_url[key].replaceAll("{value}", value);
+                    console.log("test");
+                    for (column of columns) {
+                        link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+                    }
+                    links = `${links}<a class="dropdown-item" href='${link}' target='_blank' >${key}</a>`;
+                });
+                this.innerHTML = `
+                <div class="btn-group">
+                  <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ${value}
+                  </button>
+                  <div class="dropdown-menu">
+                    ${links}
+                  </div>
+                </div>
+                `;
             }
-            this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
             row++;
         }
     );

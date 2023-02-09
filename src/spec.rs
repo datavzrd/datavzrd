@@ -488,7 +488,7 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) display_mode: DisplayMode,
     #[serde(default)]
-    pub(crate) link_to_url: Option<String>,
+    pub(crate) link_to_url: Option<LinkToUrl>,
     #[serde(default)]
     pub(crate) plot: Option<PlotSpec>,
     #[serde(default)]
@@ -497,6 +497,13 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) ellipsis: Option<u32>,
     #[serde(default)]
     pub(crate) plot_view_legend: bool,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase", untagged)]
+pub(crate) enum LinkToUrl {
+    Urls(HashMap<String, String>),
+    Url(String),
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]

@@ -71,7 +71,9 @@ views:
         imdbID:
           link-to-url: "https://www.imdb.com/title/{value}/"
         Title:
-          link-to-url: "https://de.wikipedia.org/wiki/{value}"
+          link-to-url:
+            Wikipedia: "https://de.wikipedia.org/wiki/{value}"
+            Letterboxd: "https://letterboxd.com/search/{value}"
         imdbRating:
           precision: 1
           plot:

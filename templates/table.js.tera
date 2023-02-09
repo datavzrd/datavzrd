@@ -32,7 +32,7 @@ const config = {
         {% for title, link_url in link_urls %}
         {
             "title": "{{ title }}",
-            "url": "{{ link_url }}"
+            "url": {{ link_url | json_encode}}
         },
         {% endfor %}
     ],
