@@ -837,6 +837,7 @@ mod tests {
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
+    use crate::spec::LinkToUrl::Url;
 
     #[test]
     fn test_table_config_deserialization() {
@@ -846,7 +847,7 @@ mod tests {
             custom: None,
             custom_path: None,
             display_mode: DisplayMode::Normal,
-            link_to_url: Some("https://www.rust-lang.org".to_string()),
+            link_to_url: Some(Url("https://www.rust-lang.org".to_string())),
             plot: None,
             custom_plot: None,
             ellipsis: None,
