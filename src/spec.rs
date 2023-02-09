@@ -829,6 +829,7 @@ pub enum ConfigError {
 
 #[cfg(test)]
 mod tests {
+    use crate::spec::LinkToUrl::Url;
     use crate::spec::{
         default_links, default_page_size, default_precision, default_render_table,
         default_single_page_threshold, AuxDomainColumns, DatasetSpecs, DisplayMode,
@@ -837,7 +838,6 @@ mod tests {
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
-    use crate::spec::LinkToUrl::Url;
 
     #[test]
     fn test_table_config_deserialization() {
