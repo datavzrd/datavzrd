@@ -21,6 +21,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
     csv_path: &Path,
     separator: char,
     header_rows: usize,
+    debug: bool,
 ) -> Result<()> {
     let column_types = classify_table(csv_path, separator, header_rows)?;
 
@@ -59,7 +60,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
         let js = templates.render("plot.js.tera", &context)?;
         let file_path = path.join(Path::new(&format!("plot_{index}")).with_extension("js"));
         let mut file = fs::File::create(file_path)?;
-        let minified = minify_js(&js)?;
+        let minified = minify_js(&js, debug)?;
         file.write_all(&minified)?;
     }
     Ok(())
