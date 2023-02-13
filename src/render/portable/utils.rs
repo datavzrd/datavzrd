@@ -1,6 +1,6 @@
 use crate::spec::{ItemsSpec, RenderColumnSpec};
 use anyhow::Result;
-use minify_js::{minify, TopLevelMode};
+use minify_js::{minify, Session, TopLevelMode};
 use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
@@ -89,8 +89,9 @@ pub(crate) fn minify_js(file: &str, debug: bool) -> Result<Vec<u8>> {
     if !debug {
         let mut minified: Vec<u8> = Vec::new();
         minify(
+            &Session::new(),
             TopLevelMode::Global,
-            file.as_bytes().to_vec(),
+            &file.as_bytes().to_vec(),
             &mut minified,
         )
         .expect("Failed minifying js");
