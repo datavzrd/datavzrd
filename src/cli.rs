@@ -12,6 +12,10 @@ pub struct Datavzrd {
     #[structopt(short, long, parse(from_occurrences))]
     pub(crate) _verbose: u8,
 
+    /// Activates debug mode. Javascript files are not minified.
+    #[structopt(long)]
+    pub(crate) debug: bool,
+
     /// Config file containing file paths and settings
     #[structopt(name = "CONFIG", parse(from_os_str))]
     pub(crate) config: PathBuf,
