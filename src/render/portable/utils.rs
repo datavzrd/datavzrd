@@ -85,7 +85,6 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
     Ok(())
 }
 
-
 pub(crate) fn minify_js(file: &str, debug: bool) -> Result<Vec<u8>> {
     if !debug {
         let mut minified: Vec<u8> = Vec::new();
