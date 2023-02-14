@@ -782,15 +782,10 @@ fn render_table_javascript<P: AsRef<Path>>(
 
     let labels = get_column_labels(render_columns);
 
-    let link_urls: HashMap<String, String> = render_columns
+    let link_urls: HashMap<String, _> = render_columns
         .iter()
         .filter(|(_, k)| k.link_to_url.is_some())
-        .map(|(t, spec)| {
-            (
-                t.to_string(),
-                spec.link_to_url.as_ref().unwrap().to_string(),
-            )
-        })
+        .map(|(t, spec)| (t.to_string(), spec.link_to_url.as_ref().unwrap()))
         .collect();
 
     let ellipses: HashMap<String, u32> = render_columns

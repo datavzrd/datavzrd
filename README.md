@@ -57,7 +57,9 @@ views:
               return `<b>${value}</b>`;
             }
         y:
-          link-to-url: 'https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={value}'
+          link-to-url: 
+            Ensembl: 
+              url: 'https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={value}'
   table-b:
     dataset: table-b
     render-table:
@@ -137,12 +139,12 @@ views:
 
 `datasets` defines the different datasets of the report. This is also the place to define links between your individual datasets.
 
-| keyword         | explanation                                    | default |
-|-----------------|------------------------------------------------|---------|
-| path            | The path of the CSV/TSV file                   |         |
-| separator       | The delimiter of the file                      | ,       |
-| headers         | Number of header rows in the file              | 1       |
-| [links](#links) | Configuration linking between items            |         |
+| keyword         | explanation                                         | default |
+|-----------------|-----------------------------------------------------|---------|
+| path            | The path of the CSV/TSV file                        |         |
+| separator       | The delimiter of the file                           | ,       |
+| headers         | Number of header rows in the file                   | 1       |
+| [links](#links) | Configuration linking between items                 |         |
 | offer-excel     | Whether to offer the dataset as an excel worksheet. | false   |
 
 ### views
@@ -150,7 +152,7 @@ views:
 `views` consists of all different CSV/TSV views (table or plot) that should be included in the resulting report. If neither `render-table` nor `render-plot` is present, datavzrd will render the given file as a table. Each item definition can contain these values:
 
 | keyword                       | explanation                                                                                                                                                                                                                                        | default |
-|-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------- |
+|-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
 | desc                          | A description that will be shown in the report. [Markdown](https://github.github.com/gfm/) is allowed and will be rendered to proper HTML.                                                                                                         |         |
 | dataset                       | The name of the corresponding dataset to this view defined in [datasets](#datasets)                                                                                                                                                                |         |
 | datasets                      | Key-value pairs to include multiple datasets into a [render-plot](#render-plot) configuration. Key must be the name of the dataset in the given vega-lite specswhile the value needs to be the name of a dataset defined in [datasets](#datasets). |         |
@@ -165,28 +167,28 @@ views:
 
 `render-table` contains definitions for a table view
 
-| keyword                                   | explanation                                   |
-| ------------------------------------------|-----------------------------------------------|
-| [columns](#columns)                       | Configuration of columns                      |
-| [headers](#headers)  | Configuration of the additional headers       |
+| keyword                | explanation                                   |
+|------------------------|-----------------------------------------------|
+| [columns](#columns)    | Configuration of columns                      |
+| [headers](#headers)    | Configuration of the additional headers       |
 
 ### columns
 
 `columns` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file, its 0-based index (e.g. `index(5)` for the 6th column), or a regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`):
 
-| keyword                     | explanation                                                                                                                                                                                                                                                                                                                                                                             | default | possible values           |
-|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|---------------------------|
-| link-to-url                 | Renders a link to the given url with {value} replace by the value of the table. Other values of the same row can be accessed by their column header (e.g. {age} for a column named age).                                                                                                                                                                                                |         |                           |
-| custom                      | Applies the given js function to render column content. The parameters of the function are similar to the ones defined [here](https://bootstrap-table.com/docs/api/column-options/#formatter)                                                                                                                                                                                           |         |                           |
-| label                       | Allows to specify a label that will be used in the table header instead of the column title in the given dataset.                                                                                                                                                                                                                                                                       |         |                           |
-| custom-path                 | Allows to specify a path to a file that contains a js function similar to custom. The file should only contain one js function (the name of the function shouldn't matter) and should look like [this](https://github.com/koesterlab/datavzrd/blob/main/.examples/specs/time-formatter.js). The given path is relative to the directory you are currently in and running datavzrd from. |         |                           |
-| [custom-plot](#custom-plot) | Renders a custom vega-lite plot to the corresponding table cell                                                                                                                                                                                                                                                                                                                         |         |                           |
-| [plot](#plot)               | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                                                                                                                                                                                                                                                                                                     |         |                           |
-| ellipsis                    | Shortens values to the first *n* given characters with the rest hidden behind a popover                                                                                                                                                                                                                                                                                                 |         |                           |
-| optional                    | Allows to have a column specified in render-table that is actually not present.                                                                                                                                                                                                                                                                                                         | false   | true, false               |
-| display-mode                | Allows to hide columns from views by setting this to `hidden` or have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`.                                                                                                                                                                           | normal  | detail, normal, hidden    |
-| precision                   | Allows to specify the precision of floats. It expects an integer specifying the decimal places that will be shown. Values smaller than $1 / (10^{precision})$ will be displayed in scientific notation with the same number of decimal places.                                                                                                                                          | 2       |                           |
-| plot-view-legend            | Specifies whether the column in the plot-view should include a legend or not.                                                                                                                                                                                                                                                                                                           | false   | true, false               |
+| keyword                      | explanation                                                                                                                                                                                                                                                                                                                                                                             | default | possible values           |
+|------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|---------------------------|
+| [link-to-url](#link-to-url)  | You can either specify only a single url or key value pairs with a name as the key and the url as the value that will then be accessible via a dropdown.                                                                                                                                                                                                                                |         |                           |
+| custom                       | Applies the given js function to render column content. The parameters of the function are similar to the ones defined [here](https://bootstrap-table.com/docs/api/column-options/#formatter)                                                                                                                                                                                           |         |                           |
+| label                        | Allows to specify a label that will be used in the table header instead of the column title in the given dataset.                                                                                                                                                                                                                                                                       |         |                           |
+| custom-path                  | Allows to specify a path to a file that contains a js function similar to custom. The file should only contain one js function (the name of the function shouldn't matter) and should look like [this](https://github.com/koesterlab/datavzrd/blob/main/.examples/specs/time-formatter.js). The given path is relative to the directory you are currently in and running datavzrd from. |         |                           |
+| [custom-plot](#custom-plot)  | Renders a custom vega-lite plot to the corresponding table cell                                                                                                                                                                                                                                                                                                                         |         |                           |
+| [plot](#plot)                | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell                                                                                                                                                                                                                                                                                                     |         |                           |
+| ellipsis                     | Shortens values to the first *n* given characters with the rest hidden behind a popover                                                                                                                                                                                                                                                                                                 |         |                           |
+| optional                     | Allows to have a column specified in render-table that is actually not present.                                                                                                                                                                                                                                                                                                         | false   | true, false               |
+| display-mode                 | Allows to hide columns from views by setting this to `hidden` or have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`.                                                                                                                                                                           | normal  | detail, normal, hidden    |
+| precision                    | Allows to specify the precision of floats. It expects an integer specifying the decimal places that will be shown. Values smaller than $1 / (10^{precision})$ will be displayed in scientific notation with the same number of decimal places.                                                                                                                                          | 2       |                           |
+| plot-view-legend             | Specifies whether the column in the plot-view should include a legend or not.                                                                                                                                                                                                                                                                                                           | false   | true, false               |
 
 ### headers
 
@@ -196,7 +198,7 @@ views:
 |---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | label         | Allows to add an additional label to the corresponding header                                                                                                 |
 | [plot](#plot) | Renders a vega-lite plot defined with [plot](#plot) to the corresponding table cell (currently only the [heatmap](#heatmap) type is supported in header rows) |
-| display-mode  | Allows to hide the header row by setting this to `hidden`.  |
+| display-mode  | Allows to hide the header row by setting this to `hidden`.                                                                                                    |
 | ellipsis      | Shortens values to the first *n* given characters with the rest hidden behind a popover.                                                                      |
 
 ### render-plot
@@ -204,7 +206,7 @@ views:
 `render-plot` contains individual configurations for generating a single plot from the given CSV/TSV file.
 
 | keyword   | explanation                                                                                                                                                                                     |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | spec      | A schema for a vega lite plot that will be rendered to a single view                                                                                                                            |
 | spec-path | The path to a file containing a schema for a vega lite plot that will be rendered to a single view. The given path is relative to the directory you are currently in and running datavzrd from. |
 
@@ -221,7 +223,7 @@ views:
 `links` can configure linkouts between multiple items.
 
 | keyword   | explanation                                                                                                      | default |
-| --------- | ---------------------------------------------------------------------------------------------------------------- | ------- |
+|-----------|------------------------------------------------------------------------------------------------------------------|---------|
 | column    | The column that contains the value used for the linkout                                                          |         |
 | table-row | Renders as a linkout to the other table highlighting the row in which the gene column has the same value as here |         |
 | view      | Renders as a link to the given view                                                                              |         |
@@ -232,11 +234,20 @@ views:
 `custom-plot` allows the rendering of customized vega-lite plots per cell.
 
 | keyword       | explanation                                                                                                | default |
-| ------------- | ---------------------------------------------------------------------------------------------------------- | ------- |
+|---------------|------------------------------------------------------------------------------------------------------------|---------|
 | data          | A function to return the data needed for the schema (see below) from the content of the column cell        |         |
 | spec          | The vega-lite spec for a vega plot that is rendered into each cell of this column                          |         |
 | spec-path     | The path to a file containing a schema for a vega-lite plot that is rendered into each cell of this column |         |
 | vega-controls | Whether or not the resulting vega-lite plot is supposed to have action-links in the embedded view          | false   |
+
+### link-to-url
+
+`link-to-url` allows rendering a link to a given url with {value} replaced by the value of the table.
+
+| keyword       | explanation                                                                                                                                                           | default |
+|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| url           | The url where {value} is replaced by the value of the table. Other values of the same row can be accessed by their column header (e.g. {age} for a column named age). |         |
+| new-window    | Whether or not the rendered link will be opened in a new window or not                                                                                                | true    |
 
 ### plot
 
