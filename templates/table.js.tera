@@ -325,7 +325,8 @@ $(document).ready(function() {
                            'filterAlgorithm': customFilter
                        })
                    });
-                    view.addEventListener('mouseleave', function(name, value) {
+                   // Add another event listener so the filter is still triggered when the brush is dragged outside the plot.
+                   view.addEventListener('mouseleave', function(name, value) {
                         $('#table').bootstrapTable('filterBy', {"":""}, {
                             'filterAlgorithm': customFilter
                         })
