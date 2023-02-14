@@ -26,7 +26,7 @@ function createShareURL(index, webhost_url) {
     var c = JSON.parse(JSON.stringify(config));
     c["data"] = data;
     // Update this version number when the config or datavzrd.js changes
-    c["datavzrd_row_encoding_version"] = 1;
+    c["datavzrd_row_encoding_version"] = 2;
     const packer = new jsonm.Packer();
     let packedMessage = packer.pack(c);
     let compressed = LZString.compressToEncodedURIComponent(JSON.stringify(packedMessage))
@@ -217,7 +217,7 @@ function shortenHeaderRow(row, ellipsis, skip_label) {
 }
 
 
-function linkUrlColumn(ah, dp_columns, columns, title, link_url, detail_mode, header_label_length) {
+function linkUrlColumn(ah, dp_columns, columns, title, link_urls, detail_mode, header_label_length) {
     let index = dp_columns.indexOf(title) + 1;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
@@ -227,11 +227,36 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_url, detail_mode, he
         function () {
             let row = this.parentElement.dataset.index;
             let value = table_rows[row][title];
-            let link = link_url.replaceAll("{value}", value);
-            for (column of columns) {
-                link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+            if (link_urls.length == 1) {
+                let link = link_urls[0].link.url.replaceAll("{value}", value);
+                for (column of columns) {
+                    link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+                }
+                this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
+            } else {
+                let links = "";
+                for (let l of link_urls) {
+                    let link = l.link.url.replaceAll("{value}", value);
+                    for (column of columns) {
+                        link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+                    }
+                    if (l.link.new_window) {
+                        links = `${links}<a class="dropdown-item" href='${link}' target='_blank' >${l.name}</a>`;
+                    } else {
+                        links = `${links}<a class="dropdown-item" href='${link}' >${l.name}</a>`;
+                    }
+                }
+                this.innerHTML = `
+                <div class="btn-group">
+                  <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ${value}
+                  </button>
+                  <div class="dropdown-menu">
+                    ${links}
+                  </div>
+                </div>
+                `;
             }
-            this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
             row++;
         }
     );
