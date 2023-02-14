@@ -325,6 +325,11 @@ $(document).ready(function() {
                            'filterAlgorithm': customFilter
                        })
                    });
+                    view.addEventListener('mouseleave', function(name, value) {
+                        $('#table').bootstrapTable('filterBy', {"":""}, {
+                            'filterAlgorithm': customFilter
+                        })
+                    });
                })
            } else {
            if(!reset){
