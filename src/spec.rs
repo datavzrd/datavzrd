@@ -488,7 +488,7 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) display_mode: DisplayMode,
     #[serde(default)]
-    pub(crate) link_to_url: Option<LinkToUrl>,
+    pub(crate) link_to_url: Option<HashMap<String, LinkToUrlSpec>>,
     #[serde(default)]
     pub(crate) plot: Option<PlotSpec>,
     #[serde(default)]
@@ -500,10 +500,15 @@ pub(crate) struct RenderColumnSpec {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase", untagged)]
-pub(crate) enum LinkToUrl {
-    Urls(HashMap<String, String>),
-    Url(String),
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+pub(crate) struct LinkToUrlSpec {
+    url: String,
+    #[serde(default = "default_new_window")]
+    new_window: bool,
+}
+
+fn default_new_window() -> bool {
+    true
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
@@ -829,12 +834,12 @@ pub enum ConfigError {
 
 #[cfg(test)]
 mod tests {
-    use crate::spec::LinkToUrl::Url;
     use crate::spec::{
         default_links, default_page_size, default_precision, default_render_table,
         default_single_page_threshold, AuxDomainColumns, DatasetSpecs, DisplayMode,
-        HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, PlotSpec,
-        RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, ScaleType, TickPlot,
+        HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, LinkToUrlSpec,
+        PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, ScaleType,
+        TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -847,7 +852,13 @@ mod tests {
             custom: None,
             custom_path: None,
             display_mode: DisplayMode::Normal,
-            link_to_url: Some(Url("https://www.rust-lang.org".to_string())),
+            link_to_url: Some(HashMap::from([(
+                "Rust".to_string(),
+                LinkToUrlSpec {
+                    url: "https://www.rust-lang.org".to_string(),
+                    new_window: true,
+                },
+            )])),
             plot: None,
             custom_plot: None,
             ellipsis: None,
@@ -901,7 +912,9 @@ mod tests {
             render-table:
                 columns:
                     x:
-                        link-to-url: https://www.rust-lang.org
+                        link-to-url:
+                            Rust:
+                                url: https://www.rust-lang.org
     "#;
 
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
@@ -1327,7 +1340,9 @@ mod tests {
                     render-table:
                         columns:
                             x:
-                                link-to-url: "https://lmgtfy.app/?q=Is {name} in {movie}?"
+                                link-to-url:
+                                    lmgtfy:
+                                        url: "https://lmgtfy.app/?q=Is {name} in {movie}?"
                     render-plot:
                         spec-path: ".examples/specs/movies.vl.json"
             "#;

@@ -42,9 +42,13 @@ views:
                 - 20
                 - 100
         name:
-          link-to-url: "https://lmgtfy.app/?q=Is {name} in {movie}?"
+          link-to-url:
+            lmgtfy:
+              url: "https://lmgtfy.app/?q=Is {name} in {movie}?"
         movie:
-          link-to-url: "https://de.wikipedia.org/wiki/{value}"
+          link-to-url:
+            Wikipedia:
+              url: "https://de.wikipedia.org/wiki/{value}"
         award:
           plot:
             heatmap:
@@ -69,11 +73,16 @@ views:
         Genre:
           ellipsis: 15
         imdbID:
-          link-to-url: "https://www.imdb.com/title/{value}/"
+          link-to-url:
+            IMDB:
+              url: "https://www.imdb.com/title/{value}/"
         Title:
           link-to-url:
-            Wikipedia: "https://de.wikipedia.org/wiki/{value}"
-            Letterboxd: "https://letterboxd.com/search/{value}"
+            Wikipedia:
+              url: "https://de.wikipedia.org/wiki/{value}"
+            Letterboxd:
+              url: "https://letterboxd.com/search/{value}"
+              new-window: false
         imdbRating:
           precision: 1
           plot:

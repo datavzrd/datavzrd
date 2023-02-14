@@ -32,7 +32,12 @@ const config = {
         {% for title, link_url in link_urls %}
         {
             "title": "{{ title }}",
-            "url": {{ link_url | json_encode}}
+            "links": [{% for name, link in link_url %}
+                {
+                    "name": "{{ name }}",
+                    "link": {{ link | json_encode }}
+                }{% if not loop.last %},{% endif %}
+        {% endfor %}]
         },
         {% endfor %}
     ],
@@ -556,7 +561,7 @@ for (o of config.bars) {
 
 for (o of config.link_urls) {
     if (displayed_columns.includes(o.title)) {
-        linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.url, config.detail_mode, config.header_label_length);
+        linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, config.detail_mode, config.header_label_length);
     }
 }
 
