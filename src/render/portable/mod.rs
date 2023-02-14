@@ -43,7 +43,7 @@ type LinkedTable = HashMap<(String, String), ColumnIndex>;
 
 impl Renderer for ItemRenderer {
     /// Render all items of user config
-    fn render_tables<P>(&self, path: P, webview_host: String) -> Result<()>
+    fn render_tables<P>(&self, path: P, webview_host: String, debug: bool) -> Result<()>
     where
         P: AsRef<Path>,
     {
@@ -223,12 +223,14 @@ impl Renderer for ItemRenderer {
                         table.single_page_page_size,
                         &webview_host,
                         self.specs.webview_controls,
+                        debug,
                     )?;
                     render_plots(
                         &out_path,
                         &dataset.path,
                         dataset.separator,
                         dataset.header_rows,
+                        debug,
                     )?;
                 }
             } else {
@@ -594,6 +596,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     page_size: usize,
     webview_host: &String,
     webview_controls: bool,
+    debug: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -863,7 +866,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     let js = templates.render("table.js.tera", &context)?;
 
     let mut file = File::create(file_path)?;
-    let minified = minify_js(&js)?;
+    let minified = minify_js(&js, debug)?;
     file.write_all(&minified)?;
 
     Ok(())

@@ -195,7 +195,7 @@ $(document).ready(function() {
     window.addEventListener('beforeprint', (event) => {
         setTimeout(function (){
             $('#table').bootstrapTable('togglePagination');
-            render(additional_headers, config.displayed_columns, table_rows, config.columns, config);
+            render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false);
             $('th').css("height", header_height - 15);
             {% if detail_mode %}
                 $(`table > tbody > tr td:nth-child(1)`).each(function() {this.style.setProperty("display", "none");});
@@ -230,7 +230,7 @@ $(document).ready(function() {
     });
     addNumClass(config.dp_num, additional_headers.length);
 
-    render(additional_headers, config.displayed_columns, table_rows, config.columns, config);
+    render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true);
 
     {% if not detail_mode and not header_labels | length == 0 %}
     $("table > thead > tr:first-child th:first-child").css("visibility", "hidden");
@@ -376,7 +376,7 @@ $(document).ready(function() {
 
     {% if is_single_page %}$('#table').on('page-change.bs.table', (number, size) => {
         setTimeout(function (){
-        render(additional_headers, config.displayed_columns, table_rows, config.columns, config);
+        render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false);
         }, 0);
     }){% endif %}
 
@@ -537,7 +537,7 @@ function addNumClass(dp_num, ah) {
     }
 }
 
-function render(additional_headers, displayed_columns, table_rows, columns, config) {
+function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers) {
 {% for title, custom_plot in custom_plots %}
     renderCustomPlots{{ loop.index0 }}(additional_headers.length, displayed_columns);
 {% endfor %}
@@ -572,12 +572,14 @@ for (o of config.ellipsis) {
     }
 }
 
-{% for row, heatmap in header_heatmaps %}
+if (render_headers) {
+    {% for row, heatmap in header_heatmaps %}
     colorizeHeaderRow{{ loop.index0 }}();
-{% endfor %}
+    {% endfor %}
 
-for (o of config.header_ellipsis) {
+    for (o of config.header_ellipsis) {
     shortenHeaderRow(o.index, o.ellipsis, {{ header_labels | length > 0 }});
+    }
 }
 
 $('[data-toggle="popover"]').popover()
