@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.17.1](https://www.github.com/datavzrd/datavzrd/compare/v2.17.0...v2.17.1) (2023-02-14)
+
+
+### Bug Fixes
+
+* Fix non-working filter if brush is dragged outside of plot ([#359](https://www.github.com/datavzrd/datavzrd/issues/359)) ([54138ed](https://www.github.com/datavzrd/datavzrd/commit/54138ed311758146efb9e7f376122840eab6218c))
+
 ## [2.17.0](https://www.github.com/datavzrd/datavzrd/compare/v2.16.2...v2.17.0) (2023-02-13)
 
 
