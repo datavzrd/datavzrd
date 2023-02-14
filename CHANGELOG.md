@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.17.0](https://www.github.com/datavzrd/datavzrd/compare/v2.16.2...v2.17.0) (2023-02-13)
+
+
+### Features
+
+* Add debug mode ([#354](https://www.github.com/datavzrd/datavzrd/issues/354)) ([d386da2](https://www.github.com/datavzrd/datavzrd/commit/d386da2abca5507165f15bd4eb9c950ce6618c86))
+
+
+### Bug Fixes
+
+* Fix rendering of header rows after page change ([#358](https://www.github.com/datavzrd/datavzrd/issues/358)) ([ecbe148](https://www.github.com/datavzrd/datavzrd/commit/ecbe14891164e0a1ec10d22488e7de03e34b9d30))
+
 ### [2.16.2](https://www.github.com/datavzrd/datavzrd/compare/v2.16.1...v2.16.2) (2023-02-08)
 
 
