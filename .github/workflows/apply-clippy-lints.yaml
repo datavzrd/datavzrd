@@ -1,0 +1,15 @@
+name: Autofix clippy lints
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Autofix:
+    if: github.repository_owner == 'datavzrd'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Auto apply clippy lints
+        uses: fxwiegand/apply-clippy-lints@v1
