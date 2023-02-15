@@ -464,6 +464,15 @@ impl ItemSpecs {
             columns: indexed_keys,
             headers: self.render_table.clone().unwrap().headers,
         });
+        // Generate default RenderColumnSpecs for columns that are not specified in the config
+        for header in headers {
+            if !self.render_table.as_ref().unwrap().columns.contains_key(header) {
+                self.render_table.as_mut().unwrap().columns.insert(
+                    header.to_string(),
+                    Default::default(),
+                );
+            }
+        }
         Ok(())
     }
 }
@@ -497,6 +506,24 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) ellipsis: Option<u32>,
     #[serde(default)]
     pub(crate) plot_view_legend: bool,
+}
+
+impl Default for RenderColumnSpec {
+    fn default() -> Self {
+        RenderColumnSpec {
+            optional: false,
+            precision: default_precision(),
+            label: None,
+            custom: None,
+            custom_path: None,
+            display_mode: DisplayMode::Normal,
+            link_to_url: None,
+            plot: None,
+            custom_plot: None,
+            ellipsis: None,
+            plot_view_legend: false,
+        }
+    }
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
