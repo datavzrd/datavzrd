@@ -466,11 +466,18 @@ impl ItemSpecs {
         });
         // Generate default RenderColumnSpecs for columns that are not specified in the config
         for header in headers {
-            if !self.render_table.as_ref().unwrap().columns.contains_key(header) {
-                self.render_table.as_mut().unwrap().columns.insert(
-                    header.to_string(),
-                    Default::default(),
-                );
+            if !self
+                .render_table
+                .as_ref()
+                .unwrap()
+                .columns
+                .contains_key(header)
+            {
+                self.render_table
+                    .as_mut()
+                    .unwrap()
+                    .columns
+                    .insert(header.to_string(), Default::default());
             }
         }
         Ok(())
