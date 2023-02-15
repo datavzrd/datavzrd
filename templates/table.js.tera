@@ -197,21 +197,6 @@ $(document).ready(function() {
         }
     })
 
-    window.addEventListener('beforeprint', (event) => {
-        setTimeout(function (){
-            $('#table').bootstrapTable('togglePagination');
-            render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false);
-            $('th').css("height", header_height - 15);
-            {% if detail_mode %}
-                $(`table > tbody > tr td:nth-child(1)`).each(function() {this.style.setProperty("display", "none");});
-            {% endif %}
-            if (config.length > 0) {
-            $(`table > tbody > tr td:last-child`).each(function() {this.style.setProperty("display", "none");});
-            $("table > thead > tr th:last-child").css("display", "none");
-            }
-        }, 0);
-    });
-
     $( ".btn-sm" ).click(function() {
         var col = $(this).data( "col" );
         var field = $(this).data("val").toString();
