@@ -232,7 +232,11 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, detail_mode, h
                 for (column of columns) {
                     link = link.replaceAll(`{${column}}`, table_rows[row][column]);
                 }
-                this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
+                if (link_urls[0].link.new_window) {
+                    this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
+                } else {
+                    this.innerHTML = `<a href='${link}'>${value}</a>`;
+                }
             } else {
                 let links = "";
                 for (let l of link_urls) {
