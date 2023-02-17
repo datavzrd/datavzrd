@@ -12,4 +12,4 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Auto apply clippy lints
-        uses: fxwiegand/apply-clippy-lints@v1
+        uses: fxwiegand/apply-clippy-lints@v1.0.4
