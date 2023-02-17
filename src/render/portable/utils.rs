@@ -91,7 +91,7 @@ pub(crate) fn minify_js(file: &str, debug: bool) -> Result<Vec<u8>> {
         minify(
             &Session::new(),
             TopLevelMode::Global,
-            &file.as_bytes().to_vec(),
+            file.as_bytes(),
             &mut minified,
         )
         .expect("Failed minifying js");
