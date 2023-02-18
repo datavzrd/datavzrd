@@ -28,16 +28,14 @@ fn main() -> Result<()> {
 
     if !opt.output.exists() {
         std::fs::create_dir(&opt.output)?;
-    } else {
-        if !opt.output.read_dir()?.next().is_none() {
-            if opt.overwrite_output {
-                fs::remove_dir_all(&opt.output)?;
-                std::fs::create_dir(&opt.output)?;
-            } else {
-                bail!(OutputError::OutputDirectoryNotEmpty {
-                    output_path: opt.output
-                })
-            }
+    } else if opt.output.read_dir()?.next().is_some() {
+        if opt.overwrite_output {
+            fs::remove_dir_all(&opt.output)?;
+            std::fs::create_dir(&opt.output)?;
+        } else {
+            bail!(OutputError::OutputDirectoryNotEmpty {
+                output_path: opt.output
+            })
         }
     }
 
