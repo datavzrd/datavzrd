@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.18.0](https://www.github.com/datavzrd/datavzrd/compare/v2.17.1...v2.18.0) (2023-03-01)
+
+
+### Features
+
+* Remove print option in favour of vega plot view ([#366](https://www.github.com/datavzrd/datavzrd/issues/366)) ([f2bd9a0](https://www.github.com/datavzrd/datavzrd/commit/f2bd9a008c08801153773e05467015d3ba01b78e))
+
+
+### Bug Fixes
+
+* Fix new-window keyword ([#369](https://www.github.com/datavzrd/datavzrd/issues/369)) ([efd2290](https://www.github.com/datavzrd/datavzrd/commit/efd22905ddc536987705ffa248c11b52c6acf1c7))
+* Generate default column spec automatically for columns that are not specified via the config ([#364](https://www.github.com/datavzrd/datavzrd/issues/364)) ([b849743](https://www.github.com/datavzrd/datavzrd/commit/b849743d7c1a0e3219518ed6a0d8efe9a07f94f6))
+
 ### [2.17.1](https://www.github.com/datavzrd/datavzrd/compare/v2.17.0...v2.17.1) (2023-02-14)
 
 
