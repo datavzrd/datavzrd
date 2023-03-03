@@ -218,7 +218,7 @@ $(document).ready(function() {
             {% endfor %}
         }
     });
-    addNumClass(config.dp_num, additional_headers.length);
+    addNumClass(config.dp_num, additional_headers.length, config.detail_mode);
 
     render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true);
 
@@ -445,11 +445,6 @@ function colorizeHeaderRow{{ loop.index0 }}() {
 }
 {% endfor %}
 
-function embedSearch(index) {
-    var source = `search/column_${index}.html`;
-    document.getElementById('search-iframe').setAttribute("src",source);
-}
-
 {% if detail_mode %}
 function detailFormatter(index, row) {
     let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
@@ -517,21 +512,6 @@ function renderCustomPlotDetailView{{ loop.index0 }}(value, div) {
     vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
 }
 {% endfor %}
-
-function addNumClass(dp_num, ah) {
-    for (let i in dp_num) {
-        if (dp_num[i]) {
-            let row = 0;
-            let n = parseInt(i) + {% if detail_mode %} + 2{% else %} + 1{% endif %};
-            $(`table > tbody > tr td:nth-child(${n})`).each(
-                function() {
-                    this.classList.add("num-cell");
-                    row++;
-                }
-            );
-        }
-    }
-}
 
 function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers) {
 {% for title, custom_plot in custom_plots %}

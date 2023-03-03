@@ -311,3 +311,26 @@ function colorizeDetailCard(value, div, heatmap) {
         $(`${div}`).css( "background-color", scale(value) );
     }
 }
+
+function embedSearch(index) {
+    var source = `search/column_${index}.html`;
+    document.getElementById('search-iframe').setAttribute("src",source);
+}
+
+function addNumClass(dp_num, ah, detail_mode) {
+    for (let i in dp_num) {
+        if (dp_num[i]) {
+            let row = 0;
+            let n = parseInt(i) + 1;
+            if (detail_mode) {
+                n += 1;
+            }
+            $(`table > tbody > tr td:nth-child(${n})`).each(
+                function() {
+                    this.classList.add("num-cell");
+                    row++;
+                }
+            );
+        }
+    }
+}
