@@ -239,135 +239,135 @@ $(document).ready(function() {
         $(`table > tbody > tr td:first-child`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});
     }
 
-    {% if is_single_page %}
-    $('#right-top-nav').append($('<div class="btn-group" style="padding-right: 4px;"><span data-toggle="tooltip" data-placement="left" title="Clear filters"><button class="btn btn-outline-secondary" type="button" id="clear-filter"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/></svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></button></span></div>'))
-    let filter_boundaries = {};
-    let filters = {};
-    let tick_brush_specs = {
-        "width": 50,
-        "height": 12,
-        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "data": {"values":[]},
-        "mark": "tick",
-        "encoding": {
-            "tooltip": {"field": "value", "type": "quantitative"},
-            "x": {
-                "field": "value",
-                "type": "quantitative",
-                "scale": {"type": "linear", "zero": false},
-                "axis": {
-                    "title": null,
-                    "orient": "top",
-                    "labelFontWeight": "lighter"
-                }
+    if (config.is_single_page) {
+        $('#right-top-nav').append($('<div class="btn-group" style="padding-right: 4px;"><span data-toggle="tooltip" data-placement="left" title="Clear filters"><button class="btn btn-outline-secondary" type="button" id="clear-filter"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/></svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></button></span></div>'))
+        let filter_boundaries = {};
+        let filters = {};
+        let tick_brush_specs = {
+            "width": 50,
+            "height": 12,
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {"values":[]},
+            "mark": "tick",
+            "encoding": {
+                "tooltip": {"field": "value", "type": "quantitative"},
+                "x": {
+                    "field": "value",
+                    "type": "quantitative",
+                    "scale": {"type": "linear", "zero": false},
+                    "axis": {
+                        "title": null,
+                        "orient": "top",
+                        "labelFontWeight": "lighter"
+                    }
+                },
+                "color": {"condition": {"param": "selection", "value": "#0275d8"}, "value": "grey"}
             },
-            "color": {"condition": {"param": "selection", "value": "#0275d8"}, "value": "grey"}
-        },
-        "params": [{"name": "selection", "select": "interval"}],
-        "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 10}}
-        };
+            "params": [{"name": "selection", "select": "interval"}],
+            "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 10}}
+            };
 
-    let brush_domains = {{ brush_domains }};
-    let aux_domains = {{ aux_domains }};
+        let brush_domains = {{ brush_domains }};
+        let aux_domains = {{ aux_domains }};
 
-   function render_brush_plots(reset) {
-   let tick_brush = 0;
-       for (title of config.displayed_columns) {
-           let index = tick_brush + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
-           if (config.dp_num[tick_brush]) {
-               let plot_data = [];
-               let values = []
-               for (row of table_rows) {
-                   if (row[title] != "" && row[title] != "NA") {
-                       plot_data.push({"value": parseFloat(row[title])});
-                       values.push(parseFloat(row[title]));
+       function render_brush_plots(reset) {
+       let tick_brush = 0;
+           for (title of config.displayed_columns) {
+               let index = tick_brush + 1{% if detail_mode or not header_labels | length == 0 %} + 1{% endif %};
+               if (config.dp_num[tick_brush]) {
+                   let plot_data = [];
+                   let values = []
+                   for (row of table_rows) {
+                       if (row[title] != "" && row[title] != "NA") {
+                           plot_data.push({"value": parseFloat(row[title])});
+                           values.push(parseFloat(row[title]));
+                       }
+                   }
+                   let min = Math.min(...values);
+                   let max = Math.max(...values);
+                   if (brush_domains[title] != undefined && config.tick_titles.includes(title)) {
+                       min = Math.min(...brush_domains[title]);
+                       max = Math.max(...brush_domains[title]);
+                   } else if (aux_domains[title] != undefined) {
+                       aux_values = [min, max];
+                       for (col of aux_domains[title]) {
+                            for (row of table_rows) {
+                                aux_values.push(parseFloat(row[col]));
+                            }
+                       }
+                       min = Math.min(...aux_values);
+                       max = Math.max(...aux_values);
+                   }
+                   if (Number.isInteger(min)) {
+                       min = parseInt(min.toString());
+                   }
+                   if (Number.isInteger(max)) {
+                       max = parseInt(max.toString());
+                   }
+                   let legend_tick_length = min.toString().length + max.toString().length;
+                   var s = tick_brush_specs;
+                   let has_labels = legend_tick_length < 8;
+                   s.encoding.x.axis.labels = has_labels;
+                   s.data.values = plot_data;
+                   s.name = title;
+                   s.encoding.x.axis.values = [min, max];
+                   s.encoding.x.scale.domain = [min, max];
+                   let brush_class = "";
+                   if (!has_labels) {
+                       brush_class = "no-labels";
+                   }
+                   if(!reset) $(`table > thead > tr th:nth-child(${index})`).append(`<div class="filter-brush-container"><div class="filter-brush ${brush_class}" id="brush-${tick_brush}"></div></div>`);
+                   var opt = {"actions": false};
+                   vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
+                       view.addSignalListener('selection', function(name, value) {
+                           filter_boundaries[spec.name] = value;
+                       });
+                       view.addEventListener('mouseup', function(name, value) {
+                           $('#table').bootstrapTable('filterBy', {"":""}, {
+                               'filterAlgorithm': customFilter
+                           })
+                       });
+                       // Add another event listener so the filter is still triggered when the brush is dragged outside the plot.
+                       view.addEventListener('mouseleave', function(name, value) {
+                            $('#table').bootstrapTable('filterBy', {"":""}, {
+                                'filterAlgorithm': customFilter
+                            })
+                        });
+                   })
+               } else {
+               if(!reset){
+                   $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="Filter...">`);
+                       $(`#filter-${index}`).on('input', function(event) {
+                           filters[event.target.dataset.title] = $(`#filter-${index}`).val();
+                           $('#table').bootstrapTable('filterBy', {"":""}, {
+                               'filterAlgorithm': customFilter
+                           })
+                       });
                    }
                }
-               let min = Math.min(...values);
-               let max = Math.max(...values);
-               if (brush_domains[title] != undefined && config.tick_titles.includes(title)) {
-                   min = Math.min(...brush_domains[title]);
-                   max = Math.max(...brush_domains[title]);
-               } else if (aux_domains[title] != undefined) {
-                   aux_values = [min, max];
-                   for (col of aux_domains[title]) {
-                        for (row of table_rows) {
-                            aux_values.push(parseFloat(row[col]));
-                        }
-                   }
-                   min = Math.min(...aux_values);
-                   max = Math.max(...aux_values);
-               }
-               if (Number.isInteger(min)) {
-                   min = parseInt(min.toString());
-               }
-               if (Number.isInteger(max)) {
-                   max = parseInt(max.toString());
-               }
-               let legend_tick_length = min.toString().length + max.toString().length;
-               var s = tick_brush_specs;
-               let has_labels = legend_tick_length < 8;
-               s.encoding.x.axis.labels = has_labels;
-               s.data.values = plot_data;
-               s.name = title;
-               s.encoding.x.axis.values = [min, max];
-               s.encoding.x.scale.domain = [min, max];
-               let brush_class = "";
-               if (!has_labels) {
-                   brush_class = "no-labels";
-               }
-               if(!reset) $(`table > thead > tr th:nth-child(${index})`).append(`<div class="filter-brush-container"><div class="filter-brush ${brush_class}" id="brush-${tick_brush}"></div></div>`);
-               var opt = {"actions": false};
-               vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
-                   view.addSignalListener('selection', function(name, value) {
-                       filter_boundaries[spec.name] = value;
-                   });
-                   view.addEventListener('mouseup', function(name, value) {
-                       $('#table').bootstrapTable('filterBy', {"":""}, {
-                           'filterAlgorithm': customFilter
-                       })
-                   });
-                   // Add another event listener so the filter is still triggered when the brush is dragged outside the plot.
-                   view.addEventListener('mouseleave', function(name, value) {
-                        $('#table').bootstrapTable('filterBy', {"":""}, {
-                            'filterAlgorithm': customFilter
-                        })
-                    });
-               })
-           } else {
-           if(!reset){
-               $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="Filter...">`);
-                   $(`#filter-${index}`).on('input', function(event) {
-                       filters[event.target.dataset.title] = $(`#filter-${index}`).val();
-                       $('#table').bootstrapTable('filterBy', {"":""}, {
-                           'filterAlgorithm': customFilter
-                       })
-                   });
-               }
+               tick_brush++;
            }
-           tick_brush++;
        }
-   }
 
-   render_brush_plots(false);
+       render_brush_plots(false);
 
 
-    function customFilter(row, filter) {
-        for (title of config.displayed_columns) {
-            if (filter_boundaries[title] !== undefined && !$.isEmptyObject(filter_boundaries[title])) {
-                if (row[title] < filter_boundaries[title]['value'][0] || row[title] > filter_boundaries[title]['value'][1]) {
-                    return false;
+        function customFilter(row, filter) {
+            for (title of config.displayed_columns) {
+                if (filter_boundaries[title] !== undefined && !$.isEmptyObject(filter_boundaries[title])) {
+                    if (row[title] < filter_boundaries[title]['value'][0] || row[title] > filter_boundaries[title]['value'][1]) {
+                        return false;
+                    }
+                }
+                if (filters[title] !== undefined && filters[title] !== "") {
+                    if (!row[title].includes(filters[title])) {
+                        return false;
+                    }
                 }
             }
-            if (filters[title] !== undefined && filters[title] !== "") {
-                if (!row[title].includes(filters[title])) {
-                    return false;
-                }
-            }
+            return true
         }
-        return true
     }
-    {% endif %}
 
     $('#clear-filter').click(function clearFilter() {
         filter_boundaries = {};
@@ -381,18 +381,19 @@ $(document).ready(function() {
         render_brush_plots(true);
     });
 
-
-    {% if is_single_page %}$('#table').on('page-change.bs.table', (number, size) => {
-        setTimeout(function (){
-        render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false);
-        }, 0);
-    }){% endif %}
+    if (config.is_single_page) {
+        $('#table').on('page-change.bs.table', (number, size) => {
+            setTimeout(function (){
+            render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false);
+            }, 0);
+        })
+    }
 
     let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10);
-    {% if is_single_page %}
-    let page_size = $('#table').bootstrapTable('getOptions').pageSize;
-    $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
-    {% endif %}
+    if (config.is_single_page) {
+        let page_size = $('#table').bootstrapTable('getOptions').pageSize;
+        $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
+    }
     let rows = $("table > tbody > tr");
     rows.each(function() {
         if (this.dataset.index == to_be_highlighted) {
@@ -400,7 +401,11 @@ $(document).ready(function() {
             if (!config.detail_mode && !config.header_label_length == 0) {
                 $(this).children().first().removeClass('active-row');
             }
-            $('#table').bootstrapTable('scrollTo', {unit: 'rows', value: to_be_highlighted {% if is_single_page %} % page_size{% endif %}})
+            var value = to_be_highlighted;
+            if (config.is_single_page) {
+                value = to_be_highlighted % page_size;
+            }
+            $('#table').bootstrapTable('scrollTo', {unit: 'rows', value: to_be_highlighted})
         }
     });
 
