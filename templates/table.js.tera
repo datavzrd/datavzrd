@@ -218,16 +218,13 @@ $(document).ready(function() {
         }
         var marker = { "bin_start": field};
         var index = config.columns.indexOf(col);
-        switch (index) {
-            {% for title in titles %}case {{ loop.index0 }}:
-                if (plot_{{ loop.index0 }}["layer"].length > 1) {
-                    $('#modal_{{ loop.index0 }}').modal();
-                    var marked_plot = JSON.parse(JSON.stringify(plot_{{ loop.index0 }}));
-                    marked_plot["layer"][1]["data"]["values"].push(marker);
-                    vegaEmbed('#plot_{{ loop.index0 }}', marked_plot);
-                }
-                break;
-            {% endfor %}
+        var plot_id = `plot_${index}`;
+        var modal_id = `#modal_${index}`;
+        if (window[plot_id]["layer"].length > 1) {
+            $(modal_id).modal();
+            var marked_plot = JSON.parse(JSON.stringify(window[plot_id]));
+            marked_plot["layer"][1]["data"]["values"].push(marker);
+            vegaEmbed(`#${plot_id}`, marked_plot);
         }
     });
     addNumClass(config.dp_num, additional_headers.length, config.detail_mode);
