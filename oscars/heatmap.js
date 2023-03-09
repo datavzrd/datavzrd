@@ -431,6 +431,44 @@ const heatmap_plot = {
                 }
             }
             
+        ]},
+        
+        {
+            
+            "layer": [
+            
+            {
+                "mark": {
+                    "type": "text",
+                    "align":"left"
+                },
+                "encoding": {
+                    "x": {
+                        "field": "dummy",
+                        "axis": {
+                            "labelExpr": "'overall_wins_and_overall_nominations'",
+                            "labelAngle": -90,
+                            "labelOffset": 7,
+                            "title": null,
+                            "ticks": false,
+                            "orient": "top",
+                            "domain": false
+                        }
+                    },
+                    "y": {
+                        "field": "index",
+                        "type": "ordinal",
+                        "axis": null,
+                    },
+                    "text": {
+                        "field": "overall_wins_and_overall_nominations",
+                        "type": "nominal",
+                        "title": "overall_wins_and_overall_nominations",
+                        
+                    }
+                }
+            }
+            
         ]}
         
     ],
