@@ -1,0 +1,15 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "values": []
+  },
+  "mark": "arc",
+  "encoding": {
+    "theta": {"field": "amount", "type": "quantitative"},
+    "color": {"field": "category", "type": "nominal", "scale": {"domain": ["nominations", "wins"], "range": ["#f2e34c", "#31a354"]}},
+    "tooltip": [
+      {"field": "category", "type": "nominal"},
+      {"field": "amount", "type": "quantitative"}
+    ]
+    }
+}

@@ -59,6 +59,14 @@ views:
               range:
                 - "#add8e6"
                 - "#ffb6c1"
+        overall_wins_and_overall_nominations:
+          display-mode: detail
+          custom-plot:
+            data: |
+              function(value, row) {
+                return [{"category": "wins", "amount": value.split("/")[0]}, {"category": "nominations", "amount": value.split("/")[1]}]
+              }
+            spec-path: ".examples/specs/overall-wins-and-overall-nominations.vl.json"
   oscar-plot:
     dataset: oscars
     desc: |
