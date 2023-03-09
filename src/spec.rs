@@ -1527,6 +1527,10 @@ mod tests {
                     ("birth_mo".parse().unwrap(), Default::default()),
                     ("birth_d".parse().unwrap(), Default::default()),
                     ("birth_y".parse().unwrap(), Default::default()),
+                    (
+                        "overall_wins_and_overall_nominations".parse().unwrap(),
+                        Default::default(),
+                    ),
                 ]),
                 headers: None,
             }),
