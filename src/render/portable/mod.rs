@@ -165,7 +165,6 @@ impl Renderer for ItemRenderer {
                     for (page, grouped_records) in &reader
                         .records()
                         .skip(dataset.header_rows - 1)
-                        .into_iter()
                         .enumerate()
                         .group_by(|(i, _)| row_address_factory.get(*i).page)
                     {
