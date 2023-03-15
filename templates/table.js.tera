@@ -10,6 +10,7 @@ const config = {
     "dp_num" : [{% for title in titles %}{% if display_modes[title] == "normal" %}{{ num[title] }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}],
     "tick_titles" : [{% for title, tick_plot in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
     "bar_titles" : [{% for title, tick_plot in bar_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
+    "custom_plot_titles" : [{% for title, plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
     "heatmap_titles" : [{% for title, hm in heatmaps %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
     "links" : [{% for title, link_url in link_urls %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}],
     {% for title in titles %}
@@ -475,13 +476,12 @@ function colorizeHeaderRow{{ loop.index0 }}() {
 }
 {% endfor %}
 
-{% if detail_mode %}
 function detailFormatter(index, row) {
-    let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-    let ticks = [{% for title, tick in tick_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-    let bars = [{% for title, bar in bar_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-    let displayed_columns = [{% for title in titles %}{% if display_modes[title] == "normal" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
-    let hidden_columns = [{% for title in titles %}{% if display_modes[title] == "hidden" %}"{{ title }}"{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
+    let cp = config.custom_plot_titles;
+    let ticks = config.tick_titles;
+    let bars = config.bar_titles;
+    let displayed_columns = config.displayed_columns;
+    let hidden_columns = config.hidden_columns;
     var html = []
     $.each(row, function (key, value) {
         if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share") {
@@ -528,8 +528,6 @@ function detailFormatter(index, row) {
     })
     return `<div class="d-flex flex-wrap">${html.join('')}</div>`
 }
-{% endif %}
-
 
 function renderCustomPlotDetailView(value, div, data_function, specs, vega_controls) {
     var data = data_function(value);
