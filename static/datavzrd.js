@@ -312,6 +312,47 @@ function colorizeDetailCard(value, div, heatmap) {
     }
 }
 
+function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
+    let index = dp_columns.indexOf(plot.title) + 1;
+    if (dm || header_label_length > 0) {
+        index += 1;
+    }
+    let detail_mode = dp_columns.indexOf(plot.title) == -1;
+    var data_function = plot.data_function;
+    var specs = plot.specs;
+    let row = 0;
+    let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
+    $(`table > tbody > tr td:nth-child(${index})`).each(
+        function() {
+            if (!detail_mode) {
+                var id = `${plot.title}-${row}`;
+                this.classList.add("plotcell");
+                const div = document.createElement("div");
+                let value = table_rows[row][plot.title];
+                let value_row = table_rows[row];
+                var data = data_function(value, value_row);
+                var s = specs;
+                s.data = {};
+                s.data.values = data;
+                var opt = {"actions": plot.vega_controls};
+                this.innerHTML = "";
+                this.appendChild(div);
+                vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+            }
+            row++;
+        }
+    );
+}
+
+function renderCustomPlotDetailView(value, div, data_function, specs, vega_controls) {
+    var data = data_function(value);
+    var s = specs;
+    s.data = {};
+    s.data.values = data;
+    var opt = {"actions": vega_controls};
+    vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+}
+
 function embedSearch(index) {
     var source = `search/column_${index}.html`;
     document.getElementById('search-iframe').setAttribute("src",source);
@@ -333,4 +374,57 @@ function addNumClass(dp_num, ah, detail_mode) {
             );
         }
     }
+}
+
+function detailFormatter(index, row) {
+    let cp = config.custom_plot_titles;
+    let ticks = config.tick_titles;
+    let bars = config.bar_titles;
+    let displayed_columns = config.displayed_columns;
+    let hidden_columns = config.hidden_columns;
+    var html = []
+    $.each(row, function (key, value) {
+        if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share") {
+            if (cp.includes(key) || ticks.includes(key) || bars.includes(key)) {
+                if (cp.includes(key)) {
+                    id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
+                } else if (bars.includes(key)) {
+                    id = `detail-plot-${index}-bars-${bars.indexOf(key)}`;
+                } else {
+                    id = `detail-plot-${index}-ticks-${ticks.indexOf(key)}`;
+                }
+                var card = `<div class="card">
+                   <div class="card-header">
+                     ${key}
+                   </div>
+                   <div class="card-body">
+                     <div id="${id}"></div>
+                   </div>
+                 </div>`;
+                html.push(card);
+            } else if (config.heatmap_titles.includes(key)) {
+                id = `heatmap-${index}-${config.heatmap_titles.indexOf(key)}`;
+                var card = `<div class="card">
+                  <div class="card-header">
+                    ${key}
+                  </div>
+                  <div id="${id}" class="card-body">
+                    ${value}
+                  </div>
+                </div>`;
+                html.push(card);
+            } else {
+                var card = `<div class="card">
+                   <div class="card-header">
+                     ${key}
+                   </div>
+                   <div class="card-body">
+                    ${value}
+                   </div>
+                 </div>`;
+                html.push(card);
+            }
+        }
+    })
+    return `<div class="d-flex flex-wrap">${html.join('')}</div>`
 }
