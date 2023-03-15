@@ -194,10 +194,11 @@ $(document).ready(function() {
     $('#table').bootstrapTable('append', table_rows);
 
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
-        let cp = [{% for title, custom_plot in custom_plots %}"{{ title }}"{% if not loop.last %},{% endif %}{% endfor %}];
-        {% for title, custom_plot in custom_plots %}
-        renderCustomPlotDetailView{{ loop.index0 }}(row[cp[{{ loop.index0 }}]], `#detail-plot-${index}-cp-{{ loop.index0 }}`);
-        {% endfor %}
+        for (o of custom_plots) {
+            if (!config.displayed_columns.includes(o.title)) {
+                renderCustomPlotDetailView(row[o.title], `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, o.data_function, o.specs, o.vega_controls);
+            }
+        }
 
         for (o of config.heatmaps) {
             if (o.heatmap.custom_func) {
@@ -486,7 +487,7 @@ function detailFormatter(index, row) {
         if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share") {
             if (cp.includes(key) || ticks.includes(key) || bars.includes(key)) {
                 if (cp.includes(key)) {
-                    id = `detail-plot-${index}-cp-${cp.indexOf(key)}`;
+                    id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
                 } else if (bars.includes(key)) {
                     id = `detail-plot-${index}-bars-${bars.indexOf(key)}`;
                 } else {
@@ -529,18 +530,15 @@ function detailFormatter(index, row) {
 }
 {% endif %}
 
-{% for title, custom_plot in custom_plots %}
-function renderCustomPlotDetailView{{ loop.index0 }}(value, div) {
-    var data_function = {{ custom_plot.data }};
-    var specs =  {{ custom_plot.spec }};
+
+function renderCustomPlotDetailView(value, div, data_function, specs, vega_controls) {
     var data = data_function(value);
     var s = specs;
     s.data = {};
     s.data.values = data;
-    var opt = {"actions": {{ custom_plot.vega_controls }}};
+    var opt = {"actions": vega_controls};
     vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
 }
-{% endfor %}
 
 function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers, custom_plots) {
 for (o of custom_plots) {
