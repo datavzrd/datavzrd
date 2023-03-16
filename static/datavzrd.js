@@ -312,6 +312,58 @@ function colorizeDetailCard(value, div, heatmap) {
     }
 }
 
+function colorizeHeaderRow(row, heatmap, header_label_length) {
+    let scale = null;
+
+    if (heatmap.scale == "ordinal") {
+        if (heatmap.domain != null) {
+            if (heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.scale)().domain(heatmap.domain).range(vega.scheme(heatmap.color_scheme));
+            } else if (!heatmap.range.length == 0) {
+                scale = vega.scale(heatmap.scale)().domain(heatmap.domain).range(heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.scale)().domain(heatmap.domain);
+            }
+        } else {
+            if (heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.scale)().range(vega.scheme(heatmap.color_scheme));
+            } else if (!heatmap.range.length == 0) {
+                scale = vega.scale(heatmap.scale)().range(heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.scale)();
+            }
+        }
+    } else {
+        if (heatmap.domain != null) {
+            if (heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.scale)().domain(heatmap.domain).clamp(heatmap.clamp).range(vega.scheme(heatmap.color_scheme));
+            } else if (!heatmap.range == 0) {
+                scale = vega.scale(heatmap.scale)().domain(heatmap.domain).clamp(heatmap.clamp).range(heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.scale)().domain(heatmap.domain).clamp(heatmap.clamp);
+            }
+        } else {
+            if (heatmap.color_scheme != "") {
+                scale = vega.scale(heatmap.scale)().clamp(heatmap.clamp).range(vega.scheme(heatmap.color_scheme));
+            } else if (!heatmap.range == 0) {
+                scale = vega.scale(heatmap.scale)().clamp(heatmap.clamp).range(heatmap.range);
+            } else {
+                scale = vega.scale(heatmap.scale)().clamp(heatmap.clamp);
+            }
+        }
+    }
+    var skip_label = header_label_length > 0;
+    $(`table > thead > tr:nth-child(${row + 1}) > td`).each(
+        function() {
+            var value = this.innerHTML;
+            if (value !== "" && !skip_label) {
+                this.style.setProperty("background-color", scale(value), "important");
+            }
+            skip_label = false;
+        }
+    );
+}
+
 function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
     let index = dp_columns.indexOf(plot.title) + 1;
     if (dm || header_label_length > 0) {
@@ -427,4 +479,59 @@ function detailFormatter(index, row) {
         }
     })
     return `<div class="d-flex flex-wrap">${html.join('')}</div>`
+}
+
+// Renders plots, heatmaps etc. when the table is loaded or on page change
+function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers, custom_plots) {
+    for (o of custom_plots) {
+        if (displayed_columns.includes(o.title)) {
+            renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
+        }
+    }
+
+    for (o of config.ticks) {
+        if (displayed_columns.includes(o.title)) {
+            renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config[o.title].is_float, config[o.title].precision, config.detail_mode, config.header_label_length);
+        }
+    }
+
+    for (o of config.bars) {
+        if (displayed_columns.includes(o.title)) {
+            renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config[o.title].is_float, config[o.title].precision, config.detail_mode, config.header_label_length);
+        }
+    }
+
+    for (o of config.link_urls) {
+        if (displayed_columns.includes(o.title)) {
+            linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, config.detail_mode, config.header_label_length);
+        }
+    }
+
+    for (o of config.heatmaps) {
+        if (displayed_columns.includes(o.title)) {
+            colorizeColumn(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
+        }
+    }
+
+    for (o of config.ellipsis) {
+        if (displayed_columns.includes(o.title)) {
+            shortenColumn(additional_headers.length, displayed_columns, o.title, o.ellipsis, config.detail_mode, config.header_label_length);
+        }
+    }
+
+    if (render_headers) {
+        for (o of header_config.heatmaps) {
+            colorizeHeaderRow(o.row, o.heatmap, config.header_label_length);
+        }
+
+        for (o of config.header_ellipsis) {
+            shortenHeaderRow(o.index, o.ellipsis, config.header_label_length > 0);
+        }
+    }
+
+    $('[data-toggle="popover"]').popover()
+    $('[data-toggle="tooltip"]').tooltip()
+    if (!config.detail_mode && !config.header_label_length == 0) {
+        $(`table > thead > tr:first-child > th`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});
+    }
 }

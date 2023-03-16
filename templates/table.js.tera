@@ -88,6 +88,17 @@ const custom_plots = [
     {% endfor %}
 ]
 
+const header_config = {
+    "heatmaps": [
+    {% for row, heatmap in header_heatmaps %}
+    {
+        "row": {{ row }},
+        "heatmap": {{ heatmap | json_encode }},
+    },
+    {% endfor %}
+    ]
+}
+
 $(document).ready(function() {
     $('.table-container').show();
     $('.loading').hide();
@@ -424,75 +435,3 @@ $(document).ready(function() {
         // $('#table').bootstrapTable('resetView',{height: he});
     })
 });
-
-{% for row, heatmap in header_heatmaps %}
-function colorizeHeaderRow{{ loop.index0 }}() {
-    var {{ heatmap.scale }} = vega.scale('{{ heatmap.scale }}');
-    var scale = {{ heatmap.scale }}(){% if heatmap.domain %}.domain({{ heatmap.domain | json }}){% endif %}.range({% if heatmap.color_scheme %}vega.scheme('{{ heatmap.color_scheme }}'){% else %}[{% for color in heatmap.range %}"{{ color }}"{% if not loop.last %},{% endif %}{% endfor %}]{% endif %});
-    var row = {{ row }};
-    var skip_label = {% if not header_labels | length == 0 %}true{% else %}false{% endif %};
-    $(`table > thead > tr:nth-child(${row + 1}) > td`).each(
-        function() {
-            var value = this.innerHTML;
-            if (value !== "" && !skip_label) {
-                this.style.setProperty("background-color", scale(value), "important");
-            }
-            skip_label = false;
-        }
-    );
-}
-{% endfor %}
-
-function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers, custom_plots) {
-for (o of custom_plots) {
-    if (displayed_columns.includes(o.title)) {
-        renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
-    }
-}
-
-for (o of config.ticks) {
-    if (displayed_columns.includes(o.title)) {
-        renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config[o.title].is_float, config[o.title].precision, config.detail_mode, config.header_label_length);
-    }
-}
-
-for (o of config.bars) {
-    if (displayed_columns.includes(o.title)) {
-        renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config[o.title].is_float, config[o.title].precision, config.detail_mode, config.header_label_length);
-    }
-}
-
-for (o of config.link_urls) {
-    if (displayed_columns.includes(o.title)) {
-        linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, config.detail_mode, config.header_label_length);
-    }
-}
-
-for (o of config.heatmaps) {
-    if (displayed_columns.includes(o.title)) {
-        colorizeColumn(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
-    }
-}
-
-for (o of config.ellipsis) {
-    if (displayed_columns.includes(o.title)) {
-        shortenColumn(additional_headers.length, displayed_columns, o.title, o.ellipsis, config.detail_mode, config.header_label_length);
-    }
-}
-
-if (render_headers) {
-    {% for row, heatmap in header_heatmaps %}
-    colorizeHeaderRow{{ loop.index0 }}();
-    {% endfor %}
-
-    for (o of config.header_ellipsis) {
-    shortenHeaderRow(o.index, o.ellipsis, {{ header_labels | length > 0 }});
-    }
-}
-
-$('[data-toggle="popover"]').popover()
-$('[data-toggle="tooltip"]').tooltip()
-if (!config.detail_mode && !config.header_label_length == 0) {
-    $(`table > thead > tr:first-child > th`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});
-}
-}
