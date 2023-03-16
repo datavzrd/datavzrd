@@ -89,6 +89,15 @@ const custom_plots = [
 ]
 
 const header_config = {
+    "headers": [
+    {% if additional_headers %}{% for header in additional_headers %}
+    {
+        "row": {{ loop.index }},
+        "header": {{ header | json_encode }},
+        "label": {% if header_labels[loop.index] %}{{ header_labels[loop.index] | json_encode }}{% else %}undefined{% endif %},
+    },
+    {% endfor %}{% endif %}
+    ],
     "heatmaps": [
     {% for row, heatmap in header_heatmaps %}
     {
@@ -147,7 +156,30 @@ $(document).ready(function() {
 
     $('#table').bootstrapTable(bs_table_config);
 
-    let additional_headers = "{% if additional_headers %}{% for ah in additional_headers %}<tr>{% if detail_mode or header_labels[loop.index] %}<td {% if not detail_mode %}style='border: none !important;'{% endif%}>{% endif%}{% if header_labels[loop.index] %}<b>{{ header_labels[loop.index] }}</b>{% endif %}</td>{% for title in titles %}{% if display_modes[title] == "normal" %}<td>{{ ah[title] }}</td>{% endif %}{% endfor %}</tr>{% endfor %}{% endif %}";
+    let additional_headers = "";
+
+    for (const ah of header_config.headers) {
+        console.log(ah);
+        additional_headers += "<tr>";
+        if (config.detail_mode || ah.label != undefined) {
+            additional_headers += "<td";
+            if (!config.detail_mode) {
+                additional_headers += " style='border: none !important;'";
+            }
+            additional_headers += ">";
+            if (ah.label != undefined) {
+                additional_headers += `<b>${ah.label}</b>`;
+            }
+            additional_headers += "</td>";
+        }
+        for (const title of config.columns) {
+            if (config.displayed_columns.includes(title)) {
+                additional_headers += `<td>${ah.header[title]}</td>`;
+            }
+        }
+        additional_headers += "</tr>";
+    }
+
 
     var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2 {% if is_single_page %} + 45{% endif %};
     $('th').css("height", header_height);
