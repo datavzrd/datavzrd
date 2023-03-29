@@ -889,11 +889,13 @@ struct JavascriptConfig {
     is_single_page: bool,
     page_size: usize,
     columns: Vec<String>,
+    displayed_columns: Vec<String>,
+    hidden_columns: Vec<String>,
 }
 
 impl JavascriptConfig {
     fn from_column_config(
-        _config: &HashMap<String, RenderColumnSpec>,
+        config: &HashMap<String, RenderColumnSpec>,
         is_single_page: bool,
         page_size: usize,
         columns: &[String],
@@ -906,6 +908,8 @@ impl JavascriptConfig {
             is_single_page,
             page_size,
             columns: columns.iter().map(|c| c.to_string()).collect(),
+            displayed_columns: columns.iter().map(|c| c.to_string()).filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Normal).collect(),
+            hidden_columns: columns.iter().map(|c| c.to_string()).filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Hidden).collect(),
         }
     }
 }
