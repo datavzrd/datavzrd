@@ -835,6 +835,17 @@ fn render_table_javascript<P: AsRef<Path>>(
             .collect_vec()
     });
 
+    let config = JavascriptConfig::from_column_config(
+        &render_columns,
+        is_single_page,
+        page_size,
+        &titles,
+        webview_host,
+        webview_controls,
+    );
+
+    context.insert("config", &config);
+
     context.insert("titles", &titles.iter().collect_vec());
     context.insert("precisions", &precisions);
     context.insert("additional_headers", &header_rows);
@@ -869,6 +880,34 @@ fn render_table_javascript<P: AsRef<Path>>(
     file.write_all(&minified)?;
 
     Ok(())
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptConfig {
+    webview_controls: bool,
+    webview_host: String,
+    is_single_page: bool,
+    page_size: usize,
+    columns: Vec<String>,
+}
+
+impl JavascriptConfig {
+    fn from_column_config(
+        _config: &HashMap<String, RenderColumnSpec>,
+        is_single_page: bool,
+        page_size: usize,
+        columns: &[String],
+        webview_host: &String,
+        webview_controls: bool,
+    ) -> Self {
+        Self {
+            webview_controls,
+            webview_host: webview_host.to_string(),
+            is_single_page,
+            page_size,
+            columns: columns.iter().map(|c| c.to_string()).collect(),
+        }
+    }
 }
 
 /// Renders an empty page when datasets are empty

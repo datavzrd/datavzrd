@@ -81,6 +81,8 @@ const config = {
     "aux_domains": {{ aux_domains }},
 }
 
+const config_new = {{ config | json_encode }}
+
 const custom_plots = [
     {% for title, plot in custom_plots %}
     {
