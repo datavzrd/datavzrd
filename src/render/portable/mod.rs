@@ -895,6 +895,10 @@ struct JavascriptConfig {
     displayed_columns: Vec<String>,
     hidden_columns: Vec<String>,
     displayed_numeric_columns: Vec<String>,
+    tick_titles: Vec<String>,
+    bar_titles: Vec<String>,
+    heatmap_titles: Vec<String>,
+    custom_plot_titles: Vec<String>,
 }
 
 impl JavascriptConfig {
@@ -922,6 +926,29 @@ impl JavascriptConfig {
                 .map(|(k, v)| (k.to_owned(), v.is_numeric()))
                 .filter(|(_, v)| *v)
                 .map(|(k, _)| k)
+                .collect(),
+            tick_titles: config
+                .iter()
+                .filter(|(_, k)| k.plot.is_some())
+                .filter(|(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some())
+                .map(|(k, _)| k.to_string())
+                .collect(),
+            bar_titles: config
+                .iter()
+                .filter(|(_, k)| k.plot.is_some())
+                .filter(|(_, k)| k.plot.as_ref().unwrap().bar_plot.is_some())
+                .map(|(k, _)| k.to_string())
+                .collect(),
+            heatmap_titles: config
+                .iter()
+                .filter(|(_, k)| k.plot.is_some())
+                .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
+                .map(|(k, _)| k.to_string())
+                .collect(),
+            custom_plot_titles: config
+                .iter()
+                .filter(|(_, k)| k.custom_plot.is_some())
+                .map(|(k, _)| k.to_string())
                 .collect(),
         }
     }
