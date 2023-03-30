@@ -842,6 +842,9 @@ fn render_table_javascript<P: AsRef<Path>>(
         &titles,
         webview_host,
         webview_controls,
+        csv_path,
+        separator,
+        header_row_length,
     );
 
     context.insert("config", &config);
@@ -891,6 +894,7 @@ struct JavascriptConfig {
     columns: Vec<String>,
     displayed_columns: Vec<String>,
     hidden_columns: Vec<String>,
+    displayed_numeric_columns: Vec<String>,
 }
 
 impl JavascriptConfig {
@@ -901,6 +905,9 @@ impl JavascriptConfig {
         columns: &[String],
         webview_host: &String,
         webview_controls: bool,
+        csv_path: &Path,
+        separator: char,
+        header_row_length: usize,
     ) -> Self {
         Self {
             webview_controls,
@@ -910,6 +917,12 @@ impl JavascriptConfig {
             columns: columns.iter().map(|c| c.to_string()).collect(),
             displayed_columns: columns.iter().map(|c| c.to_string()).filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Normal).collect(),
             hidden_columns: columns.iter().map(|c| c.to_string()).filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Hidden).collect(),
+            displayed_numeric_columns: classify_table(csv_path, separator, header_row_length).unwrap()
+                .iter()
+                .map(|(k, v)| (k.to_owned(), v.is_numeric()))
+                .filter(|(_, v)| *v)
+                .map(|(k, _)| k)
+                .collect(),
         }
     }
 }

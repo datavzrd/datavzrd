@@ -762,7 +762,7 @@ $(document).ready(function() {
             vegaEmbed(`#${plot_id}`, marked_plot);
         }
     });
-    addNumClass(config.dp_num, additional_headers.length, config.detail_mode);
+    addNumClass(config.displayed_numeric_columns, additional_headers.length, config.detail_mode);
 
     render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true, custom_plots);
 
@@ -809,7 +809,7 @@ $(document).ready(function() {
                 if (config.detail_mode || config.header_label_length > 0) {
                     index += 1;
                 }
-                if (config.dp_num[tick_brush]) {
+                if (config.displayed_numeric_columns[tick_brush]) {
                     let plot_data = [];
                     let values = []
                     for (row of table_rows) {
