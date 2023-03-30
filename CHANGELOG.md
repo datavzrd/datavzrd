@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.18.2](https://www.github.com/datavzrd/datavzrd/compare/v2.18.1...v2.18.2) (2023-03-30)
+
+
+### Bug Fixes
+
+* Fix domain detection with NA values ([#400](https://www.github.com/datavzrd/datavzrd/issues/400)) ([915c8c8](https://www.github.com/datavzrd/datavzrd/commit/915c8c837e4b3987e5a15ad252917808c74bec18))
+
 ### [2.18.1](https://www.github.com/datavzrd/datavzrd/compare/v2.18.0...v2.18.1) (2023-03-22)
 
 
