@@ -74,6 +74,11 @@
     min-width: 300px;
 }
 
+.modal-body {
+    max-width: calc(100vw - 50px);
+    overflow-x: auto;
+}
+
 .active-row {
     border-top: 2px solid #6ea8fe !important;
     border-bottom: 2px solid #6ea8fe;
