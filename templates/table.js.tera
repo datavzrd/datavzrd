@@ -58,7 +58,6 @@ const config = {
     "bars": [
         {% for title, bar_plot in bar_plots %}
         {
-            "index": {{ loop.index0 }},
             "title": "{{ title }}",
             "slug_title": "{{ title | slugify }}",
             "specs": {{ bar_plot }}
@@ -68,7 +67,6 @@ const config = {
     "heatmaps": [
         {% for title, tuple in heatmaps %}
         {
-            "index": {{ loop.index0 }},
             "title": "{{ title }}",
             "slug_title": "{{ title | slugify }}",
             "heatmap": {{ tuple.0 | json_encode }},
@@ -83,8 +81,7 @@ const config = {
 
 const config_new = {{ config | json_encode }}
 
-console.log(config_new["link_urls"]);
-console.log(config["link_urls"]);
+console.log(config_new == config);
 
 const custom_plots = [
     {% for title, plot in custom_plots %}

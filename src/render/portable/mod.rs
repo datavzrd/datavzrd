@@ -911,6 +911,7 @@ struct JavascriptConfig {
     brush_domains: HashMap<String, Vec<f32>>,
     aux_domains: HashMap<String, Vec<String>>,
     link_urls: Vec<JavascriptLinkConfig>,
+    ellipsis: Vec<JavascriptEllipsisConfig>,
 }
 
 impl JavascriptConfig {
@@ -1116,6 +1117,14 @@ impl JavascriptConfig {
                     }).collect(),
                 })
                 .collect(),
+            ellipsis: config
+                .iter()
+                .filter(|(_, v)| v.ellipsis.is_some())
+                .map(|(k, v)| JavascriptEllipsisConfig {
+                    title: k.to_string(),
+                    ellipsis: v.ellipsis.as_ref().unwrap().to_owned(),
+                })
+                .collect(),
         }
     }
 }
@@ -1183,6 +1192,12 @@ struct JavascriptLinkConfig {
 struct JavascriptLink {
     name: String,
     link: LinkToUrlSpec,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptEllipsisConfig {
+    title: String,
+    ellipsis: u32,
 }
 
 /// Renders an empty page when datasets are empty
