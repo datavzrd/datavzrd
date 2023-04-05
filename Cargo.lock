@@ -309,6 +309,7 @@ dependencies = [
  "serde_yaml",
  "simple_excel_writer",
  "simplelog",
+ "slug",
  "structopt",
  "tera",
  "thiserror",

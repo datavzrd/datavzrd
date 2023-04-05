@@ -83,6 +83,9 @@ const config = {
 
 const config_new = {{ config | json_encode }}
 
+console.log(config_new["heatmaps"]);
+console.log(config["heatmaps"]);
+
 const custom_plots = [
     {% for title, plot in custom_plots %}
     {

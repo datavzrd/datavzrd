@@ -22,7 +22,7 @@ use csv::{Reader, StringRecord};
 use itertools::Itertools;
 use lz_str::compress_to_utf16;
 use serde::Serialize;
-use serde_json::json;
+use serde_json::{json, Value};
 use std::cmp::max;
 use std::collections::{HashMap, HashSet};
 use std::fs;
@@ -905,7 +905,9 @@ struct JavascriptConfig {
     links: Vec<String>,
     column_config: HashMap<String, JavascriptColumnConfig>,
     header_label_length: usize,
-    ticks: Vec<JavascriptTickConfig>,
+    ticks: Vec<JavascriptTickAndBarConfig>,
+    bars: Vec<JavascriptTickAndBarConfig>,
+    heatmaps: Vec<JavascriptHeatmapConfig>,
 }
 
 impl JavascriptConfig {
@@ -996,6 +998,63 @@ impl JavascriptConfig {
                 })
                 .collect(),
             header_label_length,
+            ticks: config
+                .iter()
+                .filter(|(_, v)| v.plot.is_some())
+                .filter(|(_, v)| v.plot.as_ref().unwrap().tick_plot.is_some())
+                .map(|(k, v)| {
+                    JavascriptTickAndBarConfig::from_config(
+                        k.to_string(),
+                        render_tick_plot(
+                            k,
+                            csv_path,
+                            separator,
+                            header_row_length,
+                            v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
+                            v.precision,
+                        )
+                            .unwrap(),
+                    )
+                })
+                .collect(),
+            bars: config
+                .iter()
+                .filter(|(_, v)| v.plot.is_some())
+                .filter(|(_, v)| v.plot.as_ref().unwrap().bar_plot.is_some())
+                .map(|(k, v)| {
+                    JavascriptTickAndBarConfig::from_config(
+                        k.to_string(),
+                        render_bar_plot(
+                            k,
+                            csv_path,
+                            separator,
+                            header_row_length,
+                            v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
+                            v.precision,
+                        )
+                            .unwrap(),
+                    )
+                })
+                .collect(),
+            heatmaps: config
+                .iter()
+                .filter(|(_, k)| k.plot.is_some())
+                .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
+                .map(|(k, v)| {
+                    JavascriptHeatmapConfig::from_config(
+                        k.to_string(),
+                        v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
+                        get_column_domain(
+                            k,
+                            csv_path,
+                            separator,
+                            header_row_length,
+                            v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
+                        )
+                            .unwrap(),
+                    )
+                })
+                .collect()
         }
     }
 }
@@ -1018,20 +1077,37 @@ impl JavascriptColumnConfig {
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
-struct JavascriptTickConfig {
-    index: usize,
+struct JavascriptTickAndBarConfig {
     title: String,
     slug_title: String,
-    specs: String,
+    specs: Value,
 }
 
-impl JavascriptTickConfig {
-    fn from_column_config() -> Self {
+impl JavascriptTickAndBarConfig {
+    fn from_config(title: String, specs: String) -> Self {
         Self {
-            index: 0,
-            title: "".to_string(),
-            slug_title: "".to_string(),
-            specs: "".to_string(),
+            title: title.clone(),
+            slug_title: slug::slugify(&title),
+            specs: serde_json::from_str(&specs).unwrap(),
+        }
+    }
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptHeatmapConfig {
+    title: String,
+    slug_title: String,
+    heatmap: Heatmap,
+    domain: Value,
+}
+
+impl JavascriptHeatmapConfig {
+    fn from_config(title: String, heatmap: &Heatmap, domain: String) -> Self {
+        Self {
+            title: title.clone(),
+            slug_title: slug::slugify(&title),
+            heatmap: heatmap.to_owned(),
+            domain: serde_json::from_str(&domain).unwrap(),
         }
     }
 }
