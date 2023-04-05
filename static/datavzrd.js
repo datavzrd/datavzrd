@@ -451,13 +451,13 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 
     for (o of config.ticks) {
         if (displayed_columns.includes(o.title)) {
-            renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config[o.title].is_float, config[o.title].precision, config.detail_mode, config.header_label_length);
+            renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length);
         }
     }
 
     for (o of config.bars) {
         if (displayed_columns.includes(o.title)) {
-            renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config[o.title].is_float, config[o.title].precision, config.detail_mode, config.header_label_length);
+            renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length);
         }
     }
 
@@ -527,8 +527,8 @@ $(document).ready(function() {
         if (config.displayed_columns.includes(column)) {
             let field = column;
             let title = ""
-            if (config[column].label) {
-                title = config[column].label;
+            if (config.column_config[column].label) {
+                title = config.column_config[column].label;
             } else {
                 title = column;
             }
@@ -546,8 +546,8 @@ $(document).ready(function() {
                 if (config.format[column] != undefined) {
                     return config.format[column](value, row, index, field);
                 } else {
-                    if (config[column].precision && config[column].is_float) {
-                        return precision_formatter(config[column].precision, value);
+                    if (config.column_config[column].precision && config.column_config[column].is_float) {
+                        return precision_formatter(config.column_config[column].precision, value);
                     } else {
                         return value;
                     }

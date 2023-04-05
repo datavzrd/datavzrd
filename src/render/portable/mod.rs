@@ -900,6 +900,8 @@ struct JavascriptConfig {
     bar_titles: Vec<String>,
     heatmap_titles: Vec<String>,
     custom_plot_titles: Vec<String>,
+    links: Vec<String>,
+    column_config: HashMap<String, JavascriptColumnConfig>,
 }
 
 impl JavascriptConfig {
@@ -914,6 +916,7 @@ impl JavascriptConfig {
         separator: char,
         header_row_length: usize,
     ) -> Self {
+        let column_classification = classify_table(csv_path, separator, header_row_length).unwrap();
         Self {
             webview_controls,
             webview_host: webview_host.to_string(),
@@ -951,6 +954,32 @@ impl JavascriptConfig {
                 .filter(|(_, k)| k.custom_plot.is_some())
                 .map(|(k, _)| k.to_string())
                 .collect(),
+            links: config
+                .iter()
+                .filter(|(_, v)| v.link_to_url.is_some())
+                .map(|(k, _)| k.to_string())
+                .collect(),
+            column_config: config
+                .iter()
+                .map(|(k, v)| (k.to_string(), JavascriptColumnConfig::from_column_spec(v, column_classification.get(k).unwrap())))
+                .collect(),
+        }
+    }
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptColumnConfig {
+    label: Option<String>,
+    is_float: bool,
+    precision: u32,
+}
+
+impl JavascriptColumnConfig {
+    fn from_column_spec(spec: &RenderColumnSpec, column_type: &ColumnType) -> Self {
+        Self {
+            label: spec.label.clone(),
+            is_float: column_type == &ColumnType::Float,
+            precision: spec.precision,
         }
     }
 }
