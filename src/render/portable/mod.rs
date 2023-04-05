@@ -846,6 +846,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         csv_path,
         separator,
         header_row_length,
+        header_specs,
     );
 
     context.insert("config", &config);
@@ -888,6 +889,7 @@ fn render_table_javascript<P: AsRef<Path>>(
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
 struct JavascriptConfig {
+    detail_mode: bool,
     webview_controls: bool,
     webview_host: String,
     is_single_page: bool,
@@ -902,6 +904,7 @@ struct JavascriptConfig {
     custom_plot_titles: Vec<String>,
     links: Vec<String>,
     column_config: HashMap<String, JavascriptColumnConfig>,
+    header_label_length: usize,
 }
 
 impl JavascriptConfig {
@@ -915,9 +918,23 @@ impl JavascriptConfig {
         csv_path: &Path,
         separator: char,
         header_row_length: usize,
+        header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     ) -> Self {
         let column_classification = classify_table(csv_path, separator, header_row_length).unwrap();
+        let header_label_length = if let Some(headers) = header_specs {
+            headers
+                .iter()
+                .filter(|(_, v)| v.label.is_some())
+                .count()
+        } else {
+            0
+        };
         Self {
+            detail_mode: config
+                .iter()
+                .filter(|(_, spec)| spec.display_mode == DisplayMode::Detail)
+                .count()
+                > 0,
             webview_controls,
             webview_host: webview_host.to_string(),
             is_single_page,
@@ -963,6 +980,7 @@ impl JavascriptConfig {
                 .iter()
                 .map(|(k, v)| (k.to_string(), JavascriptColumnConfig::from_column_spec(v, column_classification.get(k).unwrap())))
                 .collect(),
+            header_label_length,
         }
     }
 }
