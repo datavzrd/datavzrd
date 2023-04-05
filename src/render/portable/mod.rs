@@ -905,6 +905,7 @@ struct JavascriptConfig {
     links: Vec<String>,
     column_config: HashMap<String, JavascriptColumnConfig>,
     header_label_length: usize,
+    ticks: Vec<JavascriptTickConfig>,
 }
 
 impl JavascriptConfig {
@@ -922,10 +923,7 @@ impl JavascriptConfig {
     ) -> Self {
         let column_classification = classify_table(csv_path, separator, header_row_length).unwrap();
         let header_label_length = if let Some(headers) = header_specs {
-            headers
-                .iter()
-                .filter(|(_, v)| v.label.is_some())
-                .count()
+            headers.iter().filter(|(_, v)| v.label.is_some()).count()
         } else {
             0
         };
@@ -940,9 +938,18 @@ impl JavascriptConfig {
             is_single_page,
             page_size,
             columns: columns.iter().map(|c| c.to_string()).collect(),
-            displayed_columns: columns.iter().map(|c| c.to_string()).filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Normal).collect(),
-            hidden_columns: columns.iter().map(|c| c.to_string()).filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Hidden).collect(),
-            displayed_numeric_columns: classify_table(csv_path, separator, header_row_length).unwrap()
+            displayed_columns: columns
+                .iter()
+                .map(|c| c.to_string())
+                .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Normal)
+                .collect(),
+            hidden_columns: columns
+                .iter()
+                .map(|c| c.to_string())
+                .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Hidden)
+                .collect(),
+            displayed_numeric_columns: classify_table(csv_path, separator, header_row_length)
+                .unwrap()
                 .iter()
                 .map(|(k, v)| (k.to_owned(), v.is_numeric()))
                 .filter(|(_, v)| *v)
@@ -978,7 +985,15 @@ impl JavascriptConfig {
                 .collect(),
             column_config: config
                 .iter()
-                .map(|(k, v)| (k.to_string(), JavascriptColumnConfig::from_column_spec(v, column_classification.get(k).unwrap())))
+                .map(|(k, v)| {
+                    (
+                        k.to_string(),
+                        JavascriptColumnConfig::from_column_spec(
+                            v,
+                            column_classification.get(k).unwrap(),
+                        ),
+                    )
+                })
                 .collect(),
             header_label_length,
         }
@@ -998,6 +1013,25 @@ impl JavascriptColumnConfig {
             label: spec.label.clone(),
             is_float: column_type == &ColumnType::Float,
             precision: spec.precision,
+        }
+    }
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptTickConfig {
+    index: usize,
+    title: String,
+    slug_title: String,
+    specs: String,
+}
+
+impl JavascriptTickConfig {
+    fn from_column_config() -> Self {
+        Self {
+            index: 0,
+            title: "".to_string(),
+            slug_title: "".to_string(),
+            specs: "".to_string(),
         }
     }
 }
