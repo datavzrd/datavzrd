@@ -136,40 +136,20 @@ function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) 
     let scale = null;
 
     if (heatmap.heatmap.scale == "ordinal") {
-        if (heatmap.heatmap.domain != null) {
-            if (heatmap.heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
-            } else if (!heatmap.heatmap.range.length == 0) {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
-            } else {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
-            }
+        if (heatmap.heatmap.color_scheme != "") {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
+        } else if (!heatmap.heatmap.range.length == 0) {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
         } else {
-            if (heatmap.heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.heatmap.scale)().range(vega.scheme(heatmap.heatmap.color_scheme));
-            } else if (!heatmap.heatmap.range.length == 0) {
-                scale = vega.scale(heatmap.heatmap.scale)().range(heatmap.heatmap.range);
-            } else {
-                scale = vega.scale(heatmap.heatmap.scale)();
-            }
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
         }
     } else {
-        if (heatmap.heatmap.domain != null) {
-            if (heatmap.heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
-            } else if (!heatmap.heatmap.range == 0) {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
-            } else {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp);
-            }
+        if (heatmap.heatmap.color_scheme != "") {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
+        } else if (!heatmap.heatmap.range == 0) {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
         } else {
-            if (heatmap.heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
-            } else if (!heatmap.heatmap.range == 0) {
-                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
-            } else {
-                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp);
-            }
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp);
         }
     }
 
@@ -270,40 +250,20 @@ function colorizeDetailCard(value, div, heatmap) {
     let scale = null;
 
     if (heatmap.heatmap.scale == "ordinal") {
-        if (heatmap.heatmap.domain != null) {
-            if (heatmap.heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
-            } else if (!heatmap.heatmap.range.length == 0) {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
-            } else {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
-            }
+        if (heatmap.heatmap.color_scheme != "") {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
+        } else if (!heatmap.heatmap.range.length == 0) {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
         } else {
-            if (heatmap.heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.heatmap.scale)().range(vega.scheme(heatmap.heatmap.color_scheme));
-            } else if (!heatmap.heatmap.range.length == 0) {
-                scale = vega.scale(heatmap.heatmap.scale)().range(heatmap.heatmap.range);
-            } else {
-                scale = vega.scale(heatmap.heatmap.scale)();
-            }
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
         }
     } else {
-        if (heatmap.heatmap.domain != null) {
-            if (heatmap.heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
-            } else if (!heatmap.heatmap.range == 0) {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
-            } else {
-                scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp);
-            }
+        if (heatmap.heatmap.color_scheme != "") {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
+        } else if (!heatmap.heatmap.range == 0) {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
         } else {
-            if (heatmap.heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
-            } else if (!heatmap.heatmap.range == 0) {
-                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
-            } else {
-                scale = vega.scale(heatmap.heatmap.scale)().clamp(heatmap.heatmap.clamp);
-            }
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp);
         }
     }
 

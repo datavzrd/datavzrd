@@ -2,7 +2,7 @@
 name = "datavzrd"
 description = "A tool to create visual HTML reports from collections of CSV/TSV tables"
 license = "MIT"
-version = "2.18.1"
+version = "2.18.3"
 authors = ["Johannes Köster <johannes.koester@tu-dortmund.de>", "Felix Wiegand <felix.wiegand@tu-dortmund.de>"]
 edition = "2021"
 
@@ -18,7 +18,7 @@ serde_yaml = "0.9"
 derive-new = "0.5"
 itertools = "0.10.5"
 tera = "1.18.1"
-serde_json = "1.0.94"
+serde_json = "1.0.95"
 lz-str = "0.2.1"
 chrono = "0.4"
 ndhistogram = "0.8.0"

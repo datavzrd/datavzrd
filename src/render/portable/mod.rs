@@ -12,6 +12,7 @@ use crate::spec::{
     LinkSpec, RenderColumnSpec, ScaleType, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
+use crate::utils::column_type::IsNa;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
 use anyhow::Result;
@@ -1229,11 +1230,13 @@ pub(crate) fn get_column_domain(
             })?;
             Ok(json!(reader
                 .records()
+                .skip(header_rows - 1)
                 .map(|r| r.unwrap())
                 .flat_map(|r| r
                     .iter()
                     .enumerate()
                     .filter(|(index, _)| column_indexes.contains(index))
+                    .filter(|(_, value)| !value.is_na())
                     .map(|(_, value)| value.to_string())
                     .collect_vec())
                 .unique()
@@ -1243,8 +1246,10 @@ pub(crate) fn get_column_domain(
         } else {
             Ok(json!(reader
                 .records()
+                .skip(header_rows - 1)
                 .map(|r| r.unwrap())
                 .map(|r| r.get(column_index).unwrap().to_owned())
+                .filter(|value| !value.as_str().is_na())
                 .unique()
                 .sorted()
                 .collect_vec())

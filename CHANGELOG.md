@@ -1,5 +1,20 @@
 # Changelog
 
+### [2.18.3](https://www.github.com/datavzrd/datavzrd/compare/v2.18.2...v2.18.3) (2023-03-30)
+
+
+### Bug Fixes
+
+* Fix table plot for wide tables ([#404](https://www.github.com/datavzrd/datavzrd/issues/404)) ([c8a92ce](https://www.github.com/datavzrd/datavzrd/commit/c8a92ce8bad029bc4abb6834c45a3a97d6145055))
+* Pre-calculate numeric heatmap domain ([#402](https://www.github.com/datavzrd/datavzrd/issues/402)) ([b91129a](https://www.github.com/datavzrd/datavzrd/commit/b91129a169b204ad9eb64c4bf998f93583c45ee7))
+
+### [2.18.2](https://www.github.com/datavzrd/datavzrd/compare/v2.18.1...v2.18.2) (2023-03-30)
+
+
+### Bug Fixes
+
+* Fix domain detection with NA values ([#400](https://www.github.com/datavzrd/datavzrd/issues/400)) ([915c8c8](https://www.github.com/datavzrd/datavzrd/commit/915c8c837e4b3987e5a15ad252917808c74bec18))
+
 ### [2.18.1](https://www.github.com/datavzrd/datavzrd/compare/v2.18.0...v2.18.1) (2023-03-22)
 
 

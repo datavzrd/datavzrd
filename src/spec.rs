@@ -592,7 +592,7 @@ impl TickPlot {
 impl Heatmap {
     fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
         self.aux_domain_columns.preprocess(dataset)?;
-        if !self.scale_type.is_quantitative() && self.domain.is_none() {
+        if self.domain.is_none() {
             let d = get_column_domain(
                 title,
                 &dataset.path,
@@ -600,7 +600,12 @@ impl Heatmap {
                 dataset.header_rows,
                 self,
             )?;
-            let domain: Vec<String> = serde_json::from_str(&d)?;
+            let domain: Vec<String> = if self.scale_type.is_quantitative() {
+                let floating_domain: Vec<f64> = serde_json::from_str(&d)?;
+                floating_domain.iter().map(|x| x.to_string()).collect()
+            } else {
+                serde_json::from_str(&d)?
+            };
             self.domain = Some(domain);
         }
         Ok(())
