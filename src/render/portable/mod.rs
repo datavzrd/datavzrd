@@ -6,11 +6,11 @@ use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
-use crate::spec::HeaderDisplayMode;
 use crate::spec::{
     BarPlot, CustomPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec,
     LinkSpec, RenderColumnSpec, ScaleType, TickPlot,
 };
+use crate::spec::{HeaderDisplayMode, LinkToUrlSpec};
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::IsNa;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -908,6 +908,9 @@ struct JavascriptConfig {
     ticks: Vec<JavascriptTickAndBarConfig>,
     bars: Vec<JavascriptTickAndBarConfig>,
     heatmaps: Vec<JavascriptHeatmapConfig>,
+    brush_domains: HashMap<String, Vec<f32>>,
+    aux_domains: HashMap<String, Vec<String>>,
+    link_urls: Vec<JavascriptLinkConfig>,
 }
 
 impl JavascriptConfig {
@@ -1055,6 +1058,64 @@ impl JavascriptConfig {
                     )
                 })
                 .collect(),
+            brush_domains: config
+                .iter()
+                .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
+                .filter_map(|(title, k)| k.tick_plot.as_ref().map(|tick_plot| (title, tick_plot)))
+                .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
+                .map(|(title, k)| (title.to_string(), k.to_vec()))
+                .chain(
+                    config
+                        .iter()
+                        .filter(|(title, _)| column_classification.get(&title.to_string()).unwrap().is_numeric())
+                        .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
+                        .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
+                        .filter(|(_, k)| k.custom_content.is_none())
+                        .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
+                        .map(|(title, k)| {
+                            (
+                                title.to_string(),
+                                k.iter().map(|s| f32::from_str(s).context(format!("Could not parse given domain value {s} for column {title}.")).unwrap()).collect_vec(),
+                            )
+                        }),
+                )
+                .collect(),
+            aux_domains: config
+                .iter()
+                .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
+                .filter_map(|(title, k)| k.tick_plot.as_ref().map(|tick_plot| (title, tick_plot)))
+                .filter_map(|(title, k)| {
+                    k.aux_domain_columns
+                        .0
+                        .as_ref()
+                        .map(|domains| (title, domains))
+                })
+                .map(|(title, k)| (title.to_string(), k.to_vec()))
+                .chain(
+                    config
+                        .iter()
+                        .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
+                        .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
+                        .filter_map(|(title, k)| {
+                            k.aux_domain_columns
+                                .0
+                                .as_ref()
+                                .map(|domains| (title, domains))
+                        })
+                        .map(|(title, k)| (title.to_string(), k.to_vec())),
+                )
+                .collect(),
+            link_urls: config
+                .iter()
+                .filter(|(_, v)| v.link_to_url.is_some())
+                .map(|(k, v)| JavascriptLinkConfig {
+                    title: k.to_string(),
+                    links: v.link_to_url.as_ref().unwrap().iter().map(|(link_name, link_spec)| JavascriptLink {
+                        name: link_name.to_string(),
+                        link: link_spec.to_owned(),
+                    }).collect(),
+                })
+                .collect(),
         }
     }
 }
@@ -1110,6 +1171,18 @@ impl JavascriptHeatmapConfig {
             domain: serde_json::from_str(&domain).unwrap(),
         }
     }
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptLinkConfig {
+    title: String,
+    links: Vec<JavascriptLink>,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptLink {
+    name: String,
+    link: LinkToUrlSpec,
 }
 
 /// Renders an empty page when datasets are empty
