@@ -1013,7 +1013,7 @@ impl JavascriptConfig {
                             v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
                             v.precision,
                         )
-                            .unwrap(),
+                        .unwrap(),
                     )
                 })
                 .collect(),
@@ -1032,7 +1032,7 @@ impl JavascriptConfig {
                             v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
                             v.precision,
                         )
-                            .unwrap(),
+                        .unwrap(),
                     )
                 })
                 .collect(),
@@ -1051,10 +1051,10 @@ impl JavascriptConfig {
                             header_row_length,
                             v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
                         )
-                            .unwrap(),
+                        .unwrap(),
                     )
                 })
-                .collect()
+                .collect(),
         }
     }
 }
