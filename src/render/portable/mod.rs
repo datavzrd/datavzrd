@@ -21,7 +21,7 @@ use chrono::{DateTime, Local};
 use csv::{Reader, StringRecord};
 use itertools::Itertools;
 use lz_str::compress_to_utf16;
-use serde::Serialize;
+use serde::{Serialize, Serializer};
 use serde_json::{json, Value};
 use std::cmp::max;
 use std::collections::{HashMap, HashSet};
@@ -912,6 +912,7 @@ struct JavascriptConfig {
     aux_domains: HashMap<String, Vec<String>>,
     link_urls: Vec<JavascriptLinkConfig>,
     ellipsis: Vec<JavascriptEllipsisConfig>,
+    format: HashMap<String, JavascriptFunction>,
 }
 
 impl JavascriptConfig {
@@ -1125,6 +1126,11 @@ impl JavascriptConfig {
                     ellipsis: v.ellipsis.as_ref().unwrap().to_owned(),
                 })
                 .collect(),
+            format: config
+                .iter()
+                .filter(|(_, k)| k.custom.is_some())
+                .map(|(k, v)| (k.to_owned(), JavascriptFunction(v.custom.as_ref().unwrap().to_owned())))
+                .collect(),
         }
     }
 }
@@ -1199,6 +1205,23 @@ struct JavascriptEllipsisConfig {
     title: String,
     ellipsis: u32,
 }
+
+
+#[derive(Debug, Clone, PartialEq)]
+struct JavascriptFunction(String);
+
+impl Serialize for JavascriptFunction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(&self.0)
+    }
+}
+
+
+
+
 
 /// Renders an empty page when datasets are empty
 fn render_empty_dataset<P: AsRef<Path>>(
