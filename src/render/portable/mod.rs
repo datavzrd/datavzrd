@@ -1207,17 +1207,30 @@ struct JavascriptEllipsisConfig {
 }
 
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Serialize, Debug, Clone, PartialEq)]
 struct JavascriptFunction(String);
 
-impl Serialize for JavascriptFunction {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        serializer.serialize_str(&self.0)
+pub(crate) struct ConfigSerializer<W: Write>(serde_json::Serializer<W>);
+
+impl<W: Write> ConfigSerializer<W> {
+    pub(crate) fn new(writer: W) -> Self {
+        Self(serde_json::Serializer::new(writer))
     }
 }
+
+impl<W: Write> Serialize for ConfigSerializer<W> {
+    fn serialize<S>(self: &ConfigSerializer<W>, value: &S) -> Result<(), serde_json::Error>
+        where
+            S: ?Sized + Serialize,
+    {
+        if let Some(s) = value.downcast_ref::<JavascriptFunction>() {
+            self.0.serialize_str(&s.0)
+        } else {
+            value.serialize(&mut self.0)
+        }
+    }
+}
+
 
 
 
