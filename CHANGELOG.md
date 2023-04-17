@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.18.4](https://www.github.com/datavzrd/datavzrd/compare/v2.18.3...v2.18.4) (2023-04-17)
+
+
+### Bug Fixes
+
+* Fix custom formatter ([#409](https://www.github.com/datavzrd/datavzrd/issues/409)) ([ea53bf2](https://www.github.com/datavzrd/datavzrd/commit/ea53bf26873d6cea6b36121979056cd0db579628))
+
 ### [2.18.3](https://www.github.com/datavzrd/datavzrd/compare/v2.18.2...v2.18.3) (2023-03-30)
 
 
