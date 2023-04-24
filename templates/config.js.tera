@@ -81,6 +81,8 @@ const config = {
 
 const config_new = {{ config | json_encode }}
 
+const new_custom_plots = {{ custom_plot_config | json_encode }}
+
 console.log(config_new == config);
 
 const custom_plots = [

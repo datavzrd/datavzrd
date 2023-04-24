@@ -665,11 +665,11 @@ pub(crate) struct CustomPlot {
     #[serde(default, rename = "data")]
     pub(crate) plot_data: String,
     #[serde(default, rename = "spec")]
-    schema: Option<String>,
+    pub(crate) schema: Option<String>,
     #[serde(default, rename = "spec-path")]
-    schema_path: Option<String>,
+    pub(crate) schema_path: Option<String>,
     #[serde(default)]
-    vega_controls: bool,
+    pub(crate) vega_controls: bool,
 }
 
 impl CustomPlot {

@@ -851,7 +851,12 @@ fn render_table_javascript<P: AsRef<Path>>(
         header_specs,
     );
 
+    let custom_plot_config = CustomPlotsConfig::from_column_config(&render_columns);
+    let header_config = HeaderConfig::from_headers();
+
     context.insert("config", &config);
+    context.insert("custom_plot_config", &custom_plot_config);
+    context.insert("header_config", &header_config);
 
     context.insert("titles", &titles.iter().collect_vec());
     context.insert("precisions", &precisions);
@@ -887,6 +892,52 @@ fn render_table_javascript<P: AsRef<Path>>(
     file.write_all(&minified)?;
 
     Ok(())
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct CustomPlotsConfig(Vec<CustomPlotConfig>);
+
+impl CustomPlotsConfig {
+    fn from_column_config(config: &HashMap<String, RenderColumnSpec>) -> Self {
+        CustomPlotsConfig(
+            config
+                .iter()
+                .filter(|(_, k)| k.custom_plot.is_some())
+                .map(|(k, v)| {
+                    let mut custom_plot = v.custom_plot.as_ref().unwrap().to_owned();
+                    custom_plot.read_schema().unwrap();
+                    CustomPlotConfig {
+                        title: k.to_string(),
+                        specs: custom_plot.schema.unwrap(),
+                        data_function: JavascriptFunction(custom_plot.plot_data).name(),
+                        vega_controls: custom_plot.vega_controls,
+                    }
+                })
+                .collect(),
+        )
+    }
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct HeaderConfig {
+    headers: Vec<HeaderRowConfig>,
+    heatmaps: Vec<HeaderHeatmapConfig>,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct HeaderRowConfig {
+    row: usize,
+    header: String,
+    label: String,
+}
+
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct CustomPlotConfig {
+    title: String,
+    specs: String,
+    data_function: String,
+    vega_controls: bool,
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
