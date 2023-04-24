@@ -21,11 +21,11 @@ use chrono::{DateTime, Local};
 use csv::{Reader, StringRecord};
 use itertools::Itertools;
 use lz_str::compress_to_utf16;
-use serde::{Serialize, Serializer};
+use serde::Serialize;
 use serde_json::{json, Value};
 use std::cmp::max;
 use std::collections::{HashMap, HashSet};
-use std::fmt::format;
+
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -226,6 +226,7 @@ impl Renderer for ItemRenderer {
                         self.specs.webview_controls,
                         debug,
                     )?;
+                    render_custom_javascript_functions(&out_path, table_specs, debug)?;
                     render_plots(
                         &out_path,
                         &dataset.path,
@@ -601,8 +602,8 @@ fn render_table_javascript<P: AsRef<Path>>(
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
-        "table.js.tera",
-        include_str!("../../../templates/table.js.tera"),
+        "config.js.tera",
+        include_str!("../../../templates/config.js.tera"),
     )?;
     let mut context = Context::new();
 
@@ -877,9 +878,9 @@ fn render_table_javascript<P: AsRef<Path>>(
     context.insert("webview_host", &webview_host);
     context.insert("webview_controls", &webview_controls);
 
-    let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
+    let file_path = Path::new(output_path.as_ref()).join(Path::new("config").with_extension("js"));
 
-    let js = templates.render("table.js.tera", &context)?;
+    let js = templates.render("config.js.tera", &context)?;
 
     let mut file = File::create(file_path)?;
     let minified = minify_js(&js, debug)?;
@@ -1214,6 +1215,59 @@ impl JavascriptFunction {
     fn name(&self) -> String {
         format!("custom_func_{:x}", md5::compute(&self.0.as_bytes()))
     }
+
+    fn to_javascript_function(&self) -> String {
+        format!(
+            "function {}({}",
+            &self.name(),
+            &self.0.split_once('(').unwrap().1
+        )
+    }
+}
+
+/// Render javascript functions into functions.js file per view
+fn render_custom_javascript_functions<P: AsRef<Path>>(
+    output_path: P,
+    render_columns: &HashMap<String, RenderColumnSpec>,
+    debug: bool,
+) -> Result<()> {
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "functions.js.tera",
+        include_str!("../../../templates/functions.js.tera"),
+    )?;
+
+    let mut context = Context::new();
+
+    let functions = render_columns
+        .iter()
+        .filter(|(_, k)| k.custom.is_some())
+        .map(|(_, v)| {
+            JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).to_javascript_function()
+        })
+        .chain(
+            render_columns
+                .iter()
+                .filter(|(_, k)| k.custom_plot.is_some())
+                .map(|(_, v)| {
+                    JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
+                        .to_javascript_function()
+                }),
+        )
+        .collect_vec();
+
+    context.insert("functions", &functions);
+
+    let file_path =
+        Path::new(output_path.as_ref()).join(Path::new("functions").with_extension("js"));
+
+    let js = templates.render("functions.js.tera", &context)?;
+
+    let mut file = File::create(file_path)?;
+    let minified = minify_js(&js, debug)?;
+    file.write_all(&minified)?;
+
+    Ok(())
 }
 
 /// Renders an empty page when datasets are empty

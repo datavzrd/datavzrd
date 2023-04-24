@@ -663,7 +663,7 @@ pub(crate) struct LinkSpec {
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct CustomPlot {
     #[serde(default, rename = "data")]
-    plot_data: String,
+    pub(crate) plot_data: String,
     #[serde(default, rename = "spec")]
     schema: Option<String>,
     #[serde(default, rename = "spec-path")]
