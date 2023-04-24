@@ -29,6 +29,7 @@ simplelog = "0.12.1"
 minify-js = "=0.5.2" # newer versions generate display issues (see PR #375)
 simple_excel_writer = "0.2"
 slug = "0.1.4"
+md5 = "0.7.0"
 
 [dev-dependencies]
 dir-assert = "0.2.0"

@@ -25,6 +25,7 @@ use serde::{Serialize, Serializer};
 use serde_json::{json, Value};
 use std::cmp::max;
 use std::collections::{HashMap, HashSet};
+use std::fmt::format;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -912,7 +913,7 @@ struct JavascriptConfig {
     aux_domains: HashMap<String, Vec<String>>,
     link_urls: Vec<JavascriptLinkConfig>,
     ellipsis: Vec<JavascriptEllipsisConfig>,
-    format: HashMap<String, JavascriptFunction>,
+    format: HashMap<String, String>,
 }
 
 impl JavascriptConfig {
@@ -1129,7 +1130,7 @@ impl JavascriptConfig {
             format: config
                 .iter()
                 .filter(|(_, k)| k.custom.is_some())
-                .map(|(k, v)| (k.to_owned(), JavascriptFunction(v.custom.as_ref().unwrap().to_owned())))
+                .map(|(k, v)| (k.to_owned(), JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).name()))
                 .collect(),
         }
     }
@@ -1206,35 +1207,14 @@ struct JavascriptEllipsisConfig {
     ellipsis: u32,
 }
 
-
 #[derive(Serialize, Debug, Clone, PartialEq)]
 struct JavascriptFunction(String);
 
-pub(crate) struct ConfigSerializer<W: Write>(serde_json::Serializer<W>);
-
-impl<W: Write> ConfigSerializer<W> {
-    pub(crate) fn new(writer: W) -> Self {
-        Self(serde_json::Serializer::new(writer))
+impl JavascriptFunction {
+    fn name(&self) -> String {
+        format!("custom_func_{:x}", md5::compute(&self.0.as_bytes()))
     }
 }
-
-impl<W: Write> Serialize for ConfigSerializer<W> {
-    fn serialize<S>(self: &ConfigSerializer<W>, value: &S) -> Result<(), serde_json::Error>
-        where
-            S: ?Sized + Serialize,
-    {
-        if let Some(s) = value.downcast_ref::<JavascriptFunction>() {
-            self.0.serialize_str(&s.0)
-        } else {
-            value.serialize(&mut self.0)
-        }
-    }
-}
-
-
-
-
-
 
 /// Renders an empty page when datasets are empty
 fn render_empty_dataset<P: AsRef<Path>>(
