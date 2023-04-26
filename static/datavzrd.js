@@ -213,7 +213,7 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, detail_mode, h
                     link = link.replaceAll(`{${column}}`, table_rows[row][column]);
                 }
                 if (link_urls[0].link.new_window) {
-                    this.innerHTML = `<a href='${link}' target='_blank' >${value}</a>`;
+                    this.innerHTML = `<a href='${link}' target='_blank' rel='noopener noreferrer' >${value}</a>`;
                 } else {
                     this.innerHTML = `<a href='${link}'>${value}</a>`;
                 }
@@ -225,7 +225,7 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, detail_mode, h
                         link = link.replaceAll(`{${column}}`, table_rows[row][column]);
                     }
                     if (l.link.new_window) {
-                        links = `${links}<a class="dropdown-item" href='${link}' target='_blank' >${l.name}</a>`;
+                        links = `${links}<a class="dropdown-item" href='${link}' target='_blank' rel='noopener noreferrer' >${l.name}</a>`;
                     } else {
                         links = `${links}<a class="dropdown-item" href='${link}' >${l.name}</a>`;
                     }
