@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.18.5](https://www.github.com/datavzrd/datavzrd/compare/v2.18.4...v2.18.5) (2023-04-27)
+
+
+### Bug Fixes
+
+* `<a target="_blank">` security vulnerability ([#413](https://www.github.com/datavzrd/datavzrd/issues/413)) ([9df908a](https://www.github.com/datavzrd/datavzrd/commit/9df908a6cfb0d5dc1ec3e216d805a554c12fcd27))
+* Render missing empty report when dataset with multiple header rows is empty ([#416](https://www.github.com/datavzrd/datavzrd/issues/416)) ([25c7341](https://www.github.com/datavzrd/datavzrd/commit/25c7341cf1460caef0e794421c1fbb8581993e09))
+
 ### [2.18.4](https://www.github.com/datavzrd/datavzrd/compare/v2.18.3...v2.18.4) (2023-04-17)
 
 
