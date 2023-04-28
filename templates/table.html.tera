@@ -52,6 +52,9 @@
                         </select>
                     </li>
                 </ol>
+                <ol class="navbar-nav mr-auto">
+                    <span class="badge badge-dark">{{ rows }} rows</span>
+                </ol>
                 <span class="pull-right" id="right-top-nav">
                     {% if is_single_page %}<span data-toggle="tooltip" data-placement="left" title="View as Plot"><button class="btn btn-outline-secondary" id="btnHeatmap" data-toggle="modal" data-target="#heatmap-plot-modal">
                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">

@@ -190,6 +190,7 @@ impl Renderer for ItemRenderer {
                             is_single_page,
                             self.specs.needs_excel_sheet(),
                             &webview_host,
+                            records_length - dataset.header_rows,
                         )?;
                     }
                     if is_single_page {
@@ -269,6 +270,7 @@ fn render_page<P: AsRef<Path>>(
     is_single_page: bool,
     has_excel_sheet: bool,
     webview_host: &String,
+    rows: usize,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -310,6 +312,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("titles", &titles.iter().collect_vec());
     context.insert("current_page", &page_index);
     context.insert("pages", &pages);
+    context.insert("rows", &rows);
     context.insert("description", &description);
     context.insert("is_single_page", &is_single_page);
     context.insert("has_excel_sheet", &has_excel_sheet);
