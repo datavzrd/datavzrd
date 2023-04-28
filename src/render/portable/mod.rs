@@ -48,6 +48,22 @@ impl Renderer for ItemRenderer {
     where
         P: AsRef<Path>,
     {
+        let view_sizes: HashMap<_, _> = self
+            .specs
+            .views
+            .iter()
+            .filter(|(_, v)| v.dataset.is_some())
+            .map(|(n, v)| {
+                (
+                    n.to_string(),
+                    self.specs
+                        .datasets
+                        .get(v.dataset.as_ref().unwrap())
+                        .unwrap()
+                        .size(),
+                )
+            })
+            .collect();
         for (name, table) in &self.specs.views {
             let out_path = Path::new(path.as_ref()).join(name);
             fs::create_dir(&out_path)?;
@@ -190,7 +206,7 @@ impl Renderer for ItemRenderer {
                             is_single_page,
                             self.specs.needs_excel_sheet(),
                             &webview_host,
-                            records_length - dataset.header_rows,
+                            &view_sizes,
                         )?;
                     }
                     if is_single_page {
@@ -270,7 +286,7 @@ fn render_page<P: AsRef<Path>>(
     is_single_page: bool,
     has_excel_sheet: bool,
     webview_host: &String,
-    rows: usize,
+    view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -312,7 +328,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("titles", &titles.iter().collect_vec());
     context.insert("current_page", &page_index);
     context.insert("pages", &pages);
-    context.insert("rows", &rows);
+    context.insert("view_sizes", &view_sizes);
     context.insert("description", &description);
     context.insert("is_single_page", &is_single_page);
     context.insert("has_excel_sheet", &has_excel_sheet);
