@@ -39,7 +39,7 @@
     <div id="content-wrap">
         <nav class="navbar navbar-expand navbar-light navbar-top">
             <div class="collapse navbar-collapse" id="navbarText2">
-                <ol class="navbar-nav mr-auto breadcrumb">
+                <ol class="navbar-nav mr-auto breadcrumb" style="margin-right: 0 !important;">
                     {% if report_name %}<li class="breadcrumb-item"><div>{{ report_name }}</div></li>{% endif %}
                     <li class="breadcrumb-item">
                         <select id="view-selection" title="{{ name }}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." data-dropdown-align-right="true" class="selectpicker" data-style="select-view" data-live-search="true">
@@ -52,7 +52,7 @@
                         </select>
                     </li>
                 </ol>
-                <ol class="navbar-nav" style="margin-right: 0 !important;">
+                <ol class="navbar-nav mr-auto">
                     <span class="badge badge-light">{{ rows }} rows</span>
                 </ol>
                 <span class="pull-right" id="right-top-nav">
