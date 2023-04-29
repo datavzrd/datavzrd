@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.19.0](https://www.github.com/datavzrd/datavzrd/compare/v2.18.5...v2.19.0) (2023-04-29)
+
+
+### Features
+
+* Show number of rows in badge ([#418](https://www.github.com/datavzrd/datavzrd/issues/418)) ([6551ebd](https://www.github.com/datavzrd/datavzrd/commit/6551ebd7239da7bfdba2231a761e5736a19444ac))
+
 ### [2.18.5](https://www.github.com/datavzrd/datavzrd/compare/v2.18.4...v2.18.5) (2023-04-27)
 
 
