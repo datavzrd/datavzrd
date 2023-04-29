@@ -326,6 +326,16 @@ pub(crate) struct DatasetSpecs {
     pub(crate) offer_excel: bool,
 }
 
+impl DatasetSpecs {
+    pub(crate) fn size(&self) -> usize {
+        let mut reader = csv::ReaderBuilder::new()
+            .delimiter(self.separator as u8)
+            .from_path(&self.path)
+            .expect("Could not read dataset.");
+        reader.records().count() - (self.header_rows - 1)
+    }
+}
+
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct ItemSpecs {
@@ -1545,5 +1555,11 @@ mod tests {
         };
 
         assert_eq!(item_specs, expected_item_specs);
+    }
+
+    #[test]
+    fn test_dataset_size() {
+        let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
+        assert_eq!(config.datasets.get("movies").unwrap().size(), 184);
     }
 }
