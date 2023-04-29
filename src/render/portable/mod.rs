@@ -121,6 +121,7 @@ impl Renderer for ItemRenderer {
                         &self.specs.default_view,
                         &self.specs.report_name,
                         self.specs.needs_excel_sheet(),
+                        &view_sizes,
                     )?;
                 // Render HTML
                 } else if let Some(table_specs) = &table.render_html {
@@ -136,6 +137,7 @@ impl Renderer for ItemRenderer {
                         &self.specs.aux_libraries,
                         &self.specs.report_name,
                         self.specs.needs_excel_sheet(),
+                        &view_sizes,
                     )?;
                 }
                 // Render table
@@ -1265,6 +1267,7 @@ fn render_plot_page<P: AsRef<Path>>(
     default_view: &Option<String>,
     report_name: &String,
     has_excel_sheet: bool,
+    view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
@@ -1345,6 +1348,7 @@ fn render_plot_page<P: AsRef<Path>>(
             })
             .collect_vec(),
     );
+    context.insert("view_sizes", &view_sizes);
     context.insert("default_view", default_view);
     context.insert("report_name", report_name);
     context.insert("name", name);
@@ -1377,6 +1381,7 @@ fn render_html_page<P: AsRef<Path>>(
     aux_libraries: &Option<Vec<String>>,
     report_name: &String,
     has_excel_sheet: bool,
+    view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
@@ -1429,6 +1434,7 @@ fn render_html_page<P: AsRef<Path>>(
             })
             .collect_vec(),
     );
+    context.insert("view_sizes", &view_sizes);
     context.insert("default_view", default_view);
     context.insert("report_name", report_name);
     context.insert("name", name);
