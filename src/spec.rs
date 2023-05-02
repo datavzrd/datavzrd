@@ -57,7 +57,9 @@ impl ItemsSpec {
                         })
                     }
                 };
-                spec.preprocess_columns(dataset, items_spec.max_in_memory_rows)?;
+                if !dataset.is_empty() {
+                    spec.preprocess_columns(dataset, items_spec.max_in_memory_rows)?;
+                }
             }
         }
         Ok(items_spec)
@@ -333,6 +335,10 @@ impl DatasetSpecs {
             .from_path(&self.path)
             .expect("Could not read dataset.");
         reader.records().count() - (self.header_rows - 1)
+    }
+
+    pub(crate) fn is_empty(&self) -> bool {
+        self.size() == 0_usize
     }
 }
 
@@ -610,6 +616,7 @@ impl Heatmap {
                 dataset.header_rows,
                 self,
             )?;
+            dbg!(&d);
             let domain: Vec<String> = if self.scale_type.is_quantitative() {
                 let floating_domain: Vec<f64> = serde_json::from_str(&d)?;
                 floating_domain.iter().map(|x| x.to_string()).collect()
