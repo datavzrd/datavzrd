@@ -49,6 +49,22 @@ impl Renderer for ItemRenderer {
     where
         P: AsRef<Path>,
     {
+        let view_sizes: HashMap<_, _> = self
+            .specs
+            .views
+            .iter()
+            .filter(|(_, v)| v.dataset.is_some())
+            .map(|(n, v)| {
+                (
+                    n.to_string(),
+                    self.specs
+                        .datasets
+                        .get(v.dataset.as_ref().unwrap())
+                        .unwrap()
+                        .size(),
+                )
+            })
+            .collect();
         for (name, table) in &self.specs.views {
             let out_path = Path::new(path.as_ref()).join(name);
             fs::create_dir(&out_path)?;
@@ -89,7 +105,7 @@ impl Renderer for ItemRenderer {
 
             let mut counter_reader = generate_reader()
                 .context(format!("Could not read file with path {:?}", &dataset.path))?;
-            let records_length = counter_reader.records().count();
+            let records_length = counter_reader.records().count() - (dataset.header_rows - 1);
             if records_length > 0 {
                 let linked_tables = get_linked_tables(name, &self.specs)?;
                 // Render plot
@@ -106,6 +122,7 @@ impl Renderer for ItemRenderer {
                         &self.specs.default_view,
                         &self.specs.report_name,
                         self.specs.needs_excel_sheet(),
+                        &view_sizes,
                     )?;
                 // Render HTML
                 } else if let Some(table_specs) = &table.render_html {
@@ -121,6 +138,7 @@ impl Renderer for ItemRenderer {
                         &self.specs.aux_libraries,
                         &self.specs.report_name,
                         self.specs.needs_excel_sheet(),
+                        &view_sizes,
                     )?;
                 }
                 // Render table
@@ -191,6 +209,7 @@ impl Renderer for ItemRenderer {
                             is_single_page,
                             self.specs.needs_excel_sheet(),
                             &webview_host,
+                            &view_sizes,
                         )?;
                     }
                     if is_single_page {
@@ -271,6 +290,7 @@ fn render_page<P: AsRef<Path>>(
     is_single_page: bool,
     has_excel_sheet: bool,
     webview_host: &String,
+    view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -312,6 +332,7 @@ fn render_page<P: AsRef<Path>>(
     context.insert("titles", &titles.iter().collect_vec());
     context.insert("current_page", &page_index);
     context.insert("pages", &pages);
+    context.insert("view_sizes", &view_sizes);
     context.insert("description", &description);
     context.insert("is_single_page", &is_single_page);
     context.insert("has_excel_sheet", &has_excel_sheet);
@@ -1695,6 +1716,7 @@ fn render_plot_page<P: AsRef<Path>>(
     default_view: &Option<String>,
     report_name: &String,
     has_excel_sheet: bool,
+    view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
@@ -1775,6 +1797,7 @@ fn render_plot_page<P: AsRef<Path>>(
             })
             .collect_vec(),
     );
+    context.insert("view_sizes", &view_sizes);
     context.insert("default_view", default_view);
     context.insert("report_name", report_name);
     context.insert("name", name);
@@ -1807,6 +1830,7 @@ fn render_html_page<P: AsRef<Path>>(
     aux_libraries: &Option<Vec<String>>,
     report_name: &String,
     has_excel_sheet: bool,
+    view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
     let generate_reader = || -> csv::Result<Reader<File>> {
         csv::ReaderBuilder::new()
@@ -1859,6 +1883,7 @@ fn render_html_page<P: AsRef<Path>>(
             })
             .collect_vec(),
     );
+    context.insert("view_sizes", &view_sizes);
     context.insert("default_view", default_view);
     context.insert("report_name", report_name);
     context.insert("name", name);

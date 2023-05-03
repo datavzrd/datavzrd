@@ -45,10 +45,10 @@
                     <li class="breadcrumb-item">
                         <select id="view-selection" title="{{ name }}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." data-dropdown-align-right="true" class="selectpicker" data-style="select-view" data-live-search="true">
                             {% if default_view %}
-                            <option value="../{{ default_view }}/index_1.html">{{ default_view }}</option>
+                            <option value="../{{ default_view }}/index_1.html" data-content="{{ default_view }} <span class='badge badge-light'>{{ view_sizes[default_view] }} rows</span>">{{ default_view }}</option>
                             {% endif %}
                             {% for table in tables | sort %}
-                            <option value="../{{ table }}/index_1.html">{{ table }}</option>
+                            <option value="../{{ table }}/index_1.html" data-content="{{ table }} <span class='badge badge-light'>{{ view_sizes[table] }} rows</span>">{{ table }}</option>
                             {% endfor %}
                         </select>
                     </li>
@@ -163,7 +163,7 @@
                             </div>
                             <div class="modal-footer">
                                 <span data-toggle="tooltip" data-placement="left" title="Open portable share link. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of {{webview_host}}.">
-                                    <a href="#" target="_blank" type="button" id="open-url" class="btn btn-primary">Open link</a>
+                                    <a href="#" target="_blank" rel="noopener noreferrer" type="button" id="open-url" class="btn btn-primary">Open link</a>
                                 </span>
 <!--                                <button href="#" type="button" id="bookmark" onclick="browser.bookmark.create({'title': document.title, 'url': $('#open-url').attr('href')})" class="btn btn-primary">-->
 <!--                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-browser-firefox" viewBox="0 0 16 16">-->

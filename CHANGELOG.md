@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.19.0](https://www.github.com/datavzrd/datavzrd/compare/v2.18.5...v2.19.0) (2023-04-29)
+
+
+### Features
+
+* Show number of rows in badge ([#418](https://www.github.com/datavzrd/datavzrd/issues/418)) ([6551ebd](https://www.github.com/datavzrd/datavzrd/commit/6551ebd7239da7bfdba2231a761e5736a19444ac))
+
+### [2.18.5](https://www.github.com/datavzrd/datavzrd/compare/v2.18.4...v2.18.5) (2023-04-27)
+
+
+### Bug Fixes
+
+* `<a target="_blank">` security vulnerability ([#413](https://www.github.com/datavzrd/datavzrd/issues/413)) ([9df908a](https://www.github.com/datavzrd/datavzrd/commit/9df908a6cfb0d5dc1ec3e216d805a554c12fcd27))
+* Render missing empty report when dataset with multiple header rows is empty ([#416](https://www.github.com/datavzrd/datavzrd/issues/416)) ([25c7341](https://www.github.com/datavzrd/datavzrd/commit/25c7341cf1460caef0e794421c1fbb8581993e09))
+
+### [2.18.4](https://www.github.com/datavzrd/datavzrd/compare/v2.18.3...v2.18.4) (2023-04-17)
+
+
+### Bug Fixes
+
+* Fix custom formatter ([#409](https://www.github.com/datavzrd/datavzrd/issues/409)) ([ea53bf2](https://www.github.com/datavzrd/datavzrd/commit/ea53bf26873d6cea6b36121979056cd0db579628))
+
 ### [2.18.3](https://www.github.com/datavzrd/datavzrd/compare/v2.18.2...v2.18.3) (2023-03-30)
 
 
