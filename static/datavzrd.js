@@ -330,7 +330,7 @@ function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
         index += 1;
     }
     let detail_mode = dp_columns.indexOf(plot.title) == -1;
-    var data_function = plot.data_function;
+    var data_function = window[plot.data_function];
     var specs = plot.specs;
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
@@ -484,7 +484,7 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
             colorizeHeaderRow(o.row, o.heatmap, config.header_label_length);
         }
 
-        for (o of config.header_ellipsis) {
+        for (o of header_config.ellipsis) {
             shortenHeaderRow(o.index, o.ellipsis, config.header_label_length > 0);
         }
     }
@@ -678,7 +678,7 @@ $(document).ready(function() {
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
         for (o of custom_plots) {
             if (!config.displayed_columns.includes(o.title)) {
-                renderCustomPlotDetailView(row[o.title], `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, o.data_function, o.specs, o.vega_controls);
+                renderCustomPlotDetailView(row[o.title], `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, window[o.data_function], o.specs, o.vega_controls);
             }
         }
 
@@ -768,7 +768,7 @@ $(document).ready(function() {
                 if (config.detail_mode || config.header_label_length > 0) {
                     index += 1;
                 }
-                if (config.displayed_numeric_columns[tick_brush]) {
+                if (config.displayed_numeric_columns.includes(title)) {
                     let plot_data = [];
                     let values = []
                     for (row of table_rows) {
