@@ -1,0 +1,1 @@
+var custom_func_bdeb9ccd63a6f2944da7a80b24245f51=((a,b)=>[{"category":"wins","amount":a.split("/")[0]},{"category":"nominations","amount":a.split("/")[1]}])

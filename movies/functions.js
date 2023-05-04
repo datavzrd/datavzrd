@@ -1,0 +1,1 @@
+var custom_func_25c0740391f9f68757894e517ef35361=((a,b)=>{const c=parseInt(a.split(' ')[0]);const d=Math.floor(c/60);const e=c%60;return `${d}h ${e}m`})
