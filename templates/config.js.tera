@@ -1,0 +1,3 @@
+const config = {{ config | json_encode }}
+const custom_plots = {{ custom_plot_config | json_encode }}
+const header_config = {{ header_config | json_encode }}

@@ -6,10 +6,10 @@ use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
-use crate::spec::HeaderDisplayMode;
+use crate::spec::LinkToUrlSpec;
 use crate::spec::{
-    BarPlot, CustomPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec,
-    LinkSpec, RenderColumnSpec, ScaleType, TickPlot,
+    BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
+    RenderColumnSpec, ScaleType, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_type::IsNa;
@@ -22,9 +22,10 @@ use csv::{Reader, StringRecord};
 use itertools::Itertools;
 use lz_str::compress_to_utf16;
 use serde::Serialize;
-use serde_json::json;
+use serde_json::{json, Value};
 use std::cmp::max;
 use std::collections::{HashMap, HashSet};
+
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -244,6 +245,7 @@ impl Renderer for ItemRenderer {
                         self.specs.webview_controls,
                         debug,
                     )?;
+                    render_custom_javascript_functions(&out_path, table_specs, debug)?;
                     render_plots(
                         &out_path,
                         &dataset.path,
@@ -621,270 +623,523 @@ fn render_table_javascript<P: AsRef<Path>>(
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
-        "table.js.tera",
-        include_str!("../../../templates/table.js.tera"),
+        "config.js.tera",
+        include_str!("../../../templates/config.js.tera"),
     )?;
     let mut context = Context::new();
 
     let header_row_length = additional_headers.clone().unwrap_or_default().len() + 1;
 
-    let formatters: HashMap<String, String> = render_columns
-        .iter()
-        .filter(|(_, k)| k.custom.is_some())
-        .map(|(k, v)| (k.to_owned(), v.custom.as_ref().unwrap().to_owned()))
-        .collect();
+    let config = JavascriptConfig::from_column_config(
+        render_columns,
+        is_single_page,
+        page_size,
+        titles,
+        webview_host,
+        webview_controls,
+        csv_path,
+        separator,
+        header_row_length,
+        header_specs,
+    );
 
-    let numeric: HashMap<String, bool> = classify_table(csv_path, separator, header_row_length)?
-        .iter()
-        .map(|(k, v)| (k.to_owned(), v.is_numeric()))
-        .collect();
+    let custom_plot_config = CustomPlotsConfig::from_column_config(render_columns);
+    let header_config = HeaderConfig::from_headers(header_specs, &titles, additional_headers);
 
-    let is_float: HashMap<String, bool> = classify_table(csv_path, separator, header_row_length)?
-        .iter()
-        .map(|(k, v)| (k.to_owned(), *v == ColumnType::Float))
-        .collect();
+    context.insert("config", &config);
+    context.insert("custom_plot_config", &custom_plot_config);
+    context.insert("header_config", &header_config);
 
-    let custom_plots: HashMap<String, CustomPlot> = render_columns
-        .iter()
-        .filter(|(_, k)| k.custom_plot.is_some())
-        .map(|(k, v)| {
-            let mut custom_plot = v.custom_plot.as_ref().unwrap().to_owned();
-            custom_plot.read_schema().unwrap();
-            (k.to_owned(), custom_plot)
-        })
-        .collect();
+    let file_path = Path::new(output_path.as_ref()).join(Path::new("config").with_extension("js"));
 
-    let tick_plots: HashMap<String, String> = render_columns
-        .iter()
-        .filter(|(_, k)| k.plot.is_some())
-        .filter(|(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some())
-        .map(|(k, v)| {
-            (
-                k.to_owned(),
-                render_tick_plot(
-                    k,
-                    csv_path,
-                    separator,
-                    header_row_length,
-                    v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
-                    v.precision,
-                )
-                .unwrap(),
-            )
-        })
-        .collect();
+    let js = templates.render("config.js.tera", &context)?;
 
-    let bar_plots: HashMap<String, String> = render_columns
-        .iter()
-        .filter(|(_, k)| k.plot.is_some())
-        .filter(|(_, k)| k.plot.as_ref().unwrap().bar_plot.is_some())
-        .map(|(k, v)| {
-            (
-                k.to_owned(),
-                render_bar_plot(
-                    k,
-                    csv_path,
-                    separator,
-                    header_row_length,
-                    v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
-                    v.precision,
-                )
-                .unwrap(),
-            )
-        })
-        .collect();
+    let mut file = File::create(file_path)?;
+    let minified = minify_js(&js, debug)?;
+    file.write_all(&minified)?;
 
-    let brush_domains: HashMap<String, Vec<f32>> = render_columns
-        .iter()
-        .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
-        .filter_map(|(title, k)| k.tick_plot.as_ref().map(|tick_plot| (title, tick_plot)))
-        .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
-        .map(|(title, k)| (title.to_string(), k.to_vec()))
-        .chain(
-            render_columns
+    Ok(())
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct CustomPlotsConfig(Vec<CustomPlotConfig>);
+
+impl CustomPlotsConfig {
+    fn from_column_config(config: &HashMap<String, RenderColumnSpec>) -> Self {
+        CustomPlotsConfig(
+            config
                 .iter()
-                .filter(|(title, _)| *numeric.get(&title.to_string()).unwrap_or(&false))
-                .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
-                .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
-                .filter(|(_, k)| k.custom_content.is_none())
-                .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
-                .map(|(title, k)| {
-                    (
-                        title.to_string(),
-                        k.iter().map(|s| f32::from_str(s).context(format!("Could not parse given domain value {s} for column {title}.")).unwrap()).collect_vec(),
-                    )
-                }),
+                .filter(|(_, k)| k.custom_plot.is_some())
+                .map(|(k, v)| {
+                    let mut custom_plot = v.custom_plot.as_ref().unwrap().to_owned();
+                    custom_plot.read_schema().unwrap();
+                    CustomPlotConfig {
+                        title: k.to_string(),
+                        specs: serde_json::Value::from_str(&custom_plot.schema.unwrap()).unwrap(),
+                        data_function: JavascriptFunction(custom_plot.plot_data).name(),
+                        vega_controls: custom_plot.vega_controls,
+                    }
+                })
+                .collect(),
         )
-        .collect();
+    }
+}
 
-    let aux_domains: HashMap<String, Vec<_>> = render_columns
-        .iter()
-        .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
-        .filter_map(|(title, k)| k.tick_plot.as_ref().map(|tick_plot| (title, tick_plot)))
-        .filter_map(|(title, k)| {
-            k.aux_domain_columns
-                .0
-                .as_ref()
-                .map(|domains| (title, domains))
-        })
-        .map(|(title, k)| (title.to_string(), k.to_vec()))
-        .chain(
-            render_columns
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct HeaderConfig {
+    headers: Vec<HeaderRowConfig>,
+    heatmaps: Vec<HeaderHeatmapConfig>,
+    ellipsis: Vec<HeaderEllipsisConfig>,
+}
+
+impl HeaderConfig {
+    fn from_headers(
+        header_specs: &Option<HashMap<u32, HeaderSpecs>>,
+        columns: &&[String],
+        additional_headers: Option<Vec<StringRecord>>,
+    ) -> Self {
+        let mut headers = vec![];
+        let mut heatmaps = vec![];
+        let mut ellipsis = vec![];
+        if let Some(hs) = header_specs {
+            let header_rows = additional_headers.unwrap();
+            for (row, specs) in hs {
+                headers.push(HeaderRowConfig {
+                    row: *row as usize,
+                    header: header_rows[*row as usize - 1]
+                        .iter()
+                        .enumerate()
+                        .map(|(i, v)| (columns[i].to_string(), v.to_string()))
+                        .collect(),
+                    label: specs.label.clone(),
+                });
+
+                if let Some(e) = &specs.ellipsis {
+                    ellipsis.push(HeaderEllipsisConfig {
+                        row: *row,
+                        ellipsis: *e,
+                    })
+                }
+
+                if let Some(p) = &specs.plot {
+                    heatmaps.push(HeaderHeatmapConfig {
+                        row: *row as usize,
+                        heatmap: p.heatmap.clone().unwrap(),
+                    });
+                }
+            }
+        }
+        HeaderConfig {
+            headers,
+            heatmaps,
+            ellipsis,
+        }
+    }
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct HeaderRowConfig {
+    row: usize,
+    header: HashMap<String, String>,
+    label: Option<String>,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct HeaderHeatmapConfig {
+    row: usize,
+    heatmap: Heatmap,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct HeaderEllipsisConfig {
+    // serialize this field with index
+    #[serde(rename = "index")]
+    row: u32,
+    ellipsis: u32,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct CustomPlotConfig {
+    title: String,
+    specs: Value,
+    data_function: String,
+    vega_controls: bool,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptConfig {
+    detail_mode: bool,
+    webview_controls: bool,
+    webview_host: String,
+    is_single_page: bool,
+    page_size: usize,
+    columns: Vec<String>,
+    displayed_columns: Vec<String>,
+    hidden_columns: Vec<String>,
+    displayed_numeric_columns: Vec<String>,
+    tick_titles: Vec<String>,
+    bar_titles: Vec<String>,
+    heatmap_titles: Vec<String>,
+    custom_plot_titles: Vec<String>,
+    links: Vec<String>,
+    column_config: HashMap<String, JavascriptColumnConfig>,
+    header_label_length: usize,
+    ticks: Vec<JavascriptTickAndBarConfig>,
+    bars: Vec<JavascriptTickAndBarConfig>,
+    heatmaps: Vec<JavascriptHeatmapConfig>,
+    brush_domains: HashMap<String, Vec<f32>>,
+    aux_domains: HashMap<String, Vec<String>>,
+    link_urls: Vec<JavascriptLinkConfig>,
+    ellipsis: Vec<JavascriptEllipsisConfig>,
+    format: HashMap<String, String>,
+}
+
+impl JavascriptConfig {
+    #[allow(clippy::too_many_arguments)]
+    fn from_column_config(
+        config: &HashMap<String, RenderColumnSpec>,
+        is_single_page: bool,
+        page_size: usize,
+        columns: &[String],
+        webview_host: &String,
+        webview_controls: bool,
+        csv_path: &Path,
+        separator: char,
+        header_row_length: usize,
+        header_specs: &Option<HashMap<u32, HeaderSpecs>>,
+    ) -> Self {
+        let column_classification = classify_table(csv_path, separator, header_row_length).unwrap();
+        let header_label_length = if let Some(headers) = header_specs {
+            headers.iter().filter(|(_, v)| v.label.is_some()).count()
+        } else {
+            0
+        };
+        Self {
+            detail_mode: config
+                .iter()
+                .filter(|(_, spec)| spec.display_mode == DisplayMode::Detail)
+                .count()
+                > 0,
+            webview_controls,
+            webview_host: webview_host.to_string(),
+            is_single_page,
+            page_size,
+            columns: columns.iter().map(|c| c.to_string()).collect(),
+            displayed_columns: columns
+                .iter()
+                .map(|c| c.to_string())
+                .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Normal)
+                .collect(),
+            hidden_columns: columns
+                .iter()
+                .map(|c| c.to_string())
+                .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Hidden)
+                .collect(),
+            displayed_numeric_columns: classify_table(csv_path, separator, header_row_length)
+                .unwrap()
+                .iter()
+                .map(|(k, v)| (k.to_owned(), v.is_numeric()))
+                .filter(|(_, v)| *v)
+                .map(|(k, _)| k)
+                .collect(),
+            tick_titles: config
+                .iter()
+                .filter(|(_, k)| k.plot.is_some())
+                .filter(|(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some())
+                .map(|(k, _)| k.to_string())
+                .collect(),
+            bar_titles: config
+                .iter()
+                .filter(|(_, k)| k.plot.is_some())
+                .filter(|(_, k)| k.plot.as_ref().unwrap().bar_plot.is_some())
+                .map(|(k, _)| k.to_string())
+                .collect(),
+            heatmap_titles: config
+                .iter()
+                .filter(|(_, k)| k.plot.is_some())
+                .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
+                .map(|(k, _)| k.to_string())
+                .collect(),
+            custom_plot_titles: config
+                .iter()
+                .filter(|(_, k)| k.custom_plot.is_some())
+                .map(|(k, _)| k.to_string())
+                .collect(),
+            links: config
+                .iter()
+                .filter(|(_, v)| v.link_to_url.is_some())
+                .map(|(k, _)| k.to_string())
+                .collect(),
+            column_config: config
+                .iter()
+                .map(|(k, v)| {
+                    (
+                        k.to_string(),
+                        JavascriptColumnConfig::from_column_spec(
+                            v,
+                            column_classification.get(k).unwrap(),
+                        ),
+                    )
+                })
+                .collect(),
+            header_label_length,
+            ticks: config
+                .iter()
+                .filter(|(_, v)| v.plot.is_some())
+                .filter(|(_, v)| v.plot.as_ref().unwrap().tick_plot.is_some())
+                .map(|(k, v)| {
+                    JavascriptTickAndBarConfig::from_config(
+                        k.to_string(),
+                        render_tick_plot(
+                            k,
+                            csv_path,
+                            separator,
+                            header_row_length,
+                            v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
+                            v.precision,
+                        )
+                        .unwrap(),
+                    )
+                })
+                .collect(),
+            bars: config
+                .iter()
+                .filter(|(_, v)| v.plot.is_some())
+                .filter(|(_, v)| v.plot.as_ref().unwrap().bar_plot.is_some())
+                .map(|(k, v)| {
+                    JavascriptTickAndBarConfig::from_config(
+                        k.to_string(),
+                        render_bar_plot(
+                            k,
+                            csv_path,
+                            separator,
+                            header_row_length,
+                            v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
+                            v.precision,
+                        )
+                        .unwrap(),
+                    )
+                })
+                .collect(),
+            heatmaps: config
+                .iter()
+                .filter(|(_, k)| k.plot.is_some())
+                .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
+                .map(|(k, v)| {
+                    JavascriptHeatmapConfig::from_config(
+                        k.to_string(),
+                        v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
+                        get_column_domain(
+                            k,
+                            csv_path,
+                            separator,
+                            header_row_length,
+                            v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
+                        )
+                        .unwrap(),
+                    )
+                })
+                .collect(),
+            brush_domains: config
                 .iter()
                 .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
-                .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
+                .filter_map(|(title, k)| k.tick_plot.as_ref().map(|tick_plot| (title, tick_plot)))
+                .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
+                .map(|(title, k)| (title.to_string(), k.to_vec()))
+                .chain(
+                    config
+                        .iter()
+                        .filter(|(title, _)| column_classification.get(&title.to_string()).unwrap().is_numeric())
+                        .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
+                        .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
+                        .filter(|(_, k)| k.custom_content.is_none())
+                        .filter_map(|(title, k)| k.domain.as_ref().map(|domain| (title, domain)))
+                        .map(|(title, k)| {
+                            (
+                                title.to_string(),
+                                k.iter().map(|s| f32::from_str(s).context(format!("Could not parse given domain value {s} for column {title}.")).unwrap()).collect_vec(),
+                            )
+                        }),
+                )
+                .collect(),
+            aux_domains: config
+                .iter()
+                .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
+                .filter_map(|(title, k)| k.tick_plot.as_ref().map(|tick_plot| (title, tick_plot)))
                 .filter_map(|(title, k)| {
                     k.aux_domain_columns
                         .0
                         .as_ref()
                         .map(|domains| (title, domains))
                 })
-                .map(|(title, k)| (title.to_string(), k.to_vec())),
-        )
-        .collect();
-
-    let heatmaps: HashMap<String, (&Heatmap, String)> = render_columns
-        .iter()
-        .filter(|(_, k)| k.plot.is_some())
-        .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
-        .map(|(k, v)| {
-            (
-                k.to_owned(),
-                (
-                    v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
-                    get_column_domain(
-                        k,
-                        csv_path,
-                        separator,
-                        header_row_length,
-                        v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
-                    )
-                    .unwrap(),
-                ),
-            )
-        })
-        .collect();
-
-    let header_heatmaps: HashMap<u32, Heatmap> = if let Some(headers) = header_specs {
-        headers
-            .iter()
-            .filter_map(|(k, v)| v.plot.as_ref().map(|heatmap| (k.to_owned(), heatmap)))
-            .filter(|(_, k)| k.heatmap.is_some())
-            .map(|(k, v)| (k.to_owned(), v.heatmap.as_ref().unwrap().to_owned()))
-            .collect()
-    } else {
-        HashMap::new()
-    };
-
-    let header_ellipsis: HashMap<u32, u32> = if let Some(headers) = header_specs {
-        headers
-            .iter()
-            .filter(|(_, h)| h.ellipsis.is_some())
-            .map(|(k, v)| (*k, v.ellipsis.unwrap()))
-            .collect()
-    } else {
-        HashMap::new()
-    };
-
-    let header_labels: HashMap<u32, String> = if let Some(headers) = header_specs {
-        headers
-            .iter()
-            .filter(|(_, v)| v.label.is_some())
-            .map(|(k, v)| (k.to_owned(), v.label.as_ref().unwrap().to_owned()))
-            .collect()
-    } else {
-        HashMap::new()
-    };
-
-    let precisions: HashMap<String, u32> = render_columns
-        .iter()
-        .map(|(k, v)| (k.to_owned(), v.precision))
-        .collect();
-
-    let labels = get_column_labels(render_columns);
-
-    let link_urls: HashMap<String, _> = render_columns
-        .iter()
-        .filter(|(_, k)| k.link_to_url.is_some())
-        .map(|(t, spec)| (t.to_string(), spec.link_to_url.as_ref().unwrap()))
-        .collect();
-
-    let ellipses: HashMap<String, u32> = render_columns
-        .iter()
-        .filter(|(_, k)| k.ellipsis.is_some())
-        .map(|(t, spec)| (t.to_string(), spec.ellipsis.unwrap()))
-        .collect();
-
-    let mut display_modes: HashMap<String, DisplayMode> = titles
-        .iter()
-        .map(|t| (t.to_string(), DisplayMode::Normal))
-        .collect();
-    for (title, rc) in render_columns {
-        display_modes.insert(title.to_string(), rc.display_mode);
+                .map(|(title, k)| (title.to_string(), k.to_vec()))
+                .chain(
+                    config
+                        .iter()
+                        .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
+                        .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
+                        .filter_map(|(title, k)| {
+                            k.aux_domain_columns
+                                .0
+                                .as_ref()
+                                .map(|domains| (title, domains))
+                        })
+                        .map(|(title, k)| (title.to_string(), k.to_vec())),
+                )
+                .collect(),
+            link_urls: config
+                .iter()
+                .filter(|(_, v)| v.link_to_url.is_some())
+                .map(|(k, v)| JavascriptLinkConfig {
+                    title: k.to_string(),
+                    links: v.link_to_url.as_ref().unwrap().iter().map(|(link_name, link_spec)| JavascriptLink {
+                        name: link_name.to_string(),
+                        link: link_spec.to_owned(),
+                    }).collect(),
+                })
+                .collect(),
+            ellipsis: config
+                .iter()
+                .filter(|(_, v)| v.ellipsis.is_some())
+                .map(|(k, v)| JavascriptEllipsisConfig {
+                    title: k.to_string(),
+                    ellipsis: v.ellipsis.as_ref().unwrap().to_owned(),
+                })
+                .collect(),
+            format: config
+                .iter()
+                .filter(|(_, k)| k.custom.is_some())
+                .map(|(k, v)| (k.to_owned(), JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).name()))
+                .collect(),
+        }
     }
-    let detail_mode = display_modes
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptColumnConfig {
+    label: Option<String>,
+    is_float: bool,
+    precision: u32,
+}
+
+impl JavascriptColumnConfig {
+    fn from_column_spec(spec: &RenderColumnSpec, column_type: &ColumnType) -> Self {
+        Self {
+            label: spec.label.clone(),
+            is_float: column_type == &ColumnType::Float,
+            precision: spec.precision,
+        }
+    }
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptTickAndBarConfig {
+    title: String,
+    slug_title: String,
+    specs: Value,
+}
+
+impl JavascriptTickAndBarConfig {
+    fn from_config(title: String, specs: String) -> Self {
+        Self {
+            title: title.clone(),
+            slug_title: slug::slugify(&title),
+            specs: serde_json::from_str(&specs).unwrap(),
+        }
+    }
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptHeatmapConfig {
+    title: String,
+    slug_title: String,
+    heatmap: Heatmap,
+    domain: Value,
+}
+
+impl JavascriptHeatmapConfig {
+    fn from_config(title: String, heatmap: &Heatmap, domain: String) -> Self {
+        Self {
+            title: title.clone(),
+            slug_title: slug::slugify(&title),
+            heatmap: heatmap.to_owned(),
+            domain: serde_json::from_str(&domain).unwrap(),
+        }
+    }
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptLinkConfig {
+    title: String,
+    links: Vec<JavascriptLink>,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptLink {
+    name: String,
+    link: LinkToUrlSpec,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptEllipsisConfig {
+    title: String,
+    ellipsis: u32,
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptFunction(String);
+
+impl JavascriptFunction {
+    fn name(&self) -> String {
+        format!("custom_func_{:x}", md5::compute(self.0.as_bytes()))
+    }
+
+    fn to_javascript_function(&self) -> String {
+        format!(
+            "function {}({}",
+            &self.name(),
+            &self.0.split_once('(').unwrap().1
+        )
+    }
+}
+
+/// Render javascript functions into functions.js file per view
+fn render_custom_javascript_functions<P: AsRef<Path>>(
+    output_path: P,
+    render_columns: &HashMap<String, RenderColumnSpec>,
+    debug: bool,
+) -> Result<()> {
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "functions.js.tera",
+        include_str!("../../../templates/functions.js.tera"),
+    )?;
+
+    let mut context = Context::new();
+
+    let functions = render_columns
         .iter()
-        .filter(|(_, mode)| *mode == &DisplayMode::Detail)
-        .count()
-        > 0;
+        .filter(|(_, k)| k.custom.is_some())
+        .map(|(_, v)| {
+            JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).to_javascript_function()
+        })
+        .chain(
+            render_columns
+                .iter()
+                .filter(|(_, k)| k.custom_plot.is_some())
+                .map(|(_, v)| {
+                    JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
+                        .to_javascript_function()
+                }),
+        )
+        .collect_vec();
 
-    let header_rows = additional_headers.map(|headers| {
-        headers
-            .iter()
-            .enumerate()
-            .filter_map(|(row, r)| {
-                // Only keep header if label or heatmap is specified for it.
-                let row = row as u32 + 1;
-                if header_specs
-                    .as_ref()
-                    .map(|specs| {
-                        specs
-                            .get(&row)
-                            .map_or(false, |spec| spec.display_mode != HeaderDisplayMode::Hidden)
-                    })
-                    .unwrap_or(false)
-                {
-                    Some(
-                        r.iter()
-                            .enumerate()
-                            .map(|(i, v)| (&titles[i], v.to_string()))
-                            .collect::<HashMap<_, _>>(),
-                    )
-                } else {
-                    None
-                }
-            })
-            .collect_vec()
-    });
+    context.insert("functions", &functions);
 
-    context.insert("titles", &titles.iter().collect_vec());
-    context.insert("precisions", &precisions);
-    context.insert("additional_headers", &header_rows);
-    context.insert("header_heatmaps", &header_heatmaps);
-    context.insert("header_ellipsis", &header_ellipsis);
-    context.insert("header_labels", &header_labels);
-    context.insert("formatter", &Some(formatters));
-    context.insert("custom_plots", &custom_plots);
-    context.insert("tick_plots", &tick_plots);
-    context.insert("bar_plots", &bar_plots);
-    context.insert("heatmaps", &heatmaps);
-    context.insert("ellipses", &ellipses);
-    context.insert("display_modes", &display_modes);
-    context.insert("detail_mode", &detail_mode);
-    context.insert("link_urls", &link_urls);
-    context.insert("num", &numeric);
-    context.insert("is_float", &is_float);
-    context.insert("labels", &labels);
-    context.insert("brush_domains", &json!(brush_domains).to_string());
-    context.insert("aux_domains", &json!(aux_domains).to_string());
-    context.insert("is_single_page", &is_single_page);
-    context.insert("page_size", &page_size);
-    context.insert("webview_host", &webview_host);
-    context.insert("webview_controls", &webview_controls);
+    let file_path =
+        Path::new(output_path.as_ref()).join(Path::new("functions").with_extension("js"));
 
-    let file_path = Path::new(output_path.as_ref()).join(Path::new("table").with_extension("js"));
-
-    let js = templates.render("table.js.tera", &context)?;
+    let js = templates.render("functions.js.tera", &context)?;
 
     let mut file = File::create(file_path)?;
     let minified = minify_js(&js, debug)?;
