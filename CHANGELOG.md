@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.19.1](https://www.github.com/datavzrd/datavzrd/compare/v2.19.0...v2.19.1) (2023-05-04)
+
+
+### Bug Fixes
+
+* Skip preprocessing when dataset is empty ([#421](https://www.github.com/datavzrd/datavzrd/issues/421)) ([3bfeaf3](https://www.github.com/datavzrd/datavzrd/commit/3bfeaf3a636133d676a464f919b770ad6ad747a1))
+
 ## [2.19.0](https://www.github.com/datavzrd/datavzrd/compare/v2.18.5...v2.19.0) (2023-04-29)
 
 
