@@ -338,7 +338,7 @@ impl DatasetSpecs {
     }
 
     pub(crate) fn is_empty(&self) -> bool {
-        self.size() == 0_usize
+        self.size() == 0
     }
 }
 
