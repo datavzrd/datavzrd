@@ -261,6 +261,7 @@ impl Renderer for ItemRenderer {
                     &self.specs.report_name,
                     &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                     self.specs.needs_excel_sheet(),
+                    &view_sizes,
                 )?;
             }
         }
@@ -1155,6 +1156,7 @@ fn render_empty_dataset<P: AsRef<Path>>(
     report_name: &str,
     tables: &[String],
     has_excel_sheet: bool,
+    view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -1164,6 +1166,7 @@ fn render_empty_dataset<P: AsRef<Path>>(
     let mut context = Context::new();
     let local: DateTime<Local> = Local::now();
 
+    context.insert("view_sizes", &view_sizes);
     context.insert("tables", tables);
     context.insert("name", name);
     context.insert("report_name", report_name);
