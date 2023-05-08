@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.19.2](https://www.github.com/datavzrd/datavzrd/compare/v2.19.1...v2.19.2) (2023-05-08)
+
+
+### Bug Fixes
+
+* Fix dropdown of empty table view ([#424](https://www.github.com/datavzrd/datavzrd/issues/424)) ([fffdf3e](https://www.github.com/datavzrd/datavzrd/commit/fffdf3e797866d40aa9365febcbb14257af4a9d3))
+
 ### [2.19.1](https://www.github.com/datavzrd/datavzrd/compare/v2.19.0...v2.19.1) (2023-05-04)
 
 
