@@ -8,10 +8,10 @@ use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::Result;
 use anyhow::{bail, Context};
 use derefable::Derefable;
+use fancy_regex::Regex;
 use itertools::Itertools;
 use lazy_static::lazy_static;
 use log::warn;
-use regex::Regex;
 use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::BorrowMut;
@@ -425,11 +425,12 @@ impl ItemSpecs {
                     .collect_vec()
                     .pop()
                     .unwrap()
+                    .unwrap()
                     .get(1)
                     .unwrap()
                     .as_str()
             };
-            if INDEX_RE.is_match(key) {
+            if INDEX_RE.is_match(key).unwrap() {
                 let index = usize::from_str(get_first_match_group(&INDEX_RE))?;
                 match headers.get(index) {
                     None => {
@@ -451,11 +452,15 @@ impl ItemSpecs {
                         };
                     }
                 }
-            } else if REGEX_RE.is_match(key) {
+            } else if REGEX_RE.is_match(key).unwrap() {
                 let pattern = get_first_match_group(&REGEX_RE);
+                dbg!(pattern);
                 let regex = Regex::new(pattern)
                     .context(format!("Failed to parse provided column regex {key}."))?;
-                for header in headers.iter().filter(|header| regex.is_match(header)) {
+                for header in headers
+                    .iter()
+                    .filter(|header| regex.is_match(header).unwrap())
+                {
                     if indexed_keys
                         .insert(header.to_string(), render_column_specs.clone())
                         .is_some()
@@ -799,18 +804,22 @@ impl AuxDomainColumns {
         let mut new_tick_plot_aux_domain_columns = Vec::new();
         if let Some(columns) = &self.0 {
             for column in columns {
-                if REGEX_RE.is_match(column) {
+                if REGEX_RE.is_match(column).unwrap() {
                     let pattern = REGEX_RE
                         .captures_iter(column)
                         .collect_vec()
                         .pop()
+                        .unwrap()
                         .unwrap()
                         .get(1)
                         .unwrap()
                         .as_str();
                     let regex = Regex::new(pattern)
                         .context(format!("Failed to parse provided column regex {column}."))?;
-                    for header in headers.iter().filter(|header| regex.is_match(header)) {
+                    for header in headers
+                        .iter()
+                        .filter(|header| regex.is_match(header).unwrap())
+                    {
                         new_tick_plot_aux_domain_columns.push(header.to_string());
                     }
                 } else {
