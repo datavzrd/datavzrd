@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.19.3](https://www.github.com/datavzrd/datavzrd/compare/v2.19.2...v2.19.3) (2023-05-16)
+
+
+### Bug Fixes
+
+* remove superfluous dbg statement ([#428](https://www.github.com/datavzrd/datavzrd/issues/428)) ([020cc1d](https://www.github.com/datavzrd/datavzrd/commit/020cc1dc94d958c8d06d3b1f75c8dd46fca569fa))
+
 ### [2.19.2](https://www.github.com/datavzrd/datavzrd/compare/v2.19.1...v2.19.2) (2023-05-08)
 
 
