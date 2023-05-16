@@ -616,7 +616,6 @@ impl Heatmap {
                 dataset.header_rows,
                 self,
             )?;
-            dbg!(&d);
             let domain: Vec<String> = if self.scale_type.is_quantitative() {
                 let floating_domain: Vec<f64> = serde_json::from_str(&d)?;
                 floating_domain.iter().map(|x| x.to_string()).collect()
