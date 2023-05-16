@@ -1406,9 +1406,15 @@ pub(crate) fn get_column_domain(
         .from_path(csv_path)
         .context(format!("Could not read file with path {csv_path:?}"))?;
 
-    let column_index = reader
-        .headers()
-        .map(|s| s.iter().position(|t| t == title).unwrap())?;
+    let column_index = reader.headers().map(|s| {
+        s.iter()
+            .position(|t| t == title)
+            .context(ColumnError::NotFound {
+                column: title.to_string(),
+                path: csv_path.to_str().unwrap().to_string(),
+            })
+            .unwrap()
+    })?;
 
     if !heatmap.scale_type.is_quantitative() {
         if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
