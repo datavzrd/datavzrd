@@ -57,9 +57,7 @@ impl ItemsSpec {
                         })
                     }
                 };
-                if !dataset.is_empty() {
-                    spec.preprocess_columns(dataset, items_spec.max_in_memory_rows)?;
-                }
+                spec.preprocess_columns(dataset, items_spec.max_in_memory_rows)?;
             }
         }
         Ok(items_spec)
@@ -454,7 +452,6 @@ impl ItemSpecs {
                 }
             } else if REGEX_RE.is_match(key).unwrap() {
                 let pattern = get_first_match_group(&REGEX_RE);
-                dbg!(pattern);
                 let regex = Regex::new(pattern)
                     .context(format!("Failed to parse provided column regex {key}."))?;
                 for header in headers
@@ -585,13 +582,15 @@ pub(crate) enum HeaderDisplayMode {
 
 impl RenderColumnSpec {
     fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
-        if let Some(plot) = &mut self.plot {
-            if let Some(ticks) = &mut plot.tick_plot {
-                ticks.preprocess(dataset)?;
-            } else if let Some(heatmap) = &mut plot.heatmap {
-                heatmap.preprocess(dataset, title)?;
-            } else if let Some(bars) = &mut plot.bar_plot {
-                bars.preprocess(dataset)?;
+        if !dataset.is_empty() {
+            if let Some(plot) = &mut self.plot {
+                if let Some(ticks) = &mut plot.tick_plot {
+                    ticks.preprocess(dataset)?;
+                } else if let Some(heatmap) = &mut plot.heatmap {
+                    heatmap.preprocess(dataset, title)?;
+                } else if let Some(bars) = &mut plot.bar_plot {
+                    bars.preprocess(dataset)?;
+                }
             }
         }
         if let Some(path) = self.custom_path.as_ref() {
