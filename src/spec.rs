@@ -4,6 +4,7 @@ use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
     MissingColumn, PlotAndTablePresentConfiguration, ValueOutsideDomain,
 };
+use crate::utils::column_position;
 use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::Result;
 use anyhow::{bail, Context};
@@ -187,7 +188,8 @@ impl ItemsSpec {
                                     .from_path(&dataset.path)?;
                                 let titles =
                                     reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                                let colum_pos = titles.iter().position(|c| c == column).unwrap();
+                                let colum_pos =
+                                    column_position(column, &mut reader, &dataset.path)?;
                                 for record in reader.records() {
                                     let record = record?;
                                     let value = record.get(colum_pos).unwrap();
