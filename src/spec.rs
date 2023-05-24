@@ -12,7 +12,7 @@ use derefable::Derefable;
 use fancy_regex::Regex;
 use itertools::Itertools;
 use lazy_static::lazy_static;
-use log::warn;
+
 use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::BorrowMut;
@@ -189,7 +189,7 @@ impl ItemsSpec {
                                 let mut reader = csv::ReaderBuilder::new()
                                     .delimiter(dataset.separator as u8)
                                     .from_path(&dataset.path)?;
-                                let titles =
+                                let _titles =
                                     reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
                                 let colum_pos = column_position(column, &mut reader)?;
                                 for record in reader.records() {

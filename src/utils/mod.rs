@@ -1,4 +1,4 @@
-use std::{io::Read, path::Path};
+use std::{io::Read};
 
 use anyhow::Result;
 
