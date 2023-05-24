@@ -2,7 +2,7 @@ use crate::render::portable::get_column_domain;
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
-    MissingColumn, PlotAndTablePresentConfiguration, ValueOutsideDomain,
+    MissingLinkoutColumn, PlotAndTablePresentConfiguration, ValueOutsideDomain,
 };
 use crate::utils::column_position;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -12,7 +12,7 @@ use derefable::Derefable;
 use fancy_regex::Regex;
 use itertools::Itertools;
 use lazy_static::lazy_static;
-use log::warn;
+
 use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::BorrowMut;
@@ -58,9 +58,7 @@ impl ItemsSpec {
                         })
                     }
                 };
-                if !dataset.is_empty() {
-                    spec.preprocess_columns(dataset, items_spec.max_in_memory_rows)?;
-                }
+                spec.preprocess_columns(dataset, items_spec.max_in_memory_rows)?;
             }
         }
         Ok(items_spec)
@@ -112,7 +110,10 @@ impl ItemsSpec {
                         classify_table(&dataset.path, dataset.separator, dataset.header_rows)?;
                     for (column, render_columns) in &render_table.columns {
                         if !titles.contains(column) && !render_columns.optional {
-                            warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
+                            bail!(ConfigError::MissingColumn {
+                                column: column.to_string(),
+                                view: name.to_string()
+                            })
                         }
                         let mut possible_conflicting = Vec::new();
                         if render_columns.ellipsis.is_some() {
@@ -188,10 +189,9 @@ impl ItemsSpec {
                                 let mut reader = csv::ReaderBuilder::new()
                                     .delimiter(dataset.separator as u8)
                                     .from_path(&dataset.path)?;
-                                let titles =
+                                let _titles =
                                     reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                                let colum_pos =
-                                    column_position(column, &mut reader, &dataset.path)?;
+                                let colum_pos = column_position(column, &mut reader)?;
                                 for record in reader.records() {
                                     let record = record?;
                                     let value = record.get(colum_pos).unwrap();
@@ -241,7 +241,7 @@ impl ItemsSpec {
                         .from_path(&dataset.path)?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
                     if !titles.contains(&link.column) {
-                        bail!(MissingColumn {
+                        bail!(MissingLinkoutColumn {
                             column: link.column.to_string(),
                             dataset: name.to_string(),
                             link: link_name.to_string(),
@@ -456,7 +456,6 @@ impl ItemSpecs {
                 }
             } else if REGEX_RE.is_match(key).unwrap() {
                 let pattern = get_first_match_group(&REGEX_RE);
-                dbg!(pattern);
                 let regex = Regex::new(pattern)
                     .context(format!("Failed to parse provided column regex {key}."))?;
                 for header in headers
@@ -587,13 +586,15 @@ pub(crate) enum HeaderDisplayMode {
 
 impl RenderColumnSpec {
     fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
-        if let Some(plot) = &mut self.plot {
-            if let Some(ticks) = &mut plot.tick_plot {
-                ticks.preprocess(dataset)?;
-            } else if let Some(heatmap) = &mut plot.heatmap {
-                heatmap.preprocess(dataset, title)?;
-            } else if let Some(bars) = &mut plot.bar_plot {
-                bars.preprocess(dataset)?;
+        if !dataset.is_empty() {
+            if let Some(plot) = &mut self.plot {
+                if let Some(ticks) = &mut plot.tick_plot {
+                    ticks.preprocess(dataset)?;
+                } else if let Some(heatmap) = &mut plot.heatmap {
+                    heatmap.preprocess(dataset, title)?;
+                } else if let Some(bars) = &mut plot.bar_plot {
+                    bars.preprocess(dataset)?;
+                }
             }
         }
         if let Some(path) = self.custom_path.as_ref() {
@@ -879,11 +880,13 @@ pub enum ConfigError {
     #[error(
         "Could not find column named {column:?} in given dataset {dataset:?} in linkout {link:?}."
     )]
-    MissingColumn {
+    MissingLinkoutColumn {
         column: String,
         dataset: String,
         link: String,
     },
+    #[error("Could not find column named '{column}' in the dataset that is used by view {view}.")]
+    MissingColumn { column: String, view: String },
     #[error(
         "Could not find view named {view:?} in given config that is referred to with {link:?}."
     )]
