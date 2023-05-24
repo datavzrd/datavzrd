@@ -643,7 +643,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         separator,
         header_row_length,
         header_specs,
-    )?;
+    );
 
     let custom_plot_config = CustomPlotsConfig::from_column_config(render_columns);
     let header_config = HeaderConfig::from_headers(header_specs, &titles, additional_headers);
@@ -809,14 +809,14 @@ impl JavascriptConfig {
         separator: char,
         header_row_length: usize,
         header_specs: &Option<HashMap<u32, HeaderSpecs>>,
-    ) -> Result<Self> {
+    ) -> Self {
         let column_classification = classify_table(csv_path, separator, header_row_length).unwrap();
         let header_label_length = if let Some(headers) = header_specs {
             headers.iter().filter(|(_, v)| v.label.is_some()).count()
         } else {
             0
         };
-        Ok(Self {
+        Self {
             detail_mode: config
                 .iter()
                 .filter(|(_, spec)| spec.display_mode == DisplayMode::Detail)
@@ -875,19 +875,15 @@ impl JavascriptConfig {
             column_config: config
                 .iter()
                 .map(|(k, v)| {
-                    if let Some(col_type) = column_classification.get(k) {
-                        Ok((
-                            k.to_string(),
-                            JavascriptColumnConfig::from_column_spec(
-                                v,
-                                col_type,
-                            ),
-                        ))
-                    } else {
-                        bail!("bug: failed to obtain column type for column '{k}'");
-                    }
+                    (
+                        k.to_string(),
+                        JavascriptColumnConfig::from_column_spec(
+                            v,
+                            column_classification.get(k).expect(&format!("bug: failed to obtain column type for column '{k}'")),
+                        ),
+                    )
                 })
-                .collect::<Result<_>>()?,
+                .collect(),
             header_label_length,
             ticks: config
                 .iter()
@@ -1017,7 +1013,7 @@ impl JavascriptConfig {
                 .filter(|(_, k)| k.custom.is_some())
                 .map(|(k, v)| (k.to_owned(), JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).name()))
                 .collect(),
-        })
+        }
     }
 }
 
