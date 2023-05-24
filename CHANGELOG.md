@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.20.0](https://www.github.com/datavzrd/datavzrd/compare/v2.19.2...v2.20.0) (2023-05-24)
+
+
+### Features
+
+* migrate to fancy-regex for regex evaluation (e.g. enabling negative look-ahead/around) ([#432](https://www.github.com/datavzrd/datavzrd/issues/432)) ([5478cb7](https://www.github.com/datavzrd/datavzrd/commit/5478cb705b1b749750fa8a5af1b7495654b4fa46))
+
+
+### Bug Fixes
+
+* Add missing error message for missing column ([#431](https://www.github.com/datavzrd/datavzrd/issues/431)) ([9528ab0](https://www.github.com/datavzrd/datavzrd/commit/9528ab0a5b85952183c842b9db8cf4b5f0934fb5))
+* Only skip plot preprocessing when given dataset is empty ([#434](https://www.github.com/datavzrd/datavzrd/issues/434)) ([8c2a71f](https://www.github.com/datavzrd/datavzrd/commit/8c2a71f69ae981a4ce190803e774875767c718e6))
+* Remove re-rendering when mouse leaves brush filter unpressed ([#437](https://www.github.com/datavzrd/datavzrd/issues/437)) ([fa6480c](https://www.github.com/datavzrd/datavzrd/commit/fa6480cc3837f9616a3727f02639dd5361fa3e93))
+* remove superfluous dbg statement ([#428](https://www.github.com/datavzrd/datavzrd/issues/428)) ([020cc1d](https://www.github.com/datavzrd/datavzrd/commit/020cc1dc94d958c8d06d3b1f75c8dd46fca569fa))
+
 ### [2.19.2](https://www.github.com/datavzrd/datavzrd/compare/v2.19.1...v2.19.2) (2023-05-08)
 
 
