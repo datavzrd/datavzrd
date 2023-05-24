@@ -816,16 +816,19 @@ $(document).ready(function() {
                         view.addSignalListener('selection', function(name, value) {
                             filter_boundaries[spec.name] = value;
                         });
-                        view.addEventListener('mouseup', function(name, value) {
+                        view.addEventListener('mouseup', function(event) {
                             $('#table').bootstrapTable('filterBy', {"":""}, {
                                 'filterAlgorithm': customFilter
                             })
                         });
                         // Add another event listener so the filter is still triggered when the brush is dragged outside the plot.
-                        view.addEventListener('mouseleave', function(name, value) {
-                            $('#table').bootstrapTable('filterBy', {"":""}, {
-                                'filterAlgorithm': customFilter
-                            })
+                        view.addEventListener('mouseleave', function(event) {
+                            // Only apply filter when mouseleave events happens while mouse is pressed
+                            if (event.buttons > 0) {
+                                $('#table').bootstrapTable('filterBy', {"":""}, {
+                                    'filterAlgorithm': customFilter
+                                })
+                            }
                         });
                     })
                 } else {
