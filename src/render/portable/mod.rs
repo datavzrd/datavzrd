@@ -12,6 +12,7 @@ use crate::spec::{
     RenderColumnSpec, ScaleType, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
+use crate::utils::column_position;
 use crate::utils::column_type::IsNa;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
@@ -1390,23 +1391,6 @@ fn render_bar_plot(
     Ok(templates.render("bar_plot.vl.tera", &context)?)
 }
 
-/// Returns the index of the given column of a csv header
-fn column_index(
-    column: &str,
-    columns: &StringRecord,
-    csv_path: &Path,
-) -> Result<usize, ColumnError> {
-    for (index, c) in columns.iter().enumerate() {
-        if c == column {
-            return Ok(index);
-        }
-    }
-    Err(ColumnError::NotFound {
-        column: column.to_string(),
-        path: csv_path.to_str().unwrap().to_string(),
-    })
-}
-
 pub(crate) fn get_column_domain(
     title: &str,
     csv_path: &Path,
@@ -1423,7 +1407,7 @@ pub(crate) fn get_column_domain(
         .from_path(csv_path)
         .context(format!("Could not read file with path {csv_path:?}"))?;
 
-    let column_index = column_index(title, reader.headers()?, csv_path)?;
+    let column_index = column_position(title, &mut reader, csv_path)?;
 
     if !heatmap.scale_type.is_quantitative() {
         if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
@@ -1507,7 +1491,7 @@ fn get_min_max_multiple_columns(
             .delimiter(separator as u8)
             .from_path(csv_path)
             .context(format!("Could not read file with path {csv_path:?}"))?;
-        let column_index = column_index(&column, reader.headers()?, csv_path)?;
+        let column_index = column_position(&column, &mut reader, csv_path)?;
         let (min, max) = get_min_max(csv_path, separator, column_index, header_rows, precision)?;
         mins.push(min);
         maxs.push(max);
@@ -1961,22 +1945,4 @@ pub enum ColumnError {
 pub enum DatasetError {
     #[error("Could not find dataset {dataset_name:?}.")]
     NotFound { dataset_name: String },
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::render::portable::column_index;
-    use csv::StringRecord;
-    use std::path::Path;
-
-    #[test]
-    fn test_column_index() {
-        let column_index = column_index(
-            "test",
-            &StringRecord::from(vec!["test", "headers"]),
-            Path::new("."),
-        )
-        .unwrap();
-        assert_eq!(column_index, 0)
-    }
 }
