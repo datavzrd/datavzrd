@@ -885,7 +885,7 @@ impl JavascriptConfig {
                         k.to_string(),
                         JavascriptColumnConfig::from_column_spec(
                             v,
-                            column_classification.get(k).expect(&format!("bug: failed to obtain column type for column '{k}'")),
+                            column_classification.get(k).unwrap_or_else(|| panic!("bug: failed to obtain column type for column '{k}'")),
                         ),
                     )
                 })
