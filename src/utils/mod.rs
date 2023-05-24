@@ -1,7 +1,6 @@
 use std::{io::Read, path::Path};
 
 use anyhow::Result;
-use csv::StringRecord;
 
 use crate::render::portable::ColumnError;
 

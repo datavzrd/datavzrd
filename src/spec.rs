@@ -188,7 +188,7 @@ impl ItemsSpec {
                                 let mut reader = csv::ReaderBuilder::new()
                                     .delimiter(dataset.separator as u8)
                                     .from_path(&dataset.path)?;
-                                let titles =
+                                let _titles =
                                     reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
                                 let colum_pos =
                                     column_position(column, &mut reader, &dataset.path)?;
