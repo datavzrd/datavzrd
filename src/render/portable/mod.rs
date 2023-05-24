@@ -160,12 +160,18 @@ impl Renderer for ItemRenderer {
                         .context(format!("Could not read file with path {:?}", &dataset.path))?;
                     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
 
-                    let table_specs = &table_specs
+                    // Filter out optional columns that are not in the headers
+                    let table_specs: &HashMap<String, RenderColumnSpec> = &table_specs
                         .columns
                         .clone()
                         .into_iter()
                         .filter(|(k, s)| !s.optional || headers.contains(k))
                         .collect();
+                    // Assert that remaining columns are present in dataset.
+                    // This should be guaranteed by the validation that happens before.
+                    for column in table_specs.keys() {
+                        assert!(headers.contains(column));
+                    }
 
                     let additional_headers = if dataset.header_rows > 1 {
                         let mut additional_header_reader = generate_reader().context(format!(
@@ -1407,7 +1413,7 @@ pub(crate) fn get_column_domain(
         .from_path(csv_path)
         .context(format!("Could not read file with path {csv_path:?}"))?;
 
-    let column_index = column_position(title, &mut reader, csv_path)?;
+    let column_index = column_position(title, &mut reader)?;
 
     if !heatmap.scale_type.is_quantitative() {
         if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
@@ -1491,7 +1497,7 @@ fn get_min_max_multiple_columns(
             .delimiter(separator as u8)
             .from_path(csv_path)
             .context(format!("Could not read file with path {csv_path:?}"))?;
-        let column_index = column_position(&column, &mut reader, csv_path)?;
+        let column_index = column_position(&column, &mut reader)?;
         let (min, max) = get_min_max(csv_path, separator, column_index, header_rows, precision)?;
         mins.push(min);
         maxs.push(max);

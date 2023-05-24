@@ -2,7 +2,7 @@ use crate::render::portable::get_column_domain;
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
-    MissingColumn, PlotAndTablePresentConfiguration, ValueOutsideDomain,
+    MissingLinkoutColumn, PlotAndTablePresentConfiguration, ValueOutsideDomain,
 };
 use crate::utils::column_position;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -110,7 +110,10 @@ impl ItemsSpec {
                         classify_table(&dataset.path, dataset.separator, dataset.header_rows)?;
                     for (column, render_columns) in &render_table.columns {
                         if !titles.contains(column) && !render_columns.optional {
-                            warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
+                            bail!(ConfigError::MissingColumn {
+                                column: column.to_string(),
+                                view: name.to_string()
+                            })
                         }
                         let mut possible_conflicting = Vec::new();
                         if render_columns.ellipsis.is_some() {
@@ -188,8 +191,7 @@ impl ItemsSpec {
                                     .from_path(&dataset.path)?;
                                 let titles =
                                     reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                                let colum_pos =
-                                    column_position(column, &mut reader, &dataset.path)?;
+                                let colum_pos = column_position(column, &mut reader)?;
                                 for record in reader.records() {
                                     let record = record?;
                                     let value = record.get(colum_pos).unwrap();
@@ -239,7 +241,7 @@ impl ItemsSpec {
                         .from_path(&dataset.path)?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
                     if !titles.contains(&link.column) {
-                        bail!(MissingColumn {
+                        bail!(MissingLinkoutColumn {
                             column: link.column.to_string(),
                             dataset: name.to_string(),
                             link: link_name.to_string(),
@@ -878,11 +880,13 @@ pub enum ConfigError {
     #[error(
         "Could not find column named {column:?} in given dataset {dataset:?} in linkout {link:?}."
     )]
-    MissingColumn {
+    MissingLinkoutColumn {
         column: String,
         dataset: String,
         link: String,
     },
+    #[error("Could not find column named '{column}' in the dataset that is used by view {view}.")]
+    MissingColumn { column: String, view: String },
     #[error(
         "Could not find view named {view:?} in given config that is referred to with {link:?}."
     )]
