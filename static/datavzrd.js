@@ -2,7 +2,15 @@
 
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
-    var converter = new showdown.Converter();
+    const converter = new showdown.Converter({
+        extensions: [
+            showdownKatex({
+                throwOnError: true,
+                displayMode: false,
+                errorColor: '#1500ff',
+            }),
+        ],
+    });
     converter.setFlavor('github');
     innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
 }

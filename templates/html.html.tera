@@ -19,6 +19,7 @@
 <script src="../static/vega-embed.min.js"></script>
 <script src="../static/lz-string.min.js"></script>
 <script src="../static/showdown.min.js"></script>
+<script src="../static/showdown-katex.min.js"></script>
 {% if aux_libraries %}
 {% for library in aux_libraries %}
 <script src="{{ library }}"></script>
@@ -65,7 +66,15 @@
             <script>
                 $(document).ready(function() {
                     var innerDescription = document.getElementById('innerDescription');
-                    var converter = new showdown.Converter();
+                    const converter = new showdown.Converter({
+                        extensions: [
+                            showdownKatex({
+                                throwOnError: true,
+                                displayMode: false,
+                                errorColor: '#1500ff',
+                            }),
+                        ],
+                    });
                     converter.setFlavor('github');
                     innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
                 });
