@@ -214,3 +214,8 @@ footer {
     background-color: #cbcbcb;
     color: #222222;
 }
+
+.katex-html {
+    /* Hide unrendered mathematical expressions */
+    display: none;
+}

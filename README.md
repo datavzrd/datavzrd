@@ -47,6 +47,10 @@ views:
     desc: |
       # A header
       This is the **description** for *table-a*.
+
+      ```latex
+      \sum_{i=1}^n i^3 = \left( \frac{n(g(n)+1)} 2 \right) ^2
+      ```
     render-table:
       columns:
         x:
@@ -153,7 +157,7 @@ views:
 
 | keyword                       | explanation                                                                                                                                                                                                                                        | default |
 |-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| desc                          | A description that will be shown in the report. [Markdown](https://github.github.com/gfm/) is allowed and will be rendered to proper HTML.                                                                                                         |         |
+| desc                          | A description that will be shown in the report. [Markdown](https://github.github.com/gfm/) is allowed and will be rendered to proper HTML. It is also possible to add latex formulas with \```latex ... ```.                                       |         |
 | dataset                       | The name of the corresponding dataset to this view defined in [datasets](#datasets)                                                                                                                                                                |         |
 | datasets                      | Key-value pairs to include multiple datasets into a [render-plot](#render-plot) configuration. Key must be the name of the dataset in the given vega-lite specswhile the value needs to be the name of a dataset defined in [datasets](#datasets). |         |
 | page-size                     | Number of rows per page                                                                                                                                                                                                                            | 20      |

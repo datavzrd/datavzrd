@@ -64,6 +64,10 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
             include_str!("../../../static/showdown.min.js"),
         ),
         (
+            "showdown-katex.min.js",
+            include_str!("../../../static/showdown-katex.min.js"),
+        ),
+        (
             "bootstrap-select.min.js",
             include_str!("../../../static/bootstrap-select.min.js"),
         ),
