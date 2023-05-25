@@ -19,6 +19,7 @@
 <script src="../static/vega-embed.min.js"></script>
 <script src="../static/lz-string.min.js"></script>
 <script src="../static/showdown.min.js"></script>
+<script src="../static/showdown-katex.min.js"></script>
 
 <div id="page-container">
     <div id="content-wrap">
@@ -64,7 +65,15 @@
             <script>
                 $(document).ready(function() {
                     var innerDescription = document.getElementById('innerDescription');
-                    var converter = new showdown.Converter();
+                    const converter = new showdown.Converter({
+                        extensions: [
+                            showdownKatex({
+                                throwOnError: true,
+                                displayMode: false,
+                                errorColor: '#1500ff',
+                            }),
+                        ],
+                    });
                     converter.setFlavor('github');
                     innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
                 });
@@ -147,7 +156,7 @@
                     </li>
                 </ul>
                 <span class="navbar-text">
-                        created Wed May 24 20:14:41 2023
+                        created Thu May 25 11:10:41 2023
                     </span>
             </div>
         </nav>
