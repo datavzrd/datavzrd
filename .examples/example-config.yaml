@@ -28,7 +28,7 @@ views:
     page-size: 25
     render-table:
       columns:
-        range(0,1):
+        index(0):
           display-mode: hidden
         regex('birth_.+'):
           display-mode: detail
