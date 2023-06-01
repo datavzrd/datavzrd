@@ -1,5 +1,3 @@
-// Changes to these functions should lead to incrementing datavzrd_row_encoding_version
-
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
     const converter = new showdown.Converter({
@@ -33,8 +31,7 @@ function createShareURL(index, webhost_url) {
     delete data["share"];
     var c = JSON.parse(JSON.stringify(config));
     c["data"] = data;
-    // Update this version number when the config or datavzrd.js changes
-    c["datavzrd_row_encoding_version"] = 2;
+    c["webhost_config"] = true;
     const packer = new jsonm.Packer();
     let packedMessage = packer.pack(c);
     let compressed = LZString.compressToEncodedURIComponent(JSON.stringify(packedMessage))
@@ -451,9 +448,11 @@ function detailFormatter(index, row) {
 
 // Renders plots, heatmaps etc. when the table is loaded or on page change
 function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers, custom_plots) {
-    for (o of custom_plots) {
-        if (displayed_columns.includes(o.title)) {
-            renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
+    if (!config.webhost_config) {
+        for (o of custom_plots) {
+            if (displayed_columns.includes(o.title)) {
+                renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
+            }
         }
     }
 
@@ -487,13 +486,15 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
         }
     }
 
-    if (render_headers) {
-        for (o of header_config.heatmaps) {
-            colorizeHeaderRow(o.row, o.heatmap, config.header_label_length);
-        }
+    if (!config.webhost_config) {
+        if (render_headers) {
+            for (o of header_config.heatmaps) {
+                colorizeHeaderRow(o.row, o.heatmap, config.header_label_length);
+            }
 
-        for (o of header_config.ellipsis) {
-            shortenHeaderRow(o.index, o.ellipsis, config.header_label_length > 0);
+            for (o of header_config.ellipsis) {
+                shortenHeaderRow(o.index, o.ellipsis, config.header_label_length > 0);
+            }
         }
     }
 
@@ -541,12 +542,14 @@ $(document).ready(function() {
                 title = column;
             }
 
-            // Add histogram button
-            let histogram_icon = ` <a class="sym" data-toggle="modal" data-target="#modal_${config.columns.indexOf(column)}" onclick="if (show_plot_${config.columns.indexOf(column)}) {vegaEmbed('#plot_${config.columns.indexOf(column)}', plot_${config.columns.indexOf(column)})} else {document.getElementById('plot_${config.columns.indexOf(column)}').innerHTML = '<p>No reasonable plot possible.</p>'}"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></a>`;
-            title += histogram_icon;
+            if (!config.webhost_config) {
+                // Add histogram button
+                let histogram_icon = ` <a class="sym" data-toggle="modal" data-target="#modal_${config.columns.indexOf(column)}" onclick="if (show_plot_${config.columns.indexOf(column)}) {vegaEmbed('#plot_${config.columns.indexOf(column)}', plot_${config.columns.indexOf(column)})} else {document.getElementById('plot_${config.columns.indexOf(column)}').innerHTML = '<p>No reasonable plot possible.</p>'}"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></a>`;
+                title += histogram_icon;
+            }
 
             // Add static search if not single page mode
-            if (!config.is_single_page) {
+            if (!config.is_single_page && !config.webhost_config) {
                 title += ` <a class="sym" data-toggle="modal" onclick="embedSearch(${config.columns.indexOf(column)})" data-target="#search"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg></a>`;
             }
 
@@ -567,7 +570,7 @@ $(document).ready(function() {
                 formatter: formatter,
             }
 
-            if (config.is_single_page) {
+            if (config.is_single_page && !config.webhost_config) {
                 column_config["filterControl"] = "input";
             }
 
@@ -575,12 +578,12 @@ $(document).ready(function() {
         }
     }
 
-    if (linkouts != null) {
+    if (linkouts != null && !config.webhost_config) {
         bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
         var decompressed_linkouts = JSON.parse(LZString.decompressFromUTF16(linkouts));
     }
 
-    if (config.webview_controls) {
+    if (config.webview_controls && !config.webhost_config) {
         bs_table_cols.push({field: 'share', title: '', formatter: function(value){ return value }});
     }
 
@@ -640,10 +643,10 @@ $(document).ready(function() {
             row[config.columns[i]] = element;
             i++;
         }
-        if (linkouts != null) {
+        if (linkouts != null && !config.webhost_config) {
             row["linkouts"] = decompressed_linkouts[j];
         }
-        if (config.webview_controls) {
+        if (config.webview_controls && !config.webhost_config) {
             row["share"] = `<span data-toggle="tooltip" data-placement="left" title="Share link via QR code. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of {{webview_host}}.">
             <button class="btn btn-outline-secondary share-btn" onclick="shareRow(${j}, config.webview_host)">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
@@ -684,9 +687,11 @@ $(document).ready(function() {
     $('#table').bootstrapTable('append', table_rows);
 
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
-        for (o of custom_plots) {
-            if (!config.displayed_columns.includes(o.title)) {
-                renderCustomPlotDetailView(row[o.title], `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, window[o.data_function], o.specs, o.vega_controls);
+        if (!config.webhost_config) {
+            for (o of custom_plots) {
+                if (!config.displayed_columns.includes(o.title)) {
+                    renderCustomPlotDetailView(row[o.title], `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, window[o.data_function], o.specs, o.vega_controls);
+                }
             }
         }
 
@@ -738,7 +743,7 @@ $(document).ready(function() {
         $(`table > tbody > tr td:first-child`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});
     }
 
-    if (config.is_single_page) {
+    if (config.is_single_page && !config.webhost_config) {
         $('#right-top-nav').append($('<div class="btn-group" style="padding-right: 4px;"><span data-toggle="tooltip" data-placement="left" title="Clear filters"><button class="btn btn-outline-secondary" type="button" id="clear-filter"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/></svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></button></span></div>'))
         let filter_boundaries = {};
         let filters = {};
@@ -853,9 +858,9 @@ $(document).ready(function() {
                 tick_brush++;
             }
         }
-
-        render_brush_plots(false);
-
+        if (!config.webhost_config) {
+            render_brush_plots(false);
+        }
 
         function customFilter(row, filter) {
             for (title of config.displayed_columns) {
