@@ -80,6 +80,10 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
             "qrcode.min.js",
             include_str!("../../../static/qrcode.min.js"),
         ),
+        (
+            "lib-voyager.min.js",
+            include_str!("../../../static/lib-voyager.min.js"),
+            )
     ];
 
     for (name, file) in files {

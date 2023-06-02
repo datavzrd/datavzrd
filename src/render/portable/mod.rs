@@ -277,6 +277,38 @@ impl Renderer for ItemRenderer {
         }
         Ok(())
     }
+
+    fn render_datasets<P>(&self, path: P, _webview_host: String, _debug: bool) -> Result<()> where P: AsRef<Path> {
+        let dataset_path = path.as_ref().join("voyager");
+        for (name, dataset_spec) in &self.specs.datasets {
+            // TODO: Skip if dataset has too many rows?
+            let mut reader = generate_reader(dataset_spec.separator, &dataset_spec.path)
+                .context(format!("Could not read file with path {:?}", &dataset_spec.path))?;
+            let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+            let records = reader.records().skip(dataset_spec.header_rows - 1).collect_vec();
+            let mut templates = Tera::default();
+            templates.add_raw_template(
+                "voyager.html.tera",
+                include_str!("../../../templates/voyager.html.tera"),
+            )?;
+            let mut context = Context::new();
+            context.insert("name", name);
+            context.insert("headers", &json!(headers));
+            context.insert("records", &json!(records));
+
+            let html = templates.render("voyager.html.tera", &context)?;
+            let file_path = dataset_path.as_ref().join(&format!("{}.html", name));
+            let mut file = File::create(file_path)?;
+            file.write_all(html.as_bytes())?;
+        }
+        Ok(())
+    }
+}
+
+fn generate_reader(separator: char, path: &PathBuf) -> csv::Result<Reader<File>> {
+    csv::ReaderBuilder::new()
+        .delimiter(separator as u8)
+        .from_path(path)
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -1524,14 +1556,8 @@ fn render_plot_page<P: AsRef<Path>>(
     has_excel_sheet: bool,
     view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
-    let generate_reader = || -> csv::Result<Reader<File>> {
-        csv::ReaderBuilder::new()
-            .delimiter(dataset.separator as u8)
-            .from_path(&dataset.path)
-    };
-    let mut reader =
-        generate_reader().context(format!("Could not read file with path {:?}", &dataset.path))?;
-
+    let mut reader = generate_reader(dataset.separator, &dataset.path)
+        .context(format!("Could not read file with path {:?}", &dataset.path))?;
     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
     let mut records: Vec<HashMap<String, String>> = reader
         .records()
@@ -1546,7 +1572,7 @@ fn render_plot_page<P: AsRef<Path>>(
         .collect_vec();
 
     if !links.is_empty() {
-        let mut linkout_reader = generate_reader()
+        let mut linkout_reader = generate_reader(dataset.separator, &dataset.path)
             .context(format!("Could not read file with path {:?}", &dataset.path))?;
         let linkouts = linkout_reader
             .records()
@@ -1638,13 +1664,8 @@ fn render_html_page<P: AsRef<Path>>(
     has_excel_sheet: bool,
     view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
-    let generate_reader = || -> csv::Result<Reader<File>> {
-        csv::ReaderBuilder::new()
-            .delimiter(dataset.separator as u8)
-            .from_path(&dataset.path)
-    };
     let mut reader =
-        generate_reader().context(format!("Could not read file with path {:?}", &dataset.path))?;
+        generate_reader(dataset.separator, &dataset.path).context(format!("Could not read file with path {:?}", &dataset.path))?;
 
     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
     let records: Vec<HashMap<String, String>> = reader
