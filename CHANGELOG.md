@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.21.0](https://www.github.com/datavzrd/datavzrd/compare/v2.20.0...v2.21.0) (2023-06-02)
+
+
+### Features
+
+* Allow column configuration via range ([#444](https://www.github.com/datavzrd/datavzrd/issues/444)) ([e973a2e](https://www.github.com/datavzrd/datavzrd/commit/e973a2e5b975af5caf5208e1214bc621b63b5cb3))
+* Allow LaTeX within table or plot description ([#441](https://www.github.com/datavzrd/datavzrd/issues/441)) ([b41c1fb](https://www.github.com/datavzrd/datavzrd/commit/b41c1fbc1e5cd9902951479ab6429b16abc5b71d))
+
 ## [2.20.0](https://www.github.com/datavzrd/datavzrd/compare/v2.19.2...v2.20.0) (2023-05-24)
 
 
