@@ -43,7 +43,8 @@ fn main() -> Result<()> {
     render_static_files(&opt.output)?;
 
     let renderer = ItemRenderer::builder().specs(config).build();
-    renderer.render_tables(&opt.output, opt.webview_url, opt.debug)?;
+    renderer.render_tables(&opt.output, &opt.webview_url, opt.debug)?;
+    renderer.render_datasets(&opt.output, &opt.webview_url, opt.debug)?;
 
     Ok(())
 }

@@ -46,7 +46,7 @@ type LinkedTable = HashMap<(String, String), ColumnIndex>;
 
 impl Renderer for ItemRenderer {
     /// Render all items of user config
-    fn render_tables<P>(&self, path: P, webview_host: String, debug: bool) -> Result<()>
+    fn render_tables<P>(&self, path: P, webview_host: &str, debug: bool) -> Result<()>
     where
         P: AsRef<Path>,
     {
@@ -215,7 +215,7 @@ impl Renderer for ItemRenderer {
                             &self.specs.default_view,
                             is_single_page,
                             self.specs.needs_excel_sheet(),
-                            &webview_host,
+                            webview_host,
                             &view_sizes,
                         )?;
                     }
@@ -278,26 +278,39 @@ impl Renderer for ItemRenderer {
         Ok(())
     }
 
-    fn render_datasets<P>(&self, path: P, _webview_host: String, _debug: bool) -> Result<()> where P: AsRef<Path> {
+    fn render_datasets<P>(&self, path: P, _webview_host: &str, _debug: bool) -> Result<()>
+    where
+        P: AsRef<Path>,
+    {
         let dataset_path = path.as_ref().join("voyager");
+        fs::create_dir(&dataset_path)?;
         for (name, dataset_spec) in &self.specs.datasets {
             // TODO: Skip if dataset has too many rows?
-            let mut reader = generate_reader(dataset_spec.separator, &dataset_spec.path)
-                .context(format!("Could not read file with path {:?}", &dataset_spec.path))?;
+            let mut reader = generate_reader(dataset_spec.separator, &dataset_spec.path).context(
+                format!("Could not read file with path {:?}", &dataset_spec.path),
+            )?;
             let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-            let records = reader.records().skip(dataset_spec.header_rows - 1).collect_vec();
+            let records = reader
+                .records()
+                .skip(dataset_spec.header_rows - 1)
+                .filter_map(|r| r.ok())
+                .map(|s| s.iter().map(|s| s.to_string()).collect_vec())
+                .collect_vec();
             let mut templates = Tera::default();
             templates.add_raw_template(
                 "voyager.html.tera",
                 include_str!("../../../templates/voyager.html.tera"),
             )?;
+            let local: DateTime<Local> = Local::now();
             let mut context = Context::new();
             context.insert("name", name);
             context.insert("headers", &json!(headers));
-            context.insert("records", &json!(records));
+            context.insert("data", &json!(compress_to_utf16(&json!(records).to_string())).to_string());
+            context.insert("time", &local.format("%a %b %e %T %Y").to_string());
+            context.insert("version", &env!("CARGO_PKG_VERSION"));
 
             let html = templates.render("voyager.html.tera", &context)?;
-            let file_path = dataset_path.as_ref().join(&format!("{}.html", name));
+            let file_path = dataset_path.join(&format!("{}.html", name));
             let mut file = File::create(file_path)?;
             file.write_all(html.as_bytes())?;
         }
@@ -329,7 +342,7 @@ fn render_page<P: AsRef<Path>>(
     default_view: &Option<String>,
     is_single_page: bool,
     has_excel_sheet: bool,
-    webview_host: &String,
+    webview_host: &str,
     view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
     let mut templates = Tera::default();
@@ -657,7 +670,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
     page_size: usize,
-    webview_host: &String,
+    webview_host: &str,
     webview_controls: bool,
     debug: bool,
 ) -> Result<()> {
@@ -841,7 +854,7 @@ impl JavascriptConfig {
         is_single_page: bool,
         page_size: usize,
         columns: &[String],
-        webview_host: &String,
+        webview_host: &str,
         webview_controls: bool,
         csv_path: &Path,
         separator: char,
@@ -1664,8 +1677,8 @@ fn render_html_page<P: AsRef<Path>>(
     has_excel_sheet: bool,
     view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
-    let mut reader =
-        generate_reader(dataset.separator, &dataset.path).context(format!("Could not read file with path {:?}", &dataset.path))?;
+    let mut reader = generate_reader(dataset.separator, &dataset.path)
+        .context(format!("Could not read file with path {:?}", &dataset.path))?;
 
     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
     let records: Vec<HashMap<String, String>> = reader

@@ -83,7 +83,7 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
         (
             "lib-voyager.min.js",
             include_str!("../../../static/lib-voyager.min.js"),
-            )
+        ),
     ];
 
     for (name, file) in files {
