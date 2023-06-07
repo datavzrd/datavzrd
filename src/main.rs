@@ -14,6 +14,7 @@ pub(crate) mod cli;
 pub(crate) mod render;
 pub(crate) mod spec;
 pub(crate) mod utils;
+mod build;
 
 fn main() -> Result<()> {
     let opt = cli::Datavzrd::from_args();
