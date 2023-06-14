@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Johannes Köster <johannes.koester@tu-dortmund.de>, Felix Wiegand <felix.wiegand@tu-dortmund.de>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "bootstrap": "^5.3.0",
     "bootstrap-select": "^1.13.18",
@@ -23,7 +23,7 @@
     "vega-lite": "^5.9.3"
   },
   "devDependencies": {
-    "webpack": "^5.85.1",
-    "webpack-cli": "^5.1.3"
+    "webpack": "^5.86.0",
+    "webpack-cli": "^5.1.4"
   }
 }
