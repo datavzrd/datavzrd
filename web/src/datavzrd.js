@@ -1,4 +1,11 @@
-// Changes to these functions should lead to incrementing datavzrd_row_encoding_version
+import $ from 'jquery';
+import LZString from 'lz-string';
+import showdown from 'showdown';
+import showdownKatex from 'showdown-katex';
+import jsonm from 'jsonm';
+import vega from 'vega';
+import vegaEmbed from 'vega-embed';
+import QRCode from 'qrcode';
 
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');

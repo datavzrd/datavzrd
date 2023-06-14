@@ -11,16 +11,7 @@
 </head>
 
 <body>
-<script src="../static/jquery.min.js"></script>
-<script src="../static/bootstrap.bundle.min.js"></script>
-<script src="../static/bootstrap-table.min.js"></script>
-<script src="../static/bootstrap-select.min.js"></script>
-<script src="../static/bootstrap-table-fixed-columns.min.js"></script>
-<script src="../static/vega.min.js"></script>
-<script src="../static/vega-lite.min.js"></script>
-<script src="../static/vega-embed.min.js"></script>
-<script src="../static/lz-string.min.js"></script>
-<script src="../static/showdown.min.js"></script>
+<script src="../static/bundle.js"></script>
 
 <div id="page-container">
     <div id="content-wrap">

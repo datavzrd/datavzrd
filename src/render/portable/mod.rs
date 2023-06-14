@@ -305,7 +305,10 @@ impl Renderer for ItemRenderer {
             let mut context = Context::new();
             context.insert("name", name);
             context.insert("headers", &json!(headers));
-            context.insert("data", &json!(compress_to_utf16(&json!(records).to_string())).to_string());
+            context.insert(
+                "data",
+                &json!(compress_to_utf16(&json!(records).to_string())).to_string(),
+            );
             context.insert("time", &local.format("%a %b %e %T %Y").to_string());
             context.insert("version", &env!("CARGO_PKG_VERSION"));
 

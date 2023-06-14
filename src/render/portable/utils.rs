@@ -13,36 +13,6 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
     fs::create_dir(&path)?;
     let files = vec![
         (
-            "bootstrap.bundle.min.js",
-            include_str!("../../../static/bootstrap.bundle.min.js"),
-        ),
-        (
-            "bootstrap-table.min.js",
-            include_str!("../../../static/bootstrap-table.min.js"),
-        ),
-        (
-            "bootstrap-table-fixed-columns.min.js",
-            include_str!("../../../static/bootstrap-table-fixed-columns.min.js"),
-        ),
-        (
-            "jquery.min.js",
-            include_str!("../../../static/jquery.min.js"),
-        ),
-        ("jsonm.min.js", include_str!("../../../static/jsonm.min.js")),
-        (
-            "lz-string.min.js",
-            include_str!("../../../static/lz-string.min.js"),
-        ),
-        ("vega.min.js", include_str!("../../../static/vega.min.js")),
-        (
-            "vega-lite.min.js",
-            include_str!("../../../static/vega-lite.min.js"),
-        ),
-        (
-            "vega-embed.min.js",
-            include_str!("../../../static/vega-embed.min.js"),
-        ),
-        (
             "bootstrap.min.css",
             include_str!("../../../static/bootstrap.min.css"),
         ),
@@ -51,39 +21,15 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
             include_str!("../../../static/bootstrap-table.min.css"),
         ),
         (
-            "bootstrap-table-filter-control.min.js",
-            include_str!("../../../static/bootstrap-table-filter-control.min.js"),
-        ),
-        (
             "bootstrap-table-fixed-columns.min.css",
             include_str!("../../../static/bootstrap-table-fixed-columns.min.css"),
         ),
         ("datavzrd.css", include_str!("../../../static/datavzrd.css")),
         (
-            "showdown.min.js",
-            include_str!("../../../static/showdown.min.js"),
-        ),
-        (
-            "showdown-katex.min.js",
-            include_str!("../../../static/showdown-katex.min.js"),
-        ),
-        (
-            "bootstrap-select.min.js",
-            include_str!("../../../static/bootstrap-select.min.js"),
-        ),
-        (
             "bootstrap-select.min.css",
             include_str!("../../../static/bootstrap-select.min.css"),
         ),
-        ("datavzrd.js", include_str!("../../../static/datavzrd.js")),
-        (
-            "qrcode.min.js",
-            include_str!("../../../static/qrcode.min.js"),
-        ),
-        (
-            "lib-voyager.min.js",
-            include_str!("../../../static/lib-voyager.min.js"),
-        ),
+        ("bundle.js", include_str!("../../../web/dist/bundle.js")),
     ];
 
     for (name, file) in files {
