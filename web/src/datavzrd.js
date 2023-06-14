@@ -5,7 +5,11 @@ import showdownKatex from 'showdown-katex';
 import jsonm from 'jsonm';
 import vega from 'vega';
 import vegaEmbed from 'vega-embed';
+import vegalite from 'vega-lite';
 import QRCode from 'qrcode';
+import 'bootstrap';
+import 'bootstrap-table';
+import 'bootstrap-select';
 
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
