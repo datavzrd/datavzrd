@@ -3,7 +3,7 @@ import LZString from 'lz-string';
 import showdown from 'showdown';
 import showdownKatex from 'showdown-katex';
 import jsonm from 'jsonm';
-import vega from 'vega';
+import * as vega from "vega";
 import vegaEmbed from 'vega-embed';
 import vegalite from 'vega-lite';
 import QRCode from 'qrcode';
@@ -228,7 +228,7 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, detail_mode, h
             let value = table_rows[row][title];
             if (link_urls.length == 1) {
                 let link = link_urls[0].link.url.replaceAll("{value}", value);
-                for (column of columns) {
+                for (const column of columns) {
                     link = link.replaceAll(`{${column}}`, table_rows[row][column]);
                 }
                 if (link_urls[0].link.new_window) {
@@ -240,7 +240,7 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, detail_mode, h
                 let links = "";
                 for (let l of link_urls) {
                     let link = l.link.url.replaceAll("{value}", value);
-                    for (column of columns) {
+                    for (const column of columns) {
                         link = link.replaceAll(`{${column}}`, table_rows[row][column]);
                     }
                     if (l.link.new_window) {
@@ -462,48 +462,48 @@ function detailFormatter(index, row) {
 
 // Renders plots, heatmaps etc. when the table is loaded or on page change
 function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers, custom_plots) {
-    for (o of custom_plots) {
+    for (const o of custom_plots) {
         if (displayed_columns.includes(o.title)) {
             renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
         }
     }
 
-    for (o of config.ticks) {
+    for (const o of config.ticks) {
         if (displayed_columns.includes(o.title)) {
             renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length);
         }
     }
 
-    for (o of config.bars) {
+    for (const o of config.bars) {
         if (displayed_columns.includes(o.title)) {
             renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length);
         }
     }
 
-    for (o of config.link_urls) {
+    for (const o of config.link_urls) {
         if (displayed_columns.includes(o.title)) {
             linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, config.detail_mode, config.header_label_length);
         }
     }
 
-    for (o of config.heatmaps) {
+    for (const o of config.heatmaps) {
         if (displayed_columns.includes(o.title)) {
             colorizeColumn(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
         }
     }
 
-    for (o of config.ellipsis) {
+    for (const o of config.ellipsis) {
         if (displayed_columns.includes(o.title)) {
             shortenColumn(additional_headers.length, displayed_columns, o.title, o.ellipsis, config.detail_mode, config.header_label_length);
         }
     }
 
     if (render_headers) {
-        for (o of header_config.heatmaps) {
+        for (const o of header_config.heatmaps) {
             colorizeHeaderRow(o.row, o.heatmap, config.header_label_length);
         }
 
-        for (o of header_config.ellipsis) {
+        for (const o of header_config.ellipsis) {
             shortenHeaderRow(o.index, o.ellipsis, config.header_label_length > 0);
         }
     }
@@ -542,7 +542,7 @@ $(document).ready(function() {
         });
     }
 
-    for (column of config.columns) {
+    for (const column of config.columns) {
         if (config.displayed_columns.includes(column)) {
             let field = column;
             let title = ""
@@ -646,7 +646,7 @@ $(document).ready(function() {
     var j = 0;
     for (const r of decompressed) {
         var i = 0;
-        row = {};
+        var row = {};
         for (const element of r) {
             row[config.columns[i]] = element;
             i++;
@@ -782,7 +782,7 @@ $(document).ready(function() {
 
         function render_brush_plots(reset) {
             let tick_brush = 0;
-            for (title of config.displayed_columns) {
+            for (const title of config.displayed_columns) {
                 let index = tick_brush + 1;
                 if (config.detail_mode || config.header_label_length > 0) {
                     index += 1;
@@ -802,7 +802,7 @@ $(document).ready(function() {
                         min = Math.min(...brush_domains[title]);
                         max = Math.max(...brush_domains[title]);
                     } else if (aux_domains[title] != undefined) {
-                        aux_values = [min, max];
+                        let aux_values = [min, max];
                         for (col of aux_domains[title]) {
                             for (row of table_rows) {
                                 aux_values.push(parseFloat(row[col]));
@@ -869,7 +869,7 @@ $(document).ready(function() {
 
 
         function customFilter(row, filter) {
-            for (title of config.displayed_columns) {
+            for (const title of config.displayed_columns) {
                 if (filter_boundaries[title] !== undefined && !$.isEmptyObject(filter_boundaries[title])) {
                     if (row[title] < filter_boundaries[title]['value'][0] || row[title] > filter_boundaries[title]['value'][1]) {
                         return false;
