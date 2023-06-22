@@ -868,6 +868,17 @@ $(document).ready(function() {
 
         render_brush_plots(false);
 
+        $('#clear-filter').click(function clearFilter() {
+            // filter_boundaries = {};
+            // filters = {};
+            $('#table').bootstrapTable('filterBy', {"":""}, {
+                'filterAlgorithm': customFilter
+            })
+            $('.form-control').each( function() {
+                $(this).val('');
+            });
+            render_brush_plots(true);
+        });
 
         function customFilter(row, filter) {
             for (const title of config.displayed_columns) {
@@ -885,18 +896,6 @@ $(document).ready(function() {
             return true
         }
     }
-
-    $('#clear-filter').click(function clearFilter() {
-        // filter_boundaries = {};
-        // filters = {};
-        $('#table').bootstrapTable('filterBy', {"":""}, {
-            'filterAlgorithm': customFilter
-        })
-        $('.form-control').each( function() {
-            $(this).val('');
-        });
-        render_brush_plots(true);
-    });
 
     if (config.is_single_page) {
         $('#table').on('page-change.bs.table', (number, size) => {
