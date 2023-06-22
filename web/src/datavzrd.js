@@ -723,6 +723,8 @@ $(document).ready(function() {
         }
     })
 
+    $("#markdown-btn").click(function() { renderMarkdownDescription(); });
+
     $( ".btn-sm" ).click(function() {
         var col = $(this).data( "col" );
         var field = $(this).data("val").toString();
