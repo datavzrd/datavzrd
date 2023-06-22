@@ -194,7 +194,7 @@ function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_l
     let row = 0;
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function () {
-            value = this.innerHTML;
+            let value = this.innerHTML;
             if (value.length > ellipsis) {
                 this.innerHTML = `<span data-toggle="tooltip" data-trigger="hover click focus" title='${value}'>${value.substring(0, ellipsis)}...</span>`;
             }
@@ -206,7 +206,7 @@ function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_l
 function shortenHeaderRow(row, ellipsis, skip_label) {
     $(`table > thead > tr:nth-child(${row + 1}) > td`).each(
         function() {
-            value = this.innerHTML;
+            let value = this.innerHTML;
             if (value.length > ellipsis && !skip_label) {
                 this.innerHTML = `<span data-toggle="tooltip" data-trigger="hover click focus" title='${value}'>${value.substring(0, ellipsis)}...</span>`;
             }
@@ -418,11 +418,11 @@ function detailFormatter(index, row) {
         if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share") {
             if (cp.includes(key) || ticks.includes(key) || bars.includes(key)) {
                 if (cp.includes(key)) {
-                    id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
+                    let id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
                 } else if (bars.includes(key)) {
-                    id = `detail-plot-${index}-bars-${bars.indexOf(key)}`;
+                    let id = `detail-plot-${index}-bars-${bars.indexOf(key)}`;
                 } else {
-                    id = `detail-plot-${index}-ticks-${ticks.indexOf(key)}`;
+                    let id = `detail-plot-${index}-ticks-${ticks.indexOf(key)}`;
                 }
                 var card = `<div class="card">
                    <div class="card-header">
@@ -434,7 +434,7 @@ function detailFormatter(index, row) {
                  </div>`;
                 html.push(card);
             } else if (config.heatmap_titles.includes(key)) {
-                id = `heatmap-${index}-${config.heatmap_titles.indexOf(key)}`;
+                let id = `heatmap-${index}-${config.heatmap_titles.indexOf(key)}`;
                 var card = `<div class="card">
                   <div class="card-header">
                     ${key}
@@ -695,13 +695,13 @@ $(document).ready(function() {
     $('#table').bootstrapTable('append', table_rows);
 
     $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
-        for (o of custom_plots) {
+        for (const o of custom_plots) {
             if (!config.displayed_columns.includes(o.title)) {
                 renderCustomPlotDetailView(row[o.title], `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, window[o.data_function], o.specs, o.vega_controls);
             }
         }
 
-        for (o of config.heatmaps) {
+        for (const o of config.heatmaps) {
             if (o.heatmap.custom_func) {
                 colorizeDetailCard(custom_func(row[o.title], row), `#heatmap-${index}-${o.index}`, o);
             } else {
@@ -709,13 +709,13 @@ $(document).ready(function() {
             }
         }
 
-        for (o of config.ticks) {
+        for (const o of config.ticks) {
             if (!config.displayed_columns.includes(o.title)) {
                 renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-ticks-${o.index}`, o.specs, o.title);
             }
         }
 
-        for (o of config.bars) {
+        for (const o of config.bars) {
             if (!config.displayed_columns.includes(o.title)) {
                 renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-bars-${o.index}`, o.specs, o.title);
             }
@@ -886,8 +886,8 @@ $(document).ready(function() {
     }
 
     $('#clear-filter').click(function clearFilter() {
-        filter_boundaries = {};
-        filters = {};
+        // filter_boundaries = {};
+        // filters = {};
         $('#table').bootstrapTable('filterBy', {"":""}, {
             'filterAlgorithm': customFilter
         })
@@ -906,8 +906,8 @@ $(document).ready(function() {
     }
 
     let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10);
+    let page_size = $('#table').bootstrapTable('getOptions').pageSize;
     if (config.is_single_page) {
-        let page_size = $('#table').bootstrapTable('getOptions').pageSize;
         $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
     }
     let rows = $("table > tbody > tr");
