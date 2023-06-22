@@ -416,13 +416,14 @@ function detailFormatter(index, row) {
     var html = []
     $.each(row, function (key, value) {
         if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share") {
+            let id;
             if (cp.includes(key) || ticks.includes(key) || bars.includes(key)) {
                 if (cp.includes(key)) {
-                    let id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
+                    id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
                 } else if (bars.includes(key)) {
-                    let id = `detail-plot-${index}-bars-${bars.indexOf(key)}`;
+                    id = `detail-plot-${index}-bars-${bars.indexOf(key)}`;
                 } else {
-                    let id = `detail-plot-${index}-ticks-${ticks.indexOf(key)}`;
+                    id = `detail-plot-${index}-ticks-${ticks.indexOf(key)}`;
                 }
                 var card = `<div class="card">
                    <div class="card-header">
@@ -434,7 +435,7 @@ function detailFormatter(index, row) {
                  </div>`;
                 html.push(card);
             } else if (config.heatmap_titles.includes(key)) {
-                let id = `heatmap-${index}-${config.heatmap_titles.indexOf(key)}`;
+                id = `heatmap-${index}-${config.heatmap_titles.indexOf(key)}`;
                 var card = `<div class="card">
                   <div class="card-header">
                     ${key}
@@ -607,7 +608,7 @@ $(document).ready(function() {
 
     if (config.detail_mode) {
         bs_table_config.detailView = true;
-        bs_table_config.detailFormatter = "detailFormatter";
+        bs_table_config.detailFormatter = detailFormatter;
     }
 
     $('#table').bootstrapTable(bs_table_config);
