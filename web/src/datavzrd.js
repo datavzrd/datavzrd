@@ -656,8 +656,8 @@ $(document).ready(function() {
             row["linkouts"] = decompressed_linkouts[j];
         }
         if (config.webview_controls) {
-            row["share"] = `<span data-toggle="tooltip" data-placement="left" title="Share link via QR code. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of {{webview_host}}.">
-            <button class="btn btn-outline-secondary share-btn" onclick="shareRow(${j}, config.webview_host)">
+            row["share"] = `<span data-toggle="tooltip" data-placement="left" title="Share link via QR code. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of ${config.webview_host}.">
+            <button class="btn btn-outline-secondary share-btn" data-row="${j}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
                 <path d="M2 2h2v2H2V2Z"/>
                 <path d="M6 0v6H0V0h6ZM5 1H1v4h4V1ZM4 12H2v2h2v-2Z"/>
@@ -666,8 +666,8 @@ $(document).ready(function() {
                 <path d="M7 12h1v3h4v1H7v-4Zm9 2v2h-3v-1h2v-1h1Z"/>
             </svg></button>
             </span>
-            <span data-toggle="tooltip" data-placement="left" title="Copy portable share link to clipboard. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of {{webview_host}}.">
-                <button type="button" id="copy-url" class="btn btn-outline-secondary" onclick="navigator.clipboard.writeText(createShareURL(${j}, '{{webview_host}}'));">
+            <span data-toggle="tooltip" data-placement="left" title="Copy portable share link to clipboard. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of ${config.webview_host}.">
+                <button type="button" data-row="${j}" class="btn btn-outline-secondary copy-url">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2" viewBox="0 0 16 16">
                         <path d="M3.5 2a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-12a.5.5 0 0 0-.5-.5H12a.5.5 0 0 1 0-1h.5A1.5 1.5 0 0 1 14 2.5v12a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-12A1.5 1.5 0 0 1 3.5 1H4a.5.5 0 0 1 0 1h-.5Z"/>
                         <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5Z"/>
@@ -678,6 +678,14 @@ $(document).ready(function() {
         j++;
         table_rows.push(row);
     }
+
+    $(document).on('click', '.share-btn', function() {
+        shareRow($(this).data('row'), config.webview_host);
+    });
+
+    $(document).on('click', '.copy-url', function() {
+        navigator.clipboard.writeText(createShareURL($(this).data('row'), config.webview_host));
+    });
 
     $( "#btnHeatmap" ).on( "click", function() {
         var i = 0;
