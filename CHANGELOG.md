@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.21.1](https://www.github.com/datavzrd/datavzrd/compare/v2.21.0...v2.21.1) (2023-06-29)
+
+
+### Bug Fixes
+
+* proper json encoding for domain boundaries; fixed subtraction overflow error in page count calculation. ([26a4970](https://www.github.com/datavzrd/datavzrd/commit/26a4970107ad37f4c121e90827e7c9d295466ca6))
+
 ## [2.21.0](https://www.github.com/datavzrd/datavzrd/compare/v2.20.0...v2.21.0) (2023-06-02)
 
 
