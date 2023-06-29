@@ -21,6 +21,7 @@
 <script>
     const data = {{ data | safe }};
     const linkouts = {{ linkouts | safe }};
+    datavzrd.load();
 </script>
 
 <div id="page-container">

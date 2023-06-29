@@ -10,6 +10,7 @@ import QRCode from 'qrcode';
 import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
+import {Voyager, CreateVoyager} from 'datavoyager';
 
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
@@ -516,147 +517,148 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
     }
 }
 
-$(document).ready(function() {
-    $('.table-container').show();
-    $('.loading').hide();
-    $('#pagination').show();
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    });
-    $(function () {
-        $('[data-toggle="popover"]').popover()
-    });
-    $('.modal').on('shown.bs.modal', function () {
-        window.dispatchEvent(new Event('resize'));
-    });
-    var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
-
-    let bs_table_cols = [];
-
-    if (!config.detail_mode && config.header_label_length > 0) {
-        bs_table_cols.push({
-            field: '',
-            title: '',
-            formatter: function(value) {
-                return value;
-            }
+export function load() {
+    $(document).ready(function() {
+        $('.table-container').show();
+        $('.loading').hide();
+        $('#pagination').show();
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
         });
-    }
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        });
+        $('.modal').on('shown.bs.modal', function () {
+            window.dispatchEvent(new Event('resize'));
+        });
+        var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
 
-    for (const column of config.columns) {
-        if (config.displayed_columns.includes(column)) {
-            let field = column;
-            let title = ""
-            if (config.column_config[column].label) {
-                title = config.column_config[column].label;
-            } else {
-                title = column;
-            }
+        let bs_table_cols = [];
 
-            // Add histogram button
-            let histogram_icon = ` <a class="sym" data-toggle="modal" data-target="#modal_${config.columns.indexOf(column)}" onclick="if (show_plot_${config.columns.indexOf(column)}) {vegaEmbed('#plot_${config.columns.indexOf(column)}', plot_${config.columns.indexOf(column)})} else {document.getElementById('plot_${config.columns.indexOf(column)}').innerHTML = '<p>No reasonable plot possible.</p>'}"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></a>`;
-            title += histogram_icon;
+        if (!config.detail_mode && config.header_label_length > 0) {
+            bs_table_cols.push({
+                field: '',
+                title: '',
+                formatter: function(value) {
+                    return value;
+                }
+            });
+        }
 
-            // Add static search if not single page mode
-            if (!config.is_single_page) {
-                title += ` <a class="sym" data-toggle="modal" onclick="embedSearch(${config.columns.indexOf(column)})" data-target="#search"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg></a>`;
-            }
-
-            let formatter = undefined;
-            if (config.format[column] != undefined) {
-                formatter = config.format[column];
-            } else {
-                if (config.column_config[column].precision && config.column_config[column].is_float) {
-                    formatter = function(value) { return precision_formatter(config.column_config[column].precision, value); };
+        for (const column of config.columns) {
+            if (config.displayed_columns.includes(column)) {
+                let field = column;
+                let title = ""
+                if (config.column_config[column].label) {
+                    title = config.column_config[column].label;
                 } else {
-                    formatter = function(value) { return value; };
+                    title = column;
+                }
+
+                // Add histogram button
+                let histogram_icon = ` <a class="sym" data-toggle="modal" data-target="#modal_${config.columns.indexOf(column)}" onclick="if (show_plot_${config.columns.indexOf(column)}) {vegaEmbed('#plot_${config.columns.indexOf(column)}', plot_${config.columns.indexOf(column)})} else {document.getElementById('plot_${config.columns.indexOf(column)}').innerHTML = '<p>No reasonable plot possible.</p>'}"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></a>`;
+                title += histogram_icon;
+
+                // Add static search if not single page mode
+                if (!config.is_single_page) {
+                    title += ` <a class="sym" data-toggle="modal" onclick="embedSearch(${config.columns.indexOf(column)})" data-target="#search"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg></a>`;
+                }
+
+                let formatter = undefined;
+                if (config.format[column] != undefined) {
+                    formatter = config.format[column];
+                } else {
+                    if (config.column_config[column].precision && config.column_config[column].is_float) {
+                        formatter = function(value) { return precision_formatter(config.column_config[column].precision, value); };
+                    } else {
+                        formatter = function(value) { return value; };
+                    }
+                }
+
+                let column_config = {
+                    field: field,
+                    title: title,
+                    formatter: formatter,
+                }
+
+                if (config.is_single_page) {
+                    column_config["filterControl"] = "input";
+                }
+
+                bs_table_cols.push(column_config);
+            }
+        }
+
+        if (linkouts != null) {
+            bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
+            var decompressed_linkouts = JSON.parse(LZString.decompressFromUTF16(linkouts));
+        }
+
+        if (config.webview_controls) {
+            bs_table_cols.push({field: 'share', title: '', formatter: function(value){ return value }});
+        }
+
+        var bs_table_config = {
+            columns: bs_table_cols,
+            data: [],
+        };
+
+        if (config.is_single_page) {
+            bs_table_config.pagination = true;
+            bs_table_config.pageSize = config.page_size;
+        }
+
+        if (config.detail_mode) {
+            bs_table_config.detailView = true;
+            bs_table_config.detailFormatter = detailFormatter;
+        }
+
+        $('#table').bootstrapTable(bs_table_config);
+
+        let additional_headers = "";
+
+        for (const ah of header_config.headers) {
+            additional_headers += "<tr>";
+            if (config.detail_mode || ah.label != undefined) {
+                additional_headers += "<td";
+                if (!config.detail_mode) {
+                    additional_headers += " style='border: none !important;'";
+                }
+                additional_headers += ">";
+                if (ah.label != undefined) {
+                    additional_headers += `<b>${ah.label}</b>`;
+                }
+                additional_headers += "</td>";
+            }
+            for (const title of config.columns) {
+                if (config.displayed_columns.includes(title)) {
+                    additional_headers += `<td>${ah.header[title]}</td>`;
                 }
             }
-
-            let column_config = {
-                field: field,
-                title: title,
-                formatter: formatter,
-            }
-
-            if (config.is_single_page) {
-                column_config["filterControl"] = "input";
-            }
-
-            bs_table_cols.push(column_config);
+            additional_headers += "</tr>";
         }
-    }
 
-    if (linkouts != null) {
-        bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
-        var decompressed_linkouts = JSON.parse(LZString.decompressFromUTF16(linkouts));
-    }
 
-    if (config.webview_controls) {
-        bs_table_cols.push({field: 'share', title: '', formatter: function(value){ return value }});
-    }
+        var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2;
+        if (config.is_single_page) {
+            header_height += 45;
+        }
+        $('th').css("height", header_height);
 
-    var bs_table_config = {
-        columns: bs_table_cols,
-        data: [],
-    };
-
-    if (config.is_single_page) {
-        bs_table_config.pagination = true;
-        bs_table_config.pageSize = config.page_size;
-    }
-
-    if (config.detail_mode) {
-        bs_table_config.detailView = true;
-        bs_table_config.detailFormatter = detailFormatter;
-    }
-
-    $('#table').bootstrapTable(bs_table_config);
-
-    let additional_headers = "";
-
-    for (const ah of header_config.headers) {
-        additional_headers += "<tr>";
-        if (config.detail_mode || ah.label != undefined) {
-            additional_headers += "<td";
-            if (!config.detail_mode) {
-                additional_headers += " style='border: none !important;'";
+        var table_rows = [];
+        var j = 0;
+        for (const r of decompressed) {
+            var i = 0;
+            var row = {};
+            for (const element of r) {
+                row[config.columns[i]] = element;
+                i++;
             }
-            additional_headers += ">";
-            if (ah.label != undefined) {
-                additional_headers += `<b>${ah.label}</b>`;
+            if (linkouts != null) {
+                row["linkouts"] = decompressed_linkouts[j];
             }
-            additional_headers += "</td>";
-        }
-        for (const title of config.columns) {
-            if (config.displayed_columns.includes(title)) {
-                additional_headers += `<td>${ah.header[title]}</td>`;
-            }
-        }
-        additional_headers += "</tr>";
-    }
-
-
-    var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2;
-    if (config.is_single_page) {
-        header_height += 45;
-    }
-    $('th').css("height", header_height);
-
-    var table_rows = [];
-    var j = 0;
-    for (const r of decompressed) {
-        var i = 0;
-        var row = {};
-        for (const element of r) {
-            row[config.columns[i]] = element;
-            i++;
-        }
-        if (linkouts != null) {
-            row["linkouts"] = decompressed_linkouts[j];
-        }
-        if (config.webview_controls) {
-            row["share"] = `<span data-toggle="tooltip" data-placement="left" title="Share link via QR code. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of ${config.webview_host}.">
+            if (config.webview_controls) {
+                row["share"] = `<span data-toggle="tooltip" data-placement="left" title="Share link via QR code. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of ${config.webview_host}.">
             <button class="btn btn-outline-secondary share-btn" data-row="${j}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
                 <path d="M2 2h2v2H2V2Z"/>
@@ -674,269 +676,288 @@ $(document).ready(function() {
                     </svg>
                 </button>
             </span>`;
-        }
-        j++;
-        table_rows.push(row);
-    }
-
-    $(document).on('click', '.share-btn', function() {
-        shareRow($(this).data('row'), config.webview_host);
-    });
-
-    $(document).on('click', '.copy-url', function() {
-        navigator.clipboard.writeText(createShareURL($(this).data('row'), config.webview_host));
-    });
-
-    $( "#btnHeatmap" ).on( "click", function() {
-        var i = 0;
-        var heatmap_data = JSON.parse(JSON.stringify(table_rows));
-        for (const r of heatmap_data) {
-            if (r.hasOwnProperty('linkouts')) delete r['linkouts']
-            if (r.hasOwnProperty('share')) delete r['share']
-            r.index = i;
-            i++;
-        }
-        heatmap_plot.data.values = heatmap_data;
-        vegaEmbed('#heatmap-plot', heatmap_plot);
-    });
-
-    $('#table').find('thead').append(additional_headers);
-    $('#table').bootstrapTable('append', table_rows);
-
-    $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
-        for (const o of custom_plots) {
-            if (!config.displayed_columns.includes(o.title)) {
-                renderCustomPlotDetailView(row[o.title], `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, window[o.data_function], o.specs, o.vega_controls);
             }
+            j++;
+            table_rows.push(row);
         }
 
-        for (const o of config.heatmaps) {
-            if (o.heatmap.custom_func) {
-                colorizeDetailCard(custom_func(row[o.title], row), `#heatmap-${index}-${o.index}`, o);
-            } else {
-                colorizeDetailCard(row[o.title], `#heatmap-${index}-${o.index}`, o);
+        $(document).on('click', '.share-btn', function() {
+            shareRow($(this).data('row'), config.webview_host);
+        });
+
+        $(document).on('click', '.copy-url', function() {
+            navigator.clipboard.writeText(createShareURL($(this).data('row'), config.webview_host));
+        });
+
+        $( "#btnHeatmap" ).on( "click", function() {
+            var i = 0;
+            var heatmap_data = JSON.parse(JSON.stringify(table_rows));
+            for (const r of heatmap_data) {
+                if (r.hasOwnProperty('linkouts')) delete r['linkouts']
+                if (r.hasOwnProperty('share')) delete r['share']
+                r.index = i;
+                i++;
             }
-        }
+            heatmap_plot.data.values = heatmap_data;
+            vegaEmbed('#heatmap-plot', heatmap_plot);
+        });
 
-        for (const o of config.ticks) {
-            if (!config.displayed_columns.includes(o.title)) {
-                renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-ticks-${o.index}`, o.specs, o.title);
-            }
-        }
+        $('#table').find('thead').append(additional_headers);
+        $('#table').bootstrapTable('append', table_rows);
 
-        for (const o of config.bars) {
-            if (!config.displayed_columns.includes(o.title)) {
-                renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-bars-${o.index}`, o.specs, o.title);
-            }
-        }
-    })
-
-    $("#markdown-btn").click(function() { renderMarkdownDescription(); });
-
-    $( ".btn-sm" ).click(function() {
-        var col = $(this).data( "col" );
-        var field = $(this).data("val").toString();
-        if (field.startsWith("<div")) {
-            var temp = $(field);
-            field = temp[0].dataset.value;
-        }
-        var marker = { "bin_start": field};
-        var index = config.columns.indexOf(col);
-        var plot_id = `plot_${index}`;
-        var modal_id = `#modal_${index}`;
-        if (window[plot_id]["layer"].length > 1) {
-            $(modal_id).modal();
-            var marked_plot = JSON.parse(JSON.stringify(window[plot_id]));
-            marked_plot["layer"][1]["data"]["values"].push(marker);
-            vegaEmbed(`#${plot_id}`, marked_plot);
-        }
-    });
-    addNumClass(config.displayed_numeric_columns, additional_headers.length, config.detail_mode);
-
-    render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true, custom_plots);
-
-    if (!config.detail_mode && !config.header_label_length == 0) {
-        $("table > thead > tr:first-child th:first-child").css("visibility", "hidden");
-        $(`table > tbody > tr td:first-child`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});
-    }
-
-    if (config.is_single_page) {
-        $('#right-top-nav').append($('<div class="btn-group" style="padding-right: 4px;"><span data-toggle="tooltip" data-placement="left" title="Clear filters"><button class="btn btn-outline-secondary" type="button" id="clear-filter"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/></svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></button></span></div>'))
-        let filter_boundaries = {};
-        let filters = {};
-        let tick_brush_specs = {
-            "width": 50,
-            "height": 12,
-            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-            "data": {"values":[]},
-            "mark": "tick",
-            "encoding": {
-                "tooltip": {"field": "value", "type": "quantitative"},
-                "x": {
-                    "field": "value",
-                    "type": "quantitative",
-                    "scale": {"type": "linear", "zero": false},
-                    "axis": {
-                        "title": null,
-                        "orient": "top",
-                        "labelFontWeight": "lighter"
-                    }
-                },
-                "color": {"condition": {"param": "selection", "value": "#0275d8"}, "value": "grey"}
-            },
-            "params": [{"name": "selection", "select": "interval"}],
-            "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 10}}
-        };
-
-        let brush_domains = config.brush_domains;
-        let aux_domains = config.aux_domains;
-
-        function render_brush_plots(reset) {
-            let tick_brush = 0;
-            for (const title of config.displayed_columns) {
-                let index = tick_brush + 1;
-                if (config.detail_mode || config.header_label_length > 0) {
-                    index += 1;
+        $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
+            for (const o of custom_plots) {
+                if (!config.displayed_columns.includes(o.title)) {
+                    renderCustomPlotDetailView(row[o.title], `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, window[o.data_function], o.specs, o.vega_controls);
                 }
-                if (config.displayed_numeric_columns.includes(title)) {
-                    let plot_data = [];
-                    let values = []
-                    for (row of table_rows) {
-                        if (row[title] != "" && row[title] != "NA") {
-                            plot_data.push({"value": parseFloat(row[title])});
-                            values.push(parseFloat(row[title]));
+            }
+
+            for (const o of config.heatmaps) {
+                if (o.heatmap.custom_func) {
+                    colorizeDetailCard(custom_func(row[o.title], row), `#heatmap-${index}-${o.index}`, o);
+                } else {
+                    colorizeDetailCard(row[o.title], `#heatmap-${index}-${o.index}`, o);
+                }
+            }
+
+            for (const o of config.ticks) {
+                if (!config.displayed_columns.includes(o.title)) {
+                    renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-ticks-${o.index}`, o.specs, o.title);
+                }
+            }
+
+            for (const o of config.bars) {
+                if (!config.displayed_columns.includes(o.title)) {
+                    renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-bars-${o.index}`, o.specs, o.title);
+                }
+            }
+        })
+
+        $("#markdown-btn").click(function() { renderMarkdownDescription(); });
+
+        $( ".btn-sm" ).click(function() {
+            var col = $(this).data( "col" );
+            var field = $(this).data("val").toString();
+            if (field.startsWith("<div")) {
+                var temp = $(field);
+                field = temp[0].dataset.value;
+            }
+            var marker = { "bin_start": field};
+            var index = config.columns.indexOf(col);
+            var plot_id = `plot_${index}`;
+            var modal_id = `#modal_${index}`;
+            if (window[plot_id]["layer"].length > 1) {
+                $(modal_id).modal();
+                var marked_plot = JSON.parse(JSON.stringify(window[plot_id]));
+                marked_plot["layer"][1]["data"]["values"].push(marker);
+                vegaEmbed(`#${plot_id}`, marked_plot);
+            }
+        });
+        addNumClass(config.displayed_numeric_columns, additional_headers.length, config.detail_mode);
+
+        render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true, custom_plots);
+
+        if (!config.detail_mode && !config.header_label_length == 0) {
+            $("table > thead > tr:first-child th:first-child").css("visibility", "hidden");
+            $(`table > tbody > tr td:first-child`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});
+        }
+
+        if (config.is_single_page) {
+            $('#right-top-nav').append($('<div class="btn-group" style="padding-right: 4px;"><span data-toggle="tooltip" data-placement="left" title="Clear filters"><button class="btn btn-outline-secondary" type="button" id="clear-filter"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/></svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></button></span></div>'))
+            let filter_boundaries = {};
+            let filters = {};
+            let tick_brush_specs = {
+                "width": 50,
+                "height": 12,
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                "data": {"values":[]},
+                "mark": "tick",
+                "encoding": {
+                    "tooltip": {"field": "value", "type": "quantitative"},
+                    "x": {
+                        "field": "value",
+                        "type": "quantitative",
+                        "scale": {"type": "linear", "zero": false},
+                        "axis": {
+                            "title": null,
+                            "orient": "top",
+                            "labelFontWeight": "lighter"
                         }
+                    },
+                    "color": {"condition": {"param": "selection", "value": "#0275d8"}, "value": "grey"}
+                },
+                "params": [{"name": "selection", "select": "interval"}],
+                "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 10}}
+            };
+
+            let brush_domains = config.brush_domains;
+            let aux_domains = config.aux_domains;
+
+            function render_brush_plots(reset) {
+                let tick_brush = 0;
+                for (const title of config.displayed_columns) {
+                    let index = tick_brush + 1;
+                    if (config.detail_mode || config.header_label_length > 0) {
+                        index += 1;
                     }
-                    let min = Math.min(...values);
-                    let max = Math.max(...values);
-                    if (brush_domains[title] != undefined && config.tick_titles.includes(title)) {
-                        min = Math.min(...brush_domains[title]);
-                        max = Math.max(...brush_domains[title]);
-                    } else if (aux_domains[title] != undefined) {
-                        let aux_values = [min, max];
-                        for (col of aux_domains[title]) {
-                            for (row of table_rows) {
-                                aux_values.push(parseFloat(row[col]));
+                    if (config.displayed_numeric_columns.includes(title)) {
+                        let plot_data = [];
+                        let values = []
+                        for (row of table_rows) {
+                            if (row[title] != "" && row[title] != "NA") {
+                                plot_data.push({"value": parseFloat(row[title])});
+                                values.push(parseFloat(row[title]));
                             }
                         }
-                        min = Math.min(...aux_values);
-                        max = Math.max(...aux_values);
-                    }
-                    if (Number.isInteger(min)) {
-                        min = parseInt(min.toString());
-                    }
-                    if (Number.isInteger(max)) {
-                        max = parseInt(max.toString());
-                    }
-                    let legend_tick_length = min.toString().length + max.toString().length;
-                    var s = tick_brush_specs;
-                    let has_labels = legend_tick_length < 8;
-                    s.encoding.x.axis.labels = has_labels;
-                    s.data.values = plot_data;
-                    s.name = title;
-                    s.encoding.x.axis.values = [min, max];
-                    s.encoding.x.scale.domain = [min, max];
-                    let brush_class = "";
-                    if (!has_labels) {
-                        brush_class = "no-labels";
-                    }
-                    if(!reset) $(`table > thead > tr th:nth-child(${index})`).append(`<div class="filter-brush-container"><div class="filter-brush ${brush_class}" id="brush-${tick_brush}"></div></div>`);
-                    var opt = {"actions": false};
-                    vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
-                        view.addSignalListener('selection', function(name, value) {
-                            filter_boundaries[spec.name] = value;
-                        });
-                        view.addEventListener('mouseup', function(event) {
-                            $('#table').bootstrapTable('filterBy', {"":""}, {
-                                'filterAlgorithm': customFilter
-                            })
-                        });
-                        // Add another event listener so the filter is still triggered when the brush is dragged outside the plot.
-                        view.addEventListener('mouseleave', function(event) {
-                            // Only apply filter when mouseleave events happens while mouse is pressed
-                            if (event.buttons > 0) {
+                        let min = Math.min(...values);
+                        let max = Math.max(...values);
+                        if (brush_domains[title] != undefined && config.tick_titles.includes(title)) {
+                            min = Math.min(...brush_domains[title]);
+                            max = Math.max(...brush_domains[title]);
+                        } else if (aux_domains[title] != undefined) {
+                            let aux_values = [min, max];
+                            for (col of aux_domains[title]) {
+                                for (row of table_rows) {
+                                    aux_values.push(parseFloat(row[col]));
+                                }
+                            }
+                            min = Math.min(...aux_values);
+                            max = Math.max(...aux_values);
+                        }
+                        if (Number.isInteger(min)) {
+                            min = parseInt(min.toString());
+                        }
+                        if (Number.isInteger(max)) {
+                            max = parseInt(max.toString());
+                        }
+                        let legend_tick_length = min.toString().length + max.toString().length;
+                        var s = tick_brush_specs;
+                        let has_labels = legend_tick_length < 8;
+                        s.encoding.x.axis.labels = has_labels;
+                        s.data.values = plot_data;
+                        s.name = title;
+                        s.encoding.x.axis.values = [min, max];
+                        s.encoding.x.scale.domain = [min, max];
+                        let brush_class = "";
+                        if (!has_labels) {
+                            brush_class = "no-labels";
+                        }
+                        if(!reset) $(`table > thead > tr th:nth-child(${index})`).append(`<div class="filter-brush-container"><div class="filter-brush ${brush_class}" id="brush-${tick_brush}"></div></div>`);
+                        var opt = {"actions": false};
+                        vegaEmbed(`#brush-${tick_brush}`, JSON.parse(JSON.stringify(s)), opt).then(({spec, view}) => {
+                            view.addSignalListener('selection', function(name, value) {
+                                filter_boundaries[spec.name] = value;
+                            });
+                            view.addEventListener('mouseup', function(event) {
                                 $('#table').bootstrapTable('filterBy', {"":""}, {
                                     'filterAlgorithm': customFilter
                                 })
-                            }
-                        });
-                    })
-                } else {
-                    if(!reset){
-                        $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="Filter...">`);
-                        $(`#filter-${index}`).on('input', function(event) {
-                            filters[event.target.dataset.title] = $(`#filter-${index}`).val();
-                            $('#table').bootstrapTable('filterBy', {"":""}, {
-                                'filterAlgorithm': customFilter
-                            })
-                        });
+                            });
+                            // Add another event listener so the filter is still triggered when the brush is dragged outside the plot.
+                            view.addEventListener('mouseleave', function(event) {
+                                // Only apply filter when mouseleave events happens while mouse is pressed
+                                if (event.buttons > 0) {
+                                    $('#table').bootstrapTable('filterBy', {"":""}, {
+                                        'filterAlgorithm': customFilter
+                                    })
+                                }
+                            });
+                        })
+                    } else {
+                        if(!reset){
+                            $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="Filter...">`);
+                            $(`#filter-${index}`).on('input', function(event) {
+                                filters[event.target.dataset.title] = $(`#filter-${index}`).val();
+                                $('#table').bootstrapTable('filterBy', {"":""}, {
+                                    'filterAlgorithm': customFilter
+                                })
+                            });
+                        }
+                    }
+                    tick_brush++;
+                }
+            }
+
+            render_brush_plots(false);
+
+            $('#clear-filter').click(function clearFilter() {
+                // filter_boundaries = {};
+                // filters = {};
+                $('#table').bootstrapTable('filterBy', {"":""}, {
+                    'filterAlgorithm': customFilter
+                })
+                $('.form-control').each( function() {
+                    $(this).val('');
+                });
+                render_brush_plots(true);
+            });
+
+            function customFilter(row, filter) {
+                for (const title of config.displayed_columns) {
+                    if (filter_boundaries[title] !== undefined && !$.isEmptyObject(filter_boundaries[title])) {
+                        if (row[title] < filter_boundaries[title]['value'][0] || row[title] > filter_boundaries[title]['value'][1]) {
+                            return false;
+                        }
+                    }
+                    if (filters[title] !== undefined && filters[title] !== "") {
+                        if (!row[title].includes(filters[title])) {
+                            return false;
+                        }
                     }
                 }
-                tick_brush++;
+                return true
             }
         }
 
-        render_brush_plots(false);
-
-        $('#clear-filter').click(function clearFilter() {
-            // filter_boundaries = {};
-            // filters = {};
-            $('#table').bootstrapTable('filterBy', {"":""}, {
-                'filterAlgorithm': customFilter
+        if (config.is_single_page) {
+            $('#table').on('page-change.bs.table', (number, size) => {
+                setTimeout(function (){
+                    render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
+                }, 0);
             })
-            $('.form-control').each( function() {
-                $(this).val('');
-            });
-            render_brush_plots(true);
+        }
+
+        let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10);
+        let page_size = $('#table').bootstrapTable('getOptions').pageSize;
+        if (config.is_single_page) {
+            $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
+        }
+        let rows = $("table > tbody > tr");
+        rows.each(function() {
+            if (this.dataset.index == to_be_highlighted) {
+                $(this).children().addClass('active-row');
+                if (!config.detail_mode && !config.header_label_length == 0) {
+                    $(this).children().first().removeClass('active-row');
+                }
+                var value = to_be_highlighted;
+                if (config.is_single_page) {
+                    value = to_be_highlighted % page_size;
+                }
+                $('#table').bootstrapTable('scrollTo', {unit: 'rows', value: to_be_highlighted})
+            }
         });
 
-        function customFilter(row, filter) {
-            for (const title of config.displayed_columns) {
-                if (filter_boundaries[title] !== undefined && !$.isEmptyObject(filter_boundaries[title])) {
-                    if (row[title] < filter_boundaries[title]['value'][0] || row[title] > filter_boundaries[title]['value'][1]) {
-                        return false;
-                    }
-                }
-                if (filters[title] !== undefined && filters[title] !== "") {
-                    if (!row[title].includes(filters[title])) {
-                        return false;
-                    }
-                }
-            }
-            return true
-        }
-    }
-
-    if (config.is_single_page) {
-        $('#table').on('page-change.bs.table', (number, size) => {
-            setTimeout(function (){
-                render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
-            }, 0);
+        $( window ).resize(function() {
+            var he = $( window ).height() - 150;
+            // $('#table').bootstrapTable('resetView',{height: he});
         })
-    }
-
-    let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10);
-    let page_size = $('#table').bootstrapTable('getOptions').pageSize;
-    if (config.is_single_page) {
-        $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
-    }
-    let rows = $("table > tbody > tr");
-    rows.each(function() {
-        if (this.dataset.index == to_be_highlighted) {
-            $(this).children().addClass('active-row');
-            if (!config.detail_mode && !config.header_label_length == 0) {
-                $(this).children().first().removeClass('active-row');
-            }
-            var value = to_be_highlighted;
-            if (config.is_single_page) {
-                value = to_be_highlighted % page_size;
-            }
-            $('#table').bootstrapTable('scrollTo', {unit: 'rows', value: to_be_highlighted})
-        }
     });
+}
 
-    $( window ).resize(function() {
-        var he = $( window ).height() - 150;
-        // $('#table').bootstrapTable('resetView',{height: he});
-    })
-});
+export function load_table(specs, data, multiple_datasets) {
+    $("#markdown-btn").click(function() { renderMarkdownDescription(); });
+    if (multiple_datasets) {
+        specs.datasets = {};
+        specs.datasets = JSON.parse(LZString.decompressFromUTF16(data));
+    } else {
+        specs.data = {};
+        specs.data.values = JSON.parse(LZString.decompressFromUTF16(data));
+    }
+    if (specs.width == "container") { $("#vis").css("width", "100%"); }
+    vegaEmbed('#vis', specs);
+}
+
+export function load_voyager(data) {
+    const decompressed = JSON.parse(LZString.decompressFromUTF16(data));
+    const voyagerInstance = CreateVoyager($('#voyager'), undefined, decompressed);
+}

@@ -36,7 +36,7 @@
                         </svg>
                     </button></span>{% endif %}
                     {% if description %}
-                    <div class="btn-group">
+                    <div class="btn-group" id="markdown-btn">
                         <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
                                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
@@ -49,22 +49,6 @@
         </nav>
         <div class="container-fluid">
             {% if description %}
-            <script>
-                $(document).ready(function() {
-                    var innerDescription = document.getElementById('innerDescription');
-                    const converter = new showdown.Converter({
-                        extensions: [
-                            showdownKatex({
-                                throwOnError: true,
-                                displayMode: false,
-                                errorColor: '#1500ff',
-                            }),
-                        ],
-                    });
-                    converter.setFlavor('github');
-                    innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
-                });
-            </script>
             <div class="row" style="margin-top: 15px;">
                 <div class="col-md-12">
                     <div class="collapse" id="collapseDescription">
@@ -81,16 +65,12 @@
                         const specs = {{ specs | safe }};
                         {% if data %}
                         const data = {{ data | safe }};
-                        specs.data = {};
-                        specs.data.values = JSON.parse(LZString.decompressFromUTF16(data));
+                        datavzrd.load_table(specs, data, false);
                         {% endif %}
                         {% if datasets %}
                         const data = {{ datasets | safe }};
-                        specs.datasets = {};
-                        specs.datasets = JSON.parse(LZString.decompressFromUTF16(data));
+                        datavzrd.load_table(specs, data, true);
                         {% endif %}
-                        if (specs.width == "container") { $("#vis").css("width", "100%"); }
-                        vegaEmbed('#vis', specs);
                     </script>
                 </div>
             </div>
