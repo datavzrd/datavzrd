@@ -10,7 +10,6 @@ import QRCode from 'qrcode';
 import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
-import {Voyager, CreateVoyager} from 'datavoyager';
 
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
@@ -955,9 +954,4 @@ export function load_table(specs, data, multiple_datasets) {
     }
     if (specs.width == "container") { $("#vis").css("width", "100%"); }
     vegaEmbed('#vis', specs);
-}
-
-export function load_voyager(data) {
-    const decompressed = JSON.parse(LZString.decompressFromUTF16(data));
-    const voyagerInstance = CreateVoyager($('#voyager'), undefined, decompressed);
 }

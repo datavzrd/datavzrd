@@ -277,48 +277,6 @@ impl Renderer for ItemRenderer {
         }
         Ok(())
     }
-
-    fn render_datasets<P>(&self, path: P, _webview_host: &str, _debug: bool) -> Result<()>
-    where
-        P: AsRef<Path>,
-    {
-        let dataset_path = path.as_ref().join("voyager");
-        fs::create_dir(&dataset_path)?;
-        for (name, dataset_spec) in &self.specs.datasets {
-            // TODO: Skip if dataset has too many rows?
-            let mut reader = generate_reader(dataset_spec.separator, &dataset_spec.path).context(
-                format!("Could not read file with path {:?}", &dataset_spec.path),
-            )?;
-            let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-            let records = reader
-                .records()
-                .skip(dataset_spec.header_rows - 1)
-                .filter_map(|r| r.ok())
-                .map(|s| s.iter().map(|s| s.to_string()).collect_vec())
-                .collect_vec();
-            let mut templates = Tera::default();
-            templates.add_raw_template(
-                "voyager.html.tera",
-                include_str!("../../../templates/voyager.html.tera"),
-            )?;
-            let local: DateTime<Local> = Local::now();
-            let mut context = Context::new();
-            context.insert("name", name);
-            context.insert("headers", &json!(headers));
-            context.insert(
-                "data",
-                &json!(compress_to_utf16(&json!(records).to_string())).to_string(),
-            );
-            context.insert("time", &local.format("%a %b %e %T %Y").to_string());
-            context.insert("version", &env!("CARGO_PKG_VERSION"));
-
-            let html = templates.render("voyager.html.tera", &context)?;
-            let file_path = dataset_path.join(&format!("{}.html", name));
-            let mut file = File::create(file_path)?;
-            file.write_all(html.as_bytes())?;
-        }
-        Ok(())
-    }
 }
 
 fn generate_reader(separator: char, path: &PathBuf) -> csv::Result<Reader<File>> {
