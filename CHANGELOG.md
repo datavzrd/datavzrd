@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.21.2](https://www.github.com/datavzrd/datavzrd/compare/v2.21.1...v2.21.2) (2023-07-03)
+
+
+### Bug Fixes
+
+* Fix hidden table headers when table has additional headers ([#457](https://www.github.com/datavzrd/datavzrd/issues/457)) ([415c646](https://www.github.com/datavzrd/datavzrd/commit/415c6469a88fe0259e4a2af8fe3813b8b666162a))
+
 ### [2.21.1](https://www.github.com/datavzrd/datavzrd/compare/v2.21.0...v2.21.1) (2023-06-29)
 
 
