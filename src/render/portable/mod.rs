@@ -245,7 +245,7 @@ impl Renderer for ItemRenderer {
                         &table.render_table.as_ref().unwrap().headers,
                         is_single_page,
                         table.single_page_page_size,
-                        &webview_host,
+                        webview_host,
                         self.specs.webview_controls,
                         debug,
                     )?;
