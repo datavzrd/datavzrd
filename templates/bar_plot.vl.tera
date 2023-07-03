@@ -6,7 +6,7 @@
         "x": {
             "field": "{{ field }}",
             "type": "quantitative",
-            "scale": {"type": "{{ scale_type }}","domain": [{{ minimum }}, {{ maximum }}]},
+            "scale": {"type": "{{ scale_type }}","domain": [{{ minimum | json_encode }}, {{ maximum | json_encode }}]},
             "axis": null
         },
         "y": {"value": 0, "scale": {"domain": [0, 1]}},

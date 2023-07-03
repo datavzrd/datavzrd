@@ -145,10 +145,7 @@ impl Renderer for ItemRenderer {
                 // Render table
                 else if let Some(table_specs) = &table.render_table {
                     let row_address_factory = RowAddressFactory::new(table.page_size);
-                    let pages = row_address_factory
-                        .get(records_length - dataset.header_rows)
-                        .page
-                        + 1;
+                    let pages = row_address_factory.get(records_length).page + 1;
 
                     let is_single_page = if let Some(max_rows) = table.max_in_memory_rows {
                         records_length <= max_rows
