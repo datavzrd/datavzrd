@@ -326,7 +326,6 @@ dependencies = [
  "csv",
  "derefable",
  "derive-new",
- "dir-assert",
  "fancy-regex",
  "itertools",
  "lazy_static",
@@ -384,12 +383,6 @@ dependencies = [
  "block-buffer",
  "crypto-common",
 ]
-
-[[package]]
-name = "dir-assert"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52079f51e329f84f2895c4752455296d9a2dab76d7af51fc7b026f05889b1899"
 
 [[package]]
 name = "either"

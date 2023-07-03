@@ -93,7 +93,6 @@ pub(crate) fn round(x: f32, decimals: u32) -> f32 {
 #[cfg(test)]
 mod tests {
     use crate::{render_index_file, render_static_files, ItemsSpec};
-    use dir_assert::assert_paths;
     use std::fs;
     use std::path::Path;
 
@@ -122,7 +121,33 @@ mod tests {
     #[test]
     fn test_render_static_files() {
         render_static_files(Path::new("/tmp")).unwrap();
-        assert_paths!("/tmp/static", "static");
+        let files = vec![
+            (
+                "bootstrap.min.css",
+                include_str!("../../../static/bootstrap.min.css"),
+            ),
+            (
+                "bootstrap-table.min.css",
+                include_str!("../../../static/bootstrap-table.min.css"),
+            ),
+            (
+                "bootstrap-table-fixed-columns.min.css",
+                include_str!("../../../static/bootstrap-table-fixed-columns.min.css"),
+            ),
+            ("datavzrd.css", include_str!("../../../static/datavzrd.css")),
+            (
+                "bootstrap-select.min.css",
+                include_str!("../../../static/bootstrap-select.min.css"),
+            ),
+            ("bundle.js", include_str!("../../../web/dist/bundle.js")),
+        ];
+
+        for (name, file) in files {
+            let rendered_file_content = fs::read_to_string(format!("/tmp/static/{}", name))
+                .expect("Could not read rendered test index file.");
+            assert_eq!(rendered_file_content, file);
+        }
+
         for entry in fs::read_dir("/tmp/static").unwrap() {
             fs::remove_file(entry.unwrap().path()).unwrap();
         }
