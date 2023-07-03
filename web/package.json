@@ -1,0 +1,29 @@
+{
+  "name": "datavzrd",
+  "version": "1.0.0",
+  "description": "Web components for datavzrd",
+  "main": "datavzrd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Johannes Köster <johannes.koester@tu-dortmund.de>, Felix Wiegand <felix.wiegand@tu-dortmund.de>",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^4.6.2",
+    "bootstrap-select": "^1.13.18",
+    "bootstrap-table": "1.20.0",
+    "jquery": "^3.7.0",
+    "jsonm": "^1.0.10",
+    "lz-string": "^1.5.0",
+    "qrcode": "^1.5.3",
+    "showdown": "^1.9.1",
+    "showdown-katex": "^0.8.0",
+    "vega": "^5.25.0",
+    "vega-embed": "^6.22.1",
+    "vega-lite": "^5.9.3"
+  },
+  "devDependencies": {
+    "webpack": "^5.86.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

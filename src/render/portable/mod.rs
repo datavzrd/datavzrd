@@ -46,7 +46,7 @@ type LinkedTable = HashMap<(String, String), ColumnIndex>;
 
 impl Renderer for ItemRenderer {
     /// Render all items of user config
-    fn render_tables<P>(&self, path: P, webview_host: String, debug: bool) -> Result<()>
+    fn render_tables<P>(&self, path: P, webview_host: &str, debug: bool) -> Result<()>
     where
         P: AsRef<Path>,
     {
@@ -212,7 +212,7 @@ impl Renderer for ItemRenderer {
                             &self.specs.default_view,
                             is_single_page,
                             self.specs.needs_excel_sheet(),
-                            &webview_host,
+                            webview_host,
                             &view_sizes,
                         )?;
                     }
@@ -276,6 +276,12 @@ impl Renderer for ItemRenderer {
     }
 }
 
+fn generate_reader(separator: char, path: &PathBuf) -> csv::Result<Reader<File>> {
+    csv::ReaderBuilder::new()
+        .delimiter(separator as u8)
+        .from_path(path)
+}
+
 #[allow(clippy::too_many_arguments)]
 /// Render single page of a table
 fn render_page<P: AsRef<Path>>(
@@ -294,7 +300,7 @@ fn render_page<P: AsRef<Path>>(
     default_view: &Option<String>,
     is_single_page: bool,
     has_excel_sheet: bool,
-    webview_host: &String,
+    webview_host: &str,
     view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
     let mut templates = Tera::default();
@@ -622,7 +628,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
     page_size: usize,
-    webview_host: &String,
+    webview_host: &str,
     webview_controls: bool,
     debug: bool,
 ) -> Result<()> {
@@ -806,7 +812,7 @@ impl JavascriptConfig {
         is_single_page: bool,
         page_size: usize,
         columns: &[String],
-        webview_host: &String,
+        webview_host: &str,
         webview_controls: bool,
         csv_path: &Path,
         separator: char,
@@ -1521,14 +1527,8 @@ fn render_plot_page<P: AsRef<Path>>(
     has_excel_sheet: bool,
     view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
-    let generate_reader = || -> csv::Result<Reader<File>> {
-        csv::ReaderBuilder::new()
-            .delimiter(dataset.separator as u8)
-            .from_path(&dataset.path)
-    };
-    let mut reader =
-        generate_reader().context(format!("Could not read file with path {:?}", &dataset.path))?;
-
+    let mut reader = generate_reader(dataset.separator, &dataset.path)
+        .context(format!("Could not read file with path {:?}", &dataset.path))?;
     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
     let mut records: Vec<HashMap<String, String>> = reader
         .records()
@@ -1543,7 +1543,7 @@ fn render_plot_page<P: AsRef<Path>>(
         .collect_vec();
 
     if !links.is_empty() {
-        let mut linkout_reader = generate_reader()
+        let mut linkout_reader = generate_reader(dataset.separator, &dataset.path)
             .context(format!("Could not read file with path {:?}", &dataset.path))?;
         let linkouts = linkout_reader
             .records()
@@ -1635,13 +1635,8 @@ fn render_html_page<P: AsRef<Path>>(
     has_excel_sheet: bool,
     view_sizes: &HashMap<String, usize>,
 ) -> Result<()> {
-    let generate_reader = || -> csv::Result<Reader<File>> {
-        csv::ReaderBuilder::new()
-            .delimiter(dataset.separator as u8)
-            .from_path(&dataset.path)
-    };
-    let mut reader =
-        generate_reader().context(format!("Could not read file with path {:?}", &dataset.path))?;
+    let mut reader = generate_reader(dataset.separator, &dataset.path)
+        .context(format!("Could not read file with path {:?}", &dataset.path))?;
 
     let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
     let records: Vec<HashMap<String, String>> = reader
