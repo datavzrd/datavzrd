@@ -397,6 +397,23 @@ lazy_static! {
     static ref REGEX_RE: Regex = Regex::new(r#"^regex\((?:'|")(.+)(?:'|")\)$"#).unwrap();
 }
 
+lazy_static! {
+    static ref RANGE_RE: Regex = Regex::new(r"^range\(([0-9]+,[0-9]+)\)$").unwrap();
+}
+
+fn get_first_match_group(regex: &Regex, key: &str) -> String {
+    regex
+        .captures_iter(key)
+        .collect_vec()
+        .pop()
+        .unwrap()
+        .unwrap()
+        .get(1)
+        .unwrap()
+        .as_str()
+        .to_string()
+}
+
 impl ItemSpecs {
     /// Preprocesses columns with index and regex notation
     fn preprocess_columns(
@@ -421,19 +438,7 @@ impl ItemSpecs {
             }
         }
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().columns.iter() {
-            let get_first_match_group = |regex: &Regex| {
-                regex
-                    .captures_iter(key)
-                    .collect_vec()
-                    .pop()
-                    .unwrap()
-                    .unwrap()
-                    .get(1)
-                    .unwrap()
-                    .as_str()
-            };
-            if INDEX_RE.is_match(key).unwrap() {
-                let index = usize::from_str(get_first_match_group(&INDEX_RE))?;
+            let mut apply_indexed_config = |index: usize| {
                 match headers.get(index) {
                     None => {
                         bail!(ConfigError::IndexTooLarge {
@@ -454,9 +459,22 @@ impl ItemSpecs {
                         };
                     }
                 }
+                Ok(())
+            };
+            if INDEX_RE.is_match(key).unwrap() {
+                let index = usize::from_str(&get_first_match_group(&INDEX_RE, key))?;
+                apply_indexed_config(index)?;
+            } else if RANGE_RE.is_match(key).unwrap() {
+                let group = get_first_match_group(&RANGE_RE, key);
+                let range = group.split_once(',').unwrap();
+                let from = usize::from_str(range.0)?;
+                let to = usize::from_str(range.1)?;
+                for index in from..to {
+                    apply_indexed_config(index)?;
+                }
             } else if REGEX_RE.is_match(key).unwrap() {
-                let pattern = get_first_match_group(&REGEX_RE);
-                let regex = Regex::new(pattern)
+                let pattern = get_first_match_group(&REGEX_RE, key);
+                let regex = Regex::new(&pattern)
                     .context(format!("Failed to parse provided column regex {key}."))?;
                 for header in headers
                     .iter()
@@ -808,22 +826,30 @@ impl AuxDomainColumns {
         if let Some(columns) = &self.0 {
             for column in columns {
                 if REGEX_RE.is_match(column).unwrap() {
-                    let pattern = REGEX_RE
-                        .captures_iter(column)
-                        .collect_vec()
-                        .pop()
-                        .unwrap()
-                        .unwrap()
-                        .get(1)
-                        .unwrap()
-                        .as_str();
-                    let regex = Regex::new(pattern)
+                    let pattern = get_first_match_group(&REGEX_RE, column);
+                    let regex = Regex::new(&pattern)
                         .context(format!("Failed to parse provided column regex {column}."))?;
                     for header in headers
                         .iter()
                         .filter(|header| regex.is_match(header).unwrap())
                     {
                         new_tick_plot_aux_domain_columns.push(header.to_string());
+                    }
+                } else if RANGE_RE.is_match(column).unwrap() {
+                    let group = get_first_match_group(&RANGE_RE, column);
+                    let range = group.split_once(',').unwrap();
+                    let from = usize::from_str(range.0)?;
+                    let to = usize::from_str(range.1)?;
+                    for index in from..to {
+                        new_tick_plot_aux_domain_columns.push(
+                            headers
+                                .get(index)
+                                .context(
+                                    "Failed to apply given range {range} for aux-domain-columns.",
+                                )
+                                .unwrap()
+                                .to_string(),
+                        );
                     }
                 } else {
                     new_tick_plot_aux_domain_columns.push(column.to_string());
