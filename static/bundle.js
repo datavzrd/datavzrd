@@ -40,6 +40,7 @@ var __webpack_exports__ = {};
   \*************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   custom_error: () => (/* binding */ custom_error),
 /* harmony export */   load: () => (/* binding */ load),
 /* harmony export */   load_table: () => (/* binding */ load_table)
 /* harmony export */ });
@@ -1013,6 +1014,11 @@ function load_table(specs, data, multiple_datasets) {
     Object(function webpackMissingModule() { var e = new Error("Cannot find module 'vega-embed'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('#vis', specs);
 }
 
+function custom_error(e, column) {
+    Object(function webpackMissingModule() { var e = new Error("Cannot find module 'jquery'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('#error-modal').modal('show')
+    Object(function webpackMissingModule() { var e = new Error("Cannot find module 'jquery'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('#error-column').html(column)
+    Object(function webpackMissingModule() { var e = new Error("Cannot find module 'jquery'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('#error-modal-text').html(e.toString() + e.stack.toString())
+}
 datavzrd = __webpack_exports__;
 /******/ })()
 ;

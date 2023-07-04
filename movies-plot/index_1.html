@@ -127,6 +127,25 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="error-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Error when calling custom function for column <b id="error-column"></b> (please fix the function definition in the datavzrd config):</p>
+                    <pre id="error-modal-text"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <footer class="footer">
         <nav class="navbar navbar-expand navbar-light navbar-top">
             <a class="navbar-brand" href="#">datavzrd</a>
@@ -140,7 +159,7 @@
                     </li>
                 </ul>
                 <span class="navbar-text">
-                        created Mon Jul  3 15:14:07 2023
+                        created Tue Jul  4 11:16:33 2023
                     </span>
             </div>
         </nav>

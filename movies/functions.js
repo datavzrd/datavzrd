@@ -1,1 +1,1 @@
-var custom_func_25c0740391f9f68757894e517ef35361=((a,b)=>{const c=parseInt(a.split(' ')[0]);const d=Math.floor(c/60);const e=c%60;return `${d}h ${e}m`})
+var custom_func_25c0740391f9f68757894e517ef35361=((a,b)=>{try{const b=parseInt(a.split(' ')[0]);const c=Math.floor(b/60);const d=b%60;return `${c}h ${d}m`}catch(a){datavzrd.custom_error(a,'Runtime')}})
