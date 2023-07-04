@@ -1105,11 +1105,35 @@ impl JavascriptFunction {
         format!("custom_func_{:x}", md5::compute(self.0.as_bytes()))
     }
 
-    fn to_javascript_function(&self) -> String {
+    fn body(&self) -> String {
+        self.0
+            .split_once('{')
+            .unwrap()
+            .1
+            .rsplit_once('}')
+            .unwrap()
+            .0
+            .to_string()
+    }
+
+    fn args(&self) -> String {
+        self.0
+            .split_once('(')
+            .unwrap()
+            .1
+            .split_once(')')
+            .unwrap()
+            .0
+            .to_string()
+    }
+
+    fn to_javascript_function(&self, column: &String) -> String {
         format!(
-            "function {}({}",
+            "function {}({}) {{ try {{ {} }} catch (e) {{ datavzrd.custom_error(e, '{}') }}}}",
             &self.name(),
-            &self.0.split_once('(').unwrap().1
+            &self.args(),
+            &self.body(),
+            column,
         )
     }
 }
@@ -1131,16 +1155,16 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
     let functions = render_columns
         .iter()
         .filter(|(_, k)| k.custom.is_some())
-        .map(|(_, v)| {
-            JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).to_javascript_function()
+        .map(|(k, v)| {
+            JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).to_javascript_function(k)
         })
         .chain(
             render_columns
                 .iter()
                 .filter(|(_, k)| k.custom_plot.is_some())
-                .map(|(_, v)| {
+                .map(|(k, v)| {
                     JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
-                        .to_javascript_function()
+                        .to_javascript_function(k)
                 }),
         )
         .collect_vec();
@@ -1943,4 +1967,21 @@ pub enum ColumnError {
 pub enum DatasetError {
     #[error("Could not find dataset {dataset_name:?}.")]
     NotFound { dataset_name: String },
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::render::portable::JavascriptFunction;
+
+    #[test]
+    fn test_javascript_function_body_parsing() {
+        let function = JavascriptFunction(String::from("function (value) { return value; }"));
+        assert_eq!(function.body().trim(), "return value;")
+    }
+
+    #[test]
+    fn test_javascript_function_arg_parsing() {
+        let function = JavascriptFunction(String::from("function (value, row) { return value; }"));
+        assert_eq!(function.args(), "value, row")
+    }
 }

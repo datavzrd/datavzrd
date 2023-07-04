@@ -955,3 +955,9 @@ export function load_table(specs, data, multiple_datasets) {
     if (specs.width == "container") { $("#vis").css("width", "100%"); }
     vegaEmbed('#vis', specs);
 }
+
+export function custom_error(e, column) {
+    $('#error-modal').modal('show')
+    $('#error-column').html(column)
+    $('#error-modal-text').html(e.toString() + e.stack.toString())
+}
