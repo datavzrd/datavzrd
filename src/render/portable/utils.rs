@@ -29,7 +29,10 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
             "bootstrap-select.min.css",
             include_str!("../../../static/bootstrap-select.min.css"),
         ),
-        ("bundle.js", include_str!("../../../web/dist/bundle.js")),
+        (
+            "bundle.js",
+            include_str!(concat!(env!("OUT_DIR"), "/web/dist/bundle.js")),
+        ),
     ];
 
     for (name, file) in files {
