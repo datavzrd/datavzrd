@@ -1106,11 +1106,25 @@ impl JavascriptFunction {
     }
 
     fn body(&self) -> String {
-        self.0.split_once('{').unwrap().1.rsplit_once('}').unwrap().0.to_string()
+        self.0
+            .split_once('{')
+            .unwrap()
+            .1
+            .rsplit_once('}')
+            .unwrap()
+            .0
+            .to_string()
     }
 
     fn args(&self) -> String {
-        self.0.split_once('(').unwrap().1.split_once(')').unwrap().0.to_string()
+        self.0
+            .split_once('(')
+            .unwrap()
+            .1
+            .split_once(')')
+            .unwrap()
+            .0
+            .to_string()
     }
 
     fn to_javascript_function(&self, column: &String) -> String {
