@@ -5,11 +5,11 @@ fn main() {
     std::process::Command::new("npm")
         .arg("install")
         .current_dir(work_dir.to_str().expect("failed to get work dir"))
-        .spawn()
+        .status()
         .expect("failed to execute webpack");
     std::process::Command::new("npx")
         .arg("webpack")
         .current_dir(work_dir.to_str().expect("failed to get work dir"))
-        .spawn()
+        .status()
         .expect("failed to execute webpack");
 }
