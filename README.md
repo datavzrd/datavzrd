@@ -178,7 +178,7 @@ views:
 
 ### columns
 
-`columns` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file, its 0-based index (e.g. `index(5)` for the 6th column), a range expression (e.g. `range(5, 10)` for the 5th column to 9th column) or a regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`):
+`columns` contains individual configurations for each column that can either be adressed by its name defined in the header of the CSV/TSV file, its 0-based index (e.g. `index(5)` for the 6th column), a range expression (e.g. `range(5, 10)` for the 5th column to 9th column) or a regular expression (e.g. `"regex('prob:.+')"` for matching all columns starting with `prob:`):
 
 | keyword                      | explanation                                                                                                                                                                                                                                                                                                                                                                             | default | possible values           |
 |------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|---------------------------|
@@ -271,7 +271,7 @@ views:
 |--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | scale              | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick plot                                                                                                                                                                                                                                  |
 | domain             | Defines the domain of the tick plot. If not present datavzrd will automatically use the minimum and maximum values for the domain                                                                                                                                                                                       |
-| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the tick plot. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported as well as range expressions (e.g. `range(5, 10)` for the 5th column to 9th column).  |
+| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the tick plot. Regular expression (e.g. `"regex('prob:.+')"` for matching all columns starting with `prob:`) are also supported as well as range expressions (e.g. `range(5, 10)` for the 5th column to 9th column).  |
 
 ### heatmap
 
@@ -284,7 +284,7 @@ views:
 | range               | Defines the color range of the heatmap as a list                                                                                                                                                                                 |         |
 | domain              | Defines the domain of the heatmap as a list                                                                                                                                                                                      |         |
 | clamp               | Defines whether values exceeding the given domain for continuous scales will be clamped to the minimum or maximum value.                                                                                                         | true    |
-| aux-domain-columns  | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported. |         |
+| aux-domain-columns  | Allows to specify a list of other columns that will be additionally used to determine the domain of the heatmap. Regular expression (e.g. `"regex('prob:.+')"` for matching all columns starting with `prob:`) are also supported. |         |
 | custom-content      | Allows to render custom content into any heatmap cell (while using the actual cell content for the heatmap color). Requires a `function(value, row)` that returns the text value that will be displayed in the cell.             |         | 
 
 ### bars
@@ -295,7 +295,7 @@ views:
 |--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | scale              | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the bar plot                                                                                                                                             |
 | domain             | Defines the domain of the bar plot. If not present datavzrd will automatically use the minimum and maximum values for the domain                                                                                                  |
-| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the bar plot. Regular expression (e.g. `regex('prob:.+')` for matching all columns starting with `prob:`) are also supported. |
+| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the bar plot. Regular expression (e.g. `"regex('prob:.+')"` for matching all columns starting with `prob:`) are also supported. |
 
 ## Authors
 
