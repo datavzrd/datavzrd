@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.22.0](https://www.github.com/datavzrd/datavzrd/compare/v2.21.2...v2.22.0) (2023-07-06)
+
+
+### Features
+
+* Show error message and stack when custom function fails ([#462](https://www.github.com/datavzrd/datavzrd/issues/462)) ([91bfa9a](https://www.github.com/datavzrd/datavzrd/commit/91bfa9a825ef61ec3dc8f017c280288735b8ede7))
+
+
+### Bug Fixes
+
+* Add npm build to build.rs ([#466](https://www.github.com/datavzrd/datavzrd/issues/466)) ([8d843b2](https://www.github.com/datavzrd/datavzrd/commit/8d843b20f1077d51746983e6f7c23a445509cdd6))
+* Fix page calculation ([#467](https://www.github.com/datavzrd/datavzrd/issues/467)) ([23e454c](https://www.github.com/datavzrd/datavzrd/commit/23e454c06079b8aaa0176bf396bc823b8bc729b2))
+
 ### [2.21.2](https://www.github.com/datavzrd/datavzrd/compare/v2.21.1...v2.21.2) (2023-07-03)
 
 
