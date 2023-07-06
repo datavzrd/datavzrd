@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 fn main() {
     std::process::Command::new("cp")
-        .args(&[
+        .args([
             "-r",
             "web/",
             PathBuf::from(std::env::var("OUT_DIR").unwrap())
