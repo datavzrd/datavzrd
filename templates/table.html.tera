@@ -26,21 +26,8 @@
 
 <div id="page-container">
     <div id="content-wrap">
-        <nav class="navbar navbar-expand navbar-light navbar-top">
-            <div class="collapse navbar-collapse" id="navbarText2">
-                <ol class="navbar-nav mr-auto breadcrumb">
-                    {% if report_name %}<li class="breadcrumb-item"><div>{{ report_name }}</div></li>{% endif %}
-                    <li class="breadcrumb-item">
-                        <select id="view-selection" title="{{ name }}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." data-dropdown-align-right="true" class="selectpicker" data-style="select-view" data-live-search="true">
-                            {% if default_view %}
-                            <option value="../{{ default_view }}/index_1.html" data-content="{{ default_view }} <span class='badge badge-light'>{{ view_sizes[default_view] }} rows</span>">{{ default_view }}</option>
-                            {% endif %}
-                            {% for table in tables | sort %}
-                            <option value="../{{ table }}/index_1.html" data-content="{{ table }} <span class='badge badge-light'>{{ view_sizes[table] }} rows</span>">{{ table }}</option>
-                            {% endfor %}
-                        </select>
-                    </li>
-                </ol>
+        <div class="fixed-top">
+            <div class="collapse pull-right" id="navbarToggleExternalContent">
                 <span class="pull-right" id="right-top-nav">
                     {% if is_single_page %}<span data-toggle="tooltip" data-placement="left" title="View as Plot"><button class="btn btn-outline-secondary" id="btnHeatmap" data-toggle="modal" data-target="#heatmap-plot-modal">
                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
@@ -63,7 +50,29 @@
                     {% endif %}
                 </span>
             </div>
-        </nav>
+            <nav class="navbar navbar-expand navbar-light navbar-top">
+                <div class="collapse navbar-collapse" id="navbarText2">
+                    <ol class="navbar-nav mr-auto breadcrumb">
+                        {% if report_name %}<li class="breadcrumb-item"><div>{{ report_name }}</div></li>{% endif %}
+                        <li class="breadcrumb-item">
+                            <select id="view-selection" title="{{ name }}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." data-dropdown-align-right="true" class="selectpicker" data-style="select-view" data-live-search="true">
+                                {% if default_view %}
+                                <option value="../{{ default_view }}/index_1.html" data-content="{{ default_view }} <span class='badge badge-light'>{{ view_sizes[default_view] }} rows</span>">{{ default_view }}</option>
+                                {% endif %}
+                                {% for table in tables | sort %}
+                                <option value="../{{ table }}/index_1.html" data-content="{{ table }} <span class='badge badge-light'>{{ view_sizes[table] }} rows</span>">{{ table }}</option>
+                                {% endfor %}
+                            </select>
+                        </li>
+                    </ol>
+                </div>
+                <span class="pull-right">
+                    <button class="navbar-toggler" style="display: block !important;" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </span>
+            </nav>
+        </div>
         <div class="container-fluid">
             {% if description %}
             <div class="row" style="margin-top: 15px;">
