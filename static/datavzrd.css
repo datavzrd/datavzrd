@@ -37,10 +37,6 @@
     height: 54px;
 }
 
-.btn-outline-secondary {
-    border: none;
-}
-
 .sym {
     cursor: pointer;
 }
@@ -218,4 +214,21 @@ footer {
 .katex-html {
     /* Hide unrendered mathematical expressions */
     display: none;
+}
+
+.navbar-toggler-icon {
+    width: 1em;
+    height: 1em;
+}
+
+#right-top-nav {
+    margin: auto;
+}
+
+.btn-hamburger-nav {
+    margin-top: 0.5em;
+}
+
+.btn-table {
+    border: none;
 }
