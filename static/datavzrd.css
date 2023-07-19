@@ -227,6 +227,8 @@ footer {
 
 .btn-hamburger-nav {
     margin-top: 0.5em;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 .btn-table {
