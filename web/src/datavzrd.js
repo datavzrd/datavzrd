@@ -640,7 +640,7 @@ export function load() {
 
         var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2;
         if (config.is_single_page) {
-            header_height += 45;
+            header_height += 55;
         }
         $('th').css("height", header_height);
 
