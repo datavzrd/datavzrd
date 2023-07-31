@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.22.1](https://www.github.com/datavzrd/datavzrd/compare/v2.22.0...v2.22.1) (2023-07-31)
+
+
+### Bug Fixes
+
+* Fix clear filters ([#478](https://www.github.com/datavzrd/datavzrd/issues/478)) ([22923db](https://www.github.com/datavzrd/datavzrd/commit/22923db0f7990f5ef073c74bda5320a7f264bf96))
+
 ## [2.22.0](https://www.github.com/datavzrd/datavzrd/compare/v2.21.2...v2.22.0) (2023-07-06)
 
 
