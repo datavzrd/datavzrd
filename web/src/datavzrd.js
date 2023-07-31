@@ -943,6 +943,19 @@ export function load() {
     });
 }
 
+export function get_config_from_url_query() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const compressed_config = urlParams.get('config');
+    const jsonm_config = JSON.parse(LZString.decompressFromEncodedURIComponent(compressed_config));
+    const unpacker = new jsonm.Unpacker();
+    return unpacker.unpack(jsonm_config);
+}
+
+export function compress_data(data) {
+    return LZString.compressToUTF16(JSON.stringify([data]));
+}
+
 export function load_table(specs, data, multiple_datasets) {
     $("#markdown-btn").click(function() { renderMarkdownDescription(); });
     if (multiple_datasets) {
