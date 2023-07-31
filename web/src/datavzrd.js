@@ -880,8 +880,8 @@ export function load() {
             render_brush_plots(false);
 
             $('#clear-filter').click(function clearFilter() {
-                // filter_boundaries = {};
-                // filters = {};
+                filter_boundaries = {};
+                filters = {};
                 $('#table').bootstrapTable('filterBy', {"":""}, {
                     'filterAlgorithm': customFilter
                 })
