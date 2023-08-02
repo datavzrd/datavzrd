@@ -225,16 +225,25 @@ footer {
     margin: auto;
 }
 
-.btn-hamburger-nav {
-    margin-top: 0.5em;
-    margin-left: 3px;
-    margin-right: 3px;
-}
-
 .btn-table {
     border: none;
 }
 
 .description-box {
     margin-top: 110px;
+}
+
+#sidebar {
+    position: fixed;
+    right: 0;
+    top: 4rem;
+    z-index: 1;
+}
+
+#sidebar-card {
+    width: 13rem;
+}
+
+.sidebar-btn:hover {
+    background-color: #cbcbcb;
 }
