@@ -221,6 +221,10 @@ footer {
     height: 1em;
 }
 
+.navbar-toggler {
+    background-color: white;
+}
+
 #right-top-nav {
     margin: auto;
 }
@@ -230,7 +234,7 @@ footer {
 }
 
 .description-box {
-    margin-top: 15px;
+    margin-top: 55px;
 }
 
 #sidebar {
