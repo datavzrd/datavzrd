@@ -230,7 +230,7 @@ footer {
 }
 
 .description-box {
-    margin-top: 110px;
+    margin-top: 15px;
 }
 
 #sidebar {
@@ -246,4 +246,5 @@ footer {
 
 .sidebar-btn:hover {
     background-color: #cbcbcb;
+    cursor: pointer;
 }

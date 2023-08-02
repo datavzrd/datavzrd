@@ -640,7 +640,7 @@ export function load() {
 
         var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2;
         if (config.is_single_page) {
-            header_height += 45;
+            header_height += 50;
         }
         $('th').css("height", header_height);
 
@@ -762,7 +762,7 @@ export function load() {
         }
 
         if (config.is_single_page) {
-            $('#sidebar-list').append($('<li class="list-group-item btn sidebar-btn" id="clear-filter">Clear filters</li>'))
+            $('#sidebar-list').append($('<li class="list-group-item sidebar-btn" id="clear-filter">Clear filters</li>'))
             let filter_boundaries = {};
             let filters = {};
             let tick_brush_specs = {
