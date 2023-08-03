@@ -251,7 +251,7 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, detail_mode, h
                 }
                 this.innerHTML = `
                 <div class="btn-group">
-                  <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn btn-outline-secondary btn-table btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     ${value}
                   </button>
                   <div class="dropdown-menu">
@@ -640,7 +640,7 @@ export function load() {
 
         var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2;
         if (config.is_single_page) {
-            header_height += 45;
+            header_height += 50;
         }
         $('th').css("height", header_height);
 
@@ -658,7 +658,7 @@ export function load() {
             }
             if (config.webview_controls) {
                 row["share"] = `<span data-toggle="tooltip" data-placement="left" title="Share link via QR code. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of ${config.webview_host}.">
-            <button class="btn btn-outline-secondary share-btn" data-row="${j}">
+            <button class="btn btn-outline-secondary btn-table share-btn" data-row="${j}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
                 <path d="M2 2h2v2H2V2Z"/>
                 <path d="M6 0v6H0V0h6ZM5 1H1v4h4V1ZM4 12H2v2h2v-2Z"/>
@@ -668,7 +668,7 @@ export function load() {
             </svg></button>
             </span>
             <span data-toggle="tooltip" data-placement="left" title="Copy portable share link to clipboard. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of ${config.webview_host}.">
-                <button type="button" data-row="${j}" class="btn btn-outline-secondary copy-url">
+                <button type="button" data-row="${j}" class="btn btn-outline-secondary btn-table copy-url">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2" viewBox="0 0 16 16">
                         <path d="M3.5 2a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-12a.5.5 0 0 0-.5-.5H12a.5.5 0 0 1 0-1h.5A1.5 1.5 0 0 1 14 2.5v12a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-12A1.5 1.5 0 0 1 3.5 1H4a.5.5 0 0 1 0 1h-.5Z"/>
                         <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5Z"/>
@@ -762,7 +762,7 @@ export function load() {
         }
 
         if (config.is_single_page) {
-            $('#right-top-nav').append($('<div class="btn-group" style="padding-right: 4px;"><span data-toggle="tooltip" data-placement="left" title="Clear filters"><button class="btn btn-outline-secondary" type="button" id="clear-filter"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/></svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></button></span></div>'))
+            $('#sidebar-list').append($('<li class="list-group-item sidebar-btn" id="clear-filter">Clear filters</li>'))
             let filter_boundaries = {};
             let filters = {};
             let tick_brush_specs = {
