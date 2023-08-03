@@ -12,25 +12,18 @@
 <body>
 <script src="../static/bundle.js"></script>
 
+<div class="collapse" id="sidebar">
+    <div class="card" id="sidebar-card">
+        <ul class="list-group list-group-flush" id="sidebar-list">
+            {% if has_excel_sheet %}<li class="list-group-item sidebar-btn" id="btnExcel" onclick="window.location='../data.xlsx'">Download excel sheet</li>{% endif %}
+            {% if description %}<li class="list-group-item sidebar-btn" id="markdown-btn" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">Show table description</li>{% endif %}
+        </ul>
+    </div>
+</div>
+
 <div id="page-container">
     <div id="content-wrap">
         <div class="fixed-top">
-            <div class="collapse" id="navbarToggleExternalContent">
-                <div class="d-flex">
-                    <span id="right-top-nav">
-                        {% if has_excel_sheet %}<button class="btn btn-hamburger-nav btn-outline-secondary" id="btnExcel" onclick="window.location='../data.xlsx'">
-                            Download excel sheet
-                        </button>{% endif %}
-                        {% if description %}
-                        <div class="btn-group" id="markdown-btn">
-                            <button class="btn btn-hamburger-nav btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
-                                Show table description
-                            </button>
-                        </div>
-                        {% endif %}
-                    </span>
-                </div>
-            </div>
             <nav class="navbar navbar-expand navbar-light navbar-top">
                 <div class="collapse navbar-collapse" id="navbarText2">
                     <ol class="navbar-nav mr-auto breadcrumb">
@@ -48,7 +41,7 @@
                     </ol>
                 </div>
                 <span class="pull-right">
-                    <button class="navbar-toggler" style="display: block !important;" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" style="display: block !important;" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                 </span>
