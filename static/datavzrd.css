@@ -240,8 +240,9 @@ footer {
 #sidebar {
     position: fixed;
     right: 0;
-    top: 4rem;
+    top: 3rem;
     z-index: 1;
+    margin-right: 7px;
 }
 
 #sidebar-card {
