@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.23.0](https://www.github.com/datavzrd/datavzrd/compare/v2.22.0...v2.23.0) (2023-08-03)
+
+
+### Features
+
+* Add hamburger menu ([#486](https://www.github.com/datavzrd/datavzrd/issues/486)) ([006dd97](https://www.github.com/datavzrd/datavzrd/commit/006dd97fed14efce6c75aaf01e06a54a60d3087c))
+
+
+### Bug Fixes
+
+* Fix clear filters ([#478](https://www.github.com/datavzrd/datavzrd/issues/478)) ([22923db](https://www.github.com/datavzrd/datavzrd/commit/22923db0f7990f5ef073c74bda5320a7f264bf96))
+
 ## [2.22.0](https://www.github.com/datavzrd/datavzrd/compare/v2.21.2...v2.22.0) (2023-07-06)
 
 
