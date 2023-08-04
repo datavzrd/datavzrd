@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.23.1](https://www.github.com/datavzrd/datavzrd/compare/v2.23.0...v2.23.1) (2023-08-04)
+
+
+### Bug Fixes
+
+* Improve error message for JSON parsing error ([#488](https://www.github.com/datavzrd/datavzrd/issues/488)) ([628192a](https://www.github.com/datavzrd/datavzrd/commit/628192a16e76a1a35ff55ee028e341aede49fc0b))
+* Show missing table headers ([#489](https://www.github.com/datavzrd/datavzrd/issues/489)) ([9b7cc4a](https://www.github.com/datavzrd/datavzrd/commit/9b7cc4a3da6846f5ed16b99110214a42a7bbd2d8))
+
 ## [2.23.0](https://www.github.com/datavzrd/datavzrd/compare/v2.22.0...v2.23.0) (2023-08-03)
 
 
