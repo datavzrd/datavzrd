@@ -248,6 +248,7 @@ impl Renderer for ItemRenderer {
                         webview_host,
                         self.specs.webview_controls,
                         debug,
+                        name,
                     )?;
                     render_custom_javascript_functions(&out_path, table_specs, debug)?;
                     render_plots(
@@ -631,6 +632,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     webview_host: &str,
     webview_controls: bool,
     debug: bool,
+    view: &str,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -654,7 +656,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         header_specs,
     );
 
-    let custom_plot_config = CustomPlotsConfig::from_column_config(render_columns);
+    let custom_plot_config = CustomPlotsConfig::from_column_config(render_columns, view);
     let header_config = HeaderConfig::from_headers(header_specs, &titles, additional_headers);
 
     context.insert("config", &config);
@@ -676,7 +678,7 @@ fn render_table_javascript<P: AsRef<Path>>(
 struct CustomPlotsConfig(Vec<CustomPlotConfig>);
 
 impl CustomPlotsConfig {
-    fn from_column_config(config: &HashMap<String, RenderColumnSpec>) -> Self {
+    fn from_column_config(config: &HashMap<String, RenderColumnSpec>, view: &str) -> Self {
         CustomPlotsConfig(
             config
                 .iter()
@@ -686,7 +688,12 @@ impl CustomPlotsConfig {
                     custom_plot.read_schema().unwrap();
                     CustomPlotConfig {
                         title: k.to_string(),
-                        specs: serde_json::Value::from_str(&custom_plot.schema.unwrap()).unwrap(),
+                        specs: serde_json::Value::from_str(&custom_plot.schema.unwrap())
+                            .context(SpecError::CouldNotParse {
+                                column: k.to_string(),
+                                view: view.to_string(),
+                            })
+                            .unwrap(),
                         data_function: JavascriptFunction(custom_plot.plot_data).name(),
                         vega_controls: custom_plot.vega_controls,
                     }
@@ -1967,6 +1974,12 @@ pub enum ColumnError {
 pub enum DatasetError {
     #[error("Could not find dataset {dataset_name:?}.")]
     NotFound { dataset_name: String },
+}
+
+#[derive(Error, Debug)]
+pub enum SpecError {
+    #[error("Could not parse specs of plot for {column:?} in view {view:?}. Please make sure your specs contain valid JSON.")]
+    CouldNotParse { column: String, view: String },
 }
 
 #[cfg(test)]
