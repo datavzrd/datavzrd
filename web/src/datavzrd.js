@@ -511,9 +511,6 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 
     $('[data-toggle="popover"]').popover()
     $('[data-toggle="tooltip"]').tooltip()
-    if (!config.detail_mode && !config.header_label_length == 0) {
-        $(`table > thead > tr:first-child > th`).each(function() {this.style.setProperty("visibility", "hidden"); this.style.setProperty("border", "none");});
-    }
 }
 
 export function load() {
