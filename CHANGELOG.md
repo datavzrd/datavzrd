@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.23.2](https://www.github.com/datavzrd/datavzrd/compare/v2.23.1...v2.23.2) (2023-08-10)
+
+
+### Bug Fixes
+
+* Fix custom-content for heatmap definitions ([#494](https://www.github.com/datavzrd/datavzrd/issues/494)) ([d5c6856](https://www.github.com/datavzrd/datavzrd/commit/d5c6856a2f176cfb5ebb53b06498409858bc2cff))
+
 ### [2.23.1](https://www.github.com/datavzrd/datavzrd/compare/v2.23.0...v2.23.1) (2023-08-04)
 
 
