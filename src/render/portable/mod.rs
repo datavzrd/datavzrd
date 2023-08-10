@@ -1077,10 +1077,24 @@ struct JavascriptHeatmapConfig {
 
 impl JavascriptHeatmapConfig {
     fn from_config(title: String, heatmap: &Heatmap, domain: String) -> Self {
+        let js_function_name = if let Some(custom_content) = &heatmap.custom_content {
+            Some(JavascriptFunction(custom_content.to_owned()).name())
+        } else {
+            None
+        };
+        let js_heatmap = Heatmap {
+            scale_type: heatmap.scale_type.clone(),
+            clamp: heatmap.clamp,
+            color_scheme: heatmap.color_scheme.clone(),
+            color_range: heatmap.color_range.clone(),
+            domain: heatmap.domain.clone(),
+            aux_domain_columns: heatmap.aux_domain_columns.clone(),
+            custom_content: js_function_name,
+        };
         Self {
             title: title.clone(),
             slug_title: slug::slugify(&title),
-            heatmap: heatmap.to_owned(),
+            heatmap: js_heatmap,
             domain: serde_json::from_str(&domain).unwrap(),
         }
     }
@@ -1173,6 +1187,19 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                     JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
                         .to_javascript_function(k)
                 }),
+        )
+        .chain(
+            render_columns
+                .iter()
+                .filter(|(_, k)| k.plot.is_some())
+                .map(|(k, v)| { (k, v.plot.as_ref().unwrap()) })
+                .filter(|(_, k)| k.heatmap.is_some())
+                .map(|(k, v)| { (k, v.heatmap.as_ref().unwrap()) })
+                .filter(|(_, k)| k.custom_content.is_some())
+                .map(|(k, v)| {
+                    JavascriptFunction(v.custom_content.as_ref().unwrap().to_owned())
+                        .to_javascript_function(k)
+                })
         )
         .collect_vec();
 
