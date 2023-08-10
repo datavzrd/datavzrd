@@ -1077,13 +1077,12 @@ struct JavascriptHeatmapConfig {
 
 impl JavascriptHeatmapConfig {
     fn from_config(title: String, heatmap: &Heatmap, domain: String) -> Self {
-        let js_function_name = if let Some(custom_content) = &heatmap.custom_content {
-            Some(JavascriptFunction(custom_content.to_owned()).name())
-        } else {
-            None
-        };
+        let js_function_name = heatmap
+            .custom_content
+            .as_ref()
+            .map(|custom_content| JavascriptFunction(custom_content.to_owned()).name());
         let js_heatmap = Heatmap {
-            scale_type: heatmap.scale_type.clone(),
+            scale_type: heatmap.scale_type,
             clamp: heatmap.clamp,
             color_scheme: heatmap.color_scheme.clone(),
             color_range: heatmap.color_range.clone(),
