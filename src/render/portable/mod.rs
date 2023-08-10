@@ -1192,14 +1192,14 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
             render_columns
                 .iter()
                 .filter(|(_, k)| k.plot.is_some())
-                .map(|(k, v)| { (k, v.plot.as_ref().unwrap()) })
+                .map(|(k, v)| (k, v.plot.as_ref().unwrap()))
                 .filter(|(_, k)| k.heatmap.is_some())
-                .map(|(k, v)| { (k, v.heatmap.as_ref().unwrap()) })
+                .map(|(k, v)| (k, v.heatmap.as_ref().unwrap()))
                 .filter(|(_, k)| k.custom_content.is_some())
                 .map(|(k, v)| {
                     JavascriptFunction(v.custom_content.as_ref().unwrap().to_owned())
                         .to_javascript_function(k)
-                })
+                }),
         )
         .collect_vec();
 
