@@ -391,7 +391,7 @@ function renderCustomPlotDetailView(value, div, data_function, specs, vega_contr
     vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
 }
 
-function embedSearch(index) {
+export function embedSearch(index) {
     var source = `search/column_${index}.html`;
     document.getElementById('search-iframe').setAttribute("src",source);
 }
@@ -974,3 +974,12 @@ export function custom_error(e, column) {
     $('#error-column').html(column)
     $('#error-modal-text').html(e.toString() + e.stack.toString())
 }
+
+$(document).click(function (event) {
+    var clickover = $(event.target);
+    var $navbar = $("#sidebar");
+    var _opened = $navbar.hasClass("show");
+    if (_opened === true && !clickover.hasClass("sidebar-btn")) {
+        $navbar.collapse('hide');
+    }
+});
