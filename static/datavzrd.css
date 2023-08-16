@@ -253,3 +253,14 @@ footer {
     background-color: #cbcbcb;
     cursor: pointer;
 }
+
+.navbar-toggler {
+    border: none;
+}
+
+#close-description {
+    position: absolute;
+    right: 4px;
+    top: 0;
+    padding: 0.2rem;
+}
