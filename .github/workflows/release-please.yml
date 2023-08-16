@@ -41,3 +41,43 @@ jobs:
         with:
           command: publish
           args: --token ${{ secrets.CRATES_IO_TOKEN }}
+
+  update-webview:
+      runs-on: ubuntu-latest
+      needs: release-please
+      if: ${{ needs.release-please.outputs.release_created }}
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
+          with:
+            path: datavzrd
+
+        - name: Checkout view repo
+          uses: actions/checkout@v2
+          with:
+            repository: datavzrd/view
+            path: view
+
+        - name: Install stable toolchain
+          uses: actions-rs/toolchain@v1
+          with:
+            toolchain: stable
+            override: true
+
+        - name: Change directory
+          run: cd datavzrd
+
+        - name: Build
+          run: cargo build --release
+
+        - name: Copy bundle.js
+          run: cp target/release/datavzrd/web/dist/bundle.js ../view/static/${{ steps.release-please.outputs.tag_name }}/bundle.js
+
+        - name: Change directory
+          run: cd ../view
+
+        - name: Commit and push changes
+          run: |
+            git add static/${{ steps.release-please.outputs.tag_name }}/bundle.js
+            git commit -m "Update bundle.js to $GITHUB_REF"
+            git push
