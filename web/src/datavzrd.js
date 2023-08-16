@@ -391,7 +391,7 @@ function renderCustomPlotDetailView(value, div, data_function, specs, vega_contr
     vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
 }
 
-function embedSearch(index) {
+export function embedSearch(index) {
     var source = `search/column_${index}.html`;
     document.getElementById('search-iframe').setAttribute("src",source);
 }
