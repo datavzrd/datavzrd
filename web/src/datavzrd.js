@@ -175,11 +175,13 @@ function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) 
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
             var value = table_rows[row][heatmap.title];
-            if (custom_func !== null) {
-                value = custom_func(value, table_rows[row]);
-            }
             if (value !== "") {
                 this.style.setProperty("background-color", scale(value), "important");
+            }
+            if (custom_func !== null) {
+                var data_function = window[custom_func];
+                value = data_function(value, table_rows[row]);
+                this.innerHTML = value;
             }
             row++;
         }
@@ -265,7 +267,7 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, detail_mode, h
     );
 }
 
-function colorizeDetailCard(value, div, heatmap) {
+function colorizeDetailCard(value, div, heatmap, row) {
     let scale = null;
 
     if (heatmap.heatmap.scale == "ordinal") {
@@ -288,6 +290,11 @@ function colorizeDetailCard(value, div, heatmap) {
 
     if (value !== "") {
         $(`${div}`).css( "background-color", scale(value) );
+    }
+    if (heatmap.heatmap.custom_content !== null) {
+        var data_function = window[heatmap.heatmap.custom_content];
+        value = data_function(value, row);
+        $(`${div}`)[0].innerHTML = value;
     }
 }
 
@@ -421,9 +428,9 @@ function detailFormatter(index, row) {
                 if (cp.includes(key)) {
                     id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
                 } else if (bars.includes(key)) {
-                    id = `detail-plot-${index}-bars-${bars.indexOf(key)}`;
+                    id = `detail-plot-${index}-bars-${config.columns.indexOf(key)}`;
                 } else {
-                    id = `detail-plot-${index}-ticks-${ticks.indexOf(key)}`;
+                    id = `detail-plot-${index}-ticks-${config.columns.indexOf(key)}`;
                 }
                 var card = `<div class="card">
                    <div class="card-header">
@@ -435,7 +442,7 @@ function detailFormatter(index, row) {
                  </div>`;
                 html.push(card);
             } else if (config.heatmap_titles.includes(key)) {
-                id = `heatmap-${index}-${config.heatmap_titles.indexOf(key)}`;
+                id = `heatmap-${index}-${config.columns.indexOf(key)}`;
                 var card = `<div class="card">
                   <div class="card-header">
                     ${key}
@@ -709,22 +716,18 @@ export function load() {
             }
 
             for (const o of config.heatmaps) {
-                if (o.heatmap.custom_func) {
-                    colorizeDetailCard(custom_func(row[o.title], row), `#heatmap-${index}-${o.index}`, o);
-                } else {
-                    colorizeDetailCard(row[o.title], `#heatmap-${index}-${o.index}`, o);
-                }
+                colorizeDetailCard(row[o.title], `#heatmap-${index}-${config.columns.indexOf(o.title)}`, o, row);
             }
 
             for (const o of config.ticks) {
                 if (!config.displayed_columns.includes(o.title)) {
-                    renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-ticks-${o.index}`, o.specs, o.title);
+                    renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-ticks-${config.columns.indexOf(o.title)}`, o.specs, o.title);
                 }
             }
 
             for (const o of config.bars) {
                 if (!config.displayed_columns.includes(o.title)) {
-                    renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-bars-${o.index}`, o.specs, o.title);
+                    renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-bars-${config.columns.indexOf(o.title)}`, o.specs, o.title);
                 }
             }
         })
