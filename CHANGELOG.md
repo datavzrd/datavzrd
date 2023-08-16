@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.23.3](https://www.github.com/datavzrd/datavzrd/compare/v2.23.2...v2.23.3) (2023-08-16)
+
+
+### Bug Fixes
+
+* Export embed_search function ([#497](https://www.github.com/datavzrd/datavzrd/issues/497)) ([5631599](https://www.github.com/datavzrd/datavzrd/commit/563159946f429728977deefdd7ae554ffd3ebbb1))
+* Optimize new menu design and usage ([#493](https://www.github.com/datavzrd/datavzrd/issues/493)) ([4019920](https://www.github.com/datavzrd/datavzrd/commit/40199209dc4393c29a0e7f90faeb4332ce713c7a))
+
 ### [2.23.2](https://www.github.com/datavzrd/datavzrd/compare/v2.23.1...v2.23.2) (2023-08-10)
 
 
