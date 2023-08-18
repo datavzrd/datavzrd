@@ -398,9 +398,9 @@ export function embedSearch(index) {
 
 export function embedHistogram(show_plot, index, plot) {
     if (show_plot) {
-        vegaEmbed('#plot_${index}', plot)
+        vegaEmbed(`#plot_${index}`, plot);
     } else {
-        document.getElementById('plot_${index}').innerHTML = '<p>No reasonable plot possible.</p>'
+        document.getElementById(`plot_${index}`).innerHTML = '<p>No reasonable plot possible.</p>';
     }
 }
 function addNumClass(dp_num, ah, detail_mode) {
