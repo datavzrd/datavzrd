@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.23.4](https://www.github.com/datavzrd/datavzrd/compare/v2.23.3...v2.23.4) (2023-08-18)
+
+
+### Bug Fixes
+
+* Fix embed search function call ([#501](https://www.github.com/datavzrd/datavzrd/issues/501)) ([239dd12](https://www.github.com/datavzrd/datavzrd/commit/239dd12e890bee2318937c3fce6f27e62cfc6b11))
+
 ### [2.23.3](https://www.github.com/datavzrd/datavzrd/compare/v2.23.2...v2.23.3) (2023-08-16)
 
 
