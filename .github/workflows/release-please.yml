@@ -68,12 +68,14 @@ jobs:
             toolchain: stable
             override: true
 
-        - name: Change directory
-          run: cd datavzrd/datavzrd
-
-        - name: Echo current directory
+        - name: List contents of directories
           run: |
-            echo "Current directory is: ${PWD}"
+            ls -al
+            ls -al datavzrd
+            ls -al view
+
+        - name: Change directory
+          run: cd datavzrd
 
         - name: Build
           run: cargo build --release
@@ -82,7 +84,7 @@ jobs:
           run: cp target/release/datavzrd/web/dist/bundle.js ../view/static/${{ steps.release-please.outputs.tag_name }}/bundle.js
 
         - name: Change directory
-          run: cd ../../view
+          run: cd ../view
 
         - name: Commit and push changes
           run: |
