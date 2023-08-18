@@ -52,12 +52,12 @@ jobs:
       if: ${{ needs.release-please.outputs.release_created }}
       steps:
         - name: Checkout repository
-          uses: actions/checkout@v2
+          uses: actions/checkout@v3
           with:
             path: datavzrd
 
         - name: Checkout view repo
-          uses: actions/checkout@v2
+          uses: actions/checkout@v3
           with:
             repository: datavzrd/view
             path: view
@@ -69,7 +69,11 @@ jobs:
             override: true
 
         - name: Change directory
-          run: cd datavzrd
+          run: cd datavzrd/datavzrd
+
+        - name: Echo current directory
+          run: |
+            echo "Current directory is: ${PWD}"
 
         - name: Build
           run: cargo build --release
@@ -78,7 +82,7 @@ jobs:
           run: cp target/release/datavzrd/web/dist/bundle.js ../view/static/${{ steps.release-please.outputs.tag_name }}/bundle.js
 
         - name: Change directory
-          run: cd ../view
+          run: cd ../../view
 
         - name: Commit and push changes
           run: |
