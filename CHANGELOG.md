@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.23.5](https://www.github.com/datavzrd/datavzrd/compare/v2.23.4...v2.23.5) (2023-08-18)
+
+
+### Bug Fixes
+
+* Fix histogram embedding ([#504](https://www.github.com/datavzrd/datavzrd/issues/504)) ([93445ea](https://www.github.com/datavzrd/datavzrd/commit/93445eafeec1d0260609fbd5996dd4cb750e8d80))
+
 ### [2.23.4](https://www.github.com/datavzrd/datavzrd/compare/v2.23.3...v2.23.4) (2023-08-18)
 
 
