@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.23.6](https://www.github.com/datavzrd/datavzrd/compare/v2.23.5...v2.23.6) (2023-08-21)
+
+
+### Bug Fixes
+
+* Fix static search dialog ([#508](https://www.github.com/datavzrd/datavzrd/issues/508)) ([07e90ef](https://www.github.com/datavzrd/datavzrd/commit/07e90ef20730fd7282ec57cd3d67c6f11842ed26))
+
 ### [2.23.5](https://www.github.com/datavzrd/datavzrd/compare/v2.23.4...v2.23.5) (2023-08-18)
 
 
