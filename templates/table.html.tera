@@ -42,7 +42,7 @@
                     <ol class="navbar-nav mr-auto breadcrumb">
                         {% if report_name %}<li class="breadcrumb-item"><div>{{ report_name }}</div></li>{% endif %}
                         <li class="breadcrumb-item">
-                            <select id="view-selection" title="{{ name }}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." data-dropdown-align-right="true" class="selectpicker" data-style="select-view" data-live-search="true">
+                            <select id="view-selection" title="{{ name }}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true">
                                 {% if default_view %}
                                 <option value="../{{ default_view }}/index_1.html" data-content="{{ default_view }} <span class='badge badge-light'>{{ view_sizes[default_view] }} rows</span>">{{ default_view }}</option>
                                 {% endif %}
