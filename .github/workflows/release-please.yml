@@ -74,11 +74,11 @@ jobs:
             cargo build --release
 
         - name: Copy bundle.js
-          run: cp target/release/build/datavzrd-*/out/web/dist/bundle.js view/static/v${{ steps.release-please.outputs.major }}.${{ steps.release-please.outputs.minor }}.${{ steps.release-please.outputs.patch }}/bundle.js
+          run: cp datavzrd/target/release/build/datavzrd-*/out/web/dist/bundle.js view/static/v${{ jobs.release-please.steps.release.outputs.major }}.${{ jobs.release-please.steps.release.outputs.minor }}.${{ jobs.release-please.steps.release.outputs.patch }}/bundle.js
 
         - name: Commit and push changes
           run: |
             cd view
-            git add static/v${{ steps.release-please.outputs.major }}.${{ steps.release-please.outputs.minor }}.${{ steps.release-please.outputs.patch }}/bundle.js
+            git add static/v${{ jobs.release-please.steps.release.outputs.major }}.${{ jobs.release-please.steps.release.outputs.minor }}.${{ jobs.release-please.steps.release.outputs.patch }}/bundle.js
             git commit -m "Update bundle.js to $GITHUB_REF"
             git push
