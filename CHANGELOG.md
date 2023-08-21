@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.23.7](https://www.github.com/datavzrd/datavzrd/compare/v2.23.6...v2.23.7) (2023-08-21)
+
+
+### Bug Fixes
+
+* Fix possibly misplaced view dropdown for very long titles ([#511](https://www.github.com/datavzrd/datavzrd/issues/511)) ([b4ec137](https://www.github.com/datavzrd/datavzrd/commit/b4ec137ed274ce30f41ddb91709a2381de80b906))
+
 ### [2.23.6](https://www.github.com/datavzrd/datavzrd/compare/v2.23.5...v2.23.6) (2023-08-21)
 
 
