@@ -68,26 +68,17 @@ jobs:
             toolchain: stable
             override: true
 
-        - name: List contents of directories
-          run: |
-            ls -al
-            ls -al datavzrd
-            ls -al view
-
-        - name: Change directory
-          run: cd datavzrd
-
         - name: Build
-          run: cargo build --release
+          run: |
+            cd datavzrd
+            cargo build --release
 
         - name: Copy bundle.js
-          run: cp target/release/datavzrd/web/dist/bundle.js ../view/static/${{ steps.release-please.outputs.tag_name }}/bundle.js
-
-        - name: Change directory
-          run: cd ../view
+          run: cp datavzrd/target/release/datavzrd/web/dist/bundle.js view/static/${{ steps.release-please.outputs.tag_name }}/bundle.js
 
         - name: Commit and push changes
           run: |
+            cd view
             git add static/${{ steps.release-please.outputs.tag_name }}/bundle.js
             git commit -m "Update bundle.js to $GITHUB_REF"
             git push
