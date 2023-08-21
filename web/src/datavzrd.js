@@ -990,3 +990,15 @@ $(document).click(function (event) {
         $navbar.collapse('hide');
     }
 });
+
+export function load_search() {
+    $(document).ready(function() {
+        window.$ = window.jQuery = require("jquery");
+        $('.table').bootstrapTable({
+            onPostHeader: function () {
+                $(".search-input").focus();
+            }
+        });
+        $(".search-input").focus();
+    });
+}

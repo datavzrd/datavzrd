@@ -7,19 +7,9 @@
 </head>
 
 <body>
-<script src="../../static/jquery.min.js"></script>
-<script src="../../static/bootstrap.bundle.min.js"></script>
-<script src="../../static/bootstrap-table.min.js"></script>
+<script src="../../static/bundle.js"></script>
 <script>
-    $(document).ready(function() {
-        $('.table').bootstrapTable({
-            onPostHeader: function () {
-                $(".search-input").focus();
-            }
-        });
-        $(".search-input").focus();
-    });
-</script>
+    datavzrd.load_search();
 </script>
 <div class="container-fluid">
     <div class="row">
