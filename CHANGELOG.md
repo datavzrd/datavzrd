@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.23.8](https://www.github.com/datavzrd/datavzrd/compare/v2.23.7...v2.23.8) (2023-08-24)
+
+
+### Bug Fixes
+
+* Fix rendering for reports with aux-domains ([#519](https://www.github.com/datavzrd/datavzrd/issues/519)) ([d5ef444](https://www.github.com/datavzrd/datavzrd/commit/d5ef444b64147c37b16e103f04fc7602b62c714a))
+
 ### [2.23.7](https://www.github.com/datavzrd/datavzrd/compare/v2.23.6...v2.23.7) (2023-08-21)
 
 
