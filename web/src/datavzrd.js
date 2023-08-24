@@ -809,7 +809,7 @@ export function load() {
                     if (config.displayed_numeric_columns.includes(title)) {
                         let plot_data = [];
                         let values = []
-                        for (row of table_rows) {
+                        for (const row of table_rows) {
                             if (row[title] != "" && row[title] != "NA") {
                                 plot_data.push({"value": parseFloat(row[title])});
                                 values.push(parseFloat(row[title]));
@@ -822,8 +822,8 @@ export function load() {
                             max = Math.max(...brush_domains[title]);
                         } else if (aux_domains[title] != undefined) {
                             let aux_values = [min, max];
-                            for (col of aux_domains[title]) {
-                                for (row of table_rows) {
+                            for (const col of aux_domains[title]) {
+                                for (const row of table_rows) {
                                     aux_values.push(parseFloat(row[col]));
                                 }
                             }
