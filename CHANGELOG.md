@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.23.9](https://www.github.com/datavzrd/datavzrd/compare/v2.23.8...v2.23.9) (2023-08-28)
+
+
+### Miscellaneous Chores
+
+* release 2.23.9 ([28a97ba](https://www.github.com/datavzrd/datavzrd/commit/28a97ba3a865d4adb275db1c8eb3ed8b37bff42f))
+
 ### [2.23.8](https://www.github.com/datavzrd/datavzrd/compare/v2.23.7...v2.23.8) (2023-08-24)
 
 
