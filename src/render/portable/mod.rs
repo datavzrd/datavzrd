@@ -1373,7 +1373,7 @@ fn render_tick_plot(
         let columns = aux_domain_columns
             .iter()
             .map(|s| s.to_string())
-            .chain(vec![title.to_string()].into_iter())
+            .chain(vec![title.to_string()])
             .collect();
         get_min_max_multiple_columns(csv_path, separator, header_rows, columns, Some(precision))?
     } else {
@@ -1430,7 +1430,7 @@ fn render_bar_plot(
         let columns = aux_domain_columns
             .iter()
             .map(|s| s.to_string())
-            .chain(vec![title.to_string()].into_iter())
+            .chain(vec![title.to_string()])
             .collect();
         get_min_max_multiple_columns(csv_path, separator, header_rows, columns, Some(precision))?
     } else {
@@ -1480,7 +1480,7 @@ pub(crate) fn get_column_domain(
             let columns = aux_domain_columns
                 .iter()
                 .map(|s| s.to_string())
-                .chain(vec![title.to_string()].into_iter())
+                .chain(vec![title.to_string()])
                 .collect_vec();
             let column_indexes: HashSet<_> = reader.headers().map(|s| {
                 s.iter()
@@ -1520,7 +1520,7 @@ pub(crate) fn get_column_domain(
         let columns = aux_domain_columns
             .iter()
             .map(|s| s.to_string())
-            .chain(vec![title.to_string()].into_iter())
+            .chain(vec![title.to_string()])
             .collect();
         Ok(json!(get_min_max_multiple_columns(
             csv_path,
