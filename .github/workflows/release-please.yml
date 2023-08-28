@@ -38,7 +38,7 @@ jobs:
           sudo apt-get install --yes libgsl0-dev
 
       - uses: Swatinem/rust-cache@v1.3.0
-      
+
       - name: Publish crate
         uses: actions-rs/cargo@v1
         with:
@@ -74,16 +74,15 @@ jobs:
             cd datavzrd
             cargo build --release
 
-        - name: Copy bundle.js and push changes
+        - name: Copy bundle.js
           run: |
             outdir=view/static/${{ needs.release-please.outputs.tag_name }}
             mkdir -p $outdir
             cp datavzrd/target/release/build/datavzrd-*/out/web/dist/bundle.js $outdir/bundle.js
-            
 
         - name: Commit and push changes
           run: |
             cd view
-            git add static/v${{ needs.release-please.outputs.tag_name}}
-            git commit -m "Release bundle.js for ${{ needs.release-please.outputs.tag_name}}"
+            git add static/${{ needs.release-please.outputs.tag_name }}
+            git commit -m "Release bundle.js for ${{ needs.release-please.outputs.tag_name }}"
             git push
