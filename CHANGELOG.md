@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.24.0](https://www.github.com/datavzrd/datavzrd/compare/v2.23.9...v2.24.0) (2023-09-05)
+
+
+### Features
+
+* Allow custom or custom-path usage with display-mode: detail ([#532](https://www.github.com/datavzrd/datavzrd/issues/532)) ([83b7289](https://www.github.com/datavzrd/datavzrd/commit/83b728921372b7fe9b10f02ab6c671f0429cfc64))
+
 ### [2.23.9](https://www.github.com/datavzrd/datavzrd/compare/v2.23.8...v2.23.9) (2023-08-28)
 
 
