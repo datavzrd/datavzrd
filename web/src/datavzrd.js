@@ -459,6 +459,18 @@ function detailFormatter(index, row) {
                   </div>
                 </div>`;
                 html.push(card);
+            } else if (config.format[key] !== undefined) {
+                var data_function = window[config.format[key]];
+                value = data_function(value, row);
+                var card = `<div class="card">
+                   <div class="card-header">
+                     ${key}
+                   </div>
+                   <div class="card-body">
+                    ${value}
+                   </div>
+                 </div>`;
+                html.push(card);
             } else {
                 var card = `<div class="card">
                    <div class="card-header">
