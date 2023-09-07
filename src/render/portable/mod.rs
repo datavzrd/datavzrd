@@ -65,6 +65,30 @@ impl Renderer for ItemRenderer {
                         .size(),
                 )
             })
+            .filter(|(view_name, size)| {
+                size == &0
+                    || (self
+                        .specs
+                        .views
+                        .get(view_name)
+                        .unwrap()
+                        .render_plot
+                        .is_none()
+                        && self
+                            .specs
+                            .views
+                            .get(view_name)
+                            .unwrap()
+                            .render_html
+                            .is_none())
+            })
+            .map(|(view_name, size)| {
+                if size == 0 {
+                    (view_name, "empty".to_string())
+                } else {
+                    (view_name, format!("{size} rows"))
+                }
+            })
             .collect();
         for (name, table) in &self.specs.views {
             let out_path = Path::new(path.as_ref()).join(name);
@@ -302,7 +326,7 @@ fn render_page<P: AsRef<Path>>(
     is_single_page: bool,
     has_excel_sheet: bool,
     webview_host: &str,
-    view_sizes: &HashMap<String, usize>,
+    view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -1223,7 +1247,7 @@ fn render_empty_dataset<P: AsRef<Path>>(
     report_name: &str,
     tables: &[String],
     has_excel_sheet: bool,
-    view_sizes: &HashMap<String, usize>,
+    view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -1582,7 +1606,7 @@ fn render_plot_page<P: AsRef<Path>>(
     default_view: &Option<String>,
     report_name: &String,
     has_excel_sheet: bool,
-    view_sizes: &HashMap<String, usize>,
+    view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
     let mut reader = generate_reader(dataset.separator, &dataset.path)
         .context(format!("Could not read file with path {:?}", &dataset.path))?;
@@ -1690,7 +1714,7 @@ fn render_html_page<P: AsRef<Path>>(
     aux_libraries: &Option<Vec<String>>,
     report_name: &String,
     has_excel_sheet: bool,
-    view_sizes: &HashMap<String, usize>,
+    view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
     let mut reader = generate_reader(dataset.separator, &dataset.path)
         .context(format!("Could not read file with path {:?}", &dataset.path))?;
