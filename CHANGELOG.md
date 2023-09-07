@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.24.1](https://www.github.com/datavzrd/datavzrd/compare/v2.24.0...v2.24.1) (2023-09-07)
+
+
+### Bug Fixes
+
+* Show row count badge only for table views ([#535](https://www.github.com/datavzrd/datavzrd/issues/535)) ([054edbe](https://www.github.com/datavzrd/datavzrd/commit/054edbeff9800eaf5790f8a13dfe9831d32838f6))
+
 ## [2.24.0](https://www.github.com/datavzrd/datavzrd/compare/v2.23.9...v2.24.0) (2023-09-05)
 
 
