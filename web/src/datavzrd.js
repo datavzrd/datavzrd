@@ -553,6 +553,9 @@ export function load() {
         $('.modal').on('shown.bs.modal', function () {
             window.dispatchEvent(new Event('resize'));
         });
+        if ($("#collapseDescription").length > 0) {
+            renderMarkdownDescription();
+        }
         var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
 
         let bs_table_cols = [];
@@ -977,6 +980,9 @@ export function compress_data(data) {
 
 export function load_table(specs, data, multiple_datasets) {
     $("#markdown-btn").click(function() { renderMarkdownDescription(); });
+    if ($("#collapseDescription").length > 0) {
+        renderMarkdownDescription();
+    }
     if (multiple_datasets) {
         specs.datasets = {};
         specs.datasets = JSON.parse(LZString.decompressFromUTF16(data));
