@@ -236,17 +236,16 @@ footer {
 .description-box {
     position: fixed;
     left: 0;
-    top: 3rem;
-    z-index: 9999;
-    max-width: 50vw;
-    margin-left: 7px;
+    top: 2.5rem;
+    z-index: 9998;
+    margin: 0;
 }
 
 #sidebar {
     position: fixed;
     right: 0;
     top: 3rem;
-    z-index: 1;
+    z-index: 9999;
     margin-right: 7px;
 }
 
@@ -270,11 +269,14 @@ footer {
 
 #close-description {
     position: absolute;
-    right: 4px;
+    left: calc(100vw - 72px);
     top: 0;
     padding: 0.2rem;
 }
 
 .description-card-body {
     background-color: rgba(255,255,255,0.75);
+    width: 100vw;
+    border: none;
+    padding: 0;
 }
