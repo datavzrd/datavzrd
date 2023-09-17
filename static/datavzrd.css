@@ -280,3 +280,8 @@ footer {
     border: none;
     padding: 0;
 }
+
+#innerDescription {
+    margin: 0 auto;
+    max-width: 800px;
+}
