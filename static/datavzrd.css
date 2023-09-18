@@ -45,6 +45,14 @@
     overflow: visible !important;
 }
 
+.fixed-top {
+    background-color: rgba(255,255,255,0.75);
+}
+
+.navbar-nav.mr-auto.breadcrumb {
+    background-color: transparent;
+}
+
 .table-container {
     display: none;
     font-size: 0.8rem;
