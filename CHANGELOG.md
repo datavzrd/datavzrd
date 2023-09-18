@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.24.2](https://www.github.com/datavzrd/datavzrd/compare/v2.24.1...v2.24.2) (2023-09-18)
+
+
+### Bug Fixes
+
+* Remove duplicated word rows ([#540](https://www.github.com/datavzrd/datavzrd/issues/540)) ([f3772d1](https://www.github.com/datavzrd/datavzrd/commit/f3772d18f7a1344359c5a97b3b91240dd4ea1393))
+
 ### [2.24.1](https://www.github.com/datavzrd/datavzrd/compare/v2.24.0...v2.24.1) (2023-09-07)
 
 
