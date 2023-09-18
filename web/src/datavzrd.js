@@ -553,6 +553,9 @@ export function load() {
         $('.modal').on('shown.bs.modal', function () {
             window.dispatchEvent(new Event('resize'));
         });
+        if ($("#collapseDescription").length > 0) {
+            renderMarkdownDescription();
+        }
         var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
 
         let bs_table_cols = [];
@@ -663,7 +666,7 @@ export function load() {
 
         var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2;
         if (config.is_single_page) {
-            header_height += 50;
+            header_height += 70;
         }
         $('th').css("height", header_height);
 
@@ -977,6 +980,9 @@ export function compress_data(data) {
 
 export function load_table(specs, data, multiple_datasets) {
     $("#markdown-btn").click(function() { renderMarkdownDescription(); });
+    if ($("#collapseDescription").length > 0) {
+        renderMarkdownDescription();
+    }
     if (multiple_datasets) {
         specs.datasets = {};
         specs.datasets = JSON.parse(LZString.decompressFromUTF16(data));
