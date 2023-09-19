@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.25.0](https://www.github.com/datavzrd/datavzrd/compare/v2.24.1...v2.25.0) (2023-09-18)
+
+
+### Features
+
+* Show description by default with higher z-index and lower background opacity ([#539](https://www.github.com/datavzrd/datavzrd/issues/539)) ([21fc2b7](https://www.github.com/datavzrd/datavzrd/commit/21fc2b791b886df0127ed77485348ade6f22a2ae))
+
+
+### Bug Fixes
+
+* Remove duplicated word rows ([#540](https://www.github.com/datavzrd/datavzrd/issues/540)) ([f3772d1](https://www.github.com/datavzrd/datavzrd/commit/f3772d18f7a1344359c5a97b3b91240dd4ea1393))
+
 ### [2.24.1](https://www.github.com/datavzrd/datavzrd/compare/v2.24.0...v2.24.1) (2023-09-07)
 
 
