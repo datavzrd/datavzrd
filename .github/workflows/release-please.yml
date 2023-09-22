@@ -85,7 +85,7 @@ jobs:
             cd view
             git add static/${{ needs.release-please.outputs.tag_name }}
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git config --global user.name "github-actions[bot]"
+            git config --global user.name "johanneskoester"
             git commit -m "Release bundle.js for ${{ needs.release-please.outputs.tag_name }}"
             git push https://$USERNAME:$REPO_KEY@github.com/datavzrd/view.git
           env:
