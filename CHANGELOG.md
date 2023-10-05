@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.26.0](https://www.github.com/datavzrd/datavzrd/compare/v2.25.0...v2.26.0) (2023-10-05)
+
+
+### Features
+
+* Allow quick heatmap defintions via vega-lite type ([#548](https://www.github.com/datavzrd/datavzrd/issues/548)) ([15e721a](https://www.github.com/datavzrd/datavzrd/commit/15e721a8bac8e6eda4a0e52a923954c36dd8a8be))
+
 ## [2.25.0](https://www.github.com/datavzrd/datavzrd/compare/v2.24.1...v2.25.0) (2023-09-18)
 
 
