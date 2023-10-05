@@ -1106,6 +1106,7 @@ impl JavascriptHeatmapConfig {
             .as_ref()
             .map(|custom_content| JavascriptFunction(custom_content.to_owned()).name());
         let js_heatmap = Heatmap {
+            vega_type: None,
             scale_type: heatmap.scale_type,
             clamp: heatmap.clamp,
             color_scheme: heatmap.color_scheme.clone(),
