@@ -650,6 +650,17 @@ impl Heatmap {
             };
             self.domain = Some(domain);
         }
+        match self.vega_type {
+            Some(VegaType::Nominal) | Some(VegaType::Ordinal) => {
+                self.scale_type = ScaleType::Ordinal;
+                self.color_scheme = "category20".to_string();
+            }
+            Some(VegaType::Quantitative) => {
+                self.scale_type = ScaleType::Linear;
+                self.color_range = vec!["#bed8ec".to_string(), "#125ca4".to_string()];
+            }
+            _ => {}
+        }
         Ok(())
     }
 }
@@ -755,6 +766,8 @@ fn default_clamp() -> bool {
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct Heatmap {
+    #[serde(default, rename = "type")]
+    pub(crate) vega_type: Option<VegaType>,
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: ScaleType,
     #[serde(default = "default_clamp")]
@@ -796,6 +809,15 @@ pub(crate) enum ScaleType {
     Band,
     Point,
     #[default]
+    None,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum VegaType {
+    Nominal,
+    Ordinal,
+    Quantitative,
     None,
 }
 
@@ -1161,6 +1183,7 @@ mod tests {
                         plot: Some(PlotSpec {
                             tick_plot: None,
                             heatmap: Some(Heatmap {
+                                vega_type: None,
                                 scale_type: ScaleType::Ordinal,
                                 clamp: true,
                                 color_scheme: "category20".to_string(),
