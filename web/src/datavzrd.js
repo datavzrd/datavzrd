@@ -44,11 +44,10 @@ function createShareURL(index, webhost_url) {
     delete data["share"];
     var c = JSON.parse(JSON.stringify(config));
     c["data"] = data;
-    c["datavzrd_version"] = $("#datavzrd-version").text();
     const packer = new jsonm.Packer();
     let packedMessage = packer.pack(c);
     let compressed = LZString.compressToEncodedURIComponent(JSON.stringify(packedMessage))
-    let url = `${webhost_url}?config=${compressed}`;
+    let url = `${webhost_url}?config=${compressed}&version=${$("#datavzrd-version").text()}`;
     return url;
 }
 
