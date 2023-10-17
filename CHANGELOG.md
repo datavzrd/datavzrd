@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.27.0](https://www.github.com/datavzrd/datavzrd/compare/v2.26.0...v2.27.0) (2023-10-17)
+
+
+### Features
+
+* Add special handling for ellipsis: 0 ([#553](https://www.github.com/datavzrd/datavzrd/issues/553)) ([c8828c2](https://www.github.com/datavzrd/datavzrd/commit/c8828c2464ef333ec114a050df74a06c43ae4a9b))
+
 ## [2.26.0](https://www.github.com/datavzrd/datavzrd/compare/v2.25.0...v2.26.0) (2023-10-05)
 
 
