@@ -537,8 +537,8 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
         }
     }
 
-    $('[data-toggle="popover"]').popover()
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="popover"]').popover({ sanitizeFn: function (content) { return content; } })
+    $('[data-toggle="tooltip"]').tooltip({ sanitizeFn: function (content) { return content; } })
 }
 
 export function load() {
@@ -547,10 +547,10 @@ export function load() {
         $('.loading').hide();
         $('#pagination').show();
         $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip({ sanitizeFn: function (content) { return content; } })
         });
         $(function () {
-            $('[data-toggle="popover"]').popover()
+            $('[data-toggle="popover"]').popover({ sanitizeFn: function (content) { return content; } })
         });
         $('.modal').on('shown.bs.modal', function () {
             window.dispatchEvent(new Event('resize'));
@@ -887,8 +887,9 @@ export function load() {
                             });
                         })
                     } else {
-                        if(!reset){
-                            $(`table > thead > tr th:nth-child(${index})`).append(`<input class="form-control form-control-sm" id="filter-${index}" data-title="${title}" placeholder="Filter...">`);
+                        if(!reset) {
+                            $(`table > thead > tr th:nth-child(${index})`).append(`<div data-toggle="popover" data-trigger="hover click focus" data-html="true" data-content="<div style='width: 20px; height: 30px;'><input class='form-control form-control-sm' id='filter-${index}' data-title='${title}' placeholder='Filter...'></div>">Bla</div>`);
+                            //$(`table > thead > tr th:nth-child(${index})`).append(`<div data-toggle="popover" data-trigger="hover click focus" data-html="true" data-content="<span style='background-color:red;padding:25px;'>Parsjdebue</span>">Bla</div>`);
                             $(`#filter-${index}`).on('input', function(event) {
                                 filters[event.target.dataset.title] = $(`#filter-${index}`).val();
                                 $('#table').bootstrapTable('filterBy', {"":""}, {
