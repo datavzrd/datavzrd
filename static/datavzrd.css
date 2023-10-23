@@ -39,6 +39,8 @@
 
 .sym {
     cursor: pointer;
+    display: inline;
+    color: #007bff;
 }
 
 .fixed-table-body {

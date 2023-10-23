@@ -888,13 +888,15 @@ export function load() {
                         })
                     } else {
                         if(!reset) {
-                            $(`table > thead > tr th:nth-child(${index})`).append(`<div data-toggle="popover" data-trigger="hover click focus" data-html="true" data-content="<div style='width: 20px; height: 30px;'><input class='form-control form-control-sm' id='filter-${index}' data-title='${title}' placeholder='Filter...'></div>">Bla</div>`);
-                            //$(`table > thead > tr th:nth-child(${index})`).append(`<div data-toggle="popover" data-trigger="hover click focus" data-html="true" data-content="<span style='background-color:red;padding:25px;'>Parsjdebue</span>">Bla</div>`);
-                            $(`#filter-${index}`).on('input', function(event) {
-                                filters[event.target.dataset.title] = $(`#filter-${index}`).val();
-                                $('#table').bootstrapTable('filterBy', {"":""}, {
-                                    'filterAlgorithm': customFilter
-                                })
+                            let search_icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
+                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title}' placeholder='Filter...'>"> ${search_icon}</div>`);
+                            $(`#filter-${index}-container`).on('click', function (e) {
+                                $(`#filter-${index}`).on('input', function(event) {
+                                    filters[event.target.dataset.title] = $(`#filter-${index}`).val();
+                                    $('#table').bootstrapTable('filterBy', {"":""}, {
+                                        'filterAlgorithm': customFilter
+                                    })
+                                });
                             });
                         }
                     }
