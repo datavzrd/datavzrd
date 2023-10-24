@@ -89,4 +89,5 @@ jobs:
             destination-github-username: 'datavzrd'
             destination-repository-name: 'view'
             target-branch: main
+            commit-message: Add datavzrd ${{ needs.release-please.outputs.tag_name }} bundle.js
             target-directory: static/${{ needs.release-please.outputs.tag_name }}/
