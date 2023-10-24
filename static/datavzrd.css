@@ -136,6 +136,7 @@ th .th-inner {
     width: 1em;
     overflow: visible !important;
     transform-origin: top left;
+    margin-bottom: 5px;
 }
 
 #vis-container {
@@ -162,10 +163,8 @@ th .th-inner {
 }
 
 .form-control {
-    height: 40px;
+    height: 35px;
     border: none !important;
-    margin-bottom: 10px;
-    margin-left: 2px;
     width: 5em;
 }
 
