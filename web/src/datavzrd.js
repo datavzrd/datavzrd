@@ -537,8 +537,12 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
         }
     }
 
-    $('[data-toggle="popover"]').popover({ sanitizeFn: function (content) { return content; } })
-    $('[data-toggle="tooltip"]').tooltip({ sanitizeFn: function (content) { return content; } })
+    // $('[data-toggle="popover"]').popover({ sanitizeFn: function (content) { return content; } })
+    // $('[data-toggle="tooltip"]').tooltip({ sanitizeFn: function (content) { return content; } })
+
+    for (var i in displayed_columns) {
+        $(`#filter-${i}-container`).popover('update');
+    }
 }
 
 export function load() {
