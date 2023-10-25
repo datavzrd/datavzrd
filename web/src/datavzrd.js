@@ -875,7 +875,11 @@ export function load() {
                         }
                         var opt = {"actions": false};
                         $(`#filter-${index}-container`).on('click', function (e) {
-                            vegaEmbed(`#brush-${e.currentTarget.dataset.brush}`, JSON.parse(e.currentTarget.dataset.s), opt).then(({spec, view}) => {
+                            var b_specs = JSON.parse(e.currentTarget.dataset.s);
+                            if (filter_boundaries[b_specs.name] != undefined) {
+                                b_specs.params[0].value = {"x": filter_boundaries[b_specs.name].value};
+                            }
+                            vegaEmbed(`#brush-${e.currentTarget.dataset.brush}`, b_specs, opt).then(({spec, view}) => {
                                 view.addSignalListener('selection', function(name, value) {
                                     filter_boundaries[spec.name] = value;
                                 });
