@@ -537,8 +537,8 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
         }
     }
 
-    // $('[data-toggle="popover"]').popover({ sanitizeFn: function (content) { return content; } })
-    // $('[data-toggle="tooltip"]').tooltip({ sanitizeFn: function (content) { return content; } })
+    $('[data-toggle="popover"]').popover({ sanitizeFn: function (content) { return content; } })
+    $('[data-toggle="tooltip"]').tooltip({ sanitizeFn: function (content) { return content; } })
 
     for (var i in displayed_columns) {
         $(`#filter-${i}-container`).popover('update');
@@ -871,10 +871,10 @@ export function load() {
                         }
                         if(!reset) {
                             let search_icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
-                            $(`table > thead > tr th:nth-child(${index})  > div.th-inner`).append(`<div class="sym" data-s='${JSON.stringify(s)}' data-brush="${tick_brush}" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="<div class='filter-brush-container'><div class='filter-brush ${brush_class}' id='brush-${tick_brush}'></div></div>"> ${search_icon}</div>`);
+                            $(`table > thead > tr th:nth-child(${index})  > div.th-inner`).append(`<div class="sym" data-s='${JSON.stringify(s)}' data-brush="${tick_brush}" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<div class='filter-brush-container'><div class='filter-brush ${brush_class}' id='brush-${tick_brush}'></div></div>"> ${search_icon}</div>`);
                         }
                         var opt = {"actions": false};
-                        $(`#filter-${index}-container`).on('mouseover', function (e) {
+                        $(`#filter-${index}-container`).on('click', function (e) {
                             vegaEmbed(`#brush-${e.currentTarget.dataset.brush}`, JSON.parse(e.currentTarget.dataset.s), opt).then(({spec, view}) => {
                                 view.addSignalListener('selection', function(name, value) {
                                     filter_boundaries[spec.name] = value;
@@ -898,7 +898,7 @@ export function load() {
                     } else {
                         if(!reset) {
                             let search_icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
-                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title}' placeholder='Filter...'>"> ${search_icon}</div>`);
+                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title}' placeholder='Filter...'>"> ${search_icon}</div>`);
                             $(`#filter-${index}-container`).on('click', function (e) {
                                 $(`#filter-${index}`).on('input', function(event) {
                                     filters[event.target.dataset.title] = $(`#filter-${index}`).val();
@@ -907,6 +907,11 @@ export function load() {
                                     })
                                 });
                             });
+                            $(`#filter-${index}-container`).on('inserted.bs.popover', function (e) {
+                                if (filters[e.currentTarget.dataset.columnTitle] != undefined) {
+                                    $(`#filter-${index}`).val(filters[e.currentTarget.dataset.columnTitle]);
+                                }
+                            })
                         }
                     }
                     tick_brush++;
