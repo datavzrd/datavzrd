@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.28.0](https://www.github.com/datavzrd/datavzrd/compare/v2.27.0...v2.28.0) (2023-10-25)
+
+
+### Features
+
+* Move filter mechanism into popover ([#561](https://www.github.com/datavzrd/datavzrd/issues/561)) ([dcd310e](https://www.github.com/datavzrd/datavzrd/commit/dcd310e78f213a6d0ad18ce387128c7c7c5a8676))
+
 ## [2.27.0](https://www.github.com/datavzrd/datavzrd/compare/v2.26.0...v2.27.0) (2023-10-17)
 
 
