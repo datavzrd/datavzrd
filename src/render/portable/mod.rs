@@ -6,7 +6,7 @@ use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
-use crate::spec::LinkToUrlSpec;
+use crate::spec::{AdditionalColumnSpec, LinkToUrlSpec};
 use crate::spec::{
     BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
     RenderColumnSpec, ScaleType, TickPlot,
@@ -265,6 +265,7 @@ impl Renderer for ItemRenderer {
                         &dataset.path,
                         dataset.separator,
                         table_specs,
+                        &table.render_table.as_ref().unwrap().additional_columns,
                         additional_headers,
                         &table.render_table.as_ref().unwrap().headers,
                         is_single_page,
@@ -649,6 +650,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     csv_path: &Path,
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
+    additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
     additional_headers: Option<Vec<StringRecord>>,
     header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
@@ -669,6 +671,7 @@ fn render_table_javascript<P: AsRef<Path>>(
 
     let config = JavascriptConfig::from_column_config(
         render_columns,
+        additional_columns,
         is_single_page,
         page_size,
         titles,
@@ -840,6 +843,7 @@ impl JavascriptConfig {
     #[allow(clippy::too_many_arguments)]
     fn from_column_config(
         config: &HashMap<String, RenderColumnSpec>,
+        additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
         is_single_page: bool,
         page_size: usize,
         columns: &[String],
@@ -866,16 +870,18 @@ impl JavascriptConfig {
             webview_host: webview_host.to_string(),
             is_single_page,
             page_size,
-            columns: columns.iter().map(|c| c.to_string()).collect(),
+            columns: columns.iter().map(|c| c.to_string()).chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).keys().map(|c| c.to_string())).collect(),
             displayed_columns: columns
                 .iter()
                 .map(|c| c.to_string())
                 .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Normal)
+                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(k,v)| v.display_mode == DisplayMode::Normal).map(|(k,_)| k.to_string()))
                 .collect(),
             hidden_columns: columns
                 .iter()
                 .map(|c| c.to_string())
                 .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Hidden)
+                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(k,v)| v.display_mode == DisplayMode::Hidden).map(|(k,_)| k.to_string()))
                 .collect(),
             displayed_numeric_columns: classify_table(csv_path, separator, header_row_length)
                 .unwrap()
@@ -906,6 +912,7 @@ impl JavascriptConfig {
                 .iter()
                 .filter(|(_, k)| k.custom_plot.is_some())
                 .map(|(k, _)| k.to_string())
+                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(k,v)| v.custom_plot.is_some()).map(|(k,_)| k.to_string()))
                 .collect(),
             links: config
                 .iter()
