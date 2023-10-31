@@ -946,6 +946,7 @@ impl JavascriptConfig {
                 .iter()
                 .filter(|(_, v)| v.link_to_url.is_some())
                 .map(|(k, _)| k.to_string())
+                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(_,v)| v.link_to_url.is_some()).map(|(k,_)| k.to_string()))
                 .collect(),
             column_config: config
                 .iter()
@@ -1081,6 +1082,20 @@ impl JavascriptConfig {
                         link: link_spec.to_owned(),
                     }).collect(),
                 })
+                .chain(
+                    additional_columns
+                        .as_ref()
+                        .unwrap_or(&HashMap::new())
+                        .iter()
+                        .filter(|(_,v)| v.link_to_url.is_some())
+                        .map(|(k, v)| JavascriptLinkConfig {
+                            title: k.to_string(),
+                            links: v.link_to_url.as_ref().unwrap().iter().map(|(link_name, link_spec)| JavascriptLink {
+                                name: link_name.to_string(),
+                                link: link_spec.to_owned(),
+                            }).collect(),
+                        })
+                )
                 .collect(),
             ellipsis: config
                 .iter()

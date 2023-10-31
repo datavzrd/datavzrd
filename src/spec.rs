@@ -388,6 +388,8 @@ pub(crate) struct AdditionalColumnSpec {
     pub(crate) display_mode: DisplayMode,
     #[serde(default)]
     pub(crate) custom_plot: Option<CustomPlot>,
+    #[serde(default)]
+    pub(crate) link_to_url: Option<HashMap<String, LinkToUrlSpec>>,
 }
 
 fn default_value_function() -> String {
