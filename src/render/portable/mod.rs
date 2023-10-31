@@ -688,7 +688,8 @@ fn render_table_javascript<P: AsRef<Path>>(
         header_specs,
     );
 
-    let custom_plot_config = CustomPlotsConfig::from_column_config(render_columns, additional_columns, view);
+    let custom_plot_config =
+        CustomPlotsConfig::from_column_config(render_columns, additional_columns, view);
     let header_config = HeaderConfig::from_headers(header_specs, &titles, additional_headers);
 
     context.insert("config", &config);
@@ -710,7 +711,11 @@ fn render_table_javascript<P: AsRef<Path>>(
 struct CustomPlotsConfig(Vec<CustomPlotConfig>);
 
 impl CustomPlotsConfig {
-    fn from_column_config(config: &HashMap<String, RenderColumnSpec>, additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>, view: &str) -> Self {
+    fn from_column_config(
+        config: &HashMap<String, RenderColumnSpec>,
+        additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
+        view: &str,
+    ) -> Self {
         CustomPlotsConfig(
             config
                 .iter()
@@ -735,7 +740,7 @@ impl CustomPlotsConfig {
                         .as_ref()
                         .unwrap_or(&HashMap::new())
                         .iter()
-                        .filter(|(_,v)| v.custom_plot.is_some())
+                        .filter(|(_, v)| v.custom_plot.is_some())
                         .map(|(k, v)| {
                             let mut custom_plot = v.custom_plot.as_ref().unwrap().to_owned();
                             custom_plot.read_schema().unwrap();
@@ -750,7 +755,7 @@ impl CustomPlotsConfig {
                                 data_function: JavascriptFunction(custom_plot.plot_data).name(),
                                 vega_controls: custom_plot.vega_controls,
                             }
-                        })
+                        }),
                 )
                 .collect(),
         )
