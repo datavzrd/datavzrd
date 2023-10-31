@@ -565,14 +565,13 @@ export function load() {
         var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
 
         for (row of decompressed) {
+            var row_with_keys = Object.fromEntries(config.columns.map((k, i) => [k, row[i]]));
             Object.keys(config.additional_colums).forEach(function(column) {
                 let value_function = window[config.additional_colums[column]];
-                let new_value = value_function(row);
+                let new_value = value_function(row_with_keys);
                 row.push(new_value);
             })
         }
-
-        console.log(decompressed);
 
         let bs_table_cols = [];
 
