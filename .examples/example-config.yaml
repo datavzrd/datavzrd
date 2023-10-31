@@ -27,6 +27,10 @@ views:
       This table contains *all* winning oscars for best actress and best actor.
     page-size: 25
     render-table:
+      add_columns:
+        test_column:
+          value: |
+            function(row) { return row.toString() }
       columns:
         index(0):
           display-mode: hidden

@@ -379,16 +379,19 @@ pub(crate) struct RenderTableSpecs {
     pub(crate) headers: Option<HashMap<u32, HeaderSpecs>>,
 }
 
-
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct AdditionalColumnSpec {
-    #[serde(default)]
-    pub(crate) value: Option<String>,
+    #[serde(default = "default_value_function")]
+    pub(crate) value: String,
     #[serde(default)]
     pub(crate) display_mode: DisplayMode,
     #[serde(default)]
     pub(crate) custom_plot: Option<CustomPlot>,
+}
+
+fn default_value_function() -> String {
+    String::from("function(row) { return '' }")
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]

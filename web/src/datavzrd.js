@@ -564,6 +564,16 @@ export function load() {
         }
         var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
 
+        for (row of decompressed) {
+            Object.keys(config.additional_colums).forEach(function(column) {
+                let value_function = window[config.additional_colums[column]];
+                let new_value = value_function(row);
+                row.push(new_value);
+            })
+        }
+
+        console.log(decompressed);
+
         let bs_table_cols = [];
 
         if (!config.detail_mode && config.header_label_length > 0) {

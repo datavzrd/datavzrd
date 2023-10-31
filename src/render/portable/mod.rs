@@ -275,7 +275,12 @@ impl Renderer for ItemRenderer {
                         debug,
                         name,
                     )?;
-                    render_custom_javascript_functions(&out_path, table_specs, debug)?;
+                    render_custom_javascript_functions(
+                        &out_path,
+                        table_specs,
+                        &table.render_table.as_ref().unwrap().additional_columns,
+                        debug,
+                    )?;
                     render_plots(
                         &out_path,
                         &dataset.path,
@@ -837,6 +842,7 @@ struct JavascriptConfig {
     link_urls: Vec<JavascriptLinkConfig>,
     ellipsis: Vec<JavascriptEllipsisConfig>,
     format: HashMap<String, String>,
+    additional_colums: HashMap<String, String>,
 }
 
 impl JavascriptConfig {
@@ -875,13 +881,13 @@ impl JavascriptConfig {
                 .iter()
                 .map(|c| c.to_string())
                 .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Normal)
-                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(k,v)| v.display_mode == DisplayMode::Normal).map(|(k,_)| k.to_string()))
+                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(_,v)| v.display_mode == DisplayMode::Normal).map(|(k,_)| k.to_string()))
                 .collect(),
             hidden_columns: columns
                 .iter()
                 .map(|c| c.to_string())
                 .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Hidden)
-                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(k,v)| v.display_mode == DisplayMode::Hidden).map(|(k,_)| k.to_string()))
+                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(_,v)| v.display_mode == DisplayMode::Hidden).map(|(k,_)| k.to_string()))
                 .collect(),
             displayed_numeric_columns: classify_table(csv_path, separator, header_row_length)
                 .unwrap()
@@ -912,7 +918,7 @@ impl JavascriptConfig {
                 .iter()
                 .filter(|(_, k)| k.custom_plot.is_some())
                 .map(|(k, _)| k.to_string())
-                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(k,v)| v.custom_plot.is_some()).map(|(k,_)| k.to_string()))
+                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(_,v)| v.custom_plot.is_some()).map(|(k,_)| k.to_string()))
                 .collect(),
             links: config
                 .iter()
@@ -930,6 +936,13 @@ impl JavascriptConfig {
                         ),
                     )
                 })
+                .chain(
+            additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, _)| (k.to_owned(), JavascriptColumnConfig {
+                label: None,
+                is_float: false,
+                precision: 0
+            }))
+            )
                 .collect(),
             header_label_length,
             ticks: config
@@ -1060,6 +1073,7 @@ impl JavascriptConfig {
                 .filter(|(_, k)| k.custom.is_some())
                 .map(|(k, v)| (k.to_owned(), JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).name()))
                 .collect(),
+            additional_colums: additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, v)| (k.to_owned(), JavascriptFunction(v.value.to_string()).name())).collect(),
         }
     }
 }
@@ -1194,6 +1208,7 @@ impl JavascriptFunction {
 fn render_custom_javascript_functions<P: AsRef<Path>>(
     output_path: P,
     render_columns: &HashMap<String, RenderColumnSpec>,
+    additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
     debug: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
@@ -1231,6 +1246,13 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                     JavascriptFunction(v.custom_content.as_ref().unwrap().to_owned())
                         .to_javascript_function(k)
                 }),
+        )
+        .chain(
+            additional_columns
+                .as_ref()
+                .unwrap_or(&HashMap::new())
+                .iter()
+                .map(|(k, v)| JavascriptFunction(v.value.to_string()).to_javascript_function(k)),
         )
         .collect_vec();
 
