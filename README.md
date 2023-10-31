@@ -171,10 +171,11 @@ views:
 
 `render-table` contains definitions for a table view
 
-| keyword                | explanation                                   |
-|------------------------|-----------------------------------------------|
-| [columns](#columns)    | Configuration of columns                      |
-| [headers](#headers)    | Configuration of the additional headers       |
+| keyword                        | explanation                                         |
+|--------------------------------|-----------------------------------------------------|
+| [columns](#columns)            | Configuration of columns                            |
+| [add-columns](#add-columns)    | Configuration of additionally generated columns     |
+| [headers](#headers)            | Configuration of the additional headers             |
 
 ### columns
 
