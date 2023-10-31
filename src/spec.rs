@@ -1021,6 +1021,7 @@ mod tests {
             description: None,
             render_table: Some(RenderTableSpecs {
                 columns: HashMap::from([("x".to_string(), expected_render_columns)]),
+                additional_columns: None,
                 headers: None,
             }),
             render_plot: None,
@@ -1197,6 +1198,7 @@ mod tests {
             description: None,
             render_table: Some(RenderTableSpecs {
                 columns: Default::default(),
+                additional_columns: None,
                 headers: Some(HashMap::from([(
                     1_u32,
                     HeaderSpecs {
@@ -1637,6 +1639,7 @@ mod tests {
                         Default::default(),
                     ),
                 ]),
+                additional_columns: None,
                 headers: None,
             }),
             render_plot: None,
