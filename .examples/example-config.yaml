@@ -29,7 +29,6 @@ views:
     render-table:
       add-columns:
         birth_season:
-          display-mode: detail
           value: |
             function getSeasonEmoji(row) {
                 var month = row.birth_mo;
