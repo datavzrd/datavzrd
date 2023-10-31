@@ -373,7 +373,7 @@ pub(crate) struct ItemSpecs {
 pub(crate) struct RenderTableSpecs {
     #[serde(default)]
     pub(crate) columns: HashMap<String, RenderColumnSpec>,
-    #[serde(default, rename = "add_columns")]
+    #[serde(default, rename = "add-columns")]
     pub(crate) additional_columns: Option<HashMap<String, AdditionalColumnSpec>>,
     #[serde(default)]
     pub(crate) headers: Option<HashMap<u32, HeaderSpecs>>,
