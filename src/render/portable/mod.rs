@@ -893,6 +893,21 @@ impl JavascriptConfig {
         } else {
             0
         };
+        let column_display_mode_filter = |dp_mode: DisplayMode| -> Vec<String> {
+            columns
+                .iter()
+                .map(|c| c.to_string())
+                .filter(|c| config.get(c).unwrap().display_mode == dp_mode)
+                .chain(
+                    additional_columns
+                        .as_ref()
+                        .unwrap_or(&HashMap::new())
+                        .iter()
+                        .filter(|(_, v)| v.display_mode == dp_mode)
+                        .map(|(k, _)| k.to_string()),
+                )
+                .collect()
+        };
         Self {
             detail_mode: config
                 .iter()
@@ -904,18 +919,8 @@ impl JavascriptConfig {
             is_single_page,
             page_size,
             columns: columns.iter().map(|c| c.to_string()).chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).keys().map(|c| c.to_string())).collect(),
-            displayed_columns: columns
-                .iter()
-                .map(|c| c.to_string())
-                .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Normal)
-                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(_,v)| v.display_mode == DisplayMode::Normal).map(|(k,_)| k.to_string()))
-                .collect(),
-            hidden_columns: columns
-                .iter()
-                .map(|c| c.to_string())
-                .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Hidden)
-                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(_,v)| v.display_mode == DisplayMode::Hidden).map(|(k,_)| k.to_string()))
-                .collect(),
+            displayed_columns: column_display_mode_filter(DisplayMode::Normal),
+            hidden_columns: column_display_mode_filter(DisplayMode::Hidden),
             displayed_numeric_columns: classify_table(csv_path, separator, header_row_length)
                 .unwrap()
                 .iter()
