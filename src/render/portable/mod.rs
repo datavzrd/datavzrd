@@ -946,18 +946,8 @@ impl JavascriptConfig {
                 .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
                 .map(|(k, _)| k.to_string())
                 .collect(),
-            custom_plot_titles: config
-                .iter()
-                .filter(|(_, k)| k.custom_plot.is_some())
-                .map(|(k, _)| k.to_string())
-                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(_,v)| v.custom_plot.is_some()).map(|(k,_)| k.to_string()))
-                .collect(),
-            links: config
-                .iter()
-                .filter(|(_, v)| v.link_to_url.is_some())
-                .map(|(k, _)| k.to_string())
-                .chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().filter(|(_,v)| v.link_to_url.is_some()).map(|(k,_)| k.to_string()))
-                .collect(),
+            custom_plot_titles: filter_columns_for(config, additional_columns, |(_, k)| k.custom_plot.is_some(), |(_, k)| k.custom_plot.is_some()),
+            links: filter_columns_for(config, additional_columns, |(_, k)| k.link_to_url.is_some(), |(_, k)| k.link_to_url.is_some()),
             column_config: config
                 .iter()
                 .map(|(k, v)| {
@@ -1123,6 +1113,31 @@ impl JavascriptConfig {
             additional_colums: additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, v)| (k.to_owned(), JavascriptFunction(v.value.to_string()).name())).collect(),
         }
     }
+}
+
+fn filter_columns_for<F, G>(
+    config: &HashMap<String, RenderColumnSpec>,
+    additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
+    filter_fn_render_columns: F,
+    filter_fn_additional_columns: G,
+) -> Vec<String>
+where
+    F: Fn(&(&String, &RenderColumnSpec)) -> bool,
+    G: Fn(&(&String, &AdditionalColumnSpec)) -> bool,
+{
+    config
+        .iter()
+        .filter(|(k, v)| filter_fn_render_columns(&(*k, v)))
+        .map(|(k, _)| k.to_string())
+        .chain(
+            additional_columns
+                .as_ref()
+                .unwrap_or(&HashMap::new())
+                .iter()
+                .filter(|(k, v)| filter_fn_additional_columns(&(*k, v)))
+                .map(|(k, _)| k.to_string()),
+        )
+        .collect()
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
