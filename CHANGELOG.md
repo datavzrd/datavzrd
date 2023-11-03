@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.29.0](https://www.github.com/datavzrd/datavzrd/compare/v2.28.0...v2.29.0) (2023-11-03)
+
+
+### Features
+
+* Allow specifying additional columns generated from dataset ([#566](https://www.github.com/datavzrd/datavzrd/issues/566)) ([3ed766a](https://www.github.com/datavzrd/datavzrd/commit/3ed766ad8a4748d5d6acb34423d489ad138a589f))
+
 ## [2.28.0](https://www.github.com/datavzrd/datavzrd/compare/v2.27.0...v2.28.0) (2023-10-25)
 
 
