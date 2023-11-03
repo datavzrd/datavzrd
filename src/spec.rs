@@ -308,6 +308,7 @@ fn default_header_size() -> usize {
 fn default_render_table() -> Option<RenderTableSpecs> {
     Some(RenderTableSpecs {
         columns: HashMap::from([]),
+        additional_columns: None,
         headers: None,
     })
 }
@@ -372,8 +373,27 @@ pub(crate) struct ItemSpecs {
 pub(crate) struct RenderTableSpecs {
     #[serde(default)]
     pub(crate) columns: HashMap<String, RenderColumnSpec>,
+    #[serde(default, rename = "add-columns")]
+    pub(crate) additional_columns: Option<HashMap<String, AdditionalColumnSpec>>,
     #[serde(default)]
     pub(crate) headers: Option<HashMap<u32, HeaderSpecs>>,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+pub(crate) struct AdditionalColumnSpec {
+    #[serde(default = "default_value_function")]
+    pub(crate) value: String,
+    #[serde(default)]
+    pub(crate) display_mode: DisplayMode,
+    #[serde(default)]
+    pub(crate) custom_plot: Option<CustomPlot>,
+    #[serde(default)]
+    pub(crate) link_to_url: Option<HashMap<String, LinkToUrlSpec>>,
+}
+
+fn default_value_function() -> String {
+    String::from("function(row) { return '' }")
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -502,6 +522,7 @@ impl ItemSpecs {
         }
         self.render_table = Some(RenderTableSpecs {
             columns: indexed_keys,
+            additional_columns: self.render_table.clone().unwrap().additional_columns,
             headers: self.render_table.clone().unwrap().headers,
         });
         // Generate default RenderColumnSpecs for columns that are not specified in the config
@@ -1000,6 +1021,7 @@ mod tests {
             description: None,
             render_table: Some(RenderTableSpecs {
                 columns: HashMap::from([("x".to_string(), expected_render_columns)]),
+                additional_columns: None,
                 headers: None,
             }),
             render_plot: None,
@@ -1176,6 +1198,7 @@ mod tests {
             description: None,
             render_table: Some(RenderTableSpecs {
                 columns: Default::default(),
+                additional_columns: None,
                 headers: Some(HashMap::from([(
                     1_u32,
                     HeaderSpecs {
@@ -1616,6 +1639,7 @@ mod tests {
                         Default::default(),
                     ),
                 ]),
+                additional_columns: None,
                 headers: None,
             }),
             render_plot: None,

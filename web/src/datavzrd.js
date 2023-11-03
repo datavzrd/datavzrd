@@ -564,6 +564,15 @@ export function load() {
         }
         var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
 
+        for (row of decompressed) {
+            var row_with_keys = Object.fromEntries(config.columns.map((k, i) => [k, row[i]]));
+            Object.keys(config.additional_colums).forEach(function(column) {
+                let value_function = window[config.additional_colums[column]];
+                let new_value = value_function(row_with_keys);
+                row.push(new_value);
+            })
+        }
+
         let bs_table_cols = [];
 
         if (!config.detail_mode && config.header_label_length > 0) {
@@ -588,10 +597,12 @@ export function load() {
 
                 // Add histogram button
                 let histogram_icon = ` <a class="sym" data-toggle="modal" data-target="#modal_${config.columns.indexOf(column)}" onclick="datavzrd.embedHistogram(show_plot_${config.columns.indexOf(column)}, ${config.columns.indexOf(column)}, plot_${config.columns.indexOf(column)})"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></a>`;
-                title += histogram_icon;
+                if (!config.additional_colums[column]) {
+                    title += histogram_icon;
+                }
 
                 // Add static search if not single page mode
-                if (!config.is_single_page) {
+                if (!config.is_single_page && !config.additional_colums[column]) {
                     title += ` <a class="sym" data-toggle="modal" onclick="datavzrd.embedSearch(${config.columns.indexOf(column)})" data-target="#search"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg></a>`;
                 }
 
@@ -869,7 +880,7 @@ export function load() {
                         if (!has_labels) {
                             brush_class = "no-labels";
                         }
-                        if(!reset) {
+                        if(!reset && !config.additional_colums[title]) {
                             let search_icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
                             $(`table > thead > tr th:nth-child(${index})  > div.th-inner`).append(`<div class="sym" data-s='${JSON.stringify(s)}' data-brush="${tick_brush}" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<div class='filter-brush-container'><div class='filter-brush ${brush_class}' id='brush-${tick_brush}'></div></div>"> ${search_icon}</div>`);
                         }

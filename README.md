@@ -171,10 +171,11 @@ views:
 
 `render-table` contains definitions for a table view
 
-| keyword                | explanation                                   |
-|------------------------|-----------------------------------------------|
-| [columns](#columns)    | Configuration of columns                      |
-| [headers](#headers)    | Configuration of the additional headers       |
+| keyword                        | explanation                                         |
+|--------------------------------|-----------------------------------------------------|
+| [columns](#columns)            | Configuration of columns                            |
+| [add-columns](#add-columns)    | Configuration of additionally generated columns     |
+| [headers](#headers)            | Configuration of the additional headers             |
 
 ### columns
 
@@ -194,6 +195,16 @@ views:
 | precision                    | Allows to specify the precision of floats. It expects an integer specifying the decimal places that will be shown. Values smaller than $1 / (10^{precision})$ will be displayed in scientific notation with the same number of decimal places.                                                                                                                                          | 2       |                           |
 | plot-view-legend             | Specifies whether the column in the plot-view should include a legend or not.                                                                                                                                                                                                                                                                                                           | false   | true, false               |
 
+### add-columns
+
+`add-columns` allows to generate new columns out of the existing dataset.
+
+| keyword                      | explanation                                                                                                                                                                                                                                                                                                                                                                             | default | possible values           |
+|------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|---------------------------|
+| value                        | A javascript function taking a row of the dataset as the parameter that returns the value for the newly generated column. A value named `age` may be accessed in the function via `function my_new_col(row) { return row.age * 2 }` for example.                                                                                                                                          |         |                           |
+| [link-to-url](#link-to-url)  | You can either specify only a single url or key value pairs with a name as the key and the url as the value that will then be accessible via a dropdown.                                                                                                                                                                                                                                |         |                           |
+| [custom-plot](#custom-plot)  | Renders a custom vega-lite plot to the corresponding table cell                                                                                                                                                                                                                                                                                                                         |         |                           |
+| display-mode                 | Allows to hide columns from views by setting this to `hidden` or have a column only in [detail view](https://examples.bootstrap-table.com/#options/detail-view.html#view-source) by setting this to `detail`.                                                                                                                                                                           | normal  | detail, normal, hidden    |
 ### headers
 
 `headers` contains definitions for additional header rows. Each row can be accessed with its index starting at `1` (`0` is the first header row that can't be customized).

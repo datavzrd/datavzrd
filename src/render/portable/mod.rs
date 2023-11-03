@@ -6,7 +6,7 @@ use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
-use crate::spec::LinkToUrlSpec;
+use crate::spec::{AdditionalColumnSpec, LinkToUrlSpec};
 use crate::spec::{
     BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
     RenderColumnSpec, ScaleType, TickPlot,
@@ -265,6 +265,7 @@ impl Renderer for ItemRenderer {
                         &dataset.path,
                         dataset.separator,
                         table_specs,
+                        &table.render_table.as_ref().unwrap().additional_columns,
                         additional_headers,
                         &table.render_table.as_ref().unwrap().headers,
                         is_single_page,
@@ -274,7 +275,12 @@ impl Renderer for ItemRenderer {
                         debug,
                         name,
                     )?;
-                    render_custom_javascript_functions(&out_path, table_specs, debug)?;
+                    render_custom_javascript_functions(
+                        &out_path,
+                        table_specs,
+                        &table.render_table.as_ref().unwrap().additional_columns,
+                        debug,
+                    )?;
                     render_plots(
                         &out_path,
                         &dataset.path,
@@ -649,6 +655,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     csv_path: &Path,
     separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
+    additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
     additional_headers: Option<Vec<StringRecord>>,
     header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
@@ -669,6 +676,7 @@ fn render_table_javascript<P: AsRef<Path>>(
 
     let config = JavascriptConfig::from_column_config(
         render_columns,
+        additional_columns,
         is_single_page,
         page_size,
         titles,
@@ -680,7 +688,8 @@ fn render_table_javascript<P: AsRef<Path>>(
         header_specs,
     );
 
-    let custom_plot_config = CustomPlotsConfig::from_column_config(render_columns, view);
+    let custom_plot_config =
+        CustomPlotsConfig::from_column_config(render_columns, additional_columns, view);
     let header_config = HeaderConfig::from_headers(header_specs, &titles, additional_headers);
 
     context.insert("config", &config);
@@ -702,7 +711,11 @@ fn render_table_javascript<P: AsRef<Path>>(
 struct CustomPlotsConfig(Vec<CustomPlotConfig>);
 
 impl CustomPlotsConfig {
-    fn from_column_config(config: &HashMap<String, RenderColumnSpec>, view: &str) -> Self {
+    fn from_column_config(
+        config: &HashMap<String, RenderColumnSpec>,
+        additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
+        view: &str,
+    ) -> Self {
         CustomPlotsConfig(
             config
                 .iter()
@@ -722,6 +735,28 @@ impl CustomPlotsConfig {
                         vega_controls: custom_plot.vega_controls,
                     }
                 })
+                .chain(
+                    additional_columns
+                        .as_ref()
+                        .unwrap_or(&HashMap::new())
+                        .iter()
+                        .filter(|(_, v)| v.custom_plot.is_some())
+                        .map(|(k, v)| {
+                            let mut custom_plot = v.custom_plot.as_ref().unwrap().to_owned();
+                            custom_plot.read_schema().unwrap();
+                            CustomPlotConfig {
+                                title: k.to_string(),
+                                specs: serde_json::Value::from_str(&custom_plot.schema.unwrap())
+                                    .context(SpecError::CouldNotParse {
+                                        column: k.to_string(),
+                                        view: view.to_string(),
+                                    })
+                                    .unwrap(),
+                                data_function: JavascriptFunction(custom_plot.plot_data).name(),
+                                vega_controls: custom_plot.vega_controls,
+                            }
+                        }),
+                )
                 .collect(),
         )
     }
@@ -834,12 +869,14 @@ struct JavascriptConfig {
     link_urls: Vec<JavascriptLinkConfig>,
     ellipsis: Vec<JavascriptEllipsisConfig>,
     format: HashMap<String, String>,
+    additional_colums: HashMap<String, String>,
 }
 
 impl JavascriptConfig {
     #[allow(clippy::too_many_arguments)]
     fn from_column_config(
         config: &HashMap<String, RenderColumnSpec>,
+        additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
         is_single_page: bool,
         page_size: usize,
         columns: &[String],
@@ -856,6 +893,21 @@ impl JavascriptConfig {
         } else {
             0
         };
+        let column_display_mode_filter = |dp_mode: DisplayMode| -> Vec<String> {
+            columns
+                .iter()
+                .map(|c| c.to_string())
+                .filter(|c| config.get(c).unwrap().display_mode == dp_mode)
+                .chain(
+                    additional_columns
+                        .as_ref()
+                        .unwrap_or(&HashMap::new())
+                        .iter()
+                        .filter(|(_, v)| v.display_mode == dp_mode)
+                        .map(|(k, _)| k.to_string()),
+                )
+                .collect()
+        };
         Self {
             detail_mode: config
                 .iter()
@@ -866,17 +918,9 @@ impl JavascriptConfig {
             webview_host: webview_host.to_string(),
             is_single_page,
             page_size,
-            columns: columns.iter().map(|c| c.to_string()).collect(),
-            displayed_columns: columns
-                .iter()
-                .map(|c| c.to_string())
-                .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Normal)
-                .collect(),
-            hidden_columns: columns
-                .iter()
-                .map(|c| c.to_string())
-                .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Hidden)
-                .collect(),
+            columns: columns.iter().map(|c| c.to_string()).chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).keys().map(|c| c.to_string())).collect(),
+            displayed_columns: column_display_mode_filter(DisplayMode::Normal),
+            hidden_columns: column_display_mode_filter(DisplayMode::Hidden),
             displayed_numeric_columns: classify_table(csv_path, separator, header_row_length)
                 .unwrap()
                 .iter()
@@ -902,16 +946,8 @@ impl JavascriptConfig {
                 .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
                 .map(|(k, _)| k.to_string())
                 .collect(),
-            custom_plot_titles: config
-                .iter()
-                .filter(|(_, k)| k.custom_plot.is_some())
-                .map(|(k, _)| k.to_string())
-                .collect(),
-            links: config
-                .iter()
-                .filter(|(_, v)| v.link_to_url.is_some())
-                .map(|(k, _)| k.to_string())
-                .collect(),
+            custom_plot_titles: filter_columns_for(config, additional_columns, |(_, k)| k.custom_plot.is_some(), |(_, k)| k.custom_plot.is_some()),
+            links: filter_columns_for(config, additional_columns, |(_, k)| k.link_to_url.is_some(), |(_, k)| k.link_to_url.is_some()),
             column_config: config
                 .iter()
                 .map(|(k, v)| {
@@ -923,6 +959,13 @@ impl JavascriptConfig {
                         ),
                     )
                 })
+                .chain(
+            additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, _)| (k.to_owned(), JavascriptColumnConfig {
+                label: None,
+                is_float: false,
+                precision: 0
+            }))
+            )
                 .collect(),
             header_label_length,
             ticks: config
@@ -1039,6 +1082,20 @@ impl JavascriptConfig {
                         link: link_spec.to_owned(),
                     }).collect(),
                 })
+                .chain(
+                    additional_columns
+                        .as_ref()
+                        .unwrap_or(&HashMap::new())
+                        .iter()
+                        .filter(|(_,v)| v.link_to_url.is_some())
+                        .map(|(k, v)| JavascriptLinkConfig {
+                            title: k.to_string(),
+                            links: v.link_to_url.as_ref().unwrap().iter().map(|(link_name, link_spec)| JavascriptLink {
+                                name: link_name.to_string(),
+                                link: link_spec.to_owned(),
+                            }).collect(),
+                        })
+                )
                 .collect(),
             ellipsis: config
                 .iter()
@@ -1053,8 +1110,34 @@ impl JavascriptConfig {
                 .filter(|(_, k)| k.custom.is_some())
                 .map(|(k, v)| (k.to_owned(), JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).name()))
                 .collect(),
+            additional_colums: additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, v)| (k.to_owned(), JavascriptFunction(v.value.to_string()).name())).collect(),
         }
     }
+}
+
+fn filter_columns_for<F, G>(
+    config: &HashMap<String, RenderColumnSpec>,
+    additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
+    filter_fn_render_columns: F,
+    filter_fn_additional_columns: G,
+) -> Vec<String>
+where
+    F: Fn(&(&String, &RenderColumnSpec)) -> bool,
+    G: Fn(&(&String, &AdditionalColumnSpec)) -> bool,
+{
+    config
+        .iter()
+        .filter(|(k, v)| filter_fn_render_columns(&(*k, v)))
+        .map(|(k, _)| k.to_string())
+        .chain(
+            additional_columns
+                .as_ref()
+                .unwrap_or(&HashMap::new())
+                .iter()
+                .filter(|(k, v)| filter_fn_additional_columns(&(*k, v)))
+                .map(|(k, _)| k.to_string()),
+        )
+        .collect()
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
@@ -1187,6 +1270,7 @@ impl JavascriptFunction {
 fn render_custom_javascript_functions<P: AsRef<Path>>(
     output_path: P,
     render_columns: &HashMap<String, RenderColumnSpec>,
+    additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
     debug: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
@@ -1224,6 +1308,13 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                     JavascriptFunction(v.custom_content.as_ref().unwrap().to_owned())
                         .to_javascript_function(k)
                 }),
+        )
+        .chain(
+            additional_columns
+                .as_ref()
+                .unwrap_or(&HashMap::new())
+                .iter()
+                .map(|(k, v)| JavascriptFunction(v.value.to_string()).to_javascript_function(k)),
         )
         .collect_vec();
 
