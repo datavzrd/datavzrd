@@ -928,24 +928,9 @@ impl JavascriptConfig {
                 .filter(|(_, v)| *v)
                 .map(|(k, _)| k)
                 .collect(),
-            tick_titles: config
-                .iter()
-                .filter(|(_, k)| k.plot.is_some())
-                .filter(|(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some())
-                .map(|(k, _)| k.to_string())
-                .collect(),
-            bar_titles: config
-                .iter()
-                .filter(|(_, k)| k.plot.is_some())
-                .filter(|(_, k)| k.plot.as_ref().unwrap().bar_plot.is_some())
-                .map(|(k, _)| k.to_string())
-                .collect(),
-            heatmap_titles: config
-                .iter()
-                .filter(|(_, k)| k.plot.is_some())
-                .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
-                .map(|(k, _)| k.to_string())
-                .collect(),
+            tick_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some()),
+            bar_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().bar_plot.is_some()),
+            heatmap_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().heatmap.is_some()),
             custom_plot_titles: filter_columns_for(config, additional_columns, |(_, k)| k.custom_plot.is_some(), |(_, k)| k.custom_plot.is_some()),
             links: filter_columns_for(config, additional_columns, |(_, k)| k.link_to_url.is_some(), |(_, k)| k.link_to_url.is_some()),
             column_config: config
@@ -1113,6 +1098,21 @@ impl JavascriptConfig {
             additional_colums: additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, v)| (k.to_owned(), JavascriptFunction(v.value.to_string()).name())).collect(),
         }
     }
+}
+
+fn filter_plot_columns<F>(
+    config: &HashMap<String, RenderColumnSpec>,
+    filter_fn_render_columns: F,
+) -> Vec<String>
+where
+    F: Fn(&(&String, &RenderColumnSpec)) -> bool,
+{
+    config
+        .iter()
+        .filter(|(_, k)| k.plot.is_some())
+        .filter(|(k, v)| filter_fn_render_columns(&(*k, v)))
+        .map(|(k, _)| k.to_string())
+        .collect()
 }
 
 fn filter_columns_for<F, G>(
