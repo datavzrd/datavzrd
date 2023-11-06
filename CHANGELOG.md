@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.29.1](https://www.github.com/datavzrd/datavzrd/compare/v2.29.0...v2.29.1) (2023-11-06)
+
+
+### Bug Fixes
+
+* Fix potential wrong ordering of add-columns ([#568](https://www.github.com/datavzrd/datavzrd/issues/568)) ([369059d](https://www.github.com/datavzrd/datavzrd/commit/369059d3ed66434bfb32a1cd5cb4f791efd74176))
+
 ## [2.29.0](https://www.github.com/datavzrd/datavzrd/compare/v2.28.0...v2.29.0) (2023-11-03)
 
 
