@@ -566,11 +566,13 @@ export function load() {
 
         for (row of decompressed) {
             var row_with_keys = Object.fromEntries(config.columns.map((k, i) => [k, row[i]]));
-            Object.keys(config.additional_colums).forEach(function(column) {
-                let value_function = window[config.additional_colums[column]];
-                let new_value = value_function(row_with_keys);
-                row.push(new_value);
-            })
+            for (const column of config.columns) {
+                if (config.additional_colums[column]) {
+                    let value_function = window[config.additional_colums[column]];
+                    let new_value = value_function(row_with_keys);
+                    row.push(new_value);
+                }
+            }
         }
 
         let bs_table_cols = [];
