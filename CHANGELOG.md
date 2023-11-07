@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.30.0](https://www.github.com/datavzrd/datavzrd/compare/v2.29.1...v2.30.0) (2023-11-07)
+
+
+### Features
+
+* Allow custom-content in link-to-url spec ([#572](https://www.github.com/datavzrd/datavzrd/issues/572)) ([41b1a06](https://www.github.com/datavzrd/datavzrd/commit/41b1a0682d38bba7b6edece500c7dcbd9163c475))
+
 ### [2.29.1](https://www.github.com/datavzrd/datavzrd/compare/v2.29.0...v2.29.1) (2023-11-06)
 
 
