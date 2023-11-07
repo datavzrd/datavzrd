@@ -220,7 +220,7 @@ function shortenHeaderRow(row, ellipsis, skip_label) {
 }
 
 
-function linkUrlColumn(ah, dp_columns, columns, title, link_urls, detail_mode, header_label_length) {
+function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content, detail_mode, header_label_length) {
     let index = dp_columns.indexOf(title) + 1;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
@@ -230,15 +230,19 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, detail_mode, h
         function () {
             let row = this.parentElement.dataset.index;
             let value = table_rows[row][title];
+            let shown_value = value;
+            if (custom_content) {
+                shown_value = window[custom_content](value, table_rows[row]);
+            }
             if (link_urls.length == 1) {
                 let link = link_urls[0].link.url.replaceAll("{value}", value);
                 for (const column of columns) {
                     link = link.replaceAll(`{${column}}`, table_rows[row][column]);
                 }
                 if (link_urls[0].link.new_window) {
-                    this.innerHTML = `<a href='${link}' target='_blank' rel='noopener noreferrer' >${value}</a>`;
+                    this.innerHTML = `<a href='${link}' target='_blank' rel='noopener noreferrer' >${shown_value}</a>`;
                 } else {
-                    this.innerHTML = `<a href='${link}'>${value}</a>`;
+                    this.innerHTML = `<a href='${link}'>${shown_value}</a>`;
                 }
             } else {
                 let links = "";
@@ -256,7 +260,7 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, detail_mode, h
                 this.innerHTML = `
                 <div class="btn-group">
                   <button class="btn btn-outline-secondary btn-table btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ${value}
+                    ${shown_value}
                   </button>
                   <div class="dropdown-menu">
                     ${links}
@@ -511,7 +515,7 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 
     for (const o of config.link_urls) {
         if (displayed_columns.includes(o.title)) {
-            linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, config.detail_mode, config.header_label_length);
+            linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, o.custom_content, config.detail_mode, config.header_label_length);
         }
     }
 

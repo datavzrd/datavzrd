@@ -389,7 +389,7 @@ pub(crate) struct AdditionalColumnSpec {
     #[serde(default)]
     pub(crate) custom_plot: Option<CustomPlot>,
     #[serde(default)]
-    pub(crate) link_to_url: Option<HashMap<String, LinkToUrlSpec>>,
+    pub(crate) link_to_url: Option<LinkToUrlSpec>,
 }
 
 fn default_value_function() -> String {
@@ -565,7 +565,7 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) display_mode: DisplayMode,
     #[serde(default)]
-    pub(crate) link_to_url: Option<HashMap<String, LinkToUrlSpec>>,
+    pub(crate) link_to_url: Option<LinkToUrlSpec>,
     #[serde(default)]
     pub(crate) plot: Option<PlotSpec>,
     #[serde(default)]
@@ -595,8 +595,16 @@ impl Default for RenderColumnSpec {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+#[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct LinkToUrlSpec {
+    #[serde(flatten)]
+    pub(crate) entries: HashMap<String, LinkToUrlSpecEntry>,
+    pub(crate) custom_content: Option<String>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+pub(crate) struct LinkToUrlSpecEntry {
     url: String,
     #[serde(default = "default_new_window")]
     new_window: bool,
@@ -976,8 +984,8 @@ mod tests {
         default_links, default_page_size, default_precision, default_render_table,
         default_single_page_threshold, AuxDomainColumns, DatasetSpecs, DisplayMode,
         HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, LinkToUrlSpec,
-        PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, ScaleType,
-        TickPlot,
+        LinkToUrlSpecEntry, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
+        RenderTableSpecs, ScaleType, TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -990,13 +998,16 @@ mod tests {
             custom: None,
             custom_path: None,
             display_mode: DisplayMode::Normal,
-            link_to_url: Some(HashMap::from([(
-                "Rust".to_string(),
-                LinkToUrlSpec {
-                    url: "https://www.rust-lang.org".to_string(),
-                    new_window: true,
-                },
-            )])),
+            link_to_url: Some(LinkToUrlSpec {
+                custom_content: None,
+                entries: HashMap::from([(
+                    "Rust".to_string(),
+                    LinkToUrlSpecEntry {
+                        url: "https://www.rust-lang.org".to_string(),
+                        new_window: true,
+                    },
+                )]),
+            }),
             plot: None,
             custom_plot: None,
             ellipsis: None,

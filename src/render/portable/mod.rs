@@ -6,7 +6,7 @@ use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
-use crate::spec::{AdditionalColumnSpec, LinkToUrlSpec};
+use crate::spec::{AdditionalColumnSpec, LinkToUrlSpecEntry};
 use crate::spec::{
     BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
     RenderColumnSpec, ScaleType, TickPlot,
@@ -1062,10 +1062,11 @@ impl JavascriptConfig {
                 .filter(|(_, v)| v.link_to_url.is_some())
                 .map(|(k, v)| JavascriptLinkConfig {
                     title: k.to_string(),
-                    links: v.link_to_url.as_ref().unwrap().iter().map(|(link_name, link_spec)| JavascriptLink {
+                    links: v.link_to_url.as_ref().unwrap().entries.iter().map(|(link_name, link_spec)| JavascriptLink {
                         name: link_name.to_string(),
                         link: link_spec.to_owned(),
                     }).collect(),
+                    custom_content: v.link_to_url.as_ref().unwrap().custom_content.to_owned().map(|c| JavascriptFunction(c).name()),
                 })
                 .chain(
                     additional_columns
@@ -1075,10 +1076,11 @@ impl JavascriptConfig {
                         .filter(|(_,v)| v.link_to_url.is_some())
                         .map(|(k, v)| JavascriptLinkConfig {
                             title: k.to_string(),
-                            links: v.link_to_url.as_ref().unwrap().iter().map(|(link_name, link_spec)| JavascriptLink {
+                            links: v.link_to_url.as_ref().unwrap().entries.iter().map(|(link_name, link_spec)| JavascriptLink {
                                 name: link_name.to_string(),
                                 link: link_spec.to_owned(),
                             }).collect(),
+                            custom_content: v.link_to_url.as_ref().unwrap().custom_content.to_owned().map(|c| JavascriptFunction(c).name()),
                         })
                 )
                 .collect(),
@@ -1211,12 +1213,13 @@ impl JavascriptHeatmapConfig {
 struct JavascriptLinkConfig {
     title: String,
     links: Vec<JavascriptLink>,
+    custom_content: Option<String>,
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
 struct JavascriptLink {
     name: String,
-    link: LinkToUrlSpec,
+    link: LinkToUrlSpecEntry,
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
@@ -1287,6 +1290,24 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
         .map(|(k, v)| {
             JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).to_javascript_function(k)
         })
+        .chain(
+            render_columns
+                .iter()
+                .filter(|(_, k)| k.link_to_url.is_some())
+                .filter(|(_, k)| k.link_to_url.as_ref().unwrap().custom_content.is_some())
+                .map(|(k, v)| {
+                    JavascriptFunction(
+                        v.link_to_url
+                            .as_ref()
+                            .unwrap()
+                            .custom_content
+                            .as_ref()
+                            .unwrap()
+                            .to_string(),
+                    )
+                    .to_javascript_function(k)
+                }),
+        )
         .chain(
             render_columns
                 .iter()
