@@ -1197,6 +1197,7 @@ impl JavascriptHeatmapConfig {
             color_scheme: heatmap.color_scheme.clone(),
             color_range: heatmap.color_range.clone(),
             domain: heatmap.domain.clone(),
+            domain_mid: heatmap.domain_mid,
             aux_domain_columns: heatmap.aux_domain_columns.clone(),
             custom_content: js_function_name,
         };

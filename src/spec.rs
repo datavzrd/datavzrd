@@ -3,6 +3,7 @@ use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
     MissingLinkoutColumn, PlotAndTablePresentConfiguration, ValueOutsideDomain,
+    WrongColumnTypeMidDomain, WrongDomainLengthWithMidDomain,
 };
 use crate::utils::column_position;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -152,6 +153,22 @@ impl ItemsSpec {
                             } else if let Some(bar_plot) = &plot_spec.bar_plot {
                                 bar_plot.domain.clone()
                             } else if let Some(heatmap) = &plot_spec.heatmap {
+                                if heatmap.domain_mid.is_some() {
+                                    if column_types.get(column).is_some_and(|ct| !ct.is_numeric()) {
+                                        bail!(WrongColumnTypeMidDomain {
+                                            view: name.to_string(),
+                                            column: column.to_string(),
+                                        })
+                                    }
+                                    if let Some(heatmap_domain) = &heatmap.domain {
+                                        if heatmap_domain.len() != 3 {
+                                            bail!(WrongDomainLengthWithMidDomain {
+                                                view: name.to_string(),
+                                                column: column.to_string(),
+                                            })
+                                        }
+                                    }
+                                }
                                 if let Some(domain) = &heatmap.domain {
                                     if let Some(colum_type) = column_types.get(column) {
                                         if colum_type == &ColumnType::Float {
@@ -679,6 +696,11 @@ impl Heatmap {
             };
             self.domain = Some(domain);
         }
+        if let Some(domain_mid) = &self.domain_mid {
+            let old_domain = self.domain.as_mut().unwrap();
+            old_domain.insert(1, domain_mid.to_string());
+            self.domain = Some(old_domain.to_owned())
+        }
         match self.vega_type {
             Some(VegaType::Nominal) | Some(VegaType::Ordinal) => {
                 self.scale_type = ScaleType::Ordinal;
@@ -807,6 +829,8 @@ pub(crate) struct Heatmap {
     pub(crate) color_range: Vec<String>,
     #[serde(default)]
     pub(crate) domain: Option<Vec<String>>,
+    #[serde(default)]
+    pub(crate) domain_mid: Option<f32>,
     #[serde(default)]
     pub(crate) aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
@@ -942,6 +966,10 @@ pub enum ConfigError {
         column: String,
         value: f32,
     },
+    #[error("Given argument mid-domain for domain for column {column:?} of view {view:?} requires the dataset to only include numerical values in column {column:?}.")]
+    WrongColumnTypeMidDomain { view: String, column: String },
+    #[error("Given domain for column {column:?} of view {view:?} does not allow usage with mid-domain. Please use a domain length of 2.")]
+    WrongDomainLengthWithMidDomain { view: String, column: String },
     #[error(
         "Given domain for column {column:?} of view {view:?} with scale type log cannot include 0."
     )]
@@ -1223,6 +1251,7 @@ mod tests {
                                 color_scheme: "category20".to_string(),
                                 color_range: vec![],
                                 domain: None,
+                                domain_mid: None,
                                 aux_domain_columns: Default::default(),
                                 custom_content: None,
                             }),
