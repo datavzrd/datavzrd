@@ -3,7 +3,7 @@ use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
     MissingLinkoutColumn, PlotAndTablePresentConfiguration, ValueOutsideDomain,
-    WrongColumnTypeMidDomain, WrongDomainLengthWithMidDomain,
+    WrongColumnTypeMidDomain, WrongDomainLengthWithMidDomain, WrongRangeLengthWithMidDomain,
 };
 use crate::utils::column_position;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -156,6 +156,12 @@ impl ItemsSpec {
                                 if heatmap.domain_mid.is_some() {
                                     if column_types.get(column).is_some_and(|ct| !ct.is_numeric()) {
                                         bail!(WrongColumnTypeMidDomain {
+                                            view: name.to_string(),
+                                            column: column.to_string(),
+                                        })
+                                    }
+                                    if heatmap.color_range.len() != 3 {
+                                        bail!(WrongRangeLengthWithMidDomain {
                                             view: name.to_string(),
                                             column: column.to_string(),
                                         })
@@ -970,6 +976,8 @@ pub enum ConfigError {
     WrongColumnTypeMidDomain { view: String, column: String },
     #[error("Given domain for column {column:?} of view {view:?} does not allow usage with mid-domain. Please use a domain length of 2.")]
     WrongDomainLengthWithMidDomain { view: String, column: String },
+    #[error("Given range for column {column:?} of view {view:?} with specified domain-mid must be of length 3.")]
+    WrongRangeLengthWithMidDomain { view: String, column: String },
     #[error(
         "Given domain for column {column:?} of view {view:?} with scale type log cannot include 0."
     )]
