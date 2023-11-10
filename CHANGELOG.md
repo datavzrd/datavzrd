@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.31.0](https://www.github.com/datavzrd/datavzrd/compare/v2.30.0...v2.31.0) (2023-11-09)
+
+
+### Features
+
+* Add domain-mid keyword for heatmaps ([#574](https://www.github.com/datavzrd/datavzrd/issues/574)) ([3f4dd2a](https://www.github.com/datavzrd/datavzrd/commit/3f4dd2a29d6d1da6b9e9367bda229e82a39b00ea))
+
 ## [2.30.0](https://www.github.com/datavzrd/datavzrd/compare/v2.29.1...v2.30.0) (2023-11-07)
 
 
