@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.31.1](https://www.github.com/datavzrd/datavzrd/compare/v2.31.0...v2.31.1) (2023-11-20)
+
+
+### Bug Fixes
+
+* Remove domain-mid column type error on empty datasets ([#583](https://www.github.com/datavzrd/datavzrd/issues/583)) ([003d96b](https://www.github.com/datavzrd/datavzrd/commit/003d96bd122d0a6a98eb271f89a4dc5cc88d18f6))
+
 ## [2.31.0](https://www.github.com/datavzrd/datavzrd/compare/v2.30.0...v2.31.0) (2023-11-09)
 
 
