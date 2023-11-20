@@ -154,7 +154,9 @@ impl ItemsSpec {
                                 bar_plot.domain.clone()
                             } else if let Some(heatmap) = &plot_spec.heatmap {
                                 if heatmap.domain_mid.is_some() {
-                                    if column_types.get(column).is_some_and(|ct| !ct.is_numeric()) {
+                                    if column_types.get(column).is_some_and(|ct| !ct.is_numeric())
+                                        && !dataset.is_empty()
+                                    {
                                         bail!(WrongColumnTypeMidDomain {
                                             view: name.to_string(),
                                             column: column.to_string(),
