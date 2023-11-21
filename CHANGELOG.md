@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.32.0](https://www.github.com/datavzrd/datavzrd/compare/v2.31.1...v2.32.0) (2023-11-21)
+
+
+### Features
+
+* Add color option to tick and bar plots ([#589](https://www.github.com/datavzrd/datavzrd/issues/589)) ([6fbfad0](https://www.github.com/datavzrd/datavzrd/commit/6fbfad0ccb560f234d893457bd337ddc81cd97dd))
+
 ### [2.31.1](https://www.github.com/datavzrd/datavzrd/compare/v2.31.0...v2.31.1) (2023-11-20)
 
 
