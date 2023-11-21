@@ -1534,6 +1534,7 @@ fn render_tick_plot(
     context.insert("maximum", &max);
     context.insert("field", &title);
     context.insert("scale_type", &tick_plot.scale_type);
+    context.insert("color_definition", &tick_plot.color);
 
     Ok(templates.render("tick_plot.vl.tera", &context)?)
 }
@@ -1591,6 +1592,7 @@ fn render_bar_plot(
     context.insert("maximum", &max);
     context.insert("field", &title);
     context.insert("scale_type", &bar_plot.scale_type);
+    context.insert("color_definition", &bar_plot.color);
 
     Ok(templates.render("bar_plot.vl.tera", &context)?)
 }

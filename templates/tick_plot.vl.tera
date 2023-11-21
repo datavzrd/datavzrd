@@ -18,7 +18,22 @@
         "y": {"value": 0, "scale": {"domain": [0, 1]}}
     },
     "layer": [
-        {"mark": "tick"},
+        {
+            "mark": "tick"{% if color_definition %},
+            "encoding": {
+                "color": {
+                    "scale": {
+                        "type": "{{ color_definition.scale }}",
+                        "range": {{ color_definition.range | json_encode }},
+                        "domain": {% if color_definition.domain %}{{ color_definition.domain | json_encode }}{% else %}[{{ minimum | json_encode }}, {{ maximum | json_encode }}]{% endif %}
+                        {% if color_definition.domain_mid %}, "domainMid": {{ color_definition.domain_mid }}{% endif %}
+                    },
+                    "field": "{{ field }}",
+                    "legend": null,
+                    "type": "quantitative"
+                }
+            }{% endif %}
+        },
         {
         "mark": {"type": "text", "yOffset": -8, "xOffset": 12},
         "encoding": {"x": {"value": 0}, "text": {"field": "{{ field }}"}}
