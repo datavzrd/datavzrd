@@ -107,6 +107,11 @@ views:
               domain:
                 - 1
                 - 10
+              color:
+                scale: linear
+                range:
+                  - red
+                  - green
         Rated:
           plot-view-legend: true
           plot:

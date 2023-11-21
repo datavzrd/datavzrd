@@ -816,6 +816,20 @@ pub(crate) struct TickPlot {
     pub(crate) domain: Option<Vec<f32>>,
     #[serde(default)]
     pub(crate) aux_domain_columns: AuxDomainColumns,
+    #[serde(default)]
+    pub(crate) color: Option<ColorDefinition>,
+}
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+pub(crate) struct ColorDefinition {
+    #[serde(default, rename = "scale")]
+    pub(crate) scale_type: ScaleType,
+    #[serde(default, rename = "range")]
+    pub(crate) color_range: Vec<String>,
+    #[serde(default)]
+    pub(crate) domain: Option<Vec<String>>,
+    #[serde(default)]
+    pub(crate) domain_mid: Option<f32>,
 }
 
 fn default_clamp() -> bool {
@@ -854,6 +868,8 @@ pub(crate) struct BarPlot {
     pub(crate) domain: Option<Vec<f32>>,
     #[serde(default)]
     pub(crate) aux_domain_columns: AuxDomainColumns,
+    #[serde(default)]
+    pub(crate) color: Option<ColorDefinition>,
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
@@ -1645,6 +1661,7 @@ mod tests {
                 "birth_d".to_string(),
                 "birth_y".to_string(),
             ])),
+            color: None,
         };
         let expected_plot = PlotSpec {
             tick_plot: Some(expected_ticks),

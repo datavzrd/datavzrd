@@ -278,11 +278,12 @@ views:
 
 `ticks` defines the attributes of a [tick-plot](https://vega.github.io/vega-lite/docs/tick.html) for numeric values.
 
-| keyword            | explanation                                                                                                                                                                                                                                                                                                             |
-|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| scale              | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick plot                                                                                                                                                                                                                                  |
-| domain             | Defines the domain of the tick plot. If not present datavzrd will automatically use the minimum and maximum values for the domain                                                                                                                                                                                       |
-| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the tick plot. Regular expression (e.g. `"regex('prob:.+')"` for matching all columns starting with `prob:`) are also supported as well as range expressions (e.g. `range(5, 10)` for the 5th column to 9th column).  |
+| keyword            | explanation                                                                                                                                                                                                                                                                                                              |
+|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| scale              | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick plot                                                                                                                                                                                                                                   |
+| domain             | Defines the domain of the tick plot. If not present datavzrd will automatically use the minimum and maximum values for the domain                                                                                                                                                                                        |
+| aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the tick plot. Regular expression (e.g. `"regex('prob:.+')"` for matching all columns starting with `prob:`) are also supported as well as range expressions (e.g. `range(5, 10)` for the 5th column to 9th column). |
+| [color](#color)    | Defines the color of the tick plot                                                                                                                                                                                                                                                                                       |
 
 ### heatmap
 
@@ -304,11 +305,24 @@ views:
 
 `bars` defines the attributes of a [bar-plot](https://vega.github.io/vega-lite/docs/bar.html) for numeric values.
 
-| keyword            | explanation                                                                                                                                                                                                                       |
-|--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| scale              | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the bar plot                                                                                                                                             |
-| domain             | Defines the domain of the bar plot. If not present datavzrd will automatically use the minimum and maximum values for the domain                                                                                                  |
+| keyword            | explanation                                                                                                                                                                                                                         |
+|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| scale              | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the bar plot                                                                                                                                               |
+| domain             | Defines the domain of the bar plot. If not present datavzrd will automatically use the minimum and maximum values for the domain                                                                                                    |
 | aux-domain-columns | Allows to specify a list of other columns that will be additionally used to determine the domain of the bar plot. Regular expression (e.g. `"regex('prob:.+')"` for matching all columns starting with `prob:`) are also supported. |
+| [color](#color)    | Defines the color of the bar plot                                                                                                                                                                                                   |
+
+### color
+
+`color` defines the attributes of a color scale definition for tick and bar plots
+
+| keyword    | explanation                                                                                                                                                        |
+|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| scale      | Defines the [scale](https://vega.github.io/vega-lite/docs/scale.html) of the tick or bar plot                                                                      |
+| domain     | Defines the domain of the color scale of the tick or bar plot. If not present datavzrd will automatically use the minimum and maximum values for the domain        |
+| domain-mid | Defines a mid point of the domain. The argument is passed on straight to the [vega-lite domain defintion](https://vega.github.io/vega-lite/docs/scale.html#domain) |
+| range      | Defines the color range of the tick or bar plot as a list                                                                                                          |
+
 
 ## Authors
 
