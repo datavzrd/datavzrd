@@ -246,7 +246,7 @@ footer {
     position: fixed;
     left: 0;
     top: 46px;
-    z-index: 9998;
+    z-index: 99;
     margin: 0;
 }
 
