@@ -24,6 +24,9 @@ function renderMarkdownDescription() {
     });
     converter.setFlavor('github');
     innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
+    if (innerDescription.offsetHeight < window.screen.height/3) {
+        $('#table-container').css('padding-top', innerDescription.offsetHeight - 25);
+    }
 }
 
 function precision_formatter(precision, value) {
