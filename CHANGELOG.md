@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.32.1](https://www.github.com/datavzrd/datavzrd/compare/v2.32.0...v2.32.1) (2023-11-22)
+
+
+### Bug Fixes
+
+* Fix hidden view selection by description ([#591](https://www.github.com/datavzrd/datavzrd/issues/591)) ([6e71ed1](https://www.github.com/datavzrd/datavzrd/commit/6e71ed107f289ab880dd0fa378fdf8e76be8d11e))
+
 ## [2.32.0](https://www.github.com/datavzrd/datavzrd/compare/v2.31.1...v2.32.0) (2023-11-21)
 
 
