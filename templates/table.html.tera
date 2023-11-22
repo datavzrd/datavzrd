@@ -81,7 +81,7 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                <div class="col-md-12 table-container" style="margin-top: 15px;">
+                <div id="table-container" class="col-md-12 table-container" style="margin-top: 15px;">
                     <table id="table" class="table" data-classes="table">
                     </table>
                 </div>
