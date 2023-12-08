@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.33.2](https://www.github.com/datavzrd/datavzrd/compare/v2.33.1...v2.33.2) (2023-12-08)
+
+
+### Bug Fixes
+
+* Fix missing header offset for views with static paging ([#598](https://www.github.com/datavzrd/datavzrd/issues/598)) ([14d38bb](https://www.github.com/datavzrd/datavzrd/commit/14d38bb774e276cfbd15ba45bcd787561d7aa5b9))
+
 ### [2.33.1](https://www.github.com/datavzrd/datavzrd/compare/v2.33.0...v2.33.1) (2023-12-08)
 
 
