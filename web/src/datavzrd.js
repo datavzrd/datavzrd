@@ -619,7 +619,7 @@ export function load() {
                 if (config.format[column] != undefined) {
                     formatter = config.format[column];
                 } else {
-                    if (config.column_config[column].precision && config.column_config[column].is_float) {
+                    if (config.column_config[column].precision !== undefined && config.column_config[column].is_float) {
                         formatter = function(value) { return precision_formatter(config.column_config[column].precision, value); };
                     } else {
                         formatter = function(value) { return value; };
