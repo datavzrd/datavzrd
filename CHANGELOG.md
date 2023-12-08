@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.33.1](https://www.github.com/datavzrd/datavzrd/compare/v2.33.0...v2.33.1) (2023-12-08)
+
+
+### Bug Fixes
+
+* Fix non-working precision keyword for case 0 ([#596](https://www.github.com/datavzrd/datavzrd/issues/596)) ([aea4db2](https://www.github.com/datavzrd/datavzrd/commit/aea4db2f432367ef27d4fd4e26ccf77f7ce74953))
+
 ## [2.33.0](https://www.github.com/datavzrd/datavzrd/compare/v2.32.0...v2.33.0) (2023-11-22)
 
 
