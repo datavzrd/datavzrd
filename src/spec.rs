@@ -891,10 +891,7 @@ pub(crate) struct Color(String);
 
 impl Color {
     fn preprocess(&mut self) -> Result<()> {
-        match COLOR_MAPPING.get(self.0.as_str()) {
-            Some(hex) => self.0 = hex.to_string(),
-            None => {}
-        }
+        if let Some(hex) = COLOR_MAPPING.get(self.0.as_str()) { self.0 = hex.to_string() }
         Ok(())
     }
 }
@@ -1097,13 +1094,7 @@ pub enum ConfigError {
 
 #[cfg(test)]
 mod tests {
-    use crate::spec::{
-        default_links, default_page_size, default_precision, default_render_table,
-        default_single_page_threshold, AuxDomainColumns, DatasetSpecs, DisplayMode,
-        HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, LinkToUrlSpec,
-        LinkToUrlSpecEntry, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
-        RenderTableSpecs, ScaleType, TickPlot,
-    };
+    use crate::spec::{default_links, default_page_size, default_precision, default_render_table, default_single_page_threshold, AuxDomainColumns, DatasetSpecs, DisplayMode, HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, LinkToUrlSpec, LinkToUrlSpecEntry, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, ScaleType, TickPlot, ColorRange};
     use std::collections::HashMap;
     use std::path::PathBuf;
 
@@ -1338,7 +1329,7 @@ mod tests {
                                 scale_type: ScaleType::Ordinal,
                                 clamp: true,
                                 color_scheme: "category20".to_string(),
-                                color_range: vec![],
+                                color_range: ColorRange(vec![]),
                                 domain: None,
                                 domain_mid: None,
                                 aux_domain_columns: Default::default(),
