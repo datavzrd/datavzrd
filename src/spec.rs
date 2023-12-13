@@ -891,7 +891,9 @@ pub(crate) struct Color(String);
 
 impl Color {
     fn preprocess(&mut self) -> Result<()> {
-        if let Some(hex) = COLOR_MAPPING.get(self.0.as_str()) { self.0 = hex.to_string() }
+        if let Some(hex) = COLOR_MAPPING.get(self.0.as_str()) {
+            self.0 = hex.to_string()
+        }
         Ok(())
     }
 }
@@ -1094,7 +1096,13 @@ pub enum ConfigError {
 
 #[cfg(test)]
 mod tests {
-    use crate::spec::{default_links, default_page_size, default_precision, default_render_table, default_single_page_threshold, AuxDomainColumns, DatasetSpecs, DisplayMode, HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, LinkToUrlSpec, LinkToUrlSpecEntry, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, ScaleType, TickPlot, ColorRange};
+    use crate::spec::{
+        default_links, default_page_size, default_precision, default_render_table,
+        default_single_page_threshold, AuxDomainColumns, ColorRange, DatasetSpecs, DisplayMode,
+        HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, LinkToUrlSpec,
+        LinkToUrlSpecEntry, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
+        RenderTableSpecs, ScaleType, TickPlot,
+    };
     use std::collections::HashMap;
     use std::path::PathBuf;
 
