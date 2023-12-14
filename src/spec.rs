@@ -162,7 +162,7 @@ impl ItemsSpec {
                                             column: column.to_string(),
                                         })
                                     }
-                                    if heatmap.color_range.len() != 3 {
+                                    if heatmap.color_range.0.len() != 3 {
                                         bail!(WrongRangeLengthWithMidDomain {
                                             view: name.to_string(),
                                             column: column.to_string(),
@@ -681,6 +681,9 @@ impl RenderColumnSpec {
 
 impl TickPlot {
     fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+        if let Some(color_definition) = &mut self.color {
+            color_definition.preprocess()?;
+        }
         self.aux_domain_columns.preprocess(dataset)
     }
 }
@@ -709,6 +712,9 @@ impl Heatmap {
             old_domain.insert(1, domain_mid.to_string());
             self.domain = Some(old_domain.to_owned())
         }
+        if !self.color_range.0.is_empty() {
+            self.color_range.preprocess()?;
+        }
         match self.vega_type {
             Some(VegaType::Nominal) | Some(VegaType::Ordinal) => {
                 self.scale_type = ScaleType::Ordinal;
@@ -716,7 +722,10 @@ impl Heatmap {
             }
             Some(VegaType::Quantitative) => {
                 self.scale_type = ScaleType::Linear;
-                self.color_range = vec!["#bed8ec".to_string(), "#125ca4".to_string()];
+                self.color_range = ColorRange(vec![
+                    Color("#bed8ec".to_string()),
+                    Color("#125ca4".to_string()),
+                ]);
             }
             _ => {}
         }
@@ -726,6 +735,9 @@ impl Heatmap {
 
 impl BarPlot {
     fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+        if let Some(color_definition) = &mut self.color {
+            color_definition.preprocess()?;
+        }
         self.aux_domain_columns.preprocess(dataset)
     }
 }
@@ -825,11 +837,17 @@ pub(crate) struct ColorDefinition {
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: ScaleType,
     #[serde(default, rename = "range")]
-    pub(crate) color_range: Vec<String>,
+    pub(crate) color_range: ColorRange,
     #[serde(default)]
     pub(crate) domain: Option<Vec<String>>,
     #[serde(default)]
     pub(crate) domain_mid: Option<f32>,
+}
+
+impl ColorDefinition {
+    fn preprocess(&mut self) -> Result<()> {
+        self.color_range.preprocess()
+    }
 }
 
 fn default_clamp() -> bool {
@@ -848,7 +866,7 @@ pub(crate) struct Heatmap {
     #[serde(default)]
     pub(crate) color_scheme: String,
     #[serde(default, rename = "range")]
-    pub(crate) color_range: Vec<String>,
+    pub(crate) color_range: ColorRange,
     #[serde(default)]
     pub(crate) domain: Option<Vec<String>>,
     #[serde(default)]
@@ -857,6 +875,50 @@ pub(crate) struct Heatmap {
     pub(crate) aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
     pub(crate) custom_content: Option<String>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+pub(crate) struct ColorRange(Vec<Color>);
+
+impl ColorRange {
+    fn preprocess(&mut self) -> Result<()> {
+        self.0.iter_mut().try_for_each(|color| color.preprocess())
+    }
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+pub(crate) struct Color(String);
+
+impl Color {
+    fn preprocess(&mut self) -> Result<()> {
+        if let Some(hex) = COLOR_MAPPING.get(self.0.as_str()) {
+            self.0 = hex.to_string()
+        }
+        Ok(())
+    }
+}
+
+lazy_static! {
+    static ref COLOR_MAPPING: HashMap<&'static str, &'static str> = {
+        let mut m = HashMap::new();
+        m.insert("red", "#d62728");
+        m.insert("blue", "#1f77b4");
+        m.insert("yellow", "#eeca3b");
+        m.insert("green", "#2ca02c");
+        m.insert("purple", "#9467bd");
+        m.insert("orange", "#ff7f0e");
+        m.insert("pink", "#e377c2");
+        m.insert("black", "#000000");
+        m.insert("white", "#ffffff");
+        m.insert("gray", "#7f7f7f");
+        m.insert("grey", "#7f7f7f");
+        m.insert("brown", "#8c564b");
+        m.insert("olive", "#bcbd22");
+        m.insert("cyan", "#17becf");
+        m.insert("lime", "#98df8a");
+        m.insert("magenta", "#ff9896");
+        m
+    };
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -1036,7 +1098,7 @@ pub enum ConfigError {
 mod tests {
     use crate::spec::{
         default_links, default_page_size, default_precision, default_render_table,
-        default_single_page_threshold, AuxDomainColumns, DatasetSpecs, DisplayMode,
+        default_single_page_threshold, AuxDomainColumns, ColorRange, DatasetSpecs, DisplayMode,
         HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, LinkToUrlSpec,
         LinkToUrlSpecEntry, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
         RenderTableSpecs, ScaleType, TickPlot,
@@ -1275,7 +1337,7 @@ mod tests {
                                 scale_type: ScaleType::Ordinal,
                                 clamp: true,
                                 color_scheme: "category20".to_string(),
-                                color_range: vec![],
+                                color_range: ColorRange(vec![]),
                                 domain: None,
                                 domain_mid: None,
                                 aux_domain_columns: Default::default(),
