@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.34.0](https://www.github.com/datavzrd/datavzrd/compare/v2.33.2...v2.34.0) (2023-12-14)
+
+
+### Features
+
+* Preprocess color words for more aesthetic colors ([#600](https://www.github.com/datavzrd/datavzrd/issues/600)) ([35fac66](https://www.github.com/datavzrd/datavzrd/commit/35fac6647fccea2df9ecb071f08b4b5ae45dd365))
+
 ### [2.33.2](https://www.github.com/datavzrd/datavzrd/compare/v2.33.1...v2.33.2) (2023-12-08)
 
 
