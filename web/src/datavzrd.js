@@ -930,12 +930,8 @@ export function load() {
                             }
                             let values = [...new Set(column_values)]
                             for (let opt of values) {
-                                let checked = "checked";
-                                if (checkbox_filters[title].includes(opt)) {
-                                    checked = "";
-                                }
                                 let checkbox = `<div class='form-check'>
-                                                    <input type='checkbox' class='form-check-input' id='${opt}' ${checked}>
+                                                    <input type='checkbox' class='form-check-input' id='${opt}' checked>
                                                     <label class='form-check-label' for='${opt}'>${opt}</label>
                                                 </div>`;
                                 data_content = data_content.concat(checkbox);
@@ -955,6 +951,14 @@ export function load() {
                                     })
                                 })
                             });
+                            $(`#filter-${index}-container`).on('inserted.bs.popover', function (e) {
+                                for (let val of checkbox_filters[e.currentTarget.dataset.columnTitle]) {
+                                    if (checkbox_filters[e.currentTarget.dataset.columnTitle].includes(val)) {
+                                        $(`[id='${val}']`).prop('checked', false);
+                                    }
+                                }
+
+                            })
                         }
                     } else {
                         if(!reset) {
