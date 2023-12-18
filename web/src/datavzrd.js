@@ -916,6 +916,22 @@ export function load() {
                                 });
                             })
                         });
+                    } else if (config.unique_column_values[title] <= 10) {
+                        let search_icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
+                        let data_content = ``;
+                        let column_values = [];
+                        for (let v of table_rows) {
+                            column_values.push(v[title]);
+                        }
+                        let values = [...new Set(column_values)]
+                        for (let opt of values) {
+                            let checkbox = `<div class='form-check'>
+                                                <input type='checkbox' class='form-check-input' id='check_${opt}' checked>
+                                                <label class='form-check-label' for='check_${opt}'>${opt}</label>
+                                            </div>`;
+                            data_content = data_content.concat(checkbox);
+                        }
+                        $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="${data_content}"> ${search_icon}</div>`);
                     } else {
                         if(!reset) {
                             let search_icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
