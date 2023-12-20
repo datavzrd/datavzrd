@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.35.0](https://www.github.com/datavzrd/datavzrd/compare/v2.34.0...v2.35.0) (2023-12-20)
+
+
+### Features
+
+* Add new multi-select filter widgets for text columns with few values ([#604](https://www.github.com/datavzrd/datavzrd/issues/604)) ([08af75f](https://www.github.com/datavzrd/datavzrd/commit/08af75f146b3f676272065f4791ce95c64f86bf9))
+
 ## [2.34.0](https://www.github.com/datavzrd/datavzrd/compare/v2.33.2...v2.34.0) (2023-12-14)
 
 
