@@ -368,6 +368,36 @@ impl DatasetSpecs {
     pub(crate) fn is_empty(&self) -> bool {
         self.size() == 0
     }
+
+    /// Returns a hashmap counting the number of unique values of all columns of the dataset
+    pub(crate) fn unique_column_values(&self) -> Result<HashMap<String, usize>> {
+        let mut reader = csv::ReaderBuilder::new()
+            .delimiter(self.separator as u8)
+            .from_path(&self.path)?;
+        let headers = reader.headers()?.clone();
+        let column_counts: HashMap<String, usize> = headers
+            .iter()
+            .enumerate()
+            .map(|(index, column)| {
+                let mut reader = csv::ReaderBuilder::new()
+                    .delimiter(self.separator as u8)
+                    .from_path(&self.path)
+                    .unwrap();
+                (
+                    column.to_string(),
+                    reader
+                        .records()
+                        .map(|row| row.unwrap())
+                        .map(|row| row.get(index).unwrap().to_string())
+                        .unique()
+                        .collect_vec()
+                        .len(),
+                )
+            })
+            .collect();
+
+        Ok(column_counts)
+    }
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -1783,5 +1813,17 @@ mod tests {
     fn test_dataset_size() {
         let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
         assert_eq!(config.datasets.get("movies").unwrap().size(), 184);
+    }
+
+    #[test]
+    fn test_dataset_unique_column_values() {
+        let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
+        let unique_column_values = config
+            .datasets
+            .get("oscars")
+            .unwrap()
+            .unique_column_values()
+            .unwrap();
+        assert_eq!(unique_column_values.get("award").unwrap(), &2_usize);
     }
 }

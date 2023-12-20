@@ -274,6 +274,7 @@ impl Renderer for ItemRenderer {
                         self.specs.webview_controls,
                         debug,
                         name,
+                        dataset,
                     )?;
                     render_custom_javascript_functions(
                         &out_path,
@@ -664,6 +665,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     webview_controls: bool,
     debug: bool,
     view: &str,
+    dataset: &DatasetSpecs,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -686,6 +688,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         separator,
         header_row_length,
         header_specs,
+        dataset,
     );
 
     let custom_plot_config =
@@ -870,6 +873,7 @@ struct JavascriptConfig {
     ellipsis: Vec<JavascriptEllipsisConfig>,
     format: HashMap<String, String>,
     additional_colums: HashMap<String, String>,
+    unique_column_values: HashMap<String, usize>,
 }
 
 impl JavascriptConfig {
@@ -886,6 +890,7 @@ impl JavascriptConfig {
         separator: char,
         header_row_length: usize,
         header_specs: &Option<HashMap<u32, HeaderSpecs>>,
+        dataset: &DatasetSpecs,
     ) -> Self {
         let column_classification = classify_table(csv_path, separator, header_row_length).unwrap();
         let header_label_length = if let Some(headers) = header_specs {
@@ -1098,6 +1103,7 @@ impl JavascriptConfig {
                 .map(|(k, v)| (k.to_owned(), JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).name()))
                 .collect(),
             additional_colums: additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, v)| (k.to_owned(), JavascriptFunction(v.value.to_string()).name())).collect(),
+            unique_column_values: dataset.unique_column_values().unwrap(),
         }
     }
 }
