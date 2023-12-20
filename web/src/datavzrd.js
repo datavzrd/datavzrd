@@ -988,6 +988,10 @@ export function load() {
             $('#clear-filter').click(function clearFilter() {
                 filter_boundaries = {};
                 filters = {};
+                checkbox_filters = {};
+                for (const title of config.displayed_columns) {
+                    checkbox_filters[title] = [];
+                }
                 $('#table').bootstrapTable('filterBy', {"":""}, {
                     'filterAlgorithm': customFilter
                 })
