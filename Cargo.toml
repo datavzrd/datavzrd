@@ -26,7 +26,7 @@ lazy_static = "1.4.0"
 fancy-regex = "0.12.0"
 log = "0.4.20"
 simplelog = "0.12.1"
-minify-js = "=0.5.2" # newer versions generate display issues (see PR #375)
+minify-js = "=0.6.0" # newer versions generate display issues (see PR #375)
 simple_excel_writer = "0.2"
 slug = "0.1.5"
 md5 = "0.7.0"
