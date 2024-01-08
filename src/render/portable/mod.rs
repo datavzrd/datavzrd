@@ -128,10 +128,8 @@ impl Renderer for ItemRenderer {
                     .from_path(&dataset.path)
             };
 
-            let mut counter_reader = generate_reader()
-                .context(format!("Could not read file with path {:?}", &dataset.path))?;
-            let records_length = counter_reader.records().count() - (dataset.header_rows - 1);
-            if records_length > 0 {
+            let records_length = dataset.size();
+            if !dataset.is_empty() {
                 let linked_tables = get_linked_tables(name, &self.specs)?;
                 // Render plot
                 if table.render_plot.is_some() {
