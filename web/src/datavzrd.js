@@ -186,14 +186,13 @@ function datavzrdScale(heatmap) {
         }
     } else {
         if (heatmap.heatmap.color_scheme != "") {
-            // use d3 for schemes that are not supported by vega because linear log scales are not supported by vega
             let scheme = heatmap.heatmap.color_scheme;
-            alert(scheme);
-            // get d3 scheme from scheme name (e.g. "viridis") d3.interpolateViridis
-            let d3_scheme = d3[`interpolate${scheme[0].toUpperCase()}`];
-            alert(d3_scheme);
-            
-
+            let d3_scheme = d3[`interpolate${scheme.charAt(0).toUpperCase()}${scheme.slice(1).toLowerCase()}`];
+            let s = heatmap.heatmap.scale;
+            if (heatmap.heatmap.scale == "linear") {
+                s = ""; // Use scaleSequential if scale is linear
+            }
+            scale = d3[`scaleSequential${s.charAt(0).toUpperCase()}${s.slice(1).toLowerCase()}`](heatmap.heatmap.domain, d3_scheme);
         } else if (!heatmap.heatmap.range == 0) {
             scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
         } else {
