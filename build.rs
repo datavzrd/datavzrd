@@ -1,12 +1,13 @@
 use std::path::PathBuf;
 
 fn main() {
+    println!("cargo:rerun-if-changed=web/");
     std::process::Command::new("cp")
         .args([
             "-r",
+            "-v",
             "web/",
             PathBuf::from(std::env::var("OUT_DIR").unwrap())
-                .join("web/")
                 .to_str()
                 .unwrap(),
         ])
