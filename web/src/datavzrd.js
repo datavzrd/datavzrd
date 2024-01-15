@@ -7,6 +7,7 @@ import * as vega from "vega";
 import vegaEmbed from 'vega-embed';
 import vegalite from 'vega-lite';
 import QRCode from 'qrcode';
+import * as d3 from "d3";
 import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
@@ -153,25 +154,9 @@ function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) 
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
     var custom_func = heatmap.heatmap.custom_content;
 
-    let scale = null;
-
-    if (heatmap.heatmap.scale == "ordinal") {
-        if (heatmap.heatmap.color_scheme != "") {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
-        } else if (!heatmap.heatmap.range.length == 0) {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
-        } else {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
-        }
-    } else {
-        if (heatmap.heatmap.color_scheme != "") {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
-        } else if (!heatmap.heatmap.range == 0) {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
-        } else {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp);
-        }
-    }
+    
+    let scale = datavzrdScale(heatmap);
+    
 
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
@@ -187,6 +172,36 @@ function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) 
             row++;
         }
     );
+}
+
+function datavzrdScale(heatmap) {
+    let scale = null;
+    if (heatmap.heatmap.scale == "ordinal") {
+        if (heatmap.heatmap.color_scheme != "") {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
+        } else if (!heatmap.heatmap.range.length == 0) {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
+        } else {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
+        }
+    } else {
+        if (heatmap.heatmap.color_scheme != "") {
+            // use d3 for schemes that are not supported by vega because linear log scales are not supported by vega
+            let scheme = heatmap.heatmap.color_scheme;
+            alert(scheme);
+            // get d3 scheme from scheme name (e.g. "viridis") d3.interpolateViridis
+            let d3_scheme = d3[`interpolate${scheme[0].toUpperCase()}`];
+            alert(d3_scheme);
+            
+
+        } else if (!heatmap.heatmap.range == 0) {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
+        } else {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp);
+        }
+    }
+
+    return scale;
 }
 
 function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_length) {
@@ -277,25 +292,7 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content
 }
 
 function colorizeDetailCard(value, div, heatmap, row) {
-    let scale = null;
-
-    if (heatmap.heatmap.scale == "ordinal") {
-        if (heatmap.heatmap.color_scheme != "") {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
-        } else if (!heatmap.heatmap.range.length == 0) {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
-        } else {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
-        }
-    } else {
-        if (heatmap.heatmap.color_scheme != "") {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(vega.scheme(heatmap.heatmap.color_scheme));
-        } else if (!heatmap.heatmap.range == 0) {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp).range(heatmap.heatmap.range);
-        } else {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp);
-        }
-    }
+    let scale = datavzrdScale(heatmap);
 
     if (value !== "") {
         $(`${div}`).css( "background-color", scale(value) );
