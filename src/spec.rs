@@ -2,8 +2,9 @@ use crate::render::portable::get_column_domain;
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
-    MissingLinkoutColumn, PlotAndTablePresentConfiguration, ValueOutsideDomain,
-    WrongColumnTypeMidDomain, WrongDomainLengthWithMidDomain, WrongRangeLengthWithMidDomain,
+    MissingLinkoutColumn, PlotAndTablePresentConfiguration, UnsupportedColorScheme,
+    ValueOutsideDomain, WrongColumnTypeMidDomain, WrongDomainLengthWithMidDomain,
+    WrongRangeLengthWithMidDomain,
 };
 use crate::utils::column_position;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -153,6 +154,30 @@ impl ItemsSpec {
                             } else if let Some(bar_plot) = &plot_spec.bar_plot {
                                 bar_plot.domain.clone()
                             } else if let Some(heatmap) = &plot_spec.heatmap {
+                                if !heatmap.color_scheme.is_empty() {
+                                    if column_types.get(column).unwrap().is_numeric()
+                                        && !matches!(
+                                            heatmap.color_scheme.to_lowercase().as_str(),
+                                            "blues"
+                                                | "greens"
+                                                | "greys"
+                                                | "oranges"
+                                                | "purples"
+                                                | "reds"
+                                                | "viridis"
+                                                | "inferno"
+                                                | "magma"
+                                                | "plasma"
+                                                | "cividis"
+                                        )
+                                    {
+                                        bail!(UnsupportedColorScheme {
+                                            view: name.to_string(),
+                                            column: column.to_string(),
+                                            scheme: heatmap.color_scheme.to_string(),
+                                        })
+                                    }
+                                }
                                 if heatmap.domain_mid.is_some() {
                                     if column_types.get(column).is_some_and(|ct| !ct.is_numeric())
                                         && !dataset.is_empty()
@@ -721,6 +746,17 @@ impl TickPlot {
 impl Heatmap {
     fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
         self.aux_domain_columns.preprocess(dataset)?;
+        match self.vega_type {
+            Some(VegaType::Nominal) | Some(VegaType::Ordinal) => {
+                self.scale_type = ScaleType::Ordinal;
+                self.color_scheme = "category20".to_string();
+            }
+            Some(VegaType::Quantitative) => {
+                self.scale_type = ScaleType::Linear;
+                self.color_scheme = "blues".to_string();
+            }
+            _ => {}
+        }
         if self.domain.is_none() {
             let d = get_column_domain(
                 title,
@@ -744,20 +780,6 @@ impl Heatmap {
         }
         if !self.color_range.0.is_empty() {
             self.color_range.preprocess()?;
-        }
-        match self.vega_type {
-            Some(VegaType::Nominal) | Some(VegaType::Ordinal) => {
-                self.scale_type = ScaleType::Ordinal;
-                self.color_scheme = "category20".to_string();
-            }
-            Some(VegaType::Quantitative) => {
-                self.scale_type = ScaleType::Linear;
-                self.color_range = ColorRange(vec![
-                    Color("#bed8ec".to_string()),
-                    Color("#125ca4".to_string()),
-                ]);
-            }
-            _ => {}
         }
         Ok(())
     }
@@ -1092,6 +1114,14 @@ pub enum ConfigError {
         "Given domain for column {column:?} of view {view:?} with scale type log cannot include 0."
     )]
     LogScaleDomainIncludesZero { view: String, column: String },
+    #[error(
+    "Given color-scheme {scheme:?} for numeric column {column:?} of view {view:?} is not supported. Please use a sequential scheme from d3."
+    )]
+    UnsupportedColorScheme {
+        view: String,
+        column: String,
+        scheme: String,
+    },
     #[error(
     "Given value for column {column:?} of view {view:?} with scale type log cannot include value {value:?}."
     )]
