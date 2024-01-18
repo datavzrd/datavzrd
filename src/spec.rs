@@ -1846,6 +1846,18 @@ mod tests {
     }
 
     #[test]
+    fn test_dataset_empty() {
+        let empty_dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/empty_table.csv"),
+            separator: ',',
+            header_rows: 4,
+            links: None,
+            offer_excel: false,
+        };
+        assert!(empty_dataset.is_empty());
+    }
+
+    #[test]
     fn test_dataset_unique_column_values() {
         let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
         let unique_column_values = config
