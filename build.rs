@@ -1,18 +1,19 @@
 use std::path::PathBuf;
 
 fn main() {
+    println!("cargo:rerun-if-changed=web/");
     std::process::Command::new("cp")
         .args([
             "-r",
+            "-v",
             "web/",
             PathBuf::from(std::env::var("OUT_DIR").unwrap())
-                .join("web/")
                 .to_str()
                 .unwrap(),
         ])
         .current_dir(env!("CARGO_MANIFEST_DIR"))
         .status()
-        .expect("failed to copy web/ to OUT_DIR/web/");
+        .expect("failed to copy web/ into OUT_DIR/");
 
     let work_dir = PathBuf::from(std::env::var("OUT_DIR").unwrap()).join("web/");
 
