@@ -154,29 +154,28 @@ impl ItemsSpec {
                             } else if let Some(bar_plot) = &plot_spec.bar_plot {
                                 bar_plot.domain.clone()
                             } else if let Some(heatmap) = &plot_spec.heatmap {
-                                if !heatmap.color_scheme.is_empty() {
-                                    if column_types.get(column).unwrap().is_numeric()
-                                        && !matches!(
-                                            heatmap.color_scheme.to_lowercase().as_str(),
-                                            "blues"
-                                                | "greens"
-                                                | "greys"
-                                                | "oranges"
-                                                | "purples"
-                                                | "reds"
-                                                | "viridis"
-                                                | "inferno"
-                                                | "magma"
-                                                | "plasma"
-                                                | "cividis"
-                                        )
-                                    {
-                                        bail!(UnsupportedColorScheme {
-                                            view: name.to_string(),
-                                            column: column.to_string(),
-                                            scheme: heatmap.color_scheme.to_string(),
-                                        })
-                                    }
+                                if !heatmap.color_scheme.is_empty()
+                                    && column_types.get(column).unwrap().is_numeric()
+                                    && !matches!(
+                                        heatmap.color_scheme.to_lowercase().as_str(),
+                                        "blues"
+                                            | "greens"
+                                            | "greys"
+                                            | "oranges"
+                                            | "purples"
+                                            | "reds"
+                                            | "viridis"
+                                            | "inferno"
+                                            | "magma"
+                                            | "plasma"
+                                            | "cividis"
+                                    )
+                                {
+                                    bail!(UnsupportedColorScheme {
+                                        view: name.to_string(),
+                                        column: column.to_string(),
+                                        scheme: heatmap.color_scheme.to_string(),
+                                    })
                                 }
                                 if heatmap.domain_mid.is_some() {
                                     if column_types.get(column).is_some_and(|ct| !ct.is_numeric())
