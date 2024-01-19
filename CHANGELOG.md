@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.35.2](https://github.com/datavzrd/datavzrd/compare/v2.35.1...v2.35.2) (2024-01-19)
+
+
+### Features
+
+* Move documentation to website ([#626](https://github.com/datavzrd/datavzrd/issues/626)) ([eede301](https://github.com/datavzrd/datavzrd/commit/eede301e2cd17b6387c4f94d622086882b864829))
+
+
+### Miscellaneous Chores
+
+* Release 2.35.2 ([c2dfb42](https://github.com/datavzrd/datavzrd/commit/c2dfb4255d2cd2279aeb436c324ce48c77bdef41))
+* Release 2.35.2 ([aef0530](https://github.com/datavzrd/datavzrd/commit/aef0530e79c0590b01c78d3ec0a26eb165c48de4))
+* Release 2.35.2 ([30140c9](https://github.com/datavzrd/datavzrd/commit/30140c90c6fd739ee46af87dd7ad618b174d3f44))
+
 ## [2.35.1](https://www.github.com/datavzrd/datavzrd/compare/v2.35.0...v2.35.1) (2024-01-18)
 
 
