@@ -6,7 +6,7 @@ fn main() {
         .args([
             "-r",
             "-v",
-            "web/",
+            "web",
             PathBuf::from(std::env::var("OUT_DIR").unwrap())
                 .to_str()
                 .unwrap(),
