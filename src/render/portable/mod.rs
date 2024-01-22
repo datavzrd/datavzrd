@@ -1405,40 +1405,46 @@ fn render_search_dialogs<P: AsRef<Path>>(
 ) -> Result<()> {
     let output_path = Path::new(path.as_ref()).join("search");
     fs::create_dir(&output_path)?;
+    let table_classes = classify_table(csv_path, separator, header_rows)?;
     for (column, title) in titles.iter().enumerate() {
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(separator as u8)
-            .from_path(csv_path)
-            .context(format!("Could not read file with path {csv_path:?}"))?;
+        if table_classes.get(title).unwrap() != &ColumnType::Float {
+            let mut reader = csv::ReaderBuilder::new()
+                .delimiter(separator as u8)
+                .from_path(csv_path)
+                .context(format!("Could not read file with path {csv_path:?}"))?;
 
-        let row_address_factory = RowAddressFactory::new(page_size);
+            let row_address_factory = RowAddressFactory::new(page_size);
 
-        let records = &reader
-            .records()
-            .skip(header_rows - 1)
-            .map(|row| row.unwrap())
-            .map(|row| row.get(column).unwrap().to_string())
-            .enumerate()
-            .map(|(i, row)| (row, row_address_factory.get(i)))
-            .map(|(row, address)| (row, address.page + 1, address.row))
-            .collect_vec();
+            let records = &reader
+                .records()
+                .skip(header_rows - 1)
+                .map(|row| row.unwrap())
+                .map(|row| row.get(column).unwrap().to_string())
+                .enumerate()
+                .map(|(i, row)| (row, row_address_factory.get(i)))
+                .map(|(row, address)| (row, address.page + 1, address.row))
+                .collect_vec();
 
-        let mut templates = Tera::default();
-        templates.add_raw_template(
-            "search_dialog.html.tera",
-            include_str!("../../../templates/search_dialog.html.tera"),
-        )?;
-        let mut context = Context::new();
-        context.insert("records", &records);
-        context.insert("title", &title);
+            let compressed_data = compress_to_utf16(&json!(records).to_string());
 
-        let file_path = Path::new(&output_path)
-            .join(Path::new(&format!("column_{column}")).with_extension("html"));
+            let mut templates = Tera::default();
+            templates.add_raw_template(
+                "search_dialog.html.tera",
+                include_str!("../../../templates/search_dialog.html.tera"),
+            )?;
+            let mut context = Context::new();
+            context.insert("data", &json!(compressed_data).to_string());
+            context.insert("records", &records);
+            context.insert("title", &title);
 
-        let html = templates.render("search_dialog.html.tera", &context)?;
+            let file_path = Path::new(&output_path)
+                .join(Path::new(&format!("column_{column}")).with_extension("html"));
 
-        let mut file = fs::File::create(file_path)?;
-        file.write_all(html.as_bytes())?;
+            let html = templates.render("search_dialog.html.tera", &context)?;
+
+            let mut file = fs::File::create(file_path)?;
+            file.write_all(html.as_bytes())?;
+        }
     }
     Ok(())
 }
