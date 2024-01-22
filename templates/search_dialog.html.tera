@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>datavzrd report</title>
+    <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../../static/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../../static/bootstrap-table.min.css">
 </head>
@@ -9,27 +10,14 @@
 <body>
 <script src="../../static/bundle.js"></script>
 <script>
+    const search_data = {{ data | safe }};
+    const table_title = "{{ title }}";
     datavzrd.load_search();
 </script>
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <table class="table table-hover" data-toggle="table" data-classes="table table-hover" data-search="true" style="width: 100%; position: center">
-                <thead>
-                <tr>
-                    <th>page</th>
-                    <th>{{ title }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for record in records %}
-                <tr>
-                    <td><a target="_parent" href="../index_{{ record.1 }}.html?highlight={{ record.2 }}" style="display: table-cell">{{ record.1 }}</a></td>
-                    <td>{{ record.0 }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <table id="search-table"></table>
         </div>
     </div>
 </div>

@@ -607,7 +607,7 @@ export function load() {
                 }
 
                 // Add static search if not single page mode
-                if (!config.is_single_page && !config.additional_colums[column]) {
+                if (!config.is_single_page && !config.additional_colums[column] && !config.column_config[column].is_float) {
                     title += ` <a class="sym" data-toggle="modal" onclick="datavzrd.embedSearch(${config.columns.indexOf(column)})" data-target="#search"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg></a>`;
                 }
 
@@ -1101,7 +1101,25 @@ $(document).click(function (event) {
 export function load_search() {
     $(document).ready(function() {
         window.$ = window.jQuery = require("jquery");
-        $('.table').bootstrapTable({
+        window['bootstrap-table'] = require('bootstrap-table');
+        const decompressed = JSON.parse(LZString.decompressFromUTF16(search_data));
+        let table_data = [];
+        for (var i = 0; i < decompressed.length; i++) {
+            var row = decompressed[i];
+            table_data.push({
+                page: `<a target="_parent" href="../index_${row[1]}.html?highlight=${row[2]}" style="display: table-cell">${row[1]}</a>`,
+                title: row[0]
+            })
+        }
+        $('#search-table').bootstrapTable({
+            columns: [
+                { field: "page", title: "page" },
+                { field: "title", title: table_title }
+            ],
+            data: table_data,
+            search: true
+        });
+        $('#search-table').bootstrapTable({
             onPostHeader: function () {
                 $(".search-input").focus();
             }
