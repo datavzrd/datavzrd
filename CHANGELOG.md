@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.35.3](https://github.com/datavzrd/datavzrd/compare/v2.35.2...v2.35.3) (2024-01-22)
+
+
+### Performance Improvements
+
+* Use lz-string compression for search dialogs ([#631](https://github.com/datavzrd/datavzrd/issues/631)) ([5cf0f1a](https://github.com/datavzrd/datavzrd/commit/5cf0f1af366db7c496ac188c1f6cc75aa24d2446))
+
 ## [2.35.2](https://github.com/datavzrd/datavzrd/compare/v2.35.1...v2.35.2) (2024-01-19)
 
 
