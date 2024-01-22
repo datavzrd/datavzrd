@@ -1111,7 +1111,6 @@ export function load_search() {
                 title: row[0]
             })
         }
-        console.log(table_data);
         $('#search-table').bootstrapTable({
             columns: [
                 { field: "page", title: "page" },
