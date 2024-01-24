@@ -2160,7 +2160,9 @@ pub enum SpecError {
 
 #[cfg(test)]
 mod tests {
-    use crate::render::portable::JavascriptFunction;
+    use crate::render::portable::{render_tick_plot, JavascriptFunction};
+    use crate::spec::{Color, ColorDefinition, ColorRange, ScaleType, TickPlot};
+    use std::path::PathBuf;
 
     #[test]
     fn test_javascript_function_body_parsing() {
@@ -2172,5 +2174,111 @@ mod tests {
     fn test_javascript_function_arg_parsing() {
         let function = JavascriptFunction(String::from("function (value, row) { return value; }"));
         assert_eq!(function.args(), "value, row")
+    }
+
+    #[test]
+    fn test_render_tick_plot() {
+        let tick_plot_spec = TickPlot {
+            scale_type: ScaleType::Linear,
+            domain: Some(vec![-350855931678.0, 760134568300.0]),
+            aux_domain_columns: Default::default(),
+            color: None,
+        };
+
+        let tick_plot = render_tick_plot(
+            "price",
+            &PathBuf::from("tests/data/uniform_datatypes.csv"),
+            ',',
+            1,
+            &tick_plot_spec,
+            2,
+        );
+        assert!(tick_plot.is_ok());
+        assert!(serde_json::from_str::<serde_json::Value>(&tick_plot.unwrap()).is_ok());
+    }
+
+    #[test]
+    fn test_render_tick_plot_with_color_definition() {
+        let tick_plot_spec = TickPlot {
+            scale_type: ScaleType::Linear,
+            domain: Some(vec![-350855931678.0, 760134568300.0]),
+            aux_domain_columns: Default::default(),
+            color: Some(ColorDefinition {
+                scale_type: ScaleType::Linear,
+                color_range: ColorRange([
+                    Color("#ebedf0".to_string()),
+                    Color("#9be9a8".to_string()),
+                ].to_vec()),
+                domain: Some(vec![
+                    "-350855931678.0".to_string(),
+                    "760134568300.0".to_string(),
+                ]),
+                domain_mid: None,
+            }),
+        };
+
+        let tick_plot = render_tick_plot(
+            "price",
+            &PathBuf::from("tests/data/uniform_datatypes.csv"),
+            ',',
+            1,
+            &tick_plot_spec,
+            2,
+        );
+        assert!(tick_plot.is_ok());
+        assert!(serde_json::from_str::<serde_json::Value>(&tick_plot.unwrap()).is_ok());
+    }
+
+    #[test]
+    fn test_render_bar_plot() {
+        let bar_plot_spec = TickPlot {
+            scale_type: ScaleType::Linear,
+            domain: Some(vec![-350855931678.0, 760134568300.0]),
+            aux_domain_columns: Default::default(),
+            color: None,
+        };
+
+        let bar_plot = render_tick_plot(
+            "price",
+            &PathBuf::from("tests/data/uniform_datatypes.csv"),
+            ',',
+            1,
+            &bar_plot_spec,
+            2,
+        );
+        assert!(bar_plot.is_ok());
+        assert!(serde_json::from_str::<serde_json::Value>(&bar_plot.unwrap()).is_ok());
+    }
+
+    #[test]
+    fn test_render_bar_plot_with_color_definition() {
+        let bar_plot_spec = TickPlot {
+            scale_type: ScaleType::Linear,
+            domain: Some(vec![-350855931678.0, 760134568300.0]),
+            aux_domain_columns: Default::default(),
+            color: Some(ColorDefinition {
+                scale_type: ScaleType::Linear,
+                color_range: ColorRange([
+                    Color("#ebedf0".to_string()),
+                    Color("#9be9a8".to_string()),
+                ].to_vec()),
+                domain: Some(vec![
+                    "-350855931678.0".to_string(),
+                    "760134568300.0".to_string(),
+                ]),
+                domain_mid: None,
+            }),
+        };
+
+        let bar_plot = render_tick_plot(
+            "price",
+            &PathBuf::from("tests/data/uniform_datatypes.csv"),
+            ',',
+            1,
+            &bar_plot_spec,
+            2,
+        );
+        assert!(bar_plot.is_ok());
+        assert!(serde_json::from_str::<serde_json::Value>(&bar_plot.unwrap()).is_ok());
     }
 }
