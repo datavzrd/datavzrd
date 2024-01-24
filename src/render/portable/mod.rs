@@ -2205,10 +2205,9 @@ mod tests {
             aux_domain_columns: Default::default(),
             color: Some(ColorDefinition {
                 scale_type: ScaleType::Linear,
-                color_range: ColorRange([
-                    Color("#ebedf0".to_string()),
-                    Color("#9be9a8".to_string()),
-                ].to_vec()),
+                color_range: ColorRange(
+                    [Color("#ebedf0".to_string()), Color("#9be9a8".to_string())].to_vec(),
+                ),
                 domain: Some(vec![
                     "-350855931678.0".to_string(),
                     "760134568300.0".to_string(),
@@ -2258,10 +2257,9 @@ mod tests {
             aux_domain_columns: Default::default(),
             color: Some(ColorDefinition {
                 scale_type: ScaleType::Linear,
-                color_range: ColorRange([
-                    Color("#ebedf0".to_string()),
-                    Color("#9be9a8".to_string()),
-                ].to_vec()),
+                color_range: ColorRange(
+                    [Color("#ebedf0".to_string()), Color("#9be9a8".to_string())].to_vec(),
+                ),
                 domain: Some(vec![
                     "-350855931678.0".to_string(),
                     "760134568300.0".to_string(),
