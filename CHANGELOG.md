@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.35.4](https://github.com/datavzrd/datavzrd/compare/v2.35.3...v2.35.4) (2024-01-24)
+
+
+### Bug Fixes
+
+* Fix bar plot without color definition ([#634](https://github.com/datavzrd/datavzrd/issues/634)) ([516e65e](https://github.com/datavzrd/datavzrd/commit/516e65ed373b049dd9dd094600dc3172bb7ee852))
+
 ## [2.35.3](https://github.com/datavzrd/datavzrd/compare/v2.35.2...v2.35.3) (2024-01-22)
 
 
