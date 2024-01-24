@@ -17,7 +17,7 @@
                 "type":"bar",
                 "height": 12,
                 "yOffset": 11
-            }{% if color_definition %},
+            },{% if color_definition %}
             "encoding": {
                 "color": {
                     "scale": {
