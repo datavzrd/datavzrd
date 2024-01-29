@@ -900,7 +900,7 @@ export function load() {
                                 view.addSignalListener('selection', function(name, value) {
                                     filter_boundaries[spec.name] = value;
                                 });
-                                view.addEventListener('mouseup', function(event) {
+                                document.getElementById(`brush-${e.currentTarget.dataset.brush}`).addEventListener('click', function(event) {
                                     $('#table').bootstrapTable('filterBy', {"":""}, {
                                         'filterAlgorithm': customFilter
                                     })
