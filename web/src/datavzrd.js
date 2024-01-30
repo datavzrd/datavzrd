@@ -30,6 +30,40 @@ function renderMarkdownDescription() {
     }
 }
 
+export function downloadCSV() {
+    var data = $('#table').bootstrapTable('getData');
+    data = JSON.parse(JSON.stringify(data));
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        console.error("No data found or data format is invalid.");
+        return;
+    }
+
+    var csvContent = "data:text/csv;charset=utf-8,";
+    var headers = config["columns"];
+    csvContent += headers.join(",") + "\n";
+
+    data.forEach(function(item){
+        var row = [];
+        headers.forEach(function(header){
+            var value = item[header];
+            if (typeof value === 'string' && value.includes(',')) {
+                value = '"' + value.replace(/"/g, '""') + '"';
+            }
+            row.push(value);
+        });
+        csvContent += row.join(",") + "\n";
+    });
+
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `${$("#view-selection").attr("title")}.csv`);
+    document.body.appendChild(link);
+    link.click();
+}
+
+
+
 function precision_formatter(precision, value) {
     if (value == "") {
         return "";
