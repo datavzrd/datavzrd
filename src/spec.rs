@@ -29,7 +29,7 @@ use thiserror::Error;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
-pub(crate) struct ItemsSpec {
+pub struct ItemsSpec {
     #[serde(default, rename = "name")]
     pub(crate) report_name: String,
     pub(crate) datasets: HashMap<String, DatasetSpecs>,
