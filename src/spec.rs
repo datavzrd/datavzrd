@@ -4,20 +4,21 @@ pub mod utils;
 
 use crate::render::portable::get_column_domain;
 use crate::render::portable::DatasetError;
+use crate::utils::column_position;
+use crate::utils::column_type::{classify_table, ColumnType};
 use crate::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
     MissingLinkoutColumn, PlotAndTablePresentConfiguration, UnsupportedColorScheme,
     ValueOutsideDomain, WrongColumnTypeMidDomain, WrongDomainLengthWithMidDomain,
     WrongRangeLengthWithMidDomain,
 };
-use crate::utils::column_position;
-use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::Result;
 use anyhow::{bail, Context};
 use derefable::Derefable;
 use fancy_regex::Regex;
 use itertools::Itertools;
 use lazy_static::lazy_static;
+use schemars::JsonSchema;
 
 use serde::Deserialize;
 use serde::Serialize;
@@ -31,7 +32,7 @@ use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use thiserror::Error;
 
-#[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Derefable, Deserialize, JsonSchema, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub struct ItemsSpec {
     #[serde(default, rename = "name")]
@@ -370,7 +371,7 @@ fn default_links() -> Option<HashMap<String, LinkSpec>> {
     Some(HashMap::new())
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct DatasetSpecs {
     pub(crate) path: PathBuf,
@@ -428,7 +429,7 @@ impl DatasetSpecs {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct ItemSpecs {
     #[serde(default)]
@@ -451,7 +452,7 @@ pub(crate) struct ItemSpecs {
     pub(crate) max_in_memory_rows: Option<usize>,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderTableSpecs {
     #[serde(default)]
@@ -462,7 +463,7 @@ pub(crate) struct RenderTableSpecs {
     pub(crate) headers: Option<HashMap<u32, HeaderSpecs>>,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct AdditionalColumnSpec {
     #[serde(default = "default_value_function")]
@@ -479,7 +480,7 @@ fn default_value_function() -> String {
     String::from("function(row) { return '' }")
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct HeaderSpecs {
     #[serde(default)]
@@ -632,7 +633,7 @@ fn default_precision() -> u32 {
     2_u32
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderColumnSpec {
     #[serde(default)]
@@ -677,7 +678,7 @@ impl Default for RenderColumnSpec {
     }
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct LinkToUrlSpec {
     #[serde(flatten)]
@@ -685,7 +686,7 @@ pub(crate) struct LinkToUrlSpec {
     pub(crate) custom_content: Option<String>,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct LinkToUrlSpecEntry {
     url: String,
@@ -697,7 +698,7 @@ fn default_new_window() -> bool {
     true
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[derive(Default, Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
 pub(crate) enum DisplayMode {
     #[default]
@@ -706,7 +707,7 @@ pub(crate) enum DisplayMode {
     Hidden,
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[derive(Default, Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
 pub(crate) enum HeaderDisplayMode {
     #[default]
@@ -797,7 +798,7 @@ impl BarPlot {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderPlotSpec {
     #[serde(default, rename = "spec")]
@@ -819,13 +820,13 @@ impl RenderPlotSpec {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderHtmlSpec {
     pub(crate) script_path: String,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct LinkSpec {
     #[serde(default)]
@@ -838,7 +839,7 @@ pub(crate) struct LinkSpec {
     pub(crate) optional: bool,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct CustomPlot {
     #[serde(default, rename = "data")]
@@ -864,7 +865,7 @@ impl CustomPlot {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct PlotSpec {
     #[serde(rename = "ticks")]
@@ -874,7 +875,7 @@ pub(crate) struct PlotSpec {
     pub(crate) bar_plot: Option<BarPlot>,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct TickPlot {
     #[serde(default, rename = "scale")]
@@ -886,7 +887,7 @@ pub(crate) struct TickPlot {
     #[serde(default)]
     pub(crate) color: Option<ColorDefinition>,
 }
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct ColorDefinition {
     #[serde(default, rename = "scale")]
@@ -909,7 +910,7 @@ fn default_clamp() -> bool {
     true
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct Heatmap {
     #[serde(default, rename = "type")]
@@ -932,7 +933,7 @@ pub(crate) struct Heatmap {
     pub(crate) custom_content: Option<String>,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+#[derive(Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq, Default)]
 pub(crate) struct ColorRange(pub(crate) Vec<Color>);
 
 impl ColorRange {
@@ -941,7 +942,7 @@ impl ColorRange {
     }
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq)]
 pub(crate) struct Color(pub(crate) String);
 
 impl Color {
@@ -976,7 +977,7 @@ lazy_static! {
     };
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct BarPlot {
     #[serde(default, rename = "scale")]
@@ -989,7 +990,7 @@ pub(crate) struct BarPlot {
     pub(crate) color: Option<ColorDefinition>,
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[derive(Default, Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
 pub(crate) enum ScaleType {
     Linear,
@@ -1006,7 +1007,7 @@ pub(crate) enum ScaleType {
     None,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[derive(Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
 pub(crate) enum VegaType {
     Nominal,
@@ -1028,7 +1029,7 @@ impl ScaleType {
     }
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
+#[derive(Default, Deserialize, JsonSchema, Serialize, Debug, Clone, PartialEq, Eq)]
 pub struct AuxDomainColumns(pub(crate) Option<Vec<String>>);
 
 impl AuxDomainColumns {

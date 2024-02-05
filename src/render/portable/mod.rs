@@ -6,16 +6,16 @@ use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
-use crate::{AdditionalColumnSpec, LinkToUrlSpecEntry};
-use crate::{
-    BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
-    RenderColumnSpec, ScaleType, TickPlot,
-};
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_position;
 use crate::utils::column_type::IsNa;
 use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::row_address::RowAddressFactory;
+use crate::{AdditionalColumnSpec, LinkToUrlSpecEntry};
+use crate::{
+    BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
+    RenderColumnSpec, ScaleType, TickPlot,
+};
 use anyhow::Result;
 use anyhow::{bail, Context as AnyhowContext};
 use chrono::{DateTime, Local};

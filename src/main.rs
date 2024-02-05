@@ -1,7 +1,7 @@
+use anyhow::{bail, Result};
 use datavzrd_lib::render::portable::utils::{render_index_file, render_static_files};
 use datavzrd_lib::render::portable::ItemRenderer;
 use datavzrd_lib::render::Renderer;
-use anyhow::{bail, Result};
 use log::LevelFilter;
 use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
 use std::fs;
