@@ -1,7 +1,6 @@
-use crate::render::portable::utils::{render_index_file, render_static_files};
-use crate::render::portable::ItemRenderer;
-use crate::render::Renderer;
-use crate::spec::ItemsSpec;
+use datavzrd_lib::render::portable::utils::{render_index_file, render_static_files};
+use datavzrd_lib::render::portable::ItemRenderer;
+use datavzrd_lib::render::Renderer;
 use anyhow::{bail, Result};
 use log::LevelFilter;
 use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
@@ -10,20 +9,15 @@ use std::path::PathBuf;
 use structopt::StructOpt;
 use thiserror::Error;
 
-pub(crate) mod cli;
-pub(crate) mod render;
-pub(crate) mod spec;
-pub(crate) mod utils;
-
 fn main() -> Result<()> {
-    let opt = cli::Datavzrd::from_args();
+    let opt = datavzrd_lib::cli::Datavzrd::from_args();
     let _ = TermLogger::init(
         LevelFilter::Warn,
         Config::default(),
         TerminalMode::Stderr,
         ColorChoice::Auto,
     );
-    let config = ItemsSpec::from_file(&opt.config)?;
+    let config = datavzrd_lib::ItemsSpec::from_file(&opt.config)?;
     config.validate()?;
 
     if !opt.output.exists() {

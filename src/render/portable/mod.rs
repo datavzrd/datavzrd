@@ -1,13 +1,13 @@
 mod plot;
-pub(crate) mod utils;
+pub mod utils;
 
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
-use crate::spec::{AdditionalColumnSpec, LinkToUrlSpecEntry};
-use crate::spec::{
+use crate::{AdditionalColumnSpec, LinkToUrlSpecEntry};
+use crate::{
     BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
     RenderColumnSpec, ScaleType, TickPlot,
 };
@@ -38,7 +38,7 @@ use thiserror::Error;
 use typed_builder::TypedBuilder;
 
 #[derive(TypedBuilder, Debug)]
-pub(crate) struct ItemRenderer {
+pub struct ItemRenderer {
     specs: ItemsSpec,
 }
 

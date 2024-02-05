@@ -1,4 +1,4 @@
-use crate::spec::{ItemsSpec, RenderColumnSpec};
+use crate::{ItemsSpec, RenderColumnSpec};
 use anyhow::Result;
 use minify_js::{minify, Session, TopLevelMode};
 use std::collections::HashMap;
@@ -8,7 +8,7 @@ use std::io::Write;
 use std::path::Path;
 use tera::{Context, Tera};
 
-pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
+pub fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
     let path = Path::new(path.as_ref()).join("static");
     fs::create_dir(&path)?;
     let files = vec![
@@ -58,7 +58,7 @@ pub(crate) fn minify_js(file: &str, debug: bool) -> Result<Vec<u8>> {
     }
 }
 
-pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> Result<()> {
+pub fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> Result<()> {
     let table = if let Some(default_view) = &specs.default_view {
         default_view
     } else {

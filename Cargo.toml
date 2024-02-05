@@ -30,3 +30,12 @@ minify-js = "=0.6.0" # newer versions generate display issues (see PR #375)
 simple_excel_writer = "0.2"
 slug = "0.1.5"
 md5 = "0.7.0"
+
+
+[lib]
+name = "datavzrd_lib"
+path = "src/spec.rs"
+
+[[bin]]
+name = "datavzrd"
+path = "src/main.rs"

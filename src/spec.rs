@@ -1,6 +1,10 @@
+pub mod cli;
+pub mod render;
+pub mod utils;
+
 use crate::render::portable::get_column_domain;
 use crate::render::portable::DatasetError;
-use crate::spec::ConfigError::{
+use crate::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
     MissingLinkoutColumn, PlotAndTablePresentConfiguration, UnsupportedColorScheme,
     ValueOutsideDomain, WrongColumnTypeMidDomain, WrongDomainLengthWithMidDomain,
@@ -44,7 +48,7 @@ pub struct ItemsSpec {
 }
 
 impl ItemsSpec {
-    pub(crate) fn from_file<P: AsRef<Path> + Debug>(path: P) -> Result<ItemsSpec> {
+    pub fn from_file<P: AsRef<Path> + Debug>(path: P) -> Result<ItemsSpec> {
         let config_file = fs::read_to_string(&path).context(format!(
             "Could not find config file under given path {:?}",
             &path
@@ -70,7 +74,7 @@ impl ItemsSpec {
         self.datasets.values().any(|dataset| dataset.offer_excel)
     }
 
-    pub(crate) fn validate(&self) -> Result<()> {
+    pub fn validate(&self) -> Result<()> {
         if let Some(view) = &self.default_view {
             if self.views.get(view).is_none() {
                 bail!(ConfigError::MissingDefaultView {
