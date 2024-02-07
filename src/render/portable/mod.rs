@@ -273,6 +273,7 @@ impl Renderer for ItemRenderer {
                         debug,
                         name,
                         dataset,
+                        table.line_numbers,
                     )?;
                     render_custom_javascript_functions(
                         &out_path,
@@ -664,6 +665,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     debug: bool,
     view: &str,
     dataset: &DatasetSpecs,
+    line_numbers: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -687,6 +689,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         header_row_length,
         header_specs,
         dataset,
+        line_numbers,
     );
 
     let custom_plot_config =
@@ -872,6 +875,7 @@ struct JavascriptConfig {
     format: HashMap<String, String>,
     additional_colums: HashMap<String, String>,
     unique_column_values: HashMap<String, usize>,
+    line_numbers: bool,
 }
 
 impl JavascriptConfig {
@@ -889,6 +893,7 @@ impl JavascriptConfig {
         header_row_length: usize,
         header_specs: &Option<HashMap<u32, HeaderSpecs>>,
         dataset: &DatasetSpecs,
+        line_numbers: bool,
     ) -> Self {
         let column_classification = classify_table(csv_path, separator, header_row_length).unwrap();
         let header_label_length = if let Some(headers) = header_specs {
@@ -1102,6 +1107,7 @@ impl JavascriptConfig {
                 .collect(),
             additional_colums: additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, v)| (k.to_owned(), JavascriptFunction(v.value.to_string()).name())).collect(),
             unique_column_values: dataset.unique_column_values().unwrap(),
+            line_numbers: line_numbers,
         }
     }
 }

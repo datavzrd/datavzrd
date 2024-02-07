@@ -63,9 +63,12 @@ function shareRow(index, webhost_url) {
     QRCode.toCanvas(document.getElementById('qr-code'), url)
 }
 
-function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
+function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length, line_numbers) {
     let index = columns.indexOf(title) + 1;
     if (detail_mode || header_label_length !== 0) {
+        index += 1;
+    }
+    if (line_numbers) {
         index += 1;
     }
     let row = 0;
@@ -97,9 +100,12 @@ function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precisi
     );
 }
 
-function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
+function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length, line_numbers) {
     let index = columns.indexOf(title) + 1;
     if (detail_mode || header_label_length !== 0) {
+        index += 1;
+    }
+    if (line_numbers) {
         index += 1;
     }
     let row = 0;
@@ -145,9 +151,12 @@ function renderDetailTickBarPlot(value, div, specs, title) {
     }
 }
 
-function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) {
+function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length, line_numbers) {
     let index = columns.indexOf(heatmap.title) + 1;
     if (detail_mode || header_label_length !== 0) {
+        index += 1;
+    }
+    if (line_numbers) {
         index += 1;
     }
     let row = 0;
@@ -203,9 +212,12 @@ function datavzrdScale(heatmap) {
     return scale;
 }
 
-function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_length) {
+function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_length, line_numbers) {
     let index = columns.indexOf(title) + 1;
     if (detail_mode || header_label_length !== 0) {
+        index += 1;
+    }
+    if (config.line_numbers) {
         index += 1;
     }
     let row = 0;
@@ -237,9 +249,12 @@ function shortenHeaderRow(row, ellipsis, skip_label) {
 }
 
 
-function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content, detail_mode, header_label_length) {
+function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content, detail_mode, header_label_length, line_numbers) {
     let index = dp_columns.indexOf(title) + 1;
     if (detail_mode || header_label_length !== 0) {
+        index += 1;
+    }
+    if (line_numbers) {
         index += 1;
     }
     let table_rows = $('#table').bootstrapTable('getData');
@@ -355,9 +370,12 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
     );
 }
 
-function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
+function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length, line_numbers) {
     let index = dp_columns.indexOf(plot.title) + 1;
     if (dm || header_label_length > 0) {
+        index += 1;
+    }
+    if (line_numbers) {
         index += 1;
     }
     let detail_mode = dp_columns.indexOf(plot.title) == -1;
@@ -408,12 +426,15 @@ export function embedHistogram(show_plot, index, plot) {
         document.getElementById(`plot_${index}`).innerHTML = '<p>No reasonable plot possible.</p>';
     }
 }
-function addNumClass(dp_num, ah, detail_mode) {
+function addNumClass(dp_num, ah, detail_mode, config) {
     for (let i in dp_num) {
         if (dp_num[i]) {
             let row = 0;
             let n = parseInt(i) + 1;
             if (detail_mode) {
+                n += 1;
+            }
+            if (config.line_numbers > 0) {
                 n += 1;
             }
             $(`table > tbody > tr td:nth-child(${n})`).each(
@@ -434,7 +455,7 @@ function detailFormatter(index, row) {
     let hidden_columns = config.hidden_columns;
     var html = []
     $.each(row, function (key, value) {
-        if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share") {
+        if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share" && key !== "line_number") {
             let id;
             if (cp.includes(key) || ticks.includes(key) || bars.includes(key)) {
                 if (cp.includes(key)) {
@@ -496,37 +517,37 @@ function detailFormatter(index, row) {
 function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers, custom_plots) {
     for (const o of custom_plots) {
         if (displayed_columns.includes(o.title)) {
-            renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
+            renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length, config.line_numbers);
         }
     }
 
     for (const o of config.ticks) {
         if (displayed_columns.includes(o.title)) {
-            renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length);
+            renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length, config.line_numbers);
         }
     }
 
     for (const o of config.bars) {
         if (displayed_columns.includes(o.title)) {
-            renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length);
+            renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length, config.line_numbers);
         }
     }
 
     for (const o of config.link_urls) {
         if (displayed_columns.includes(o.title)) {
-            linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, o.custom_content, config.detail_mode, config.header_label_length);
+            linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, o.custom_content, config.detail_mode, config.header_label_length, config.line_numbers);
         }
     }
 
     for (const o of config.heatmaps) {
         if (displayed_columns.includes(o.title)) {
-            colorizeColumn(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
+            colorizeColumn(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length, config.line_numbers);
         }
     }
 
     for (const o of config.ellipsis) {
         if (displayed_columns.includes(o.title)) {
-            shortenColumn(additional_headers.length, displayed_columns, o.title, o.ellipsis, config.detail_mode, config.header_label_length);
+            shortenColumn(additional_headers.length, displayed_columns, o.title, o.ellipsis, config.detail_mode, config.header_label_length, config.line_numbers);
         }
     }
 
@@ -583,6 +604,16 @@ export function load() {
         if (!config.detail_mode && config.header_label_length > 0) {
             bs_table_cols.push({
                 field: '',
+                title: '',
+                formatter: function(value) {
+                    return value;
+                }
+            });
+        }
+
+        if (config.line_numbers) {
+            bs_table_cols.push({
+                field: 'line_number',
                 title: '',
                 formatter: function(value) {
                     return value;
@@ -694,6 +725,11 @@ export function load() {
         for (const r of decompressed) {
             var i = 0;
             var row = {};
+            if (!config.is_single_page) {
+                row["line_number"] = j + 1 + config.page_size * (CURRENT_PAGE - 1);
+            } else {
+                row["line_number"] = j + 1;
+            }
             for (const element of r) {
                 row[config.columns[i]] = element;
                 i++;
@@ -793,7 +829,7 @@ export function load() {
                 vegaEmbed(`#${plot_id}`, marked_plot);
             }
         });
-        addNumClass(config.displayed_numeric_columns, additional_headers.length, config.detail_mode);
+        addNumClass(config.displayed_numeric_columns, additional_headers.length, config.detail_mode, config);
 
         render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true, custom_plots);
 
@@ -842,6 +878,9 @@ export function load() {
                 for (const title of config.displayed_columns) {
                     let index = tick_brush + 1;
                     if (config.detail_mode || config.header_label_length > 0) {
+                        index += 1;
+                    }
+                    if (config.line_numbers) {
                         index += 1;
                     }
                     if (config.displayed_numeric_columns.includes(title)) {
