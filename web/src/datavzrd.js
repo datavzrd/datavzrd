@@ -63,14 +63,12 @@ function shareRow(index, webhost_url) {
     QRCode.toCanvas(document.getElementById('qr-code'), url)
 }
 
-function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length, line_numbers) {
+function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
     let index = columns.indexOf(title) + 1;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
     }
-    if (line_numbers) {
-        index += 1;
-    }
+    index += 1; // compensate for line numbers
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
     $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -100,14 +98,12 @@ function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precisi
     );
 }
 
-function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length, line_numbers) {
+function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
     let index = columns.indexOf(title) + 1;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
     }
-    if (line_numbers) {
-        index += 1;
-    }
+    index += 1; // compensate for line numbers
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
     $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -151,14 +147,12 @@ function renderDetailTickBarPlot(value, div, specs, title) {
     }
 }
 
-function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length, line_numbers) {
+function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) {
     let index = columns.indexOf(heatmap.title) + 1;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
     }
-    if (line_numbers) {
-        index += 1;
-    }
+    index += 1; // compensate for line numbers
     let row = 0;
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
     var custom_func = heatmap.heatmap.custom_content;
@@ -212,14 +206,12 @@ function datavzrdScale(heatmap) {
     return scale;
 }
 
-function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_length, line_numbers) {
+function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_length) {
     let index = columns.indexOf(title) + 1;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
     }
-    if (config.line_numbers) {
-        index += 1;
-    }
+    index += 1; // compensate for line numbers
     let row = 0;
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function () {
@@ -249,14 +241,12 @@ function shortenHeaderRow(row, ellipsis, skip_label) {
 }
 
 
-function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content, detail_mode, header_label_length, line_numbers) {
+function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content, detail_mode, header_label_length) {
     let index = dp_columns.indexOf(title) + 1;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
     }
-    if (line_numbers) {
-        index += 1;
-    }
+    index += 1; // compensate for line numbers
     let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function () {
@@ -370,14 +360,12 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
     );
 }
 
-function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length, line_numbers) {
+function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
     let index = dp_columns.indexOf(plot.title) + 1;
     if (dm || header_label_length > 0) {
         index += 1;
     }
-    if (line_numbers) {
-        index += 1;
-    }
+    index += 1; // compensate for line numbers
     let detail_mode = dp_columns.indexOf(plot.title) == -1;
     var data_function = window[plot.data_function];
     var specs = plot.specs;
@@ -434,9 +422,7 @@ function addNumClass(dp_num, ah, detail_mode, config) {
             if (detail_mode) {
                 n += 1;
             }
-            if (config.line_numbers > 0) {
-                n += 1;
-            }
+            n += 1; // compensate for line numbers
             $(`table > tbody > tr td:nth-child(${n})`).each(
                 function() {
                     this.classList.add("num-cell");
@@ -517,37 +503,37 @@ function detailFormatter(index, row) {
 function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers, custom_plots) {
     for (const o of custom_plots) {
         if (displayed_columns.includes(o.title)) {
-            renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length, config.line_numbers);
+            renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
         }
     }
 
     for (const o of config.ticks) {
         if (displayed_columns.includes(o.title)) {
-            renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length, config.line_numbers);
+            renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length);
         }
     }
 
     for (const o of config.bars) {
         if (displayed_columns.includes(o.title)) {
-            renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length, config.line_numbers);
+            renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length);
         }
     }
 
     for (const o of config.link_urls) {
         if (displayed_columns.includes(o.title)) {
-            linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, o.custom_content, config.detail_mode, config.header_label_length, config.line_numbers);
+            linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, o.custom_content, config.detail_mode, config.header_label_length);
         }
     }
 
     for (const o of config.heatmaps) {
         if (displayed_columns.includes(o.title)) {
-            colorizeColumn(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length, config.line_numbers);
+            colorizeColumn(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
         }
     }
 
     for (const o of config.ellipsis) {
         if (displayed_columns.includes(o.title)) {
-            shortenColumn(additional_headers.length, displayed_columns, o.title, o.ellipsis, config.detail_mode, config.header_label_length, config.line_numbers);
+            shortenColumn(additional_headers.length, displayed_columns, o.title, o.ellipsis, config.detail_mode, config.header_label_length);
         }
     }
 
@@ -611,15 +597,15 @@ export function load() {
             });
         }
 
-        if (config.line_numbers) {
-            bs_table_cols.push({
-                field: 'line_number',
-                title: '',
-                formatter: function(value) {
-                    return value;
-                }
-            });
-        }
+        
+        bs_table_cols.push({
+            field: 'line_number',
+            title: '',
+            formatter: function(value) {
+                return value;
+            }
+        });
+        
 
         for (const column of config.columns) {
             if (config.displayed_columns.includes(column)) {
@@ -880,9 +866,7 @@ export function load() {
                     if (config.detail_mode || config.header_label_length > 0) {
                         index += 1;
                     }
-                    if (config.line_numbers) {
-                        index += 1;
-                    }
+                    index += 1; // compensate for line numbers
                     if (config.displayed_numeric_columns.includes(title)) {
                         let plot_data = [];
                         let values = []

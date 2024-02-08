@@ -445,8 +445,6 @@ pub(crate) struct ItemSpecs {
     pub(crate) render_html: Option<RenderHtmlSpec>,
     #[serde(default)]
     pub(crate) max_in_memory_rows: Option<usize>,
-    #[serde(default)]
-    pub(crate) line_numbers: bool,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -1215,7 +1213,6 @@ mod tests {
             render_plot: None,
             render_html: None,
             max_in_memory_rows: None,
-            line_numbers: false,
         };
 
         let expected_config = ItemsSpec {
@@ -1287,7 +1284,6 @@ mod tests {
             render_plot: Some(expected_render_plot),
             render_html: None,
             max_in_memory_rows: None,
-            line_numbers: false,
         };
 
         let expected_config = ItemsSpec {
@@ -1347,7 +1343,6 @@ mod tests {
             render_plot: None,
             render_html: Some(expected_render_html),
             max_in_memory_rows: None,
-            line_numbers: false,
         };
 
         let expected_config = ItemsSpec {
@@ -1417,7 +1412,6 @@ mod tests {
             render_plot: None,
             render_html: None,
             max_in_memory_rows: None,
-            line_numbers: false,
         };
 
         let expected_config = ItemsSpec {
@@ -1839,7 +1833,6 @@ mod tests {
             render_plot: None,
             render_html: None,
             max_in_memory_rows: None,
-            line_numbers: false,
         };
 
         assert_eq!(item_specs, expected_item_specs);
