@@ -64,11 +64,10 @@ function shareRow(index, webhost_url) {
 }
 
 function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
-    let index = columns.indexOf(title) + 1;
+    let index = columns.indexOf(title) + 2;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
     }
-    index += 1; // compensate for line numbers
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
     $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -99,11 +98,10 @@ function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precisi
 }
 
 function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
-    let index = columns.indexOf(title) + 1;
+    let index = columns.indexOf(title) + 2;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
     }
-    index += 1; // compensate for line numbers
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
     $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -148,11 +146,10 @@ function renderDetailTickBarPlot(value, div, specs, title) {
 }
 
 function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) {
-    let index = columns.indexOf(heatmap.title) + 1;
+    let index = columns.indexOf(heatmap.title) + 2;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
     }
-    index += 1; // compensate for line numbers
     let row = 0;
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
     var custom_func = heatmap.heatmap.custom_content;
@@ -207,11 +204,10 @@ function datavzrdScale(heatmap) {
 }
 
 function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_length) {
-    let index = columns.indexOf(title) + 1;
+    let index = columns.indexOf(title) + 2;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
     }
-    index += 1; // compensate for line numbers
     let row = 0;
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function () {
@@ -242,11 +238,10 @@ function shortenHeaderRow(row, ellipsis, skip_label) {
 
 
 function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content, detail_mode, header_label_length) {
-    let index = dp_columns.indexOf(title) + 1;
+    let index = dp_columns.indexOf(title) + 2;
     if (detail_mode || header_label_length !== 0) {
         index += 1;
     }
-    index += 1; // compensate for line numbers
     let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function () {
@@ -361,11 +356,10 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
 }
 
 function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
-    let index = dp_columns.indexOf(plot.title) + 1;
+    let index = dp_columns.indexOf(plot.title) + 2;
     if (dm || header_label_length > 0) {
         index += 1;
     }
-    index += 1; // compensate for line numbers
     let detail_mode = dp_columns.indexOf(plot.title) == -1;
     var data_function = window[plot.data_function];
     var specs = plot.specs;
@@ -418,11 +412,10 @@ function addNumClass(dp_num, ah, detail_mode, config) {
     for (let i in dp_num) {
         if (dp_num[i]) {
             let row = 0;
-            let n = parseInt(i) + 1;
+            let n = parseInt(i) + 2;
             if (detail_mode) {
                 n += 1;
             }
-            n += 1; // compensate for line numbers
             $(`table > tbody > tr td:nth-child(${n})`).each(
                 function() {
                     this.classList.add("num-cell");
@@ -862,11 +855,10 @@ export function load() {
             function render_brush_plots(reset) {
                 let tick_brush = 0;
                 for (const title of config.displayed_columns) {
-                    let index = tick_brush + 1;
+                    let index = tick_brush + 2;
                     if (config.detail_mode || config.header_label_length > 0) {
                         index += 1;
                     }
-                    index += 1; // compensate for line numbers
                     if (config.displayed_numeric_columns.includes(title)) {
                         let plot_data = [];
                         let values = []
