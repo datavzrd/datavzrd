@@ -1150,3 +1150,18 @@ export function load_search() {
         $(".search-input").focus();
     });
 }
+
+export function toggle_line_numbers() {
+    var table = document.getElementById("table");
+    var rows = table.getElementsByTagName("tr");
+    var cell_index = config.detail_mode ? 1 : 0;
+    for (var i = 0; i < rows.length; i++) {
+        var cells = rows[i].getElementsByTagName("td");
+        if (cells.length > 0) {
+            cells[cell_index].style.display = cells[cell_index].style.display === "none" ? "table-cell" : "none";
+        }
+    }
+    // also hide table head 
+    var ths = table.getElementsByTagName("th");
+    ths[cell_index].style.display = ths[cell_index].style.display === "none" ? "table-cell" : "none";
+}
