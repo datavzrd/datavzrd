@@ -528,6 +528,7 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
     for (var i in displayed_columns) {
         $(`#filter-${i}-container`).popover('update');
     }
+    toggle_line_numbers()
 }
 
 export function load() {
