@@ -140,7 +140,7 @@ function renderDetailTickBarPlot(value, div, specs, title) {
 }
 
 function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) {
-    let index = get_index(title, columns, detail_mode, header_label_length);
+    let index = get_index(heatmap.title, columns, detail_mode, header_label_length);
     let row = 0;
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
     var custom_func = heatmap.heatmap.custom_content;
