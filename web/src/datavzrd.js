@@ -12,6 +12,8 @@ import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
 
+let LINE_NUMBERS = false;
+
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
     const converter = new showdown.Converter({
@@ -528,7 +530,10 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
     for (var i in displayed_columns) {
         $(`#filter-${i}-container`).popover('update');
     }
-    toggle_line_numbers()
+
+    if (!LINE_NUMBERS) {
+        line_numbers("none");
+    }
 }
 
 export function load() {
@@ -1134,17 +1139,26 @@ function get_index(name, columns, detail_mode, header_label_length) {
     return index
 }
 
-export function toggle_line_numbers() {
+function line_numbers(style) {
     var table = document.getElementById("table");
     var rows = table.getElementsByTagName("tr");
     var cell_index = config.detail_mode ? 1 : 0;
     for (var i = 0; i < rows.length; i++) {
         var cells = rows[i].getElementsByTagName("td");
         if (cells.length > 0) {
-            cells[cell_index].style.display = cells[cell_index].style.display === "none" ? "table-cell" : "none";
+            cells[cell_index].style.display = style;
         }
     }
-    // also hide table head 
+    // also hide table head
     var ths = table.getElementsByTagName("th");
-    ths[cell_index].style.display = ths[cell_index].style.display === "none" ? "table-cell" : "none";
+    ths[cell_index].style.display = style;
+}
+
+export function toggle_line_numbers() {
+    if (LINE_NUMBERS) {
+        line_numbers("none");
+    } else {
+        line_numbers("table-cell");
+    }
+    LINE_NUMBERS = !LINE_NUMBERS;
 }
