@@ -51,15 +51,21 @@ mod tests {
     use crate::utils::row_address::RowAddress;
     use std::collections::HashMap;
     use std::str::FromStr;
+    use crate::spec::DatasetSpecs;
 
     #[test]
     fn test_column_index() {
+        let dataset = DatasetSpecs {
+            path: "tests/data/uniform_datatypes.csv".to_string().parse().unwrap(),
+            separator: char::from_str(",").unwrap(),
+            header_rows: 1,
+            links: None,
+            offer_excel: false,
+        };
         let column_index = ColumnIndex::new(
-            "tests/data/uniform_datatypes.csv",
-            char::from_str(",").unwrap(),
+            &dataset,
             "first",
             3,
-            1,
         )
         .unwrap();
         let expected_column_index = ColumnIndex {

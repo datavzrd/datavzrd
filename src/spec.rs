@@ -1817,7 +1817,7 @@ mod tests {
     #[test]
     fn test_dataset_size() {
         let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
-        assert_eq!(config.datasets.get("movies").unwrap().size(), 184);
+        assert_eq!(config.datasets.get("movies").unwrap().size().unwrap(), 184);
     }
 
     #[test]
@@ -1829,7 +1829,7 @@ mod tests {
             links: None,
             offer_excel: false,
         };
-        assert!(empty_dataset.is_empty());
+        assert!(empty_dataset.is_empty().unwrap());
     }
 
     #[test]

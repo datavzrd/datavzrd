@@ -200,12 +200,21 @@ impl BinnedPlotRecord {
 
 #[cfg(test)]
 mod tests {
+    use std::str::FromStr;
     use crate::render::portable::plot::{generate_nominal_plot, PlotRecord};
+    use crate::spec::DatasetSpecs;
 
     #[test]
     fn test_nominal_plot_generation() {
+        let dataset = DatasetSpecs {
+            path: "tests/data/uniform_datatypes.csv".to_string().parse().unwrap(),
+            separator: char::from_str(",").unwrap(),
+            header_rows: 1,
+            links: None,
+            offer_excel: false,
+        };
         let mut records =
-            generate_nominal_plot("tests/data/uniform_datatypes.csv".as_ref(), ',', 0, 1)
+            generate_nominal_plot(&dataset ,0, )
                 .unwrap()
                 .unwrap();
         records.sort_unstable();
