@@ -215,7 +215,7 @@ impl Renderer for ItemRenderer {
                             pages,
                             records
                                 .iter()
-                                .map(|(_, records)| records.as_ref())
+                                .map(|(_, records)| records)
                                 .collect_vec(),
                             &headers,
                             &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
