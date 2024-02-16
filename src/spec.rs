@@ -8,7 +8,7 @@ use crate::spec::ConfigError::{
 };
 use crate::utils::column_position;
 use crate::utils::column_type::{classify_table, ColumnType};
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use anyhow::{bail, Context};
 use derefable::Derefable;
 use fancy_regex::Regex;
@@ -104,12 +104,9 @@ impl ItemsSpec {
                         }
                     }
                     let dataset = self.datasets.get(view.dataset.as_ref().unwrap()).unwrap();
-                    let mut reader = csv::ReaderBuilder::new()
-                        .delimiter(dataset.separator as u8)
-                        .from_path(&dataset.path)?;
+                    let mut reader = dataset.reader()?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                    let column_types =
-                        classify_table(&dataset.path, dataset.separator, dataset.header_rows)?;
+                    let column_types = classify_table(dataset)?;
                     for (column, render_columns) in &render_table.columns {
                         if !titles.contains(column) && !render_columns.optional {
                             bail!(ConfigError::MissingColumn {
@@ -179,7 +176,7 @@ impl ItemsSpec {
                                 }
                                 if heatmap.domain_mid.is_some() {
                                     if column_types.get(column).is_some_and(|ct| !ct.is_numeric())
-                                        && !dataset.is_empty()
+                                        && !dataset.is_empty()?
                                     {
                                         bail!(WrongColumnTypeMidDomain {
                                             view: name.to_string(),
@@ -235,14 +232,10 @@ impl ItemsSpec {
                                 false
                             };
                             if let Some(domain) = domain {
-                                let mut reader = csv::ReaderBuilder::new()
-                                    .delimiter(dataset.separator as u8)
-                                    .from_path(&dataset.path)?;
-                                let _titles =
-                                    reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                                let colum_pos = column_position(column, &mut reader)?;
-                                for record in reader.records() {
-                                    let record = record?;
+                                let mut reader = dataset.reader()?;
+                                let colum_pos = column_position(column, dataset)?;
+                                for record in reader.records()? {
+                                    let record = record;
                                     let value = record.get(colum_pos).unwrap();
                                     if let Ok(value) = value.parse::<f32>() {
                                         if (value < domain[0] || value > domain[domain.len() - 1])
@@ -285,9 +278,7 @@ impl ItemsSpec {
         for (name, dataset) in &self.datasets {
             if let Some(linkouts) = &dataset.links {
                 for (link_name, link) in linkouts {
-                    let mut reader = csv::ReaderBuilder::new()
-                        .delimiter(dataset.separator as u8)
-                        .from_path(&dataset.path)?;
+                    let mut reader = dataset.reader()?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
                     if !titles.contains(&link.column) {
                         bail!(MissingLinkoutColumn {
@@ -303,9 +294,7 @@ impl ItemsSpec {
                         if let Some(table_spec) = self.views.get(table) {
                             if let Some(table_dataset) = &table_spec.dataset {
                                 if let Some(dataset) = self.datasets.get(table_dataset) {
-                                    let mut reader = csv::ReaderBuilder::new()
-                                        .delimiter(dataset.separator as u8)
-                                        .from_path(&dataset.path)?;
+                                    let mut reader = dataset.reader()?;
                                     let titles = reader
                                         .headers()?
                                         .iter()
@@ -381,37 +370,37 @@ pub(crate) struct DatasetSpecs {
 }
 
 impl DatasetSpecs {
-    pub(crate) fn size(&self) -> usize {
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(self.separator as u8)
-            .from_path(&self.path)
-            .expect("Could not read dataset.");
-        reader.records().count() - (self.header_rows - 1)
+    pub(crate) fn size(&self) -> Result<usize> {
+        Ok(self.reader()?.records()?.count() - (self.header_rows - 1))
     }
 
-    pub(crate) fn is_empty(&self) -> bool {
-        self.size() == 0
+    pub(crate) fn is_empty(&self) -> Result<bool> {
+        Ok(self.size()? == 0)
+    }
+
+    pub(crate) fn reader(&self) -> Result<readervzrd::FileReader> {
+        let path = &self
+            .path
+            .to_str()
+            .ok_or(anyhow!("Failed to create dataset reader."))?;
+        let reader = readervzrd::FileReader::new(path, Some(self.separator))?;
+        Ok(reader)
     }
 
     /// Returns a hashmap counting the number of unique values of all columns of the dataset
     pub(crate) fn unique_column_values(&self) -> Result<HashMap<String, usize>> {
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(self.separator as u8)
-            .from_path(&self.path)?;
+        let mut reader = self.reader()?;
         let headers = reader.headers()?.clone();
         let column_counts: HashMap<String, usize> = headers
             .iter()
             .enumerate()
             .map(|(index, column)| {
-                let mut reader = csv::ReaderBuilder::new()
-                    .delimiter(self.separator as u8)
-                    .from_path(&self.path)
-                    .unwrap();
+                let mut reader = self.reader().unwrap();
                 (
                     column.to_string(),
                     reader
                         .records()
-                        .map(|row| row.unwrap())
+                        .unwrap()
                         .map(|row| row.get(index).unwrap().to_string())
                         .unique()
                         .collect_vec()
@@ -521,16 +510,13 @@ impl ItemSpecs {
         single_page_threshold: usize,
     ) -> Result<()> {
         let mut indexed_keys = HashMap::new();
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(dataset.separator as u8)
-            .from_path(&dataset.path)
-            .context(format!("Could not read file with path {:?}", &dataset.path))?;
-        let rows = &reader.records().count();
+        let mut reader = dataset.reader()?;
+        let rows = &reader.records()?.count();
         self.single_page_page_size = self.page_size;
         if rows <= &single_page_threshold {
             self.page_size = *rows;
         }
-        let headers = reader.headers()?;
+        let headers = dataset.reader()?.headers()?;
         if let Some(render_table) = self.render_table.borrow_mut() {
             for (title, render_column_specs) in render_table.columns.iter_mut() {
                 render_column_specs.preprocess(dataset, title)?;
@@ -611,7 +597,7 @@ impl ItemSpecs {
                 .as_ref()
                 .unwrap()
                 .columns
-                .contains_key(header)
+                .contains_key(&header)
             {
                 self.render_table
                     .as_mut()
@@ -712,7 +698,7 @@ pub(crate) enum HeaderDisplayMode {
 
 impl RenderColumnSpec {
     fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
-        if !dataset.is_empty() {
+        if !dataset.is_empty()? {
             if let Some(plot) = &mut self.plot {
                 if let Some(ticks) = &mut plot.tick_plot {
                     ticks.preprocess(dataset)?;
@@ -757,13 +743,7 @@ impl Heatmap {
             _ => {}
         }
         if self.domain.is_none() {
-            let d = get_column_domain(
-                title,
-                &dataset.path,
-                dataset.separator,
-                dataset.header_rows,
-                self,
-            )?;
+            let d = get_column_domain(title, dataset, self)?;
             let domain: Vec<String> = if self.scale_type.is_quantitative() {
                 let floating_domain: Vec<f64> = serde_json::from_str(&d)?;
                 floating_domain.iter().map(|x| x.to_string()).collect()
@@ -1029,10 +1009,7 @@ pub struct AuxDomainColumns(pub(crate) Option<Vec<String>>);
 
 impl AuxDomainColumns {
     fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(dataset.separator as u8)
-            .from_path(&dataset.path)
-            .context(format!("Could not read file with path {:?}", &dataset.path))?;
+        let mut reader = dataset.reader()?;
         let headers = reader.headers()?;
         let mut new_tick_plot_aux_domain_columns = Vec::new();
         if let Some(columns) = &self.0 {

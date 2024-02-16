@@ -322,7 +322,6 @@ version = "2.35.4"
 dependencies = [
  "anyhow",
  "chrono",
- "csv",
  "derefable",
  "derive-new",
  "fancy-regex",
@@ -333,6 +332,7 @@ dependencies = [
  "md5",
  "minify-js",
  "ndhistogram",
+ "readervzrd",
  "serde",
  "serde_json",
  "serde_yaml",
@@ -894,6 +894,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
 dependencies = [
  "getrandom",
+]
+
+[[package]]
+name = "readervzrd"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "04a5bd8401299136ffe333c88186276c3728b8729942f4c3d3c00076180ce983"
+dependencies = [
+ "csv",
+ "serde",
+ "serde_json",
+ "thiserror",
 ]
 
 [[package]]

@@ -1,7 +1,7 @@
+use crate::spec::DatasetSpecs;
 use anyhow::Result;
 use std::collections::HashMap;
 use std::iter::FromIterator;
-use std::path::Path;
 use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Default)]
@@ -40,14 +40,8 @@ impl ColumnType {
 }
 
 /// Classifies table columns as String, Integer or Float
-pub(crate) fn classify_table<P: AsRef<Path>>(
-    path: P,
-    separator: char,
-    header_rows: usize,
-) -> Result<HashMap<String, ColumnType>> {
-    let mut reader = csv::ReaderBuilder::new()
-        .delimiter(separator as u8)
-        .from_path(path)?;
+pub(crate) fn classify_table(dataset: &DatasetSpecs) -> Result<HashMap<String, ColumnType>> {
+    let mut reader = dataset.reader()?;
 
     let headers = reader.headers()?.clone();
     let mut classification = HashMap::from_iter(
@@ -55,9 +49,8 @@ pub(crate) fn classify_table<P: AsRef<Path>>(
             .iter()
             .map(|f| (f.to_owned(), ColumnType::default())),
     );
-    for record in reader.records().skip(header_rows - 1) {
-        let result = record?;
-        for (title, value) in headers.iter().zip(result.iter()) {
+    for record in reader.records()?.skip(dataset.header_rows - 1) {
+        for (title, value) in headers.iter().zip(record.iter()) {
             let column_type = classification.get_mut(title).unwrap();
             column_type.update(value)?;
         }

@@ -1,7 +1,8 @@
 use crate::render::portable::utils::{minify_js, round};
-use crate::utils::column_type::{classify_table, ColumnType, IsNa};
-use anyhow::{Context as AnyhowContext, Result};
-use csv::Reader;
+use crate::spec::DatasetSpecs;
+use crate::utils::column_type::IsNa;
+use crate::utils::column_type::{classify_table, ColumnType};
+use anyhow::Result;
 use itertools::Itertools;
 use ndhistogram::axis::Uniform;
 use ndhistogram::{ndhistogram, Histogram};
@@ -9,7 +10,6 @@ use serde::Serialize;
 use serde_json::json;
 use std::collections::HashMap;
 use std::fs;
-use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use std::str::FromStr;
@@ -18,17 +18,12 @@ use tera::{Context, Tera};
 /// Renders plots to javascript file
 pub(crate) fn render_plots<P: AsRef<Path>>(
     output_path: P,
-    csv_path: &Path,
-    separator: char,
-    header_rows: usize,
+    dataset: &DatasetSpecs,
     debug: bool,
 ) -> Result<()> {
-    let column_types = classify_table(csv_path, separator, header_rows)?;
+    let column_types = classify_table(dataset)?;
 
-    let mut reader = csv::ReaderBuilder::new()
-        .delimiter(separator as u8)
-        .from_path(csv_path)
-        .context(format!("Could not read file with path {csv_path:?}"))?;
+    let mut reader = dataset.reader()?;
 
     let path = Path::new(output_path.as_ref()).join("plots");
     fs::create_dir(&path)?;
@@ -41,7 +36,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
         match column_types.get(column) {
             None => unreachable!(),
             Some(ColumnType::String) | Some(ColumnType::None) => {
-                let plot = generate_nominal_plot(csv_path, separator, index, header_rows)?;
+                let plot = generate_nominal_plot(dataset, index)?;
                 templates.add_raw_template(
                     "plot.js.tera",
                     include_str!("../../../templates/nominal_plot.js.tera"),
@@ -49,7 +44,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
                 context.insert("table", &json!(plot).to_string())
             }
             Some(ColumnType::Integer) | Some(ColumnType::Float) => {
-                let plot = generate_numeric_plot(csv_path, separator, index, header_rows)?;
+                let plot = generate_numeric_plot(dataset, index)?;
                 templates.add_raw_template(
                     "plot.js.tera",
                     include_str!("../../../templates/numeric_plot.js.tera"),
@@ -68,21 +63,12 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
 
 /// Generates plot records for columns of types Float and Integer
 fn generate_numeric_plot(
-    path: &Path,
-    separator: char,
+    dataset: &DatasetSpecs,
     column_index: usize,
-    header_rows: usize,
 ) -> Result<Option<Vec<BinnedPlotRecord>>> {
-    let generate_reader = || -> csv::Result<Reader<File>> {
-        csv::ReaderBuilder::new()
-            .delimiter(separator as u8)
-            .from_path(path)
-    };
+    let mut reader = dataset.reader()?;
 
-    let mut reader =
-        generate_reader().context(format!("Could not read file with path {path:?}"))?;
-
-    let (min, max) = get_min_max(path, separator, column_index, header_rows, None)?;
+    let (min, max) = get_min_max(dataset, column_index, None)?;
 
     if min == max {
         return Ok(None);
@@ -91,8 +77,7 @@ fn generate_numeric_plot(
     let mut hist = ndhistogram!(Uniform::new(NUMERIC_BINS, min, max));
     let mut nan = 0;
 
-    for r in reader.records().skip(header_rows - 1) {
-        let record = r?;
+    for record in reader.records()?.skip(dataset.header_rows - 1) {
         let value = record.get(column_index).unwrap();
         if let Ok(number) = f32::from_str(value) {
             hist.fill(&number)
@@ -119,33 +104,23 @@ fn generate_numeric_plot(
 
 /// Finds the numeric minimum and maximum value of a csv column
 pub(crate) fn get_min_max(
-    path: &Path,
-    separator: char,
+    dataset: &DatasetSpecs,
     column_index: usize,
-    header_rows: usize,
     precision: Option<u32>,
 ) -> Result<(f32, f32)> {
-    let generate_reader = || -> csv::Result<Reader<File>> {
-        csv::ReaderBuilder::new()
-            .delimiter(separator as u8)
-            .from_path(path)
-    };
-
-    let mut min_reader =
-        generate_reader().context(format!("Could not read file with path {path:?}"))?;
-    let mut max_reader =
-        generate_reader().context(format!("Could not read file with path {path:?}"))?;
+    let mut min_reader = dataset.reader()?;
+    let mut max_reader = dataset.reader()?;
 
     let min = min_reader
-        .records()
-        .skip(header_rows - 1)
-        .map(|r| r.unwrap().get(column_index).unwrap().to_string())
+        .records()?
+        .skip(dataset.header_rows - 1)
+        .map(|r| r.get(column_index).unwrap().to_string())
         .filter_map(|s| s.parse().ok())
         .fold(f32::INFINITY, |a, b| a.min(b));
     let max = max_reader
-        .records()
-        .skip(header_rows - 1)
-        .map(|r| r.unwrap().get(column_index).unwrap().to_string())
+        .records()?
+        .skip(dataset.header_rows - 1)
+        .map(|r| r.get(column_index).unwrap().to_string())
         .filter_map(|s| s.parse().ok())
         .fold(f32::NEG_INFINITY, |a, b| a.max(b));
 
@@ -158,22 +133,16 @@ pub(crate) fn get_min_max(
 
 /// Generates plot records for columns of type String
 fn generate_nominal_plot(
-    path: &Path,
-    separator: char,
+    dataset: &DatasetSpecs,
     column_index: usize,
-    header_rows: usize,
 ) -> Result<Option<Vec<PlotRecord>>> {
-    let mut reader = csv::ReaderBuilder::new()
-        .delimiter(separator as u8)
-        .from_path(path)
-        .context(format!("Could not read file with path {path:?}"))?;
+    let mut reader = dataset.reader()?;
 
     let mut count_values = HashMap::new();
 
-    for record in reader.records().skip(header_rows - 1) {
-        let result = record?;
+    for result in reader.records()?.skip(dataset.header_rows - 1) {
         let value = result.get(column_index).unwrap();
-        if !value.is_na() {
+        if !value.as_str().is_na() {
             let entry = count_values.entry(value.to_owned()).or_insert_with(|| 0);
             *entry += 1;
         } else {
