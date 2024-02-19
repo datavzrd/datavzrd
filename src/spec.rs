@@ -1821,6 +1821,18 @@ mod tests {
     }
 
     #[test]
+    fn test_dataset_size_with_json() {
+        let dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/uniform_datatypes.json"),
+            separator: ',',
+            header_rows: 1,
+            links: None,
+            offer_excel: false,
+        };
+        assert_eq!(dataset.size().unwrap(), 4);
+    }
+
+    #[test]
     fn test_dataset_empty() {
         let empty_dataset = DatasetSpecs {
             path: PathBuf::from("tests/data/empty_table.csv"),
@@ -1841,6 +1853,7 @@ mod tests {
             .unwrap()
             .unique_column_values()
             .unwrap();
+        assert_eq!(unique_column_values.get("oscar_yr").unwrap(), &91_usize);
         assert_eq!(unique_column_values.get("award").unwrap(), &2_usize);
     }
 }
