@@ -2027,12 +2027,7 @@ mod tests {
             links: None,
         };
 
-        let tick_plot = render_tick_plot(
-            "price",
-            &dataset,
-            &tick_plot_spec,
-            2,
-        );
+        let tick_plot = render_tick_plot("price", &dataset, &tick_plot_spec, 2);
         assert!(tick_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&tick_plot.unwrap()).is_ok());
     }
@@ -2064,12 +2059,7 @@ mod tests {
             links: None,
         };
 
-        let tick_plot = render_tick_plot(
-            "price",
-            &dataset,
-            &tick_plot_spec,
-            2,
-        );
+        let tick_plot = render_tick_plot("price", &dataset, &tick_plot_spec, 2);
         assert!(tick_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&tick_plot.unwrap()).is_ok());
     }
@@ -2091,12 +2081,7 @@ mod tests {
             links: None,
         };
 
-        let bar_plot = render_tick_plot(
-            "price",
-            &dataset,
-            &bar_plot_spec,
-            2,
-        );
+        let bar_plot = render_tick_plot("price", &dataset, &bar_plot_spec, 2);
         assert!(bar_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&bar_plot.unwrap()).is_ok());
     }
@@ -2128,12 +2113,7 @@ mod tests {
             links: None,
         };
 
-        let bar_plot = render_tick_plot(
-            "price",
-            &dataset,
-            &bar_plot_spec,
-            2,
-        );
+        let bar_plot = render_tick_plot("price", &dataset, &bar_plot_spec, 2);
         assert!(bar_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&bar_plot.unwrap()).is_ok());
     }
