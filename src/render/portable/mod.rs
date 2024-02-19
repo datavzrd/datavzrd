@@ -1995,7 +1995,7 @@ pub enum SpecError {
 #[cfg(test)]
 mod tests {
     use crate::render::portable::{render_tick_plot, JavascriptFunction};
-    use crate::spec::{Color, ColorDefinition, ColorRange, ScaleType, TickPlot};
+    use crate::spec::{Color, ColorDefinition, ColorRange, DatasetSpecs, ScaleType, TickPlot};
     use std::path::PathBuf;
 
     #[test]
@@ -2019,11 +2019,17 @@ mod tests {
             color: None,
         };
 
+        let dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/uniform_datatypes.csv"),
+            separator: ',',
+            header_rows: 1,
+            offer_excel: false,
+            links: None,
+        };
+
         let tick_plot = render_tick_plot(
             "price",
-            &PathBuf::from("tests/data/uniform_datatypes.csv"),
-            ',',
-            1,
+            &dataset,
             &tick_plot_spec,
             2,
         );
@@ -2050,11 +2056,17 @@ mod tests {
             }),
         };
 
+        let dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/uniform_datatypes.csv"),
+            separator: ',',
+            header_rows: 1,
+            offer_excel: false,
+            links: None,
+        };
+
         let tick_plot = render_tick_plot(
             "price",
-            &PathBuf::from("tests/data/uniform_datatypes.csv"),
-            ',',
-            1,
+            &dataset,
             &tick_plot_spec,
             2,
         );
@@ -2071,11 +2083,17 @@ mod tests {
             color: None,
         };
 
+        let dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/uniform_datatypes.csv"),
+            separator: ',',
+            header_rows: 1,
+            offer_excel: false,
+            links: None,
+        };
+
         let bar_plot = render_tick_plot(
             "price",
-            &PathBuf::from("tests/data/uniform_datatypes.csv"),
-            ',',
-            1,
+            &dataset,
             &bar_plot_spec,
             2,
         );
@@ -2102,11 +2120,17 @@ mod tests {
             }),
         };
 
+        let dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/uniform_datatypes.csv"),
+            separator: ',',
+            header_rows: 1,
+            offer_excel: false,
+            links: None,
+        };
+
         let bar_plot = render_tick_plot(
             "price",
-            &PathBuf::from("tests/data/uniform_datatypes.csv"),
-            ',',
-            1,
+            &dataset,
             &bar_plot_spec,
             2,
         );
