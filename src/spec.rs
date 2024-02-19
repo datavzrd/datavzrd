@@ -908,7 +908,7 @@ pub(crate) struct Heatmap {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
-pub(crate) struct ColorRange(Vec<Color>);
+pub(crate) struct ColorRange(pub(crate) Vec<Color>);
 
 impl ColorRange {
     fn preprocess(&mut self) -> Result<()> {
@@ -917,7 +917,7 @@ impl ColorRange {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-pub(crate) struct Color(String);
+pub(crate) struct Color(pub(crate) String);
 
 impl Color {
     fn preprocess(&mut self) -> Result<()> {
