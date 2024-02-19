@@ -69,24 +69,24 @@ impl IsNa for &str {
 
 #[cfg(test)]
 mod tests {
+    use crate::spec::DatasetSpecs;
     use crate::utils::column_type::{classify_table, ColumnType};
     use std::collections::HashMap;
     use std::str::FromStr;
-    use crate::spec::DatasetSpecs;
 
     #[test]
     fn test_classify_uniform_table() {
         let dataset = DatasetSpecs {
-            path: "tests/data/uniform_datatypes.csv".to_string().parse().unwrap(),
+            path: "tests/data/uniform_datatypes.csv"
+                .to_string()
+                .parse()
+                .unwrap(),
             separator: char::from_str(",").unwrap(),
             header_rows: 1,
             links: None,
             offer_excel: false,
         };
-        let classification = classify_table(
-            &dataset,
-        )
-        .unwrap();
+        let classification = classify_table(&dataset).unwrap();
         let expected = HashMap::from([
             (String::from("first"), ColumnType::String),
             (String::from("last"), ColumnType::String),
@@ -99,16 +99,16 @@ mod tests {
     #[test]
     fn test_classify_non_uniform_table() {
         let dataset = DatasetSpecs {
-            path: "tests/data/non_uniform_datatypes.csv".to_string().parse().unwrap(),
+            path: "tests/data/non_uniform_datatypes.csv"
+                .to_string()
+                .parse()
+                .unwrap(),
             separator: char::from_str(",").unwrap(),
             header_rows: 1,
             links: None,
             offer_excel: false,
         };
-        let classification = classify_table(
-            &dataset,
-        )
-        .unwrap();
+        let classification = classify_table(&dataset).unwrap();
         let expected = HashMap::from([
             (String::from("first"), ColumnType::String),
             (String::from("last"), ColumnType::String),
@@ -127,10 +127,7 @@ mod tests {
             links: None,
             offer_excel: false,
         };
-        let classification = classify_table(
-            &dataset,
-        )
-        .unwrap();
+        let classification = classify_table(&dataset).unwrap();
         for column_type in classification.values() {
             assert_eq!(&ColumnType::None, column_type)
         }

@@ -47,27 +47,25 @@ impl ColumnIndex {
 
 #[cfg(test)]
 mod tests {
+    use crate::spec::DatasetSpecs;
     use crate::utils::column_index::ColumnIndex;
     use crate::utils::row_address::RowAddress;
     use std::collections::HashMap;
     use std::str::FromStr;
-    use crate::spec::DatasetSpecs;
 
     #[test]
     fn test_column_index() {
         let dataset = DatasetSpecs {
-            path: "tests/data/uniform_datatypes.csv".to_string().parse().unwrap(),
+            path: "tests/data/uniform_datatypes.csv"
+                .to_string()
+                .parse()
+                .unwrap(),
             separator: char::from_str(",").unwrap(),
             header_rows: 1,
             links: None,
             offer_excel: false,
         };
-        let column_index = ColumnIndex::new(
-            &dataset,
-            "first",
-            3,
-        )
-        .unwrap();
+        let column_index = ColumnIndex::new(&dataset, "first", 3).unwrap();
         let expected_column_index = ColumnIndex {
             index: HashMap::from([
                 (String::from("Delia"), RowAddress::new(0, 0)),

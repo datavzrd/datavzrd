@@ -213,10 +213,7 @@ impl Renderer for ItemRenderer {
                             &out_path,
                             page + 1,
                             pages,
-                            records
-                                .iter()
-                                .map(|(_, records)| records)
-                                .collect_vec(),
+                            records.iter().map(|(_, records)| records).collect_vec(),
                             &headers,
                             &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                             name,
