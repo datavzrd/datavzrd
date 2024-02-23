@@ -1,7 +1,7 @@
+use crate::spec::DatasetSpecs;
 use anyhow::Result;
 use std::collections::HashMap;
 use std::iter::FromIterator;
-use std::path::Path;
 use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Default)]
@@ -40,24 +40,15 @@ impl ColumnType {
 }
 
 /// Classifies table columns as String, Integer or Float
-pub(crate) fn classify_table<P: AsRef<Path>>(
-    path: P,
-    separator: char,
-    header_rows: usize,
-) -> Result<HashMap<String, ColumnType>> {
-    let mut reader = csv::ReaderBuilder::new()
-        .delimiter(separator as u8)
-        .from_path(path)?;
-
-    let headers = reader.headers()?.clone();
+pub(crate) fn classify_table(dataset: &DatasetSpecs) -> Result<HashMap<String, ColumnType>> {
+    let headers = dataset.reader()?.headers()?.clone();
     let mut classification = HashMap::from_iter(
         headers
             .iter()
             .map(|f| (f.to_owned(), ColumnType::default())),
     );
-    for record in reader.records().skip(header_rows - 1) {
-        let result = record?;
-        for (title, value) in headers.iter().zip(result.iter()) {
+    for record in dataset.reader()?.records()?.skip(dataset.header_rows - 1) {
+        for (title, value) in headers.iter().zip(record.iter()) {
             let column_type = classification.get_mut(title).unwrap();
             column_type.update(value)?;
         }
@@ -78,18 +69,24 @@ impl IsNa for &str {
 
 #[cfg(test)]
 mod tests {
+    use crate::spec::DatasetSpecs;
     use crate::utils::column_type::{classify_table, ColumnType};
     use std::collections::HashMap;
     use std::str::FromStr;
 
     #[test]
     fn test_classify_uniform_table() {
-        let classification = classify_table(
-            "tests/data/uniform_datatypes.csv",
-            char::from_str(",").unwrap(),
-            1,
-        )
-        .unwrap();
+        let dataset = DatasetSpecs {
+            path: "tests/data/uniform_datatypes.csv"
+                .to_string()
+                .parse()
+                .unwrap(),
+            separator: char::from_str(",").unwrap(),
+            header_rows: 1,
+            links: None,
+            offer_excel: false,
+        };
+        let classification = classify_table(&dataset).unwrap();
         let expected = HashMap::from([
             (String::from("first"), ColumnType::String),
             (String::from("last"), ColumnType::String),
@@ -101,12 +98,17 @@ mod tests {
 
     #[test]
     fn test_classify_non_uniform_table() {
-        let classification = classify_table(
-            "tests/data/non_uniform_datatypes.csv",
-            char::from_str(",").unwrap(),
-            1,
-        )
-        .unwrap();
+        let dataset = DatasetSpecs {
+            path: "tests/data/non_uniform_datatypes.csv"
+                .to_string()
+                .parse()
+                .unwrap(),
+            separator: char::from_str(",").unwrap(),
+            header_rows: 1,
+            links: None,
+            offer_excel: false,
+        };
+        let classification = classify_table(&dataset).unwrap();
         let expected = HashMap::from([
             (String::from("first"), ColumnType::String),
             (String::from("last"), ColumnType::String),
@@ -118,12 +120,14 @@ mod tests {
 
     #[test]
     fn test_empty_column() {
-        let classification = classify_table(
-            "tests/data/empty_table.csv",
-            char::from_str(",").unwrap(),
-            1,
-        )
-        .unwrap();
+        let dataset = DatasetSpecs {
+            path: "tests/data/empty_table.csv".to_string().parse().unwrap(),
+            separator: char::from_str(",").unwrap(),
+            header_rows: 1,
+            links: None,
+            offer_excel: false,
+        };
+        let classification = classify_table(&dataset).unwrap();
         for column_type in classification.values() {
             assert_eq!(&ColumnType::None, column_type)
         }
