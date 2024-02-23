@@ -89,7 +89,7 @@ const heatmap_plot = {
                 "mark": {
                     "type": "rect",
                     "align":"left",
-                    "width": 54
+                    "width": 20
                 },
                 "encoding": {
                     "x": {
@@ -114,7 +114,7 @@ const heatmap_plot = {
                         "type": "nominal",
                         "title": "Rated",
                         "scale": {
-                            "domain": ["Approved","G","M","M/PG","N/A","Not Rated","PG","PG-13","Passed","R","TV-MA","Unrated"],
+                            "domain": [],
                             "type": "ordinal",
                             "scheme": "tableau20",
                             

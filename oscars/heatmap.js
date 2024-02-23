@@ -51,7 +51,7 @@ const heatmap_plot = {
                 "mark": {
                     "type": "rect",
                     "align":"left",
-                    "width": 72
+                    "width": 20
                 },
                 "encoding": {
                     "x": {
