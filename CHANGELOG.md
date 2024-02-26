@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.36.0](https://github.com/datavzrd/datavzrd/compare/v2.35.4...v2.36.0) (2024-02-26)
+
+
+### Features
+
+* Add line-numbers keyword ([#648](https://github.com/datavzrd/datavzrd/issues/648)) ([77196cc](https://github.com/datavzrd/datavzrd/commit/77196cc8b58d9704fdc8afa7322235dc476d5680))
+* Allow downloading filtered data ([#646](https://github.com/datavzrd/datavzrd/issues/646)) ([bf112a4](https://github.com/datavzrd/datavzrd/commit/bf112a4c59f144a065277d9e84d279e6d5c92ff4))
+* Support json input via readervzrd ([#651](https://github.com/datavzrd/datavzrd/issues/651)) ([994f897](https://github.com/datavzrd/datavzrd/commit/994f8978f4e292aae3b3caabe40799b6b8612639))
+
+
+### Bug Fixes
+
+* Adjust plot and html views to match styling of table views with padding for small descriptions ([#645](https://github.com/datavzrd/datavzrd/issues/645)) ([1700cf1](https://github.com/datavzrd/datavzrd/commit/1700cf118f77b1b2047fc78cf7b6a2b6be576662))
+* Fix brush plot on firefox ([#643](https://github.com/datavzrd/datavzrd/issues/643)) ([e6fcbec](https://github.com/datavzrd/datavzrd/commit/e6fcbecc7463e43700801fe75379a0bedba45e8c))
+* Fix plot view getting overlapped by filters ([#638](https://github.com/datavzrd/datavzrd/issues/638)) ([14763f6](https://github.com/datavzrd/datavzrd/commit/14763f637ef5cf08f93d21e367da9406333ffa68))
+
 ## [2.35.4](https://github.com/datavzrd/datavzrd/compare/v2.35.3...v2.35.4) (2024-01-24)
 
 
