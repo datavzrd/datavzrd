@@ -68,6 +68,9 @@
                     });
                     converter.setFlavor('github');
                     innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
+                    if (innerDescription.offsetHeight < window.screen.height/3) {
+                        $('#canvas').css('padding-top', innerDescription.offsetHeight + 50);
+                    }
                 });
             </script>
             <div class="row" style="margin-top: 15px;">

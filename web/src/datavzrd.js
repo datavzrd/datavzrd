@@ -12,6 +12,8 @@ import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
 
+let LINE_NUMBERS = false;
+
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
     const converter = new showdown.Converter({
@@ -27,6 +29,7 @@ function renderMarkdownDescription() {
     innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
     if (innerDescription.offsetHeight < window.screen.height/3) {
         $('#table-container').css('padding-top', innerDescription.offsetHeight - 25);
+        $('#vis-container').css('padding-top', innerDescription.offsetHeight + 50);
     }
 }
 
@@ -98,10 +101,7 @@ function shareRow(index, webhost_url) {
 }
 
 function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
-    let index = columns.indexOf(title) + 1;
-    if (detail_mode || header_label_length !== 0) {
-        index += 1;
-    }
+    let index = get_index(title, columns, detail_mode, header_label_length);
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
     $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -132,10 +132,7 @@ function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precisi
 }
 
 function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
-    let index = columns.indexOf(title) + 1;
-    if (detail_mode || header_label_length !== 0) {
-        index += 1;
-    }
+    let index = get_index(title, columns, detail_mode, header_label_length);
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
     $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -180,10 +177,7 @@ function renderDetailTickBarPlot(value, div, specs, title) {
 }
 
 function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) {
-    let index = columns.indexOf(heatmap.title) + 1;
-    if (detail_mode || header_label_length !== 0) {
-        index += 1;
-    }
+    let index = get_index(heatmap.title, columns, detail_mode, header_label_length);
     let row = 0;
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
     var custom_func = heatmap.heatmap.custom_content;
@@ -238,10 +232,7 @@ function datavzrdScale(heatmap) {
 }
 
 function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_length) {
-    let index = columns.indexOf(title) + 1;
-    if (detail_mode || header_label_length !== 0) {
-        index += 1;
-    }
+    let index = get_index(title, columns, detail_mode, header_label_length);
     let row = 0;
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function () {
@@ -272,10 +263,7 @@ function shortenHeaderRow(row, ellipsis, skip_label) {
 
 
 function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content, detail_mode, header_label_length) {
-    let index = dp_columns.indexOf(title) + 1;
-    if (detail_mode || header_label_length !== 0) {
-        index += 1;
-    }
+    let index = get_index(title, dp_columns, detail_mode, header_label_length);
     let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function () {
@@ -390,10 +378,7 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
 }
 
 function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
-    let index = dp_columns.indexOf(plot.title) + 1;
-    if (dm || header_label_length > 0) {
-        index += 1;
-    }
+    let index = get_index(title, dp_columns, dm, header_label_length);
     let detail_mode = dp_columns.indexOf(plot.title) == -1;
     var data_function = window[plot.data_function];
     var specs = plot.specs;
@@ -442,11 +427,11 @@ export function embedHistogram(show_plot, index, plot) {
         document.getElementById(`plot_${index}`).innerHTML = '<p>No reasonable plot possible.</p>';
     }
 }
-function addNumClass(dp_num, ah, detail_mode) {
+function addNumClass(dp_num, ah, detail_mode, config) {
     for (let i in dp_num) {
         if (dp_num[i]) {
             let row = 0;
-            let n = parseInt(i) + 1;
+            let n = parseInt(i) + 2;
             if (detail_mode) {
                 n += 1;
             }
@@ -468,7 +453,7 @@ function detailFormatter(index, row) {
     let hidden_columns = config.hidden_columns;
     var html = []
     $.each(row, function (key, value) {
-        if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share") {
+        if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share" && key !== "line_number") {
             let id;
             if (cp.includes(key) || ticks.includes(key) || bars.includes(key)) {
                 if (cp.includes(key)) {
@@ -580,6 +565,10 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
     for (var i in displayed_columns) {
         $(`#filter-${i}-container`).popover('update');
     }
+
+    if (!LINE_NUMBERS) {
+        line_numbers("none");
+    }
 }
 
 export function load() {
@@ -623,6 +612,16 @@ export function load() {
                 }
             });
         }
+
+        
+        bs_table_cols.push({
+            field: 'line_number',
+            title: '',
+            formatter: function(value) {
+                return value;
+            }
+        });
+        
 
         for (const column of config.columns) {
             if (config.displayed_columns.includes(column)) {
@@ -728,6 +727,11 @@ export function load() {
         for (const r of decompressed) {
             var i = 0;
             var row = {};
+            if (!config.is_single_page) {
+                row["line_number"] = j + 1 + config.page_size * (CURRENT_PAGE - 1);
+            } else {
+                row["line_number"] = j + 1;
+            }
             for (const element of r) {
                 row[config.columns[i]] = element;
                 i++;
@@ -827,7 +831,7 @@ export function load() {
                 vegaEmbed(`#${plot_id}`, marked_plot);
             }
         });
-        addNumClass(config.displayed_numeric_columns, additional_headers.length, config.detail_mode);
+        addNumClass(config.displayed_numeric_columns, additional_headers.length, config.detail_mode, config);
 
         render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true, custom_plots);
 
@@ -874,7 +878,7 @@ export function load() {
             function render_brush_plots(reset) {
                 let tick_brush = 0;
                 for (const title of config.displayed_columns) {
-                    let index = tick_brush + 1;
+                    let index = tick_brush + 2;
                     if (config.detail_mode || config.header_label_length > 0) {
                         index += 1;
                     }
@@ -934,7 +938,7 @@ export function load() {
                                 view.addSignalListener('selection', function(name, value) {
                                     filter_boundaries[spec.name] = value;
                                 });
-                                view.addEventListener('mouseup', function(event) {
+                                document.getElementById(`brush-${e.currentTarget.dataset.brush}`).addEventListener('click', function(event) {
                                     $('#table').bootstrapTable('filterBy', {"":""}, {
                                         'filterAlgorithm': customFilter
                                     })
@@ -1160,4 +1164,36 @@ export function load_search() {
         });
         $(".search-input").focus();
     });
+}
+
+function get_index(name, columns, detail_mode, header_label_length) {
+    let index = columns.indexOf(name) + 2;
+    if (detail_mode || header_label_length !== 0) {
+        index += 1;
+    }
+    return index
+}
+
+function line_numbers(style) {
+    var table = document.getElementById("table");
+    var rows = table.getElementsByTagName("tr");
+    var cell_index = config.detail_mode ? 1 : 0;
+    for (var i = 0; i < rows.length; i++) {
+        var cells = rows[i].getElementsByTagName("td");
+        if (cells.length > 0) {
+            cells[cell_index].style.display = style;
+        }
+    }
+    // also hide table head
+    var ths = table.getElementsByTagName("th");
+    ths[cell_index].style.display = style;
+}
+
+export function toggle_line_numbers() {
+    if (LINE_NUMBERS) {
+        line_numbers("none");
+    } else {
+        line_numbers("table-cell");
+    }
+    LINE_NUMBERS = !LINE_NUMBERS;
 }
