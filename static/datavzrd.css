@@ -71,6 +71,10 @@
     padding-top: 25%;
 }
 
+#heatmap-plot-modal {
+    z-index: 9999;
+}
+
 #modal-dialog-heatmap {
     position: relative;
     display: table;
