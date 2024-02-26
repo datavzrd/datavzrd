@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.1](https://github.com/datavzrd/datavzrd/compare/v2.36.0...v2.36.1) (2024-02-26)
+
+
+### Miscellaneous Chores
+
+* release 2.36.1 ([d9d021b](https://github.com/datavzrd/datavzrd/commit/d9d021b9df029feb7fa057cae7380b62916e8903))
+
 ## [2.36.0](https://github.com/datavzrd/datavzrd/compare/v2.35.4...v2.36.0) (2024-02-26)
 
 
