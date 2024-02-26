@@ -1,7 +1,6 @@
-use std::collections::HashMap;
-use std::path::Path;
-
+use crate::spec::DatasetSpecs;
 use anyhow::Result;
+use std::collections::HashMap;
 
 use crate::utils::row_address::{RowAddress, RowAddressFactory};
 
@@ -12,28 +11,17 @@ pub(crate) struct ColumnIndex {
 
 impl ColumnIndex {
     /// Build index from a given table and column name.
-    pub(crate) fn new<P>(
-        path: P,
-        separator: char,
-        column_name: &str,
-        page_size: usize,
-        header_rows: usize,
-    ) -> Result<Self>
-    where
-        P: AsRef<Path>,
-    {
+    pub(crate) fn new(dataset: &DatasetSpecs, column_name: &str, page_size: usize) -> Result<Self> {
         // Load the column values into the hash map while keeping the row number as value.
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(separator as u8)
-            .from_path(path)?;
+        let mut reader = dataset.reader()?;
 
-        let headers = reader.headers()?;
+        let headers = dataset.reader()?.headers()?;
         let column_index = headers.iter().position(|r| r == column_name).unwrap();
         let mut index = HashMap::new();
         let address_factory = RowAddressFactory::new(page_size);
-        for (i, result) in reader.records().skip(header_rows - 1).enumerate() {
+        for (i, result) in reader.records()?.skip(dataset.header_rows - 1).enumerate() {
             index.insert(
-                result?.get(column_index).unwrap().to_owned(),
+                result.get(column_index).unwrap().to_owned(),
                 address_factory.get(i),
             );
         }
@@ -59,6 +47,7 @@ impl ColumnIndex {
 
 #[cfg(test)]
 mod tests {
+    use crate::spec::DatasetSpecs;
     use crate::utils::column_index::ColumnIndex;
     use crate::utils::row_address::RowAddress;
     use std::collections::HashMap;
@@ -66,14 +55,17 @@ mod tests {
 
     #[test]
     fn test_column_index() {
-        let column_index = ColumnIndex::new(
-            "tests/data/uniform_datatypes.csv",
-            char::from_str(",").unwrap(),
-            "first",
-            3,
-            1,
-        )
-        .unwrap();
+        let dataset = DatasetSpecs {
+            path: "tests/data/uniform_datatypes.csv"
+                .to_string()
+                .parse()
+                .unwrap(),
+            separator: char::from_str(",").unwrap(),
+            header_rows: 1,
+            links: None,
+            offer_excel: false,
+        };
+        let column_index = ColumnIndex::new(&dataset, "first", 3).unwrap();
         let expected_column_index = ColumnIndex {
             index: HashMap::from([
                 (String::from("Delia"), RowAddress::new(0, 0)),
