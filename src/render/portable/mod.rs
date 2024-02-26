@@ -160,6 +160,8 @@ impl Renderer for ItemRenderer {
                 }
                 // Render table
                 else if let Some(table_specs) = &table.render_table {
+                    let data_path = out_path.join("data");
+                    fs::create_dir(&data_path)?;
                     let row_address_factory = RowAddressFactory::new(table.page_size);
                     let pages = row_address_factory.get(records_length - 1).page + 1;
 
@@ -301,6 +303,10 @@ fn render_page<P: AsRef<Path>>(
         "table.html.tera",
         include_str!("../../../templates/table.html.tera"),
     )?;
+    templates.add_raw_template(
+        "data.js.tera",
+        include_str!("../../../templates/data.js.tera"),
+    )?;
     let mut context = Context::new();
 
     let data = data
@@ -368,6 +374,15 @@ fn render_page<P: AsRef<Path>>(
 
     let mut file = fs::File::create(file_path)?;
     file.write_all(html.as_bytes())?;
+
+    let data_file_path = Path::new(output_path.as_ref())
+        .join("data")
+        .join(Path::new(&format!("data_{page_index}")).with_extension("js"));
+
+    let js = templates.render("data.js.tera", &context)?;
+
+    let mut data_file = fs::File::create(data_file_path)?;
+    data_file.write_all(js.as_bytes())?;
 
     Ok(())
 }

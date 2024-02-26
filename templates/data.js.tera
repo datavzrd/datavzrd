@@ -1,0 +1,2 @@
+const data = {{ data | safe }};
+const linkouts = {{ linkouts | safe }};
