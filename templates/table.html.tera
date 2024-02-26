@@ -31,6 +31,7 @@
             {% if is_single_page %}<li class="list-group-item sidebar-btn" id="btnHeatmap" data-toggle="modal" data-target="#heatmap-plot-modal">Show as plot</li>{% endif %}
             {% if has_excel_sheet %}<li class="list-group-item sidebar-btn" id="btnExcel" onclick="window.location='../data.xlsx'">Download excel sheet</li>{% endif %}
             {% if description %}<li class="list-group-item sidebar-btn" id="markdown-btn" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">Show description</li>{% endif %}
+            {% if is_single_page %}<li class="list-group-item sidebar-btn" onclick="datavzrd.downloadCSV()">Download CSV</li>{% endif %}
             <li class="list-group-item sidebar-btn" id="toggleLineNumbers" onclick="datavzrd.toggle_line_numbers()">Show/Hide Line Numbers</li>
         </ul>
     </div>
