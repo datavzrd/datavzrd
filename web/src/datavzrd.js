@@ -421,10 +421,11 @@ export function embedSearch(index) {
 }
 
 export function embedHistogram(show_plot, index, plot) {
+    $("#histogram-modal-title").text(config.columns[index]);
     if (show_plot) {
-        vegaEmbed(`#plot_${index}`, plot);
+        vegaEmbed('#histogram-plot', plot);
     } else {
-        document.getElementById(`plot_${index}`).innerHTML = '<p>No reasonable plot possible.</p>';
+        document.getElementById('histogram-plot').innerHTML = '<p>No reasonable plot possible.</p>';
     }
 }
 function addNumClass(dp_num, ah, detail_mode, config) {
@@ -634,7 +635,7 @@ export function load() {
                 }
 
                 // Add histogram button
-                let histogram_icon = ` <a class="sym" data-toggle="modal" data-target="#modal_${config.columns.indexOf(column)}" onclick="datavzrd.embedHistogram(show_plot_${config.columns.indexOf(column)}, ${config.columns.indexOf(column)}, plot_${config.columns.indexOf(column)})"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></a>`;
+                let histogram_icon = ` <a class="sym" data-toggle="modal" data-target="#histogram_modal" onclick="datavzrd.embedHistogram(show_plot_${config.columns.indexOf(column)}, ${config.columns.indexOf(column)}, plot_${config.columns.indexOf(column)})"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></a>`;
                 if (!config.additional_colums[column]) {
                     title += histogram_icon;
                 }
