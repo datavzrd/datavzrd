@@ -115,19 +115,17 @@
                 {% endif %}
                 </div>
             </div>
-            <!-- Modal -->
-            {% for title in titles %}
-            <div class="modal fade" id="modal_{{ loop.index0 }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="histogram_modal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">{{ title }}</h5>
+                            <h5 class="modal-title" id="histogram-modal-title"></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div id="plot_{{ loop.index0 }}" style="width: 100%; height: 300px; border:none;">
+                            <div id="histogram-plot" style="width: 100%; height: 300px; border:none;">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -136,7 +134,7 @@
                     </div>
                 </div>
             </div>
-            {% endfor %}<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabelqr" id="qr-modal" aria-hidden="true">
+            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabelqr" id="qr-modal" aria-hidden="true">
                 <div class="modal-dialog modal-lg id="modal-dialog-qr">
                     <div class="modal-content">
                         <div class="modal-header">
