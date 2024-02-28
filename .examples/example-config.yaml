@@ -1,5 +1,4 @@
 name: My oscar report
-max-in-memory-rows: 10
 datasets:
   oscars:
     path: ".examples/data/oscars.csv"
