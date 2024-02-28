@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.2](https://github.com/datavzrd/datavzrd/compare/v2.36.1...v2.36.2) (2024-02-27)
+
+
+### Performance Improvements
+
+* Use single modal for histograms of all columns ([#659](https://github.com/datavzrd/datavzrd/issues/659)) ([ba0e705](https://github.com/datavzrd/datavzrd/commit/ba0e705e3799510342a2652075df57bb9fe319b2))
+
 ## [2.36.1](https://github.com/datavzrd/datavzrd/compare/v2.36.0...v2.36.1) (2024-02-26)
 
 
