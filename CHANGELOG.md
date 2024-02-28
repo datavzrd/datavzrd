@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.3](https://github.com/datavzrd/datavzrd/compare/v2.36.2...v2.36.3) (2024-02-28)
+
+
+### Performance Improvements
+
+* Minify table html files ([#661](https://github.com/datavzrd/datavzrd/issues/661)) ([e1219cd](https://github.com/datavzrd/datavzrd/commit/e1219cd608ed0ed1f4fab112e20faf7fad6f1aa5))
+
 ## [2.36.2](https://github.com/datavzrd/datavzrd/compare/v2.36.1...v2.36.2) (2024-02-27)
 
 
