@@ -379,7 +379,7 @@ fn render_page<P: AsRef<Path>>(
     if debug {
         file.write_all(html.as_bytes())?;
     } else {
-        file.write_all(&minify(&html.as_bytes(), &Cfg::new()))?;
+        file.write_all(&minify(html.as_bytes(), &Cfg::new()))?;
     }
 
     let data_file_path = Path::new(output_path.as_ref())
