@@ -26,6 +26,7 @@ use serde_json::{json, Value};
 use std::cmp::max;
 use std::collections::{HashMap, HashSet};
 
+use minify_html::{minify, Cfg};
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -229,6 +230,7 @@ impl Renderer for ItemRenderer {
                             self.specs.needs_excel_sheet(),
                             webview_host,
                             &view_sizes,
+                            debug,
                         )?;
                     }
                     if is_single_page {
@@ -297,6 +299,7 @@ fn render_page<P: AsRef<Path>>(
     has_excel_sheet: bool,
     webview_host: &str,
     view_sizes: &HashMap<String, String>,
+    debug: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -373,7 +376,11 @@ fn render_page<P: AsRef<Path>>(
     let html = templates.render("table.html.tera", &context)?;
 
     let mut file = fs::File::create(file_path)?;
-    file.write_all(html.as_bytes())?;
+    if debug {
+        file.write_all(html.as_bytes())?;
+    } else {
+        file.write_all(&minify(&html.as_bytes(), &Cfg::new()))?;
+    }
 
     let data_file_path = Path::new(output_path.as_ref())
         .join("data")
