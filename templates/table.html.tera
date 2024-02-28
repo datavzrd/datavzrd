@@ -137,7 +137,7 @@
                 </div>
             </div>
             {% endfor %}<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabelqr" id="qr-modal" aria-hidden="true">
-                <div class="modal-dialog modal-lg id="modal-dialog-qr">
+                <div class="modal-dialog modal-lg" id="modal-dialog-qr">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Share data</h5>
