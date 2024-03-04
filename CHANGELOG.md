@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.4](https://github.com/datavzrd/datavzrd/compare/v2.36.3...v2.36.4) (2024-03-04)
+
+
+### Performance Improvements
+
+* Use JSONM for compression ([#666](https://github.com/datavzrd/datavzrd/issues/666)) ([512e410](https://github.com/datavzrd/datavzrd/commit/512e4101560033fe075e09dc364093ab8fe51641))
+
 ## [2.36.3](https://github.com/datavzrd/datavzrd/compare/v2.36.2...v2.36.3) (2024-02-28)
 
 
