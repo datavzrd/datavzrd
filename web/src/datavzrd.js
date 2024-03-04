@@ -589,7 +589,8 @@ export function load() {
         if ($("#collapseDescription").length > 0) {
             renderMarkdownDescription();
         }
-        var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
+
+        let decompressed = decompress(data);
 
         for (row of decompressed) {
             var row_with_keys = Object.fromEntries(config.columns.map((k, i) => [k, row[i]]));
@@ -672,7 +673,7 @@ export function load() {
 
         if (linkouts != null) {
             bs_table_cols.push({field: 'linkouts', title: '', formatter: function(value){ return value }});
-            var decompressed_linkouts = JSON.parse(LZString.decompressFromUTF16(linkouts));
+            var decompressed_linkouts = decompress(linkouts);
         }
 
         if (config.webview_controls) {
@@ -1113,10 +1114,10 @@ export function load_table(specs, data, multiple_datasets) {
     }
     if (multiple_datasets) {
         specs.datasets = {};
-        specs.datasets = JSON.parse(LZString.decompressFromUTF16(data));
+        specs.datasets = decompress(data);
     } else {
         specs.data = {};
-        specs.data.values = JSON.parse(LZString.decompressFromUTF16(data));
+        specs.data.values = decompress(data);
     }
     if (specs.width == "container") { $("#vis").css("width", "100%"); }
     vegaEmbed('#vis', specs);
@@ -1141,7 +1142,7 @@ export function load_search() {
     $(document).ready(function() {
         window.$ = window.jQuery = require("jquery");
         window['bootstrap-table'] = require('bootstrap-table');
-        const decompressed = JSON.parse(LZString.decompressFromUTF16(search_data));
+        let decompressed = decompress(search_data);
         let table_data = [];
         for (var i = 0; i < decompressed.length; i++) {
             var row = decompressed[i];
@@ -1197,4 +1198,11 @@ export function toggle_line_numbers() {
         line_numbers("table-cell");
     }
     LINE_NUMBERS = !LINE_NUMBERS;
+}
+
+function decompress(data) {
+    var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
+    const unpacker = new jsonm.Unpacker();
+    decompressed = unpacker.unpack(decompressed);
+    return decompressed
 }

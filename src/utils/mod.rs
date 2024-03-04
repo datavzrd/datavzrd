@@ -3,6 +3,7 @@ use anyhow::Result;
 
 pub(crate) mod column_index;
 pub(crate) mod column_type;
+pub(crate) mod compress;
 pub(crate) mod row_address;
 
 /// Returns the index of the given column of a csv header

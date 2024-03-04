@@ -1,6 +1,5 @@
 mod plot;
 pub(crate) mod utils;
-
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::get_column_labels;
@@ -15,12 +14,12 @@ use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_position;
 use crate::utils::column_type::IsNa;
 use crate::utils::column_type::{classify_table, ColumnType};
+use crate::utils::compress::compress;
 use crate::utils::row_address::RowAddressFactory;
 use anyhow::Result;
 use anyhow::{bail, Context as AnyhowContext};
 use chrono::{DateTime, Local};
 use itertools::Itertools;
-use lz_str::compress_to_utf16;
 use serde::Serialize;
 use serde_json::{json, Value};
 use std::cmp::max;
@@ -331,12 +330,12 @@ fn render_page<P: AsRef<Path>>(
                 .unwrap()
             })
             .collect_vec();
-        Some(compress_to_utf16(&json!(linkouts).to_string()))
+        Some(compress(json!(linkouts))?)
     } else {
         None
     };
 
-    let compressed_data = compress_to_utf16(&json!(data).to_string());
+    let compressed_data = compress(json!(data))?;
 
     let local: DateTime<Local> = Local::now();
 
@@ -1356,7 +1355,7 @@ fn render_search_dialogs<P: AsRef<Path>>(
                 .map(|(row, address)| (row, address.page + 1, address.row))
                 .collect_vec();
 
-            let compressed_data = compress_to_utf16(&json!(records).to_string());
+            let compressed_data = compress(json!(records))?;
 
             let mut templates = Tera::default();
             templates.add_raw_template(
@@ -1665,7 +1664,7 @@ fn render_plot_page<P: AsRef<Path>>(
 
     let local: DateTime<Local> = Local::now();
 
-    let compressed_data = compress_to_utf16(&json!(records).to_string());
+    let compressed_data = compress(json!(records))?;
 
     context.insert("data", &json!(compressed_data).to_string());
     context.insert("description", &item_spec.description);
@@ -1828,7 +1827,7 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
 
     let local: DateTime<Local> = Local::now();
 
-    let compressed_data = compress_to_utf16(&json!(data).to_string());
+    let compressed_data = compress(json!(data))?;
 
     context.insert("datasets", &json!(compressed_data).to_string());
     context.insert("description", &item_spec.description);
