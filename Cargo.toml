@@ -32,4 +32,4 @@ simple_excel_writer = "0.2"
 slug = "0.1.5"
 md5 = "0.7.0"
 jsonm = "0.2.0"
-
+rmp-serde = "0.15.3"

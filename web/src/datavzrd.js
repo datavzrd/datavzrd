@@ -8,6 +8,7 @@ import vegaEmbed from 'vega-embed';
 import vegalite from 'vega-lite';
 import QRCode from 'qrcode';
 import * as d3 from "d3";
+import 'msgpack-lite';
 import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
@@ -1202,7 +1203,10 @@ export function toggle_line_numbers() {
 
 function decompress(data) {
     var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
-    const unpacker = new jsonm.Unpacker();
-    decompressed = unpacker.unpack(decompressed);
+    // const unpacker = new jsonm.Unpacker();
+    // decompressed = unpacker.unpack(decompressed);
+    console.log(decompressed);
+    decompressed = msgpack.decode(Buffer.from(decompressed, 'utf-8'));
+    console.log(decompressed);
     return decompressed
 }
