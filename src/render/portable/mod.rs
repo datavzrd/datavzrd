@@ -203,6 +203,8 @@ impl Renderer for ItemRenderer {
                         None
                     };
 
+                    let column_types = classify_table(dataset)?;
+
                     for (page, grouped_records) in &dataset
                         .reader()?
                         .records()?
@@ -229,6 +231,7 @@ impl Renderer for ItemRenderer {
                             self.specs.needs_excel_sheet(),
                             webview_host,
                             &view_sizes,
+                            &column_types,
                             debug,
                         )?;
                     }
@@ -298,6 +301,7 @@ fn render_page<P: AsRef<Path>>(
     has_excel_sheet: bool,
     webview_host: &str,
     view_sizes: &HashMap<String, String>,
+    column_types: &HashMap<String, ColumnType>,
     debug: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
@@ -334,6 +338,22 @@ fn render_page<P: AsRef<Path>>(
     } else {
         None
     };
+
+    let data = data
+        .iter()
+        .map(|s| {
+            s.iter()
+                .enumerate()
+                .map(|(i, s)| match column_types.get(&titles[i]) {
+                    Some(ColumnType::Float) => json!(s.parse::<f64>().unwrap()),
+                    Some(ColumnType::Integer) => json!(s.parse::<i32>().unwrap()),
+                    _ => {
+                        json!(s.to_string())
+                    }
+                })
+                .collect_vec()
+        })
+        .collect_vec();
 
     let compressed_data = compress(json!(data))?;
 
