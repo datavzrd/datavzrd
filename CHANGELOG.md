@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.5](https://github.com/datavzrd/datavzrd/compare/v2.36.4...v2.36.5) (2024-03-08)
+
+
+### Performance Improvements
+
+* Use numeric json types ([#668](https://github.com/datavzrd/datavzrd/issues/668)) ([b623473](https://github.com/datavzrd/datavzrd/commit/b62347332a1b15c94742c28f096ce044c938ea0b))
+
 ## [2.36.4](https://github.com/datavzrd/datavzrd/compare/v2.36.3...v2.36.4) (2024-03-04)
 
 
