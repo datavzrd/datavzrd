@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.6](https://github.com/datavzrd/datavzrd/compare/v2.36.5...v2.36.6) (2024-03-11)
+
+
+### Bug Fixes
+
+* Change integer type to fix possible overflow error ([#671](https://github.com/datavzrd/datavzrd/issues/671)) ([fa629b8](https://github.com/datavzrd/datavzrd/commit/fa629b8f187ae01a90388376b027b29d43c3b0e1))
+
 ## [2.36.5](https://github.com/datavzrd/datavzrd/compare/v2.36.4...v2.36.5) (2024-03-08)
 
 
