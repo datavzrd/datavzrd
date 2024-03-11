@@ -346,7 +346,7 @@ fn render_page<P: AsRef<Path>>(
                 .enumerate()
                 .map(|(i, s)| match column_types.get(&titles[i]) {
                     Some(ColumnType::Float) => json!(s.parse::<f64>().unwrap()),
-                    Some(ColumnType::Integer) => json!(s.parse::<i32>().unwrap()),
+                    Some(ColumnType::Integer) => json!(s.parse::<i64>().unwrap()),
                     _ => {
                         json!(s.to_string())
                     }
