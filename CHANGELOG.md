@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.7](https://github.com/datavzrd/datavzrd/compare/v2.36.6...v2.36.7) (2024-03-12)
+
+
+### Bug Fixes
+
+* Skip validations for non-present optional columns ([#673](https://github.com/datavzrd/datavzrd/issues/673)) ([6379d21](https://github.com/datavzrd/datavzrd/commit/6379d2121f9497eb7cbddaf969a728caa2a68874))
+
 ## [2.36.6](https://github.com/datavzrd/datavzrd/compare/v2.36.5...v2.36.6) (2024-03-11)
 
 
