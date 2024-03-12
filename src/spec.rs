@@ -114,99 +114,105 @@ impl ItemsSpec {
                                 view: name.to_string()
                             })
                         }
-                        let mut possible_conflicting = Vec::new();
-                        if render_columns.ellipsis.is_some() {
-                            possible_conflicting.push("ellipsis".to_string());
-                        }
-                        if render_columns.link_to_url.is_some() {
-                            possible_conflicting.push("link-to-url".to_string());
-                        }
-                        if render_columns.custom.is_some() {
-                            possible_conflicting.push("custom".to_string());
-                        }
-                        if render_columns.custom_plot.is_some() {
-                            possible_conflicting.push("custom-plot".to_string());
-                        }
-                        if let Some(plot) = &render_columns.plot {
-                            if plot.heatmap.is_some() {
-                                possible_conflicting.push("heatmap".to_string());
-                            } else if plot.tick_plot.is_some() {
-                                possible_conflicting.push("ticks".to_string());
+                        if titles.contains(column) {
+                            let mut possible_conflicting = Vec::new();
+                            if render_columns.ellipsis.is_some() {
+                                possible_conflicting.push("ellipsis".to_string());
                             }
-                        }
-                        if possible_conflicting.len() > 1
-                            && !(possible_conflicting.contains(&"heatmap".to_string())
-                                && possible_conflicting.contains(&"ellipsis".to_string())
-                                && possible_conflicting.len() == 2)
-                        {
-                            bail!(ConflictingConfiguration {
-                                view: name.to_string(),
-                                column: column.to_string(),
-                                conflict: possible_conflicting
-                            })
-                        }
-                        if let Some(plot_spec) = &render_columns.plot {
-                            let domain = if let Some(tick_plot) = &plot_spec.tick_plot {
-                                tick_plot.domain.clone()
-                            } else if let Some(bar_plot) = &plot_spec.bar_plot {
-                                bar_plot.domain.clone()
-                            } else if let Some(heatmap) = &plot_spec.heatmap {
-                                if !heatmap.color_scheme.is_empty()
-                                    && column_types.get(column).unwrap().is_numeric()
-                                    && !matches!(
-                                        heatmap.color_scheme.to_lowercase().as_str(),
-                                        "blues"
-                                            | "greens"
-                                            | "greys"
-                                            | "oranges"
-                                            | "purples"
-                                            | "reds"
-                                            | "viridis"
-                                            | "inferno"
-                                            | "magma"
-                                            | "plasma"
-                                            | "cividis"
-                                    )
-                                {
-                                    bail!(UnsupportedColorScheme {
-                                        view: name.to_string(),
-                                        column: column.to_string(),
-                                        scheme: heatmap.color_scheme.to_string(),
-                                    })
+                            if render_columns.link_to_url.is_some() {
+                                possible_conflicting.push("link-to-url".to_string());
+                            }
+                            if render_columns.custom.is_some() {
+                                possible_conflicting.push("custom".to_string());
+                            }
+                            if render_columns.custom_plot.is_some() {
+                                possible_conflicting.push("custom-plot".to_string());
+                            }
+                            if let Some(plot) = &render_columns.plot {
+                                if plot.heatmap.is_some() {
+                                    possible_conflicting.push("heatmap".to_string());
+                                } else if plot.tick_plot.is_some() {
+                                    possible_conflicting.push("ticks".to_string());
                                 }
-                                if heatmap.domain_mid.is_some() {
-                                    if column_types.get(column).is_some_and(|ct| !ct.is_numeric())
-                                        && !dataset.is_empty()?
+                            }
+                            if possible_conflicting.len() > 1
+                                && !(possible_conflicting.contains(&"heatmap".to_string())
+                                    && possible_conflicting.contains(&"ellipsis".to_string())
+                                    && possible_conflicting.len() == 2)
+                            {
+                                bail!(ConflictingConfiguration {
+                                    view: name.to_string(),
+                                    column: column.to_string(),
+                                    conflict: possible_conflicting
+                                })
+                            }
+                            if let Some(plot_spec) = &render_columns.plot {
+                                let domain = if let Some(tick_plot) = &plot_spec.tick_plot {
+                                    tick_plot.domain.clone()
+                                } else if let Some(bar_plot) = &plot_spec.bar_plot {
+                                    bar_plot.domain.clone()
+                                } else if let Some(heatmap) = &plot_spec.heatmap {
+                                    if !heatmap.color_scheme.is_empty()
+                                        && column_types.get(column).unwrap().is_numeric()
+                                        && !matches!(
+                                            heatmap.color_scheme.to_lowercase().as_str(),
+                                            "blues"
+                                                | "greens"
+                                                | "greys"
+                                                | "oranges"
+                                                | "purples"
+                                                | "reds"
+                                                | "viridis"
+                                                | "inferno"
+                                                | "magma"
+                                                | "plasma"
+                                                | "cividis"
+                                        )
                                     {
-                                        bail!(WrongColumnTypeMidDomain {
+                                        bail!(UnsupportedColorScheme {
                                             view: name.to_string(),
                                             column: column.to_string(),
+                                            scheme: heatmap.color_scheme.to_string(),
                                         })
                                     }
-                                    if heatmap.color_range.0.len() != 3 {
-                                        bail!(WrongRangeLengthWithMidDomain {
-                                            view: name.to_string(),
-                                            column: column.to_string(),
-                                        })
-                                    }
-                                    if let Some(heatmap_domain) = &heatmap.domain {
-                                        if heatmap_domain.len() != 3 {
-                                            bail!(WrongDomainLengthWithMidDomain {
+                                    if heatmap.domain_mid.is_some() {
+                                        if column_types
+                                            .get(column)
+                                            .is_some_and(|ct| !ct.is_numeric())
+                                            && !dataset.is_empty()?
+                                        {
+                                            bail!(WrongColumnTypeMidDomain {
                                                 view: name.to_string(),
                                                 column: column.to_string(),
                                             })
                                         }
+                                        if heatmap.color_range.0.len() != 3 {
+                                            bail!(WrongRangeLengthWithMidDomain {
+                                                view: name.to_string(),
+                                                column: column.to_string(),
+                                            })
+                                        }
+                                        if let Some(heatmap_domain) = &heatmap.domain {
+                                            if heatmap_domain.len() != 3 {
+                                                bail!(WrongDomainLengthWithMidDomain {
+                                                    view: name.to_string(),
+                                                    column: column.to_string(),
+                                                })
+                                            }
+                                        }
                                     }
-                                }
-                                if let Some(domain) = &heatmap.domain {
-                                    if let Some(colum_type) = column_types.get(column) {
-                                        if colum_type == &ColumnType::Float {
-                                            Some(
-                                                domain
-                                                    .iter()
-                                                    .map(|d| f32::from_str(d).unwrap())
-                                                    .collect_vec(),
-                                            )
+                                    if let Some(domain) = &heatmap.domain {
+                                        if let Some(colum_type) = column_types.get(column) {
+                                            if colum_type == &ColumnType::Float {
+                                                Some(
+                                                    domain
+                                                        .iter()
+                                                        .map(|d| f32::from_str(d).unwrap())
+                                                        .collect_vec(),
+                                                )
+                                            } else {
+                                                None
+                                            }
                                         } else {
                                             None
                                         }
@@ -215,57 +221,56 @@ impl ItemsSpec {
                                     }
                                 } else {
                                     None
-                                }
-                            } else {
-                                None
-                            };
-                            let scale_type = if let Some(tick_plot) = &plot_spec.tick_plot {
-                                Some(tick_plot.scale_type)
-                            } else if let Some(bar_plot) = &plot_spec.bar_plot {
-                                Some(bar_plot.scale_type)
-                            } else {
-                                plot_spec.heatmap.as_ref().map(|heatmap| heatmap.scale_type)
-                            };
-                            let clamp = if let Some(heatmap) = &plot_spec.heatmap {
-                                heatmap.clamp
-                            } else {
-                                false
-                            };
-                            if let Some(domain) = domain {
-                                let mut reader = dataset.reader()?;
-                                let colum_pos = column_position(column, dataset)?;
-                                for record in reader.records()? {
-                                    let value = record.get(colum_pos).unwrap();
-                                    if let Ok(value) = value.parse::<f32>() {
-                                        if (value < domain[0] || value > domain[domain.len() - 1])
-                                            && !clamp
-                                        {
-                                            bail!(ValueOutsideDomain {
-                                                view: name.to_string(),
-                                                column: column.to_string(),
-                                                value
-                                            })
-                                        }
-                                        if let Some(scale_type) = scale_type {
-                                            if scale_type == ScaleType::Log && value <= 0_f32 {
-                                                bail!(LogScaleIncludesZero {
+                                };
+                                let scale_type = if let Some(tick_plot) = &plot_spec.tick_plot {
+                                    Some(tick_plot.scale_type)
+                                } else if let Some(bar_plot) = &plot_spec.bar_plot {
+                                    Some(bar_plot.scale_type)
+                                } else {
+                                    plot_spec.heatmap.as_ref().map(|heatmap| heatmap.scale_type)
+                                };
+                                let clamp = if let Some(heatmap) = &plot_spec.heatmap {
+                                    heatmap.clamp
+                                } else {
+                                    false
+                                };
+                                if let Some(domain) = domain {
+                                    let mut reader = dataset.reader()?;
+                                    let colum_pos = column_position(column, dataset)?;
+                                    for record in reader.records()? {
+                                        let value = record.get(colum_pos).unwrap();
+                                        if let Ok(value) = value.parse::<f32>() {
+                                            if (value < domain[0]
+                                                || value > domain[domain.len() - 1])
+                                                && !clamp
+                                            {
+                                                bail!(ValueOutsideDomain {
                                                     view: name.to_string(),
                                                     column: column.to_string(),
                                                     value
                                                 })
                                             }
+                                            if let Some(scale_type) = scale_type {
+                                                if scale_type == ScaleType::Log && value <= 0_f32 {
+                                                    bail!(LogScaleIncludesZero {
+                                                        view: name.to_string(),
+                                                        column: column.to_string(),
+                                                        value
+                                                    })
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                                if let Some(scale) = scale_type {
-                                    if scale == ScaleType::Log
-                                        && domain[0] <= 0_f32
-                                        && 0_f32 <= domain[domain.len() - 1]
-                                    {
-                                        bail!(LogScaleDomainIncludesZero {
-                                            view: name.to_string(),
-                                            column: column.to_string(),
-                                        })
+                                    if let Some(scale) = scale_type {
+                                        if scale == ScaleType::Log
+                                            && domain[0] <= 0_f32
+                                            && 0_f32 <= domain[domain.len() - 1]
+                                        {
+                                            bail!(LogScaleDomainIncludesZero {
+                                                view: name.to_string(),
+                                                column: column.to_string(),
+                                            })
+                                        }
                                     }
                                 }
                             }
