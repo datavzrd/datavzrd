@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.8](https://github.com/datavzrd/datavzrd/compare/v2.36.7...v2.36.8) (2024-03-12)
+
+
+### Bug Fixes
+
+* Revert usage of numeric json types ([930a877](https://github.com/datavzrd/datavzrd/commit/930a877c7496bf562ffcca8c57f6bde37ac6a0ef))
+
 ## [2.36.7](https://github.com/datavzrd/datavzrd/compare/v2.36.6...v2.36.7) (2024-03-12)
 
 
