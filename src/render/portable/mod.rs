@@ -1286,7 +1286,7 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
     let js = templates.render("functions.js.tera", &context)?;
 
     let mut file = File::create(file_path)?;
-    file.write_all(&js.as_bytes())?;
+    file.write_all(js.as_bytes())?;
 
     Ok(())
 }
