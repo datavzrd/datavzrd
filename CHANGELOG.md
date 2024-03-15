@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.9](https://github.com/datavzrd/datavzrd/compare/v2.36.8...v2.36.9) (2024-03-15)
+
+
+### Bug Fixes
+
+* Dont minify custom javascript functions ([#676](https://github.com/datavzrd/datavzrd/issues/676)) ([780018a](https://github.com/datavzrd/datavzrd/commit/780018a8d2ce4d5bd1e1a9b6c110418872eafff1))
+
 ## [2.36.8](https://github.com/datavzrd/datavzrd/compare/v2.36.7...v2.36.8) (2024-03-12)
 
 
