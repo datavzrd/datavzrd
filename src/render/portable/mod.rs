@@ -2032,6 +2032,25 @@ mod tests {
     }
 
     #[test]
+    fn test_javascript_function_name() {
+        let f = r#"
+        function(value, row) {
+            let custom_value = 'This is a custom function';
+            if (value.length === 0) {
+              return ``
+            }
+            const len = value.split(',').length;
+            return `<span data-toggle="popover" data-content="${{custom_value}}">${len}</span>`;
+        }
+        "#;
+        let function = JavascriptFunction(f.to_string());
+        assert_eq!(
+            function.name(),
+            "custom_func_51101d9f2c9ec9e08100de43d906d9ab"
+        );
+    }
+
+    #[test]
     fn test_render_tick_plot() {
         let tick_plot_spec = TickPlot {
             scale_type: ScaleType::Linear,
