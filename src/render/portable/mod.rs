@@ -256,7 +256,6 @@ impl Renderer for ItemRenderer {
                         &out_path,
                         table_specs,
                         &table.render_table.as_ref().unwrap().additional_columns,
-                        debug,
                     )?;
                     render_plots(&out_path, dataset, debug)?;
                 }
@@ -1215,7 +1214,6 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
     output_path: P,
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
-    debug: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -1288,8 +1286,7 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
     let js = templates.render("functions.js.tera", &context)?;
 
     let mut file = File::create(file_path)?;
-    let minified = minify_js(&js, debug)?;
-    file.write_all(&minified)?;
+    file.write_all(js.as_bytes())?;
 
     Ok(())
 }
