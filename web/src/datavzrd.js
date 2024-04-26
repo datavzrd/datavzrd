@@ -11,6 +11,7 @@ import * as d3 from "d3";
 import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
+import htmlToSvg from "htmlsvg";
 
 let LINE_NUMBERS = false;
 
@@ -1198,6 +1199,15 @@ export function toggle_line_numbers() {
         line_numbers("table-cell");
     }
     LINE_NUMBERS = !LINE_NUMBERS;
+}
+
+export async function screenshot_table() {
+    const svgConfig = {
+        downloadSvg: true,
+        filename: "htmltosvg",
+    };
+    const htmlElement = document.getElementById("table");
+    const svg = await htmlToSvg(htmlElement, svgConfig);
 }
 
 function decompress(data) {
