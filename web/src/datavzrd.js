@@ -14,6 +14,8 @@ import 'bootstrap-select';
 
 let LINE_NUMBERS = false;
 
+let VEGA_EMBED_OPTIONS = { 'renderer': 'svg', 'actions': false };
+
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
     const converter = new showdown.Converter({
@@ -123,8 +125,7 @@ function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precisi
                 var s = specs;
                 s.data = {};
                 s.data.values = data;
-                var opt = { "actions": false };
-                vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+                vegaEmbed(div, JSON.parse(JSON.stringify(s)), VEGA_EMBED_OPTIONS);
             }
             row++;
         }
@@ -154,8 +155,7 @@ function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precisio
                 var s = specs;
                 s.data = {};
                 s.data.values = data;
-                var opt = { "actions": false };
-                vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+                vegaEmbed(div, JSON.parse(JSON.stringify(s)), VEGA_EMBED_OPTIONS);
             }
             row++;
         }
@@ -171,8 +171,7 @@ function renderDetailTickBarPlot(value, div, specs, title) {
         var s = specs;
         s.data = {};
         s.data.values = data;
-        var opt = { "actions": false };
-        vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+        vegaEmbed(div, JSON.parse(JSON.stringify(s)), VEGA_EMBED_OPTIONS);
     }
 }
 
@@ -396,7 +395,7 @@ function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
                 var s = specs;
                 s.data = {};
                 s.data.values = data;
-                var opt = {"actions": plot.vega_controls};
+                var opt = {"actions": plot.vega_controls, 'renderer': 'svg'};
                 this.innerHTML = "";
                 this.appendChild(div);
                 vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
@@ -411,7 +410,7 @@ function renderCustomPlotDetailView(value, div, data_function, specs, vega_contr
     var s = specs;
     s.data = {};
     s.data.values = data;
-    var opt = {"actions": vega_controls};
+    var opt = {"actions": vega_controls, 'renderer': 'svg'};
     vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
 }
 
@@ -1204,5 +1203,6 @@ function decompress(data) {
     var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
     const unpacker = new jsonm.Unpacker();
     decompressed = unpacker.unpack(decompressed);
+    console.log(decompressed);
     return decompressed
 }
