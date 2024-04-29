@@ -32,6 +32,7 @@
             {% if description %}<li class="list-group-item sidebar-btn" id="markdown-btn" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">Show description</li>{% endif %}
             {% if is_single_page %}<li class="list-group-item sidebar-btn" onclick="datavzrd.downloadCSV()">Download CSV</li>{% endif %}
             <li class="list-group-item sidebar-btn" id="toggleLineNumbers" onclick="datavzrd.toggle_line_numbers()">Show/Hide Line Numbers</li>
+            <li class="list-group-item sidebar-btn" id="screenshotTable" onclick="datavzrd.screenshot_table()">Export table as SVG</li>
         </ul>
     </div>
 </div>

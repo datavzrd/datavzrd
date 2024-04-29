@@ -11,6 +11,7 @@ import * as d3 from "d3";
 import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
+import { documentToSVG, elementToSVG, inlineResources, formatXML } from 'dom-to-svg';
 
 let LINE_NUMBERS = false;
 
@@ -1199,10 +1200,43 @@ export function toggle_line_numbers() {
     LINE_NUMBERS = !LINE_NUMBERS;
 }
 
+function downloadSVG(svgString, fileName) {
+    const blob = new Blob([svgString], { type: 'image/svg+xml' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+export function screenshot_table() {
+    document.querySelectorAll('.sym').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('table tr').forEach(row => {
+        const cells = row.querySelectorAll('td');
+        let s = -1;
+        if (linkouts !== null) {
+            s = -2;
+        }
+        const lastTwo = Array.from(cells).slice(s);
+        lastTwo.forEach(cell => cell.style.display = 'none');
+    });
+    if (config.detail_mode) {
+        document.querySelectorAll('table tr').forEach(row => {
+            const cells = row.querySelectorAll('td, th');
+            const first = Array.from(cells).slice(0, 1);
+            first.forEach(cell => cell.style.display = 'none');
+        });
+    }
+    const table_element = document.getElementById("table");
+    const svgDocument = elementToSVG(table_element);
+    const svgString = new XMLSerializer().serializeToString(svgDocument);
+    downloadSVG(svgString, "table_screenshot.svg");
+}
+
 function decompress(data) {
     var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
     const unpacker = new jsonm.Unpacker();
     decompressed = unpacker.unpack(decompressed);
-    console.log(decompressed);
     return decompressed
 }
