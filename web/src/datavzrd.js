@@ -1211,6 +1211,7 @@ function downloadSVG(svgString, fileName) {
 }
 
 export function screenshot_table() {
+    $('th').each(function() { $(this).css('height', `${parseFloat($(this).css('height')) - 80}px`); });
     document.querySelectorAll('.sym').forEach(el => el.style.display = 'none');
     document.querySelectorAll('table tr').forEach(row => {
         const cells = row.querySelectorAll('td');
@@ -1231,7 +1232,7 @@ export function screenshot_table() {
     const table_element = document.getElementById("table");
     const svgDocument = elementToSVG(table_element);
     const svgString = new XMLSerializer().serializeToString(svgDocument);
-    downloadSVG(svgString, "table_screenshot.svg");
+    downloadSVG(svgString, `${$("#view-selection").attr("title")}.svg`);
 }
 
 function decompress(data) {
