@@ -378,7 +378,7 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
 }
 
 function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
-    let index = get_index(title, dp_columns, dm, header_label_length);
+    let index = get_index(plot.title, dp_columns, dm, header_label_length);
     let detail_mode = dp_columns.indexOf(plot.title) == -1;
     var data_function = window[plot.data_function];
     var specs = plot.specs;
