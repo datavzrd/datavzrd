@@ -6,7 +6,6 @@
 ### Bug Fixes
 
 * Fix rendering of custom plot for display-mode: normal ([5841f34](https://github.com/datavzrd/datavzrd/commit/5841f34fd27c68d5d1c318bfe9f836c4ba39eaf7))
-* Fix rendering of custom plot for display-mode: normal ([22ddc02](https://github.com/datavzrd/datavzrd/commit/22ddc0217a22b76838182e524bf886968077c264))
 
 ## [2.36.9](https://github.com/datavzrd/datavzrd/compare/v2.36.8...v2.36.9) (2024-03-15)
 
