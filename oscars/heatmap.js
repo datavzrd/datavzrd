@@ -446,7 +446,7 @@ const heatmap_plot = {
                     "x": {
                         "field": "dummy",
                         "axis": {
-                            "labelExpr": "'overall_wins_and_overall_nominations'",
+                            "labelExpr": "'overall wins and nominations'",
                             "labelAngle": -90,
                             "labelOffset": 7,
                             "title": null,
