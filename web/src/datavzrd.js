@@ -456,6 +456,10 @@ function detailFormatter(index, row) {
     $.each(row, function (key, value) {
         if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share" && key !== "line_number") {
             let id;
+            let card_title = key;
+            if (config.column_config[key].label) {
+                card_title = config.column_config[key].label;
+            }
             if (cp.includes(key) || ticks.includes(key) || bars.includes(key)) {
                 if (cp.includes(key)) {
                     id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
@@ -466,7 +470,7 @@ function detailFormatter(index, row) {
                 }
                 var card = `<div class="card">
                    <div class="card-header">
-                     ${key}
+                     ${card_title}
                    </div>
                    <div class="card-body">
                      <div id="${id}"></div>
@@ -477,7 +481,7 @@ function detailFormatter(index, row) {
                 id = `heatmap-${index}-${config.columns.indexOf(key)}`;
                 var card = `<div class="card">
                   <div class="card-header">
-                    ${key}
+                    ${card_title}
                   </div>
                   <div id="${id}" class="card-body">
                     ${value}
@@ -489,7 +493,7 @@ function detailFormatter(index, row) {
                 value = data_function(value, row);
                 var card = `<div class="card">
                    <div class="card-header">
-                     ${key}
+                     ${card_title}
                    </div>
                    <div class="card-body">
                     ${value}
@@ -499,7 +503,7 @@ function detailFormatter(index, row) {
             } else {
                 var card = `<div class="card">
                    <div class="card-header">
-                     ${key}
+                     ${card_title}
                    </div>
                    <div class="card-body">
                     ${value}
