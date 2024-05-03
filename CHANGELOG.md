@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.11](https://github.com/datavzrd/datavzrd/compare/v2.36.10...v2.36.11) (2024-05-03)
+
+
+### Bug Fixes
+
+* Display labels with display-mode: detail ([#695](https://github.com/datavzrd/datavzrd/issues/695)) ([708e601](https://github.com/datavzrd/datavzrd/commit/708e60163aa83b75f5486e796c75a4046cd076a7))
+
 ## [2.36.10](https://github.com/datavzrd/datavzrd/compare/v2.36.9...v2.36.10) (2024-04-30)
 
 
