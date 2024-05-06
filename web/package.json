@@ -22,7 +22,7 @@
     "vega-embed": "^6.22.1",
     "vega-lite": "^5.9.3",
     "d3": "^7.8.5",
-    "dom-to-svg": "datavzrd/dom-to-svg"
+    "dom-to-svg": "git+https://github.com/datavzrd/dom-to-svg.git"
   },
   "devDependencies": {
     "webpack": "^5.86.0",
