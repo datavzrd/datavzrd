@@ -1526,7 +1526,7 @@ pub(crate) fn get_column_domain(
                 .map(|s| s.to_string())
                 .chain(vec![title.to_string()])
                 .collect_vec();
-            let column_indexes: HashSet<_> = reader.headers().map(|s| {
+            let column_indexes: HashSet<_> = dataset.reader()?.headers().map(|s| {
                 s.iter()
                     .enumerate()
                     .filter(|(_, title)| columns.contains(&title.to_string()))
