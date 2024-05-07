@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.12](https://github.com/datavzrd/datavzrd/compare/v2.36.11...v2.36.12) (2024-05-07)
+
+
+### Bug Fixes
+
+* Fix heatmap domain retrieval ([#698](https://github.com/datavzrd/datavzrd/issues/698)) ([18cc469](https://github.com/datavzrd/datavzrd/commit/18cc469f140b6fd09744bd3dbcc4835f28269a44))
+
 ## [2.36.11](https://github.com/datavzrd/datavzrd/compare/v2.36.10...v2.36.11) (2024-05-03)
 
 
