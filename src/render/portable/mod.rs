@@ -208,7 +208,7 @@ impl Renderer for ItemRenderer {
                         .records()?
                         .skip(dataset.header_rows - 1)
                         .enumerate()
-                        .group_by(|(i, _)| row_address_factory.get(*i).page)
+                        .chunk_by(|(i, _)| row_address_factory.get(*i).page)
                     {
                         let records = grouped_records.collect_vec();
                         render_page(

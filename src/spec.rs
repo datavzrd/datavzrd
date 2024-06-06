@@ -72,7 +72,7 @@ impl ItemsSpec {
 
     pub(crate) fn validate(&self) -> Result<()> {
         if let Some(view) = &self.default_view {
-            if self.views.get(view).is_none() {
+            if !self.views.contains_key(view) {
                 bail!(ConfigError::MissingDefaultView {
                     view: view.to_string()
                 })
@@ -86,7 +86,7 @@ impl ItemsSpec {
                             view: name.to_string()
                         })
                     }
-                    if self.datasets.get(view.dataset.as_ref().unwrap()).is_none() {
+                    if !self.datasets.contains_key(view.dataset.as_ref().unwrap()) {
                         bail!(ConfigError::MissingDataset {
                             dataset: view.dataset.as_ref().unwrap().to_string()
                         })
