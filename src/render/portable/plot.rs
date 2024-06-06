@@ -27,6 +27,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
 
     let path = Path::new(output_path.as_ref()).join("plots");
     fs::create_dir(&path)?;
+    let mut plots = Vec::new();
 
     for (index, column) in reader.headers()?.iter().enumerate() {
         let mut templates = Tera::default();
@@ -53,11 +54,13 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
             }
         };
         let js = templates.render("plot.js.tera", &context)?;
-        let file_path = path.join(Path::new(&format!("plot_{index}")).with_extension("js"));
-        let mut file = fs::File::create(file_path)?;
-        let minified = minify_js(&js, debug)?;
-        file.write_all(&minified)?;
+        plots.push(js);
     }
+    let js_plots = plots.join("\n");
+    let file_path = path.join(Path::new(&"plots".to_string()).with_extension("js"));
+    let mut file = fs::File::create(file_path)?;
+    let minified = minify_js(&js_plots, debug)?;
+    file.write_all(&minified)?;
     Ok(())
 }
 

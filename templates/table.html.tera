@@ -15,8 +15,7 @@
 <script src="functions.js"></script>
 <script src="../static/bundle.js"></script>
 {% if is_single_page %}<script src="heatmap.js"></script>{% endif %}
-{% for title in titles %}
-<script src="plots/plot_{{ loop.index0 }}.js"></script>{% endfor %}
+<script src="plots/plots.js"></script>
 <script src="data/data_{{ current_page }}.js"></script>
 
 <script>
