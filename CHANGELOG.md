@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.36.13](https://github.com/datavzrd/datavzrd/compare/v2.36.12...v2.36.13) (2024-06-07)
+
+
+### Performance Improvements
+
+* Add modals via javascript for improved storage ([#716](https://github.com/datavzrd/datavzrd/issues/716)) ([e500d83](https://github.com/datavzrd/datavzrd/commit/e500d838cdb72050c31ce9d38edda329812a0514))
+* Bundle css into javascript ([#714](https://github.com/datavzrd/datavzrd/issues/714)) ([95a7ed4](https://github.com/datavzrd/datavzrd/commit/95a7ed4aad38079682a727eb79e7e8eaa941d5cd))
+
 ## [2.36.12](https://github.com/datavzrd/datavzrd/compare/v2.36.11...v2.36.12) (2024-05-07)
 
 
