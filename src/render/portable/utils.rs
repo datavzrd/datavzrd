@@ -11,34 +11,9 @@ use tera::{Context, Tera};
 pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
     let path = Path::new(path.as_ref()).join("static");
     fs::create_dir(&path)?;
-    let files = vec![
-        (
-            "bootstrap.min.css",
-            include_str!("../../../static/bootstrap.min.css"),
-        ),
-        (
-            "bootstrap-table.min.css",
-            include_str!("../../../static/bootstrap-table.min.css"),
-        ),
-        (
-            "bootstrap-table-fixed-columns.min.css",
-            include_str!("../../../static/bootstrap-table-fixed-columns.min.css"),
-        ),
-        ("datavzrd.css", include_str!("../../../static/datavzrd.css")),
-        (
-            "bootstrap-select.min.css",
-            include_str!("../../../static/bootstrap-select.min.css"),
-        ),
-        (
-            "bundle.js",
-            include_str!(concat!(env!("OUT_DIR"), "/web/dist/bundle.js")),
-        ),
-    ];
-
-    for (name, file) in files {
-        let mut out = File::create(path.join(Path::new(name)))?;
-        out.write_all(file.as_bytes())?;
-    }
+    let bundle = include_str!(concat!(env!("OUT_DIR"), "/web/dist/bundle.js"));
+    let mut out = File::create(path.join(Path::new("bundle.js")))?;
+    out.write_all(bundle.as_bytes())?;
     Ok(())
 }
 
@@ -124,35 +99,11 @@ mod tests {
     #[test]
     fn test_render_static_files() {
         render_static_files(Path::new("/tmp")).unwrap();
-        let files = vec![
-            (
-                "bootstrap.min.css",
-                include_str!("../../../static/bootstrap.min.css"),
-            ),
-            (
-                "bootstrap-table.min.css",
-                include_str!("../../../static/bootstrap-table.min.css"),
-            ),
-            (
-                "bootstrap-table-fixed-columns.min.css",
-                include_str!("../../../static/bootstrap-table-fixed-columns.min.css"),
-            ),
-            ("datavzrd.css", include_str!("../../../static/datavzrd.css")),
-            (
-                "bootstrap-select.min.css",
-                include_str!("../../../static/bootstrap-select.min.css"),
-            ),
-            (
-                "bundle.js",
-                include_str!(concat!(env!("OUT_DIR"), "/web/dist/bundle.js")),
-            ),
-        ];
+        let bundle = include_str!(concat!(env!("OUT_DIR"), "/web/dist/bundle.js"));
 
-        for (name, file) in files {
-            let rendered_file_content = fs::read_to_string(format!("/tmp/static/{}", name))
-                .expect("Could not read rendered test index file.");
-            assert_eq!(rendered_file_content, file);
-        }
+        let rendered_file_content = fs::read_to_string("/tmp/static/bundle.js")
+            .expect("Could not read rendered bundle file.");
+        assert_eq!(rendered_file_content, bundle);
 
         for entry in fs::read_dir("/tmp/static").unwrap() {
             fs::remove_file(entry.unwrap().path()).unwrap();
