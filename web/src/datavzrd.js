@@ -11,6 +11,7 @@ import * as d3 from "d3";
 import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
+import {renderModals} from "./modals";
 import '../style/bootstrap.min.css';
 import '../style/bootstrap-table.min.css';
 import '../style/bootstrap-select.min.css';
@@ -587,6 +588,7 @@ export function load() {
         $('.table-container').show();
         $('.loading').hide();
         $('#pagination').show();
+        renderModals();
         $(function () {
             $('[data-toggle="tooltip"]').tooltip({ sanitizeFn: function (content) { return content; } })
         });
