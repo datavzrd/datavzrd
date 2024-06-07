@@ -11,6 +11,12 @@ import * as d3 from "d3";
 import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
+import '../style/bootstrap.min.css';
+import '../style/bootstrap-table.min.css';
+import '../style/bootstrap-select.min.css';
+import '../style/bootstrap-table-fixed-columns.min.css';
+import '../style/datavzrd.css';
+
 
 let LINE_NUMBERS = false;
 
