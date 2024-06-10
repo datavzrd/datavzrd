@@ -227,7 +227,6 @@ impl Renderer for ItemRenderer {
                             &self.specs.default_view,
                             is_single_page,
                             self.specs.needs_excel_sheet(),
-                            webview_host,
                             &view_sizes,
                             debug,
                         )?;
@@ -246,11 +245,16 @@ impl Renderer for ItemRenderer {
                         &table.render_table.as_ref().unwrap().headers,
                         is_single_page,
                         table.single_page_page_size,
+                        pages,
                         webview_host,
                         self.specs.webview_controls,
                         debug,
                         name,
                         dataset,
+                        &view_sizes,
+                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
+                        &self.specs.default_view,
+                        self.specs.needs_excel_sheet(),
                     )?;
                     render_custom_javascript_functions(
                         &out_path,
@@ -295,7 +299,6 @@ fn render_page<P: AsRef<Path>>(
     default_view: &Option<String>,
     is_single_page: bool,
     has_excel_sheet: bool,
-    webview_host: &str,
     view_sizes: &HashMap<String, String>,
     debug: bool,
 ) -> Result<()> {
@@ -366,7 +369,6 @@ fn render_page<P: AsRef<Path>>(
     context.insert("report_name", report_name);
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
     context.insert("version", &env!("CARGO_PKG_VERSION"));
-    context.insert("webview_host", &webview_host);
 
     let file_path = Path::new(output_path.as_ref())
         .join(Path::new(&format!("index_{page_index}")).with_extension("html"));
@@ -608,11 +610,16 @@ fn render_table_javascript<P: AsRef<Path>>(
     header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
     page_size: usize,
+    pages: usize,
     webview_host: &str,
     webview_controls: bool,
     debug: bool,
     view: &str,
     dataset: &DatasetSpecs,
+    view_sizes: &HashMap<String, String>,
+    tables: &Vec<String>,
+    default_view: &Option<String>,
+    has_excel_sheet: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -631,6 +638,11 @@ fn render_table_javascript<P: AsRef<Path>>(
         webview_controls,
         header_specs,
         dataset,
+        pages,
+        view_sizes,
+        tables,
+        default_view,
+        has_excel_sheet,
     );
 
     let custom_plot_config =
@@ -816,6 +828,11 @@ struct JavascriptConfig {
     format: HashMap<String, String>,
     additional_colums: HashMap<String, String>,
     unique_column_values: HashMap<String, usize>,
+    pages: usize,
+    view_sizes: HashMap<String, String>,
+    tables: Vec<String>,
+    default_view: Option<String>,
+    has_excel_sheet: bool,
 }
 
 impl JavascriptConfig {
@@ -830,6 +847,11 @@ impl JavascriptConfig {
         webview_controls: bool,
         header_specs: &Option<HashMap<u32, HeaderSpecs>>,
         dataset: &DatasetSpecs,
+        pages: usize,
+        view_sizes: &HashMap<String, String>,
+        tables: &Vec<String>,
+        default_view: &Option<String>,
+        has_excel_sheet: bool,
     ) -> Self {
         let column_classification = classify_table(dataset).unwrap();
         let header_label_length = if let Some(headers) = header_specs {
@@ -852,6 +874,7 @@ impl JavascriptConfig {
                 )
                 .collect()
         };
+        let sorted_tables = tables.iter().sorted().map(|s| s.to_owned()).collect_vec();
         Self {
             detail_mode: config
                 .iter()
@@ -1037,6 +1060,11 @@ impl JavascriptConfig {
                 .collect(),
             additional_colums: additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, v)| (k.to_owned(), JavascriptFunction(v.value.to_string()).name())).collect(),
             unique_column_values: dataset.unique_column_values().unwrap(),
+            pages,
+            view_sizes: view_sizes.to_owned(),
+            tables: sorted_tables,
+            default_view: default_view.to_owned(),
+            has_excel_sheet,
         }
     }
 }
