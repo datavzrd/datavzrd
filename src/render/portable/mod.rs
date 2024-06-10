@@ -849,7 +849,7 @@ impl JavascriptConfig {
         dataset: &DatasetSpecs,
         pages: usize,
         view_sizes: &HashMap<String, String>,
-        tables: &Vec<String>,
+        tables: &[String],
         default_view: &Option<String>,
         has_excel_sheet: bool,
     ) -> Self {
