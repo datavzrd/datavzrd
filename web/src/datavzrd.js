@@ -21,6 +21,8 @@ import '../style/datavzrd.css';
 
 let LINE_NUMBERS = false;
 
+load();
+
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
     const converter = new showdown.Converter({
@@ -585,6 +587,7 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 
 export function load() {
     $(document).ready(function() {
+        document.title = "datavzrd report";
         render_html_contents();
         $('.table-container').show();
         $('.loading').hide();

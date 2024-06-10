@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>datavzrd report</title>
     <meta charset="UTF-8">
 </head>
 
@@ -12,10 +11,6 @@
 {% if is_single_page %}<script src="heatmap.js"></script>{% endif %}
 <script src="plots/plots.js"></script>
 <script src="data/data_{{ current_page }}.js"></script>
-
-<script>
-    datavzrd.load();
-</script>
 
 </body>
 </html>
