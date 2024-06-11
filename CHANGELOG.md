@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.14](https://github.com/datavzrd/datavzrd/compare/v2.36.13...v2.36.14) (2024-06-11)
+
+
+### Performance Improvements
+
+* Render html contents via javascript ([#717](https://github.com/datavzrd/datavzrd/issues/717)) ([8c00967](https://github.com/datavzrd/datavzrd/commit/8c00967c1fd4b5619421f0a0ce6571696d699c19))
+
 ## [2.36.13](https://github.com/datavzrd/datavzrd/compare/v2.36.12...v2.36.13) (2024-06-07)
 
 
