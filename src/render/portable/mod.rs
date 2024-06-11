@@ -214,20 +214,16 @@ impl Renderer for ItemRenderer {
                         render_page(
                             &out_path,
                             page + 1,
-                            pages,
                             records.iter().map(|(_, records)| records).collect_vec(),
                             &headers,
                             &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                             name,
-                            table.description.as_deref(),
                             &linked_tables,
                             dataset.links.as_ref().unwrap(),
                             &self.specs.report_name,
                             &self.specs.views,
                             &self.specs.default_view,
                             is_single_page,
-                            self.specs.needs_excel_sheet(),
-                            &view_sizes,
                             debug,
                         )?;
                     }
@@ -255,6 +251,9 @@ impl Renderer for ItemRenderer {
                         &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                         &self.specs.default_view,
                         self.specs.needs_excel_sheet(),
+                        table.description.as_deref(),
+                        &self.specs.report_name,
+                        name,
                     )?;
                     render_custom_javascript_functions(
                         &out_path,
@@ -286,20 +285,16 @@ impl Renderer for ItemRenderer {
 fn render_page<P: AsRef<Path>>(
     output_path: P,
     page_index: usize,
-    pages: usize,
     data: Vec<&Vec<String>>,
     titles: &[String],
     tables: &[String],
     name: &str,
-    description: Option<&str>,
     linked_tables: &LinkedTable,
     links: &HashMap<String, LinkSpec>,
     report_name: &str,
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
     is_single_page: bool,
-    has_excel_sheet: bool,
-    view_sizes: &HashMap<String, String>,
     debug: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
@@ -339,17 +334,10 @@ fn render_page<P: AsRef<Path>>(
 
     let compressed_data = compress(json!(data))?;
 
-    let local: DateTime<Local> = Local::now();
-
     context.insert("data", &json!(compressed_data).to_string());
     context.insert("linkouts", &json!(compressed_linkouts).to_string());
-    context.insert("titles", &titles.iter().collect_vec());
     context.insert("current_page", &page_index);
-    context.insert("pages", &pages);
-    context.insert("view_sizes", &view_sizes);
-    context.insert("description", &description);
     context.insert("is_single_page", &is_single_page);
-    context.insert("has_excel_sheet", &has_excel_sheet);
     context.insert(
         "tables",
         &tables
@@ -365,10 +353,7 @@ fn render_page<P: AsRef<Path>>(
             .collect_vec(),
     );
     context.insert("default_view", default_view);
-    context.insert("name", name);
     context.insert("report_name", report_name);
-    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
-    context.insert("version", &env!("CARGO_PKG_VERSION"));
 
     let file_path = Path::new(output_path.as_ref())
         .join(Path::new(&format!("index_{page_index}")).with_extension("html"));
@@ -617,9 +602,12 @@ fn render_table_javascript<P: AsRef<Path>>(
     view: &str,
     dataset: &DatasetSpecs,
     view_sizes: &HashMap<String, String>,
-    tables: &Vec<String>,
+    tables: &[String],
     default_view: &Option<String>,
     has_excel_sheet: bool,
+    description: Option<&str>,
+    report_name: &String,
+    title: &String,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -643,6 +631,9 @@ fn render_table_javascript<P: AsRef<Path>>(
         tables,
         default_view,
         has_excel_sheet,
+        description,
+        report_name,
+        title,
     );
 
     let custom_plot_config =
@@ -833,6 +824,11 @@ struct JavascriptConfig {
     tables: Vec<String>,
     default_view: Option<String>,
     has_excel_sheet: bool,
+    description: Option<String>,
+    report_name: String,
+    time: String,
+    version: String,
+    title: String,
 }
 
 impl JavascriptConfig {
@@ -852,6 +848,9 @@ impl JavascriptConfig {
         tables: &[String],
         default_view: &Option<String>,
         has_excel_sheet: bool,
+        description: Option<&str>,
+        report_name: &String,
+        title: &String,
     ) -> Self {
         let column_classification = classify_table(dataset).unwrap();
         let header_label_length = if let Some(headers) = header_specs {
@@ -859,6 +858,7 @@ impl JavascriptConfig {
         } else {
             0
         };
+        let local: DateTime<Local> = Local::now();
         let column_display_mode_filter = |dp_mode: DisplayMode| -> Vec<String> {
             columns
                 .iter()
@@ -1065,6 +1065,11 @@ impl JavascriptConfig {
             tables: sorted_tables,
             default_view: default_view.to_owned(),
             has_excel_sheet,
+            description: description.map(|s| s.to_string()),
+            report_name: report_name.to_owned(),
+            time: local.format("%a %b %e %T %Y").to_string(),
+            version: env!("CARGO_PKG_VERSION").to_string(),
+            title: title.to_string(),
         }
     }
 }

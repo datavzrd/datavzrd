@@ -1,8 +1,3 @@
 const data = {{ data | safe }};
 const linkouts = {{ linkouts | safe }};
 const CURRENT_PAGE = {{ current_page }};
-const TIME = "{{ time }}";
-const VERSION = "{{ version }}";
-const DESCRIPTION = `{% if description %}{{ description | escape }}{% endif %}`;
-const REPORT_NAME = "{% if report_name %}{{ report_name }}{% endif %}";
-const TITLE = "{{ name }}";

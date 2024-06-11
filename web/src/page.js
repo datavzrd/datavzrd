@@ -7,7 +7,7 @@ export function render_html_contents() {
                         <button id="close-description" type="button" data-toggle="collapse" data-target="#collapseDescription" class="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <div id="innerDescription" data-markdown="${DESCRIPTION}"></div>
+                        <div id="innerDescription" data-markdown="${config.description}"></div>
                     </div>
                 </div>
             </div>
@@ -38,8 +38,8 @@ export function render_html_contents() {
         pagination_html = "";
     }
     let report_name_html = "";
-    if (REPORT_NAME !== "") {
-        report_name_html = `<li class="breadcrumb-item"><div>${REPORT_NAME}</div></li>`;
+    if (config.report_name !== "") {
+        report_name_html = `<li class="breadcrumb-item"><div>${config.report_name}</div></li>`;
     }
     let selection_html = "";
     if (config.default_view) {
@@ -55,7 +55,7 @@ export function render_html_contents() {
         <ol class="navbar-nav mr-auto breadcrumb">
             ${report_name_html}
             <li class="breadcrumb-item">
-                <select id="view-selection" title="${TITLE}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true">
+                <select id="view-selection" title="${config.title}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true">
                     ${selection_html}
                 </select>
             </li>
@@ -67,7 +67,7 @@ export function render_html_contents() {
     if (config.has_excel_sheet) {
         sidebar_html += '<li class="list-group-item sidebar-btn" id="btnExcel" onclick="window.location=\'../data.xlsx\'">Download excel sheet</li>';
     }
-    if (DESCRIPTION !== "") {
+    if (config.description) {
         sidebar_html += '<li class="list-group-item sidebar-btn" id="markdown-btn" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">Show description</li>';
     }
     if (config.is_single_page) {
@@ -223,14 +223,14 @@ export function render_html_contents() {
                     <div class="collapse navbar-collapse" id="navbarText">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <a class="nav-link" id="datavzrd-version" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">${VERSION}</a>
+                                <a class="nav-link" id="datavzrd-version" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">${config.version}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="https://github.com/datavzrd/datavzrd">github</a>
                             </li>
                         </ul>
                         <span class="navbar-text">
-                            created ${TIME}
+                            created ${config.time}
                         </span>
                     </div>
                 </nav>
