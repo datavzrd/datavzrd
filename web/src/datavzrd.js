@@ -11,7 +11,7 @@ import * as d3 from "d3";
 import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
-import {renderModals} from "./modals";
+import {render_html_contents} from "./page";
 import '../style/bootstrap.min.css';
 import '../style/bootstrap-table.min.css';
 import '../style/bootstrap-select.min.css';
@@ -20,6 +20,8 @@ import '../style/datavzrd.css';
 
 
 let LINE_NUMBERS = false;
+
+load();
 
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
@@ -585,10 +587,12 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 
 export function load() {
     $(document).ready(function() {
+        document.title = "datavzrd report";
+        render_html_contents();
         $('.table-container').show();
         $('.loading').hide();
         $('#pagination').show();
-        renderModals();
+        $('select').selectpicker();
         $(function () {
             $('[data-toggle="tooltip"]').tooltip({ sanitizeFn: function (content) { return content; } })
         });
