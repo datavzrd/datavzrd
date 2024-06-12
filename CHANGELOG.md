@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.15](https://github.com/datavzrd/datavzrd/compare/v2.36.14...v2.36.15) (2024-06-12)
+
+
+### Bug Fixes
+
+* Remove null being displayed when table doesnt have a description ([#720](https://github.com/datavzrd/datavzrd/issues/720)) ([fac0d6d](https://github.com/datavzrd/datavzrd/commit/fac0d6d8d7633aa3c1dcfad0731c540340184302))
+
 ## [2.36.14](https://github.com/datavzrd/datavzrd/compare/v2.36.13...v2.36.14) (2024-06-11)
 
 
