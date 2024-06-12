@@ -1216,7 +1216,28 @@ export function toggle_line_numbers() {
     LINE_NUMBERS = !LINE_NUMBERS;
 }
 
+function addRotationTransform(svgString) {
+    let table_headers = config.displayed_columns;
+    for (const column of table_headers) {
+        if (config.column_config[column].label !== null) {
+            table_headers[table_headers.indexOf(column)] = config.column_config[column].label;
+        }
+    }
+    return svgString.replace(/<text\b([^>]*)>(<tspan[^>]*x="([\d.]+)"[^>]*y="([\d.]+)"[^>]*>([^<]+)<\/tspan>)(<\/text>)/g,
+        (match, textAttributes, tspanContent, x, y, word, closingTag) => {
+            if (table_headers.includes(word)) {
+                const transform = `transform="rotate(-45, ${x}, ${y})"`;
+                return `<text${textAttributes} ${transform}>${tspanContent}${closingTag}`;
+            }
+            return match;
+        }
+    );
+}
+
+
+
 function downloadSVG(svgString, fileName) {
+    svgString = addRotationTransform(svgString);
     const blob = new Blob([svgString], { type: 'image/svg+xml' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
