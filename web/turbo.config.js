@@ -1,6 +1,7 @@
 const path = require('path');
+const { defineConfig } = require('@turbo/pack');
 
-module.exports = {
+module.exports = defineConfig({
     entry: './src/datavzrd.js',
     mode: 'development',
     devtool: 'source-map',
@@ -17,4 +18,4 @@ module.exports = {
             },
         ],
     },
-};
+});

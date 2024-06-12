@@ -24,8 +24,9 @@ fn main() {
         .expect("failed to execute webpack");
 
     std::process::Command::new("npx")
-        .arg("webpack")
+        .arg("turbo")
+        .arg("build")
         .current_dir(work_dir.to_str().expect("failed to get work dir"))
         .status()
-        .expect("failed to execute webpack");
+        .expect("failed to execute turbo build");
 }

@@ -4,7 +4,7 @@
   "description": "Web components for datavzrd",
   "main": "datavzrd.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "turbo build"
   },
   "author": "Johannes Köster <johannes.koester@tu-dortmund.de>, Felix Wiegand <felix.wiegand@tu-dortmund.de>",
   "license": "MIT",
@@ -24,9 +24,8 @@
     "d3": "^7.8.5"
   },
   "devDependencies": {
-    "webpack": "^5.86.0",
-    "webpack-cli": "^5.1.4",
     "css-loader": "^7.1.2",
-    "style-loader": "^3.3.1"
+    "style-loader": "^3.3.1",
+    "@turbo/pack": "^2.0.0"
   }
 }
