@@ -1,5 +1,76 @@
 # Changelog
 
+## [2.36.14](https://github.com/datavzrd/datavzrd/compare/v2.36.13...v2.36.14) (2024-06-11)
+
+
+### Performance Improvements
+
+* Render html contents via javascript ([#717](https://github.com/datavzrd/datavzrd/issues/717)) ([8c00967](https://github.com/datavzrd/datavzrd/commit/8c00967c1fd4b5619421f0a0ce6571696d699c19))
+
+## [2.36.13](https://github.com/datavzrd/datavzrd/compare/v2.36.12...v2.36.13) (2024-06-07)
+
+
+### Performance Improvements
+
+* Add modals via javascript for improved storage ([#716](https://github.com/datavzrd/datavzrd/issues/716)) ([e500d83](https://github.com/datavzrd/datavzrd/commit/e500d838cdb72050c31ce9d38edda329812a0514))
+* Bundle css into javascript ([#714](https://github.com/datavzrd/datavzrd/issues/714)) ([95a7ed4](https://github.com/datavzrd/datavzrd/commit/95a7ed4aad38079682a727eb79e7e8eaa941d5cd))
+
+## [2.36.12](https://github.com/datavzrd/datavzrd/compare/v2.36.11...v2.36.12) (2024-05-07)
+
+
+### Bug Fixes
+
+* Fix heatmap domain retrieval ([#698](https://github.com/datavzrd/datavzrd/issues/698)) ([18cc469](https://github.com/datavzrd/datavzrd/commit/18cc469f140b6fd09744bd3dbcc4835f28269a44))
+
+## [2.36.11](https://github.com/datavzrd/datavzrd/compare/v2.36.10...v2.36.11) (2024-05-03)
+
+
+### Bug Fixes
+
+* Display labels with display-mode: detail ([#695](https://github.com/datavzrd/datavzrd/issues/695)) ([708e601](https://github.com/datavzrd/datavzrd/commit/708e60163aa83b75f5486e796c75a4046cd076a7))
+
+## [2.36.10](https://github.com/datavzrd/datavzrd/compare/v2.36.9...v2.36.10) (2024-04-30)
+
+
+### Bug Fixes
+
+* Fix rendering of custom plot for display-mode: normal ([5841f34](https://github.com/datavzrd/datavzrd/commit/5841f34fd27c68d5d1c318bfe9f836c4ba39eaf7))
+
+## [2.36.9](https://github.com/datavzrd/datavzrd/compare/v2.36.8...v2.36.9) (2024-03-15)
+
+
+### Bug Fixes
+
+* Dont minify custom javascript functions ([#676](https://github.com/datavzrd/datavzrd/issues/676)) ([780018a](https://github.com/datavzrd/datavzrd/commit/780018a8d2ce4d5bd1e1a9b6c110418872eafff1))
+
+## [2.36.8](https://github.com/datavzrd/datavzrd/compare/v2.36.7...v2.36.8) (2024-03-12)
+
+
+### Bug Fixes
+
+* Revert usage of numeric json types ([930a877](https://github.com/datavzrd/datavzrd/commit/930a877c7496bf562ffcca8c57f6bde37ac6a0ef))
+
+## [2.36.7](https://github.com/datavzrd/datavzrd/compare/v2.36.6...v2.36.7) (2024-03-12)
+
+
+### Bug Fixes
+
+* Skip validations for non-present optional columns ([#673](https://github.com/datavzrd/datavzrd/issues/673)) ([6379d21](https://github.com/datavzrd/datavzrd/commit/6379d2121f9497eb7cbddaf969a728caa2a68874))
+
+## [2.36.6](https://github.com/datavzrd/datavzrd/compare/v2.36.5...v2.36.6) (2024-03-11)
+
+
+### Bug Fixes
+
+* Change integer type to fix possible overflow error ([#671](https://github.com/datavzrd/datavzrd/issues/671)) ([fa629b8](https://github.com/datavzrd/datavzrd/commit/fa629b8f187ae01a90388376b027b29d43c3b0e1))
+
+## [2.36.5](https://github.com/datavzrd/datavzrd/compare/v2.36.4...v2.36.5) (2024-03-08)
+
+
+### Performance Improvements
+
+* Use numeric json types ([#668](https://github.com/datavzrd/datavzrd/issues/668)) ([b623473](https://github.com/datavzrd/datavzrd/commit/b62347332a1b15c94742c28f096ce044c938ea0b))
+
 ## [2.36.4](https://github.com/datavzrd/datavzrd/compare/v2.36.3...v2.36.4) (2024-03-04)
 
 

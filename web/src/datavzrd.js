@@ -12,10 +12,19 @@ import 'bootstrap';
 import 'bootstrap-table';
 import 'bootstrap-select';
 import { documentToSVG, elementToSVG, inlineResources, formatXML } from 'dom-to-svg';
+import {render_html_contents} from "./page";
+import '../style/bootstrap.min.css';
+import '../style/bootstrap-table.min.css';
+import '../style/bootstrap-select.min.css';
+import '../style/bootstrap-table-fixed-columns.min.css';
+import '../style/datavzrd.css';
+
 
 let LINE_NUMBERS = false;
 
 let VEGA_EMBED_OPTIONS = { 'renderer': 'svg', 'actions': false };
+
+load();
 
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
@@ -378,7 +387,7 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
 }
 
 function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
-    let index = get_index(title, dp_columns, dm, header_label_length);
+    let index = get_index(plot.title, dp_columns, dm, header_label_length);
     let detail_mode = dp_columns.indexOf(plot.title) == -1;
     var data_function = window[plot.data_function];
     var specs = plot.specs;
@@ -456,6 +465,10 @@ function detailFormatter(index, row) {
     $.each(row, function (key, value) {
         if (!hidden_columns.includes(key) && !displayed_columns.includes(key) && key !== "linkouts" && key !== "share" && key !== "line_number") {
             let id;
+            let card_title = key;
+            if (config.column_config[key].label) {
+                card_title = config.column_config[key].label;
+            }
             if (cp.includes(key) || ticks.includes(key) || bars.includes(key)) {
                 if (cp.includes(key)) {
                     id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
@@ -466,7 +479,7 @@ function detailFormatter(index, row) {
                 }
                 var card = `<div class="card">
                    <div class="card-header">
-                     ${key}
+                     ${card_title}
                    </div>
                    <div class="card-body">
                      <div id="${id}"></div>
@@ -477,7 +490,7 @@ function detailFormatter(index, row) {
                 id = `heatmap-${index}-${config.columns.indexOf(key)}`;
                 var card = `<div class="card">
                   <div class="card-header">
-                    ${key}
+                    ${card_title}
                   </div>
                   <div id="${id}" class="card-body">
                     ${value}
@@ -489,7 +502,7 @@ function detailFormatter(index, row) {
                 value = data_function(value, row);
                 var card = `<div class="card">
                    <div class="card-header">
-                     ${key}
+                     ${card_title}
                    </div>
                    <div class="card-body">
                     ${value}
@@ -499,7 +512,7 @@ function detailFormatter(index, row) {
             } else {
                 var card = `<div class="card">
                    <div class="card-header">
-                     ${key}
+                     ${card_title}
                    </div>
                    <div class="card-body">
                     ${value}
@@ -574,9 +587,12 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 
 export function load() {
     $(document).ready(function() {
+        document.title = "datavzrd report";
+        render_html_contents();
         $('.table-container').show();
         $('.loading').hide();
         $('#pagination').show();
+        $('select').selectpicker();
         $(function () {
             $('[data-toggle="tooltip"]').tooltip({ sanitizeFn: function (content) { return content; } })
         });

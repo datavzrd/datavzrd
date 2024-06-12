@@ -3,11 +3,6 @@
 <head>
     <title>datavzrd report</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/bootstrap-select.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table-fixed-columns.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/datavzrd.css">
 </head>
 
 <body>

@@ -1,13 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>datavzrd report</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/bootstrap-select.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/bootstrap-table-fixed-columns.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/datavzrd.css">
 </head>
 
 <body>
@@ -15,8 +9,7 @@
 <script src="functions.js"></script>
 <script src="../static/bundle.js"></script>
 {% if is_single_page %}<script src="heatmap.js"></script>{% endif %}
-{% for title in titles %}
-<script src="plots/plot_{{ loop.index0 }}.js"></script>{% endfor %}
+<script src="plots/plots.js"></script>
 <script src="data/data_{{ current_page }}.js"></script>
 
 <script>
@@ -32,7 +25,6 @@
             {% if description %}<li class="list-group-item sidebar-btn" id="markdown-btn" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">Show description</li>{% endif %}
             {% if is_single_page %}<li class="list-group-item sidebar-btn" onclick="datavzrd.downloadCSV()">Download CSV</li>{% endif %}
             <li class="list-group-item sidebar-btn" id="toggleLineNumbers" onclick="datavzrd.toggle_line_numbers()">Show/Hide Line Numbers</li>
-            <li class="list-group-item sidebar-btn" id="screenshotTable" onclick="datavzrd.screenshot_table()">Export table as SVG</li>
         </ul>
     </div>
 </div>

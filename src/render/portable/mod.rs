@@ -208,27 +208,22 @@ impl Renderer for ItemRenderer {
                         .records()?
                         .skip(dataset.header_rows - 1)
                         .enumerate()
-                        .group_by(|(i, _)| row_address_factory.get(*i).page)
+                        .chunk_by(|(i, _)| row_address_factory.get(*i).page)
                     {
                         let records = grouped_records.collect_vec();
                         render_page(
                             &out_path,
                             page + 1,
-                            pages,
                             records.iter().map(|(_, records)| records).collect_vec(),
                             &headers,
                             &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                             name,
-                            table.description.as_deref(),
                             &linked_tables,
                             dataset.links.as_ref().unwrap(),
                             &self.specs.report_name,
                             &self.specs.views,
                             &self.specs.default_view,
                             is_single_page,
-                            self.specs.needs_excel_sheet(),
-                            webview_host,
-                            &view_sizes,
                             debug,
                         )?;
                     }
@@ -246,17 +241,24 @@ impl Renderer for ItemRenderer {
                         &table.render_table.as_ref().unwrap().headers,
                         is_single_page,
                         table.single_page_page_size,
+                        pages,
                         webview_host,
                         self.specs.webview_controls,
                         debug,
                         name,
                         dataset,
+                        &view_sizes,
+                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
+                        &self.specs.default_view,
+                        self.specs.needs_excel_sheet(),
+                        table.description.as_deref(),
+                        &self.specs.report_name,
+                        name,
                     )?;
                     render_custom_javascript_functions(
                         &out_path,
                         table_specs,
                         &table.render_table.as_ref().unwrap().additional_columns,
-                        debug,
                     )?;
                     render_plots(&out_path, dataset, debug)?;
                 }
@@ -283,21 +285,16 @@ impl Renderer for ItemRenderer {
 fn render_page<P: AsRef<Path>>(
     output_path: P,
     page_index: usize,
-    pages: usize,
     data: Vec<&Vec<String>>,
     titles: &[String],
     tables: &[String],
     name: &str,
-    description: Option<&str>,
     linked_tables: &LinkedTable,
     links: &HashMap<String, LinkSpec>,
     report_name: &str,
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
     is_single_page: bool,
-    has_excel_sheet: bool,
-    webview_host: &str,
-    view_sizes: &HashMap<String, String>,
     debug: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
@@ -337,17 +334,10 @@ fn render_page<P: AsRef<Path>>(
 
     let compressed_data = compress(json!(data))?;
 
-    let local: DateTime<Local> = Local::now();
-
     context.insert("data", &json!(compressed_data).to_string());
     context.insert("linkouts", &json!(compressed_linkouts).to_string());
-    context.insert("titles", &titles.iter().collect_vec());
     context.insert("current_page", &page_index);
-    context.insert("pages", &pages);
-    context.insert("view_sizes", &view_sizes);
-    context.insert("description", &description);
     context.insert("is_single_page", &is_single_page);
-    context.insert("has_excel_sheet", &has_excel_sheet);
     context.insert(
         "tables",
         &tables
@@ -363,11 +353,7 @@ fn render_page<P: AsRef<Path>>(
             .collect_vec(),
     );
     context.insert("default_view", default_view);
-    context.insert("name", name);
     context.insert("report_name", report_name);
-    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
-    context.insert("version", &env!("CARGO_PKG_VERSION"));
-    context.insert("webview_host", &webview_host);
 
     let file_path = Path::new(output_path.as_ref())
         .join(Path::new(&format!("index_{page_index}")).with_extension("html"));
@@ -609,11 +595,19 @@ fn render_table_javascript<P: AsRef<Path>>(
     header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
     page_size: usize,
+    pages: usize,
     webview_host: &str,
     webview_controls: bool,
     debug: bool,
     view: &str,
     dataset: &DatasetSpecs,
+    view_sizes: &HashMap<String, String>,
+    tables: &[String],
+    default_view: &Option<String>,
+    has_excel_sheet: bool,
+    description: Option<&str>,
+    report_name: &String,
+    title: &String,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -632,6 +626,14 @@ fn render_table_javascript<P: AsRef<Path>>(
         webview_controls,
         header_specs,
         dataset,
+        pages,
+        view_sizes,
+        tables,
+        default_view,
+        has_excel_sheet,
+        description,
+        report_name,
+        title,
     );
 
     let custom_plot_config =
@@ -817,6 +819,16 @@ struct JavascriptConfig {
     format: HashMap<String, String>,
     additional_colums: HashMap<String, String>,
     unique_column_values: HashMap<String, usize>,
+    pages: usize,
+    view_sizes: HashMap<String, String>,
+    tables: Vec<String>,
+    default_view: Option<String>,
+    has_excel_sheet: bool,
+    description: Option<String>,
+    report_name: String,
+    time: String,
+    version: String,
+    title: String,
 }
 
 impl JavascriptConfig {
@@ -831,6 +843,14 @@ impl JavascriptConfig {
         webview_controls: bool,
         header_specs: &Option<HashMap<u32, HeaderSpecs>>,
         dataset: &DatasetSpecs,
+        pages: usize,
+        view_sizes: &HashMap<String, String>,
+        tables: &[String],
+        default_view: &Option<String>,
+        has_excel_sheet: bool,
+        description: Option<&str>,
+        report_name: &String,
+        title: &String,
     ) -> Self {
         let column_classification = classify_table(dataset).unwrap();
         let header_label_length = if let Some(headers) = header_specs {
@@ -838,6 +858,7 @@ impl JavascriptConfig {
         } else {
             0
         };
+        let local: DateTime<Local> = Local::now();
         let column_display_mode_filter = |dp_mode: DisplayMode| -> Vec<String> {
             columns
                 .iter()
@@ -853,6 +874,7 @@ impl JavascriptConfig {
                 )
                 .collect()
         };
+        let sorted_tables = tables.iter().sorted().map(|s| s.to_owned()).collect_vec();
         Self {
             detail_mode: config
                 .iter()
@@ -1038,6 +1060,16 @@ impl JavascriptConfig {
                 .collect(),
             additional_colums: additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, v)| (k.to_owned(), JavascriptFunction(v.value.to_string()).name())).collect(),
             unique_column_values: dataset.unique_column_values().unwrap(),
+            pages,
+            view_sizes: view_sizes.to_owned(),
+            tables: sorted_tables,
+            default_view: default_view.to_owned(),
+            has_excel_sheet,
+            description: description.map(|s| s.to_string()),
+            report_name: report_name.to_owned(),
+            time: local.format("%a %b %e %T %Y").to_string(),
+            version: env!("CARGO_PKG_VERSION").to_string(),
+            title: title.to_string(),
         }
     }
 }
@@ -1215,7 +1247,6 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
     output_path: P,
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
-    debug: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -1288,8 +1319,7 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
     let js = templates.render("functions.js.tera", &context)?;
 
     let mut file = File::create(file_path)?;
-    let minified = minify_js(&js, debug)?;
-    file.write_all(&minified)?;
+    file.write_all(js.as_bytes())?;
 
     Ok(())
 }
@@ -1529,7 +1559,7 @@ pub(crate) fn get_column_domain(
                 .map(|s| s.to_string())
                 .chain(vec![title.to_string()])
                 .collect_vec();
-            let column_indexes: HashSet<_> = reader.headers().map(|s| {
+            let column_indexes: HashSet<_> = dataset.reader()?.headers().map(|s| {
                 s.iter()
                     .enumerate()
                     .filter(|(_, title)| columns.contains(&title.to_string()))
@@ -2029,6 +2059,25 @@ mod tests {
     fn test_javascript_function_arg_parsing() {
         let function = JavascriptFunction(String::from("function (value, row) { return value; }"));
         assert_eq!(function.args(), "value, row")
+    }
+
+    #[test]
+    fn test_javascript_function_name() {
+        let f = r#"
+        function(value, row) {
+            let custom_value = 'This is a custom function';
+            if (value.length === 0) {
+              return ``
+            }
+            const len = value.split(',').length;
+            return `<span data-toggle="popover" data-content="${{custom_value}}">${len}</span>`;
+        }
+        "#;
+        let function = JavascriptFunction(f.to_string());
+        assert_eq!(
+            function.name(),
+            "custom_func_51101d9f2c9ec9e08100de43d906d9ab"
+        );
     }
 
     #[test]

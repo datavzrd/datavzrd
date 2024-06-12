@@ -60,6 +60,21 @@
     font-size: 0.8rem;
 }
 
+#table-container {
+    margin-top: 15px;
+}
+
+#histogram-plot {
+    width: 100%;
+    height: 300px;
+    border:none;
+}
+
+#search-iframe {
+    width: 100%;
+    height: min(530px, 50vh)
+}
+
 .linkout-btn {
     font-size: 0.8rem;
     white-space: nowrap;
@@ -297,4 +312,8 @@ footer {
 #innerDescription {
     margin: 0 auto;
     max-width: 800px;
+}
+
+.nav-btn {
+    display: block !important;
 }
