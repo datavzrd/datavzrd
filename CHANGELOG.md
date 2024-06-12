@@ -1,5 +1,41 @@
 # Changelog
 
+## [2.36.14](https://github.com/datavzrd/datavzrd/compare/v2.36.13...v2.36.14) (2024-06-11)
+
+
+### Performance Improvements
+
+* Render html contents via javascript ([#717](https://github.com/datavzrd/datavzrd/issues/717)) ([8c00967](https://github.com/datavzrd/datavzrd/commit/8c00967c1fd4b5619421f0a0ce6571696d699c19))
+
+## [2.36.13](https://github.com/datavzrd/datavzrd/compare/v2.36.12...v2.36.13) (2024-06-07)
+
+
+### Performance Improvements
+
+* Add modals via javascript for improved storage ([#716](https://github.com/datavzrd/datavzrd/issues/716)) ([e500d83](https://github.com/datavzrd/datavzrd/commit/e500d838cdb72050c31ce9d38edda329812a0514))
+* Bundle css into javascript ([#714](https://github.com/datavzrd/datavzrd/issues/714)) ([95a7ed4](https://github.com/datavzrd/datavzrd/commit/95a7ed4aad38079682a727eb79e7e8eaa941d5cd))
+
+## [2.36.12](https://github.com/datavzrd/datavzrd/compare/v2.36.11...v2.36.12) (2024-05-07)
+
+
+### Bug Fixes
+
+* Fix heatmap domain retrieval ([#698](https://github.com/datavzrd/datavzrd/issues/698)) ([18cc469](https://github.com/datavzrd/datavzrd/commit/18cc469f140b6fd09744bd3dbcc4835f28269a44))
+
+## [2.36.11](https://github.com/datavzrd/datavzrd/compare/v2.36.10...v2.36.11) (2024-05-03)
+
+
+### Bug Fixes
+
+* Display labels with display-mode: detail ([#695](https://github.com/datavzrd/datavzrd/issues/695)) ([708e601](https://github.com/datavzrd/datavzrd/commit/708e60163aa83b75f5486e796c75a4046cd076a7))
+
+## [2.36.10](https://github.com/datavzrd/datavzrd/compare/v2.36.9...v2.36.10) (2024-04-30)
+
+
+### Bug Fixes
+
+* Fix rendering of custom plot for display-mode: normal ([5841f34](https://github.com/datavzrd/datavzrd/commit/5841f34fd27c68d5d1c318bfe9f836c4ba39eaf7))
+
 ## [2.36.9](https://github.com/datavzrd/datavzrd/compare/v2.36.8...v2.36.9) (2024-03-15)
 
 
