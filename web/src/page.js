@@ -12,6 +12,9 @@ export function render_html_contents() {
                 </div>
             </div>
         </div>`;
+    if (!config.description) {
+        description_html = "";
+    }
     let inner_pagination_html = "";
     if (CURRENT_PAGE > 1) {
         if (CURRENT_PAGE !== 2) {
