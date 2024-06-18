@@ -2,16 +2,19 @@ use crate::render::portable::get_column_domain;
 use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
-    MissingColumn, PlotAndTablePresentConfiguration, ValueOutsideDomain,
+    MissingLinkoutColumn, PlotAndTablePresentConfiguration, UnsupportedColorScheme,
+    ValueOutsideDomain, WrongColumnTypeMidDomain, WrongDomainLengthWithMidDomain,
+    WrongRangeLengthWithMidDomain,
 };
+use crate::utils::column_position;
 use crate::utils::column_type::{classify_table, ColumnType};
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use anyhow::{bail, Context};
 use derefable::Derefable;
 use fancy_regex::Regex;
 use itertools::Itertools;
 use lazy_static::lazy_static;
-use log::warn;
+
 use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::BorrowMut;
@@ -57,9 +60,7 @@ impl ItemsSpec {
                         })
                     }
                 };
-                if !dataset.is_empty() {
-                    spec.preprocess_columns(dataset, items_spec.max_in_memory_rows)?;
-                }
+                spec.preprocess_columns(dataset, items_spec.max_in_memory_rows)?;
             }
         }
         Ok(items_spec)
@@ -71,7 +72,7 @@ impl ItemsSpec {
 
     pub(crate) fn validate(&self) -> Result<()> {
         if let Some(view) = &self.default_view {
-            if self.views.get(view).is_none() {
+            if !self.views.contains_key(view) {
                 bail!(ConfigError::MissingDefaultView {
                     view: view.to_string()
                 })
@@ -85,7 +86,7 @@ impl ItemsSpec {
                             view: name.to_string()
                         })
                     }
-                    if self.datasets.get(view.dataset.as_ref().unwrap()).is_none() {
+                    if !self.datasets.contains_key(view.dataset.as_ref().unwrap()) {
                         bail!(ConfigError::MissingDataset {
                             dataset: view.dataset.as_ref().unwrap().to_string()
                         })
@@ -103,62 +104,115 @@ impl ItemsSpec {
                         }
                     }
                     let dataset = self.datasets.get(view.dataset.as_ref().unwrap()).unwrap();
-                    let mut reader = csv::ReaderBuilder::new()
-                        .delimiter(dataset.separator as u8)
-                        .from_path(&dataset.path)?;
+                    let mut reader = dataset.reader()?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                    let column_types =
-                        classify_table(&dataset.path, dataset.separator, dataset.header_rows)?;
+                    let column_types = classify_table(dataset)?;
                     for (column, render_columns) in &render_table.columns {
                         if !titles.contains(column) && !render_columns.optional {
-                            warn!("Found render-table definition for column {} that is not part of the given dataset.", &column);
-                        }
-                        let mut possible_conflicting = Vec::new();
-                        if render_columns.ellipsis.is_some() {
-                            possible_conflicting.push("ellipsis".to_string());
-                        }
-                        if render_columns.link_to_url.is_some() {
-                            possible_conflicting.push("link-to-url".to_string());
-                        }
-                        if render_columns.custom.is_some() {
-                            possible_conflicting.push("custom".to_string());
-                        }
-                        if render_columns.custom_plot.is_some() {
-                            possible_conflicting.push("custom-plot".to_string());
-                        }
-                        if let Some(plot) = &render_columns.plot {
-                            if plot.heatmap.is_some() {
-                                possible_conflicting.push("heatmap".to_string());
-                            } else if plot.tick_plot.is_some() {
-                                possible_conflicting.push("ticks".to_string());
-                            }
-                        }
-                        if possible_conflicting.len() > 1
-                            && !(possible_conflicting.contains(&"heatmap".to_string())
-                                && possible_conflicting.contains(&"ellipsis".to_string())
-                                && possible_conflicting.len() == 2)
-                        {
-                            bail!(ConflictingConfiguration {
-                                view: name.to_string(),
+                            bail!(ConfigError::MissingColumn {
                                 column: column.to_string(),
-                                conflict: possible_conflicting
+                                view: name.to_string()
                             })
                         }
-                        if let Some(plot_spec) = &render_columns.plot {
-                            let domain = if let Some(tick_plot) = &plot_spec.tick_plot {
-                                tick_plot.domain.clone()
-                            } else if let Some(bar_plot) = &plot_spec.bar_plot {
-                                bar_plot.domain.clone()
-                            } else if let Some(heatmap) = &plot_spec.heatmap {
-                                if let Some(domain) = &heatmap.domain {
-                                    if let Some(colum_type) = column_types.get(column) {
-                                        if colum_type == &ColumnType::Float {
-                                            Some(
-                                                domain
-                                                    .iter()
-                                                    .map(|d| f32::from_str(d).unwrap())
-                                                    .collect_vec(),
-                                            )
+                        if titles.contains(column) {
+                            let mut possible_conflicting = Vec::new();
+                            if render_columns.ellipsis.is_some() {
+                                possible_conflicting.push("ellipsis".to_string());
+                            }
+                            if render_columns.link_to_url.is_some() {
+                                possible_conflicting.push("link-to-url".to_string());
+                            }
+                            if render_columns.custom.is_some() {
+                                possible_conflicting.push("custom".to_string());
+                            }
+                            if render_columns.custom_plot.is_some() {
+                                possible_conflicting.push("custom-plot".to_string());
+                            }
+                            if let Some(plot) = &render_columns.plot {
+                                if plot.heatmap.is_some() {
+                                    possible_conflicting.push("heatmap".to_string());
+                                } else if plot.tick_plot.is_some() {
+                                    possible_conflicting.push("ticks".to_string());
+                                }
+                            }
+                            if possible_conflicting.len() > 1
+                                && !(possible_conflicting.contains(&"heatmap".to_string())
+                                    && possible_conflicting.contains(&"ellipsis".to_string())
+                                    && possible_conflicting.len() == 2)
+                            {
+                                bail!(ConflictingConfiguration {
+                                    view: name.to_string(),
+                                    column: column.to_string(),
+                                    conflict: possible_conflicting
+                                })
+                            }
+                            if let Some(plot_spec) = &render_columns.plot {
+                                let domain = if let Some(tick_plot) = &plot_spec.tick_plot {
+                                    tick_plot.domain.clone()
+                                } else if let Some(bar_plot) = &plot_spec.bar_plot {
+                                    bar_plot.domain.clone()
+                                } else if let Some(heatmap) = &plot_spec.heatmap {
+                                    if !heatmap.color_scheme.is_empty()
+                                        && column_types.get(column).unwrap().is_numeric()
+                                        && !matches!(
+                                            heatmap.color_scheme.to_lowercase().as_str(),
+                                            "blues"
+                                                | "greens"
+                                                | "greys"
+                                                | "oranges"
+                                                | "purples"
+                                                | "reds"
+                                                | "viridis"
+                                                | "inferno"
+                                                | "magma"
+                                                | "plasma"
+                                                | "cividis"
+                                        )
+                                    {
+                                        bail!(UnsupportedColorScheme {
+                                            view: name.to_string(),
+                                            column: column.to_string(),
+                                            scheme: heatmap.color_scheme.to_string(),
+                                        })
+                                    }
+                                    if heatmap.domain_mid.is_some() {
+                                        if column_types
+                                            .get(column)
+                                            .is_some_and(|ct| !ct.is_numeric())
+                                            && !dataset.is_empty()?
+                                        {
+                                            bail!(WrongColumnTypeMidDomain {
+                                                view: name.to_string(),
+                                                column: column.to_string(),
+                                            })
+                                        }
+                                        if heatmap.color_range.0.len() != 3 {
+                                            bail!(WrongRangeLengthWithMidDomain {
+                                                view: name.to_string(),
+                                                column: column.to_string(),
+                                            })
+                                        }
+                                        if let Some(heatmap_domain) = &heatmap.domain {
+                                            if heatmap_domain.len() != 3 {
+                                                bail!(WrongDomainLengthWithMidDomain {
+                                                    view: name.to_string(),
+                                                    column: column.to_string(),
+                                                })
+                                            }
+                                        }
+                                    }
+                                    if let Some(domain) = &heatmap.domain {
+                                        if let Some(colum_type) = column_types.get(column) {
+                                            if colum_type == &ColumnType::Float {
+                                                Some(
+                                                    domain
+                                                        .iter()
+                                                        .map(|d| f32::from_str(d).unwrap())
+                                                        .collect_vec(),
+                                                )
+                                            } else {
+                                                None
+                                            }
                                         } else {
                                             None
                                         }
@@ -167,62 +221,56 @@ impl ItemsSpec {
                                     }
                                 } else {
                                     None
-                                }
-                            } else {
-                                None
-                            };
-                            let scale_type = if let Some(tick_plot) = &plot_spec.tick_plot {
-                                Some(tick_plot.scale_type)
-                            } else if let Some(bar_plot) = &plot_spec.bar_plot {
-                                Some(bar_plot.scale_type)
-                            } else {
-                                plot_spec.heatmap.as_ref().map(|heatmap| heatmap.scale_type)
-                            };
-                            let clamp = if let Some(heatmap) = &plot_spec.heatmap {
-                                heatmap.clamp
-                            } else {
-                                false
-                            };
-                            if let Some(domain) = domain {
-                                let mut reader = csv::ReaderBuilder::new()
-                                    .delimiter(dataset.separator as u8)
-                                    .from_path(&dataset.path)?;
-                                let titles =
-                                    reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                                let colum_pos = titles.iter().position(|c| c == column).unwrap();
-                                for record in reader.records() {
-                                    let record = record?;
-                                    let value = record.get(colum_pos).unwrap();
-                                    if let Ok(value) = value.parse::<f32>() {
-                                        if (value < domain[0] || value > domain[domain.len() - 1])
-                                            && !clamp
-                                        {
-                                            bail!(ValueOutsideDomain {
-                                                view: name.to_string(),
-                                                column: column.to_string(),
-                                                value
-                                            })
-                                        }
-                                        if let Some(scale_type) = scale_type {
-                                            if scale_type == ScaleType::Log && value <= 0_f32 {
-                                                bail!(LogScaleIncludesZero {
+                                };
+                                let scale_type = if let Some(tick_plot) = &plot_spec.tick_plot {
+                                    Some(tick_plot.scale_type)
+                                } else if let Some(bar_plot) = &plot_spec.bar_plot {
+                                    Some(bar_plot.scale_type)
+                                } else {
+                                    plot_spec.heatmap.as_ref().map(|heatmap| heatmap.scale_type)
+                                };
+                                let clamp = if let Some(heatmap) = &plot_spec.heatmap {
+                                    heatmap.clamp
+                                } else {
+                                    false
+                                };
+                                if let Some(domain) = domain {
+                                    let mut reader = dataset.reader()?;
+                                    let colum_pos = column_position(column, dataset)?;
+                                    for record in reader.records()? {
+                                        let value = record.get(colum_pos).unwrap();
+                                        if let Ok(value) = value.parse::<f32>() {
+                                            if (value < domain[0]
+                                                || value > domain[domain.len() - 1])
+                                                && !clamp
+                                            {
+                                                bail!(ValueOutsideDomain {
                                                     view: name.to_string(),
                                                     column: column.to_string(),
                                                     value
                                                 })
                                             }
+                                            if let Some(scale_type) = scale_type {
+                                                if scale_type == ScaleType::Log && value <= 0_f32 {
+                                                    bail!(LogScaleIncludesZero {
+                                                        view: name.to_string(),
+                                                        column: column.to_string(),
+                                                        value
+                                                    })
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                                if let Some(scale) = scale_type {
-                                    if scale == ScaleType::Log
-                                        && domain[0] <= 0_f32
-                                        && 0_f32 <= domain[domain.len() - 1]
-                                    {
-                                        bail!(LogScaleDomainIncludesZero {
-                                            view: name.to_string(),
-                                            column: column.to_string(),
-                                        })
+                                    if let Some(scale) = scale_type {
+                                        if scale == ScaleType::Log
+                                            && domain[0] <= 0_f32
+                                            && 0_f32 <= domain[domain.len() - 1]
+                                        {
+                                            bail!(LogScaleDomainIncludesZero {
+                                                view: name.to_string(),
+                                                column: column.to_string(),
+                                            })
+                                        }
                                     }
                                 }
                             }
@@ -234,12 +282,10 @@ impl ItemsSpec {
         for (name, dataset) in &self.datasets {
             if let Some(linkouts) = &dataset.links {
                 for (link_name, link) in linkouts {
-                    let mut reader = csv::ReaderBuilder::new()
-                        .delimiter(dataset.separator as u8)
-                        .from_path(&dataset.path)?;
+                    let mut reader = dataset.reader()?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
                     if !titles.contains(&link.column) {
-                        bail!(MissingColumn {
+                        bail!(MissingLinkoutColumn {
                             column: link.column.to_string(),
                             dataset: name.to_string(),
                             link: link_name.to_string(),
@@ -252,9 +298,7 @@ impl ItemsSpec {
                         if let Some(table_spec) = self.views.get(table) {
                             if let Some(table_dataset) = &table_spec.dataset {
                                 if let Some(dataset) = self.datasets.get(table_dataset) {
-                                    let mut reader = csv::ReaderBuilder::new()
-                                        .delimiter(dataset.separator as u8)
-                                        .from_path(&dataset.path)?;
+                                    let mut reader = dataset.reader()?;
                                     let titles = reader
                                         .headers()?
                                         .iter()
@@ -306,6 +350,7 @@ fn default_header_size() -> usize {
 fn default_render_table() -> Option<RenderTableSpecs> {
     Some(RenderTableSpecs {
         columns: HashMap::from([]),
+        additional_columns: None,
         headers: None,
     })
 }
@@ -329,16 +374,46 @@ pub(crate) struct DatasetSpecs {
 }
 
 impl DatasetSpecs {
-    pub(crate) fn size(&self) -> usize {
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(self.separator as u8)
-            .from_path(&self.path)
-            .expect("Could not read dataset.");
-        reader.records().count() - (self.header_rows - 1)
+    pub(crate) fn size(&self) -> Result<usize> {
+        Ok(self.reader()?.records()?.count() - (self.header_rows - 1))
     }
 
-    pub(crate) fn is_empty(&self) -> bool {
-        self.size() == 0
+    pub(crate) fn is_empty(&self) -> Result<bool> {
+        Ok(self.size()? == 0)
+    }
+
+    pub(crate) fn reader(&self) -> Result<readervzrd::FileReader> {
+        let path = &self
+            .path
+            .to_str()
+            .ok_or(anyhow!("Failed to create dataset reader."))?;
+        let reader = readervzrd::FileReader::new(path, Some(self.separator))?;
+        Ok(reader)
+    }
+
+    /// Returns a hashmap counting the number of unique values of all columns of the dataset
+    pub(crate) fn unique_column_values(&self) -> Result<HashMap<String, usize>> {
+        let mut reader = self.reader()?;
+        let headers = reader.headers()?.clone();
+        let column_counts: HashMap<String, usize> = headers
+            .iter()
+            .enumerate()
+            .map(|(index, column)| {
+                let mut reader = self.reader().unwrap();
+                (
+                    column.to_string(),
+                    reader
+                        .records()
+                        .unwrap()
+                        .map(|row| row.get(index).unwrap().to_string())
+                        .unique()
+                        .collect_vec()
+                        .len(),
+                )
+            })
+            .collect();
+
+        Ok(column_counts)
     }
 }
 
@@ -370,8 +445,27 @@ pub(crate) struct ItemSpecs {
 pub(crate) struct RenderTableSpecs {
     #[serde(default)]
     pub(crate) columns: HashMap<String, RenderColumnSpec>,
+    #[serde(default, rename = "add-columns")]
+    pub(crate) additional_columns: Option<HashMap<String, AdditionalColumnSpec>>,
     #[serde(default)]
     pub(crate) headers: Option<HashMap<u32, HeaderSpecs>>,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+pub(crate) struct AdditionalColumnSpec {
+    #[serde(default = "default_value_function")]
+    pub(crate) value: String,
+    #[serde(default)]
+    pub(crate) display_mode: DisplayMode,
+    #[serde(default)]
+    pub(crate) custom_plot: Option<CustomPlot>,
+    #[serde(default)]
+    pub(crate) link_to_url: Option<LinkToUrlSpec>,
+}
+
+fn default_value_function() -> String {
+    String::from("function(row) { return '' }")
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -395,6 +489,23 @@ lazy_static! {
     static ref REGEX_RE: Regex = Regex::new(r#"^regex\((?:'|")(.+)(?:'|")\)$"#).unwrap();
 }
 
+lazy_static! {
+    static ref RANGE_RE: Regex = Regex::new(r"^range\(([0-9]+,[0-9]+)\)$").unwrap();
+}
+
+fn get_first_match_group(regex: &Regex, key: &str) -> String {
+    regex
+        .captures_iter(key)
+        .collect_vec()
+        .pop()
+        .unwrap()
+        .unwrap()
+        .get(1)
+        .unwrap()
+        .as_str()
+        .to_string()
+}
+
 impl ItemSpecs {
     /// Preprocesses columns with index and regex notation
     fn preprocess_columns(
@@ -403,35 +514,20 @@ impl ItemSpecs {
         single_page_threshold: usize,
     ) -> Result<()> {
         let mut indexed_keys = HashMap::new();
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(dataset.separator as u8)
-            .from_path(&dataset.path)
-            .context(format!("Could not read file with path {:?}", &dataset.path))?;
-        let rows = &reader.records().count();
+        let mut reader = dataset.reader()?;
+        let rows = &reader.records()?.count();
         self.single_page_page_size = self.page_size;
         if rows <= &single_page_threshold {
             self.page_size = *rows;
         }
-        let headers = reader.headers()?;
+        let headers = dataset.reader()?.headers()?;
         if let Some(render_table) = self.render_table.borrow_mut() {
             for (title, render_column_specs) in render_table.columns.iter_mut() {
                 render_column_specs.preprocess(dataset, title)?;
             }
         }
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().columns.iter() {
-            let get_first_match_group = |regex: &Regex| {
-                regex
-                    .captures_iter(key)
-                    .collect_vec()
-                    .pop()
-                    .unwrap()
-                    .unwrap()
-                    .get(1)
-                    .unwrap()
-                    .as_str()
-            };
-            if INDEX_RE.is_match(key).unwrap() {
-                let index = usize::from_str(get_first_match_group(&INDEX_RE))?;
+            let mut apply_indexed_config = |index: usize| {
                 match headers.get(index) {
                     None => {
                         bail!(ConfigError::IndexTooLarge {
@@ -452,10 +548,22 @@ impl ItemSpecs {
                         };
                     }
                 }
+                Ok(())
+            };
+            if INDEX_RE.is_match(key).unwrap() {
+                let index = usize::from_str(&get_first_match_group(&INDEX_RE, key))?;
+                apply_indexed_config(index)?;
+            } else if RANGE_RE.is_match(key).unwrap() {
+                let group = get_first_match_group(&RANGE_RE, key);
+                let range = group.split_once(',').unwrap();
+                let from = usize::from_str(range.0)?;
+                let to = usize::from_str(range.1)?;
+                for index in from..to {
+                    apply_indexed_config(index)?;
+                }
             } else if REGEX_RE.is_match(key).unwrap() {
-                let pattern = get_first_match_group(&REGEX_RE);
-                dbg!(pattern);
-                let regex = Regex::new(pattern)
+                let pattern = get_first_match_group(&REGEX_RE, key);
+                let regex = Regex::new(&pattern)
                     .context(format!("Failed to parse provided column regex {key}."))?;
                 for header in headers
                     .iter()
@@ -483,6 +591,7 @@ impl ItemSpecs {
         }
         self.render_table = Some(RenderTableSpecs {
             columns: indexed_keys,
+            additional_columns: self.render_table.clone().unwrap().additional_columns,
             headers: self.render_table.clone().unwrap().headers,
         });
         // Generate default RenderColumnSpecs for columns that are not specified in the config
@@ -492,7 +601,7 @@ impl ItemSpecs {
                 .as_ref()
                 .unwrap()
                 .columns
-                .contains_key(header)
+                .contains_key(&header)
             {
                 self.render_table
                     .as_mut()
@@ -525,7 +634,7 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) display_mode: DisplayMode,
     #[serde(default)]
-    pub(crate) link_to_url: Option<HashMap<String, LinkToUrlSpec>>,
+    pub(crate) link_to_url: Option<LinkToUrlSpec>,
     #[serde(default)]
     pub(crate) plot: Option<PlotSpec>,
     #[serde(default)]
@@ -555,8 +664,16 @@ impl Default for RenderColumnSpec {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+#[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct LinkToUrlSpec {
+    #[serde(flatten)]
+    pub(crate) entries: HashMap<String, LinkToUrlSpecEntry>,
+    pub(crate) custom_content: Option<String>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+pub(crate) struct LinkToUrlSpecEntry {
     url: String,
     #[serde(default = "default_new_window")]
     new_window: bool,
@@ -585,13 +702,15 @@ pub(crate) enum HeaderDisplayMode {
 
 impl RenderColumnSpec {
     fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
-        if let Some(plot) = &mut self.plot {
-            if let Some(ticks) = &mut plot.tick_plot {
-                ticks.preprocess(dataset)?;
-            } else if let Some(heatmap) = &mut plot.heatmap {
-                heatmap.preprocess(dataset, title)?;
-            } else if let Some(bars) = &mut plot.bar_plot {
-                bars.preprocess(dataset)?;
+        if !dataset.is_empty()? {
+            if let Some(plot) = &mut self.plot {
+                if let Some(ticks) = &mut plot.tick_plot {
+                    ticks.preprocess(dataset)?;
+                } else if let Some(heatmap) = &mut plot.heatmap {
+                    heatmap.preprocess(dataset, title)?;
+                } else if let Some(bars) = &mut plot.bar_plot {
+                    bars.preprocess(dataset)?;
+                }
             }
         }
         if let Some(path) = self.custom_path.as_ref() {
@@ -606,6 +725,9 @@ impl RenderColumnSpec {
 
 impl TickPlot {
     fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+        if let Some(color_definition) = &mut self.color {
+            color_definition.preprocess()?;
+        }
         self.aux_domain_columns.preprocess(dataset)
     }
 }
@@ -613,14 +735,19 @@ impl TickPlot {
 impl Heatmap {
     fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
         self.aux_domain_columns.preprocess(dataset)?;
+        match self.vega_type {
+            Some(VegaType::Nominal) | Some(VegaType::Ordinal) => {
+                self.scale_type = ScaleType::Ordinal;
+                self.color_scheme = "category20".to_string();
+            }
+            Some(VegaType::Quantitative) => {
+                self.scale_type = ScaleType::Linear;
+                self.color_scheme = "blues".to_string();
+            }
+            _ => {}
+        }
         if self.domain.is_none() {
-            let d = get_column_domain(
-                title,
-                &dataset.path,
-                dataset.separator,
-                dataset.header_rows,
-                self,
-            )?;
+            let d = get_column_domain(title, dataset, self)?;
             let domain: Vec<String> = if self.scale_type.is_quantitative() {
                 let floating_domain: Vec<f64> = serde_json::from_str(&d)?;
                 floating_domain.iter().map(|x| x.to_string()).collect()
@@ -629,12 +756,23 @@ impl Heatmap {
             };
             self.domain = Some(domain);
         }
+        if let Some(domain_mid) = &self.domain_mid {
+            let old_domain = self.domain.as_mut().unwrap();
+            old_domain.insert(1, domain_mid.to_string());
+            self.domain = Some(old_domain.to_owned())
+        }
+        if !self.color_range.0.is_empty() {
+            self.color_range.preprocess()?;
+        }
         Ok(())
     }
 }
 
 impl BarPlot {
     fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+        if let Some(color_definition) = &mut self.color {
+            color_definition.preprocess()?;
+        }
         self.aux_domain_columns.preprocess(dataset)
     }
 }
@@ -725,6 +863,26 @@ pub(crate) struct TickPlot {
     pub(crate) domain: Option<Vec<f32>>,
     #[serde(default)]
     pub(crate) aux_domain_columns: AuxDomainColumns,
+    #[serde(default)]
+    pub(crate) color: Option<ColorDefinition>,
+}
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+pub(crate) struct ColorDefinition {
+    #[serde(default, rename = "scale")]
+    pub(crate) scale_type: ScaleType,
+    #[serde(default, rename = "range")]
+    pub(crate) color_range: ColorRange,
+    #[serde(default)]
+    pub(crate) domain: Option<Vec<String>>,
+    #[serde(default)]
+    pub(crate) domain_mid: Option<f32>,
+}
+
+impl ColorDefinition {
+    fn preprocess(&mut self) -> Result<()> {
+        self.color_range.preprocess()
+    }
 }
 
 fn default_clamp() -> bool {
@@ -734,6 +892,8 @@ fn default_clamp() -> bool {
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct Heatmap {
+    #[serde(default, rename = "type")]
+    pub(crate) vega_type: Option<VegaType>,
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: ScaleType,
     #[serde(default = "default_clamp")]
@@ -741,13 +901,59 @@ pub(crate) struct Heatmap {
     #[serde(default)]
     pub(crate) color_scheme: String,
     #[serde(default, rename = "range")]
-    pub(crate) color_range: Vec<String>,
+    pub(crate) color_range: ColorRange,
     #[serde(default)]
     pub(crate) domain: Option<Vec<String>>,
+    #[serde(default)]
+    pub(crate) domain_mid: Option<f32>,
     #[serde(default)]
     pub(crate) aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
     pub(crate) custom_content: Option<String>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+pub(crate) struct ColorRange(pub(crate) Vec<Color>);
+
+impl ColorRange {
+    fn preprocess(&mut self) -> Result<()> {
+        self.0.iter_mut().try_for_each(|color| color.preprocess())
+    }
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+pub(crate) struct Color(pub(crate) String);
+
+impl Color {
+    fn preprocess(&mut self) -> Result<()> {
+        if let Some(hex) = COLOR_MAPPING.get(self.0.as_str()) {
+            self.0 = hex.to_string()
+        }
+        Ok(())
+    }
+}
+
+lazy_static! {
+    static ref COLOR_MAPPING: HashMap<&'static str, &'static str> = {
+        let mut m = HashMap::new();
+        m.insert("red", "#d62728");
+        m.insert("blue", "#1f77b4");
+        m.insert("yellow", "#eeca3b");
+        m.insert("green", "#2ca02c");
+        m.insert("purple", "#9467bd");
+        m.insert("orange", "#ff7f0e");
+        m.insert("pink", "#e377c2");
+        m.insert("black", "#000000");
+        m.insert("white", "#ffffff");
+        m.insert("gray", "#7f7f7f");
+        m.insert("grey", "#7f7f7f");
+        m.insert("brown", "#8c564b");
+        m.insert("olive", "#bcbd22");
+        m.insert("cyan", "#17becf");
+        m.insert("lime", "#98df8a");
+        m.insert("magenta", "#ff9896");
+        m
+    };
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -759,6 +965,8 @@ pub(crate) struct BarPlot {
     pub(crate) domain: Option<Vec<f32>>,
     #[serde(default)]
     pub(crate) aux_domain_columns: AuxDomainColumns,
+    #[serde(default)]
+    pub(crate) color: Option<ColorDefinition>,
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
@@ -775,6 +983,15 @@ pub(crate) enum ScaleType {
     Band,
     Point,
     #[default]
+    None,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum VegaType {
+    Nominal,
+    Ordinal,
+    Quantitative,
     None,
 }
 
@@ -796,31 +1013,36 @@ pub struct AuxDomainColumns(pub(crate) Option<Vec<String>>);
 
 impl AuxDomainColumns {
     fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(dataset.separator as u8)
-            .from_path(&dataset.path)
-            .context(format!("Could not read file with path {:?}", &dataset.path))?;
+        let mut reader = dataset.reader()?;
         let headers = reader.headers()?;
         let mut new_tick_plot_aux_domain_columns = Vec::new();
         if let Some(columns) = &self.0 {
             for column in columns {
                 if REGEX_RE.is_match(column).unwrap() {
-                    let pattern = REGEX_RE
-                        .captures_iter(column)
-                        .collect_vec()
-                        .pop()
-                        .unwrap()
-                        .unwrap()
-                        .get(1)
-                        .unwrap()
-                        .as_str();
-                    let regex = Regex::new(pattern)
+                    let pattern = get_first_match_group(&REGEX_RE, column);
+                    let regex = Regex::new(&pattern)
                         .context(format!("Failed to parse provided column regex {column}."))?;
                     for header in headers
                         .iter()
                         .filter(|header| regex.is_match(header).unwrap())
                     {
                         new_tick_plot_aux_domain_columns.push(header.to_string());
+                    }
+                } else if RANGE_RE.is_match(column).unwrap() {
+                    let group = get_first_match_group(&RANGE_RE, column);
+                    let range = group.split_once(',').unwrap();
+                    let from = usize::from_str(range.0)?;
+                    let to = usize::from_str(range.1)?;
+                    for index in from..to {
+                        new_tick_plot_aux_domain_columns.push(
+                            headers
+                                .get(index)
+                                .context(
+                                    "Failed to apply given range {range} for aux-domain-columns.",
+                                )
+                                .unwrap()
+                                .to_string(),
+                        );
                     }
                 } else {
                     new_tick_plot_aux_domain_columns.push(column.to_string());
@@ -862,10 +1084,24 @@ pub enum ConfigError {
         column: String,
         value: f32,
     },
+    #[error("Given argument mid-domain for domain for column {column:?} of view {view:?} requires the dataset to only include numerical values in column {column:?}.")]
+    WrongColumnTypeMidDomain { view: String, column: String },
+    #[error("Given domain for column {column:?} of view {view:?} does not allow usage with mid-domain. Please use a domain length of 2.")]
+    WrongDomainLengthWithMidDomain { view: String, column: String },
+    #[error("Given range for column {column:?} of view {view:?} with specified domain-mid must be of length 3.")]
+    WrongRangeLengthWithMidDomain { view: String, column: String },
     #[error(
         "Given domain for column {column:?} of view {view:?} with scale type log cannot include 0."
     )]
     LogScaleDomainIncludesZero { view: String, column: String },
+    #[error(
+    "Given color-scheme {scheme:?} for numeric column {column:?} of view {view:?} is not supported. Please use a sequential scheme from d3."
+    )]
+    UnsupportedColorScheme {
+        view: String,
+        column: String,
+        scheme: String,
+    },
     #[error(
     "Given value for column {column:?} of view {view:?} with scale type log cannot include value {value:?}."
     )]
@@ -877,11 +1113,13 @@ pub enum ConfigError {
     #[error(
         "Could not find column named {column:?} in given dataset {dataset:?} in linkout {link:?}."
     )]
-    MissingColumn {
+    MissingLinkoutColumn {
         column: String,
         dataset: String,
         link: String,
     },
+    #[error("Could not find column named '{column}' in the dataset that is used by view {view}.")]
+    MissingColumn { column: String, view: String },
     #[error(
         "Could not find view named {view:?} in given config that is referred to with {link:?}."
     )]
@@ -900,10 +1138,10 @@ pub enum ConfigError {
 mod tests {
     use crate::spec::{
         default_links, default_page_size, default_precision, default_render_table,
-        default_single_page_threshold, AuxDomainColumns, DatasetSpecs, DisplayMode,
+        default_single_page_threshold, AuxDomainColumns, ColorRange, DatasetSpecs, DisplayMode,
         HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, LinkToUrlSpec,
-        PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec, RenderTableSpecs, ScaleType,
-        TickPlot,
+        LinkToUrlSpecEntry, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
+        RenderTableSpecs, ScaleType, TickPlot,
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -916,13 +1154,16 @@ mod tests {
             custom: None,
             custom_path: None,
             display_mode: DisplayMode::Normal,
-            link_to_url: Some(HashMap::from([(
-                "Rust".to_string(),
-                LinkToUrlSpec {
-                    url: "https://www.rust-lang.org".to_string(),
-                    new_window: true,
-                },
-            )])),
+            link_to_url: Some(LinkToUrlSpec {
+                custom_content: None,
+                entries: HashMap::from([(
+                    "Rust".to_string(),
+                    LinkToUrlSpecEntry {
+                        url: "https://www.rust-lang.org".to_string(),
+                        new_window: true,
+                    },
+                )]),
+            }),
             plot: None,
             custom_plot: None,
             ellipsis: None,
@@ -947,6 +1188,7 @@ mod tests {
             description: None,
             render_table: Some(RenderTableSpecs {
                 columns: HashMap::from([("x".to_string(), expected_render_columns)]),
+                additional_columns: None,
                 headers: None,
             }),
             render_plot: None,
@@ -1123,6 +1365,7 @@ mod tests {
             description: None,
             render_table: Some(RenderTableSpecs {
                 columns: Default::default(),
+                additional_columns: None,
                 headers: Some(HashMap::from([(
                     1_u32,
                     HeaderSpecs {
@@ -1130,11 +1373,13 @@ mod tests {
                         plot: Some(PlotSpec {
                             tick_plot: None,
                             heatmap: Some(Heatmap {
+                                vega_type: None,
                                 scale_type: ScaleType::Ordinal,
                                 clamp: true,
                                 color_scheme: "category20".to_string(),
-                                color_range: vec![],
+                                color_range: ColorRange(vec![]),
                                 domain: None,
+                                domain_mid: None,
                                 aux_domain_columns: Default::default(),
                                 custom_content: None,
                             }),
@@ -1518,6 +1763,7 @@ mod tests {
                 "birth_d".to_string(),
                 "birth_y".to_string(),
             ])),
+            color: None,
         };
         let expected_plot = PlotSpec {
             tick_plot: Some(expected_ticks),
@@ -1562,6 +1808,7 @@ mod tests {
                         Default::default(),
                     ),
                 ]),
+                additional_columns: None,
                 headers: None,
             }),
             render_plot: None,
@@ -1575,6 +1822,43 @@ mod tests {
     #[test]
     fn test_dataset_size() {
         let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
-        assert_eq!(config.datasets.get("movies").unwrap().size(), 184);
+        assert_eq!(config.datasets.get("movies").unwrap().size().unwrap(), 184);
+    }
+
+    #[test]
+    fn test_dataset_size_with_json() {
+        let dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/uniform_datatypes.json"),
+            separator: ',',
+            header_rows: 1,
+            links: None,
+            offer_excel: false,
+        };
+        assert_eq!(dataset.size().unwrap(), 4);
+    }
+
+    #[test]
+    fn test_dataset_empty() {
+        let empty_dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/empty_table.csv"),
+            separator: ',',
+            header_rows: 4,
+            links: None,
+            offer_excel: false,
+        };
+        assert!(empty_dataset.is_empty().unwrap());
+    }
+
+    #[test]
+    fn test_dataset_unique_column_values() {
+        let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
+        let unique_column_values = config
+            .datasets
+            .get("oscars")
+            .unwrap()
+            .unique_column_values()
+            .unwrap();
+        assert_eq!(unique_column_values.get("oscar_yr").unwrap(), &91_usize);
+        assert_eq!(unique_column_values.get("award").unwrap(), &2_usize);
     }
 }

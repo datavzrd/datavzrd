@@ -27,6 +27,14 @@ views:
       This table contains *all* winning oscars for best actress and best actor.
     page-size: 25
     render-table:
+      add-columns:
+        birth_season:
+          value: |
+            function getSeasonEmoji(row) {
+                var month = row.birth_mo;
+                const seasons = ["❄️", "🌸", "☀️", "🍁"];
+                return (month < 1 || month > 12) ? "Invalid month" : seasons[Math.floor((month % 12) / 3)];
+            }
       columns:
         index(0):
           display-mode: hidden
@@ -61,6 +69,7 @@ views:
                 - "#ffb6c1"
         overall_wins_and_overall_nominations:
           display-mode: detail
+          label: overall wins and nominations
           custom-plot:
             data: |
               function(value, row) {
@@ -99,6 +108,11 @@ views:
               domain:
                 - 1
                 - 10
+              color:
+                scale: linear
+                range:
+                  - red
+                  - green
         Rated:
           plot-view-legend: true
           plot:

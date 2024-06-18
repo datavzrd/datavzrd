@@ -9,35 +9,85 @@ jobs:
   release-please:
     if: github.repository_owner == 'datavzrd'
     runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
 
-      - uses: GoogleCloudPlatform/release-please-action@v2
+      - uses: GoogleCloudPlatform/release-please-action@v4
         id: release
         with:
           release-type: rust
           package-name: datavzrd
 
-      - uses: actions/checkout@v2
-        if: ${{ steps.release.outputs.release_created }}
+  publish:
+    runs-on: ubuntu-latest
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    steps:
+      - uses: actions/checkout@v3
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
-        if: ${{ steps.release.outputs.release_created }}
         with:
           toolchain: stable
           override: true
 
       - name: Install system dependencies
-        if: ${{ steps.release.outputs.release_created }}
         run: |
           sudo apt-get install --yes libgsl0-dev
 
       - uses: Swatinem/rust-cache@v1.3.0
-        if: ${{ steps.release.outputs.release_created }}
-      
+
       - name: Publish crate
-        if: ${{ steps.release.outputs.release_created }}
         uses: actions-rs/cargo@v1
         with:
           command: publish
           args: --token ${{ secrets.CRATES_IO_TOKEN }}
+
+  update-webview:
+      runs-on: ubuntu-latest
+      needs:
+        - release-please
+        - publish
+      if: ${{ needs.release-please.outputs.release_created }}
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+          with:
+            path: datavzrd
+
+        - name: Checkout view repo
+          uses: actions/checkout@v3
+          with:
+            repository: datavzrd/view
+            path: view
+
+        - name: Install stable toolchain
+          uses: actions-rs/toolchain@v1
+          with:
+            toolchain: stable
+            override: true
+
+        - name: Build
+          run: |
+            cd datavzrd
+            cargo build --release
+
+        - name: Copy bundle.js
+          run: |
+            outdir=view/static/${{ needs.release-please.outputs.tag_name }}
+            mkdir -p $outdir
+            cp datavzrd/target/release/build/datavzrd-*/out/web/dist/bundle.js $outdir/bundle.js
+
+        - name: Commit and push changes
+          uses: cpina/github-action-push-to-another-repository@main
+          env:
+            SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+          with:
+            source-directory: view/static/${{ needs.release-please.outputs.tag_name }}
+            destination-github-username: 'datavzrd'
+            destination-repository-name: 'view'
+            target-branch: main
+            commit-message: Add datavzrd ${{ needs.release-please.outputs.tag_name }} bundle.js
+            target-directory: static/${{ needs.release-please.outputs.tag_name }}/

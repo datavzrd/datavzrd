@@ -1,36 +1,36 @@
 mod plot;
 pub(crate) mod utils;
-
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
-use crate::spec::LinkToUrlSpec;
+use crate::spec::{AdditionalColumnSpec, LinkToUrlSpecEntry};
 use crate::spec::{
     BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
     RenderColumnSpec, ScaleType, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
+use crate::utils::column_position;
 use crate::utils::column_type::IsNa;
 use crate::utils::column_type::{classify_table, ColumnType};
+use crate::utils::compress::compress;
 use crate::utils::row_address::RowAddressFactory;
 use anyhow::Result;
 use anyhow::{bail, Context as AnyhowContext};
 use chrono::{DateTime, Local};
-use csv::{Reader, StringRecord};
 use itertools::Itertools;
-use lz_str::compress_to_utf16;
 use serde::Serialize;
 use serde_json::{json, Value};
 use std::cmp::max;
 use std::collections::{HashMap, HashSet};
 
+use minify_html::{minify, Cfg};
 use std::fs;
 use std::fs::File;
 use std::io::Write;
 use std::option::Option::Some;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::str::FromStr;
 use tera::{Context, Tera};
 use thiserror::Error;
@@ -45,7 +45,7 @@ type LinkedTable = HashMap<(String, String), ColumnIndex>;
 
 impl Renderer for ItemRenderer {
     /// Render all items of user config
-    fn render_tables<P>(&self, path: P, webview_host: String, debug: bool) -> Result<()>
+    fn render_tables<P>(&self, path: P, webview_host: &str, debug: bool) -> Result<()>
     where
         P: AsRef<Path>,
     {
@@ -61,8 +61,33 @@ impl Renderer for ItemRenderer {
                         .datasets
                         .get(v.dataset.as_ref().unwrap())
                         .unwrap()
-                        .size(),
+                        .size()
+                        .unwrap(),
                 )
+            })
+            .filter(|(view_name, size)| {
+                size == &0
+                    || (self
+                        .specs
+                        .views
+                        .get(view_name)
+                        .unwrap()
+                        .render_plot
+                        .is_none()
+                        && self
+                            .specs
+                            .views
+                            .get(view_name)
+                            .unwrap()
+                            .render_html
+                            .is_none())
+            })
+            .map(|(view_name, size)| {
+                if size == 0 {
+                    (view_name, "empty".to_string())
+                } else {
+                    (view_name, format!("{size} rows"))
+                }
             })
             .collect();
         for (name, table) in &self.specs.views {
@@ -97,16 +122,8 @@ impl Renderer for ItemRenderer {
                 }
             };
 
-            let generate_reader = || -> csv::Result<Reader<File>> {
-                csv::ReaderBuilder::new()
-                    .delimiter(dataset.separator as u8)
-                    .from_path(&dataset.path)
-            };
-
-            let mut counter_reader = generate_reader()
-                .context(format!("Could not read file with path {:?}", &dataset.path))?;
-            let records_length = counter_reader.records().count() - (dataset.header_rows - 1);
-            if records_length > 0 {
+            let records_length = dataset.size()?;
+            if !dataset.is_empty()? {
                 let linked_tables = get_linked_tables(name, &self.specs)?;
                 // Render plot
                 if table.render_plot.is_some() {
@@ -143,11 +160,10 @@ impl Renderer for ItemRenderer {
                 }
                 // Render table
                 else if let Some(table_specs) = &table.render_table {
+                    let data_path = out_path.join("data");
+                    fs::create_dir(&data_path)?;
                     let row_address_factory = RowAddressFactory::new(table.page_size);
-                    let pages = row_address_factory
-                        .get(records_length - dataset.header_rows)
-                        .page
-                        + 1;
+                    let pages = row_address_factory.get(records_length - 1).page + 1;
 
                     let is_single_page = if let Some(max_rows) = table.max_in_memory_rows {
                         records_length <= max_rows
@@ -155,104 +171,96 @@ impl Renderer for ItemRenderer {
                         records_length <= self.specs.max_in_memory_rows
                     };
 
-                    let mut reader = generate_reader()
-                        .context(format!("Could not read file with path {:?}", &dataset.path))?;
-                    let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
+                    let headers = dataset
+                        .reader()?
+                        .headers()?
+                        .iter()
+                        .map(|s| s.to_owned())
+                        .collect_vec();
 
-                    let table_specs = &table_specs
+                    // Filter out optional columns that are not in the headers
+                    let table_specs: &HashMap<String, RenderColumnSpec> = &table_specs
                         .columns
                         .clone()
                         .into_iter()
                         .filter(|(k, s)| !s.optional || headers.contains(k))
                         .collect();
+                    // Assert that remaining columns are present in dataset.
+                    // This should be guaranteed by the validation that happens before.
+                    for column in table_specs.keys() {
+                        assert!(headers.contains(column));
+                    }
 
                     let additional_headers = if dataset.header_rows > 1 {
-                        let mut additional_header_reader = generate_reader().context(format!(
-                            "Could not read file with path {:?}",
-                            &dataset.path
-                        ))?;
                         Some(
-                            additional_header_reader
-                                .records()
+                            dataset
+                                .reader()?
+                                .records()?
                                 .take(dataset.header_rows - 1)
-                                .map(|r| r.unwrap())
                                 .collect_vec(),
                         )
                     } else {
                         None
                     };
 
-                    for (page, grouped_records) in &reader
-                        .records()
+                    for (page, grouped_records) in &dataset
+                        .reader()?
+                        .records()?
                         .skip(dataset.header_rows - 1)
                         .enumerate()
-                        .group_by(|(i, _)| row_address_factory.get(*i).page)
+                        .chunk_by(|(i, _)| row_address_factory.get(*i).page)
                     {
                         let records = grouped_records.collect_vec();
                         render_page(
                             &out_path,
                             page + 1,
-                            pages,
-                            records
-                                .iter()
-                                .map(|(_, records)| records.as_ref().unwrap())
-                                .collect_vec(),
+                            records.iter().map(|(_, records)| records).collect_vec(),
                             &headers,
                             &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                             name,
-                            table.description.as_deref(),
                             &linked_tables,
                             dataset.links.as_ref().unwrap(),
                             &self.specs.report_name,
                             &self.specs.views,
                             &self.specs.default_view,
                             is_single_page,
-                            self.specs.needs_excel_sheet(),
-                            &webview_host,
-                            &view_sizes,
+                            debug,
                         )?;
                     }
                     if is_single_page {
-                        render_table_heatmap(
-                            &out_path,
-                            &dataset.path,
-                            dataset.separator,
-                            table_specs,
-                            &headers,
-                            dataset.header_rows,
-                        )?;
+                        render_table_heatmap(&out_path, dataset, table_specs, &headers)?;
                     } else {
-                        render_search_dialogs(
-                            &out_path,
-                            &headers,
-                            &dataset.path,
-                            dataset.separator,
-                            table.page_size,
-                            dataset.header_rows,
-                        )?;
+                        render_search_dialogs(&out_path, &headers, dataset, table.page_size)?;
                     }
                     render_table_javascript(
                         &out_path,
                         &headers,
-                        &dataset.path,
-                        dataset.separator,
                         table_specs,
+                        &table.render_table.as_ref().unwrap().additional_columns,
                         additional_headers,
                         &table.render_table.as_ref().unwrap().headers,
                         is_single_page,
                         table.single_page_page_size,
-                        &webview_host,
+                        pages,
+                        webview_host,
                         self.specs.webview_controls,
                         debug,
+                        name,
+                        dataset,
+                        &view_sizes,
+                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
+                        &self.specs.default_view,
+                        self.specs.needs_excel_sheet(),
+                        table.description.as_deref(),
+                        &self.specs.report_name,
+                        name,
                     )?;
-                    render_custom_javascript_functions(&out_path, table_specs, debug)?;
-                    render_plots(
+                    render_custom_javascript_functions(
                         &out_path,
-                        &dataset.path,
-                        dataset.separator,
-                        dataset.header_rows,
-                        debug,
+                        table_specs,
+                        &table.render_table.as_ref().unwrap().additional_columns,
                     )?;
+                    render_plots(&out_path, dataset, debug)?;
                 }
             } else {
                 render_empty_dataset(
@@ -277,26 +285,26 @@ impl Renderer for ItemRenderer {
 fn render_page<P: AsRef<Path>>(
     output_path: P,
     page_index: usize,
-    pages: usize,
-    data: Vec<&StringRecord>,
+    data: Vec<&Vec<String>>,
     titles: &[String],
     tables: &[String],
     name: &str,
-    description: Option<&str>,
     linked_tables: &LinkedTable,
     links: &HashMap<String, LinkSpec>,
     report_name: &str,
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
     is_single_page: bool,
-    has_excel_sheet: bool,
-    webview_host: &String,
-    view_sizes: &HashMap<String, usize>,
+    debug: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
         "table.html.tera",
         include_str!("../../../templates/table.html.tera"),
+    )?;
+    templates.add_raw_template(
+        "data.js.tera",
+        include_str!("../../../templates/data.js.tera"),
     )?;
     let mut context = Context::new();
 
@@ -319,24 +327,17 @@ fn render_page<P: AsRef<Path>>(
                 .unwrap()
             })
             .collect_vec();
-        Some(compress_to_utf16(&json!(linkouts).to_string()))
+        Some(compress(json!(linkouts))?)
     } else {
         None
     };
 
-    let compressed_data = compress_to_utf16(&json!(data).to_string());
-
-    let local: DateTime<Local> = Local::now();
+    let compressed_data = compress(json!(data))?;
 
     context.insert("data", &json!(compressed_data).to_string());
     context.insert("linkouts", &json!(compressed_linkouts).to_string());
-    context.insert("titles", &titles.iter().collect_vec());
     context.insert("current_page", &page_index);
-    context.insert("pages", &pages);
-    context.insert("view_sizes", &view_sizes);
-    context.insert("description", &description);
     context.insert("is_single_page", &is_single_page);
-    context.insert("has_excel_sheet", &has_excel_sheet);
     context.insert(
         "tables",
         &tables
@@ -352,11 +353,7 @@ fn render_page<P: AsRef<Path>>(
             .collect_vec(),
     );
     context.insert("default_view", default_view);
-    context.insert("name", name);
     context.insert("report_name", report_name);
-    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
-    context.insert("version", &env!("CARGO_PKG_VERSION"));
-    context.insert("webview_host", &webview_host);
 
     let file_path = Path::new(output_path.as_ref())
         .join(Path::new(&format!("index_{page_index}")).with_extension("html"));
@@ -364,18 +361,29 @@ fn render_page<P: AsRef<Path>>(
     let html = templates.render("table.html.tera", &context)?;
 
     let mut file = fs::File::create(file_path)?;
-    file.write_all(html.as_bytes())?;
+    if debug {
+        file.write_all(html.as_bytes())?;
+    } else {
+        file.write_all(&minify(html.as_bytes(), &Cfg::new()))?;
+    }
+
+    let data_file_path = Path::new(output_path.as_ref())
+        .join("data")
+        .join(Path::new(&format!("data_{page_index}")).with_extension("js"));
+
+    let js = templates.render("data.js.tera", &context)?;
+
+    let mut data_file = fs::File::create(data_file_path)?;
+    data_file.write_all(js.as_bytes())?;
 
     Ok(())
 }
 
 fn render_table_heatmap<P: AsRef<Path>>(
     output_path: P,
-    csv_path: &Path,
-    separator: char,
+    dataset: &DatasetSpecs,
     render_columns: &HashMap<String, RenderColumnSpec>,
     titles: &[String],
-    header_rows: usize,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -397,7 +405,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
 
     let labels = get_column_labels(render_columns);
 
-    let table_classes = classify_table(csv_path, separator, header_rows)?;
+    let table_classes = classify_table(dataset)?;
     let column_types: HashMap<_, _> = table_classes
         .iter()
         .map(|(t, c)| match c {
@@ -437,14 +445,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
             } else {
                 let mut aux_domains = h.aux_domain_columns.0.as_ref().unwrap().to_vec();
                 aux_domains.push(t.to_string());
-                let d = get_min_max_multiple_columns(
-                    csv_path,
-                    separator,
-                    header_rows,
-                    aux_domains,
-                    None,
-                )
-                .unwrap();
+                let d = get_min_max_multiple_columns(dataset, aux_domains, None).unwrap();
                 vec![d.0, d.1]
             };
             (t, domain)
@@ -458,12 +459,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
         .filter(|(_, p)| p.heatmap.is_some())
         .map(|(t, p)| (t, p.heatmap.as_ref().unwrap()))
         .filter(|(_, h)| h.domain.is_some() || h.aux_domain_columns.0.is_some())
-        .map(|(t, h)| {
-            (
-                t,
-                get_column_domain(t, csv_path, separator, header_rows, h).unwrap(),
-            )
-        })
+        .map(|(t, h)| (t, get_column_domain(t, dataset, h).unwrap()))
         .collect();
 
     let scales: HashMap<_, _> = render_columns
@@ -538,15 +534,7 @@ fn render_table_heatmap<P: AsRef<Path>>(
     let column_widths: HashMap<_, _> = marks
         .iter()
         .filter(|(_, m)| *m != &"text")
-        .map(|(t, _)| {
-            (
-                t,
-                max(
-                    20,
-                    6 * get_column_width(t, csv_path, separator, header_rows).unwrap(),
-                ),
-            )
-        })
+        .map(|(t, _)| (t, max(20, 6 * get_column_width(t, dataset).unwrap())))
         .collect();
 
     context.insert("remove_legend", &remove_legend);
@@ -573,31 +561,21 @@ fn render_table_heatmap<P: AsRef<Path>>(
     Ok(())
 }
 
-fn get_column_width(
-    column: &str,
-    csv_path: &Path,
-    separator: char,
-    header_rows: usize,
-) -> Result<i32> {
-    let mut reader = csv::ReaderBuilder::new()
-        .delimiter(separator as u8)
-        .from_path(csv_path)
-        .context(format!("Could not read file with path {csv_path:?}"))?;
-
+fn get_column_width(column: &str, dataset: &DatasetSpecs) -> Result<i32> {
+    let mut reader = dataset.reader()?;
     let column_index = reader.headers().map(|s| {
         s.iter()
             .position(|t| t == column)
             .context(ColumnError::NotFound {
                 column: column.to_string(),
-                path: csv_path.to_str().unwrap().to_string(),
+                path: dataset.path.to_str().unwrap().to_string(),
             })
             .unwrap()
     })?;
 
     let width = reader
-        .records()
-        .skip(header_rows - 1)
-        .map(|row| row.unwrap())
+        .records()?
+        .skip(dataset.header_rows - 1)
         .map(|row| row.get(column_index).unwrap().to_string())
         .map(|s| s.len())
         .max()
@@ -611,16 +589,25 @@ fn get_column_width(
 fn render_table_javascript<P: AsRef<Path>>(
     output_path: P,
     titles: &[String],
-    csv_path: &Path,
-    separator: char,
     render_columns: &HashMap<String, RenderColumnSpec>,
-    additional_headers: Option<Vec<StringRecord>>,
+    additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
+    additional_headers: Option<Vec<Vec<String>>>,
     header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
     page_size: usize,
-    webview_host: &String,
+    pages: usize,
+    webview_host: &str,
     webview_controls: bool,
     debug: bool,
+    view: &str,
+    dataset: &DatasetSpecs,
+    view_sizes: &HashMap<String, String>,
+    tables: &[String],
+    default_view: &Option<String>,
+    has_excel_sheet: bool,
+    description: Option<&str>,
+    report_name: &String,
+    title: &String,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -629,22 +616,28 @@ fn render_table_javascript<P: AsRef<Path>>(
     )?;
     let mut context = Context::new();
 
-    let header_row_length = additional_headers.clone().unwrap_or_default().len() + 1;
-
     let config = JavascriptConfig::from_column_config(
         render_columns,
+        additional_columns,
         is_single_page,
         page_size,
         titles,
         webview_host,
         webview_controls,
-        csv_path,
-        separator,
-        header_row_length,
         header_specs,
+        dataset,
+        pages,
+        view_sizes,
+        tables,
+        default_view,
+        has_excel_sheet,
+        description,
+        report_name,
+        title,
     );
 
-    let custom_plot_config = CustomPlotsConfig::from_column_config(render_columns);
+    let custom_plot_config =
+        CustomPlotsConfig::from_column_config(render_columns, additional_columns, view);
     let header_config = HeaderConfig::from_headers(header_specs, &titles, additional_headers);
 
     context.insert("config", &config);
@@ -666,7 +659,11 @@ fn render_table_javascript<P: AsRef<Path>>(
 struct CustomPlotsConfig(Vec<CustomPlotConfig>);
 
 impl CustomPlotsConfig {
-    fn from_column_config(config: &HashMap<String, RenderColumnSpec>) -> Self {
+    fn from_column_config(
+        config: &HashMap<String, RenderColumnSpec>,
+        additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
+        view: &str,
+    ) -> Self {
         CustomPlotsConfig(
             config
                 .iter()
@@ -676,11 +673,38 @@ impl CustomPlotsConfig {
                     custom_plot.read_schema().unwrap();
                     CustomPlotConfig {
                         title: k.to_string(),
-                        specs: serde_json::Value::from_str(&custom_plot.schema.unwrap()).unwrap(),
+                        specs: serde_json::Value::from_str(&custom_plot.schema.unwrap())
+                            .context(SpecError::CouldNotParse {
+                                column: k.to_string(),
+                                view: view.to_string(),
+                            })
+                            .unwrap(),
                         data_function: JavascriptFunction(custom_plot.plot_data).name(),
                         vega_controls: custom_plot.vega_controls,
                     }
                 })
+                .chain(
+                    additional_columns
+                        .as_ref()
+                        .unwrap_or(&HashMap::new())
+                        .iter()
+                        .filter(|(_, v)| v.custom_plot.is_some())
+                        .map(|(k, v)| {
+                            let mut custom_plot = v.custom_plot.as_ref().unwrap().to_owned();
+                            custom_plot.read_schema().unwrap();
+                            CustomPlotConfig {
+                                title: k.to_string(),
+                                specs: serde_json::Value::from_str(&custom_plot.schema.unwrap())
+                                    .context(SpecError::CouldNotParse {
+                                        column: k.to_string(),
+                                        view: view.to_string(),
+                                    })
+                                    .unwrap(),
+                                data_function: JavascriptFunction(custom_plot.plot_data).name(),
+                                vega_controls: custom_plot.vega_controls,
+                            }
+                        }),
+                )
                 .collect(),
         )
     }
@@ -697,7 +721,7 @@ impl HeaderConfig {
     fn from_headers(
         header_specs: &Option<HashMap<u32, HeaderSpecs>>,
         columns: &&[String],
-        additional_headers: Option<Vec<StringRecord>>,
+        additional_headers: Option<Vec<Vec<String>>>,
     ) -> Self {
         let mut headers = vec![];
         let mut heatmaps = vec![];
@@ -793,28 +817,64 @@ struct JavascriptConfig {
     link_urls: Vec<JavascriptLinkConfig>,
     ellipsis: Vec<JavascriptEllipsisConfig>,
     format: HashMap<String, String>,
+    additional_colums: HashMap<String, String>,
+    unique_column_values: HashMap<String, usize>,
+    pages: usize,
+    view_sizes: HashMap<String, String>,
+    tables: Vec<String>,
+    default_view: Option<String>,
+    has_excel_sheet: bool,
+    description: Option<String>,
+    report_name: String,
+    time: String,
+    version: String,
+    title: String,
 }
 
 impl JavascriptConfig {
     #[allow(clippy::too_many_arguments)]
     fn from_column_config(
         config: &HashMap<String, RenderColumnSpec>,
+        additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
         is_single_page: bool,
         page_size: usize,
         columns: &[String],
-        webview_host: &String,
+        webview_host: &str,
         webview_controls: bool,
-        csv_path: &Path,
-        separator: char,
-        header_row_length: usize,
         header_specs: &Option<HashMap<u32, HeaderSpecs>>,
+        dataset: &DatasetSpecs,
+        pages: usize,
+        view_sizes: &HashMap<String, String>,
+        tables: &[String],
+        default_view: &Option<String>,
+        has_excel_sheet: bool,
+        description: Option<&str>,
+        report_name: &String,
+        title: &String,
     ) -> Self {
-        let column_classification = classify_table(csv_path, separator, header_row_length).unwrap();
+        let column_classification = classify_table(dataset).unwrap();
         let header_label_length = if let Some(headers) = header_specs {
             headers.iter().filter(|(_, v)| v.label.is_some()).count()
         } else {
             0
         };
+        let local: DateTime<Local> = Local::now();
+        let column_display_mode_filter = |dp_mode: DisplayMode| -> Vec<String> {
+            columns
+                .iter()
+                .map(|c| c.to_string())
+                .filter(|c| config.get(c).unwrap().display_mode == dp_mode)
+                .chain(
+                    additional_columns
+                        .as_ref()
+                        .unwrap_or(&HashMap::new())
+                        .iter()
+                        .filter(|(_, v)| v.display_mode == dp_mode)
+                        .map(|(k, _)| k.to_string()),
+                )
+                .collect()
+        };
+        let sorted_tables = tables.iter().sorted().map(|s| s.to_owned()).collect_vec();
         Self {
             detail_mode: config
                 .iter()
@@ -825,52 +885,21 @@ impl JavascriptConfig {
             webview_host: webview_host.to_string(),
             is_single_page,
             page_size,
-            columns: columns.iter().map(|c| c.to_string()).collect(),
-            displayed_columns: columns
-                .iter()
-                .map(|c| c.to_string())
-                .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Normal)
-                .collect(),
-            hidden_columns: columns
-                .iter()
-                .map(|c| c.to_string())
-                .filter(|c| config.get(c).unwrap().display_mode == DisplayMode::Hidden)
-                .collect(),
-            displayed_numeric_columns: classify_table(csv_path, separator, header_row_length)
+            columns: columns.iter().map(|c| c.to_string()).chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).keys().map(|c| c.to_string())).collect(),
+            displayed_columns: column_display_mode_filter(DisplayMode::Normal),
+            hidden_columns: column_display_mode_filter(DisplayMode::Hidden),
+            displayed_numeric_columns: classify_table(dataset)
                 .unwrap()
                 .iter()
                 .map(|(k, v)| (k.to_owned(), v.is_numeric()))
                 .filter(|(_, v)| *v)
                 .map(|(k, _)| k)
                 .collect(),
-            tick_titles: config
-                .iter()
-                .filter(|(_, k)| k.plot.is_some())
-                .filter(|(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some())
-                .map(|(k, _)| k.to_string())
-                .collect(),
-            bar_titles: config
-                .iter()
-                .filter(|(_, k)| k.plot.is_some())
-                .filter(|(_, k)| k.plot.as_ref().unwrap().bar_plot.is_some())
-                .map(|(k, _)| k.to_string())
-                .collect(),
-            heatmap_titles: config
-                .iter()
-                .filter(|(_, k)| k.plot.is_some())
-                .filter(|(_, k)| k.plot.as_ref().unwrap().heatmap.is_some())
-                .map(|(k, _)| k.to_string())
-                .collect(),
-            custom_plot_titles: config
-                .iter()
-                .filter(|(_, k)| k.custom_plot.is_some())
-                .map(|(k, _)| k.to_string())
-                .collect(),
-            links: config
-                .iter()
-                .filter(|(_, v)| v.link_to_url.is_some())
-                .map(|(k, _)| k.to_string())
-                .collect(),
+            tick_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some()),
+            bar_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().bar_plot.is_some()),
+            heatmap_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().heatmap.is_some()),
+            custom_plot_titles: filter_columns_for(config, additional_columns, |(_, k)| k.custom_plot.is_some(), |(_, k)| k.custom_plot.is_some()),
+            links: filter_columns_for(config, additional_columns, |(_, k)| k.link_to_url.is_some(), |(_, k)| k.link_to_url.is_some()),
             column_config: config
                 .iter()
                 .map(|(k, v)| {
@@ -878,10 +907,17 @@ impl JavascriptConfig {
                         k.to_string(),
                         JavascriptColumnConfig::from_column_spec(
                             v,
-                            column_classification.get(k).unwrap(),
+                            column_classification.get(k).unwrap_or_else(|| panic!("bug: failed to obtain column type for column '{k}'")),
                         ),
                     )
                 })
+                .chain(
+            additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, _)| (k.to_owned(), JavascriptColumnConfig {
+                label: None,
+                is_float: false,
+                precision: 0
+            }))
+            )
                 .collect(),
             header_label_length,
             ticks: config
@@ -893,9 +929,7 @@ impl JavascriptConfig {
                         k.to_string(),
                         render_tick_plot(
                             k,
-                            csv_path,
-                            separator,
-                            header_row_length,
+                            dataset,
                             v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
                             v.precision,
                         )
@@ -912,9 +946,7 @@ impl JavascriptConfig {
                         k.to_string(),
                         render_bar_plot(
                             k,
-                            csv_path,
-                            separator,
-                            header_row_length,
+                            dataset,
                             v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
                             v.precision,
                         )
@@ -932,9 +964,7 @@ impl JavascriptConfig {
                         v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
                         get_column_domain(
                             k,
-                            csv_path,
-                            separator,
-                            header_row_length,
+                            dataset,
                             v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
                         )
                         .unwrap(),
@@ -993,11 +1023,27 @@ impl JavascriptConfig {
                 .filter(|(_, v)| v.link_to_url.is_some())
                 .map(|(k, v)| JavascriptLinkConfig {
                     title: k.to_string(),
-                    links: v.link_to_url.as_ref().unwrap().iter().map(|(link_name, link_spec)| JavascriptLink {
+                    links: v.link_to_url.as_ref().unwrap().entries.iter().map(|(link_name, link_spec)| JavascriptLink {
                         name: link_name.to_string(),
                         link: link_spec.to_owned(),
                     }).collect(),
+                    custom_content: v.link_to_url.as_ref().unwrap().custom_content.to_owned().map(|c| JavascriptFunction(c).name()),
                 })
+                .chain(
+                    additional_columns
+                        .as_ref()
+                        .unwrap_or(&HashMap::new())
+                        .iter()
+                        .filter(|(_,v)| v.link_to_url.is_some())
+                        .map(|(k, v)| JavascriptLinkConfig {
+                            title: k.to_string(),
+                            links: v.link_to_url.as_ref().unwrap().entries.iter().map(|(link_name, link_spec)| JavascriptLink {
+                                name: link_name.to_string(),
+                                link: link_spec.to_owned(),
+                            }).collect(),
+                            custom_content: v.link_to_url.as_ref().unwrap().custom_content.to_owned().map(|c| JavascriptFunction(c).name()),
+                        })
+                )
                 .collect(),
             ellipsis: config
                 .iter()
@@ -1012,8 +1058,60 @@ impl JavascriptConfig {
                 .filter(|(_, k)| k.custom.is_some())
                 .map(|(k, v)| (k.to_owned(), JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).name()))
                 .collect(),
+            additional_colums: additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, v)| (k.to_owned(), JavascriptFunction(v.value.to_string()).name())).collect(),
+            unique_column_values: dataset.unique_column_values().unwrap(),
+            pages,
+            view_sizes: view_sizes.to_owned(),
+            tables: sorted_tables,
+            default_view: default_view.to_owned(),
+            has_excel_sheet,
+            description: description.map(|s| s.to_string()),
+            report_name: report_name.to_owned(),
+            time: local.format("%a %b %e %T %Y").to_string(),
+            version: env!("CARGO_PKG_VERSION").to_string(),
+            title: title.to_string(),
         }
     }
+}
+
+fn filter_plot_columns<F>(
+    config: &HashMap<String, RenderColumnSpec>,
+    filter_fn_render_columns: F,
+) -> Vec<String>
+where
+    F: Fn(&(&String, &RenderColumnSpec)) -> bool,
+{
+    config
+        .iter()
+        .filter(|(_, k)| k.plot.is_some())
+        .filter(|(k, v)| filter_fn_render_columns(&(*k, v)))
+        .map(|(k, _)| k.to_string())
+        .collect()
+}
+
+fn filter_columns_for<F, G>(
+    config: &HashMap<String, RenderColumnSpec>,
+    additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
+    filter_fn_render_columns: F,
+    filter_fn_additional_columns: G,
+) -> Vec<String>
+where
+    F: Fn(&(&String, &RenderColumnSpec)) -> bool,
+    G: Fn(&(&String, &AdditionalColumnSpec)) -> bool,
+{
+    config
+        .iter()
+        .filter(|(k, v)| filter_fn_render_columns(&(*k, v)))
+        .map(|(k, _)| k.to_string())
+        .chain(
+            additional_columns
+                .as_ref()
+                .unwrap_or(&HashMap::new())
+                .iter()
+                .filter(|(k, v)| filter_fn_additional_columns(&(*k, v)))
+                .map(|(k, _)| k.to_string()),
+        )
+        .collect()
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
@@ -1060,10 +1158,25 @@ struct JavascriptHeatmapConfig {
 
 impl JavascriptHeatmapConfig {
     fn from_config(title: String, heatmap: &Heatmap, domain: String) -> Self {
+        let js_function_name = heatmap
+            .custom_content
+            .as_ref()
+            .map(|custom_content| JavascriptFunction(custom_content.to_owned()).name());
+        let js_heatmap = Heatmap {
+            vega_type: None,
+            scale_type: heatmap.scale_type,
+            clamp: heatmap.clamp,
+            color_scheme: heatmap.color_scheme.clone(),
+            color_range: heatmap.color_range.clone(),
+            domain: heatmap.domain.clone(),
+            domain_mid: heatmap.domain_mid,
+            aux_domain_columns: heatmap.aux_domain_columns.clone(),
+            custom_content: js_function_name,
+        };
         Self {
             title: title.clone(),
             slug_title: slug::slugify(&title),
-            heatmap: heatmap.to_owned(),
+            heatmap: js_heatmap,
             domain: serde_json::from_str(&domain).unwrap(),
         }
     }
@@ -1073,12 +1186,13 @@ impl JavascriptHeatmapConfig {
 struct JavascriptLinkConfig {
     title: String,
     links: Vec<JavascriptLink>,
+    custom_content: Option<String>,
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
 struct JavascriptLink {
     name: String,
-    link: LinkToUrlSpec,
+    link: LinkToUrlSpecEntry,
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
@@ -1095,11 +1209,35 @@ impl JavascriptFunction {
         format!("custom_func_{:x}", md5::compute(self.0.as_bytes()))
     }
 
-    fn to_javascript_function(&self) -> String {
+    fn body(&self) -> String {
+        self.0
+            .split_once('{')
+            .unwrap()
+            .1
+            .rsplit_once('}')
+            .unwrap()
+            .0
+            .to_string()
+    }
+
+    fn args(&self) -> String {
+        self.0
+            .split_once('(')
+            .unwrap()
+            .1
+            .split_once(')')
+            .unwrap()
+            .0
+            .to_string()
+    }
+
+    fn to_javascript_function(&self, column: &String) -> String {
         format!(
-            "function {}({}",
+            "function {}({}) {{ try {{ {} }} catch (e) {{ datavzrd.custom_error(e, '{}') }}}}",
             &self.name(),
-            &self.0.split_once('(').unwrap().1
+            &self.args(),
+            &self.body(),
+            column,
         )
     }
 }
@@ -1108,7 +1246,7 @@ impl JavascriptFunction {
 fn render_custom_javascript_functions<P: AsRef<Path>>(
     output_path: P,
     render_columns: &HashMap<String, RenderColumnSpec>,
-    debug: bool,
+    additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -1121,17 +1259,55 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
     let functions = render_columns
         .iter()
         .filter(|(_, k)| k.custom.is_some())
-        .map(|(_, v)| {
-            JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).to_javascript_function()
+        .map(|(k, v)| {
+            JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).to_javascript_function(k)
         })
         .chain(
             render_columns
                 .iter()
-                .filter(|(_, k)| k.custom_plot.is_some())
-                .map(|(_, v)| {
-                    JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
-                        .to_javascript_function()
+                .filter(|(_, k)| k.link_to_url.is_some())
+                .filter(|(_, k)| k.link_to_url.as_ref().unwrap().custom_content.is_some())
+                .map(|(k, v)| {
+                    JavascriptFunction(
+                        v.link_to_url
+                            .as_ref()
+                            .unwrap()
+                            .custom_content
+                            .as_ref()
+                            .unwrap()
+                            .to_string(),
+                    )
+                    .to_javascript_function(k)
                 }),
+        )
+        .chain(
+            render_columns
+                .iter()
+                .filter(|(_, k)| k.custom_plot.is_some())
+                .map(|(k, v)| {
+                    JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
+                        .to_javascript_function(k)
+                }),
+        )
+        .chain(
+            render_columns
+                .iter()
+                .filter(|(_, k)| k.plot.is_some())
+                .map(|(k, v)| (k, v.plot.as_ref().unwrap()))
+                .filter(|(_, k)| k.heatmap.is_some())
+                .map(|(k, v)| (k, v.heatmap.as_ref().unwrap()))
+                .filter(|(_, k)| k.custom_content.is_some())
+                .map(|(k, v)| {
+                    JavascriptFunction(v.custom_content.as_ref().unwrap().to_owned())
+                        .to_javascript_function(k)
+                }),
+        )
+        .chain(
+            additional_columns
+                .as_ref()
+                .unwrap_or(&HashMap::new())
+                .iter()
+                .map(|(k, v)| JavascriptFunction(v.value.to_string()).to_javascript_function(k)),
         )
         .collect_vec();
 
@@ -1143,8 +1319,7 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
     let js = templates.render("functions.js.tera", &context)?;
 
     let mut file = File::create(file_path)?;
-    let minified = minify_js(&js, debug)?;
-    file.write_all(&minified)?;
+    file.write_all(js.as_bytes())?;
 
     Ok(())
 }
@@ -1156,7 +1331,7 @@ fn render_empty_dataset<P: AsRef<Path>>(
     report_name: &str,
     tables: &[String],
     has_excel_sheet: bool,
-    view_sizes: &HashMap<String, usize>,
+    view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -1189,47 +1364,47 @@ fn render_empty_dataset<P: AsRef<Path>>(
 fn render_search_dialogs<P: AsRef<Path>>(
     path: P,
     titles: &[String],
-    csv_path: &Path,
-    separator: char,
+    dataset: &DatasetSpecs,
     page_size: usize,
-    header_rows: usize,
 ) -> Result<()> {
     let output_path = Path::new(path.as_ref()).join("search");
     fs::create_dir(&output_path)?;
+    let table_classes = classify_table(dataset)?;
     for (column, title) in titles.iter().enumerate() {
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(separator as u8)
-            .from_path(csv_path)
-            .context(format!("Could not read file with path {csv_path:?}"))?;
+        if table_classes.get(title).unwrap() != &ColumnType::Float {
+            let mut reader = dataset.reader()?;
 
-        let row_address_factory = RowAddressFactory::new(page_size);
+            let row_address_factory = RowAddressFactory::new(page_size);
 
-        let records = &reader
-            .records()
-            .skip(header_rows - 1)
-            .map(|row| row.unwrap())
-            .map(|row| row.get(column).unwrap().to_string())
-            .enumerate()
-            .map(|(i, row)| (row, row_address_factory.get(i)))
-            .map(|(row, address)| (row, address.page + 1, address.row))
-            .collect_vec();
+            let records = &reader
+                .records()?
+                .skip(dataset.header_rows - 1)
+                .map(|row| row.get(column).unwrap().to_string())
+                .enumerate()
+                .map(|(i, row)| (row, row_address_factory.get(i)))
+                .map(|(row, address)| (row, address.page + 1, address.row))
+                .collect_vec();
 
-        let mut templates = Tera::default();
-        templates.add_raw_template(
-            "search_dialog.html.tera",
-            include_str!("../../../templates/search_dialog.html.tera"),
-        )?;
-        let mut context = Context::new();
-        context.insert("records", &records);
-        context.insert("title", &title);
+            let compressed_data = compress(json!(records))?;
 
-        let file_path = Path::new(&output_path)
-            .join(Path::new(&format!("column_{column}")).with_extension("html"));
+            let mut templates = Tera::default();
+            templates.add_raw_template(
+                "search_dialog.html.tera",
+                include_str!("../../../templates/search_dialog.html.tera"),
+            )?;
+            let mut context = Context::new();
+            context.insert("data", &json!(compressed_data).to_string());
+            context.insert("records", &records);
+            context.insert("title", &title);
 
-        let html = templates.render("search_dialog.html.tera", &context)?;
+            let file_path = Path::new(&output_path)
+                .join(Path::new(&format!("column_{column}")).with_extension("html"));
 
-        let mut file = fs::File::create(file_path)?;
-        file.write_all(html.as_bytes())?;
+            let html = templates.render("search_dialog.html.tera", &context)?;
+
+            let mut file = fs::File::create(file_path)?;
+            file.write_all(html.as_bytes())?;
+        }
     }
     Ok(())
 }
@@ -1263,13 +1438,7 @@ fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
         };
         let page_size = specs.views.get(*table).unwrap().page_size;
 
-        let column_index = ColumnIndex::new(
-            &other_dataset.path,
-            other_dataset.separator,
-            column,
-            page_size,
-            other_dataset.header_rows,
-        )?;
+        let column_index = ColumnIndex::new(other_dataset, column, page_size)?;
 
         result.insert((table.to_string(), column.to_string()), column_index);
     }
@@ -1279,23 +1448,18 @@ fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
 /// Renders tick plots for given csv column
 fn render_tick_plot(
     title: &str,
-    csv_path: &Path,
-    separator: char,
-    header_rows: usize,
+    dataset: &DatasetSpecs,
     tick_plot: &TickPlot,
     precision: u32,
 ) -> Result<String> {
-    let mut reader = csv::ReaderBuilder::new()
-        .delimiter(separator as u8)
-        .from_path(csv_path)
-        .context(format!("Could not read file with path {csv_path:?}"))?;
+    let mut reader = dataset.reader()?;
 
     let column_index = reader.headers().map(|s| {
         s.iter()
             .position(|t| t == title)
             .context(ColumnError::NotFound {
                 column: title.to_string(),
-                path: csv_path.to_str().unwrap().to_string(),
+                path: dataset.path.to_str().unwrap().to_string(),
             })
             .unwrap()
     })?;
@@ -1306,17 +1470,11 @@ fn render_tick_plot(
         let columns = aux_domain_columns
             .iter()
             .map(|s| s.to_string())
-            .chain(vec![title.to_string()].into_iter())
+            .chain(vec![title.to_string()])
             .collect();
-        get_min_max_multiple_columns(csv_path, separator, header_rows, columns, Some(precision))?
+        get_min_max_multiple_columns(dataset, columns, Some(precision))?
     } else {
-        get_min_max(
-            csv_path,
-            separator,
-            column_index,
-            header_rows,
-            Some(precision),
-        )?
+        get_min_max(dataset, column_index, Some(precision))?
     };
 
     let mut templates = Tera::default();
@@ -1329,6 +1487,7 @@ fn render_tick_plot(
     context.insert("maximum", &max);
     context.insert("field", &title);
     context.insert("scale_type", &tick_plot.scale_type);
+    context.insert("color_definition", &tick_plot.color);
 
     Ok(templates.render("tick_plot.vl.tera", &context)?)
 }
@@ -1336,23 +1495,18 @@ fn render_tick_plot(
 /// Renders bar plots for given csv column
 fn render_bar_plot(
     title: &str,
-    csv_path: &Path,
-    separator: char,
-    header_rows: usize,
+    dataset: &DatasetSpecs,
     bar_plot: &BarPlot,
     precision: u32,
 ) -> Result<String> {
-    let mut reader = csv::ReaderBuilder::new()
-        .delimiter(separator as u8)
-        .from_path(csv_path)
-        .context(format!("Could not read file with path {csv_path:?}"))?;
+    let mut reader = dataset.reader()?;
 
     let column_index = reader.headers().map(|s| {
         s.iter()
             .position(|t| t == title)
             .context(ColumnError::NotFound {
                 column: title.to_string(),
-                path: csv_path.to_str().unwrap().to_string(),
+                path: dataset.path.to_str().unwrap().to_string(),
             })
             .unwrap()
     })?;
@@ -1363,17 +1517,11 @@ fn render_bar_plot(
         let columns = aux_domain_columns
             .iter()
             .map(|s| s.to_string())
-            .chain(vec![title.to_string()].into_iter())
+            .chain(vec![title.to_string()])
             .collect();
-        get_min_max_multiple_columns(csv_path, separator, header_rows, columns, Some(precision))?
+        get_min_max_multiple_columns(dataset, columns, Some(precision))?
     } else {
-        get_min_max(
-            csv_path,
-            separator,
-            column_index,
-            header_rows,
-            Some(precision),
-        )?
+        get_min_max(dataset, column_index, Some(precision))?
     };
 
     let mut templates = Tera::default();
@@ -1386,38 +1534,32 @@ fn render_bar_plot(
     context.insert("maximum", &max);
     context.insert("field", &title);
     context.insert("scale_type", &bar_plot.scale_type);
+    context.insert("color_definition", &bar_plot.color);
 
     Ok(templates.render("bar_plot.vl.tera", &context)?)
 }
 
 pub(crate) fn get_column_domain(
     title: &str,
-    csv_path: &Path,
-    separator: char,
-    header_rows: usize,
+    dataset: &DatasetSpecs,
     heatmap: &Heatmap,
 ) -> Result<String> {
     if let Some(domain) = &heatmap.domain {
         return Ok(json!(domain).to_string());
     }
 
-    let mut reader = csv::ReaderBuilder::new()
-        .delimiter(separator as u8)
-        .from_path(csv_path)
-        .context(format!("Could not read file with path {csv_path:?}"))?;
+    let mut reader = dataset.reader()?;
 
-    let column_index = reader
-        .headers()
-        .map(|s| s.iter().position(|t| t == title).unwrap())?;
+    let column_index = column_position(title, dataset)?;
 
     if !heatmap.scale_type.is_quantitative() {
         if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
             let columns = aux_domain_columns
                 .iter()
                 .map(|s| s.to_string())
-                .chain(vec![title.to_string()].into_iter())
+                .chain(vec![title.to_string()])
                 .collect_vec();
-            let column_indexes: HashSet<_> = reader.headers().map(|s| {
+            let column_indexes: HashSet<_> = dataset.reader()?.headers().map(|s| {
                 s.iter()
                     .enumerate()
                     .filter(|(_, title)| columns.contains(&title.to_string()))
@@ -1425,14 +1567,13 @@ pub(crate) fn get_column_domain(
                     .collect()
             })?;
             Ok(json!(reader
-                .records()
-                .skip(header_rows - 1)
-                .map(|r| r.unwrap())
+                .records()?
+                .skip(dataset.header_rows - 1)
                 .flat_map(|r| r
                     .iter()
                     .enumerate()
                     .filter(|(index, _)| column_indexes.contains(index))
-                    .filter(|(_, value)| !value.is_na())
+                    .filter(|(_, value)| !value.as_str().is_na())
                     .map(|(_, value)| value.to_string())
                     .collect_vec())
                 .unique()
@@ -1441,9 +1582,8 @@ pub(crate) fn get_column_domain(
             .to_string())
         } else {
             Ok(json!(reader
-                .records()
-                .skip(header_rows - 1)
-                .map(|r| r.unwrap())
+                .records()?
+                .skip(dataset.header_rows - 1)
                 .map(|r| r.get(column_index).unwrap().to_owned())
                 .filter(|value| !value.as_str().is_na())
                 .unique()
@@ -1455,53 +1595,25 @@ pub(crate) fn get_column_domain(
         let columns = aux_domain_columns
             .iter()
             .map(|s| s.to_string())
-            .chain(vec![title.to_string()].into_iter())
+            .chain(vec![title.to_string()])
             .collect();
-        Ok(json!(get_min_max_multiple_columns(
-            csv_path,
-            separator,
-            header_rows,
-            columns,
-            None
-        )?)
-        .to_string())
+        Ok(json!(get_min_max_multiple_columns(dataset, columns, None)?).to_string())
     } else {
-        Ok(json!(get_min_max(
-            csv_path,
-            separator,
-            column_index,
-            header_rows,
-            None
-        )?)
-        .to_string())
+        Ok(json!(get_min_max(dataset, column_index, None)?).to_string())
     }
 }
 
 /// Returns the minimum and maximum for multiple given columns
 fn get_min_max_multiple_columns(
-    csv_path: &Path,
-    separator: char,
-    header_rows: usize,
+    dataset: &DatasetSpecs,
     columns: Vec<String>,
     precision: Option<u32>,
 ) -> Result<(f32, f32)> {
     let mut mins = Vec::new();
     let mut maxs = Vec::new();
     for column in columns {
-        let mut reader = csv::ReaderBuilder::new()
-            .delimiter(separator as u8)
-            .from_path(csv_path)
-            .context(format!("Could not read file with path {csv_path:?}"))?;
-        let column_index = reader.headers().map(|s| {
-            s.iter()
-                .position(|t| t == column)
-                .context(ColumnError::NotFound {
-                    column: column.to_string(),
-                    path: csv_path.to_str().unwrap().to_string(),
-                })
-                .unwrap()
-        })?;
-        let (min, max) = get_min_max(csv_path, separator, column_index, header_rows, precision)?;
+        let column_index = column_position(&column, dataset)?;
+        let (min, max) = get_min_max(dataset, column_index, precision)?;
         mins.push(min);
         maxs.push(max);
     }
@@ -1525,38 +1637,33 @@ fn render_plot_page<P: AsRef<Path>>(
     default_view: &Option<String>,
     report_name: &String,
     has_excel_sheet: bool,
-    view_sizes: &HashMap<String, usize>,
+    view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
-    let generate_reader = || -> csv::Result<Reader<File>> {
-        csv::ReaderBuilder::new()
-            .delimiter(dataset.separator as u8)
-            .from_path(&dataset.path)
-    };
-    let mut reader =
-        generate_reader().context(format!("Could not read file with path {:?}", &dataset.path))?;
-
-    let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-    let mut records: Vec<HashMap<String, String>> = reader
-        .records()
+    let headers = dataset
+        .reader()?
+        .headers()?
+        .iter()
+        .map(|s| s.to_owned())
+        .collect_vec();
+    let mut records: Vec<HashMap<String, String>> = dataset
+        .reader()?
+        .records()?
         .skip(&dataset.header_rows - 1)
         .map(|row| {
-            row.unwrap()
-                .iter()
+            row.iter()
                 .enumerate()
                 .map(|(index, record)| (headers.get(index).unwrap().to_owned(), record.to_owned()))
                 .collect()
         })
         .collect_vec();
-
     if !links.is_empty() {
-        let mut linkout_reader = generate_reader()
-            .context(format!("Could not read file with path {:?}", &dataset.path))?;
-        let linkouts = linkout_reader
-            .records()
+        let linkouts = dataset
+            .reader()?
+            .records()?
             .skip(&dataset.header_rows - 1)
             .map(|row| {
                 render_linkouts(
-                    &row.unwrap().iter().map(|s| s.to_owned()).collect_vec(),
+                    &row.iter().map(|s| s.to_owned()).collect_vec(),
                     linked_tables,
                     &headers,
                     links,
@@ -1587,7 +1694,7 @@ fn render_plot_page<P: AsRef<Path>>(
 
     let local: DateTime<Local> = Local::now();
 
-    let compressed_data = compress_to_utf16(&json!(records).to_string());
+    let compressed_data = compress(json!(records))?;
 
     context.insert("data", &json!(compressed_data).to_string());
     context.insert("description", &item_spec.description);
@@ -1639,23 +1746,20 @@ fn render_html_page<P: AsRef<Path>>(
     aux_libraries: &Option<Vec<String>>,
     report_name: &String,
     has_excel_sheet: bool,
-    view_sizes: &HashMap<String, usize>,
+    view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
-    let generate_reader = || -> csv::Result<Reader<File>> {
-        csv::ReaderBuilder::new()
-            .delimiter(dataset.separator as u8)
-            .from_path(&dataset.path)
-    };
-    let mut reader =
-        generate_reader().context(format!("Could not read file with path {:?}", &dataset.path))?;
-
-    let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-    let records: Vec<HashMap<String, String>> = reader
-        .records()
+    let headers = dataset
+        .reader()?
+        .headers()?
+        .iter()
+        .map(|s| s.to_owned())
+        .collect_vec();
+    let records: Vec<HashMap<String, String>> = dataset
+        .reader()?
+        .records()?
         .skip(&dataset.header_rows - 1)
         .map(|row| {
-            row.unwrap()
-                .iter()
+            row.iter()
                 .enumerate()
                 .map(|(index, record)| (headers.get(index).unwrap().to_owned(), record.to_owned()))
                 .collect()
@@ -1720,25 +1824,17 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
 ) -> Result<()> {
-    let generate_reader = |separator: char, path: &PathBuf| -> csv::Result<Reader<File>> {
-        csv::ReaderBuilder::new()
-            .delimiter(separator as u8)
-            .from_path(path)
-    };
-
     let mut data = HashMap::new();
 
     for (name, dataset) in datasets {
-        let mut reader = generate_reader(dataset.separator, &dataset.path)
-            .context(format!("Could not read file with path {:?}", &dataset.path))?;
+        let mut reader = dataset.reader()?;
 
         let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
         let records: Vec<HashMap<String, String>> = reader
-            .records()
+            .records()?
             .skip(&dataset.header_rows - 1)
             .map(|row| {
-                row.unwrap()
-                    .iter()
+                row.iter()
                     .enumerate()
                     .map(|(index, record)| {
                         (headers.get(index).unwrap().to_owned(), record.to_owned())
@@ -1761,7 +1857,7 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
 
     let local: DateTime<Local> = Local::now();
 
-    let compressed_data = compress_to_utf16(&json!(data).to_string());
+    let compressed_data = compress(json!(data))?;
 
     context.insert("datasets", &json!(compressed_data).to_string());
     context.insert("description", &item_spec.description);
@@ -1895,31 +1991,16 @@ fn render_excel_sheet<P: AsRef<Path>>(specs: &ItemsSpec, output_path: P) -> Resu
             false
         };
         if spec.render_plot.is_none() && spec.render_html.is_none() && export {
-            let mut rdr = csv::ReaderBuilder::new()
-                .has_headers(false)
-                .flexible(true)
-                .delimiter(
-                    specs
-                        .datasets
-                        .get(spec.dataset.as_ref().unwrap())
-                        .unwrap()
-                        .separator as u8,
-                )
-                .from_path(
-                    &specs
-                        .datasets
-                        .get(spec.dataset.as_ref().unwrap())
-                        .unwrap()
-                        .path,
-                )?;
+            let dataset = specs.datasets.get(spec.dataset.as_ref().unwrap()).unwrap();
+            let mut rdr = dataset.reader()?;
 
             let mut sheet = wb.create_sheet(view);
 
             wb.write_sheet(&mut sheet, |sw| {
-                for result in rdr.records() {
+                for result in rdr.records().unwrap() {
                     let mut row = simple_excel_writer::Row::new();
-                    for field in result?.iter() {
-                        row.add_cell(field);
+                    for field in result.iter() {
+                        row.add_cell(field.to_string());
                     }
                     sw.append_row(row)?;
                 }
@@ -1954,4 +2035,156 @@ pub enum ColumnError {
 pub enum DatasetError {
     #[error("Could not find dataset {dataset_name:?}.")]
     NotFound { dataset_name: String },
+}
+
+#[derive(Error, Debug)]
+pub enum SpecError {
+    #[error("Could not parse specs of plot for {column:?} in view {view:?}. Please make sure your specs contain valid JSON.")]
+    CouldNotParse { column: String, view: String },
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::render::portable::{render_tick_plot, JavascriptFunction};
+    use crate::spec::{Color, ColorDefinition, ColorRange, DatasetSpecs, ScaleType, TickPlot};
+    use std::path::PathBuf;
+
+    #[test]
+    fn test_javascript_function_body_parsing() {
+        let function = JavascriptFunction(String::from("function (value) { return value; }"));
+        assert_eq!(function.body().trim(), "return value;")
+    }
+
+    #[test]
+    fn test_javascript_function_arg_parsing() {
+        let function = JavascriptFunction(String::from("function (value, row) { return value; }"));
+        assert_eq!(function.args(), "value, row")
+    }
+
+    #[test]
+    fn test_javascript_function_name() {
+        let f = r#"
+        function(value, row) {
+            let custom_value = 'This is a custom function';
+            if (value.length === 0) {
+              return ``
+            }
+            const len = value.split(',').length;
+            return `<span data-toggle="popover" data-content="${{custom_value}}">${len}</span>`;
+        }
+        "#;
+        let function = JavascriptFunction(f.to_string());
+        assert_eq!(
+            function.name(),
+            "custom_func_51101d9f2c9ec9e08100de43d906d9ab"
+        );
+    }
+
+    #[test]
+    fn test_render_tick_plot() {
+        let tick_plot_spec = TickPlot {
+            scale_type: ScaleType::Linear,
+            domain: Some(vec![-350855931678.0, 760134568300.0]),
+            aux_domain_columns: Default::default(),
+            color: None,
+        };
+
+        let dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/uniform_datatypes.csv"),
+            separator: ',',
+            header_rows: 1,
+            offer_excel: false,
+            links: None,
+        };
+
+        let tick_plot = render_tick_plot("price", &dataset, &tick_plot_spec, 2);
+        assert!(tick_plot.is_ok());
+        assert!(serde_json::from_str::<serde_json::Value>(&tick_plot.unwrap()).is_ok());
+    }
+
+    #[test]
+    fn test_render_tick_plot_with_color_definition() {
+        let tick_plot_spec = TickPlot {
+            scale_type: ScaleType::Linear,
+            domain: Some(vec![-350855931678.0, 760134568300.0]),
+            aux_domain_columns: Default::default(),
+            color: Some(ColorDefinition {
+                scale_type: ScaleType::Linear,
+                color_range: ColorRange(
+                    [Color("#ebedf0".to_string()), Color("#9be9a8".to_string())].to_vec(),
+                ),
+                domain: Some(vec![
+                    "-350855931678.0".to_string(),
+                    "760134568300.0".to_string(),
+                ]),
+                domain_mid: None,
+            }),
+        };
+
+        let dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/uniform_datatypes.csv"),
+            separator: ',',
+            header_rows: 1,
+            offer_excel: false,
+            links: None,
+        };
+
+        let tick_plot = render_tick_plot("price", &dataset, &tick_plot_spec, 2);
+        assert!(tick_plot.is_ok());
+        assert!(serde_json::from_str::<serde_json::Value>(&tick_plot.unwrap()).is_ok());
+    }
+
+    #[test]
+    fn test_render_bar_plot() {
+        let bar_plot_spec = TickPlot {
+            scale_type: ScaleType::Linear,
+            domain: Some(vec![-350855931678.0, 760134568300.0]),
+            aux_domain_columns: Default::default(),
+            color: None,
+        };
+
+        let dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/uniform_datatypes.csv"),
+            separator: ',',
+            header_rows: 1,
+            offer_excel: false,
+            links: None,
+        };
+
+        let bar_plot = render_tick_plot("price", &dataset, &bar_plot_spec, 2);
+        assert!(bar_plot.is_ok());
+        assert!(serde_json::from_str::<serde_json::Value>(&bar_plot.unwrap()).is_ok());
+    }
+
+    #[test]
+    fn test_render_bar_plot_with_color_definition() {
+        let bar_plot_spec = TickPlot {
+            scale_type: ScaleType::Linear,
+            domain: Some(vec![-350855931678.0, 760134568300.0]),
+            aux_domain_columns: Default::default(),
+            color: Some(ColorDefinition {
+                scale_type: ScaleType::Linear,
+                color_range: ColorRange(
+                    [Color("#ebedf0".to_string()), Color("#9be9a8".to_string())].to_vec(),
+                ),
+                domain: Some(vec![
+                    "-350855931678.0".to_string(),
+                    "760134568300.0".to_string(),
+                ]),
+                domain_mid: None,
+            }),
+        };
+
+        let dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/uniform_datatypes.csv"),
+            separator: ',',
+            header_rows: 1,
+            offer_excel: false,
+            links: None,
+        };
+
+        let bar_plot = render_tick_plot("price", &dataset, &bar_plot_spec, 2);
+        assert!(bar_plot.is_ok());
+        assert!(serde_json::from_str::<serde_json::Value>(&bar_plot.unwrap()).is_ok());
+    }
 }

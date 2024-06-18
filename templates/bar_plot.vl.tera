@@ -6,14 +6,36 @@
         "x": {
             "field": "{{ field }}",
             "type": "quantitative",
-            "scale": {"type": "{{ scale_type }}","domain": [{{ minimum }}, {{ maximum }}]},
+            "scale": {"type": "{{ scale_type }}","domain": [{{ minimum | json_encode }}, {{ maximum | json_encode }}]},
             "axis": null
         },
-        "y": {"value": 0, "scale": {"domain": [0, 1]}},
-        "color": {"value": "#6baed6"}
+        "y": {"value": 0, "scale": {"domain": [0, 1]}}
     },
     "layer": [
-        {"mark": {"type":"bar", "height": 12, "yOffset": 11}},
+        {
+            "mark": {
+                "type":"bar",
+                "height": 12,
+                "yOffset": 11
+            },{% if color_definition %}
+            "encoding": {
+                "color": {
+                    "scale": {
+                        "type": "{{ color_definition.scale }}",
+                        "range": {{ color_definition.range | json_encode }},
+                        "domain": {% if color_definition.domain %}{{ color_definition.domain | json_encode }}{% else %}[{{ minimum | json_encode }}, {{ maximum | json_encode }}]{% endif %}
+                        {% if color_definition.domain_mid %}, "domainMid": {{ color_definition.domain_mid }}{% endif %}
+                    },
+                    "field": "{{ field }}",
+                    "legend": null,
+                    "type": "quantitative"
+                }
+            }{% else %}
+            "encoding": {
+                "color": {"value": "#6baed6"}
+            }
+            {% endif %}
+        },
         {
         "mark": {"type": "text", "yOffset": 11, "xOffset": 12},
         "encoding": {"x": {"value": 0}, "text": {"field": "{{ field }}"}, "color": {"value": "black"}}
