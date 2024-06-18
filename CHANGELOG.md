@@ -1,5 +1,34 @@
 # Changelog
 
+## [2.37.0](https://github.com/datavzrd/datavzrd/compare/v2.36.15...v2.37.0) (2024-06-18)
+
+
+### Features
+
+* Allow exporting table as SVG file ([#693](https://github.com/datavzrd/datavzrd/issues/693)) ([0f32d66](https://github.com/datavzrd/datavzrd/commit/0f32d66c8856833881b006a96b016612732fb5f2))
+
+## [2.36.15](https://github.com/datavzrd/datavzrd/compare/v2.36.14...v2.36.15) (2024-06-12)
+
+
+### Bug Fixes
+
+* Remove null being displayed when table doesnt have a description ([#720](https://github.com/datavzrd/datavzrd/issues/720)) ([fac0d6d](https://github.com/datavzrd/datavzrd/commit/fac0d6d8d7633aa3c1dcfad0731c540340184302))
+
+## [2.36.14](https://github.com/datavzrd/datavzrd/compare/v2.36.13...v2.36.14) (2024-06-11)
+
+
+### Performance Improvements
+
+* Render html contents via javascript ([#717](https://github.com/datavzrd/datavzrd/issues/717)) ([8c00967](https://github.com/datavzrd/datavzrd/commit/8c00967c1fd4b5619421f0a0ce6571696d699c19))
+
+## [2.36.13](https://github.com/datavzrd/datavzrd/compare/v2.36.12...v2.36.13) (2024-06-07)
+
+
+### Performance Improvements
+
+* Add modals via javascript for improved storage ([#716](https://github.com/datavzrd/datavzrd/issues/716)) ([e500d83](https://github.com/datavzrd/datavzrd/commit/e500d838cdb72050c31ce9d38edda329812a0514))
+* Bundle css into javascript ([#714](https://github.com/datavzrd/datavzrd/issues/714)) ([95a7ed4](https://github.com/datavzrd/datavzrd/commit/95a7ed4aad38079682a727eb79e7e8eaa941d5cd))
+
 ## [2.36.12](https://github.com/datavzrd/datavzrd/compare/v2.36.11...v2.36.12) (2024-05-07)
 
 

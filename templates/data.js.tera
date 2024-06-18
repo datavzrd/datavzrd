@@ -1,2 +1,3 @@
 const data = {{ data | safe }};
 const linkouts = {{ linkouts | safe }};
+const CURRENT_PAGE = {{ current_page }};
