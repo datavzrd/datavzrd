@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.37.0](https://github.com/datavzrd/datavzrd/compare/v2.36.15...v2.37.0) (2024-06-18)
+
+
+### Features
+
+* Allow exporting table as SVG file ([#693](https://github.com/datavzrd/datavzrd/issues/693)) ([0f32d66](https://github.com/datavzrd/datavzrd/commit/0f32d66c8856833881b006a96b016612732fb5f2))
+
 ## [2.36.15](https://github.com/datavzrd/datavzrd/compare/v2.36.14...v2.36.15) (2024-06-12)
 
 
