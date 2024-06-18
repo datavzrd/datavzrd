@@ -77,6 +77,7 @@ export function render_html_contents() {
         sidebar_html += '<li class="list-group-item sidebar-btn" onclick="datavzrd.downloadCSV()">Download CSV</li>';
     }
     sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleLineNumbers" onclick="datavzrd.toggle_line_numbers()">Show/Hide Line Numbers</li>';
+    sidebar_html += '<li class="list-group-item sidebar-btn" id="screenshotTable" onclick="datavzrd.screenshot_table()">Export table as SVG</li>';
     const content = `
         <div class="collapse" id="sidebar">
             <div class="card" id="sidebar-card">
