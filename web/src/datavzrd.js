@@ -9,7 +9,7 @@ import vegalite from 'vega-lite';
 import QRCode from 'qrcode';
 import * as d3 from "d3";
 import 'bootstrap';
-import 'bootstrap-table';
+import 'bootstrap-table/src/bootstrap-table.js';
 import 'bootstrap-select';
 import { documentToSVG, elementToSVG, inlineResources, formatXML } from 'dom-to-svg';
 import {render_html_contents} from "./page";
@@ -659,7 +659,20 @@ export function load() {
 
                 // Add static search if not single page mode
                 if (!config.is_single_page && !config.additional_colums[column] && !config.column_config[column].is_float) {
-                    title += `<a class="sym" data-toggle="modal" onclick="datavzrd.embedSearch(${config.columns.indexOf(column)})" data-target="#search"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg></a>`;
+                    title += `<a class="sym" style="margin-left: 2px;" data-toggle="modal" onclick="datavzrd.embedSearch(${config.columns.indexOf(column)})" data-target="#search"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg></a>`;
+                }
+
+                if (config.is_single_page) {
+                    title += `
+                    <div class="sym sym-container" style="position: relative;">
+                        <svg onclick="datavzrd.sort('${column}', 'asc')" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                          <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                        </svg>
+                        <svg onclick="datavzrd.sort('${column}', 'desc')" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
+                    </div>
+                    `
                 }
 
                 let formatter = undefined;
@@ -704,6 +717,7 @@ export function load() {
         if (config.is_single_page) {
             bs_table_config.pagination = true;
             bs_table_config.pageSize = config.page_size;
+            bs_table_config.sortable = true;
         }
 
         if (config.detail_mode) {
@@ -737,7 +751,7 @@ export function load() {
         }
 
 
-        var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2 + 70;
+        var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2 + 80;
         $('th').css("height", header_height);
 
         var table_rows = [];
@@ -944,7 +958,7 @@ export function load() {
                         }
                         if(!reset && !config.additional_colums[title]) {
                             let search_icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
-                            $(`table > thead > tr th:nth-child(${index})  > div.th-inner`).append(`<div class="sym" data-s='${JSON.stringify(s)}' data-brush="${tick_brush}" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<div class='filter-brush-container'><div class='filter-brush ${brush_class}' id='brush-${tick_brush}'></div></div>"> ${search_icon}</div>`);
+                            $(`table > thead > tr th:nth-child(${index})  > div.th-inner`).append(`<div class="sym filter-sym" data-s='${JSON.stringify(s)}' data-brush="${tick_brush}" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<div class='filter-brush-container'><div class='filter-brush ${brush_class}' id='brush-${tick_brush}'></div></div>"> ${search_icon}</div>`);
                         }
                         var opt = {"actions": false};
                         $(`#filter-${index}-container`).on('click', function (e) {
@@ -988,7 +1002,7 @@ export function load() {
                                                 </div>`;
                                 data_content = data_content.concat(checkbox);
                             }
-                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="${data_content}"> ${search_icon}</div>`);
+                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym filter-sym" id="filter-${index}-container" data-column-title='${title}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="${data_content}"> ${search_icon}</div>`);
                             $(`#filter-${index}-container`).on('click', function (e) {
                                 $('input:checkbox').change(function (event) {
                                     if (!event.currentTarget.checked) {
@@ -1015,7 +1029,7 @@ export function load() {
                     } else {
                         if(!reset) {
                             let search_icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
-                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title}' placeholder='Filter...'>"> ${search_icon}</div>`);
+                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym filter-sym" id="filter-${index}-container" data-column-title='${title}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title}' placeholder='Filter...'>"> ${search_icon}</div>`);
                             $(`#filter-${index}-container`).on('click', function (e) {
                                 $(`#filter-${index}`).on('input', function(event) {
                                     filters[event.target.dataset.title] = $(`#filter-${index}`).val();
@@ -1077,6 +1091,11 @@ export function load() {
 
         if (config.is_single_page) {
             $('#table').on('page-change.bs.table', (number, size) => {
+                setTimeout(function (){
+                    render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
+                }, 0);
+            })
+            $('#table').on('sort.bs.table', (number, size) => {
                 setTimeout(function (){
                     render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
                 }, 0);
@@ -1277,4 +1296,8 @@ function decompress(data) {
     const unpacker = new jsonm.Unpacker();
     decompressed = unpacker.unpack(decompressed);
     return decompressed
+}
+
+export function sort(column, order) {
+    $('#table').bootstrapTable('sortBy', {field: column, sortOrder: order})
 }
