@@ -333,6 +333,10 @@ footer {
     top: 8px;
 }
 
-.filter-sym {
+.hide-sym {
     margin-left: 14px;
+}
+
+.hide-sym:hover {
+    color: grey;
 }
