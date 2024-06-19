@@ -11,7 +11,7 @@
   "dependencies": {
     "bootstrap": "^4.6.2",
     "bootstrap-select": "^1.13.18",
-    "bootstrap-table": "1.20.2",
+    "bootstrap-table": "1.22.6",
     "jquery": "^3.7.0",
     "jsonm": "^1.0.10",
     "lz-string": "^1.5.0",

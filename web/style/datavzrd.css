@@ -317,3 +317,22 @@ footer {
 .nav-btn {
     display: block !important;
 }
+
+.sym-container svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+.sym-container svg:hover {
+    color: grey;
+}
+
+.sym-container .bi-caret-down {
+    top: 8px;
+}
+
+.filter-sym {
+    margin-left: 14px;
+}
