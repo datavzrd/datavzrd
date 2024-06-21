@@ -1127,6 +1127,12 @@ export function load() {
             })
         }
 
+
+        var rect = $('.fixed-table-container')[0].getBoundingClientRect();
+        if (rect.left < 0 || rect.right > $(window).width()) {
+            add_scroll_button();
+        }
+
         let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10);
         let page_size = $('#table').bootstrapTable('getOptions').pageSize;
         if (config.is_single_page) {
@@ -1335,5 +1341,37 @@ export function hide(column, render) {
     });
     if (!render) {
         config["to_be_hidden"].push(column);
+    }
+}
+
+function add_scroll_button() {
+    var buttonHTML = `
+    <div class="float-left">
+        <button type="button" class="btn btn-primary pulsating-button" data-toggle="tooltip" data-placement="top" title="Datavzrd allows horizontal scrolling when the table exceeds the viewport">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mouse-fill" viewBox="0 0 16 16">
+                <path d="M3 5a5 5 0 0 1 10 0v6a5 5 0 0 1-10 0zm5.5-1.5a.5.5 0 0 0-1 0v2a.5.5 0 0 0 1 0z"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+            </svg>
+        </button>
+    </div>
+  `;
+
+    var targetElement = document.querySelector('#pagination');
+
+    if (config.is_single_page) {
+        targetElement = document.querySelector('.float-right.pagination');
+    }
+
+    if (targetElement) {
+        targetElement.insertAdjacentHTML('beforebegin', buttonHTML);
+        var button = targetElement.previousElementSibling;
+        $(button).tooltip();
+    } else {
+        console.error('No element found with class "float-right pagination".');
     }
 }
