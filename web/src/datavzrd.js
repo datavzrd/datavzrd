@@ -1334,15 +1334,18 @@ export function sort(column, order) {
 }
 
 export function hide(column, render) {
-    const index = get_index(column, config.displayed_columns, config.header_label_length, config.detail_mode, config.header_label_length)
-    $(`table > thead > tr:first-child th:nth-child(${index})`).css("display", "none");
-    $(`table > tbody > tr td:nth-child(${index})`).each(function () {
+    const column_index = get_index(column, config.displayed_columns, config.detail_mode, config.header_label_length);
+    $(`table > thead > tr:first-child th:nth-child(${column_index})`).css("display", "none");
+    $(`table > tbody > tr td:nth-child(${column_index})`).each(function () {
         this.style.setProperty("display", "none");
     });
     if (!render) {
         config["to_be_hidden"].push(column);
     }
 }
+
+
+
 
 function add_scroll_button() {
     var buttonHTML = `
