@@ -336,3 +336,16 @@ footer {
 .filter-sym {
     margin-left: 14px;
 }
+
+.pulsating-button {
+    animation: pulsate 2s infinite;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-top: 10px;
+}
+
+@keyframes pulsate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
