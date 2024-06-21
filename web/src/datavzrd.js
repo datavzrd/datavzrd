@@ -24,8 +24,6 @@ let LINE_NUMBERS = false;
 
 let VEGA_EMBED_OPTIONS = { 'renderer': 'svg', 'actions': false };
 
-load();
-
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
     const converter = new showdown.Converter({
@@ -1207,7 +1205,7 @@ $(document).click(function (event) {
 export function load_search() {
     $(document).ready(function() {
         window.$ = window.jQuery = require("jquery");
-        window['bootstrap-table'] = require('bootstrap-table');
+        window['bootstrap-table'] = require('bootstrap-table/src/bootstrap-table.js');
         let decompressed = decompress(search_data);
         let table_data = [];
         for (var i = 0; i < decompressed.length; i++) {
