@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.38.0](https://github.com/datavzrd/datavzrd/compare/v2.37.0...v2.38.0) (2024-06-21)
+
+
+### Features
+
+* Add user notification for horizontal scrolling when viewport width is exceeded ([4bcb22b](https://github.com/datavzrd/datavzrd/commit/4bcb22bfec3316f0a827a792d7190535e4be257f))
+* Allow hiding columns for in-memory-reports ([#726](https://github.com/datavzrd/datavzrd/issues/726)) ([4656016](https://github.com/datavzrd/datavzrd/commit/4656016519484d653125f732be7570888b1d7f13))
+* Allow sorting for in-memory-reports ([#724](https://github.com/datavzrd/datavzrd/issues/724)) ([9eb38b1](https://github.com/datavzrd/datavzrd/commit/9eb38b1ff8d71f17fb16e764a47806ca0d76ff97))
+
+
+### Bug Fixes
+
+* Fix static search and plot views ([0be4d7a](https://github.com/datavzrd/datavzrd/commit/0be4d7ab1dbe3eb9e6a1034a30991d1109e2f585))
+
 ## [2.37.0](https://github.com/datavzrd/datavzrd/compare/v2.36.15...v2.37.0) (2024-06-18)
 
 
