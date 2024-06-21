@@ -333,7 +333,7 @@ footer {
     top: 8px;
 }
 
-.filter-sym {
+.hide-sym {
     margin-left: 14px;
 }
 
@@ -348,4 +348,8 @@ footer {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
+}
+
+.hide-sym:hover {
+    color: grey;
 }
