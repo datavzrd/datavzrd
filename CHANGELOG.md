@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.38.1](https://github.com/datavzrd/datavzrd/compare/v2.38.0...v2.38.1) (2024-06-25)
+
+
+### Performance Improvements
+
+* Use better link time optimization on release profile ([#728](https://github.com/datavzrd/datavzrd/issues/728)) ([2aad0a6](https://github.com/datavzrd/datavzrd/commit/2aad0a61d456010b955587e8ae9eeca213eadbe6))
+
 ## [2.38.0](https://github.com/datavzrd/datavzrd/compare/v2.37.0...v2.38.0) (2024-06-21)
 
 
