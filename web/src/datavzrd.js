@@ -1291,6 +1291,9 @@ export function screenshot_table() {
         if (linkouts !== null) {
             s = -2;
         }
+        if (!config.webview_controls) {
+            s += 1;
+        }
         const lastTwo = Array.from(cells).slice(s);
         lastTwo.forEach(cell => cell.style.display = 'none');
     });
