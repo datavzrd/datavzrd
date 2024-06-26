@@ -761,8 +761,13 @@ export function load() {
         }
 
 
-        var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2 + 80;
+        var header_height = (80 + 6 * Math.max(...config.displayed_columns.map(el => {
+            var columnConfig = config.column_config[el];
+            return columnConfig && columnConfig.label ? columnConfig.label.length : el.length;
+        })) * Math.SQRT2) / 2 + 80;
+
         $('th').css("height", header_height);
+
 
         var table_rows = [];
         var j = 0;
@@ -1252,12 +1257,23 @@ export function toggle_line_numbers() {
 }
 
 function addRotationTransform(svgString) {
-    let table_headers = config.displayed_columns;
-    for (const column of table_headers) {
-        if (config.column_config[column].label !== null) {
-            table_headers[table_headers.indexOf(column)] = config.column_config[column].label;
-        }
+    let table_headers = config.displayed_columns.map(column =>
+        config.column_config[column].label !== null ? config.column_config[column].label : column
+    );
+
+    const widthMatch = svgString.match(/<svg[^>]*width="([\d.]+)"[^>]*>/);
+    let svgWidth = 0;
+    if (widthMatch) {
+        svgWidth = parseFloat(widthMatch[1]);
     }
+
+    const maxLength = Math.max(...table_headers.map(word => word.length));
+    const headerHeight = (80 + 6 * maxLength * Math.SQRT2) / 2 + 80;
+
+    svgWidth += headerHeight;
+
+    svgString = svgString.replace(/(<svg[^>]*width=")([\d.]+)"/, `$1${svgWidth}"`);
+
     return svgString.replace(/<text\b([^>]*)>(<tspan[^>]*x="([\d.]+)"[^>]*y="([\d.]+)"[^>]*>([^<]+)<\/tspan>)(<\/text>)/g,
         (match, textAttributes, tspanContent, x, y, word, closingTag) => {
             if (table_headers.includes(word)) {
