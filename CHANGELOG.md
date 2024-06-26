@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.38.2](https://github.com/datavzrd/datavzrd/compare/v2.38.1...v2.38.2) (2024-06-26)
+
+
+### Bug Fixes
+
+* Fix last column hidden on exported svg and adjust header height to eventual label ([#733](https://github.com/datavzrd/datavzrd/issues/733)) ([0fcd3d7](https://github.com/datavzrd/datavzrd/commit/0fcd3d750c345d19c84aa78f7ee07e2464b57645))
+* Remove heatmap table export which is superseeded by svg export ([#731](https://github.com/datavzrd/datavzrd/issues/731)) ([be98965](https://github.com/datavzrd/datavzrd/commit/be98965a2027fd64474602f701e22b21870f269b))
+
 ## [2.38.1](https://github.com/datavzrd/datavzrd/compare/v2.38.0...v2.38.1) (2024-06-25)
 
 
