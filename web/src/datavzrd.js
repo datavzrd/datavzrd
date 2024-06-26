@@ -813,19 +813,6 @@ export function load() {
             navigator.clipboard.writeText(createShareURL($(this).data('row'), config.webview_host));
         });
 
-        $( "#btnHeatmap" ).on( "click", function() {
-            var i = 0;
-            var heatmap_data = JSON.parse(JSON.stringify(table_rows));
-            for (const r of heatmap_data) {
-                if (r.hasOwnProperty('linkouts')) delete r['linkouts']
-                if (r.hasOwnProperty('share')) delete r['share']
-                r.index = i;
-                i++;
-            }
-            heatmap_plot.data.values = heatmap_data;
-            vegaEmbed('#heatmap-plot', heatmap_plot);
-        });
-
         $('#table').find('thead').append(additional_headers);
         $('#table').bootstrapTable('append', table_rows);
 

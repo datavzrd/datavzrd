@@ -90,15 +90,6 @@
     z-index: 9999;
 }
 
-#modal-dialog-heatmap {
-    position: relative;
-    display: table;
-    overflow-y: auto;
-    overflow-x: auto;
-    width: auto;
-    min-width: 300px;
-}
-
 .modal-body {
     max-width: calc(100vw - 50px);
     overflow-x: auto;
