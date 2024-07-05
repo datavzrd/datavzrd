@@ -32,7 +32,7 @@ use std::io::Write;
 use std::option::Option::Some;
 use std::path::Path;
 use std::str::FromStr;
-use tera::{Context, Tera, escape_html};
+use tera::{escape_html, Context, Tera};
 use thiserror::Error;
 use typed_builder::TypedBuilder;
 
