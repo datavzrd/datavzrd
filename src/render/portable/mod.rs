@@ -2,13 +2,12 @@ mod plot;
 pub(crate) mod utils;
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
-use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
 use crate::spec::{AdditionalColumnSpec, LinkToUrlSpecEntry};
 use crate::spec::{
     BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
-    RenderColumnSpec, ScaleType, TickPlot,
+    RenderColumnSpec, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_position;
@@ -22,7 +21,6 @@ use chrono::{DateTime, Local};
 use itertools::Itertools;
 use serde::Serialize;
 use serde_json::{json, Value};
-use std::cmp::max;
 use std::collections::{HashMap, HashSet};
 
 use minify_html::{minify, Cfg};
@@ -227,9 +225,7 @@ impl Renderer for ItemRenderer {
                             debug,
                         )?;
                     }
-                    if is_single_page {
-                        render_table_heatmap(&out_path, dataset, table_specs, &headers)?;
-                    } else {
+                    if !is_single_page {
                         render_search_dialogs(&out_path, &headers, dataset, table.page_size)?;
                     }
                     render_table_javascript(
@@ -377,211 +373,6 @@ fn render_page<P: AsRef<Path>>(
     data_file.write_all(js.as_bytes())?;
 
     Ok(())
-}
-
-fn render_table_heatmap<P: AsRef<Path>>(
-    output_path: P,
-    dataset: &DatasetSpecs,
-    render_columns: &HashMap<String, RenderColumnSpec>,
-    titles: &[String],
-) -> Result<()> {
-    let mut templates = Tera::default();
-    templates.add_raw_template(
-        "table_heatmap.js.tera",
-        include_str!("../../../templates/table_heatmap.js.tera"),
-    )?;
-    let mut context = Context::new();
-
-    let hidden_columns: HashSet<_> = render_columns
-        .iter()
-        .filter(|(_, v)| v.display_mode == DisplayMode::Hidden)
-        .map(|(k, _)| k)
-        .collect();
-
-    let columns = titles
-        .iter()
-        .filter(|t| !hidden_columns.contains(t))
-        .collect_vec();
-
-    let labels = get_column_labels(render_columns);
-
-    let table_classes = classify_table(dataset)?;
-    let column_types: HashMap<_, _> = table_classes
-        .iter()
-        .map(|(t, c)| match c {
-            ColumnType::None | ColumnType::String => (t, "nominal"),
-            ColumnType::Float | ColumnType::Integer => (t, "quantitative"),
-        })
-        .collect();
-    let marks: HashMap<_, _> = titles
-        .iter()
-        .map(|title| {
-            if let Some(rc) = render_columns.get(&title.to_string()) {
-                if let Some(plot) = &rc.plot {
-                    if plot.bar_plot.is_some() {
-                        (title, "bar")
-                    } else {
-                        (title, "rect")
-                    }
-                } else {
-                    (title, "text")
-                }
-            } else {
-                (title, "text")
-            }
-        })
-        .collect();
-
-    let tick_domains: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .filter(|(_, p)| p.tick_plot.is_some())
-        .map(|(t, p)| (t, p.tick_plot.as_ref().unwrap()))
-        .filter(|(_, h)| h.domain.is_some() || h.aux_domain_columns.0.is_some())
-        .map(|(t, h)| {
-            let domain = if let Some(domain) = h.domain.as_ref() {
-                domain.clone()
-            } else {
-                let mut aux_domains = h.aux_domain_columns.0.as_ref().unwrap().to_vec();
-                aux_domains.push(t.to_string());
-                let d = get_min_max_multiple_columns(dataset, aux_domains, None).unwrap();
-                vec![d.0, d.1]
-            };
-            (t, domain)
-        })
-        .collect();
-
-    let heatmap_domains: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .filter(|(_, p)| p.heatmap.is_some())
-        .map(|(t, p)| (t, p.heatmap.as_ref().unwrap()))
-        .filter(|(_, h)| h.domain.is_some() || h.aux_domain_columns.0.is_some())
-        .map(|(t, h)| (t, get_column_domain(t, dataset, h).unwrap()))
-        .collect();
-
-    let scales: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .map(|(t, p)| {
-            if let Some(heatmap) = &p.heatmap {
-                (t, heatmap.scale_type)
-            } else if let Some(ticks) = &p.tick_plot {
-                (t, ticks.scale_type)
-            } else {
-                (t, ScaleType::None)
-            }
-        })
-        .filter(|(_, s)| s != &ScaleType::None)
-        .collect();
-
-    let ranges: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .filter(|(_, p)| p.heatmap.is_some())
-        .map(|(t, p)| {
-            let heatmap = p.heatmap.as_ref().unwrap();
-            (t, &heatmap.color_range)
-        })
-        .collect();
-
-    let schemes: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .filter(|(_, p)| p.heatmap.is_some())
-        .map(|(t, p)| {
-            let heatmap = p.heatmap.as_ref().unwrap();
-            (t, &heatmap.color_scheme)
-        })
-        .filter(|(_, s)| !s.is_empty())
-        .collect();
-
-    let clamps: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .filter(|(_, p)| p.heatmap.is_some())
-        .map(|(t, p)| (t, &p.heatmap.as_ref().unwrap().clamp))
-        .collect();
-
-    let remove_legend: HashMap<_, _> = titles
-        .iter()
-        .tuple_windows()
-        .map(|(t1, t2)| {
-            match (
-                tick_domains.get(t1),
-                tick_domains.get(t2),
-                heatmap_domains.get(t1),
-                heatmap_domains.get(t2),
-            ) {
-                (Some(d1), Some(d2), _, _) => (t1, d1 == d2),
-                (_, _, Some(d1), Some(d2)) => (t1, d1 == d2),
-                _ => (t1, false),
-            }
-        })
-        .collect();
-
-    let plot_legends: HashMap<_, _> = render_columns
-        .iter()
-        .map(|(t, rc)| (t, rc.plot_view_legend))
-        .collect();
-
-    let column_widths: HashMap<_, _> = marks
-        .iter()
-        .filter(|(_, m)| *m != &"text")
-        .map(|(t, _)| (t, max(20, 6 * get_column_width(t, dataset).unwrap())))
-        .collect();
-
-    context.insert("remove_legend", &remove_legend);
-    context.insert("column_widths", &column_widths);
-    context.insert("plot_legends", &plot_legends);
-    context.insert("tick_domains", &tick_domains);
-    context.insert("heatmap_domains", &heatmap_domains);
-    context.insert("ranges", &ranges);
-    context.insert("schemes", &schemes);
-    context.insert("scales", &scales);
-    context.insert("clamps", &clamps);
-    context.insert("columns", &columns);
-    context.insert("types", &column_types);
-    context.insert("marks", &marks);
-    context.insert("labels", &labels);
-
-    let js = templates.render("table_heatmap.js.tera", &context)?;
-
-    let file_path = Path::new(output_path.as_ref()).join(Path::new("heatmap").with_extension("js"));
-
-    let mut file = File::create(file_path)?;
-    file.write_all(js.as_bytes())?;
-
-    Ok(())
-}
-
-fn get_column_width(column: &str, dataset: &DatasetSpecs) -> Result<i32> {
-    let mut reader = dataset.reader()?;
-    let column_index = reader.headers().map(|s| {
-        s.iter()
-            .position(|t| t == column)
-            .context(ColumnError::NotFound {
-                column: column.to_string(),
-                path: dataset.path.to_str().unwrap().to_string(),
-            })
-            .unwrap()
-    })?;
-
-    let width = reader
-        .records()?
-        .skip(dataset.header_rows - 1)
-        .map(|row| row.get(column_index).unwrap().to_string())
-        .map(|s| s.len())
-        .max()
-        .unwrap_or(0);
-
-    Ok(width as i32)
 }
 
 #[allow(clippy::too_many_arguments)]

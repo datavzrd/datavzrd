@@ -761,8 +761,13 @@ export function load() {
         }
 
 
-        var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2 + 80;
+        var header_height = (80 + 6 * Math.max(...config.displayed_columns.map(el => {
+            var columnConfig = config.column_config[el];
+            return columnConfig && columnConfig.label ? columnConfig.label.length : el.length;
+        })) * Math.SQRT2) / 2 + 80;
+
         $('th').css("height", header_height);
+
 
         var table_rows = [];
         var j = 0;
@@ -811,19 +816,6 @@ export function load() {
 
         $(document).on('click', '.copy-url', function() {
             navigator.clipboard.writeText(createShareURL($(this).data('row'), config.webview_host));
-        });
-
-        $( "#btnHeatmap" ).on( "click", function() {
-            var i = 0;
-            var heatmap_data = JSON.parse(JSON.stringify(table_rows));
-            for (const r of heatmap_data) {
-                if (r.hasOwnProperty('linkouts')) delete r['linkouts']
-                if (r.hasOwnProperty('share')) delete r['share']
-                r.index = i;
-                i++;
-            }
-            heatmap_plot.data.values = heatmap_data;
-            vegaEmbed('#heatmap-plot', heatmap_plot);
         });
 
         $('#table').find('thead').append(additional_headers);
@@ -1265,12 +1257,23 @@ export function toggle_line_numbers() {
 }
 
 function addRotationTransform(svgString) {
-    let table_headers = config.displayed_columns;
-    for (const column of table_headers) {
-        if (config.column_config[column].label !== null) {
-            table_headers[table_headers.indexOf(column)] = config.column_config[column].label;
-        }
+    let table_headers = config.displayed_columns.map(column =>
+        config.column_config[column].label !== null ? config.column_config[column].label : column
+    );
+
+    const widthMatch = svgString.match(/<svg[^>]*width="([\d.]+)"[^>]*>/);
+    let svgWidth = 0;
+    if (widthMatch) {
+        svgWidth = parseFloat(widthMatch[1]);
     }
+
+    const maxLength = Math.max(...table_headers.map(word => word.length));
+    const headerHeight = (80 + 6 * maxLength * Math.SQRT2) / 2 + 80;
+
+    svgWidth += headerHeight;
+
+    svgString = svgString.replace(/(<svg[^>]*width=")([\d.]+)"/, `$1${svgWidth}"`);
+
     return svgString.replace(/<text\b([^>]*)>(<tspan[^>]*x="([\d.]+)"[^>]*y="([\d.]+)"[^>]*>([^<]+)<\/tspan>)(<\/text>)/g,
         (match, textAttributes, tspanContent, x, y, word, closingTag) => {
             if (table_headers.includes(word)) {
@@ -1303,6 +1306,9 @@ export function screenshot_table() {
         let s = -1;
         if (linkouts !== null) {
             s = -2;
+        }
+        if (!config.webview_controls) {
+            s += 1;
         }
         const lastTwo = Array.from(cells).slice(s);
         lastTwo.forEach(cell => cell.style.display = 'none');

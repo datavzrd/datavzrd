@@ -64,9 +64,6 @@ export function render_html_contents() {
             </li>
         </ol>`;
     let sidebar_html = "";
-    if (config.is_single_page) {
-        sidebar_html += '<li class="list-group-item sidebar-btn" id="btnHeatmap" data-toggle="modal" data-target="#heatmap-plot-modal">Show as plot</li>';
-    }
     if (config.has_excel_sheet) {
         sidebar_html += '<li class="list-group-item sidebar-btn" id="btnExcel" onclick="window.location=\'../data.xlsx\'">Download excel sheet</li>';
     }
@@ -78,7 +75,7 @@ export function render_html_contents() {
         sidebar_html += '<li class="list-group-item sidebar-btn" id="unhide-btn">Unhide columns</li>';
     }
     sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleLineNumbers" onclick="datavzrd.toggle_line_numbers()">Show/Hide Line Numbers</li>';
-    sidebar_html += '<li class="list-group-item sidebar-btn" id="screenshotTable" onclick="datavzrd.screenshot_table()">Export table as SVG</li>';
+    sidebar_html += '<li class="list-group-item sidebar-btn" id="screenshotTable" onclick="datavzrd.screenshot_table()">Export table page as SVG</li>';
     const content = `
         <div class="collapse" id="sidebar">
             <div class="card" id="sidebar-card">
@@ -157,26 +154,6 @@ export function render_html_contents() {
                                             <span data-toggle="tooltip" data-placement="left" title="Open portable share link. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of ${config.webview_host}.">
                                                 <a href="#" target="_blank" rel="noopener noreferrer" type="button" id="open-url" class="btn btn-primary">Open link</a>
                                             </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="heatmap-plot-modal" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" id="modal-dialog-heatmap">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Plot-View</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p class="text-right small">Click "..."-button for export options</p>
-                                        <div id="heatmap-plot">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         </div>
                                     </div>
                                 </div>
