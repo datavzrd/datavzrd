@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.38.3](https://github.com/datavzrd/datavzrd/compare/v2.38.2...v2.38.3) (2024-07-05)
+
+
+### Bug Fixes
+
+* Escape description string ([#737](https://github.com/datavzrd/datavzrd/issues/737)) ([5f82cf9](https://github.com/datavzrd/datavzrd/commit/5f82cf943f546ffdb360a47d60cf333c47d1061c))
+
 ## [2.38.2](https://github.com/datavzrd/datavzrd/compare/v2.38.1...v2.38.2) (2024-06-26)
 
 
