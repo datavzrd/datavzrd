@@ -856,7 +856,7 @@ impl JavascriptConfig {
             tables: sorted_tables,
             default_view: default_view.to_owned(),
             has_excel_sheet,
-            description: description.map(|s| escape_html(s)),
+            description: description.map(escape_html),
             report_name: report_name.to_owned(),
             time: local.format("%a %b %e %T %Y").to_string(),
             version: env!("CARGO_PKG_VERSION").to_string(),
