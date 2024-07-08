@@ -669,10 +669,10 @@ export function load() {
                 if (config.is_single_page) {
                     title += `
                     <div class="sym sym-container" style="position: relative;">
-                        <svg onclick="datavzrd.sort('${column}', 'asc')" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                        <svg onclick="datavzrd.sort('${column}', 'asc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
                           <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
                         </svg>
-                        <svg onclick="datavzrd.sort('${column}', 'desc')" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                        <svg onclick="datavzrd.sort('${column}', 'desc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                         </svg>
                     </div>
@@ -1115,6 +1115,9 @@ export function load() {
                     line_numbers("none");
                 }
             })
+            $('#unsort-btn').on('click', function() {
+                render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
+            });
         }
 
 
@@ -1333,7 +1336,9 @@ function decompress(data) {
     return decompressed
 }
 
-export function sort(column, order) {
+export function sort(column, order, svg) {
+    document.querySelectorAll('.sym-container svg').forEach(svg => svg.style.color = "currentColor");
+    svg.style.color = "#c21f30";
     $('#table').bootstrapTable('sortBy', {field: column, sortOrder: order})
 }
 
