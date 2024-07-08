@@ -17,16 +17,17 @@ fn main() {
 
     let work_dir = PathBuf::from(std::env::var("OUT_DIR").unwrap()).join("web/");
 
-    std::process::Command::new("npm")
+    std::process::Command::new("pnpm")
         .arg("install")
         .current_dir(work_dir.to_str().expect("failed to get work dir"))
         .status()
-        .expect("failed to install npm packages");
+        .expect("failed to install packages");
 
-    std::process::Command::new("npx")
+    std::process::Command::new("pnpm")
+        .arg("exec")
         .arg("rspack")
         .arg("build")
         .current_dir(work_dir.to_str().expect("failed to get work dir"))
         .status()
-        .expect("failed to execute npx rspack build");
+        .expect("failed to execute pnpm exec rspack build");
 }

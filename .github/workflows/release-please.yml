@@ -33,6 +33,9 @@ jobs:
           toolchain: stable
           override: true
 
+      - name: Install pnpm
+        run: npm install -g pnpm
+
       - name: Install system dependencies
         run: |
           sudo apt-get install --yes libgsl0-dev
@@ -68,6 +71,9 @@ jobs:
           with:
             toolchain: stable
             override: true
+
+        - name: Install pnpm
+          run: npm install -g pnpm
 
         - name: Build
           run: |

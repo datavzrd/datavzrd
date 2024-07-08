@@ -36,6 +36,9 @@ jobs:
            override: true
            components: clippy
 
+       - name: Install pnpm
+         run: npm install -g pnpm
+
        - name: Lint with clippy
          uses: actions-rs/clippy-check@v1
          with:
@@ -53,6 +56,9 @@ jobs:
         with:
           toolchain: stable
           override: true
+
+      - name: Install pnpm
+        run: npm install -g pnpm
       
       - uses: Swatinem/rust-cache@v1.3.0
 
