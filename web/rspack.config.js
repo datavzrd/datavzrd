@@ -1,5 +1,5 @@
 const path = require('path');
-const webpack = require('webpack')
+const rspack = require('@rspack/core');
 
 module.exports = {
     entry: './src/datavzrd.js',
@@ -19,11 +19,14 @@ module.exports = {
         ],
     },
     plugins: [
-        new webpack.ProvidePlugin({
+        new rspack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
             'window.$': 'jquery',
             'window.jQuery': 'jquery',
         }),
     ],
+    experiments: {
+        css: false
+    }
 };

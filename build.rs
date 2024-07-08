@@ -21,11 +21,12 @@ fn main() {
         .arg("install")
         .current_dir(work_dir.to_str().expect("failed to get work dir"))
         .status()
-        .expect("failed to execute webpack");
+        .expect("failed to install npm packages");
 
     std::process::Command::new("npx")
-        .arg("webpack")
+        .arg("rspack")
+        .arg("build")
         .current_dir(work_dir.to_str().expect("failed to get work dir"))
         .status()
-        .expect("failed to execute webpack");
+        .expect("failed to execute npx rspack build");
 }
