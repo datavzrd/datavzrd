@@ -28,5 +28,5 @@ fn main() {
         .arg("build")
         .current_dir(work_dir.to_str().expect("failed to get work dir"))
         .status()
-        .expect("failed to execute npm rspack build");
+        .expect("failed to execute npx rspack build");
 }
