@@ -11,5 +11,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Install pnpm
+        run: npm install -g pnpm
       - name: Auto apply clippy lints
         uses: fxwiegand/apply-clippy-lints@v1.0.4
