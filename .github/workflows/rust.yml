@@ -36,6 +36,9 @@ jobs:
            override: true
            components: clippy
 
+       - name: Install pnpm
+         run: npm install -g pnpm
+
        - name: Lint with clippy
          uses: actions-rs/clippy-check@v1
          with:
