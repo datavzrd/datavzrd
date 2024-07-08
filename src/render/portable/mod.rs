@@ -30,7 +30,7 @@ use std::io::Write;
 use std::option::Option::Some;
 use std::path::Path;
 use std::str::FromStr;
-use tera::{Context, Tera};
+use tera::{escape_html, Context, Tera};
 use thiserror::Error;
 use typed_builder::TypedBuilder;
 
@@ -856,7 +856,7 @@ impl JavascriptConfig {
             tables: sorted_tables,
             default_view: default_view.to_owned(),
             has_excel_sheet,
-            description: description.map(|s| s.to_string()),
+            description: description.map(escape_html),
             report_name: report_name.to_owned(),
             time: local.format("%a %b %e %T %Y").to_string(),
             version: env!("CARGO_PKG_VERSION").to_string(),
