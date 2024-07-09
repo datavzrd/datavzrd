@@ -1,21 +1,22 @@
+use fs_extra::dir::CopyOptions;
+use std::env;
 use std::path::PathBuf;
 
 fn main() {
     println!("cargo:rerun-if-changed=web/");
-    std::process::Command::new("cp")
-        .args([
-            "-r",
-            "-v",
-            "web",
-            PathBuf::from(std::env::var("OUT_DIR").unwrap())
-                .to_str()
-                .unwrap(),
-        ])
-        .current_dir(env!("CARGO_MANIFEST_DIR"))
-        .status()
-        .expect("failed to copy web/ into OUT_DIR/");
+    let out_dir = env::var("OUT_DIR").unwrap();
+    let web_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("web");
+    fs_extra::dir::copy(
+        web_dir,
+        out_dir,
+        &CopyOptions {
+            overwrite: true,
+            ..CopyOptions::new()
+        },
+    )
+    .expect("failed to copy web/ into OUT_DIR/");
 
-    let work_dir = PathBuf::from(std::env::var("OUT_DIR").unwrap()).join("web/");
+    let work_dir = PathBuf::from(std::env::var("OUT_DIR").unwrap()).join("web");
 
     std::process::Command::new("pnpm")
         .arg("install")
