@@ -1118,6 +1118,18 @@ export function load() {
             $('#unsort-btn').on('click', function() {
                 render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
             });
+            $('#downloadCSV-btn').on('click', function() {
+                downloadCSV()
+            })
+            $('#toggleLineNumbers').on('click', function() {
+                toggle_line_numbers()
+            })
+            $('#screenshotTable').on('click', function() {
+                screenshot_table()
+            })
+            $('#btnExcel').on('click', function() {
+                window.location.href = '../data.xlsx';
+            })
         }
 
 
