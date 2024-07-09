@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.39.1](https://github.com/datavzrd/datavzrd/compare/v2.39.0...v2.39.1) (2024-07-09)
+
+
+### Bug Fixes
+
+* Fix SVG export for basic views without webview controls and linkouts ([f75bbc4](https://github.com/datavzrd/datavzrd/commit/f75bbc407d6659baee5c119f74cbc0cc2e725311))
+
 ## [2.39.0](https://github.com/datavzrd/datavzrd/compare/v2.38.3...v2.39.0) (2024-07-09)
 
 
