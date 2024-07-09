@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.39.0](https://github.com/datavzrd/datavzrd/compare/v2.38.3...v2.39.0) (2024-07-09)
+
+
+### Features
+
+* Show active sort order visually ([4d9956a](https://github.com/datavzrd/datavzrd/commit/4d9956aaadcf7215a531ab378094ddc65745cf21))
+
 ## [2.38.3](https://github.com/datavzrd/datavzrd/compare/v2.38.2...v2.38.3) (2024-07-05)
 
 
