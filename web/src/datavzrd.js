@@ -1325,8 +1325,10 @@ export function screenshot_table() {
         if (!config.webview_controls) {
             s += 1;
         }
-        const lastTwo = Array.from(cells).slice(s);
-        lastTwo.forEach(cell => cell.style.display = 'none');
+        if (s < 0) {
+            const lastTwo = Array.from(cells).slice(s);
+            lastTwo.forEach(cell => cell.style.display = 'none');
+        }
     });
     if (config.detail_mode) {
         document.querySelectorAll('table tr').forEach(row => {
