@@ -14,7 +14,7 @@ anyhow = "1"
 thiserror = "1"
 readervzrd = "0.1.0"
 typed-builder = "0.18"
-serde_yaml = "0.9"
+serde_yaml = "0.8" # https://github.com/AlexanderThaller/format_serde_error/pull/23
 derive-new = "0.6"
 itertools = "0.13.0"
 tera = "1.20.0"
@@ -32,6 +32,7 @@ simple_excel_writer = "0.2"
 slug = "0.1.5"
 md5 = "0.7.0"
 jsonm = "0.2.0"
+format_serde_error = "0.3.0"
 
 [build-dependencies]
 fs_extra = "1.3"

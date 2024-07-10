@@ -25,6 +25,7 @@ use std::fs::File;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
+use format_serde_error::SerdeError;
 use thiserror::Error;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
@@ -49,7 +50,8 @@ impl ItemsSpec {
             "Could not find config file under given path {:?}",
             &path
         ))?;
-        let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)?;
+        let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)
+            .map_err(|err| SerdeError::new(config_file.to_string(), err))?;
         for (_, spec) in items_spec.views.iter_mut() {
             if spec.render_table.is_some() && spec.render_plot.is_none() {
                 let dataset = match items_spec.datasets.get(spec.dataset.as_ref().unwrap()) {
