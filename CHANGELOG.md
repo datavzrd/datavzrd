@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.40.0](https://github.com/datavzrd/datavzrd/compare/v2.39.1...v2.40.0) (2024-07-10)
+
+
+### Features
+
+* Improve context of error messages with format_serde_error ([#749](https://github.com/datavzrd/datavzrd/issues/749)) ([af7cfbe](https://github.com/datavzrd/datavzrd/commit/af7cfbe4f66d34f65d7a699ae91a0cdd063f3a8d))
+
 ## [2.39.1](https://github.com/datavzrd/datavzrd/compare/v2.39.0...v2.39.1) (2024-07-09)
 
 
