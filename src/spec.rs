@@ -15,6 +15,7 @@ use fancy_regex::Regex;
 use itertools::Itertools;
 use lazy_static::lazy_static;
 
+use format_serde_error::SerdeError;
 use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::BorrowMut;
@@ -49,7 +50,8 @@ impl ItemsSpec {
             "Could not find config file under given path {:?}",
             &path
         ))?;
-        let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)?;
+        let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)
+            .map_err(|err| SerdeError::new(config_file.to_string(), err))?;
         for (_, spec) in items_spec.views.iter_mut() {
             if spec.render_table.is_some() && spec.render_plot.is_none() {
                 let dataset = match items_spec.datasets.get(spec.dataset.as_ref().unwrap()) {
