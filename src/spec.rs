@@ -15,6 +15,7 @@ use fancy_regex::Regex;
 use itertools::Itertools;
 use lazy_static::lazy_static;
 
+use format_serde_error::SerdeError;
 use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::BorrowMut;
@@ -25,7 +26,6 @@ use std::fs::File;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
-use format_serde_error::SerdeError;
 use thiserror::Error;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
