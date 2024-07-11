@@ -52,7 +52,7 @@ views:
         name:
           link-to-url:
             lmgtfy:
-              url: "https://lmgtfy.app/?q=Is {name} in {movie}?"
+              url: "https://letmegooglethat.com/?q=Is {name} in {movie}?"
         movie:
           link-to-url:
             Wikipedia:
