@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.41.0](https://github.com/datavzrd/datavzrd/compare/v2.40.0...v2.41.0) (2024-07-12)
+
+
+### Features
+
+* Allow unsorting tables ([#751](https://github.com/datavzrd/datavzrd/issues/751)) ([de3fd98](https://github.com/datavzrd/datavzrd/commit/de3fd98120e271fa3770afe6305c888d1048a612))
+
 ## [2.40.0](https://github.com/datavzrd/datavzrd/compare/v2.39.1...v2.40.0) (2024-07-10)
 
 
