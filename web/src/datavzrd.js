@@ -19,7 +19,6 @@ import '../style/bootstrap-select.min.css';
 import '../style/bootstrap-table-fixed-columns.min.css';
 import '../style/datavzrd.css';
 
-
 let LINE_NUMBERS = false;
 
 let VEGA_EMBED_OPTIONS = { 'renderer': 'svg', 'actions': false };
@@ -1351,6 +1350,13 @@ function decompress(data) {
 }
 
 export function sort(column, order, svg) {
+    const options = $('#table').bootstrapTable('getOptions');
+    if (options.sortName === column && options.sortOrder === order) {
+        $('#table').bootstrapTable('sortBy', {"":""})
+        document.querySelectorAll('.sym-container svg').forEach(svg => svg.style.color = "currentColor");
+        svg.style.color = "#007bff";
+        return;
+    }
     document.querySelectorAll('.sym-container svg').forEach(svg => svg.style.color = "currentColor");
     svg.style.color = "#c21f30";
     $('#table').bootstrapTable('sortBy', {field: column, sortOrder: order})
