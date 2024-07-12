@@ -1350,9 +1350,8 @@ function decompress(data) {
 }
 
 export function sort(column, order, svg) {
-    const currentSortColumn = $('#table').bootstrapTable('getOptions').sortName;
-    const currentSortOrder = $('#table').bootstrapTable('getOptions').sortOrder;
-    if (currentSortColumn === column && currentSortOrder === order) {
+    const options = $('#table').bootstrapTable('getOptions');
+    if (options.sortName === column && options.sortOrder === order) {
         $('#table').bootstrapTable('sortBy', {"":""})
         document.querySelectorAll('.sym-container svg').forEach(svg => svg.style.color = "currentColor");
         svg.style.color = "#007bff";
