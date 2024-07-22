@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.41.1](https://github.com/datavzrd/datavzrd/compare/v2.41.0...v2.41.1) (2024-07-22)
+
+
+### Bug Fixes
+
+* Fix additional header row offset ([#756](https://github.com/datavzrd/datavzrd/issues/756)) ([d095ca2](https://github.com/datavzrd/datavzrd/commit/d095ca26ccaabc5e3eab873053315800a4c1845c))
+
 ## [2.41.0](https://github.com/datavzrd/datavzrd/compare/v2.40.0...v2.41.0) (2024-07-12)
 
 
