@@ -334,7 +334,7 @@ impl ItemsSpec {
 }
 
 fn default_single_page_threshold() -> usize {
-    1000_usize
+    20000_usize
 }
 
 fn default_separator() -> char {
