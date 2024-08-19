@@ -334,7 +334,7 @@ impl ItemsSpec {
 }
 
 fn default_single_page_threshold() -> usize {
-    1000_usize
+    20000_usize
 }
 
 fn default_separator() -> char {
@@ -1201,7 +1201,7 @@ mod tests {
         let expected_config = ItemsSpec {
             datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
             default_view: None,
-            max_in_memory_rows: 1000,
+            max_in_memory_rows: 20000,
             views: HashMap::from([("table-a".to_string(), expected_table_spec)]),
             report_name: "my_report".to_string(),
             aux_libraries: None,
@@ -1272,7 +1272,7 @@ mod tests {
         let expected_config = ItemsSpec {
             datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
             default_view: Some("table-a".to_string()),
-            max_in_memory_rows: 1000,
+            max_in_memory_rows: 20000,
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: None,
@@ -1331,7 +1331,7 @@ mod tests {
         let expected_config = ItemsSpec {
             datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
             default_view: None,
-            max_in_memory_rows: 1000,
+            max_in_memory_rows: 20000,
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: Some(Vec::from(["https://cdnjs.org/d3.js".to_string()])),
@@ -1409,7 +1409,7 @@ mod tests {
                 },
             )]),
             default_view: None,
-            max_in_memory_rows: 1000,
+            max_in_memory_rows: 20000,
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: None,
