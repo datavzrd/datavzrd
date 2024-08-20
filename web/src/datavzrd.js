@@ -318,7 +318,7 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content
     );
 }
 
-function colorizeDetailCard(value, div, heatmap, row) {
+function colorizeDetailCard(value, div, heatmap, row, is_float, precision) {
     let scale = datavzrdScale(heatmap);
 
     if (value !== "") {
@@ -327,6 +327,9 @@ function colorizeDetailCard(value, div, heatmap, row) {
     if (heatmap.heatmap.custom_content !== null) {
         var data_function = window[heatmap.heatmap.custom_content];
         value = data_function(value, row);
+        $(`${div}`)[0].innerHTML = value;
+    } else if (is_float && precision !== undefined) {
+        value = precision_formatter(precision, value);
         $(`${div}`)[0].innerHTML = value;
     }
 }
@@ -836,7 +839,7 @@ export function load() {
 
             for (const o of config.heatmaps) {
                 if (!config.displayed_columns.includes(o.title)) {
-                    colorizeDetailCard(row[o.title], `#heatmap-${index}-${config.columns.indexOf(o.title)}`, o, row);
+                    colorizeDetailCard(row[o.title], `#heatmap-${index}-${config.columns.indexOf(o.title)}`, o, row, config.column_config[o.title].is_float, config.column_config[o.title].precision);
                 }
             }
 
