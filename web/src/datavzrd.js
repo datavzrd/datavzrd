@@ -835,7 +835,9 @@ export function load() {
             }
 
             for (const o of config.heatmaps) {
-                colorizeDetailCard(row[o.title], `#heatmap-${index}-${config.columns.indexOf(o.title)}`, o, row);
+                if (!config.displayed_columns.includes(o.title)) {
+                    colorizeDetailCard(row[o.title], `#heatmap-${index}-${config.columns.indexOf(o.title)}`, o, row);
+                }
             }
 
             for (const o of config.ticks) {
