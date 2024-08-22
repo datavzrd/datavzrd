@@ -1,0 +1,81 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100rem;
+    height: 100rem;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1002;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    width: 900px;
+    height: 500px;
+    border-radius: 8px;
+    position: relative;
+    max-width: 80%;
+    max-height: 80%;
+    z-index: 1001;
+  }
+  
+  .modal-header {
+    background: white;
+    width: 800px;
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1002;
+  }
+  
+  .modal-body {
+    padding: 20px;
+    overflow: auto;
+    height: 65%;
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: -50px;
+    color: gray;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .vega-embed {
+    position: absolute;
+    top: 200px;
+    right: -250px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #plot-container {
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 95%;
+  }
+
+  .header-title {
+    font-size: 1.25rem;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;  
+}
+  

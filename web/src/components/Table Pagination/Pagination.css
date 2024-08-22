@@ -1,0 +1,112 @@
+  [data-scope="pagination"] ul {
+    display:flex;
+    padding-left:0;
+    list-style:none;
+    float: right;
+  }
+
+  [data-scope="pagination"] li {
+    width: 39px;
+    margin-inline: -5px;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 4px;
+  }
+
+  .page-btn, .prev-btn, .next-btn, .ellipsis-btn {
+    width: 40px;
+    display: flex;
+    background-color: #ffffff;
+    padding: 5px;
+    text-decoration: none;
+    color: #0056b3;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    height: 33.2px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .page-btn, .prev-btn, .next-btn {
+    cursor: pointer;
+    align-items: center;
+  }
+
+  .page-btn.selected {
+    background-color: #0056b3;
+    color: white;
+  }
+
+  .table-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .pagination-detail {
+    float: left;
+    display: flex;
+    align-items: center;
+  }
+
+  .pagination-info {
+    line-height: 40px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  .pagination-row-count-menu {
+    border-radius: 4px 4px 4px 4px;
+    border-color: lightslategrey;
+    width: 60px;
+    height: 40px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: lightslategray;
+    color: white;
+  }
+
+  .pagination-row-count-menu svg {
+    margin-left: 5px;
+    color: white;
+  }
+
+  .pagination-select-menu {
+    background-color: white;
+    width: 150px;
+    padding-left: 0px;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .pagination-select-menu li {
+    background-color: white;
+    padding-left: 0px;
+    height: 30px;
+    list-style-type: none;
+    font-size: medium;
+  }
+
+.pagination-select-menu span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 20px;
+}
+
+  .pagination-select-menu li:hover {
+    background-color: rgb(243, 243, 243)
+  }
+
+  .pagination-select-menu li[data-state="checked"] {
+    background-color: rgb(0, 123, 255);
+    color: white;
+  }
+
+
