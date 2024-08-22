@@ -218,6 +218,9 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
         {showLineNumbers && (
           <td className='line-number'>{rowKey}</td>
         )}
+        {!config.detail_mode && !config.header_label_length == 0 && (
+          <td style={{ visibility: "hidden", border: "none" }}></td>
+        )}
         {Object.values(props).map((value, index) => {
           if (config.heatmap_titles.includes(visibleColumns[index])) {
             for (let i = 0; i < config.heatmaps.length; i++) {
@@ -393,6 +396,7 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
   const [anchorRefs, setAnchorRefs] = useState<{ [key: string]: HTMLDivElement | null }>({});
   const [filterType, setFilterType] = useState('')
   const [isEmbedSearchModalOpen, setIsEmbedSearchModalOpen] = useState(false);
+  const [embedSearchModalSource, setEmbedSearchModalSource] = useState(null)
 
 
   const indexOfLastRow = currentPage * rowCountPerPage;
@@ -482,6 +486,7 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
   const handleEmbedSearch = (column: string) => {
     var source = `search/column_${config.columns.indexOf(column)}.html`;
     setIsEmbedSearchModalOpen(true)
+    setEmbedSearchModalSource(source)
   }
 
   const handleApplyFilter = (value: string) => {
@@ -501,9 +506,14 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
       <table id="table">
         <thead>
           <tr>
-            <th></th>
             {showLineNumbers && (
               <th></th>
+            )}
+            {!config.detail_mode && !config.header_label_length == 0 && (
+              <td style={{ visibility: "hidden", border: "none" }}></td>
+            )}
+            {config.detail_mode && (
+              <td></td>
             )}
             {visibleColumns.map((key: any) => (
               <th key={key}>
@@ -629,7 +639,7 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
               <button className="modal-close" onClick={onCloseEmbedSearchModal}>X</button>
             </div>
             <div className="modal-body">
-              <iframe id="embed-search-container" src={`search/column_5.html`} style={{ top: "0px", width: '100%', height: '100%' }} />
+              <iframe id="embed-search-container" src={embedSearchModalSource} style={{ top: "0px", width: '100%', height: '100%' }} />
             </div>
           </div>
         </div>

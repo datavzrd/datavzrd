@@ -13,7 +13,7 @@ body {
   }
   
   thead {
-    width: auto;
+    width: fit-content !important;
     height: 100px;
     color: black;
   }
