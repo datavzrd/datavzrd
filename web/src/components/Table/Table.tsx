@@ -3,7 +3,8 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './Table.css';
 import FilterPopup from './FilterPopup'
-import vegaEmbed, { vega } from 'vega-embed';
+import vegaEmbed from 'vega-embed';
+import * as vega from 'vega'
 import LZString from 'lz-string';
 const jsonm = require('jsonm');
 const d3 = require("d3");
@@ -95,7 +96,7 @@ function datavzrdScale(heatmap: any) {
           scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).clamp(heatmap.heatmap.clamp);
       }
   }
-  return scale;
+  return scale
 }
 
 function precision_formatter(precision: any, value: any) {
@@ -574,11 +575,8 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
           </tr>
           {header_config && header_config.headers.map((header, index) => {
           const firstTdStyle = !config.detail_mode && !header.label ? { border: 'none' } : {};
-          const heatmapOfRow = header_config.heatmaps.find(heatmap => heatmap.row === header.row)/*
-          console.log(colorizeHeaderRow(heatmapOfRow.heatmap))
-          let scale = colorizeHeaderRow(heatmapOfRow)
-          console.log(scale(header.label))
-          const combinedStyle = { ...firstTdStyle, ...{ backgroundColor: colorizeHeaderRow(heatmapOfRow.heatmap, config.header_label_length) } }*/
+          const heatmapOfRow = header_config.heatmaps.find(heatmap => heatmap.row === header.row)
+          const scale = colorizeHeaderRow(heatmapOfRow.heatmap)
           return (
             <tr key={index}>
               {(config.detail_mode || header.label) && (
@@ -587,13 +585,17 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
                 </td>
               )}
               <td></td>
-              {config.columns.map((title, colIndex) => (
-                config.displayed_columns.includes(title) ? (
-                  <td key={colIndex}>
+              {config.columns.map((title, colIndex) => {
+                  const hasContent = header.header[title] !== undefined && header.header[title] !== '';
+                  const cellStyle = hasContent ? {
+                    backgroundColor: scale(header.header[title]),
+                  } : {};
+                return ( config.displayed_columns.includes(title) ? (
+                  <td key={colIndex} style={cellStyle}>
                     {header.header[title] !== undefined ? header.header[title] : ''}
                   </td>
-                ) : null
-              ))}
+                ) : null )
+                })}
             </tr>
           );
         })}
