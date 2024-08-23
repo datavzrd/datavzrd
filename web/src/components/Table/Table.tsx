@@ -226,7 +226,11 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
             for (let i = 0; i < config.heatmaps.length; i++) {
               if (config.heatmaps[i].title === visibleColumns[index]) {
                 let scale = datavzrdScale(config.heatmaps[i])
-                return (<td style={{ backgroundColor: scale(value) }} key={index}>{value}</td>)
+                return (
+                  <td style={value ? { backgroundColor: scale(value) } : undefined} key={index}>
+                    {value}
+                  </td>
+                );
               }
             }
           }
@@ -276,7 +280,7 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
           return (
           <td key={index}>{value}</td>
           )
-        })}
+        })} 
         <td>
           <div className="row-link-menu">
             <a>
@@ -510,10 +514,10 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
               <th></th>
             )}
             {!config.detail_mode && !config.header_label_length == 0 && (
-              <td style={{ visibility: "hidden", border: "none" }}></td>
+              <th style={{ visibility: "hidden", border: "none" }}></th>
             )}
             {config.detail_mode && (
-              <td></td>
+              <th></th>
             )}
             {visibleColumns.map((key: any) => (
               <th key={key}>
@@ -582,27 +586,36 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
                 </div>
               </th>
             ))}
+            <th></th>
+            <th></th>
           </tr>
           {header_config && header_config.headers.map((header, index) => {
-          const firstTdStyle = !config.detail_mode && !header.label ? { border: 'none' } : {};
+          const firstTdStyle = !config.detail_mode && !header.label ? { border: 'none', height: "18px", padding: "0 0" } : { border: 'none', height: "18px", padding: "0 0" };
           const heatmapOfRow = header_config.heatmaps.find(heatmap => heatmap.row === header.row)
           const scale = colorizeHeaderRow(heatmapOfRow.heatmap)
           return (
-            <tr key={index}>
-              {(config.detail_mode || header.label) && (
+            <tr key={index} style={{ height: "18px", padding: "0 0" }}>
+              {(config.detail_mode || header.label) ? (
                 <td style={firstTdStyle}>
                   {header.label && <b>{header.label}</b>}
                 </td>
+              ) : (
+                <td style={{ height: "18px", padding: "0 0" }}></td>
               )}
-              <td></td>
-              {config.columns.map((title, colIndex) => {
+              {config.displayed_columns.map((title, colIndex) => {
                   const hasContent = header.header[title] !== undefined && header.header[title] !== '';
                   const cellStyle = hasContent ? {
                     backgroundColor: scale(header.header[title]),
-                  } : {};
+                    height: "18px",
+                    padding: "0 0"
+                  } : { height: "18px", padding: "0 0" };
                 return ( config.displayed_columns.includes(title) ? (
                   <td key={colIndex} style={cellStyle}>
-                    {header.header[title] !== undefined ? header.header[title] : ''}
+                    { hasContent && (
+                      <span title={header.header[title]}>
+                      {header.header[title]}
+                      </span>
+                    )}
                   </td>
                 ) : null )
                 })}
