@@ -180,6 +180,8 @@ export default function App() {
         window.location.href = '../data.xlsx';
       } else if (button == 'screenshotTable') {
         screenshotTable()
+      } else if (button == 'showDescription') {
+        setDescriptionBoxOpen(prev => !prev)
       }
   }
 
@@ -211,7 +213,6 @@ export default function App() {
       <div>
         <div className="fixed-top">
         <Menu 
-          setCollapsibleOpen={setDescriptionBoxOpen}
           onButtonSelect={handleMenuButtonClick}
         />
         <Select />
@@ -307,6 +308,8 @@ export function Plot({ specs, plotData, multiple_datasets }: PlotProps) {
       window.location.href = '../data.xlsx';
     } else if (button == 'screenshotTable') {
       screenshotTable()
+    }  else if (button == 'showDescription') {
+      setDescriptionBoxOpen(prev => !prev)
     }
   }
 
@@ -323,7 +326,6 @@ export function Plot({ specs, plotData, multiple_datasets }: PlotProps) {
       <div>
         <div className="fixed-top">
           <Menu 
-            setCollapsibleOpen={setDescriptionBoxOpen}
             onButtonSelect={handleMenuButtonClick}
           />
           <Select />

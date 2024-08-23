@@ -7,21 +7,16 @@ import { getId } from "../../App";
 import './Menu.css'
 
 interface MenuProps {
-  setCollapsibleOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onButtonSelect: (button: string) => void;
 }
 
-export default function Menu({ setCollapsibleOpen, onButtonSelect }: MenuProps) {
+export default function Menu({ onButtonSelect }: MenuProps) {
   const [menuState, send] = useMachine(
     menu.machine({
       id: getId(`menu`),
       closeOnSelect: false,
       onSelect(details) {
-        if (details.value === "showDescription") {
-          setCollapsibleOpen(prev => !prev);
-        } else {
-          onButtonSelect(details.value);
-        }
+        onButtonSelect(details.value);
       },
     })
   );
