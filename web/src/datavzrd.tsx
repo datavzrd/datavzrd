@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
+import App, { Plot } from "./App.tsx";
 import "./styles/index.css";
 import { decompress } from "./App.tsx";
 import vegaEmbed from 'vega-embed';
@@ -51,6 +51,21 @@ export function load_search() {
         <React.StrictMode>
             <SearchTable />
         </React.StrictMode>
+    )
+}
+
+export function load_plot(specs: any, plotData: any, multiple_datasets: any) {
+
+    const rootElement = document.createElement("div")
+    rootElement.id = "root"
+    document.body.appendChild(rootElement)
+
+    document.title = "datavzrd report";
+
+    ReactDOM.createRoot(rootElement).render(
+    <React.StrictMode>
+        <Plot specs={specs} plotData={plotData} multiple_datasets={multiple_datasets} />
+    </React.StrictMode>
     )
 }
 

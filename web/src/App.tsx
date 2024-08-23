@@ -1,9 +1,10 @@
 //@ts-nocheck
 
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import LZString from 'lz-string';
 const jsonm = require('jsonm');
 import { documentToSVG, elementToSVG, inlineResources, formatXML } from 'dom-to-svg';
+import vegaEmbed from 'vega-embed'
 import './styles/App.css';
 import Menu from './components/Menu/Menu';
 import  DescriptionBox from './components/DescriptionBox/DescriptionBox';
@@ -13,6 +14,12 @@ import Select from './components/SelectPagination/Select';
 import HistogramPlot from './components/HistogramPlot/HistogramPlot';
 import QRCodeModal from './components/QRCodeModal/QRCodeModal';
 import  FilterPopupHandle from './components/Table/FilterPopup';
+
+interface PlotProps {
+  specs: any;
+  plotData: any;
+  multiple_datasets: any;
+}
 
 export function getId(name: string) {
   return (`datavzrd-${name}`);
@@ -270,4 +277,84 @@ export default function App() {
       </footer>
     </div>
   );
+}
+
+export function Plot({ specs, plotData, multiple_datasets }: PlotProps) {
+
+  const [descriptionBoxOpen, setDescriptionBoxOpen] = useState(true);
+  const plotRef = useRef<HTMLDivElement>(null);
+
+  if (multiple_datasets) {
+    specs.datasets = {};
+    specs.datasets = decompress(plotData);
+} else {
+    specs.data = {};
+    specs.data.values = decompress(plotData);
+}
+
+  const handleMenuButtonClick = (button: string) => {
+
+    if (button == 'unhideColumns') {
+      setVisibleColumns(config.displayed_columns)
+    } else if (button == 'clearFilters') {
+      setFilters({})
+      triggerPopupFunction()
+    } else if (button == 'downloadCSV') {
+      downloadCSV(decompressed)
+    } else if (button == 'toggleLineNumbers') {
+      setShowLineNumbers(prev => !prev)
+    } else if (button == 'downloadExcel') {
+      window.location.href = '../data.xlsx';
+    } else if (button == 'screenshotTable') {
+      screenshotTable()
+    }
+  }
+
+  useEffect(() => {
+    if (plotRef.current) {
+      vegaEmbed(plotRef.current, specs).catch(err => {
+        console.error(err)
+      })
+    }
+  })
+
+  return (
+    <div>
+      <div>
+        <div className="fixed-top">
+          <Menu 
+            setCollapsibleOpen={setDescriptionBoxOpen}
+            onButtonSelect={handleMenuButtonClick}
+          />
+          <Select />
+        </div>
+      </div>
+      <DescriptionBox 
+        isOpen={descriptionBoxOpen} 
+        toggleOpen={setDescriptionBoxOpen}
+      />
+      <div>
+        <div id="plot-container" style={{ top: "200px" }}ref={plotRef}>
+        </div>
+      </div>
+      <footer className="footer" style={{ position: "absolute", bottom: "0" }}>
+        <nav class="bottom-footer">
+            <a class="bottom-footer-brand" href="#">datavzrd</a>
+            <div class="bottom-footer-option-menu" id="navbarText">
+                <ul class="bottom-footer-options">
+                    <li class="bottom-footer-option">
+                        <a class="bottom-footer-option-link" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">2.41.1</a>
+                    </li>
+                    <li class="bottom-footer-option">
+                        <a class="bottom-footer-option-link" href="https://github.com/datavzrd/datavzrd">github</a>
+                    </li>
+                </ul>
+                <span class="bottom-footer-created-time">
+                        {config.time}
+                    </span>
+            </div>
+        </nav>
+      </footer>
+    </div>
+  )
 }

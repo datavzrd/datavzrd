@@ -49,11 +49,19 @@ export default function DescriptionBox({ isOpen, toggleOpen }: DescriptionBoxPro
   
       converter.setFlavor('github');
   
-      const htmlContent = converter.makeHtml(config.description);
+      let htmlContent = null;
+      
+      if (config !== undefined && config.description) {
+          htmlContent = converter.makeHtml(config.description);
+      } else if (typeof description !== 'undefined') {
+          htmlContent = converter.makeHtml(description);
+      }
+
       setMarkdownContent(htmlContent);
     }, []);
   
     return (
+      markdownContent ? (
       <div {...api.getRootProps()}>
         <div className={`description-box ${state.matches('open') ? 'open' : 'closed'}`} {...api.getContentProps()}>
           <button onClick={() => handleClick()}>
@@ -64,5 +72,6 @@ export default function DescriptionBox({ isOpen, toggleOpen }: DescriptionBoxPro
           <div id="innerDescription" dangerouslySetInnerHTML={{ __html: markdownContent }} />
         </div>
       </div>
+    ) : null
     );
   }

@@ -14,10 +14,10 @@ code {
 }
 
 footer {
-  position: static;
+  position: absolute;
   width: 100%;
   height: 54px;
-  bottom: 0;
+  left: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -39,6 +39,8 @@ footer {
 }
 
 .bottom-footer-option-menu {
+  position: relative;
+  right: 15px;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -118,13 +120,6 @@ footer {
   display: flex !important;
   flex-basis: auto;
   justify-content: space-between;
-}
-
-#innerDescription {
-  flex-grow: 1; 
-  text-align: center;
-  font-size: 1rem;
-  color: #6c757d;
 }
 
 .nav-link {

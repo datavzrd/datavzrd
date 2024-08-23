@@ -37,27 +37,27 @@ export default function Menu({ setCollapsibleOpen, onButtonSelect }: MenuProps) 
       </button>
       <div {...api.getPositionerProps()} className="menu">
         <ul {...api.getContentProps()} className="sidebar">
-          { config.has_excel_sheet && (
+          { config !== undefined && config.has_excel_sheet && (
             <li key="downloadExcel" className="sidebar-btn" {...api.getItemProps({ value: "downloadExcel" })}>
             Download Excel Sheet
             </li>
           )}
-          { config.description && (
+          { config !== undefined && config.description && (
             <li key="showDescription" className="sidebar-btn" {...api.getItemProps({ value: "showDescription" })}>
             Show Description
             </li>
           )}
-          { config.is_single_page && (
+          { config !== undefined && config.is_single_page && (
             <li key="downloadCSV" className="sidebar-btn" {...api.getItemProps({ value: "downloadCSV" })}>
             Download CSV
             </li>   
           )}
-          { config.is_single_page && (
+          { config !== undefined && config.is_single_page && (
             <li key="unhideColumns" className="sidebar-btn" {...api.getItemProps({ value: "unhideColumns" })}>
             Unhide Columns
             </li>   
           )}
-          { config.is_single_page && (
+          { config !== undefined && config.is_single_page && (
             <li key="clearFilters" className="sidebar-btn" {...api.getItemProps({ value: "clearFilters" })}>
             Clear Filters
             </li>   
