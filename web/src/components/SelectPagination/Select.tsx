@@ -52,7 +52,11 @@ export default function Select() {
             <input type="search" placeholder="Filter..." className="pagination-searchbox" onChange={(e) => {onInputChange(e.target.value)}}/>
             {tableList.map((item) => (
               <li key={item} {...api.getItemProps({ item })}>
-                <span>{item}</span>
+                <span>{item}
+                {config.view_sizes[item] && (
+                  <span className="pagination-view-size">{config.view_sizes[item]}</span>
+                )}
+                </span>
                 <span {...api.getItemIndicatorProps({ item })}></span>
               </li>
             ))}
