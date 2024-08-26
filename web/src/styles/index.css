@@ -317,3 +317,17 @@ footer {
   text-decoration: none;
   color: inherit;
 }
+
+.empty-html-container h4 {
+  display: block;
+  margin-block-start: 1.33em;
+  margin-block-end: 1.33em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+  unicode-bidi: isolate;
+  margin-bottom: .5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  font-size: 1.5rem;
+}

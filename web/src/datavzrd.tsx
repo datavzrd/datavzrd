@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
-import App, { Plot } from "./App.tsx";
+import App, { Empty, Plot } from "./App.tsx";
 import "./styles/index.css";
 import { decompress } from "./App.tsx";
 import vegaEmbed from 'vega-embed';
@@ -66,6 +66,19 @@ export function load_plot(specs: any, plotData: any, multiple_datasets: any) {
     <React.StrictMode>
         <Plot specs={specs} plotData={plotData} multiple_datasets={multiple_datasets} />
     </React.StrictMode>
+    )
+}
+
+export function load_empty() {
+
+    const rootElement = document.createElement("div")
+    rootElement.id = "root"
+    document.body.appendChild(rootElement)
+
+    ReactDOM.createRoot(rootElement).render(
+        <React.StrictMode>
+            <Empty />
+        </React.StrictMode>
     )
 }
 

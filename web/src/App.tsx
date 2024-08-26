@@ -252,7 +252,7 @@ export default function App() {
             <div class="bottom-footer-option-menu" id="navbarText">
                 <ul class="bottom-footer-options">
                     <li class="bottom-footer-option">
-                        <a class="bottom-footer-option-link" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">2.41.1</a>
+                        <a class="bottom-footer-option-link" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">{config.version}</a>
                     </li>
                     <li class="bottom-footer-option">
                         <a class="bottom-footer-option-link" href="https://github.com/datavzrd/datavzrd">github</a>
@@ -333,7 +333,42 @@ export function Plot({ specs, plotData, multiple_datasets }: PlotProps) {
             <div class="bottom-footer-option-menu" id="navbarText">
                 <ul class="bottom-footer-options">
                     <li class="bottom-footer-option">
-                        <a class="bottom-footer-option-link" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">2.41.1</a>
+                        <a class="bottom-footer-option-link" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">{config.version}</a>
+                    </li>
+                    <li class="bottom-footer-option">
+                        <a class="bottom-footer-option-link" href="https://github.com/datavzrd/datavzrd">github</a>
+                    </li>
+                </ul>
+                <span class="bottom-footer-created-time">
+                        {config.time}
+                    </span>
+            </div>
+        </nav>
+      </footer>
+    </div>
+  )
+}
+
+export function Empty() {
+  return (
+    <div>
+      <div>
+        <div className="fixed-top">
+          <Select />
+        </div>
+        <div>
+          <div style={{ height: "calc(100vh - 190px)"}} className="empty-html-container">
+            <h4>No data</h4>
+          </div>
+        </div>
+      </div>
+      <footer className="footer" style={{ position: "absolute", bottom: "0" }}>
+        <nav class="bottom-footer">
+            <a class="bottom-footer-brand" href="#">datavzrd</a>
+            <div class="bottom-footer-option-menu" id="navbarText">
+                <ul class="bottom-footer-options">
+                    <li class="bottom-footer-option">
+                        <a class="bottom-footer-option-link" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">{config.version}</a>
                     </li>
                     <li class="bottom-footer-option">
                         <a class="bottom-footer-option-link" href="https://github.com/datavzrd/datavzrd">github</a>

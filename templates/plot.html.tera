@@ -23,7 +23,8 @@
                         report_name: `{{ report_name | safe }}`,
                         title: `{{ name | safe }}`,
                         time: `{{ time | safe }}`,
-                        view_sizes: view_sizes
+                        view_sizes: view_sizes,
+                        version:  `{{ version | safe }}`
                     }
                     
                     const description = `{{ description | safe }}`
