@@ -53,9 +53,9 @@ export default function Select() {
             {tableList.map((item) => (
               <li key={item} {...api.getItemProps({ item })}>
                 <span>{item}
-                {config.view_sizes[item] && (
+                {config.view_sizes[item] ? (
                   <span className="pagination-view-size">{config.view_sizes[item]}</span>
-                )}
+                ) : null }
                 </span>
                 <span {...api.getItemIndicatorProps({ item })}></span>
               </li>

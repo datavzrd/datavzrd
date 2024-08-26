@@ -11,13 +11,19 @@
 
                     const tables = {{ tables | json_encode() | safe}};
                     const default_view = `{{ default_view | safe }}`
+                    const view_sizes = {
+                        {% for table, size in view_sizes %}
+                        "{{ table }}": "{{ size }}",
+                        {% endfor %}
+                    }
 
                     const config = {
                         tables: tables.concat(default_view ? [default_view]: []),
                         description: `{{ description | safe }}`,
                         report_name: `{{ report_name | safe }}`,
                         title: `{{ name | safe }}`,
-                        time: `{{ time | safe }}`
+                        time: `{{ time | safe }}`,
+                        view_sizes: view_sizes
                     }
                     
                     const description = `{{ description | safe }}`
