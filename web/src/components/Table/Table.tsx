@@ -515,7 +515,6 @@ function TableCol({ columnKey, setVisibleColumns, setFilters, showHistogram, sor
 
 
         vegaEmbed(brushRef.current, s, opt).then(({spec, view}) => {
-          console.log(view)
           view.addSignalListener('selection', function(name, value) {
             if (Object.keys(value).length == 0) {
               value = { value: [min, max] }
