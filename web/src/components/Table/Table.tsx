@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './Table.css';
-import FilterPopup from './FilterPopup'
 import vegaEmbed from 'vega-embed';
 import * as vega from 'vega'
 import LZString from 'lz-string';
@@ -23,15 +22,40 @@ interface TableProps {
   currentPage: number;
   rowCountPerPage: number;
   visibleColumns: string[];
-  hideColumn: (column : string) => void;
+  setVisibleColumns: any;
   showHistogram: (index: string) => void;
   setShowQR: React.Dispatch<React.SetStateAction<boolean>>;
   setQRURL: any;
   filters: any;
   setFilters: any;
-  filterPopupRef: any;
   showLineNumbers: boolean;
 }
+
+let brushFilterSpec: any = {
+  "width": 50,
+  "height": 12,
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"values":[]},
+  "mark": "tick",
+  "encoding": {
+      "tooltip": {"field": "value", "type": "quantitative"},
+      "x": {
+          "field": "value",
+          "type": "quantitative",
+          "scale": {"type": "linear", "zero": false},
+          "axis": {
+              "title": null,
+              "orient": "top",
+              "labelFontWeight": "lighter"
+          }
+      },
+      "color": {"condition": {"param": "selection", "value": "#0275d8"}, "value": "grey"}
+  },
+  "params": [{"name": "selection", "select": "interval"}],
+  "config": {"axis": {"grid": false},"background": null, "style": {"cell": {"stroke": "transparent"}}, "tick": {"thickness": 0.5, "bandSize": 10}}
+};
+
+let filter_boundaries: any = {};
 
 function filterByRange(cellValue: any, filterValue: any) {
   const [minValue, maxValue] = filterValue.split(',').map(Number);
@@ -393,12 +417,212 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
   );
 }
 
-export default function Table({ data, currentPage, rowCountPerPage, visibleColumns, hideColumn, showHistogram, setShowQR, setQRURL, filters, setFilters, filterPopupRef, showLineNumbers }: TableProps) {
+function TableCol({ columnKey, setVisibleColumns, setFilters, showHistogram, sortConfig, handleSort, setIsEmbedSearchModalOpen, setEmbedSearchModalSource, rows }) {
+
+  const [tickOptions, setTickOptions] = useState<string[]>([]);
+  const [checkedOptions, setCheckedOptions] = useState<string[]>([]);
+  const [showFilterModal, setShowFilterModal] = useState(false)
+  const brushRef = useRef<HTMLDivElement>(null);
+
+  const handleHideColumn = (column: string) => {
+    setVisibleColumns(prev => prev.filter(col => col !== column));
+  }
+
+  const handleApplyFilter = (value: string) => {
+    setFilters((prevFilters: any) => ({ ...prevFilters, [columnKey]: value }));
+  };
+
+  const handleEmbedSearch = (column: string) => {
+    var source = `search/column_${config.columns.indexOf(column)}.html`;
+    setIsEmbedSearchModalOpen(true)
+    setEmbedSearchModalSource(source)
+  }
+
+  useEffect(() => {
+    if (brushRef.current && config.displayed_numeric_columns.includes(columnKey)) {
+
+      console.log('Test')
+      let brush_domains = config.brush_domains;
+      let aux_domains = config.aux_domains;
+
+      let tick_brush = 0;
+
+      let index = tick_brush + 2;
+
+      if (config.detail_mode || config.header_label_length > 0) {
+        index += 1;
+      }
+
+      if (config.displayed_numeric_columns.includes(columnKey)) {
+        let plot_data = [];
+        let values = []
+
+        for (const row of rows) {
+          if (row[columnKey] != "" && row[columnKey] != "NA") {
+            plot_data.push({"value": parseFloat(row[config.columns.indexOf(columnKey)])});
+            values.push(parseFloat(row[config.columns.indexOf(columnKey)]));
+          }
+        }
+
+        let min = Math.min(...values);
+        let max = Math.max(...values);
+
+        if (brush_domains[columnKey] != undefined && config.tick_titles.includes(columnKey)) {
+          min = Math.min(...brush_domains[columnKey]);
+          max = Math.max(...brush_domains[columnKey]);
+        } else if (aux_domains[columnKey] != undefined) {
+            let aux_values = [min, max];
+            for (const col of aux_domains[columnKey]) {
+                for (const row of rows) {
+                    aux_values.push(parseFloat(row[col]));
+                }
+            }
+            min = Math.min(...aux_values);
+            max = Math.max(...aux_values);
+        }
+        if (Number.isInteger(min)) {
+            min = parseInt(min.toString());
+        }
+        if (Number.isInteger(max)) {
+            max = parseInt(max.toString());
+        }
+        let legend_tick_length = min.toString().length + max.toString().length;
+        var s = brushFilterSpec;
+        let has_labels = legend_tick_length < 8;
+        s.encoding.x.axis.labels = has_labels;
+        s.data.values = plot_data;
+        s.name = columnKey;
+        s.encoding.x.axis.values = [min, max];
+        s.encoding.x.scale.domain = [min, max];
+        let brush_class = "";
+        if (!has_labels) {
+            brush_class = "no-labels";
+        }
+
+        var opt = { "actions": false }
+
+        if (filter_boundaries[s.name] != undefined) {
+          s.params[0].value = {"x": filter_boundaries[s.name].value};
+      }
+
+
+        vegaEmbed(brushRef.current, s, opt).then(({spec, view}) => {
+          view.addSignalListener('selection', function(name, value) {
+            filter_boundaries[s.name] = value;
+            handleApplyFilter(value.value.join(','));
+            console.log(view)
+          })
+        }).catch(err => console.error(err));
+
+      }
+    } else if (!config.displayed_numeric_columns.includes(columnKey) && config.unique_column_values[columnKey]) {
+      let column_values = [];
+
+      for (let row of rows) {
+          column_values.push(row[config.columns.indexOf(columnKey)]);
+      }
+
+      let values = [...new Set(column_values)];
+
+      setTickOptions(values);
+      setCheckedOptions(values)
+      
+    }
+
+  }, [showFilterModal]);
+
+  return (
+    <>
+      <th key={columnKey}>
+        {showFilterModal && (
+          <div className="filter-modal">
+            <button className="filter-modal-close" onClick={() => (setShowFilterModal(false))}>X</button>
+            { (!config.displayed_numeric_columns.includes(columnKey) && config.unique_column_values[columnKey] > 10) || config.additional_colums[columnKey] ? (
+              <input type="text" className="text-filter" placeholder="Filter..." onChange={(e) => {handleApplyFilter(e.target.value)}} />
+            ) : !config.displayed_numeric_columns.includes(columnKey) && config.unique_column_values[columnKey] <= 10 ? (
+            <div>
+              {tickOptions.map(option => (
+                <div className='form-check' columnKey={option}>
+                  <input type='checkbox' className='form-check-input' id={option} onChange={(e) => handleCheckboxChange(e, option)} checked={checkedOptions.includes(option)}/>
+                  <label className='form-check-label'htmlFor={option}>{option}</label>
+                </div>
+              ))}
+            </div>
+            ) : config.displayed_numeric_columns.includes(columnKey) ? (
+            <div className="brush-plot-container">
+              <div ref={brushRef} style={{ width: '100%', height: '100%' }} id="brush-plot"/>
+            </div>
+            ) : null
+            }
+          </div>
+        )}
+        <div className="th-inner">
+          <div className="th-label-container">{config.column_config[columnKey].label || columnKey}</div>
+          <div className="buttons">
+            {!(columnKey in config.additional_colums) && (
+            <button
+              className="histogram-btn"
+              onClick={() => showHistogram(columnKey)}>   
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bar-chart-fill" viewBox="0 0 16 16">
+                  <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"/>
+                </svg>
+            </button>
+            )}
+            {config.is_single_page && (
+            <button
+              onClick={() => handleSort(columnKey as keyof TableRowProps, 'ascending')}
+              className={`sort-button ${sortConfig?.key === columnKey && sortConfig?.direction === 'ascending' ? 'active' : ''}`}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                  <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                </svg>
+            </button>
+            )}
+            {config.is_single_page && (
+            <button
+              onClick={() => handleSort(columnKey as keyof TableRowProps, 'descending')}
+              className={`sort-button ${sortConfig?.key === columnKey && sortConfig?.direction === 'descending' ? 'active' : ''}`}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                  <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+            </button>
+            )}
+            {config.is_single_page && (
+            <button
+              onClick={() => handleHideColumn(columnKey)}
+              className="hide-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                  <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                  <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                </svg>
+            </button>
+            )}
+            {config.is_single_page ? (
+            <button
+              onClick={(e) => {setShowFilterModal(prev => !prev)}}
+              className="filter-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </button>
+            ) : (
+              <button
+              onClick={(e) => handleEmbedSearch(columnKey)}
+              className="filter-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </button>
+            )
+            } 
+          </div>
+        </div>
+      </th>
+    </>
+  )
+}
+
+export default function Table({ data, currentPage, rowCountPerPage, visibleColumns, setVisibleColumns, showHistogram, setShowQR, setQRURL, filters, setFilters, showLineNumbers }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: keyof TableRowProps; direction: 'ascending' | 'descending' } | null>(null);
-  const [filterColumn, setFilterColumn] = useState<string | null>(null);
-  const [showFilterPopup, setShowFilterPopup] = useState<boolean>(false);
-  const [anchorRefs, setAnchorRefs] = useState<{ [key: string]: HTMLDivElement | null }>({});
-  const [filterType, setFilterType] = useState('')
   const [isEmbedSearchModalOpen, setIsEmbedSearchModalOpen] = useState(false);
   const [embedSearchModalSource, setEmbedSearchModalSource] = useState(null)
 
@@ -461,46 +685,6 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
     });
   };
 
-  
-  const handleHideColumn = (column: string) => {
-    hideColumn(column);
-  };
-
-  const handleEmbedHistogram = (index: string) => {
-    showHistogram(index)
-  }
-
-  const handleOpenFilterPopup = (column: string, anchor: HTMLDivElement) => {
-    if (config.displayed_numeric_columns.includes(column)) {
-      setFilterType('brush')
-    } else if (config.unique_column_values[column]) {
-      if (config.unique_column_values[column] > 10) {
-        setFilterType('string')
-      } else if (config.unique_column_values[column] <= 10) {
-        setFilterType('tick')
-      }
-    } else {
-      setFilterType('string')
-    }
-    setFilterColumn(column);
-    setAnchorRefs(prevRefs => ({ ...prevRefs, [column]: anchor }));
-    setShowFilterPopup(true);
-  };
-
-  const handleEmbedSearch = (column: string) => {
-    var source = `search/column_${config.columns.indexOf(column)}.html`;
-    setIsEmbedSearchModalOpen(true)
-    setEmbedSearchModalSource(source)
-  }
-
-  const handleApplyFilter = (value: string) => {
-    setFilters((prevFilters: any) => ({ ...prevFilters, [filterColumn || '']: value }));
-  };
-  const handleCloseFilterPopup = () => {
-    setShowFilterPopup(false);
-    setFilterColumn(null);
-  };
-
   const onCloseEmbedSearchModal = () => {
     setIsEmbedSearchModalOpen(false)
   }
@@ -512,82 +696,29 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
           <tr>
             {showLineNumbers && (
               <th></th>
-            )}
+              )}
             {!config.detail_mode && !config.header_label_length == 0 && (
               <th style={{ visibility: "hidden", border: "none" }}></th>
             )}
             {config.detail_mode && (
               <th></th>
             )}
-            {visibleColumns.map((key: any) => (
-              <th key={key}>
-                <div className="th-inner">
-                  {config.column_config[key].label || key}
-                  <div className="buttons">
-                    {!(key in config.additional_colums) && (
-                    <button
-                      className="histogram-btn"
-                      onClick={() => handleEmbedHistogram(key)}>   
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bar-chart-fill" viewBox="0 0 16 16">
-                          <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"/>
-                        </svg>
-                    </button>
-                    )}
-                    {config.is_single_page && (
-                    <button
-                      onClick={() => handleSort(key as keyof TableRowProps, 'ascending')}
-                      className={`sort-button ${sortConfig?.key === key && sortConfig?.direction === 'ascending' ? 'active' : ''}`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                          <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                        </svg>
-                    </button>
-                    )}
-                    {config.is_single_page && (
-                    <button
-                      onClick={() => handleSort(key as keyof TableRowProps, 'descending')}
-                      className={`sort-button ${sortConfig?.key === key && sortConfig?.direction === 'descending' ? 'active' : ''}`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                          <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                        </svg>
-                    </button>
-                    )}
-                    {config.is_single_page && (
-                    <button
-                      onClick={() => handleHideColumn(key)}
-                      className="hide-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye-slash-fill" viewBox="0 0 16 16">
-                          <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
-                          <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
-                        </svg>
-                    </button>
-                    )}
-                    {config.is_single_page ? (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleOpenFilterPopup(key, e.currentTarget.closest('div') as HTMLDivElement);
-                      }}
-                      className="filter-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
-                          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                        </svg>
-                    </button>
-                    ) : (
-                      <button
-                      onClick={(e) => handleEmbedSearch(key)}
-                      className="filter-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
-                          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                        </svg>
-                    </button>
-                    )
-                    } 
-                  </div>
-                </div>
-              </th>
-            ))}
+            {visibleColumns.map((columnKey: any) => (
+              <TableCol
+                columnKey={columnKey}
+                setVisibleColumns={setVisibleColumns}
+                setFilters={setFilters} 
+                showHistogram={showHistogram}
+                sortConfig={sortConfig}
+                handleSort={handleSort} 
+                setIsEmbedSearchModalOpen={setIsEmbedSearchModalOpen} 
+                setEmbedSearchModalSource={setEmbedSearchModalSource} 
+                rows={data}
+                />
+              ) 
+            )}
             <th></th>
-            <th></th>
+            <th></th> 
           </tr>
           {header_config && header_config.headers.map((header, index) => {
           const firstTdStyle = !config.detail_mode && !header.label ? { border: 'none', height: "18px", padding: "0 0" } : { border: 'none', height: "18px", padding: "0 0" };
@@ -633,17 +764,6 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
           })}
         </tbody>
       </table>
-      {showFilterPopup && filterColumn && anchorRefs && (
-        <FilterPopup
-          ref={filterPopupRef}
-          column={filterColumn}
-          onApply={handleApplyFilter}
-          onClose={handleCloseFilterPopup}
-          anchorRef={anchorRefs[filterColumn]!}
-          filterType={filterType}
-          rows={data}
-        />
-      )}
       {isEmbedSearchModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">

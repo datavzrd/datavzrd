@@ -14,7 +14,6 @@ body {
   
   thead {
     width: fit-content !important;
-    height: 100px;
     color: black;
   }
 
@@ -43,7 +42,6 @@ body {
     white-space: nowrap;
     position: relative;
     z-index: 990;
-    position: static;
   }
 
   a {
@@ -54,7 +52,15 @@ body {
   .th-inner {
     transform: rotate(-45deg);
     display: inline-block;
-    text-align: center;
+    text-align: left;
+    vertical-align: bottom;
+    position: relative;
+    bottom: 30px;
+    overflow: visible !important;
+  }
+
+  .th-label-container {
+    position: relative;
   }
   
   .buttons {
@@ -211,37 +217,7 @@ body {
     cursor: pointer;
   }
 
-  .filter-popup {
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    width: 150px;
-    height: 86px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    z-index: 1060;
-    justify-content: center;
-    position: relative;
-  }
-  
-  .filter-popup h4 {
-    margin: 0;
-    padding-bottom: 5px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .filter-popup input {
-    margin-bottom: 5px;
-    padding: 5px;
-    font-size: 14px;
-  }
-  
-  .filter-popup button {
+  .filter-modal button {
     padding: 2px;
     font-size: 12px;
     cursor: pointer;
@@ -257,9 +233,28 @@ body {
     justify-content: center;
     border: none;
   }
-  
-  .filter-popup button:last-child {
-    margin-right: 0;
+
+  .filter-modal {
+    position: absolute;
+    top: -160px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    width: 120px;
+    height: 60px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    z-index: 1060;
+    justify-content: center;
+  }
+
+  .filter-popup input {
+    margin-bottom: 5px;
+    padding: 5px;
+    font-size: 14px;
   }
 
   .brush-plot-container {

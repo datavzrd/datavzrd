@@ -13,7 +13,6 @@ import Pagination from './components/Table Pagination/Pagination';
 import Select from './components/SelectPagination/Select';
 import HistogramPlot from './components/HistogramPlot/HistogramPlot';
 import QRCodeModal from './components/QRCodeModal/QRCodeModal';
-import  FilterPopupHandle from './components/Table/FilterPopup';
 
 interface PlotProps {
   specs: any;
@@ -144,13 +143,7 @@ export default function App() {
   const [qrURL, setQRURL] = useState("");
   const [showLineNumbers, setShowLineNumbers] = useState(false);
   const [filters, setFilters] = useState<{ [key: string]: string }>({});
-  const filterPopupRef = useRef<FilterPopupHandle>(null);
 
-  const triggerPopupFunction = () => {
-    if (filterPopupRef.current) {
-      filterPopupRef.current.clearFilters();
-    }
-  };
 
   let decompressed = decompress(data);
   
@@ -199,10 +192,6 @@ export default function App() {
     setRowCountPerPage(newRowCount)
   }
 
-  const handleHideColumn = (column: string) => {
-    setVisibleColumns(prev => prev.filter(col => col !== column));
-  }
-
   const closeHistogramModal = () => {
     setShowHistogram(false);
     setHistogramPlot(null);
@@ -228,13 +217,12 @@ export default function App() {
           currentPage={currentPage}
           rowCountPerPage={rowCountPerPage}
           visibleColumns={visibleColumns}
-          hideColumn={handleHideColumn}
+          setVisibleColumns={setVisibleColumns}
           showHistogram={handleShowHistogram}
           setShowQR={setShowQR}
           setQRURL={setQRURL}
           filters={filters}
           setFilters={setFilters}
-          filterPopupRef={filterPopupRef}
           showLineNumbers={showLineNumbers}
         />
         <Pagination
