@@ -438,10 +438,18 @@ function TableCol({ columnKey, setVisibleColumns, setFilters, showHistogram, sor
     setEmbedSearchModalSource(source)
   }
 
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, option: string) => {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      setCheckedOptions(prev => [...prev, option]);
+    } else {
+      setCheckedOptions(prev => prev.filter(checkedBox =>  checkedBox != option))
+    }
+  };
+
   useEffect(() => {
     if (brushRef.current && config.displayed_numeric_columns.includes(columnKey)) {
 
-      console.log('Test')
       let brush_domains = config.brush_domains;
       let aux_domains = config.aux_domains;
 
@@ -507,15 +515,27 @@ function TableCol({ columnKey, setVisibleColumns, setFilters, showHistogram, sor
 
 
         vegaEmbed(brushRef.current, s, opt).then(({spec, view}) => {
+          console.log(view)
           view.addSignalListener('selection', function(name, value) {
+            if (Object.keys(value).length == 0) {
+              value = { value: [min, max] }
+            }
             filter_boundaries[s.name] = value;
-            handleApplyFilter(value.value.join(','));
-            console.log(view)
+          })
+
+          brushRef.current.addEventListener('click', function(event) {
+            handleApplyFilter(filter_boundaries[s.name].value.join(','))
+        });
+
+          view.addEventListener('mouseleave', function (event) {
+            if (event.buttons > 0) {
+              handleApplyFilter(filter_boundaries[s.name].value.join(','))
+            }
           })
         }).catch(err => console.error(err));
 
       }
-    } else if (!config.displayed_numeric_columns.includes(columnKey) && config.unique_column_values[columnKey]) {
+    } else if (!config.displayed_numeric_columns.includes(columnKey) && config.unique_column_values[columnKey] <= 10) {
       let column_values = [];
 
       for (let row of rows) {
@@ -530,6 +550,10 @@ function TableCol({ columnKey, setVisibleColumns, setFilters, showHistogram, sor
     }
 
   }, [showFilterModal]);
+
+  useEffect(() => {
+    handleApplyFilter(checkedOptions.join(','))
+  }, [checkedOptions])
 
   return (
     <>
