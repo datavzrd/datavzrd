@@ -164,7 +164,6 @@ export default function App() {
         setVisibleColumns(config.displayed_columns)
       } else if (button == 'clearFilters') {
         setFilters({})
-        triggerPopupFunction()
       } else if (button == 'downloadCSV') {
         downloadCSV(decompressed)
       } else if (button == 'toggleLineNumbers') {

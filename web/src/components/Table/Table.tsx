@@ -180,6 +180,7 @@ function colorizeHeaderRow(heatmap: any) {
 
 function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLineNumbers, ...props }: TableRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [linkMenuIsOpen, setLinkMenuIsOpen] = useState(false)
   const tickRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const barRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const customPlotRefs = useRef<{ [key: string]: HTMLDivElement | null}>({})
@@ -261,12 +262,40 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
           if (config.links.includes(visibleColumns[index])) {
             for (let i = 0; i < config.link_urls.length; i++) {
               if (config.link_urls[i].title === visibleColumns[index]) {
-                let linkURL = config.link_urls[i].links[0].link.url.replace('{value}', value)
-                return (
-                <td key={index}>
-                  <a href={linkURL}>{value}</a>
-                </td>
-                )
+                if (config.link_urls[i].links.length == 1) {
+                  let linkURL = config.link_urls[i].links[0].link.url.replaceAll(`{${visibleColumns[index]}}`, value)
+                  for (const column of config.columns) {
+                    linkURL = linkURL.replaceAll(`{${column}}`, data[rowKey - 1][config.columns.indexOf(column)])
+                  }
+                  return (
+                    <td key={index}>
+                      <a href={linkURL}>{value}</a>
+                    </td>
+                    )
+                } else {
+                  return (
+                    <td key={index}>
+                      <div className="link-menu-button" onClick={() => { setLinkMenuIsOpen(prev => !prev) }}>
+                        {value}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-down" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"/>
+                        </svg>
+                      </div>
+                      { linkMenuIsOpen && (
+                        <ul className="link-menu">
+                        {config.link_urls[i].links.map((link: any) => {
+                          let linkURL = link.link.url.replace('{value}', value)
+                          return ( 
+                            <li className="link-menu-item">
+                              <a className="link-menu-link" href={linkURL}>{link.name}</a>
+                            </li>
+                            )
+                        })}
+                        </ul>
+                      )}
+                    </td>
+                  )
+                }
               }
             }
           }
