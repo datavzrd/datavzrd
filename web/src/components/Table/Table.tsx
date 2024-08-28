@@ -329,7 +329,13 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
               }
             }
           }
-          
+          if (config.format[visibleColumns[index]] !== undefined) {
+            let data_function = window[config.format[visibleColumns[index]]];
+            value = data_function(value, data[rowKey - 1])
+            return (
+              <td key={index}>{value}</td>
+            )
+          }
           return (
           <td key={index}>{value}</td>
           )
