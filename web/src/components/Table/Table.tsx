@@ -205,10 +205,11 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
       if (ref && config.ticks.find((tick: any) => tick.title === key)) {
         const tickConfig = config.ticks.find((tick: any) => tick.title === key);
         if (tickConfig) {
+          let value = props[key]
           const spec = { ...tickConfig.specs };
           spec.data = { values: [{ [key]: props[key] }] };
-          if (config.column_config[key].is_float && config.column_config.precision !== undefined) {
-            spec.data = { values: [{ [key]: precision_formatter(config.column_config.precision, props[key])}]}
+          if (config.column_config[key].is_float && config.column_config[key].precision !== undefined) {
+            spec.data = { values: [{ [key]: precision_formatter(config.column_config[key].precision, props[key])}]}
           }
           vegaEmbed(ref, spec, { renderer: 'svg', actions: false });
         }
