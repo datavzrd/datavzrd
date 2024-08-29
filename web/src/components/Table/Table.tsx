@@ -252,13 +252,16 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
             for (let i = 0; i < config.heatmaps.length; i++) {
               if (config.heatmaps[i].title === visibleColumns[index]) {
                 if (value !== "" && config.heatmaps[i].heatmap.custom_content === null) {
-                  let column_values = [];
-                  for (let row of data) {
-                    column_values.push(row[index]);
-                  }
-                  let values = [...new Set(column_values)];
                   let heatmap = config.heatmaps[i]
-                  heatmap.heatmap.domain = values;
+                  if (heatmap.heatmap.color_scheme == "" && !heatmap.heatmap.range.length == 0) {
+                    let column_values = [];
+                    for (let row of data) {
+                      column_values.push(row[index]);
+                    }
+                    let values = [...new Set(column_values)];
+                    let heatmap = config.heatmaps[i]
+                    heatmap.heatmap.domain = values;
+                  }
                   let scale = datavzrdScale(heatmap)
                   return (
                     <td style={value ? { backgroundColor: scale(value) } : undefined} key={index}>
