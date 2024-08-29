@@ -507,9 +507,17 @@ function TableCol({ columnKey, setVisibleColumns, setFilters, showHistogram, sor
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, option: string) => {
     const isChecked = event.target.checked;
     if (isChecked) {
-      setCheckedOptions(prev => [...prev, option]);
+      setCheckedOptions(prev => {
+        const updatedOptions = [...prev, option];
+        handleApplyFilter(updatedOptions.join(','));
+        return updatedOptions;
+      });
     } else {
-      setCheckedOptions(prev => prev.filter(checkedBox =>  checkedBox != option))
+      setCheckedOptions(prev => {
+        const updatedOptions = prev.filter(checkedBox => checkedBox !== option);
+        handleApplyFilter(updatedOptions.join(','));
+        return updatedOptions;
+      });
     }
   };
 
@@ -615,10 +623,6 @@ function TableCol({ columnKey, setVisibleColumns, setFilters, showHistogram, sor
     }
 
   }, [showFilterModal]);
-
-  useEffect(() => {
-    handleApplyFilter(checkedOptions.join(','))
-  }, [checkedOptions])
 
   return (
     <>
