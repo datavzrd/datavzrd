@@ -546,8 +546,10 @@ function TableCol({ columnKey, setVisibleColumns, setFilters, showHistogram, sor
           }
         }
 
-        let min = Math.min(...values);
-        let max = Math.max(...values);
+        let valuesWithoutNan = values.filter(value => !isNaN(value));
+
+        let min = Math.min(...valuesWithoutNan);
+        let max = Math.max(...valuesWithoutNan);
 
         if (brush_domains[columnKey] != undefined && config.tick_titles.includes(columnKey)) {
           min = Math.min(...brush_domains[columnKey]);
@@ -629,7 +631,6 @@ function TableCol({ columnKey, setVisibleColumns, setFilters, showHistogram, sor
       <th key={columnKey}>
         {showFilterModal && (
           <div className="filter-modal">
-            <button className="filter-modal-close" onClick={() => (setShowFilterModal(false))}>X</button>
             { (!config.displayed_numeric_columns.includes(columnKey) && config.unique_column_values[columnKey] > 10) || config.additional_colums[columnKey] ? (
               <input type="text" className="text-filter" placeholder="Filter..." onChange={(e) => {handleApplyFilter(e.target.value)}} />
             ) : !config.displayed_numeric_columns.includes(columnKey) && config.unique_column_values[columnKey] <= 10 ? (
