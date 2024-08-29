@@ -183,6 +183,7 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
   const [linkMenuIsOpen, setLinkMenuIsOpen] = useState(false)
   const tickRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const barRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const heatmapRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
   const customPlotRefs = useRef<{ [key: string]: HTMLDivElement | null}>({})
 
   useEffect(() => {
@@ -389,37 +390,67 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
                 }
                 if (config.custom_plot_titles.includes(key) || config.tick_titles.includes(key) || config.bar_titles.includes(key)) {
                   if (config.custom_plot_titles.includes(key)) {
-                    id = `detail-plot-cp-${config.columns.indexOf(key)}`;
+                    return (
+                      <div className="card">
+                        <div class="card-header">
+                         {card_title}
+                       </div>
+                       <div class="card-body">
+                         <div id="detail-view-plot" ref={el => customPlotRefs.current[key] = el}></div>
+                       </div>
+                      </div>
+                    )
                   } else if (config.bar_titles.includes(key)) {
-                    id = `detail-plot-bars-${config.columns.indexOf(key)}`;
+                    return (
+                      <div className="card">
+                        <div class="card-header">
+                         {card_title}
+                       </div>
+                       <div class="card-body">
+                         <div id="detail-view-plot" ref={el => barRefs.current[key] = el}></div>
+                       </div>
+                      </div>
+                    )
                   } else {
-                    id = `detail-plot-ticks-${config.columns.indexOf(key)}`;
+                    return (
+                      <div className="card">
+                        <div class="card-header">
+                         {card_title}
+                       </div>
+                       <div class="card-body">
+                         <div id="detail-view-plot" ref={el => tickRefs.current[key] = el}></div>
+                       </div>
+                      </div>
+                    )
                   }
-                  return (
-                    <div className="card">
-                      <div class="card-header">
-                       {card_title}
-                     </div>
-                     <div class="card-body">
-                       <div id="detail-view-plot" ref={el => customPlotRefs.current[key] = el}></div>
-                     </div>
-                    </div>
-                  )
                 } else if (config.heatmap_titles.includes(key)) {
-                  id = `heatmap-${config.columns.indexOf(key)}`;
-                  return (
-                    <div className="card">
-                      <div className="card-header">
-                        {card_title}
+                  let detailCardHeatmap;
+                  for (const heatmap of config.heatmaps) {
+                    if (heatmap.title == key) {
+                      detailCardHeatmap = heatmap;
+                    }
+                  }
+                  let scale = datavzrdScale(detailCardHeatmap)
+                  if (value !== "") {
+                    return (
+                      <div className="card">
+                        <div className="card-header">
+                          {card_title}
+                        </div>
+                        <div id={id} ref={el => heatmapRefs.current[key] = el} style={{ backgroundColor: scale(value) }} className="card-body"> //
+                          {value}
+                        </div>
                       </div>
-                      <div id={id} className="card-body">
-                        {value}
-                      </div>
-                    </div>
-                  )
+                    )
+                  }
+                  if (detailCardHeatmap.heatmap.custom_content !== null) {
+                    var data_function = window[detailCardHeatmap.heatmap.custom_content]
+                    value = data_function(value, data[rowKey - 1]);
+                    heatmapRefs.current[key].innerHTML = value;
+                  }
                 } else if (config.format[key] !== undefined) {
                   var data_function: any = window[config.format[key]];
-                  value = data_function(value, row)
+                  value = data_function(value, data[rowKey - 1])
                   return (
                     <div className="card">
                       <div className="card-header">
