@@ -98,13 +98,13 @@ function copyToClipboard(props: any) {
 function datavzrdScale(heatmap: any) {
   let scale = null;
   if (heatmap.heatmap.scale == "ordinal") {
-      if (heatmap.heatmap.color_scheme != "") {
-          scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
-      } else if (heatmap.heatmap.range.length != 0) {
-          scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
-      } else {
-          scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
-      }
+    if (heatmap.heatmap.color_scheme != "") {
+      scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
+    } else if (!heatmap.heatmap.range.length == 0) {
+      scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
+    } else {
+      scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
+    }
   } else {
       if (heatmap.heatmap.color_scheme != "") {
           let scheme = heatmap.heatmap.color_scheme;
@@ -251,12 +251,31 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
           if (config.heatmap_titles.includes(visibleColumns[index])) {
             for (let i = 0; i < config.heatmaps.length; i++) {
               if (config.heatmaps[i].title === visibleColumns[index]) {
-                let scale = datavzrdScale(config.heatmaps[i])
-                return (
-                  <td style={value ? { backgroundColor: scale(value) } : undefined} key={index}>
-                    {value}
-                  </td>
-                );
+                if (value !== "" && config.heatmaps[i].heatmap.custom_content === null) {
+                  let column_values = [];
+                  for (let row of data) {
+                    column_values.push(row[index]);
+                  }
+                  let values = [...new Set(column_values)];
+                  let heatmap = config.heatmaps[i]
+                  heatmap.heatmap.domain = values;
+                  let scale = datavzrdScale(heatmap)
+                  return (
+                    <td style={value ? { backgroundColor: scale(value) } : undefined} key={index}>
+                      {value}
+                    </td>
+                  );
+                }
+                if (config.heatmaps[i].heatmap.custom_content !== null) {
+                  var data_function = window[config.heatmaps[i].heatmap.custom_content];
+                  let formattedValue = data_function(value, data[rowKey - 1]);
+                  let scale = datavzrdScale(config.heatmaps[i])
+                  return (
+                    <td style={value ? { backgroundColor: scale(value) } : undefined} key={index}>
+                      {formattedValue}
+                    </td>
+                  );
+                }
               }
             }
           }
@@ -430,23 +449,39 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
                       detailCardHeatmap = heatmap;
                     }
                   }
-                  let scale = datavzrdScale(detailCardHeatmap)
-                  if (value !== "") {
+                  if (value !== "" && detailCardHeatmap.heatmap.custom_content === null) {
+                    let column_values = [];
+                    for (let row of data) {
+                      column_values.push(row[config.columns.indexOf(key)]);
+                    }
+                    let values = [...new Set(column_values)];
+                    detailCardHeatmap.heatmap.domain = values;
+                    let scale = datavzrdScale(detailCardHeatmap)
                     return (
                       <div className="card">
                         <div className="card-header">
                           {card_title}
                         </div>
-                        <div id={id} ref={el => heatmapRefs.current[key] = el} style={{ backgroundColor: scale(value) }} className="card-body"> //
+                        <div id={id} style={{ backgroundColor: scale(value) }} className="card-body"> //
                           {value}
                         </div>
                       </div>
                     )
                   }
                   if (detailCardHeatmap.heatmap.custom_content !== null) {
+                    let scale = datavzrdScale(detailCardHeatmap)
                     var data_function = window[detailCardHeatmap.heatmap.custom_content]
-                    value = data_function(value, data[rowKey - 1]);
-                    heatmapRefs.current[key].innerHTML = value;
+                    let formattedValue = data_function(value, data[rowKey - 1]);
+                    return (
+                      <div className="card">
+                      <div className="card-header">
+                        {card_title}
+                      </div>
+                      <div id={id} style={{ backgroundColor: scale(value) }} className="card-body"> //
+                        {formattedValue}
+                      </div>
+                    </div>
+                    )
                   }
                 } else if (config.format[key] !== undefined) {
                   var data_function: any = window[config.format[key]];
