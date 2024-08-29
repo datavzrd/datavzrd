@@ -321,16 +321,17 @@ function TableRow ({ data, rowKey, setShowQR, setQRURL, visibleColumns, showLine
           }
           if (config.tick_titles.includes(visibleColumns[index])) {
             const tickTitle = visibleColumns[index];
-            return (
-              <td key={index}>
-                <div className="row-tick-container">
-                  <div
-                    ref={el => tickRefs.current[tickTitle] = el}
-                    id="row-tick-plot"
-                  ></div>
-                </div>
-              </td>
-            );
+            if (value != "") {
+              return (
+                <td key={index}>
+                  <div className="row-tick-container">
+                    <div
+                      ref={el => tickRefs.current[tickTitle] = el}
+                      id="row-tick-plot"></div>
+                  </div>
+                </td>
+              );
+            }
           }
           if (config.bar_titles.includes(visibleColumns[index])) {
             for (let i = 0; i < config.bars.length; i++) {
