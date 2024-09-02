@@ -9,12 +9,13 @@ import { useEffect, useState } from "react";
 
 interface PaginationProps {
   data: any;
+  currentPage: any;
   onPageChange: (page: number) => void;
   onRowCountChange: (page: number) => void;
   currentRowCount: number;
 }
 
-export default function Pagination({ data, onPageChange, currentRowCount, onRowCountChange }: PaginationProps) {
+export default function Pagination({ data, currentPage, onPageChange, currentRowCount, onRowCountChange }: PaginationProps) {
   let count;
 
   if (config.is_single_page) {
@@ -38,6 +39,10 @@ export default function Pagination({ data, onPageChange, currentRowCount, onRowC
     }
     setRowLastIndex(lastIndex);
   }, [api.page, currentRowCount, data.length]);
+
+  useEffect(() => {
+    api.setPage(currentPage)
+  }, [currentPage]);
 
   if (!config.is_single_page) {
     var pageNumber = window.location.href.match(/index_(\d+)\.html/);

@@ -19,6 +19,7 @@ interface TableRowProps {
 
 interface TableProps {
   data: string[][];
+  setCurrentPage: any;
   currentPage: number;
   rowCountPerPage: number;
   visibleColumns: string[];
@@ -754,7 +755,7 @@ function TableCol({ columnKey, setVisibleColumns, setFilters, showHistogram, sor
   )
 }
 
-export default function Table({ data, currentPage, rowCountPerPage, visibleColumns, setVisibleColumns, showHistogram, setShowQR, setQRURL, filters, setFilters, showLineNumbers }: TableProps) {
+export default function Table({ data, setCurrentPage, currentPage, rowCountPerPage, visibleColumns, setVisibleColumns, showHistogram, setShowQR, setQRURL, filters, setFilters, showLineNumbers }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: keyof TableRowProps; direction: 'ascending' | 'descending' } | null>(null);
   const [isEmbedSearchModalOpen, setIsEmbedSearchModalOpen] = useState(false);
   const [embedSearchModalSource, setEmbedSearchModalSource] = useState(null)
@@ -768,10 +769,13 @@ export default function Table({ data, currentPage, rowCountPerPage, visibleColum
 
     if (Object.keys(filters).length > 0) {
       processedData = processedData.filter(row => {
-        return Object.keys(filters).every(column => { 
+        return Object.keys(filters).every(column => {
+          if (currentPage != 1) {
+            setCurrentPage(1)
+          } 
           const columnIndex = config.columns.indexOf(column);
           const cellValue = row[columnIndex]?.toString() || '';
-
+  
           if (config.displayed_numeric_columns.includes(column)) {
             return filterByRange(cellValue, filters[column]);
           } else if (config.unique_column_values[column]) {

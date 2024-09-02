@@ -213,6 +213,7 @@ export default function App() {
       <div className="table-container">
         <Table 
           data={decompressed}
+          setCurrentPage={setCurrentPage}
           currentPage={currentPage}
           rowCountPerPage={rowCountPerPage}
           visibleColumns={visibleColumns}
@@ -226,6 +227,7 @@ export default function App() {
         />
         <Pagination
           currentRowCount={rowCountPerPage}
+          currentPage={currentPage}
           data={decompressed} 
           onPageChange={handlePageChange}
           onRowCountChange={handleRowCountChange}
