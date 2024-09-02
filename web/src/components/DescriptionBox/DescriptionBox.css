@@ -1,0 +1,78 @@
+.description-box {
+  position: fixed;
+  top: 72px;
+  left: 0;
+  right: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  color: black;
+  background: white;
+  padding: 20px;
+  z-index: 999;
+  text-align: center;
+}
+
+.description-box button {
+  position: absolute;
+  top: 0px;
+  right: 25px;
+  background: transparent;
+  border: none;
+  color: black;
+  cursor: pointer;
+  font-size: 1em;
+  transition: color 0.3s;
+}
+
+.description-box h2 {
+  margin: 0;
+  opacity: 1;
+  font-size: 1.5em;
+}
+
+.description-box p {
+  margin: 0;
+  opacity: 1;
+  font-size: 1em;
+}
+
+.description-box.open {
+  max-height: 10vh;
+  opacity: 0.8;
+}
+
+.description-box.closed {
+  max-height: 0;
+  opacity: 0;
+}
+
+@keyframes expand {
+  from {
+      max-height: 0;
+      opacity: 0;
+  }
+  to {
+      max-height: 10vh;
+      opacity: 0.8;
+  }
+}
+
+@keyframes collapse {
+  from {
+      max-height: 10vh;
+      opacity: 0.8;
+  }
+  to {
+      max-height: 0;
+      opacity: 0;
+  }
+}
+
+[data-scope="collapsible"][data-part="content"][data-state="open"] {
+  animation: expand 1500ms cubic-bezier(0, 0, 0.38, 0.8);
+}
+
+[data-scope="collapsible"][data-part="content"][data-state="closed"] {
+  animation: collapse 500ms cubic-bezier(0, 0, 0.38, 0.8);
+}

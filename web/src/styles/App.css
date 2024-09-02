@@ -1,0 +1,57 @@
+.fixed-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  padding: 27px;
+  z-index: 1000;
+  opacity: .8;
+}
+
+.table-container {
+  max-width: 1400px;
+  margin: 175px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-brand:hover {
+  color: rgba(0,0,0,.7) !important;
+}
+
+.navbar-top {
+  height: 54px;
+}
+
+.navbar-toggler-icon {
+  width: 1em;
+  height: 1em;
+}
+
+.navbar-toggler {
+  background-color: white;
+  border: none;
+}
+
+@keyframes expand {
+  from {
+    max-height: 0;
+    opacity: 1;
+  }
+  to {
+    max-height: 500px;
+    opacity: 1;
+  }
+}
+
+@keyframes collapse {
+  from {
+    max-height: 500px;
+    opacity: 1;
+  }
+  to {
+    max-height: 0;
+    opacity: 1;
+  }
+}
