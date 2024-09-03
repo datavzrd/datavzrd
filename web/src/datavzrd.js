@@ -1326,14 +1326,12 @@ function downloadSVG(svgString, fileName) {
 }
 
 export function screenshot_table() {
-    $('th').each(function() { $(this).css('height', `${parseFloat($(this).css('height')) - 80}px`); });
+    let header_height = parseFloat($(this).css('height'));
+    $('th').each(function() { $(this).css('height', `${header_height - 80}`); });
     document.querySelectorAll('.sym').forEach(el => el.style.display = 'none');
     document.querySelectorAll('table tr').forEach(row => {
         const cells = row.querySelectorAll('td');
-        let s = -1;
-        if (linkouts !== null) {
-            s = -2;
-        }
+        let s = linkouts !== null ? -2 : -1;
         if (!config.webview_controls) {
             s += 1;
         }
@@ -1353,6 +1351,26 @@ export function screenshot_table() {
     const svgDocument = elementToSVG(table_element);
     const svgString = new XMLSerializer().serializeToString(svgDocument);
     downloadSVG(svgString, `${$("#view-selection").attr("title")}.svg`);
+    $('th').each(function() { $(this).css('height', `${header_height}px`); });
+    document.querySelectorAll('.sym').forEach(el => el.style.display = 'inline');
+    if (config.detail_mode) {
+        document.querySelectorAll('table tr').forEach(row => {
+            const cells = row.querySelectorAll('td, th');
+            const first = Array.from(cells).slice(0, 1);
+            first.forEach(cell => cell.style.display = 'block');
+        });
+    }
+    document.querySelectorAll('table tr').forEach(row => {
+        const cells = row.querySelectorAll('td');
+        let s = linkouts !== null ? -2 : -1;
+        if (!config.webview_controls) {
+            s += 1;
+        }
+        if (s < 0) {
+            const lastTwo = Array.from(cells).slice(s);
+            lastTwo.forEach(cell => cell.style.display = 'table-cell');
+        }
+    });
 }
 
 function decompress(data) {
