@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.41.3](https://github.com/datavzrd/datavzrd/compare/v2.41.2...v2.41.3) (2024-09-03)
+
+
+### Bug Fixes
+
+* Reconstruct table after SVG export ([0cd425a](https://github.com/datavzrd/datavzrd/commit/0cd425a0e601b5b35610d1e0ebf37e06659a6829))
+
 ## [2.41.2](https://github.com/datavzrd/datavzrd/compare/v2.41.1...v2.41.2) (2024-08-20)
 
 
