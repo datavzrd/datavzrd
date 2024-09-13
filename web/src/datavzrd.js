@@ -1189,7 +1189,7 @@ export function compress_data(data) {
     return LZString.compressToUTF16(JSON.stringify([data]));
 }
 
-export function load_table(specs, data, multiple_datasets) {
+export function load_plot(specs, data, multiple_datasets, resize) {
     $("#markdown-btn").click(function() { renderMarkdownDescription(); });
     if ($("#collapseDescription").length > 0) {
         renderMarkdownDescription();
@@ -1201,7 +1201,11 @@ export function load_table(specs, data, multiple_datasets) {
         specs.data = {};
         specs.data.values = decompress(data);
     }
-    if (specs.width == "container") { $("#vis").css("width", "100%"); }
+    if (specs.width == "container") {
+        $("#vis").css("width", "100%");
+    } else if (resize) {
+        specs.width += resize;
+    }
     vegaEmbed('#vis', specs);
 }
 

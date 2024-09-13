@@ -61,15 +61,17 @@
             <div class="row">
                 <div class="col-md-12 d-flex justify-content-center" id="vis-container">
                     <div class="mt-auto mb-auto ml-auto mr-auto" id="vis"></div>
+                    <button type="button" id="zoom" class="btn btn-secondary" onclick="datavzrd.load_plot(specs, data, false, 100)">+</button>
+                    <button type="button" id="unzoom" class="btn btn-secondary" onclick="datavzrd.load_plot(specs, data, false, -100)">-</button>
                     <script>
                         const specs = {{ specs | safe }};
                         {% if data %}
                         const data = {{ data | safe }};
-                        datavzrd.load_table(specs, data, false);
+                        datavzrd.load_plot(specs, data, false);
                         {% endif %}
                         {% if datasets %}
                         const data = {{ datasets | safe }};
-                        datavzrd.load_table(specs, data, true);
+                        datavzrd.load_plot(specs, data, true);
                         {% endif %}
                     </script>
                 </div>
