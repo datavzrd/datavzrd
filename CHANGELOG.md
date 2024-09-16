@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.42.0](https://github.com/datavzrd/datavzrd/compare/v2.41.3...v2.42.0) (2024-09-16)
+
+
+### Features
+
+* Add size controls for plot views ([#778](https://github.com/datavzrd/datavzrd/issues/778)) ([a33f28d](https://github.com/datavzrd/datavzrd/commit/a33f28dc1c4235aea9c1e7db9a850cc48db6eb02))
+
 ## [2.41.3](https://github.com/datavzrd/datavzrd/compare/v2.41.2...v2.41.3) (2024-09-03)
 
 
