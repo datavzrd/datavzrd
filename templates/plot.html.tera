@@ -7,7 +7,6 @@
 
 <body>
 <script src="../static/bundle.js"></script>
-
 <div class="collapse" id="sidebar">
     <div class="card" id="sidebar-card">
         <ul class="list-group list-group-flush" id="sidebar-list">
@@ -65,11 +64,11 @@
                         const specs = {{ specs | safe }};
                         {% if data %}
                         const data = {{ data | safe }};
-                        datavzrd.load_table(specs, data, false);
+                        datavzrd.load_plot(specs, data, false);
                         {% endif %}
                         {% if datasets %}
                         const data = {{ datasets | safe }};
-                        datavzrd.load_table(specs, data, true);
+                        datavzrd.load_plot(specs, data, true);
                         {% endif %}
                     </script>
                 </div>

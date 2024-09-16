@@ -12,7 +12,7 @@ import 'bootstrap';
 import 'bootstrap-table/src/bootstrap-table.js';
 import 'bootstrap-select';
 import { documentToSVG, elementToSVG, inlineResources, formatXML } from 'dom-to-svg';
-import {render_html_contents} from "./page";
+import {render_html_contents, render_plot_size_controls} from "./page";
 import '../style/bootstrap.min.css';
 import '../style/bootstrap-table.min.css';
 import '../style/bootstrap-select.min.css';
@@ -1189,7 +1189,7 @@ export function compress_data(data) {
     return LZString.compressToUTF16(JSON.stringify([data]));
 }
 
-export function load_table(specs, data, multiple_datasets) {
+export function load_plot(specs, data, multiple_datasets, resize) {
     $("#markdown-btn").click(function() { renderMarkdownDescription(); });
     if ($("#collapseDescription").length > 0) {
         renderMarkdownDescription();
@@ -1201,8 +1201,21 @@ export function load_table(specs, data, multiple_datasets) {
         specs.data = {};
         specs.data.values = decompress(data);
     }
-    if (specs.width == "container") { $("#vis").css("width", "100%"); }
-    vegaEmbed('#vis', specs);
+    if (specs.width == "container") {
+        $("#vis").css("width", "100%");
+    } else if (!resize) {
+        render_plot_size_controls();
+    }
+    vegaEmbed('#vis', specs).then(({spec, view}) => {
+        if (resize && specs.width !== "container") {
+            let width = view.width();
+            let height = view.height();
+            let aspect_ratio = height / width;
+            specs.width = width + resize;
+            specs.height = height + resize * aspect_ratio;
+            view.width(width + resize).height(height + resize * aspect_ratio).run();
+        }
+    });
 }
 
 export function custom_error(e, column) {
