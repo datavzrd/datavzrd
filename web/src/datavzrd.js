@@ -1205,7 +1205,7 @@ export function load_plot(specs, data, multiple_datasets, resize) {
         $("#vis").css("width", "100%");
     }
     vegaEmbed('#vis', specs).then(({spec, view}) => {
-        if (resize) {
+        if (resize && specs.width !== "container") {
             let width = view.width();
             let height = view.height();
             let aspect_ratio = height / width;
