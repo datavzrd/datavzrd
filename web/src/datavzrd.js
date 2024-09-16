@@ -1203,10 +1203,17 @@ export function load_plot(specs, data, multiple_datasets, resize) {
     }
     if (specs.width == "container") {
         $("#vis").css("width", "100%");
-    } else if (resize) {
-        specs.width += resize;
     }
-    vegaEmbed('#vis', specs);
+    vegaEmbed('#vis', specs).then(({spec, view}) => {
+        if (resize) {
+            let width = view.width();
+            let height = view.height();
+            let aspect_ratio = height / width;
+            specs.width = width + resize;
+            specs.height = height + resize * aspect_ratio;
+            view.width(width + resize).height(height + resize * aspect_ratio).run();
+        }
+    });
 }
 
 export function custom_error(e, column) {
