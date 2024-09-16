@@ -73,7 +73,6 @@
                     </script>
                 </div>
             </div>
-            <div class="row" id="controls"></div>
         </div>
     </div>
     <div class="modal fade" id="error-modal" tabindex="-1" role="dialog">
