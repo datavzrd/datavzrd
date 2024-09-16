@@ -12,7 +12,7 @@ import 'bootstrap';
 import 'bootstrap-table/src/bootstrap-table.js';
 import 'bootstrap-select';
 import { documentToSVG, elementToSVG, inlineResources, formatXML } from 'dom-to-svg';
-import {render_html_contents} from "./page";
+import {render_html_contents, render_plot_size_controls} from "./page";
 import '../style/bootstrap.min.css';
 import '../style/bootstrap-table.min.css';
 import '../style/bootstrap-select.min.css';
@@ -1203,6 +1203,8 @@ export function load_plot(specs, data, multiple_datasets, resize) {
     }
     if (specs.width == "container") {
         $("#vis").css("width", "100%");
+    } else if (!resize) {
+        render_plot_size_controls();
     }
     vegaEmbed('#vis', specs).then(({spec, view}) => {
         if (resize && specs.width !== "container") {
