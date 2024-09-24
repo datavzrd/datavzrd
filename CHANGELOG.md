@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.42.1](https://github.com/datavzrd/datavzrd/compare/v2.42.0...v2.42.1) (2024-09-24)
+
+
+### Bug Fixes
+
+* Deactivate plot view resize controls for composite plots ([#781](https://github.com/datavzrd/datavzrd/issues/781)) ([bb739be](https://github.com/datavzrd/datavzrd/commit/bb739be1cb44a38e67fb815aba08253739d7e366))
+
 ## [2.42.0](https://github.com/datavzrd/datavzrd/compare/v2.41.3...v2.42.0) (2024-09-16)
 
 
