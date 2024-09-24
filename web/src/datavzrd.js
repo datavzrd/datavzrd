@@ -1203,7 +1203,7 @@ export function load_plot(specs, data, multiple_datasets, resize) {
     }
     if (specs.width == "container") {
         $("#vis").css("width", "100%");
-    } else if (!resize) {
+    } else if (!resize && !specs.hconcat && !specs.vconcat) {
         render_plot_size_controls();
     }
     vegaEmbed('#vis', specs).then(({spec, view}) => {
