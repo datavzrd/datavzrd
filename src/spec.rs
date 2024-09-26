@@ -1175,6 +1175,7 @@ mod tests {
             ellipsis: None,
             plot_view_legend: false,
             label: None,
+            spell: None,
         };
 
         let expected_dataset_spec = DatasetSpecs {
@@ -1703,6 +1704,7 @@ mod tests {
             ellipsis: None,
             plot_view_legend: false,
             label: None,
+            spell: None,
         };
         let expected_render_column_spec_oscar_no = RenderColumnSpec {
             precision: default_precision(),
@@ -1716,6 +1718,7 @@ mod tests {
             ellipsis: None,
             plot_view_legend: false,
             label: None,
+            spell: None,
         };
         assert_eq!(
             oscar_config.get("oscar_no").unwrap().to_owned(),
@@ -1788,6 +1791,7 @@ mod tests {
             custom_plot: None,
             ellipsis: None,
             plot_view_legend: false,
+            spell: None,
         };
         let expected_item_specs = ItemSpecs {
             hidden: false,
