@@ -27,6 +27,7 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use thiserror::Error;
+use crate::spells::SpellSpec;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
@@ -645,6 +646,8 @@ pub(crate) struct RenderColumnSpec {
     pub(crate) ellipsis: Option<u32>,
     #[serde(default)]
     pub(crate) plot_view_legend: bool,
+    #[serde(default)]
+    pub(crate) spell: Option<SpellSpec>,
 }
 
 impl Default for RenderColumnSpec {
@@ -661,6 +664,7 @@ impl Default for RenderColumnSpec {
             custom_plot: None,
             ellipsis: None,
             plot_view_legend: false,
+            spell: None,
         }
     }
 }
