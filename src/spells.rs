@@ -148,7 +148,7 @@ mod tests {
         let result = spell.render_column_spec().unwrap();
         let expected = RenderColumnSpec {
             optional: false,
-            precision: 0,
+            precision: 2,
             label: None,
             custom: None,
             custom_path: None,
@@ -159,7 +159,7 @@ mod tests {
                 heatmap: Some(Heatmap {
                     vega_type: None,
                     scale_type: ScaleType::Linear,
-                    clamp: false,
+                    clamp: true,
                     color_scheme: "".to_string(),
                     color_range: ColorRange {
                         0: vec![
