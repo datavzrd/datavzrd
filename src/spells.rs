@@ -52,8 +52,9 @@ fn call_process_yaml(yaml_content: &str) -> Result<String> {
     Python::with_gil(|py| {
         let yte_module = PyModule::import_bound(py, "yte")?;
         let result = yte_module.getattr("process_yaml")?.call1((yaml_content,))?;
-        let result_str: String = result.extract()?;
-        Ok(result_str)
+        let yaml_module = PyModule::import_bound(py, "yaml")?;
+        let yaml_string = yaml_module.call_method1("dump", (result,))?.extract::<String>()?;
+        Ok(yaml_string)
     })
 }
 
@@ -71,6 +72,6 @@ mod tests {
         ?else:
           bar: 1"#;
         let result = call_process_yaml(yaml_content).unwrap();
-        assert_eq!(result, "foo: 1");
+        assert_eq!(result, "foo: 1\n");
     }
 }
