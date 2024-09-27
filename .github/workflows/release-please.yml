@@ -27,11 +27,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-          cache: 'pip' # caching pip dependencies
-
       - name: Install yte
         run: pip install yte
 
@@ -67,11 +62,6 @@ jobs:
           uses: actions/checkout@v3
           with:
             path: datavzrd
-
-        - uses: actions/setup-python@v5
-          with:
-            python-version: '3.10'
-            cache: 'pip' # caching pip dependencies
 
         - name: Install yte
           run: pip install yte
