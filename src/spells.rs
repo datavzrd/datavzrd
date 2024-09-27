@@ -8,6 +8,8 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
+use fancy_regex::Regex;
+use lazy_static::lazy_static;
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
@@ -15,6 +17,10 @@ pub(crate) struct SpellSpec {
     pub(crate) url: String,
     #[serde(default)]
     pub(crate) with: HashMap<String, String>,
+}
+
+lazy_static! {
+    static ref SPELL_RE: Regex = Regex::new(r"^(v\d+\.\d+\.\d+)/([^/]+)/(.+)$").unwrap();
 }
 
 impl SpellSpec {
@@ -56,7 +62,15 @@ impl SpellSpec {
 }
 
 pub fn fetch_content(url: &String, relative_path: &String) -> Result<String> {
-    if url.starts_with("http://") || url.starts_with("https://") {
+    if let Ok(Some(captures)) = SPELL_RE.captures(relative_path) {
+        let version = captures.get(1).unwrap().as_str();
+        let category = captures.get(2).unwrap().as_str();
+        let spell = captures.get(3).unwrap().as_str();
+        let full_url = format!("https://github.com/datavzrd/datavzrd-spells/raw/{version}/{category}/{spell}/spell.yaml");
+        let content = get(full_url)?.text()?;
+        Ok(content)
+    }
+    else if url.starts_with("http://") || url.starts_with("https://") {
         let base_url = url.rsplit_once('/').unwrap_or(("", "")).0;
         let full_url = format!("{}/{}", base_url, relative_path.trim_start_matches('/'));
         let content = get(full_url)?.text()?;
