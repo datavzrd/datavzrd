@@ -62,14 +62,7 @@ impl SpellSpec {
 }
 
 pub fn fetch_content(url: &String, relative_path: &String) -> Result<String> {
-    if let Ok(Some(captures)) = SPELL_RE.captures(relative_path) {
-        let version = captures.get(1).unwrap().as_str();
-        let category = captures.get(2).unwrap().as_str();
-        let spell = captures.get(3).unwrap().as_str();
-        let full_url = format!("https://github.com/datavzrd/datavzrd-spells/raw/{version}/{category}/{spell}/spell.yaml");
-        let content = get(full_url)?.text()?;
-        Ok(content)
-    } else if url.starts_with("http://") || url.starts_with("https://") {
+    if url.starts_with("http://") || url.starts_with("https://") {
         let base_url = url.rsplit_once('/').unwrap_or(("", "")).0;
         let full_url = format!("{}/{}", base_url, relative_path.trim_start_matches('/'));
         let content = get(full_url)?.text()?;
@@ -82,7 +75,12 @@ pub fn fetch_content(url: &String, relative_path: &String) -> Result<String> {
 }
 
 pub fn fetch_spell(input: &str) -> Result<String> {
-    if input.starts_with("http://") || input.starts_with("https://") {
+    if let Ok(Some(captures)) = SPELL_RE.captures(input) {
+        let version = captures.get(1).unwrap().as_str();
+        let category = captures.get(2).unwrap().as_str();
+        let spell = captures.get(3).unwrap().as_str();
+        fetch_from_url(&format!("https://github.com/datavzrd/datavzrd-spells/raw/{version}/{category}/{spell}/spell.yaml"))
+    } else if input.starts_with("http://") || input.starts_with("https://") {
         fetch_from_url(input)
     } else {
         fetch_from_file(input)
