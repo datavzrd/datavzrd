@@ -1,4 +1,4 @@
-use crate::spec::RenderColumnSpec;
+use crate::spec::{ItemSpecs, RenderColumnSpec};
 use anyhow::Result;
 use pyo3::prelude::*;
 use pyo3::types::IntoPyDict;
@@ -19,11 +19,52 @@ pub(crate) struct SpellSpec {
 
 impl SpellSpec {
     pub(crate) fn render_column_spec(&self) -> Result<RenderColumnSpec> {
-        let variables = self.with.clone();
+        let mut specs: RenderColumnSpec = self.render_spec()?;
+        if let Some(path) = &specs.custom_path {
+            let contents = fetch_content(&self.url, path)?;
+            specs.custom = Some(contents);
+        }
+        Ok(specs)
+    }
+
+    pub(crate) fn render_item_spec(&self) -> Result<ItemSpecs> {
+        let mut specs: ItemSpecs = self.render_spec()?;
+        if let Some(render_table) = &specs.clone().render_table {
+            for (column, column_spec) in &render_table.columns {
+                if let Some(path) = &column_spec.custom_path {
+                    let mut column_spec = column_spec.clone();
+                    let contents = fetch_content(&self.url, path)?;
+                    column_spec.custom = Some(contents);
+                    specs
+                        .render_table
+                        .as_mut()
+                        .unwrap()
+                        .columns
+                        .insert(column.clone(), column_spec);
+                }
+            }
+        }
+        Ok(specs)
+    }
+
+    fn render_spec<T: serde::de::DeserializeOwned>(&self) -> Result<T> {
         let template = fetch_spell(&self.url)?;
-        let yaml_string = call_process_yaml(&template, variables)?;
+        let yaml_string = call_process_yaml(&template, self.with.clone())?;
         let yaml = serde_yaml::from_str(&yaml_string)?;
         Ok(yaml)
+    }
+}
+
+pub fn fetch_content(url: &String, relative_path: &String) -> Result<String> {
+    if url.starts_with("http://") || url.starts_with("https://") {
+        let base_url = url.rsplit_once('/').unwrap_or(("", "")).0;
+        let full_url = format!("{}/{}", base_url, relative_path.trim_start_matches('/'));
+        let content = get(full_url)?.text()?;
+        Ok(content)
+    } else {
+        let path = Path::new(url).join(relative_path);
+        let content = fs::read_to_string(path)?;
+        Ok(content)
     }
 }
 
@@ -143,5 +184,14 @@ mod tests {
             plot_view_legend: false,
             spell: None,
         };
+    }
+
+    #[test]
+    fn test_fetch_content_remote() {
+        let url = "https://raw.githubusercontent.com/datavzrd/datavzrd/refs/heads/main/src/cli.rs"
+            .to_string();
+        let relative_path = "../README.md".to_string();
+        let result = fetch_content(&url, &relative_path).unwrap();
+        assert!(result.contains("A tool to create visual and interactive HTML reports from collections of CSV/TSV tables."));
     }
 }

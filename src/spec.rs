@@ -54,6 +54,10 @@ impl ItemsSpec {
         let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)
             .map_err(|err| SerdeError::new(config_file.to_string(), err))?;
         for (_, spec) in items_spec.views.iter_mut() {
+            if let Some(spell) = spec.spell.as_ref() {
+                let rendered_spec = spell.render_item_spec()?;
+                *spec = spec.merge_item_specs(&rendered_spec)?;
+            }
             if spec.render_table.is_some() && spec.render_plot.is_none() {
                 let dataset = match items_spec.datasets.get(spec.dataset.as_ref().unwrap()) {
                     Some(dataset) => dataset,
@@ -441,6 +445,38 @@ pub(crate) struct ItemSpecs {
     pub(crate) render_html: Option<RenderHtmlSpec>,
     #[serde(default)]
     pub(crate) max_in_memory_rows: Option<usize>,
+    #[serde(default)]
+    pub(crate) spell: Option<SpellSpec>,
+}
+
+impl ItemSpecs {
+    fn merge_item_specs(&self, other: &ItemSpecs) -> Result<ItemSpecs> {
+        let mut merged = self.clone();
+        merged.hidden = other.hidden;
+        if let Some(dataset) = &other.dataset {
+            merged.dataset = Some(dataset.to_string());
+        }
+        if let Some(datasets) = &other.datasets {
+            merged.datasets = Some(datasets.clone());
+        }
+        merged.page_size = other.page_size;
+        if let Some(description) = &other.description {
+            merged.description = Some(description.to_string());
+        }
+        if let Some(render_table) = &other.render_table {
+            merged.render_table = Some(render_table.clone());
+        }
+        if let Some(render_plot) = &other.render_plot {
+            merged.render_plot = Some(render_plot.clone());
+        }
+        if let Some(render_html) = &other.render_html {
+            merged.render_html = Some(render_html.clone());
+        }
+        if let Some(max_in_memory_rows) = &other.max_in_memory_rows {
+            merged.max_in_memory_rows = Some(*max_in_memory_rows);
+        }
+        Ok(merged)
+    }
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -600,7 +636,11 @@ impl ItemSpecs {
         let mut rendered_spells = HashMap::new();
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().columns.iter() {
             if let Some(spell) = &render_column_specs.spell {
-                rendered_spells.insert(key.to_string(), spell.render_column_spec()?);
+                let spell_column_spec = spell.render_column_spec()?;
+                rendered_spells.insert(
+                    key.to_string(),
+                    render_column_specs.merge_render_column_spec(spell_column_spec)?,
+                );
             } else {
                 rendered_spells.insert(key.to_string(), render_column_specs.clone());
             }
@@ -679,6 +719,36 @@ impl Default for RenderColumnSpec {
             plot_view_legend: false,
             spell: None,
         }
+    }
+}
+
+impl RenderColumnSpec {
+    fn merge_render_column_spec(&self, other: RenderColumnSpec) -> Result<RenderColumnSpec> {
+        let mut merged = self.clone();
+        merged.optional = other.optional;
+        merged.precision = other.precision;
+        if let Some(label) = &other.label {
+            merged.label = Some(label.to_string());
+        }
+        if let Some(custom) = &other.custom {
+            merged.custom = Some(custom.to_string());
+        }
+        merged.custom_path = None; // custom_path is not merged since it is already processed when spell is fetched.
+        merged.display_mode = other.display_mode;
+        if let Some(link_to_url) = &other.link_to_url {
+            merged.link_to_url = Some(link_to_url.clone());
+        }
+        if let Some(plot) = &other.plot {
+            merged.plot = Some(plot.clone());
+        }
+        if let Some(custom_plot) = &other.custom_plot {
+            merged.custom_plot = Some(custom_plot.clone());
+        }
+        if let Some(ellipsis) = &other.ellipsis {
+            merged.ellipsis = Some(*ellipsis);
+        }
+        merged.plot_view_legend = other.plot_view_legend;
+        Ok(merged)
     }
 }
 
@@ -1214,6 +1284,7 @@ mod tests {
             render_plot: None,
             render_html: None,
             max_in_memory_rows: None,
+            spell: None,
         };
 
         let expected_config = ItemsSpec {
@@ -1285,6 +1356,7 @@ mod tests {
             render_plot: Some(expected_render_plot),
             render_html: None,
             max_in_memory_rows: None,
+            spell: None,
         };
 
         let expected_config = ItemsSpec {
@@ -1344,6 +1416,7 @@ mod tests {
             render_plot: None,
             render_html: Some(expected_render_html),
             max_in_memory_rows: None,
+            spell: None,
         };
 
         let expected_config = ItemsSpec {
@@ -1413,6 +1486,7 @@ mod tests {
             render_plot: None,
             render_html: None,
             max_in_memory_rows: None,
+            spell: None,
         };
 
         let expected_config = ItemsSpec {
@@ -1837,6 +1911,7 @@ mod tests {
             render_plot: None,
             render_html: None,
             max_in_memory_rows: None,
+            spell: None,
         };
 
         assert_eq!(item_specs, expected_item_specs);
