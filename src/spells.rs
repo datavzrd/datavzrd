@@ -184,7 +184,7 @@ mod tests {
             plot_view_legend: false,
             spell: None,
         };
-         assert_eq!(result, expected);
+        assert_eq!(result, expected);
     }
 
     #[test]
