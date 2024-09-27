@@ -11,5 +11,5 @@
       {"field": "category", "type": "nominal"},
       {"field": "amount", "type": "quantitative"}
     ]
-    }
+  }
 }

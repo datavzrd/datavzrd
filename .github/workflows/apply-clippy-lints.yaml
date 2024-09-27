@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Install yte
+        run: pip install yte
       - name: Install pnpm
         run: npm install -g pnpm
       - name: Auto apply clippy lints

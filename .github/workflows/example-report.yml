@@ -17,6 +17,9 @@ jobs:
           toolchain: stable
           override: true
 
+      - name: Install yte
+        run: pip install yte
+
       - name: Install pnpm
         run: npm install -g pnpm
 
