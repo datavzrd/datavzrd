@@ -1,5 +1,7 @@
 use crate::spec::{ItemSpecs, RenderColumnSpec};
 use anyhow::Result;
+use fancy_regex::Regex;
+use lazy_static::lazy_static;
 use pyo3::prelude::*;
 use pyo3::types::IntoPyDict;
 use pyo3::types::PyModule;
@@ -8,8 +10,6 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
-use fancy_regex::Regex;
-use lazy_static::lazy_static;
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
@@ -69,8 +69,7 @@ pub fn fetch_content(url: &String, relative_path: &String) -> Result<String> {
         let full_url = format!("https://github.com/datavzrd/datavzrd-spells/raw/{version}/{category}/{spell}/spell.yaml");
         let content = get(full_url)?.text()?;
         Ok(content)
-    }
-    else if url.starts_with("http://") || url.starts_with("https://") {
+    } else if url.starts_with("http://") || url.starts_with("https://") {
         let base_url = url.rsplit_once('/').unwrap_or(("", "")).0;
         let full_url = format!("{}/{}", base_url, relative_path.trim_start_matches('/'));
         let content = get(full_url)?.text()?;
