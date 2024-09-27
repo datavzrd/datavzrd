@@ -172,13 +172,11 @@ mod tests {
                     scale_type: ScaleType::Linear,
                     clamp: true,
                     color_scheme: "".to_string(),
-                    color_range: ColorRange {
-                        0: vec![
-                            Color("#a1d99b".to_string()),
-                            Color("white".to_string()),
-                            Color("#fdae6b".to_string()),
-                        ],
-                    },
+                    color_range: ColorRange(vec![
+                        Color("#a1d99b".to_string()),
+                        Color("white".to_string()),
+                        Color("#fdae6b".to_string()),
+                    ]),
                     domain: Some(vec![
                         "0".to_string(),
                         "0.05".to_string(),
