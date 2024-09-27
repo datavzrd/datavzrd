@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.43.0](https://github.com/datavzrd/datavzrd/compare/v2.42.1...v2.43.0) (2024-09-27)
+
+
+### Features
+
+* Add datavzrd spells ([#783](https://github.com/datavzrd/datavzrd/issues/783)) ([f27011f](https://github.com/datavzrd/datavzrd/commit/f27011f05b0439b7e356e0a0a6833a92118193c3))
+
 ## [2.42.1](https://github.com/datavzrd/datavzrd/compare/v2.42.0...v2.42.1) (2024-09-24)
 
 
