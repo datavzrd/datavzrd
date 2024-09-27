@@ -597,6 +597,19 @@ impl ItemSpecs {
             additional_columns: self.render_table.clone().unwrap().additional_columns,
             headers: self.render_table.clone().unwrap().headers,
         });
+        let mut rendered_spells = HashMap::new();
+        for (key, render_column_specs) in self.render_table.as_ref().unwrap().columns.iter() {
+            if let Some(spell) = &render_column_specs.spell {
+                rendered_spells.insert(key.to_string(), spell.render_column_spec()?);
+            } else {
+                rendered_spells.insert(key.to_string(), render_column_specs.clone());
+            }
+        }
+        self.render_table = Some(RenderTableSpecs {
+            columns: rendered_spells,
+            additional_columns: self.render_table.clone().unwrap().additional_columns,
+            headers: self.render_table.clone().unwrap().headers,
+        });
         // Generate default RenderColumnSpecs for columns that are not specified in the config
         for header in headers {
             if !self

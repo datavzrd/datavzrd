@@ -2,7 +2,7 @@ use crate::spec::RenderColumnSpec;
 use anyhow::Result;
 use pyo3::prelude::*;
 use pyo3::types::IntoPyDict;
-use pyo3::types::{PyAny, PyDict, PyModule};
+use pyo3::types::PyModule;
 use reqwest::blocking::get;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -18,17 +18,16 @@ pub(crate) struct SpellSpec {
 }
 
 impl SpellSpec {
-    pub(crate) fn render(&self) -> Result<RenderColumnSpec> {
-        unimplemented!()
-    }
-
-    pub(crate) fn variables(&self) -> Result<String> {
-        let variables = HashMap::from([("__variables__".to_string(), self.with.clone())]);
-        Ok(serde_yaml::to_string(&variables)?)
+    pub(crate) fn render_column_spec(&self) -> Result<RenderColumnSpec> {
+        let variables = self.with.clone();
+        let template = fetch_spell(&self.url)?;
+        let yaml_string = call_process_yaml(&template, variables)?;
+        let yaml = serde_yaml::from_str(&yaml_string)?;
+        Ok(yaml)
     }
 }
 
-pub fn fetch_spell(input: &str) -> Result<String, Box<dyn std::error::Error>> {
+pub fn fetch_spell(input: &str) -> Result<String> {
     if input.starts_with("http://") || input.starts_with("https://") {
         fetch_from_url(input)
     } else {
@@ -37,13 +36,13 @@ pub fn fetch_spell(input: &str) -> Result<String, Box<dyn std::error::Error>> {
 }
 
 /// Fetches content from a URL.
-fn fetch_from_url(url: &str) -> Result<String, Box<dyn std::error::Error>> {
+fn fetch_from_url(url: &str) -> Result<String> {
     let response = get(url)?.text()?;
     Ok(response)
 }
 
 /// Fetches content from a local file.
-fn fetch_from_file(path: &str) -> Result<String, Box<dyn std::error::Error>> {
+fn fetch_from_file(path: &str) -> Result<String> {
     let content = fs::read_to_string(Path::new(path))?;
     Ok(content)
 }
@@ -67,7 +66,7 @@ fn call_process_yaml(template: &str, variables: HashMap<String, String>) -> Resu
 #[cfg(test)]
 mod tests {
     use super::*;
-    use simple_excel_writer::ToCellValue;
+    use crate::spec::{Color, ColorRange, Heatmap, PlotSpec, ScaleType};
 
     #[test]
     fn call_process_yaml_valid_input() {
@@ -97,5 +96,52 @@ mod tests {
         )
         .unwrap();
         assert_ne!(result, "bar: 2\n");
+    }
+
+    #[test]
+    fn test_render_spell() {
+        let spell = SpellSpec {
+            url: "tests/spells/p-value.spell.yaml".to_string(),
+            with: HashMap::from([(String::from("significance_threshold"), String::from("0.05"))]),
+        };
+        let result = spell.render_column_spec().unwrap();
+        let expected = RenderColumnSpec {
+            optional: false,
+            precision: 0,
+            label: None,
+            custom: None,
+            custom_path: None,
+            display_mode: Default::default(),
+            link_to_url: None,
+            plot: Some(PlotSpec {
+                tick_plot: None,
+                heatmap: Some(Heatmap {
+                    vega_type: None,
+                    scale_type: ScaleType::Linear,
+                    clamp: false,
+                    color_scheme: "".to_string(),
+                    color_range: ColorRange {
+                        0: vec![
+                            Color("#a1d99b".to_string()),
+                            Color("white".to_string()),
+                            Color("#fdae6b".to_string()),
+                        ],
+                    },
+                    domain: Some(vec![
+                        "0".to_string(),
+                        "0.05".to_string(),
+                        "0.25".to_string(),
+                    ]),
+                    domain_mid: None,
+                    aux_domain_columns: Default::default(),
+                    custom_content: None,
+                }),
+                bar_plot: None,
+            }),
+            custom_plot: None,
+            ellipsis: None,
+            plot_view_legend: false,
+            spell: None,
+        };
     }
 }

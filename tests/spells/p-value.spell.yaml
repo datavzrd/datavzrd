@@ -1,0 +1,13 @@
+__use_yte__: true
+
+plot:
+  heatmap:
+    scale: linear
+    range:
+      - "#a1d99b"
+      - "white"
+      - "#fdae6b"
+    domain:
+      - 0
+      - ?significance_threshold
+      - 0.25
