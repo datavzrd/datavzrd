@@ -1,12 +1,13 @@
-use std::fs;
-use std::path::Path;
-use reqwest::blocking::get;
-use std::collections::HashMap;
-use serde::Deserialize;
 use crate::spec::RenderColumnSpec;
 use anyhow::Result;
 use pyo3::prelude::*;
-use pyo3::types::{PyModule, PyAny};
+use pyo3::types::IntoPyDict;
+use pyo3::types::{PyAny, PyDict, PyModule};
+use reqwest::blocking::get;
+use serde::Deserialize;
+use std::collections::HashMap;
+use std::fs;
+use std::path::Path;
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
@@ -48,12 +49,17 @@ fn fetch_from_file(path: &str) -> Result<String, Box<dyn std::error::Error>> {
 }
 
 /// Call the `process_yaml` function from the Python `yte` module.
-fn call_process_yaml(yaml_content: &str) -> Result<String> {
+fn call_process_yaml(template: &str, variables: HashMap<String, String>) -> Result<String> {
     Python::with_gil(|py| {
         let yte_module = PyModule::import_bound(py, "yte")?;
-        let result = yte_module.getattr("process_yaml")?.call1((yaml_content,))?;
+        let kwargs = [("variables".to_string(), variables)].into_py_dict_bound(py);
+        let result = yte_module
+            .getattr("process_yaml")?
+            .call((template,), Some(kwargs).as_ref())?;
         let yaml_module = PyModule::import_bound(py, "yaml")?;
-        let yaml_string = yaml_module.call_method1("dump", (result,))?.extract::<String>()?;
+        let yaml_string = yaml_module
+            .call_method1("dump", (result,))?
+            .extract::<String>()?;
         Ok(yaml_string)
     })
 }
@@ -61,6 +67,7 @@ fn call_process_yaml(yaml_content: &str) -> Result<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use simple_excel_writer::ToCellValue;
 
     #[test]
     fn call_process_yaml_valid_input() {
@@ -71,7 +78,24 @@ mod tests {
           bar: 2
         ?else:
           bar: 1"#;
-        let result = call_process_yaml(yaml_content).unwrap();
+        let result = call_process_yaml(yaml_content, HashMap::new()).unwrap();
         assert_eq!(result, "foo: 1\n");
+    }
+
+    #[test]
+    fn call_process_yaml_with_variables() {
+        let yaml_content = r#"
+        ?if True:
+          foo: ?two
+        ?elif False:
+          bar: 2
+        ?else:
+          bar: 1"#;
+        let result = call_process_yaml(
+            yaml_content,
+            HashMap::from([("two".to_string(), "2".to_string())]),
+        )
+        .unwrap();
+        assert_ne!(result, "bar: 2\n");
     }
 }

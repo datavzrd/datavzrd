@@ -15,6 +15,7 @@ use fancy_regex::Regex;
 use itertools::Itertools;
 use lazy_static::lazy_static;
 
+use crate::spells::SpellSpec;
 use format_serde_error::SerdeError;
 use serde::Deserialize;
 use serde::Serialize;
@@ -27,7 +28,6 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use thiserror::Error;
-use crate::spells::SpellSpec;
 
 #[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]

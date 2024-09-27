@@ -13,8 +13,8 @@ use thiserror::Error;
 pub(crate) mod cli;
 pub(crate) mod render;
 pub(crate) mod spec;
-pub(crate) mod utils;
 pub(crate) mod spells;
+pub(crate) mod utils;
 
 fn main() -> Result<()> {
     let opt = cli::Datavzrd::from_args();
