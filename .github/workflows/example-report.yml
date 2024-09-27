@@ -17,6 +17,14 @@ jobs:
           toolchain: stable
           override: true
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip' # caching pip dependencies
+
+      - name: Install yte
+        run: pip install yte
+
       - name: Install pnpm
         run: npm install -g pnpm
 

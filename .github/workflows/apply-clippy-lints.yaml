@@ -11,6 +11,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip' # caching pip dependencies
+      - name: Install yte
+        run: pip install yte
       - name: Install pnpm
         run: npm install -g pnpm
       - name: Auto apply clippy lints
