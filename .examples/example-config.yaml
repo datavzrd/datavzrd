@@ -43,10 +43,12 @@ views:
         oscar_yr:
           label: year
         age:
-          spell:
-            url: "v1.0.0/stats/p-value"
-            with:
-              significance_threshold: 0.05
+          plot:
+            ticks:
+              scale: linear
+              domain:
+                - 20
+                - 100
         name:
           link-to-url:
             lmgtfy:
