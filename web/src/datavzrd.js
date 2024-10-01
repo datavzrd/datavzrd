@@ -109,7 +109,7 @@ function shareRow(index, webhost_url) {
     document.getElementById("qr-code").innerHTML = "";
     let url = createShareURL(index, webhost_url);
     $('#open-url').attr("href", url);
-    QRCode.toCanvas(document.getElementById('qr-code'), url)
+    QRCode.toCanvas(document.getElementById("qr-code"), url, { width: window.innerHeight / 1.8 });
 }
 
 function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
