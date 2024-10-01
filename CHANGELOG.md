@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.43.1](https://github.com/datavzrd/datavzrd/compare/v2.43.0...v2.43.1) (2024-10-01)
+
+
+### Bug Fixes
+
+* Fix row sharing ([d6c6b29](https://github.com/datavzrd/datavzrd/commit/d6c6b295759eed5278d5ccb4d240e333713d6609))
+
 ## [2.43.0](https://github.com/datavzrd/datavzrd/compare/v2.42.1...v2.43.0) (2024-09-27)
 
 
