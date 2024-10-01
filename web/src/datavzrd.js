@@ -92,7 +92,10 @@ function createShareURL(index, webhost_url) {
     var data = $('#table').bootstrapTable('getData')[index];
     delete data["linkouts"];
     delete data["share"];
+    delete data["line_number"];
     var c = JSON.parse(JSON.stringify(config));
+    c["format"] = {}; // Remove any custom function
+    delete c["unique_column_values"];
     c["data"] = data;
     const packer = new jsonm.Packer();
     let packedMessage = packer.pack(c);
