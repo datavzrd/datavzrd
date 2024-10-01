@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.43.2](https://github.com/datavzrd/datavzrd/compare/v2.43.1...v2.43.2) (2024-10-01)
+
+
+### Bug Fixes
+
+* Adjust QR code size for smaller screens ([c5570d2](https://github.com/datavzrd/datavzrd/commit/c5570d273b36c7ce5c0c0a1c27952521023b9f1f))
+
 ## [2.43.1](https://github.com/datavzrd/datavzrd/compare/v2.43.0...v2.43.1) (2024-10-01)
 
 
