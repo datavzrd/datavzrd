@@ -52,11 +52,11 @@ views:
         name:
           link-to-url:
             lmgtfy:
-              url: "https://letmegooglethat.com/?q=Is {name} in {movie}?"
+              url: "https://www.google.com/search?q={name}"
         movie:
           link-to-url:
             Wikipedia:
-              url: "https://de.wikipedia.org/wiki/{value}"
+              url: "https://en.wikipedia.org/wiki/{value}"
         award:
           plot:
             heatmap:
@@ -96,7 +96,7 @@ views:
         Title:
           link-to-url:
             Wikipedia:
-              url: "https://de.wikipedia.org/wiki/{value}"
+              url: "https://en.wikipedia.org/wiki/{value}"
             Letterboxd:
               url: "https://letterboxd.com/search/{value}"
               new-window: false
