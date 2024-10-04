@@ -81,10 +81,6 @@
                 </div>
             </div>
             {% endif %}
-            <script>
-            var data = {{ data | safe }};
-            {{ script | safe}}
-            </script>
             <div class="row">
                 <div class="col-md-12 d-flex justify-content-center" id="canvas"></div>
             </div>
@@ -129,4 +125,8 @@
     </footer>
 </div>
 </body>
+<script>
+    var data = {{ data | safe }};
+    {{ script | safe}}
+</script>
 </html>
