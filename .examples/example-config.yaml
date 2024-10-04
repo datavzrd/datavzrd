@@ -1,5 +1,7 @@
 name: My oscar report
 datasets:
+  test:
+    path: ".examples/test.csv"
   oscars:
     path: ".examples/data/oscars.csv"
     offer-excel: true
@@ -20,6 +22,10 @@ datasets:
 default-view: oscars
 webview-controls: true
 views:
+  embed:
+    dataset: test
+    render-html:
+      script-path: ".examples/embed.js"
   oscars:
     dataset: oscars
     desc: |
