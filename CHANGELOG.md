@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.43.3](https://github.com/datavzrd/datavzrd/compare/v2.43.2...v2.43.3) (2024-10-04)
+
+
+### Bug Fixes
+
+* Fix render-html script placement ([8f9ed75](https://github.com/datavzrd/datavzrd/commit/8f9ed75b8302862c572247bfc39fc87f8643c4d6))
+
 ## [2.43.2](https://github.com/datavzrd/datavzrd/compare/v2.43.1...v2.43.2) (2024-10-01)
 
 
