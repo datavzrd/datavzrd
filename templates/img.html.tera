@@ -120,8 +120,4 @@
     </footer>
 </div>
 </body>
-<script>
-    var data = {{ data | safe }};
-    {{ script | safe}}
-</script>
 </html>

@@ -130,8 +130,17 @@ impl Renderer for ItemRenderer {
             } else {
                 0
             };
-            if !records_length == 0 {
-                let linked_tables = get_linked_tables(name, &self.specs)?;
+            let is_empty = if table.render_img.is_none() {
+                dataset.is_empty()?
+            } else {
+                false
+            };
+            if !is_empty {
+                let linked_tables = if table.render_img.is_none() {
+                    get_linked_tables(name, &self.specs)?
+                } else {
+                    HashMap::new()
+                };
                 // Render plot
                 if table.render_plot.is_some() {
                     render_plot_page(
@@ -1638,7 +1647,6 @@ fn render_img_page<P: AsRef<Path>>(
     report_name: &String,
     view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
-    // copy image to output path
     let img_file = Path::new(&img_path);
     let img_file_name = img_file.file_name().unwrap();
     let img_file_path = Path::new(output_path.as_ref()).join(img_file_name);
