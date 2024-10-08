@@ -1635,6 +1635,7 @@ fn render_html_page<P: AsRef<Path>>(
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 /// Renders a plot page from given render-plot spec
 fn render_img_page<P: AsRef<Path>>(
     output_path: P,
@@ -1650,7 +1651,7 @@ fn render_img_page<P: AsRef<Path>>(
     let img_file = Path::new(&img_path);
     let img_file_name = img_file.file_name().unwrap();
     let img_file_path = Path::new(output_path.as_ref()).join(img_file_name);
-    fs::copy(&img_file, &img_file_path)?;
+    fs::copy(img_file, &img_file_path)?;
 
     let mut templates = Tera::default();
     templates.add_raw_template(
