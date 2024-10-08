@@ -111,13 +111,18 @@ impl Renderer for ItemRenderer {
                     continue;
                 }
             }
-            let dataset = match self.specs.datasets.get(table.dataset.as_ref().unwrap()) {
-                Some(dataset) => dataset,
-                None => {
-                    bail!(DatasetError::NotFound {
-                        dataset_name: table.dataset.as_ref().unwrap().clone()
-                    })
+
+            let dataset = if let Some(d) = table.dataset.as_ref() {
+                match self.specs.datasets.get(d) {
+                    Some(dataset) => dataset,
+                    None => {
+                        bail!(DatasetError::NotFound {
+                            dataset_name: table.dataset.as_ref().unwrap().clone()
+                        })
+                    }
                 }
+            } else {
+                &DatasetSpecs::default()
             };
 
             let records_length = dataset.size()?;
@@ -153,6 +158,18 @@ impl Renderer for ItemRenderer {
                         &self.specs.aux_libraries,
                         &self.specs.report_name,
                         self.specs.needs_excel_sheet(),
+                        &view_sizes,
+                    )?;
+                } else if let Some(table_specs) = &table.render_img {
+                    render_img_page(
+                        &out_path,
+                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
+                        name,
+                        table,
+                        &self.specs.views,
+                        &self.specs.default_view,
+                        table_specs.path.to_string(),
+                        &self.specs.report_name,
                         &view_sizes,
                     )?;
                 }
@@ -1601,6 +1618,67 @@ fn render_html_page<P: AsRef<Path>>(
 
     let mut file = fs::File::create(file_path)?;
     file.write_all(html.as_bytes())?;
+
+    Ok(())
+}
+
+/// Renders a plot page from given render-plot spec
+fn render_img_page<P: AsRef<Path>>(
+    output_path: P,
+    tables: &[String],
+    name: &str,
+    item_spec: &ItemSpecs,
+    views: &HashMap<String, ItemSpecs>,
+    default_view: &Option<String>,
+    img_path: String,
+    report_name: &String,
+    view_sizes: &HashMap<String, String>,
+) -> Result<()> {
+    // copy image to output path
+    let img_file = Path::new(&img_path);
+    let img_file_name = img_file.file_name().unwrap();
+    let img_file_path = Path::new(output_path.as_ref()).join(img_file_name);
+    fs::copy(&img_file, &img_file_path)?;
+
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "img.html.tera",
+        include_str!("../../../templates/img.html.tera"),
+    )?;
+    let mut context = Context::new();
+
+    let local: DateTime<Local> = Local::now();
+
+    context.insert("description", &item_spec.description);
+    context.insert("img", &img_file_name.to_str().unwrap());
+    context.insert(
+        "tables",
+        &tables
+            .iter()
+            .filter(|t| !views.get(*t).unwrap().hidden)
+            .filter(|t| {
+                if let Some(default_view) = default_view {
+                    t != &default_view
+                } else {
+                    true
+                }
+            })
+            .collect_vec(),
+    );
+    context.insert("view_sizes", &view_sizes);
+    context.insert("default_view", default_view);
+    context.insert("report_name", report_name);
+    context.insert("name", name);
+    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
+    context.insert("version", &env!("CARGO_PKG_VERSION"));
+
+    let file_path =
+        Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
+
+    let img = templates.render("img.html.tera", &context)?;
+
+    let mut file = fs::File::create(file_path)?;
+    file.write_all(img.as_bytes())?;
 
     Ok(())
 }

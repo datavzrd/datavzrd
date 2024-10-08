@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>datavzrd report</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<script src="../static/bundle.js"></script>
+<div class="collapse" id="sidebar">
+    <div class="card" id="sidebar-card">
+        <ul class="list-group list-group-flush" id="sidebar-list">
+            {% if description %}<li class="list-group-item sidebar-btn" id="markdown-btn" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">Show description</li>{% endif %}
+        </ul>
+    </div>
+</div>
+
+<div id="page-container">
+    <div id="content-wrap">
+        <div class="fixed-top">
+            <nav class="navbar navbar-expand navbar-light navbar-top">
+                <div class="collapse navbar-collapse" id="navbarText2">
+                    <ol class="navbar-nav mr-auto breadcrumb">
+                        {% if report_name %}<li class="breadcrumb-item"><div>{{ report_name }}</div></li>{% endif %}
+                        <li class="breadcrumb-item">
+                            <select id="view-selection" title="{{ name }}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true">
+                                {% if default_view %}
+                                <option value="../{{ default_view }}/index_1.html" data-content="{{ default_view }} {% if view_sizes[default_view] %}<span class='badge badge-light'>{{ view_sizes[default_view] }} rows</span>{% endif %}">{{ default_view }}</option>
+                                {% endif %}
+                                {% for table in tables | sort %}
+                                <option value="../{{ table }}/index_1.html" data-content="{{ table }} {% if view_sizes[table] %}<span class='badge badge-light'>{{ view_sizes[table] }} rows</span>{% endif %}">{{ table }}</option>
+                                {% endfor %}
+                            </select>
+                        </li>
+                    </ol>
+                </div>
+                <span class="pull-right">
+                    <button class="navbar-toggler" style="display: block !important;" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </span>
+            </nav>
+        </div>
+        <div class="container-fluid">
+            {% if description %}
+            <script>
+                $(document).ready(function() {
+                    var innerDescription = document.getElementById('innerDescription');
+                    const converter = new showdown.Converter({
+                        extensions: [
+                            showdownKatex({
+                                throwOnError: true,
+                                displayMode: false,
+                                errorColor: '#1500ff',
+                            }),
+                        ],
+                    });
+                    converter.setFlavor('github');
+                    innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
+                    if (innerDescription.offsetHeight < window.screen.height/3) {
+                        $('#canvas').css('padding-top', innerDescription.offsetHeight + 50);
+                    }
+                });
+            </script>
+            <div class="row" style="margin-top: 15px;">
+                <div class="col-md-12">
+                    <div class="collapse" id="collapseDescription">
+                        <button type="button" data-toggle="collapse" data-target="#collapseDescription" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="card card-body" id="innerDescription" data-markdown="{{ description | escape }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-center">
+                    <img src="./{{ img }}" class="img-fluid" alt="Responsive image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="error-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Error when calling custom function for column <b id="error-column"></b> (please fix the function definition in the datavzrd config):</p>
+                    <pre id="error-modal-text"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <nav class="navbar navbar-expand navbar-light navbar-top">
+            <a class="navbar-brand" href="#">datavzrd</a>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">{{ version }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/datavzrd/datavzrd">github</a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                        created {{ time }}
+                    </span>
+            </div>
+        </nav>
+    </footer>
+</div>
+</body>
+<script>
+    var data = {{ data | safe }};
+    {{ script | safe}}
+</script>
+</html>
