@@ -125,8 +125,12 @@ impl Renderer for ItemRenderer {
                 &DatasetSpecs::default()
             };
 
-            let records_length = dataset.size()?;
-            if !dataset.is_empty()? {
+            let records_length = if table.render_img.is_none() {
+                dataset.size()?
+            } else {
+                0
+            };
+            if !records_length == 0 {
                 let linked_tables = get_linked_tables(name, &self.specs)?;
                 // Render plot
                 if table.render_plot.is_some() {
