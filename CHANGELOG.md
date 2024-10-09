@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.43.4](https://github.com/datavzrd/datavzrd/compare/v2.43.3...v2.43.4) (2024-10-09)
+
+
+### Bug Fixes
+
+* Remove unused import ([#793](https://github.com/datavzrd/datavzrd/issues/793)) ([1736ef7](https://github.com/datavzrd/datavzrd/commit/1736ef7cc3aa6dea39e83ef089a0a21874e242f1))
+
 ## [2.43.3](https://github.com/datavzrd/datavzrd/compare/v2.43.2...v2.43.3) (2024-10-04)
 
 
