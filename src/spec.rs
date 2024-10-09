@@ -58,7 +58,10 @@ impl ItemsSpec {
                 let rendered_spec = spell.render_item_spec()?;
                 *spec = spec.merge_item_specs(&rendered_spec)?;
             }
-            if spec.render_table.is_some() && spec.render_plot.is_none() {
+            if spec.render_table.is_some()
+                && spec.render_plot.is_none()
+                && spec.render_img.is_none()
+            {
                 let dataset = match items_spec.datasets.get(spec.dataset.as_ref().unwrap()) {
                     Some(dataset) => dataset,
                     None => {
@@ -87,7 +90,7 @@ impl ItemsSpec {
         }
         for (name, view) in &self.views {
             if let Some(render_table) = &view.render_table {
-                if view.datasets.is_none() {
+                if view.datasets.is_none() && view.render_img.is_none() {
                     if view.dataset.is_none() {
                         bail!(ConfigError::MissingDatasetProperty {
                             view: name.to_string()
@@ -366,7 +369,7 @@ fn default_links() -> Option<HashMap<String, LinkSpec>> {
     Some(HashMap::new())
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, Debug, Clone, PartialEq, Default)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct DatasetSpecs {
     pub(crate) path: PathBuf,
@@ -444,6 +447,8 @@ pub(crate) struct ItemSpecs {
     #[serde(default)]
     pub(crate) render_html: Option<RenderHtmlSpec>,
     #[serde(default)]
+    pub(crate) render_img: Option<RenderImgSpec>,
+    #[serde(default)]
     pub(crate) max_in_memory_rows: Option<usize>,
     #[serde(default)]
     pub(crate) spell: Option<SpellSpec>,
@@ -471,6 +476,9 @@ impl ItemSpecs {
         }
         if let Some(render_html) = &other.render_html {
             merged.render_html = Some(render_html.clone());
+        }
+        if let Some(render_img) = &other.render_img {
+            merged.render_img = Some(render_img.clone());
         }
         if let Some(max_in_memory_rows) = &other.max_in_memory_rows {
             merged.max_in_memory_rows = Some(*max_in_memory_rows);
@@ -896,6 +904,12 @@ pub(crate) struct RenderHtmlSpec {
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+pub(crate) struct RenderImgSpec {
+    pub(crate) path: String,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct LinkSpec {
     #[serde(default)]
     pub(crate) column: String,
@@ -1283,6 +1297,7 @@ mod tests {
             }),
             render_plot: None,
             render_html: None,
+            render_img: None,
             max_in_memory_rows: None,
             spell: None,
         };
@@ -1355,6 +1370,7 @@ mod tests {
             render_table: default_render_table(),
             render_plot: Some(expected_render_plot),
             render_html: None,
+            render_img: None,
             max_in_memory_rows: None,
             spell: None,
         };
@@ -1415,6 +1431,7 @@ mod tests {
             render_table: default_render_table(),
             render_plot: None,
             render_html: Some(expected_render_html),
+            render_img: None,
             max_in_memory_rows: None,
             spell: None,
         };
@@ -1485,6 +1502,7 @@ mod tests {
             }),
             render_plot: None,
             render_html: None,
+            render_img: None,
             max_in_memory_rows: None,
             spell: None,
         };
@@ -1910,6 +1928,7 @@ mod tests {
             }),
             render_plot: None,
             render_html: None,
+            render_img: None,
             max_in_memory_rows: None,
             spell: None,
         };
