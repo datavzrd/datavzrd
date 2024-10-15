@@ -351,3 +351,7 @@ footer {
     z-index: 2;
     right: calc(50% - 50px);
 }
+
+.popover {
+    z-index: 2 !important;
+}
