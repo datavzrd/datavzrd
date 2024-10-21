@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.43.6](https://github.com/datavzrd/datavzrd/compare/v2.43.5...v2.43.6) (2024-10-21)
+
+
+### Bug Fixes
+
+* Fix row being unavailable in data function of custom plots with display-mode detail ([#802](https://github.com/datavzrd/datavzrd/issues/802)) ([0fc7166](https://github.com/datavzrd/datavzrd/commit/0fc71662785bf16c902e55b5cc5682e6567b1fab))
+
 ## [2.43.5](https://github.com/datavzrd/datavzrd/compare/v2.43.4...v2.43.5) (2024-10-15)
 
 
