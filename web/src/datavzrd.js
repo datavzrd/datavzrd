@@ -420,8 +420,8 @@ function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
     );
 }
 
-function renderCustomPlotDetailView(value, div, data_function, specs, vega_controls) {
-    var data = data_function(value);
+function renderCustomPlotDetailView(value, row, div, data_function, specs, vega_controls) {
+    var data = data_function(value, row);
     var s = specs;
     s.data = {};
     s.data.values = data;
@@ -836,7 +836,7 @@ export function load() {
         $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
             for (const o of custom_plots) {
                 if (!config.displayed_columns.includes(o.title)) {
-                    renderCustomPlotDetailView(row[o.title], `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, window[o.data_function], o.specs, o.vega_controls);
+                    renderCustomPlotDetailView(row[o.title], row, `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, window[o.data_function], o.specs, o.vega_controls);
                 }
             }
 
