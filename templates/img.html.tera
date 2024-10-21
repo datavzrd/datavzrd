@@ -76,7 +76,7 @@
             {% endif %}
             <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
-                    <img src="./{{ img }}" class="img-fluid" alt="Responsive image">
+                    <img src="./{{ img }}" class="datavzrd-img">
                 </div>
             </div>
         </div>

@@ -125,15 +125,10 @@ impl Renderer for ItemRenderer {
                 &DatasetSpecs::default()
             };
 
-            let records_length = if table.render_img.is_none() {
-                dataset.size()?
+            let (records_length, is_empty) = if table.render_img.is_none() {
+                (dataset.size()?, dataset.is_empty()?)
             } else {
-                0
-            };
-            let is_empty = if table.render_img.is_none() {
-                dataset.is_empty()?
-            } else {
-                false
+                (0, false)
             };
             if !is_empty {
                 let linked_tables = if table.render_img.is_none() {

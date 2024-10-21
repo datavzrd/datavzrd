@@ -355,3 +355,12 @@ footer {
 .popover {
     z-index: 2 !important;
 }
+
+.datavzrd-img {
+    max-width: 85vw;
+    max-height: 85vh;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 5rem auto;
+}
