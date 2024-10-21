@@ -150,7 +150,7 @@ th .th-inner {
 }
 
 #vis-container {
-    height: calc(100vh - 200px)
+    height: calc(100vh - 105px)
 }
 
 .fa {
@@ -343,4 +343,15 @@ footer {
 
 .hide-sym:hover {
     color: grey;
+}
+
+#plot-size-control {
+    position: absolute;
+    bottom: 52px;
+    z-index: 2;
+    right: calc(50% - 50px);
+}
+
+.popover {
+    z-index: 2 !important;
 }

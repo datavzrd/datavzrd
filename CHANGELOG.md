@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.43.5](https://github.com/datavzrd/datavzrd/compare/v2.43.4...v2.43.5) (2024-10-15)
+
+
+### Bug Fixes
+
+* Fix popover z-index for numeric search widget ([#798](https://github.com/datavzrd/datavzrd/issues/798)) ([3cecbd6](https://github.com/datavzrd/datavzrd/commit/3cecbd638fd1a83baaf13605558c93e10bd708e4))
+* Improve plot controls and container size ([#796](https://github.com/datavzrd/datavzrd/issues/796)) ([7867ab1](https://github.com/datavzrd/datavzrd/commit/7867ab1268dc8f4ca9c3c5898c300d51184d783b))
+
+## [2.43.4](https://github.com/datavzrd/datavzrd/compare/v2.43.3...v2.43.4) (2024-10-09)
+
+
+### Bug Fixes
+
+* Remove unused import ([#793](https://github.com/datavzrd/datavzrd/issues/793)) ([1736ef7](https://github.com/datavzrd/datavzrd/commit/1736ef7cc3aa6dea39e83ef089a0a21874e242f1))
+
 ## [2.43.3](https://github.com/datavzrd/datavzrd/compare/v2.43.2...v2.43.3) (2024-10-04)
 
 
