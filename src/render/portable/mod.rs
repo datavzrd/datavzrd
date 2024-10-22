@@ -1874,6 +1874,11 @@ fn render_excel_sheet<P: AsRef<Path>>(specs: &ItemsSpec, output_path: P) -> Resu
             let mut sheet = wb.create_sheet(view);
 
             wb.write_sheet(&mut sheet, |sw| {
+                let mut row = simple_excel_writer::Row::new();
+                for header in rdr.headers().unwrap() {
+                    row.add_cell(header.to_string());
+                }
+                sw.append_row(row)?;
                 for result in rdr.records().unwrap() {
                     let mut row = simple_excel_writer::Row::new();
                     for field in result.iter() {
