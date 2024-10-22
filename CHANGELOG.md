@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.44.0](https://github.com/datavzrd/datavzrd/compare/v2.43.6...v2.44.0) (2024-10-22)
+
+
+### Features
+
+* Add render-img option ([#792](https://github.com/datavzrd/datavzrd/issues/792)) ([633a027](https://github.com/datavzrd/datavzrd/commit/633a027bb633eaa3dda8304550eb74cdfefb7715))
+
 ## [2.43.6](https://github.com/datavzrd/datavzrd/compare/v2.43.5...v2.43.6) (2024-10-21)
 
 
