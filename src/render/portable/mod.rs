@@ -1133,6 +1133,17 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                 .iter()
                 .map(|(k, v)| JavascriptFunction(v.value.to_string()).to_javascript_function(k)),
         )
+        .chain(
+            additional_columns
+                .as_ref()
+                .unwrap_or(&HashMap::new())
+                .iter()
+                .filter(|(_, k)| k.custom_plot.is_some())
+                .map(|(k, v)| {
+                    JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
+                        .to_javascript_function(k)
+                }),
+        )
         .collect_vec();
 
     context.insert("functions", &functions);
