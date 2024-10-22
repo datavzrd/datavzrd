@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.44.1](https://github.com/datavzrd/datavzrd/compare/v2.44.0...v2.44.1) (2024-10-22)
+
+
+### Bug Fixes
+
+* Fix missing data function for custom plot usage within add-columns ([#808](https://github.com/datavzrd/datavzrd/issues/808)) ([9f9431d](https://github.com/datavzrd/datavzrd/commit/9f9431d0a416a165a35938c8af7cfdddce8f5268))
+* Fix missing headers in exported excel file ([#805](https://github.com/datavzrd/datavzrd/issues/805)) ([5071b25](https://github.com/datavzrd/datavzrd/commit/5071b2519c07aa9249631a0211315c489d4a34cb))
+* Fix missing unfold option when only add-column uses display-mode detail ([#807](https://github.com/datavzrd/datavzrd/issues/807)) ([df0d47a](https://github.com/datavzrd/datavzrd/commit/df0d47ab5cc39d8d69fdc9244bc7b2f480e77c88))
+
 ## [2.44.0](https://github.com/datavzrd/datavzrd/compare/v2.43.6...v2.44.0) (2024-10-22)
 
 
