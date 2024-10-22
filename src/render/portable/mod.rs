@@ -691,12 +691,20 @@ impl JavascriptConfig {
                 .collect()
         };
         let sorted_tables = tables.iter().sorted().map(|s| s.to_owned()).collect_vec();
-        Self {
-            detail_mode: config
+        let detail_mode = config
+            .iter()
+            .filter(|(_, spec)| spec.display_mode == DisplayMode::Detail)
+            .count()
+            > 0
+            || additional_columns
+                .as_ref()
+                .unwrap_or(&HashMap::new())
                 .iter()
-                .filter(|(_, spec)| spec.display_mode == DisplayMode::Detail)
+                .filter(|(_, v)| v.display_mode == DisplayMode::Detail)
                 .count()
-                > 0,
+                > 0;
+        Self {
+            detail_mode,
             webview_controls,
             webview_host: webview_host.to_string(),
             is_single_page,
