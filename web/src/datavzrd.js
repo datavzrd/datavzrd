@@ -1224,7 +1224,7 @@ export function load_plot(specs, data, multiple_datasets, resize) {
 export function custom_error(e, column) {
     $('#error-modal').modal('show')
     $('#error-column').html(column)
-    $('#error-modal-text').html(e.toString() + e.stack.toString())
+    $('#error-modal-text').html(e.toString() + "\n" + e.stack.toString())
 }
 
 $(document).click(function (event) {
