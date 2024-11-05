@@ -832,6 +832,7 @@ impl TickPlot {
 impl Heatmap {
     fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
         self.aux_domain_columns.preprocess(dataset)?;
+        self.scale_type.preprocess();
         match self.vega_type {
             Some(VegaType::Nominal) | Some(VegaType::Ordinal) => {
                 self.scale_type = ScaleType::Ordinal;
@@ -1083,6 +1084,7 @@ pub(crate) enum ScaleType {
     Time,
     Utc,
     Ordinal,
+    Nominal,
     Band,
     Point,
     #[default]
@@ -1108,6 +1110,13 @@ impl ScaleType {
                 | ScaleType::SymLog
                 | ScaleType::Log
         )
+    }
+
+    pub(crate) fn preprocess(&mut self) {
+        match self {
+            ScaleType::Nominal => { *self = ScaleType::Ordinal; }
+            _ => {}
+        }
     }
 }
 
