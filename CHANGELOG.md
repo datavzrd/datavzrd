@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.44.2](https://github.com/datavzrd/datavzrd/compare/v2.44.1...v2.44.2) (2024-11-05)
+
+
+### Bug Fixes
+
+* Allow use of nominal for scale type ([#820](https://github.com/datavzrd/datavzrd/issues/820)) ([05d2407](https://github.com/datavzrd/datavzrd/commit/05d2407aadd2a65f6bf580d874714288a684a54d))
+* Fix formatting for error messages ([#814](https://github.com/datavzrd/datavzrd/issues/814)) ([302b4ce](https://github.com/datavzrd/datavzrd/commit/302b4ce38cd147f635a22ed026343d220e0308d1))
+* Improve behaviour for further configuring spells ([#822](https://github.com/datavzrd/datavzrd/issues/822)) ([074de5d](https://github.com/datavzrd/datavzrd/commit/074de5d4da85f3117135ae905cb204fb92dd7338))
+
 ## [2.44.1](https://github.com/datavzrd/datavzrd/compare/v2.44.0...v2.44.1) (2024-10-22)
 
 
