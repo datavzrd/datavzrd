@@ -118,7 +118,7 @@ impl ItemsSpec {
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
                     let column_types = classify_table(dataset)?;
                     for (column, render_columns) in &render_table.columns {
-                        if !titles.contains(column) && !render_columns.optional {
+                        if !titles.contains(column) && !render_columns.optional.unwrap() {
                             bail!(ConfigError::MissingColumn {
                                 column: column.to_string(),
                                 view: name.to_string()
@@ -647,10 +647,15 @@ impl ItemSpecs {
                 let spell_column_spec = spell.render_column_spec()?;
                 rendered_spells.insert(
                     key.to_string(),
-                    render_column_specs.merge_render_column_spec(spell_column_spec)?,
+                    render_column_specs
+                        .merge_render_column_spec(spell_column_spec)?
+                        .apply_defaults()?,
                 );
             } else {
-                rendered_spells.insert(key.to_string(), render_column_specs.clone());
+                rendered_spells.insert(
+                    key.to_string(),
+                    render_column_specs.clone().apply_defaults()?,
+                );
             }
         }
         self.render_table = Some(RenderTableSpecs {
@@ -686,9 +691,9 @@ fn default_precision() -> u32 {
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderColumnSpec {
     #[serde(default)]
-    pub(crate) optional: bool,
-    #[serde(default = "default_precision")]
-    pub(crate) precision: u32,
+    pub(crate) optional: Option<bool>,
+    #[serde(default)]
+    pub(crate) precision: Option<u32>,
     #[serde(default)]
     pub(crate) label: Option<String>,
     #[serde(default)]
@@ -696,7 +701,7 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) custom_path: Option<String>,
     #[serde(default)]
-    pub(crate) display_mode: DisplayMode,
+    pub(crate) display_mode: Option<DisplayMode>,
     #[serde(default)]
     pub(crate) link_to_url: Option<LinkToUrlSpec>,
     #[serde(default)]
@@ -706,7 +711,7 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) ellipsis: Option<u32>,
     #[serde(default)]
-    pub(crate) plot_view_legend: bool,
+    pub(crate) plot_view_legend: Option<bool>,
     #[serde(default)]
     pub(crate) spell: Option<SpellSpec>,
 }
@@ -714,17 +719,17 @@ pub(crate) struct RenderColumnSpec {
 impl Default for RenderColumnSpec {
     fn default() -> Self {
         RenderColumnSpec {
-            optional: false,
-            precision: default_precision(),
+            optional: Some(false),
+            precision: Some(default_precision()),
             label: None,
             custom: None,
             custom_path: None,
-            display_mode: DisplayMode::Normal,
+            display_mode: Some(DisplayMode::Normal),
             link_to_url: None,
             plot: None,
             custom_plot: None,
             ellipsis: None,
-            plot_view_legend: false,
+            plot_view_legend: Some(false),
             spell: None,
         }
     }
@@ -733,8 +738,12 @@ impl Default for RenderColumnSpec {
 impl RenderColumnSpec {
     fn merge_render_column_spec(&self, other: RenderColumnSpec) -> Result<RenderColumnSpec> {
         let mut merged = self.clone();
-        merged.optional = other.optional;
-        merged.precision = other.precision;
+        if let Some(optional) = other.optional {
+            merged.optional = Some(optional);
+        }
+        if let Some(precision) = other.precision {
+            merged.precision = Some(precision);
+        }
         if let Some(label) = &other.label {
             merged.label = Some(label.to_string());
         }
@@ -742,7 +751,9 @@ impl RenderColumnSpec {
             merged.custom = Some(custom.to_string());
         }
         merged.custom_path = None; // custom_path is not merged since it is already processed when spell is fetched.
-        merged.display_mode = other.display_mode;
+        if let Some(display_mode) = other.display_mode {
+            merged.display_mode = Some(display_mode);
+        }
         if let Some(link_to_url) = &other.link_to_url {
             merged.link_to_url = Some(link_to_url.clone());
         }
@@ -755,8 +766,27 @@ impl RenderColumnSpec {
         if let Some(ellipsis) = &other.ellipsis {
             merged.ellipsis = Some(*ellipsis);
         }
-        merged.plot_view_legend = other.plot_view_legend;
+        if let Some(plot_view_legend) = other.plot_view_legend {
+            merged.plot_view_legend = Some(plot_view_legend);
+        }
         Ok(merged)
+    }
+
+    fn apply_defaults(&mut self) -> Result<RenderColumnSpec> {
+        let mut with_defaults = self.clone();
+        if self.display_mode.is_none() {
+            with_defaults.display_mode = Some(DisplayMode::Normal);
+        }
+        if self.optional.is_none() {
+            with_defaults.optional = Some(false);
+        }
+        if self.precision.is_none() {
+            with_defaults.precision = Some(default_precision());
+        }
+        if self.plot_view_legend.is_none() {
+            with_defaults.plot_view_legend = Some(false);
+        }
+        Ok(with_defaults)
     }
 }
 
@@ -1252,11 +1282,11 @@ mod tests {
     #[test]
     fn test_table_config_deserialization() {
         let expected_render_columns = RenderColumnSpec {
-            precision: default_precision(),
-            optional: false,
+            precision: None,
+            optional: None,
             custom: None,
             custom_path: None,
-            display_mode: DisplayMode::Normal,
+            display_mode: None,
             link_to_url: Some(LinkToUrlSpec {
                 custom_content: None,
                 entries: HashMap::from([(
@@ -1270,7 +1300,7 @@ mod tests {
             plot: None,
             custom_plot: None,
             ellipsis: None,
-            plot_view_legend: false,
+            plot_view_legend: None,
             label: None,
             spell: None,
         };
@@ -1720,6 +1750,7 @@ mod tests {
                     render-table:
                         columns:
                             some-column:
+                                optional: false
                                 plot:
                                     ticks:
                                         scale: linear
@@ -1798,30 +1829,30 @@ mod tests {
             .unwrap()
             .columns;
         let expected_render_column_spec = RenderColumnSpec {
-            precision: default_precision(),
-            optional: false,
+            precision: Some(default_precision()),
+            optional: Some(false),
             custom: None,
             custom_path: None,
-            display_mode: DisplayMode::Detail,
+            display_mode: Some(DisplayMode::Detail),
             link_to_url: None,
             plot: None,
             custom_plot: None,
             ellipsis: None,
-            plot_view_legend: false,
+            plot_view_legend: Some(false),
             label: None,
             spell: None,
         };
         let expected_render_column_spec_oscar_no = RenderColumnSpec {
-            precision: default_precision(),
-            optional: false,
+            precision: Some(default_precision()),
+            optional: Some(false),
             custom: None,
             custom_path: None,
-            display_mode: DisplayMode::Hidden,
+            display_mode: Some(DisplayMode::Hidden),
             link_to_url: None,
             plot: None,
             custom_plot: None,
             ellipsis: None,
-            plot_view_legend: false,
+            plot_view_legend: Some(false),
             label: None,
             spell: None,
         };
@@ -1885,17 +1916,17 @@ mod tests {
             bar_plot: None,
         };
         let expected_render_columns = RenderColumnSpec {
-            optional: false,
-            precision: default_precision(),
+            optional: Some(false),
+            precision: Some(default_precision()),
             label: None,
             custom: None,
             custom_path: None,
-            display_mode: DisplayMode::default(),
+            display_mode: Some(DisplayMode::default()),
             link_to_url: None,
             plot: Some(expected_plot),
             custom_plot: None,
             ellipsis: None,
-            plot_view_legend: false,
+            plot_view_legend: Some(false),
             spell: None,
         };
         let expected_item_specs = ItemSpecs {

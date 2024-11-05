@@ -158,12 +158,12 @@ mod tests {
         };
         let result = spell.render_column_spec().unwrap();
         let expected = RenderColumnSpec {
-            optional: false,
-            precision: 2,
+            optional: None,
+            precision: None,
             label: None,
             custom: None,
             custom_path: None,
-            display_mode: Default::default(),
+            display_mode: None,
             link_to_url: None,
             plot: Some(PlotSpec {
                 tick_plot: None,
@@ -190,7 +190,7 @@ mod tests {
             }),
             custom_plot: None,
             ellipsis: None,
-            plot_view_legend: false,
+            plot_view_legend: None,
             spell: None,
         };
         assert_eq!(result, expected);
