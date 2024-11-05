@@ -206,7 +206,7 @@ impl Renderer for ItemRenderer {
                         .columns
                         .clone()
                         .into_iter()
-                        .filter(|(k, s)| !s.optional || headers.contains(k))
+                        .filter(|(k, s)| !s.optional.unwrap() || headers.contains(k))
                         .collect();
                     // Assert that remaining columns are present in dataset.
                     // This should be guaranteed by the validation that happens before.
@@ -679,7 +679,7 @@ impl JavascriptConfig {
             columns
                 .iter()
                 .map(|c| c.to_string())
-                .filter(|c| config.get(c).unwrap().display_mode == dp_mode)
+                .filter(|c| config.get(c).unwrap().display_mode.unwrap() == dp_mode)
                 .chain(
                     additional_columns
                         .as_ref()
@@ -693,7 +693,7 @@ impl JavascriptConfig {
         let sorted_tables = tables.iter().sorted().map(|s| s.to_owned()).collect_vec();
         let detail_mode = config
             .iter()
-            .filter(|(_, spec)| spec.display_mode == DisplayMode::Detail)
+            .filter(|(_, spec)| spec.display_mode.unwrap() == DisplayMode::Detail)
             .count()
             > 0
             || additional_columns
@@ -755,7 +755,7 @@ impl JavascriptConfig {
                             k,
                             dataset,
                             v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
-                            v.precision,
+                            v.precision.unwrap(),
                         )
                         .unwrap(),
                     )
@@ -772,7 +772,7 @@ impl JavascriptConfig {
                             k,
                             dataset,
                             v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
-                            v.precision,
+                            v.precision.unwrap(),
                         )
                         .unwrap(),
                     )
@@ -950,7 +950,7 @@ impl JavascriptColumnConfig {
         Self {
             label: spec.label.clone(),
             is_float: column_type == &ColumnType::Float,
-            precision: spec.precision,
+            precision: spec.precision.unwrap(),
         }
     }
 }
