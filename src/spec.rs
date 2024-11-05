@@ -1113,11 +1113,8 @@ impl ScaleType {
     }
 
     pub(crate) fn preprocess(&mut self) {
-        match self {
-            ScaleType::Nominal => {
-                *self = ScaleType::Ordinal;
-            }
-            _ => {}
+        if self == &ScaleType::Nominal {
+            *self = ScaleType::Ordinal;
         }
     }
 }
