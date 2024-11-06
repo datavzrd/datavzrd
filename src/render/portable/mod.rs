@@ -1055,7 +1055,7 @@ impl JavascriptFunction {
             .to_string()
     }
 
-    fn to_javascript_function(&self, column: &String) -> String {
+    fn to_javascript_function(&self, column: &str) -> String {
         format!(
             "function {}({}) {{ try {{ {} }} catch (e) {{ datavzrd.custom_error(e, '{}') }}}}",
             &self.name(),

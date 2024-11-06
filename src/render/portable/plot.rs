@@ -77,6 +77,7 @@ fn generate_numeric_plot(
         return Ok(None);
     }
 
+    let bin_width = (max - min) / NUMERIC_BINS as f32;
     let mut hist = ndhistogram!(Uniform::new(NUMERIC_BINS, min, max));
     let mut nan = 0;
 
@@ -91,7 +92,11 @@ fn generate_numeric_plot(
 
     let mut result = hist
         .iter()
-        .map(|h| BinnedPlotRecord::new(h.bin.start(), h.bin.end(), *h.value))
+        .map(|h| BinnedPlotRecord {
+            bin_start: h.bin.start().unwrap_or(min - bin_width),
+            bin_end: h.bin.end().unwrap_or(max + bin_width),
+            value: *h.value as u32,
+        })
         .collect_vec();
 
     if nan > 0 {
@@ -189,16 +194,6 @@ struct BinnedPlotRecord {
     bin_start: f32,
     bin_end: f32,
     value: u32,
-}
-
-impl BinnedPlotRecord {
-    fn new(start: Option<f32>, end: Option<f32>, value: f64) -> BinnedPlotRecord {
-        BinnedPlotRecord {
-            bin_start: start.unwrap_or(f32::NEG_INFINITY),
-            bin_end: end.unwrap_or(f32::INFINITY),
-            value: value as u32,
-        }
-    }
 }
 
 #[cfg(test)]
