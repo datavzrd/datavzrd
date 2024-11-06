@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.44.3](https://github.com/datavzrd/datavzrd/compare/v2.44.2...v2.44.3) (2024-11-06)
+
+
+### Bug Fixes
+
+* Fix bug when columns containing single quotes ([#823](https://github.com/datavzrd/datavzrd/issues/823)) ([8ab08e5](https://github.com/datavzrd/datavzrd/commit/8ab08e55746a8dceaef09d7a60dcf66bff5232ba))
+* Prevent underflow and overflow bins from not showing in histogram ([#824](https://github.com/datavzrd/datavzrd/issues/824)) ([d927bae](https://github.com/datavzrd/datavzrd/commit/d927bae63fc60feb1aae07b81849e4b24ad2a872))
+
 ## [2.44.2](https://github.com/datavzrd/datavzrd/compare/v2.44.1...v2.44.2) (2024-11-05)
 
 
