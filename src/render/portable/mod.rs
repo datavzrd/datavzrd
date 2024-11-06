@@ -1055,7 +1055,7 @@ impl JavascriptFunction {
             .to_string()
     }
 
-    fn to_javascript_function(&self, column: &String) -> String {
+    fn to_javascript_function(&self, column: &str) -> String {
         let escaped_column = column.replace("'", "\\'");
         format!(
             "function {}({}) {{ try {{ {} }} catch (e) {{ datavzrd.custom_error(e, '{}') }}}}",
