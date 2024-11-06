@@ -1065,7 +1065,6 @@ impl JavascriptFunction {
             escaped_column,
         )
     }
-
 }
 
 /// Render javascript functions into functions.js file per view
