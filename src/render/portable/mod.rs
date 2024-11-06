@@ -1056,12 +1056,13 @@ impl JavascriptFunction {
     }
 
     fn to_javascript_function(&self, column: &String) -> String {
+        let escaped_column = column.replace("'", "\\'");
         format!(
             "function {}({}) {{ try {{ {} }} catch (e) {{ datavzrd.custom_error(e, '{}') }}}}",
             &self.name(),
             &self.args(),
             &self.body(),
-            column,
+            escaped_column,
         )
     }
 }
