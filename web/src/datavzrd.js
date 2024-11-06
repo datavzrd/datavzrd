@@ -676,14 +676,14 @@ export function load() {
                 if (config.is_single_page) {
                     title += `
                     <div class="sym sym-container" style="position: relative;">
-                        <svg onclick="datavzrd.sort('${column}', 'asc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                        <svg onclick="datavzrd.sort(${config.columns.indexOf(column)}, 'asc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
                           <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
                         </svg>
-                        <svg onclick="datavzrd.sort('${column}', 'desc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                        <svg onclick="datavzrd.sort(${config.columns.indexOf(column)}, 'desc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                         </svg>
                     </div>
-                    <div class="sym hide-sym" onclick="datavzrd.hide('${column}', false)">
+                    <div class="sym hide-sym" onclick="datavzrd.hide(${config.columns.indexOf(column)}, false)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
                             <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
                             <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
@@ -1019,7 +1019,7 @@ export function load() {
                                                 </div>`;
                                 data_content = data_content.concat(checkbox);
                             }
-                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="${data_content}"> ${search_icon}</div>`);
+                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title.replace(/'/g, "&#39;")}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="${data_content}"> ${search_icon}</div>`);
                             $(`#filter-${index}-container`).on('click', function (e) {
                                 $('input:checkbox').change(function (event) {
                                     if (!event.currentTarget.checked) {
@@ -1046,7 +1046,7 @@ export function load() {
                     } else {
                         if(!reset) {
                             let search_icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
-                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title}' placeholder='Filter...'>"> ${search_icon}</div>`);
+                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title.replace(/'/g, "&#39;")}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title.replace(/'/g, "&#39;")}' placeholder='Filter...'>"> ${search_icon}</div>`);
                             $(`#filter-${index}-container`).on('click', function (e) {
                                 $(`#filter-${index}`).on('input', function(event) {
                                     filters[event.target.dataset.title] = $(`#filter-${index}`).val();
@@ -1396,7 +1396,8 @@ function decompress(data) {
     return decompressed
 }
 
-export function sort(column, order, svg) {
+export function sort(c, order, svg) {
+    let column = config.columns[c];
     const options = $('#table').bootstrapTable('getOptions');
     if (options.sortName === column && options.sortOrder === order) {
         $('#table').bootstrapTable('sortBy', {"":""})
@@ -1409,7 +1410,8 @@ export function sort(column, order, svg) {
     $('#table').bootstrapTable('sortBy', {field: column, sortOrder: order})
 }
 
-export function hide(column, render) {
+export function hide(c, render) {
+    let column = config.columns[c];
     const column_index = get_index(column, config.displayed_columns, config.detail_mode, config.header_label_length);
     $(`table > thead > tr:first-child th:nth-child(${column_index})`).css("display", "none");
     $(`table > tbody > tr td:nth-child(${column_index})`).each(function () {
