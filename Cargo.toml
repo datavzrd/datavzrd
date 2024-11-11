@@ -11,7 +11,7 @@ derefable = "0.1"
 serde = { version = "1", features = ["derive"] }
 structopt = "0.3"
 anyhow = "1"
-thiserror = "1"
+thiserror = "2"
 readervzrd = "0.1.1"
 typed-builder = "0.20"
 serde_yaml = "0.8" # https://github.com/AlexanderThaller/format_serde_error/pull/23
