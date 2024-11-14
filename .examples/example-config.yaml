@@ -121,9 +121,6 @@ views:
               color-scheme: tableau20
         Runtime:
           custom-path: ".examples/specs/time-formatter.js"
-        timerun:
-          optional: true
-          custom-path: ".examples/specs/time-formatter.js"
   movies-plot:
     dataset: movies
     desc: |
