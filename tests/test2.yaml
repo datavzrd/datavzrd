@@ -1,0 +1,13 @@
+datasets:
+    test:
+    path: tests/data/data2.tsv
+    separator: "\t"
+
+views:
+  test:
+    datatset: test
+    render-table:
+      columns: 
+        Significance Column:
+          spell:
+            url: tests/spells/spell.yaml

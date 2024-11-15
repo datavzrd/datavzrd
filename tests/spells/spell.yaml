@@ -1,0 +1,26 @@
+__use_yte__: true
+
+custom: |
+  function clin_sig(value){
+    const colorMapping = {
+      "unknown": "rgb(108 117 125)", // gray 
+      "not_provided": "rgb(52 58 64)", // dark gray 
+      "other": "rgb(173 181 189)", // light gray 
+      "benign": "rgb(33 136 56)", // green 
+      "benign/likely_benign": "rgb(33 136 56)", // dark green 
+      "likely_benign": "rgb(40 167 69)", // green 
+      "protective": "rgb(32 201 151)", // teal 
+      "uncertain_significance": "rgb(255 193 7)", // yellow 
+      "conflicting_interpretations_of_pathogenicity": "rgb(23 162 184)", // cyan 
+      "association": "rgb(0 123 255)", // blue 
+      "affects": "rgb(111 66 193)", // purple 
+      "drug_response": "rgb(102 16 242)", // dark purple 
+      "risk_factor": "rgb(227 52 47)", // red 
+      "likely_pathogenic": "rgb(220 53 69)", // dark red 
+      "pathogenic/likely_pathogenic": "rgb(189 33 48)", // deep red 
+      "pathogenic": "rgb(189 33 48)" // dark red 
+    };
+
+    const splitValues = value.split(",").map(item => `<span style="color: white; background-color: ${colorMapping[item.trim()]}"class="badge">${item.trim()}</span>`);
+    return splitValues.join(' '); 
+  }

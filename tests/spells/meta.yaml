@@ -1,0 +1,14 @@
+name: clin_sig
+type: "column"
+description: |
+  This spell visualizes the clinical significance via bootstrap pills
+example: 
+  code: |
+    render-table:
+      columns: 
+        Significance Column:
+          spell:
+            url: <url>
+testdata: data1.tsv
+authors:
+  -Benjamin Orlik
