@@ -78,7 +78,7 @@ fn generate_numeric_plot(
     }
 
     let bin_width = (max - min) / NUMERIC_BINS as f32;
-    let mut hist = ndhistogram!(Uniform::new(NUMERIC_BINS, min, max));
+    let mut hist = ndhistogram!(Uniform::new(NUMERIC_BINS, min, max)?);
     let mut nan = 0;
 
     for record in reader.records()?.skip(dataset.header_rows - 1) {
