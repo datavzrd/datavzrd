@@ -364,3 +364,7 @@ footer {
     display: block;
     margin: 5rem auto;
 }
+
+.linkout-raw-value {
+    display: none;
+}

@@ -306,7 +306,8 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content
                     }
                 }
                 this.innerHTML = `
-                <div class="btn-group">
+                <div class="linkout-raw-value">${shown_value}</div>
+                <div class="btn-group linkout-group">
                   <button class="btn btn-outline-secondary btn-table btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     ${shown_value}
                   </button>
@@ -1363,6 +1364,8 @@ export function screenshot_table() {
             first.forEach(cell => cell.style.display = 'none');
         });
     }
+    document.querySelectorAll('.linkout-group').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.linkout-raw-value').forEach(el => el.style.display = 'table-cell');
     const table_element = document.getElementById("table");
     const svgDocument = elementToSVG(table_element);
     const svgString = new XMLSerializer().serializeToString(svgDocument);
@@ -1387,6 +1390,8 @@ export function screenshot_table() {
             lastTwo.forEach(cell => cell.style.display = 'table-cell');
         }
     });
+    document.querySelectorAll('.linkout-group').forEach(el => el.style.display = 'table-cell');
+    document.querySelectorAll('.linkout-raw-value').forEach(el => el.style.display = 'none');
 }
 
 function decompress(data) {
