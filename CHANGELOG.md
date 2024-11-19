@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.44.4](https://github.com/datavzrd/datavzrd/compare/v2.44.3...v2.44.4) (2024-11-19)
+
+
+### Bug Fixes
+
+* Multi linkout dropdown not showing properly in SVG export ([#834](https://github.com/datavzrd/datavzrd/issues/834)) ([d37da07](https://github.com/datavzrd/datavzrd/commit/d37da07b01ec27b846e4212320b84d1fc6f66fcf))
+
 ## [2.44.3](https://github.com/datavzrd/datavzrd/compare/v2.44.2...v2.44.3) (2024-11-06)
 
 
