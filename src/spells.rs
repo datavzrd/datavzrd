@@ -102,12 +102,12 @@ fn fetch_from_file(path: &str) -> Result<String> {
 /// Call the `process_yaml` function from the Python `yte` module.
 fn call_process_yaml(template: &str, variables: HashMap<String, String>) -> Result<String> {
     Python::with_gil(|py| {
-        let yte_module = PyModule::import_bound(py, "yte")?;
-        let kwargs = [("variables".to_string(), variables)].into_py_dict_bound(py);
+        let yte_module = PyModule::import(py, "yte")?;
+        let kwargs = [("variables".to_string(), variables)].into_py_dict(py)?;
         let result = yte_module
             .getattr("process_yaml")?
             .call((template,), Some(kwargs).as_ref())?;
-        let yaml_module = PyModule::import_bound(py, "yaml")?;
+        let yaml_module = PyModule::import(py, "yaml")?;
         let yaml_string = yaml_module
             .call_method1("dump", (result,))?
             .extract::<String>()?;
