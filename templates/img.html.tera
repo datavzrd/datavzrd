@@ -7,16 +7,9 @@
 
 <body>
 <script src="../static/bundle.js"></script>
-{% if aux_libraries %}
-{% for library in aux_libraries %}
-<script src="{{ library }}"></script>
-{% endfor %}
-{% endif %}
-
 <div class="collapse" id="sidebar">
     <div class="card" id="sidebar-card">
         <ul class="list-group list-group-flush" id="sidebar-list">
-            {% if has_excel_sheet %}<li class="list-group-item sidebar-btn" id="btnExcel" onclick="window.location='../data.xlsx'">Download excel sheet</li>{% endif %}
             {% if description %}<li class="list-group-item sidebar-btn" id="markdown-btn" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">Show description</li>{% endif %}
         </ul>
     </div>
@@ -82,7 +75,9 @@
             </div>
             {% endif %}
             <div class="row">
-                <div class="col-md-12 d-flex justify-content-center" id="canvas"></div>
+                <div class="col-md-12 d-flex justify-content-center">
+                    <img src="./{{ img }}" class="datavzrd-img">
+                </div>
             </div>
         </div>
     </div>
@@ -125,8 +120,4 @@
     </footer>
 </div>
 </body>
-<script>
-    var data = {{ data | safe }};
-    {{ script | safe}}
-</script>
 </html>

@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 export function render_html_contents() {
     let description_html = `
         <div class="row description-box">
@@ -64,20 +66,18 @@ export function render_html_contents() {
             </li>
         </ol>`;
     let sidebar_html = "";
-    if (config.is_single_page) {
-        sidebar_html += '<li class="list-group-item sidebar-btn" id="btnHeatmap" data-toggle="modal" data-target="#heatmap-plot-modal">Show as plot</li>';
-    }
     if (config.has_excel_sheet) {
-        sidebar_html += '<li class="list-group-item sidebar-btn" id="btnExcel" onclick="window.location=\'../data.xlsx\'">Download excel sheet</li>';
+        sidebar_html += '<li class="list-group-item sidebar-btn" id="btnExcel">Download excel sheet</li>';
     }
     if (config.description) {
         sidebar_html += '<li class="list-group-item sidebar-btn" id="markdown-btn" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">Show description</li>';
     }
     if (config.is_single_page) {
-        sidebar_html += '<li class="list-group-item sidebar-btn" onclick="datavzrd.downloadCSV()">Download CSV</li>';
+        sidebar_html += '<li class="list-group-item sidebar-btn" id="downloadCSV-btn">Download CSV</li>';
+        sidebar_html += '<li class="list-group-item sidebar-btn" id="unhide-btn">Unhide columns</li>';
     }
-    sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleLineNumbers" onclick="datavzrd.toggle_line_numbers()">Show/Hide Line Numbers</li>';
-    sidebar_html += '<li class="list-group-item sidebar-btn" id="screenshotTable" onclick="datavzrd.screenshot_table()">Export table as SVG</li>';
+    sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleLineNumbers">Show/Hide Line Numbers</li>';
+    sidebar_html += '<li class="list-group-item sidebar-btn" id="screenshotTable">Export table page as SVG</li>';
     const content = `
         <div class="collapse" id="sidebar">
             <div class="card" id="sidebar-card">
@@ -161,26 +161,6 @@ export function render_html_contents() {
                                 </div>
                             </div>
                         </div>
-                        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="heatmap-plot-modal" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" id="modal-dialog-heatmap">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Plot-View</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p class="text-right small">Click "..."-button for export options</p>
-                                        <div id="heatmap-plot">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="modal fade" id="search" tabindex="-1" role="dialog" aria-hidden="true" data-focus="false">
                             <div class="modal-dialog modal-dialog-centered modal-md" role="document">
                                 <div class="modal-content">
@@ -241,4 +221,23 @@ export function render_html_contents() {
             </footer>
         </div>`;
     document.querySelector('body').innerHTML = content;
+}
+
+export function render_plot_size_controls() {
+    let controls = `
+        <div id="plot-size-control">
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" id="zoom" class="btn btn-sm btn-outline-secondary" onclick="datavzrd.load_plot(specs, data, false, 100)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-angle-expand" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707"/>
+                    </svg>
+                </button>
+                <button type="button" id="unzoom" class="btn btn-sm btn-outline-secondary"onclick="datavzrd.load_plot(specs, data, false, -100)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-angle-contract" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M.172 15.828a.5.5 0 0 0 .707 0l4.096-4.096V14.5a.5.5 0 1 0 1 0v-3.975a.5.5 0 0 0-.5-.5H1.5a.5.5 0 0 0 0 1h2.768L.172 15.121a.5.5 0 0 0 0 .707M15.828.172a.5.5 0 0 0-.707 0l-4.096 4.096V1.5a.5.5 0 1 0-1 0v3.975a.5.5 0 0 0 .5.5H14.5a.5.5 0 0 0 0-1h-2.768L15.828.879a.5.5 0 0 0 0-.707"/>
+                    </svg>
+                </button>
+            </div>
+        </div>`;
+    $('.container-fluid').append(controls);
 }

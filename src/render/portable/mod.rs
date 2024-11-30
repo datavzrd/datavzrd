@@ -2,13 +2,12 @@ mod plot;
 pub(crate) mod utils;
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
-use crate::render::portable::utils::get_column_labels;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
 use crate::spec::{AdditionalColumnSpec, LinkToUrlSpecEntry};
 use crate::spec::{
     BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
-    RenderColumnSpec, ScaleType, TickPlot,
+    RenderColumnSpec, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_position;
@@ -22,7 +21,6 @@ use chrono::{DateTime, Local};
 use itertools::Itertools;
 use serde::Serialize;
 use serde_json::{json, Value};
-use std::cmp::max;
 use std::collections::{HashMap, HashSet};
 
 use minify_html::{minify, Cfg};
@@ -32,7 +30,7 @@ use std::io::Write;
 use std::option::Option::Some;
 use std::path::Path;
 use std::str::FromStr;
-use tera::{Context, Tera};
+use tera::{escape_html, Context, Tera};
 use thiserror::Error;
 use typed_builder::TypedBuilder;
 
@@ -113,18 +111,31 @@ impl Renderer for ItemRenderer {
                     continue;
                 }
             }
-            let dataset = match self.specs.datasets.get(table.dataset.as_ref().unwrap()) {
-                Some(dataset) => dataset,
-                None => {
-                    bail!(DatasetError::NotFound {
-                        dataset_name: table.dataset.as_ref().unwrap().clone()
-                    })
+
+            let dataset = if let Some(d) = table.dataset.as_ref() {
+                match self.specs.datasets.get(d) {
+                    Some(dataset) => dataset,
+                    None => {
+                        bail!(DatasetError::NotFound {
+                            dataset_name: table.dataset.as_ref().unwrap().clone()
+                        })
+                    }
                 }
+            } else {
+                &DatasetSpecs::default()
             };
 
-            let records_length = dataset.size()?;
-            if !dataset.is_empty()? {
-                let linked_tables = get_linked_tables(name, &self.specs)?;
+            let (records_length, is_empty) = if table.render_img.is_none() {
+                (dataset.size()?, dataset.is_empty()?)
+            } else {
+                (0, false)
+            };
+            if !is_empty {
+                let linked_tables = if table.render_img.is_none() {
+                    get_linked_tables(name, &self.specs)?
+                } else {
+                    HashMap::new()
+                };
                 // Render plot
                 if table.render_plot.is_some() {
                     render_plot_page(
@@ -157,6 +168,18 @@ impl Renderer for ItemRenderer {
                         self.specs.needs_excel_sheet(),
                         &view_sizes,
                     )?;
+                } else if let Some(table_specs) = &table.render_img {
+                    render_img_page(
+                        &out_path,
+                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
+                        name,
+                        table,
+                        &self.specs.views,
+                        &self.specs.default_view,
+                        table_specs.path.to_string(),
+                        &self.specs.report_name,
+                        &view_sizes,
+                    )?;
                 }
                 // Render table
                 else if let Some(table_specs) = &table.render_table {
@@ -183,7 +206,7 @@ impl Renderer for ItemRenderer {
                         .columns
                         .clone()
                         .into_iter()
-                        .filter(|(k, s)| !s.optional || headers.contains(k))
+                        .filter(|(k, s)| !s.optional.unwrap() || headers.contains(k))
                         .collect();
                     // Assert that remaining columns are present in dataset.
                     // This should be guaranteed by the validation that happens before.
@@ -227,9 +250,7 @@ impl Renderer for ItemRenderer {
                             debug,
                         )?;
                     }
-                    if is_single_page {
-                        render_table_heatmap(&out_path, dataset, table_specs, &headers)?;
-                    } else {
+                    if !is_single_page {
                         render_search_dialogs(&out_path, &headers, dataset, table.page_size)?;
                     }
                     render_table_javascript(
@@ -377,211 +398,6 @@ fn render_page<P: AsRef<Path>>(
     data_file.write_all(js.as_bytes())?;
 
     Ok(())
-}
-
-fn render_table_heatmap<P: AsRef<Path>>(
-    output_path: P,
-    dataset: &DatasetSpecs,
-    render_columns: &HashMap<String, RenderColumnSpec>,
-    titles: &[String],
-) -> Result<()> {
-    let mut templates = Tera::default();
-    templates.add_raw_template(
-        "table_heatmap.js.tera",
-        include_str!("../../../templates/table_heatmap.js.tera"),
-    )?;
-    let mut context = Context::new();
-
-    let hidden_columns: HashSet<_> = render_columns
-        .iter()
-        .filter(|(_, v)| v.display_mode == DisplayMode::Hidden)
-        .map(|(k, _)| k)
-        .collect();
-
-    let columns = titles
-        .iter()
-        .filter(|t| !hidden_columns.contains(t))
-        .collect_vec();
-
-    let labels = get_column_labels(render_columns);
-
-    let table_classes = classify_table(dataset)?;
-    let column_types: HashMap<_, _> = table_classes
-        .iter()
-        .map(|(t, c)| match c {
-            ColumnType::None | ColumnType::String => (t, "nominal"),
-            ColumnType::Float | ColumnType::Integer => (t, "quantitative"),
-        })
-        .collect();
-    let marks: HashMap<_, _> = titles
-        .iter()
-        .map(|title| {
-            if let Some(rc) = render_columns.get(&title.to_string()) {
-                if let Some(plot) = &rc.plot {
-                    if plot.bar_plot.is_some() {
-                        (title, "bar")
-                    } else {
-                        (title, "rect")
-                    }
-                } else {
-                    (title, "text")
-                }
-            } else {
-                (title, "text")
-            }
-        })
-        .collect();
-
-    let tick_domains: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .filter(|(_, p)| p.tick_plot.is_some())
-        .map(|(t, p)| (t, p.tick_plot.as_ref().unwrap()))
-        .filter(|(_, h)| h.domain.is_some() || h.aux_domain_columns.0.is_some())
-        .map(|(t, h)| {
-            let domain = if let Some(domain) = h.domain.as_ref() {
-                domain.clone()
-            } else {
-                let mut aux_domains = h.aux_domain_columns.0.as_ref().unwrap().to_vec();
-                aux_domains.push(t.to_string());
-                let d = get_min_max_multiple_columns(dataset, aux_domains, None).unwrap();
-                vec![d.0, d.1]
-            };
-            (t, domain)
-        })
-        .collect();
-
-    let heatmap_domains: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .filter(|(_, p)| p.heatmap.is_some())
-        .map(|(t, p)| (t, p.heatmap.as_ref().unwrap()))
-        .filter(|(_, h)| h.domain.is_some() || h.aux_domain_columns.0.is_some())
-        .map(|(t, h)| (t, get_column_domain(t, dataset, h).unwrap()))
-        .collect();
-
-    let scales: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .map(|(t, p)| {
-            if let Some(heatmap) = &p.heatmap {
-                (t, heatmap.scale_type)
-            } else if let Some(ticks) = &p.tick_plot {
-                (t, ticks.scale_type)
-            } else {
-                (t, ScaleType::None)
-            }
-        })
-        .filter(|(_, s)| s != &ScaleType::None)
-        .collect();
-
-    let ranges: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .filter(|(_, p)| p.heatmap.is_some())
-        .map(|(t, p)| {
-            let heatmap = p.heatmap.as_ref().unwrap();
-            (t, &heatmap.color_range)
-        })
-        .collect();
-
-    let schemes: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .filter(|(_, p)| p.heatmap.is_some())
-        .map(|(t, p)| {
-            let heatmap = p.heatmap.as_ref().unwrap();
-            (t, &heatmap.color_scheme)
-        })
-        .filter(|(_, s)| !s.is_empty())
-        .collect();
-
-    let clamps: HashMap<_, _> = render_columns
-        .iter()
-        .filter(|(_, r)| r.plot.is_some())
-        .map(|(t, rc)| (t, rc.plot.as_ref().unwrap()))
-        .filter(|(_, p)| p.heatmap.is_some())
-        .map(|(t, p)| (t, &p.heatmap.as_ref().unwrap().clamp))
-        .collect();
-
-    let remove_legend: HashMap<_, _> = titles
-        .iter()
-        .tuple_windows()
-        .map(|(t1, t2)| {
-            match (
-                tick_domains.get(t1),
-                tick_domains.get(t2),
-                heatmap_domains.get(t1),
-                heatmap_domains.get(t2),
-            ) {
-                (Some(d1), Some(d2), _, _) => (t1, d1 == d2),
-                (_, _, Some(d1), Some(d2)) => (t1, d1 == d2),
-                _ => (t1, false),
-            }
-        })
-        .collect();
-
-    let plot_legends: HashMap<_, _> = render_columns
-        .iter()
-        .map(|(t, rc)| (t, rc.plot_view_legend))
-        .collect();
-
-    let column_widths: HashMap<_, _> = marks
-        .iter()
-        .filter(|(_, m)| *m != &"text")
-        .map(|(t, _)| (t, max(20, 6 * get_column_width(t, dataset).unwrap())))
-        .collect();
-
-    context.insert("remove_legend", &remove_legend);
-    context.insert("column_widths", &column_widths);
-    context.insert("plot_legends", &plot_legends);
-    context.insert("tick_domains", &tick_domains);
-    context.insert("heatmap_domains", &heatmap_domains);
-    context.insert("ranges", &ranges);
-    context.insert("schemes", &schemes);
-    context.insert("scales", &scales);
-    context.insert("clamps", &clamps);
-    context.insert("columns", &columns);
-    context.insert("types", &column_types);
-    context.insert("marks", &marks);
-    context.insert("labels", &labels);
-
-    let js = templates.render("table_heatmap.js.tera", &context)?;
-
-    let file_path = Path::new(output_path.as_ref()).join(Path::new("heatmap").with_extension("js"));
-
-    let mut file = File::create(file_path)?;
-    file.write_all(js.as_bytes())?;
-
-    Ok(())
-}
-
-fn get_column_width(column: &str, dataset: &DatasetSpecs) -> Result<i32> {
-    let mut reader = dataset.reader()?;
-    let column_index = reader.headers().map(|s| {
-        s.iter()
-            .position(|t| t == column)
-            .context(ColumnError::NotFound {
-                column: column.to_string(),
-                path: dataset.path.to_str().unwrap().to_string(),
-            })
-            .unwrap()
-    })?;
-
-    let width = reader
-        .records()?
-        .skip(dataset.header_rows - 1)
-        .map(|row| row.get(column_index).unwrap().to_string())
-        .map(|s| s.len())
-        .max()
-        .unwrap_or(0);
-
-    Ok(width as i32)
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -863,7 +679,7 @@ impl JavascriptConfig {
             columns
                 .iter()
                 .map(|c| c.to_string())
-                .filter(|c| config.get(c).unwrap().display_mode == dp_mode)
+                .filter(|c| config.get(c).unwrap().display_mode.unwrap() == dp_mode)
                 .chain(
                     additional_columns
                         .as_ref()
@@ -875,12 +691,20 @@ impl JavascriptConfig {
                 .collect()
         };
         let sorted_tables = tables.iter().sorted().map(|s| s.to_owned()).collect_vec();
-        Self {
-            detail_mode: config
+        let detail_mode = config
+            .iter()
+            .filter(|(_, spec)| spec.display_mode.unwrap() == DisplayMode::Detail)
+            .count()
+            > 0
+            || additional_columns
+                .as_ref()
+                .unwrap_or(&HashMap::new())
                 .iter()
-                .filter(|(_, spec)| spec.display_mode == DisplayMode::Detail)
+                .filter(|(_, v)| v.display_mode == DisplayMode::Detail)
                 .count()
-                > 0,
+                > 0;
+        Self {
+            detail_mode,
             webview_controls,
             webview_host: webview_host.to_string(),
             is_single_page,
@@ -931,7 +755,7 @@ impl JavascriptConfig {
                             k,
                             dataset,
                             v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
-                            v.precision,
+                            v.precision.unwrap(),
                         )
                         .unwrap(),
                     )
@@ -948,7 +772,7 @@ impl JavascriptConfig {
                             k,
                             dataset,
                             v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
-                            v.precision,
+                            v.precision.unwrap(),
                         )
                         .unwrap(),
                     )
@@ -1065,7 +889,7 @@ impl JavascriptConfig {
             tables: sorted_tables,
             default_view: default_view.to_owned(),
             has_excel_sheet,
-            description: description.map(|s| s.to_string()),
+            description: description.map(escape_html),
             report_name: report_name.to_owned(),
             time: local.format("%a %b %e %T %Y").to_string(),
             version: env!("CARGO_PKG_VERSION").to_string(),
@@ -1126,7 +950,7 @@ impl JavascriptColumnConfig {
         Self {
             label: spec.label.clone(),
             is_float: column_type == &ColumnType::Float,
-            precision: spec.precision,
+            precision: spec.precision.unwrap(),
         }
     }
 }
@@ -1231,13 +1055,14 @@ impl JavascriptFunction {
             .to_string()
     }
 
-    fn to_javascript_function(&self, column: &String) -> String {
+    fn to_javascript_function(&self, column: &str) -> String {
+        let escaped_column = column.replace("'", "\\'");
         format!(
             "function {}({}) {{ try {{ {} }} catch (e) {{ datavzrd.custom_error(e, '{}') }}}}",
             &self.name(),
             &self.args(),
             &self.body(),
-            column,
+            escaped_column,
         )
     }
 }
@@ -1308,6 +1133,17 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                 .unwrap_or(&HashMap::new())
                 .iter()
                 .map(|(k, v)| JavascriptFunction(v.value.to_string()).to_javascript_function(k)),
+        )
+        .chain(
+            additional_columns
+                .as_ref()
+                .unwrap_or(&HashMap::new())
+                .iter()
+                .filter(|(_, k)| k.custom_plot.is_some())
+                .map(|(k, v)| {
+                    JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
+                        .to_javascript_function(k)
+                }),
         )
         .collect_vec();
 
@@ -1814,6 +1650,67 @@ fn render_html_page<P: AsRef<Path>>(
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
+/// Renders a plot page from given render-plot spec
+fn render_img_page<P: AsRef<Path>>(
+    output_path: P,
+    tables: &[String],
+    name: &str,
+    item_spec: &ItemSpecs,
+    views: &HashMap<String, ItemSpecs>,
+    default_view: &Option<String>,
+    img_path: String,
+    report_name: &String,
+    view_sizes: &HashMap<String, String>,
+) -> Result<()> {
+    let img_file = Path::new(&img_path);
+    let img_file_name = img_file.file_name().unwrap();
+    let img_file_path = Path::new(output_path.as_ref()).join(img_file_name);
+    fs::copy(img_file, &img_file_path)?;
+
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "img.html.tera",
+        include_str!("../../../templates/img.html.tera"),
+    )?;
+    let mut context = Context::new();
+
+    let local: DateTime<Local> = Local::now();
+
+    context.insert("description", &item_spec.description);
+    context.insert("img", &img_file_name.to_str().unwrap());
+    context.insert(
+        "tables",
+        &tables
+            .iter()
+            .filter(|t| !views.get(*t).unwrap().hidden)
+            .filter(|t| {
+                if let Some(default_view) = default_view {
+                    t != &default_view
+                } else {
+                    true
+                }
+            })
+            .collect_vec(),
+    );
+    context.insert("view_sizes", &view_sizes);
+    context.insert("default_view", default_view);
+    context.insert("report_name", report_name);
+    context.insert("name", name);
+    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
+    context.insert("version", &env!("CARGO_PKG_VERSION"));
+
+    let file_path =
+        Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
+
+    let img = templates.render("img.html.tera", &context)?;
+
+    let mut file = fs::File::create(file_path)?;
+    file.write_all(img.as_bytes())?;
+
+    Ok(())
+}
+
 /// Renders a plot page from given render-plot spec containing multiple datasets
 fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
     output_path: P,
@@ -1997,6 +1894,11 @@ fn render_excel_sheet<P: AsRef<Path>>(specs: &ItemsSpec, output_path: P) -> Resu
             let mut sheet = wb.create_sheet(view);
 
             wb.write_sheet(&mut sheet, |sw| {
+                let mut row = simple_excel_writer::Row::new();
+                for header in rdr.headers().unwrap() {
+                    row.add_cell(header.to_string());
+                }
+                sw.append_row(row)?;
                 for result in rdr.records().unwrap() {
                     let mut row = simple_excel_writer::Row::new();
                     for field in result.iter() {

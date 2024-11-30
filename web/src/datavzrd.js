@@ -9,22 +9,19 @@ import vegalite from 'vega-lite';
 import QRCode from 'qrcode';
 import * as d3 from "d3";
 import 'bootstrap';
-import 'bootstrap-table';
+import 'bootstrap-table/src/bootstrap-table.js';
 import 'bootstrap-select';
 import { documentToSVG, elementToSVG, inlineResources, formatXML } from 'dom-to-svg';
-import {render_html_contents} from "./page";
+import {render_html_contents, render_plot_size_controls} from "./page";
 import '../style/bootstrap.min.css';
 import '../style/bootstrap-table.min.css';
 import '../style/bootstrap-select.min.css';
 import '../style/bootstrap-table-fixed-columns.min.css';
 import '../style/datavzrd.css';
 
-
 let LINE_NUMBERS = false;
 
 let VEGA_EMBED_OPTIONS = { 'renderer': 'svg', 'actions': false };
-
-load();
 
 function renderMarkdownDescription() {
     var innerDescription = document.getElementById('innerDescription');
@@ -95,7 +92,10 @@ function createShareURL(index, webhost_url) {
     var data = $('#table').bootstrapTable('getData')[index];
     delete data["linkouts"];
     delete data["share"];
+    delete data["line_number"];
     var c = JSON.parse(JSON.stringify(config));
+    c["format"] = {}; // Remove any custom function
+    delete c["unique_column_values"];
     c["data"] = data;
     const packer = new jsonm.Packer();
     let packedMessage = packer.pack(c);
@@ -109,7 +109,7 @@ function shareRow(index, webhost_url) {
     document.getElementById("qr-code").innerHTML = "";
     let url = createShareURL(index, webhost_url);
     $('#open-url').attr("href", url);
-    QRCode.toCanvas(document.getElementById('qr-code'), url)
+    QRCode.toCanvas(document.getElementById("qr-code"), url, { width: window.innerHeight / 1.8 });
 }
 
 function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
@@ -306,7 +306,8 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content
                     }
                 }
                 this.innerHTML = `
-                <div class="btn-group">
+                <div class="linkout-raw-value">${shown_value}</div>
+                <div class="btn-group linkout-group">
                   <button class="btn btn-outline-secondary btn-table btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     ${shown_value}
                   </button>
@@ -321,7 +322,7 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content
     );
 }
 
-function colorizeDetailCard(value, div, heatmap, row) {
+function colorizeDetailCard(value, div, heatmap, row, is_float, precision) {
     let scale = datavzrdScale(heatmap);
 
     if (value !== "") {
@@ -330,6 +331,9 @@ function colorizeDetailCard(value, div, heatmap, row) {
     if (heatmap.heatmap.custom_content !== null) {
         var data_function = window[heatmap.heatmap.custom_content];
         value = data_function(value, row);
+        $(`${div}`)[0].innerHTML = value;
+    } else if (is_float && precision !== undefined) {
+        value = precision_formatter(precision, value);
         $(`${div}`)[0].innerHTML = value;
     }
 }
@@ -374,14 +378,16 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
             }
         }
     }
-    var skip_label = header_label_length > 0;
-    $(`table > thead > tr:nth-child(${row + 1}) > td`).each(
+    var start = 0;
+    if (header_label_length > 0) {
+        start = 1;
+    }
+    $(`table > thead > tr:nth-child(${row + 1}) > td:gt(${start})`).each(
         function() {
             var value = this.innerHTML;
-            if (value !== "" && !skip_label) {
+            if (value !== "") {
                 this.style.setProperty("background-color", scale(value), "important");
             }
-            skip_label = false;
         }
     );
 }
@@ -415,8 +421,8 @@ function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
     );
 }
 
-function renderCustomPlotDetailView(value, div, data_function, specs, vega_controls) {
-    var data = data_function(value);
+function renderCustomPlotDetailView(value, row, div, data_function, specs, vega_controls) {
+    var data = data_function(value, row);
     var s = specs;
     s.data = {};
     s.data.values = data;
@@ -583,6 +589,12 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
     if (!LINE_NUMBERS) {
         line_numbers("none");
     }
+
+    if (config["to_be_hidden"]) {
+        for (var hc of config["to_be_hidden"]) {
+            hide(hc, true);
+        }
+    }
 }
 
 export function load() {
@@ -659,7 +671,26 @@ export function load() {
 
                 // Add static search if not single page mode
                 if (!config.is_single_page && !config.additional_colums[column] && !config.column_config[column].is_float) {
-                    title += `<a class="sym" data-toggle="modal" onclick="datavzrd.embedSearch(${config.columns.indexOf(column)})" data-target="#search"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg></a>`;
+                    title += `<a class="sym" style="margin-left: 2px;" data-toggle="modal" onclick="datavzrd.embedSearch(${config.columns.indexOf(column)})" data-target="#search"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg></a>`;
+                }
+
+                if (config.is_single_page) {
+                    title += `
+                    <div class="sym sym-container" style="position: relative;">
+                        <svg onclick="datavzrd.sort(${config.columns.indexOf(column)}, 'asc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                          <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                        </svg>
+                        <svg onclick="datavzrd.sort(${config.columns.indexOf(column)}, 'desc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
+                    </div>
+                    <div class="sym hide-sym" onclick="datavzrd.hide(${config.columns.indexOf(column)}, false)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                        </svg>
+                    </div>
+                    `
                 }
 
                 let formatter = undefined;
@@ -704,6 +735,7 @@ export function load() {
         if (config.is_single_page) {
             bs_table_config.pagination = true;
             bs_table_config.pageSize = config.page_size;
+            bs_table_config.sortable = true;
         }
 
         if (config.detail_mode) {
@@ -717,28 +749,38 @@ export function load() {
 
         for (const ah of header_config.headers) {
             additional_headers += "<tr>";
-            if (config.detail_mode || ah.label != undefined) {
+            if (config.detail_mode || ah.label) {
                 additional_headers += "<td";
                 if (!config.detail_mode) {
                     additional_headers += " style='border: none !important;'";
                 }
                 additional_headers += ">";
-                if (ah.label != undefined) {
+                if (ah.label) {
                     additional_headers += `<b>${ah.label}</b>`;
                 }
                 additional_headers += "</td>";
             }
+            additional_headers += "<td></td>";
             for (const title of config.columns) {
-                if (config.displayed_columns.includes(title)) {
-                    additional_headers += `<td>${ah.header[title]}</td>`;
+                if (config.displayed_columns.includes(title) ) {
+                    if (ah.header[title] === undefined) {
+                        additional_headers += "<td></td>";
+                    } else {
+                        additional_headers += `<td>${ah.header[title]}</td>`;
+                    }
                 }
             }
             additional_headers += "</tr>";
         }
 
 
-        var header_height = (80+6*Math.max(...(config.displayed_columns.map(el => el.length)))*Math.SQRT2)/2 + 70;
+        var header_height = (80 + 6 * Math.max(...config.displayed_columns.map(el => {
+            var columnConfig = config.column_config[el];
+            return columnConfig && columnConfig.label ? columnConfig.label.length : el.length;
+        })) * Math.SQRT2) / 2 + 80;
+
         $('th').css("height", header_height);
+
 
         var table_rows = [];
         var j = 0;
@@ -789,31 +831,20 @@ export function load() {
             navigator.clipboard.writeText(createShareURL($(this).data('row'), config.webview_host));
         });
 
-        $( "#btnHeatmap" ).on( "click", function() {
-            var i = 0;
-            var heatmap_data = JSON.parse(JSON.stringify(table_rows));
-            for (const r of heatmap_data) {
-                if (r.hasOwnProperty('linkouts')) delete r['linkouts']
-                if (r.hasOwnProperty('share')) delete r['share']
-                r.index = i;
-                i++;
-            }
-            heatmap_plot.data.values = heatmap_data;
-            vegaEmbed('#heatmap-plot', heatmap_plot);
-        });
-
         $('#table').find('thead').append(additional_headers);
         $('#table').bootstrapTable('append', table_rows);
 
         $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
             for (const o of custom_plots) {
                 if (!config.displayed_columns.includes(o.title)) {
-                    renderCustomPlotDetailView(row[o.title], `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, window[o.data_function], o.specs, o.vega_controls);
+                    renderCustomPlotDetailView(row[o.title], row, `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, window[o.data_function], o.specs, o.vega_controls);
                 }
             }
 
             for (const o of config.heatmaps) {
-                colorizeDetailCard(row[o.title], `#heatmap-${index}-${config.columns.indexOf(o.title)}`, o, row);
+                if (!config.displayed_columns.includes(o.title)) {
+                    colorizeDetailCard(row[o.title], `#heatmap-${index}-${config.columns.indexOf(o.title)}`, o, row, config.column_config[o.title].is_float, config.column_config[o.title].precision);
+                }
             }
 
             for (const o of config.ticks) {
@@ -852,6 +883,7 @@ export function load() {
         addNumClass(config.displayed_numeric_columns, additional_headers.length, config.detail_mode, config);
 
         render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true, custom_plots);
+        config["to_be_hidden"] = [];
 
         if (!config.detail_mode && !config.header_label_length == 0) {
             $("table > thead > tr:first-child th:first-child").css("visibility", "hidden");
@@ -988,7 +1020,7 @@ export function load() {
                                                 </div>`;
                                 data_content = data_content.concat(checkbox);
                             }
-                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="${data_content}"> ${search_icon}</div>`);
+                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title.replace(/'/g, "&#39;")}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="${data_content}"> ${search_icon}</div>`);
                             $(`#filter-${index}-container`).on('click', function (e) {
                                 $('input:checkbox').change(function (event) {
                                     if (!event.currentTarget.checked) {
@@ -1015,7 +1047,7 @@ export function load() {
                     } else {
                         if(!reset) {
                             let search_icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
-                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title}' placeholder='Filter...'>"> ${search_icon}</div>`);
+                            $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym" id="filter-${index}-container" data-column-title='${title.replace(/'/g, "&#39;")}' data-toggle="popover" data-placement="top" data-trigger="hover click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title.replace(/'/g, "&#39;")}' placeholder='Filter...'>"> ${search_icon}</div>`);
                             $(`#filter-${index}-container`).on('click', function (e) {
                                 $(`#filter-${index}`).on('input', function(event) {
                                     filters[event.target.dataset.title] = $(`#filter-${index}`).val();
@@ -1081,6 +1113,44 @@ export function load() {
                     render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
                 }, 0);
             })
+            $('#table').on('sort.bs.table', (number, size) => {
+                setTimeout(function (){
+                    render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
+                }, 0);
+            })
+            $('#unhide-btn').on('click', function() {
+                config["to_be_hidden"] = [];
+                $(`table > thead > tr:first-child th`).each(function () {
+                    this.style.setProperty("display", "");
+                });
+                $(`table > tbody > tr td`).each(function () {
+                    this.style.setProperty("display", "");
+                });
+                if (!LINE_NUMBERS) {
+                    line_numbers("none");
+                }
+            })
+            $('#unsort-btn').on('click', function() {
+                render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
+            });
+            $('#downloadCSV-btn').on('click', function() {
+                downloadCSV()
+            })
+            $('#toggleLineNumbers').on('click', function() {
+                toggle_line_numbers()
+            })
+            $('#screenshotTable').on('click', function() {
+                screenshot_table()
+            })
+            $('#btnExcel').on('click', function() {
+                window.location.href = '../data.xlsx';
+            })
+        }
+
+
+        var rect = $('.fixed-table-container')[0].getBoundingClientRect();
+        if (rect.left < 0 || rect.right > $(window).width()) {
+            add_scroll_button();
         }
 
         let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10);
@@ -1123,7 +1193,7 @@ export function compress_data(data) {
     return LZString.compressToUTF16(JSON.stringify([data]));
 }
 
-export function load_table(specs, data, multiple_datasets) {
+export function load_plot(specs, data, multiple_datasets, resize) {
     $("#markdown-btn").click(function() { renderMarkdownDescription(); });
     if ($("#collapseDescription").length > 0) {
         renderMarkdownDescription();
@@ -1135,14 +1205,27 @@ export function load_table(specs, data, multiple_datasets) {
         specs.data = {};
         specs.data.values = decompress(data);
     }
-    if (specs.width == "container") { $("#vis").css("width", "100%"); }
-    vegaEmbed('#vis', specs);
+    if (specs.width == "container") {
+        $("#vis").css("width", "100%");
+    } else if (!resize && !specs.hconcat && !specs.vconcat) {
+        render_plot_size_controls();
+    }
+    vegaEmbed('#vis', specs).then(({spec, view}) => {
+        if (resize && specs.width !== "container") {
+            let width = view.width();
+            let height = view.height();
+            let aspect_ratio = height / width;
+            specs.width = width + resize;
+            specs.height = height + resize * aspect_ratio;
+            view.width(width + resize).height(height + resize * aspect_ratio).run();
+        }
+    });
 }
 
 export function custom_error(e, column) {
     $('#error-modal').modal('show')
     $('#error-column').html(column)
-    $('#error-modal-text').html(e.toString() + e.stack.toString())
+    $('#error-modal-text').html(e.toString() + "\n" + e.stack.toString())
 }
 
 $(document).click(function (event) {
@@ -1157,7 +1240,7 @@ $(document).click(function (event) {
 export function load_search() {
     $(document).ready(function() {
         window.$ = window.jQuery = require("jquery");
-        window['bootstrap-table'] = require('bootstrap-table');
+        window['bootstrap-table'] = require('bootstrap-table/src/bootstrap-table.js');
         let decompressed = decompress(search_data);
         let table_data = [];
         for (var i = 0; i < decompressed.length; i++) {
@@ -1193,9 +1276,10 @@ function get_index(name, columns, detail_mode, header_label_length) {
 }
 
 function line_numbers(style) {
+    const hasLabel = header_config.headers.some(header => header.label);
     var table = document.getElementById("table");
     var rows = table.getElementsByTagName("tr");
-    var cell_index = config.detail_mode ? 1 : 0;
+    var cell_index = config.detail_mode || hasLabel ? 1 : 0;
     for (var i = 0; i < rows.length; i++) {
         var cells = rows[i].getElementsByTagName("td");
         if (cells.length > 0) {
@@ -1217,12 +1301,23 @@ export function toggle_line_numbers() {
 }
 
 function addRotationTransform(svgString) {
-    let table_headers = config.displayed_columns;
-    for (const column of table_headers) {
-        if (config.column_config[column].label !== null) {
-            table_headers[table_headers.indexOf(column)] = config.column_config[column].label;
-        }
+    let table_headers = config.displayed_columns.map(column =>
+        config.column_config[column].label !== null ? config.column_config[column].label : column
+    );
+
+    const widthMatch = svgString.match(/<svg[^>]*width="([\d.]+)"[^>]*>/);
+    let svgWidth = 0;
+    if (widthMatch) {
+        svgWidth = parseFloat(widthMatch[1]);
     }
+
+    const maxLength = Math.max(...table_headers.map(word => word.length));
+    const headerHeight = (80 + 6 * maxLength * Math.SQRT2) / 2 + 80;
+
+    svgWidth += headerHeight;
+
+    svgString = svgString.replace(/(<svg[^>]*width=")([\d.]+)"/, `$1${svgWidth}"`);
+
     return svgString.replace(/<text\b([^>]*)>(<tspan[^>]*x="([\d.]+)"[^>]*y="([\d.]+)"[^>]*>([^<]+)<\/tspan>)(<\/text>)/g,
         (match, textAttributes, tspanContent, x, y, word, closingTag) => {
             if (table_headers.includes(word)) {
@@ -1248,16 +1343,19 @@ function downloadSVG(svgString, fileName) {
 }
 
 export function screenshot_table() {
-    $('th').each(function() { $(this).css('height', `${parseFloat($(this).css('height')) - 80}px`); });
+    let header_height = parseFloat($(this).css('height'));
+    $('th').each(function() { $(this).css('height', `${header_height - 80}`); });
     document.querySelectorAll('.sym').forEach(el => el.style.display = 'none');
     document.querySelectorAll('table tr').forEach(row => {
         const cells = row.querySelectorAll('td');
-        let s = -1;
-        if (linkouts !== null) {
-            s = -2;
+        let s = linkouts !== null ? -2 : -1;
+        if (!config.webview_controls) {
+            s += 1;
         }
-        const lastTwo = Array.from(cells).slice(s);
-        lastTwo.forEach(cell => cell.style.display = 'none');
+        if (s < 0) {
+            const lastTwo = Array.from(cells).slice(s);
+            lastTwo.forEach(cell => cell.style.display = 'none');
+        }
     });
     if (config.detail_mode) {
         document.querySelectorAll('table tr').forEach(row => {
@@ -1266,10 +1364,34 @@ export function screenshot_table() {
             first.forEach(cell => cell.style.display = 'none');
         });
     }
+    document.querySelectorAll('.linkout-group').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.linkout-raw-value').forEach(el => el.style.display = 'table-cell');
     const table_element = document.getElementById("table");
     const svgDocument = elementToSVG(table_element);
     const svgString = new XMLSerializer().serializeToString(svgDocument);
     downloadSVG(svgString, `${$("#view-selection").attr("title")}.svg`);
+    $('th').each(function() { $(this).css('height', `${header_height}px`); });
+    document.querySelectorAll('.sym').forEach(el => el.style.display = 'inline');
+    if (config.detail_mode) {
+        document.querySelectorAll('table tr').forEach(row => {
+            const cells = row.querySelectorAll('td, th');
+            const first = Array.from(cells).slice(0, 1);
+            first.forEach(cell => cell.style.display = 'block');
+        });
+    }
+    document.querySelectorAll('table tr').forEach(row => {
+        const cells = row.querySelectorAll('td');
+        let s = linkouts !== null ? -2 : -1;
+        if (!config.webview_controls) {
+            s += 1;
+        }
+        if (s < 0) {
+            const lastTwo = Array.from(cells).slice(s);
+            lastTwo.forEach(cell => cell.style.display = 'table-cell');
+        }
+    });
+    document.querySelectorAll('.linkout-group').forEach(el => el.style.display = 'table-cell');
+    document.querySelectorAll('.linkout-raw-value').forEach(el => el.style.display = 'none');
 }
 
 function decompress(data) {
@@ -1277,4 +1399,65 @@ function decompress(data) {
     const unpacker = new jsonm.Unpacker();
     decompressed = unpacker.unpack(decompressed);
     return decompressed
+}
+
+export function sort(c, order, svg) {
+    let column = config.columns[c];
+    const options = $('#table').bootstrapTable('getOptions');
+    if (options.sortName === column && options.sortOrder === order) {
+        $('#table').bootstrapTable('sortBy', {"":""})
+        document.querySelectorAll('.sym-container svg').forEach(svg => svg.style.color = "currentColor");
+        svg.style.color = "#007bff";
+        return;
+    }
+    document.querySelectorAll('.sym-container svg').forEach(svg => svg.style.color = "currentColor");
+    svg.style.color = "#c21f30";
+    $('#table').bootstrapTable('sortBy', {field: column, sortOrder: order})
+}
+
+export function hide(c, render) {
+    let column = config.columns[c];
+    const column_index = get_index(column, config.displayed_columns, config.detail_mode, config.header_label_length);
+    $(`table > thead > tr:first-child th:nth-child(${column_index})`).css("display", "none");
+    $(`table > tbody > tr td:nth-child(${column_index})`).each(function () {
+        this.style.setProperty("display", "none");
+    });
+    if (!render) {
+        config["to_be_hidden"].push(column);
+    }
+}
+
+
+
+
+function add_scroll_button() {
+    var buttonHTML = `
+    <div class="float-left">
+        <button type="button" class="btn btn-primary pulsating-button" data-toggle="tooltip" data-placement="top" title="Datavzrd allows horizontal scrolling when the table exceeds the viewport">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mouse-fill" viewBox="0 0 16 16">
+                <path d="M3 5a5 5 0 0 1 10 0v6a5 5 0 0 1-10 0zm5.5-1.5a.5.5 0 0 0-1 0v2a.5.5 0 0 0 1 0z"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+            </svg>
+        </button>
+    </div>
+  `;
+
+    var targetElement = document.querySelector('#pagination');
+
+    if (config.is_single_page) {
+        targetElement = document.querySelector('.float-right.pagination');
+    }
+
+    if (targetElement) {
+        targetElement.insertAdjacentHTML('beforebegin', buttonHTML);
+        var button = targetElement.previousElementSibling;
+        $(button).tooltip();
+    } else {
+        console.error('No element found with class "float-right pagination".');
+    }
 }

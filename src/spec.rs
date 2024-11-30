@@ -15,6 +15,8 @@ use fancy_regex::Regex;
 use itertools::Itertools;
 use lazy_static::lazy_static;
 
+use crate::spells::SpellSpec;
+use format_serde_error::SerdeError;
 use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::BorrowMut;
@@ -49,9 +51,17 @@ impl ItemsSpec {
             "Could not find config file under given path {:?}",
             &path
         ))?;
-        let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)?;
+        let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)
+            .map_err(|err| SerdeError::new(config_file.to_string(), err))?;
         for (_, spec) in items_spec.views.iter_mut() {
-            if spec.render_table.is_some() && spec.render_plot.is_none() {
+            if let Some(spell) = spec.spell.as_ref() {
+                let rendered_spec = spell.render_item_spec()?;
+                *spec = spec.merge_item_specs(&rendered_spec)?;
+            }
+            if spec.render_table.is_some()
+                && spec.render_plot.is_none()
+                && spec.render_img.is_none()
+            {
                 let dataset = match items_spec.datasets.get(spec.dataset.as_ref().unwrap()) {
                     Some(dataset) => dataset,
                     None => {
@@ -80,7 +90,7 @@ impl ItemsSpec {
         }
         for (name, view) in &self.views {
             if let Some(render_table) = &view.render_table {
-                if view.datasets.is_none() {
+                if view.datasets.is_none() && view.render_img.is_none() {
                     if view.dataset.is_none() {
                         bail!(ConfigError::MissingDatasetProperty {
                             view: name.to_string()
@@ -108,7 +118,7 @@ impl ItemsSpec {
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
                     let column_types = classify_table(dataset)?;
                     for (column, render_columns) in &render_table.columns {
-                        if !titles.contains(column) && !render_columns.optional {
+                        if !titles.contains(column) && !render_columns.optional.unwrap() {
                             bail!(ConfigError::MissingColumn {
                                 column: column.to_string(),
                                 view: name.to_string()
@@ -332,7 +342,7 @@ impl ItemsSpec {
 }
 
 fn default_single_page_threshold() -> usize {
-    1000_usize
+    20000_usize
 }
 
 fn default_separator() -> char {
@@ -359,7 +369,7 @@ fn default_links() -> Option<HashMap<String, LinkSpec>> {
     Some(HashMap::new())
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, Debug, Clone, PartialEq, Default)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct DatasetSpecs {
     pub(crate) path: PathBuf,
@@ -437,7 +447,44 @@ pub(crate) struct ItemSpecs {
     #[serde(default)]
     pub(crate) render_html: Option<RenderHtmlSpec>,
     #[serde(default)]
+    pub(crate) render_img: Option<RenderImgSpec>,
+    #[serde(default)]
     pub(crate) max_in_memory_rows: Option<usize>,
+    #[serde(default)]
+    pub(crate) spell: Option<SpellSpec>,
+}
+
+impl ItemSpecs {
+    fn merge_item_specs(&self, other: &ItemSpecs) -> Result<ItemSpecs> {
+        let mut merged = self.clone();
+        merged.hidden = other.hidden;
+        if let Some(dataset) = &other.dataset {
+            merged.dataset = Some(dataset.to_string());
+        }
+        if let Some(datasets) = &other.datasets {
+            merged.datasets = Some(datasets.clone());
+        }
+        merged.page_size = other.page_size;
+        if let Some(description) = &other.description {
+            merged.description = Some(description.to_string());
+        }
+        if let Some(render_table) = &other.render_table {
+            merged.render_table = Some(render_table.clone());
+        }
+        if let Some(render_plot) = &other.render_plot {
+            merged.render_plot = Some(render_plot.clone());
+        }
+        if let Some(render_html) = &other.render_html {
+            merged.render_html = Some(render_html.clone());
+        }
+        if let Some(render_img) = &other.render_img {
+            merged.render_img = Some(render_img.clone());
+        }
+        if let Some(max_in_memory_rows) = &other.max_in_memory_rows {
+            merged.max_in_memory_rows = Some(*max_in_memory_rows);
+        }
+        Ok(merged)
+    }
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -594,6 +641,28 @@ impl ItemSpecs {
             additional_columns: self.render_table.clone().unwrap().additional_columns,
             headers: self.render_table.clone().unwrap().headers,
         });
+        let mut rendered_spells = HashMap::new();
+        for (key, render_column_specs) in self.render_table.as_ref().unwrap().columns.iter() {
+            if let Some(spell) = &render_column_specs.spell {
+                let spell_column_spec = spell.render_column_spec()?;
+                rendered_spells.insert(
+                    key.to_string(),
+                    render_column_specs
+                        .merge_render_column_spec(spell_column_spec)?
+                        .apply_defaults()?,
+                );
+            } else {
+                rendered_spells.insert(
+                    key.to_string(),
+                    render_column_specs.clone().apply_defaults()?,
+                );
+            }
+        }
+        self.render_table = Some(RenderTableSpecs {
+            columns: rendered_spells,
+            additional_columns: self.render_table.clone().unwrap().additional_columns,
+            headers: self.render_table.clone().unwrap().headers,
+        });
         // Generate default RenderColumnSpecs for columns that are not specified in the config
         for header in headers {
             if !self
@@ -622,9 +691,9 @@ fn default_precision() -> u32 {
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderColumnSpec {
     #[serde(default)]
-    pub(crate) optional: bool,
-    #[serde(default = "default_precision")]
-    pub(crate) precision: u32,
+    pub(crate) optional: Option<bool>,
+    #[serde(default)]
+    pub(crate) precision: Option<u32>,
     #[serde(default)]
     pub(crate) label: Option<String>,
     #[serde(default)]
@@ -632,7 +701,7 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) custom_path: Option<String>,
     #[serde(default)]
-    pub(crate) display_mode: DisplayMode,
+    pub(crate) display_mode: Option<DisplayMode>,
     #[serde(default)]
     pub(crate) link_to_url: Option<LinkToUrlSpec>,
     #[serde(default)]
@@ -642,24 +711,82 @@ pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) ellipsis: Option<u32>,
     #[serde(default)]
-    pub(crate) plot_view_legend: bool,
+    pub(crate) plot_view_legend: Option<bool>,
+    #[serde(default)]
+    pub(crate) spell: Option<SpellSpec>,
 }
 
 impl Default for RenderColumnSpec {
     fn default() -> Self {
         RenderColumnSpec {
-            optional: false,
-            precision: default_precision(),
+            optional: Some(false),
+            precision: Some(default_precision()),
             label: None,
             custom: None,
             custom_path: None,
-            display_mode: DisplayMode::Normal,
+            display_mode: Some(DisplayMode::Normal),
             link_to_url: None,
             plot: None,
             custom_plot: None,
             ellipsis: None,
-            plot_view_legend: false,
+            plot_view_legend: Some(false),
+            spell: None,
         }
+    }
+}
+
+impl RenderColumnSpec {
+    fn merge_render_column_spec(&self, other: RenderColumnSpec) -> Result<RenderColumnSpec> {
+        let mut merged = self.clone();
+        if let Some(optional) = other.optional {
+            merged.optional = Some(optional);
+        }
+        if let Some(precision) = other.precision {
+            merged.precision = Some(precision);
+        }
+        if let Some(label) = &other.label {
+            merged.label = Some(label.to_string());
+        }
+        if let Some(custom) = &other.custom {
+            merged.custom = Some(custom.to_string());
+        }
+        merged.custom_path = None; // custom_path is not merged since it is already processed when spell is fetched.
+        if let Some(display_mode) = other.display_mode {
+            merged.display_mode = Some(display_mode);
+        }
+        if let Some(link_to_url) = &other.link_to_url {
+            merged.link_to_url = Some(link_to_url.clone());
+        }
+        if let Some(plot) = &other.plot {
+            merged.plot = Some(plot.clone());
+        }
+        if let Some(custom_plot) = &other.custom_plot {
+            merged.custom_plot = Some(custom_plot.clone());
+        }
+        if let Some(ellipsis) = &other.ellipsis {
+            merged.ellipsis = Some(*ellipsis);
+        }
+        if let Some(plot_view_legend) = other.plot_view_legend {
+            merged.plot_view_legend = Some(plot_view_legend);
+        }
+        Ok(merged)
+    }
+
+    fn apply_defaults(&mut self) -> Result<RenderColumnSpec> {
+        let mut with_defaults = self.clone();
+        if self.display_mode.is_none() {
+            with_defaults.display_mode = Some(DisplayMode::Normal);
+        }
+        if self.optional.is_none() {
+            with_defaults.optional = Some(false);
+        }
+        if self.precision.is_none() {
+            with_defaults.precision = Some(default_precision());
+        }
+        if self.plot_view_legend.is_none() {
+            with_defaults.plot_view_legend = Some(false);
+        }
+        Ok(with_defaults)
     }
 }
 
@@ -735,6 +862,7 @@ impl TickPlot {
 impl Heatmap {
     fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
         self.aux_domain_columns.preprocess(dataset)?;
+        self.scale_type.preprocess();
         match self.vega_type {
             Some(VegaType::Nominal) | Some(VegaType::Ordinal) => {
                 self.scale_type = ScaleType::Ordinal;
@@ -803,6 +931,12 @@ impl RenderPlotSpec {
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderHtmlSpec {
     pub(crate) script_path: String,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
+pub(crate) struct RenderImgSpec {
+    pub(crate) path: String,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
@@ -980,6 +1114,7 @@ pub(crate) enum ScaleType {
     Time,
     Utc,
     Ordinal,
+    Nominal,
     Band,
     Point,
     #[default]
@@ -1005,6 +1140,12 @@ impl ScaleType {
                 | ScaleType::SymLog
                 | ScaleType::Log
         )
+    }
+
+    pub(crate) fn preprocess(&mut self) {
+        if self == &ScaleType::Nominal {
+            *self = ScaleType::Ordinal;
+        }
     }
 }
 
@@ -1149,11 +1290,11 @@ mod tests {
     #[test]
     fn test_table_config_deserialization() {
         let expected_render_columns = RenderColumnSpec {
-            precision: default_precision(),
-            optional: false,
+            precision: None,
+            optional: None,
             custom: None,
             custom_path: None,
-            display_mode: DisplayMode::Normal,
+            display_mode: None,
             link_to_url: Some(LinkToUrlSpec {
                 custom_content: None,
                 entries: HashMap::from([(
@@ -1167,8 +1308,9 @@ mod tests {
             plot: None,
             custom_plot: None,
             ellipsis: None,
-            plot_view_legend: false,
+            plot_view_legend: None,
             label: None,
+            spell: None,
         };
 
         let expected_dataset_spec = DatasetSpecs {
@@ -1193,13 +1335,15 @@ mod tests {
             }),
             render_plot: None,
             render_html: None,
+            render_img: None,
             max_in_memory_rows: None,
+            spell: None,
         };
 
         let expected_config = ItemsSpec {
             datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
             default_view: None,
-            max_in_memory_rows: 1000,
+            max_in_memory_rows: 20000,
             views: HashMap::from([("table-a".to_string(), expected_table_spec)]),
             report_name: "my_report".to_string(),
             aux_libraries: None,
@@ -1264,13 +1408,15 @@ mod tests {
             render_table: default_render_table(),
             render_plot: Some(expected_render_plot),
             render_html: None,
+            render_img: None,
             max_in_memory_rows: None,
+            spell: None,
         };
 
         let expected_config = ItemsSpec {
             datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
             default_view: Some("table-a".to_string()),
-            max_in_memory_rows: 1000,
+            max_in_memory_rows: 20000,
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: None,
@@ -1323,13 +1469,15 @@ mod tests {
             render_table: default_render_table(),
             render_plot: None,
             render_html: Some(expected_render_html),
+            render_img: None,
             max_in_memory_rows: None,
+            spell: None,
         };
 
         let expected_config = ItemsSpec {
             datasets: HashMap::from([("table-a".to_string(), expected_dataset_spec)]),
             default_view: None,
-            max_in_memory_rows: 1000,
+            max_in_memory_rows: 20000,
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: Some(Vec::from(["https://cdnjs.org/d3.js".to_string()])),
@@ -1392,7 +1540,9 @@ mod tests {
             }),
             render_plot: None,
             render_html: None,
+            render_img: None,
             max_in_memory_rows: None,
+            spell: None,
         };
 
         let expected_config = ItemsSpec {
@@ -1407,7 +1557,7 @@ mod tests {
                 },
             )]),
             default_view: None,
-            max_in_memory_rows: 1000,
+            max_in_memory_rows: 20000,
             views: HashMap::from([("plot-a".to_string(), expected_item_spec)]),
             report_name: "".to_string(),
             aux_libraries: None,
@@ -1608,6 +1758,7 @@ mod tests {
                     render-table:
                         columns:
                             some-column:
+                                optional: false
                                 plot:
                                     ticks:
                                         scale: linear
@@ -1686,30 +1837,32 @@ mod tests {
             .unwrap()
             .columns;
         let expected_render_column_spec = RenderColumnSpec {
-            precision: default_precision(),
-            optional: false,
+            precision: Some(default_precision()),
+            optional: Some(false),
             custom: None,
             custom_path: None,
-            display_mode: DisplayMode::Detail,
+            display_mode: Some(DisplayMode::Detail),
             link_to_url: None,
             plot: None,
             custom_plot: None,
             ellipsis: None,
-            plot_view_legend: false,
+            plot_view_legend: Some(false),
             label: None,
+            spell: None,
         };
         let expected_render_column_spec_oscar_no = RenderColumnSpec {
-            precision: default_precision(),
-            optional: false,
+            precision: Some(default_precision()),
+            optional: Some(false),
             custom: None,
             custom_path: None,
-            display_mode: DisplayMode::Hidden,
+            display_mode: Some(DisplayMode::Hidden),
             link_to_url: None,
             plot: None,
             custom_plot: None,
             ellipsis: None,
-            plot_view_legend: false,
+            plot_view_legend: Some(false),
             label: None,
+            spell: None,
         };
         assert_eq!(
             oscar_config.get("oscar_no").unwrap().to_owned(),
@@ -1771,17 +1924,18 @@ mod tests {
             bar_plot: None,
         };
         let expected_render_columns = RenderColumnSpec {
-            optional: false,
-            precision: default_precision(),
+            optional: Some(false),
+            precision: Some(default_precision()),
             label: None,
             custom: None,
             custom_path: None,
-            display_mode: DisplayMode::default(),
+            display_mode: Some(DisplayMode::default()),
             link_to_url: None,
             plot: Some(expected_plot),
             custom_plot: None,
             ellipsis: None,
-            plot_view_legend: false,
+            plot_view_legend: Some(false),
+            spell: None,
         };
         let expected_item_specs = ItemSpecs {
             hidden: false,
@@ -1813,7 +1967,9 @@ mod tests {
             }),
             render_plot: None,
             render_html: None,
+            render_img: None,
             max_in_memory_rows: None,
+            spell: None,
         };
 
         assert_eq!(item_specs, expected_item_specs);

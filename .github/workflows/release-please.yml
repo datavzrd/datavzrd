@@ -27,11 +27,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install yte
+        run: pip install yte
+
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           override: true
+
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Install system dependencies
         run: |
@@ -57,6 +63,9 @@ jobs:
           with:
             path: datavzrd
 
+        - name: Install yte
+          run: pip install yte
+
         - name: Checkout view repo
           uses: actions/checkout@v3
           with:
@@ -68,6 +77,9 @@ jobs:
           with:
             toolchain: stable
             override: true
+
+        - name: Install pnpm
+          run: npm install -g pnpm
 
         - name: Build
           run: |

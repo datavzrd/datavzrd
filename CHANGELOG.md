@@ -1,5 +1,195 @@
 # Changelog
 
+## [2.44.4](https://github.com/datavzrd/datavzrd/compare/v2.44.3...v2.44.4) (2024-11-19)
+
+
+### Bug Fixes
+
+* Multi linkout dropdown not showing properly in SVG export ([#834](https://github.com/datavzrd/datavzrd/issues/834)) ([d37da07](https://github.com/datavzrd/datavzrd/commit/d37da07b01ec27b846e4212320b84d1fc6f66fcf))
+
+## [2.44.3](https://github.com/datavzrd/datavzrd/compare/v2.44.2...v2.44.3) (2024-11-06)
+
+
+### Bug Fixes
+
+* Fix bug when columns containing single quotes ([#823](https://github.com/datavzrd/datavzrd/issues/823)) ([8ab08e5](https://github.com/datavzrd/datavzrd/commit/8ab08e55746a8dceaef09d7a60dcf66bff5232ba))
+* Prevent underflow and overflow bins from not showing in histogram ([#824](https://github.com/datavzrd/datavzrd/issues/824)) ([d927bae](https://github.com/datavzrd/datavzrd/commit/d927bae63fc60feb1aae07b81849e4b24ad2a872))
+
+## [2.44.2](https://github.com/datavzrd/datavzrd/compare/v2.44.1...v2.44.2) (2024-11-05)
+
+
+### Bug Fixes
+
+* Allow use of nominal for scale type ([#820](https://github.com/datavzrd/datavzrd/issues/820)) ([05d2407](https://github.com/datavzrd/datavzrd/commit/05d2407aadd2a65f6bf580d874714288a684a54d))
+* Fix formatting for error messages ([#814](https://github.com/datavzrd/datavzrd/issues/814)) ([302b4ce](https://github.com/datavzrd/datavzrd/commit/302b4ce38cd147f635a22ed026343d220e0308d1))
+* Improve behaviour for further configuring spells ([#822](https://github.com/datavzrd/datavzrd/issues/822)) ([074de5d](https://github.com/datavzrd/datavzrd/commit/074de5d4da85f3117135ae905cb204fb92dd7338))
+
+## [2.44.1](https://github.com/datavzrd/datavzrd/compare/v2.44.0...v2.44.1) (2024-10-22)
+
+
+### Bug Fixes
+
+* Fix missing data function for custom plot usage within add-columns ([#808](https://github.com/datavzrd/datavzrd/issues/808)) ([9f9431d](https://github.com/datavzrd/datavzrd/commit/9f9431d0a416a165a35938c8af7cfdddce8f5268))
+* Fix missing headers in exported excel file ([#805](https://github.com/datavzrd/datavzrd/issues/805)) ([5071b25](https://github.com/datavzrd/datavzrd/commit/5071b2519c07aa9249631a0211315c489d4a34cb))
+* Fix missing unfold option when only add-column uses display-mode detail ([#807](https://github.com/datavzrd/datavzrd/issues/807)) ([df0d47a](https://github.com/datavzrd/datavzrd/commit/df0d47ab5cc39d8d69fdc9244bc7b2f480e77c88))
+
+## [2.44.0](https://github.com/datavzrd/datavzrd/compare/v2.43.6...v2.44.0) (2024-10-22)
+
+
+### Features
+
+* Add render-img option ([#792](https://github.com/datavzrd/datavzrd/issues/792)) ([633a027](https://github.com/datavzrd/datavzrd/commit/633a027bb633eaa3dda8304550eb74cdfefb7715))
+
+## [2.43.6](https://github.com/datavzrd/datavzrd/compare/v2.43.5...v2.43.6) (2024-10-21)
+
+
+### Bug Fixes
+
+* Fix row being unavailable in data function of custom plots with display-mode detail ([#802](https://github.com/datavzrd/datavzrd/issues/802)) ([0fc7166](https://github.com/datavzrd/datavzrd/commit/0fc71662785bf16c902e55b5cc5682e6567b1fab))
+
+## [2.43.5](https://github.com/datavzrd/datavzrd/compare/v2.43.4...v2.43.5) (2024-10-15)
+
+
+### Bug Fixes
+
+* Fix popover z-index for numeric search widget ([#798](https://github.com/datavzrd/datavzrd/issues/798)) ([3cecbd6](https://github.com/datavzrd/datavzrd/commit/3cecbd638fd1a83baaf13605558c93e10bd708e4))
+* Improve plot controls and container size ([#796](https://github.com/datavzrd/datavzrd/issues/796)) ([7867ab1](https://github.com/datavzrd/datavzrd/commit/7867ab1268dc8f4ca9c3c5898c300d51184d783b))
+
+## [2.43.4](https://github.com/datavzrd/datavzrd/compare/v2.43.3...v2.43.4) (2024-10-09)
+
+
+### Bug Fixes
+
+* Remove unused import ([#793](https://github.com/datavzrd/datavzrd/issues/793)) ([1736ef7](https://github.com/datavzrd/datavzrd/commit/1736ef7cc3aa6dea39e83ef089a0a21874e242f1))
+
+## [2.43.3](https://github.com/datavzrd/datavzrd/compare/v2.43.2...v2.43.3) (2024-10-04)
+
+
+### Bug Fixes
+
+* Fix render-html script placement ([8f9ed75](https://github.com/datavzrd/datavzrd/commit/8f9ed75b8302862c572247bfc39fc87f8643c4d6))
+
+## [2.43.2](https://github.com/datavzrd/datavzrd/compare/v2.43.1...v2.43.2) (2024-10-01)
+
+
+### Bug Fixes
+
+* Adjust QR code size for smaller screens ([c5570d2](https://github.com/datavzrd/datavzrd/commit/c5570d273b36c7ce5c0c0a1c27952521023b9f1f))
+
+## [2.43.1](https://github.com/datavzrd/datavzrd/compare/v2.43.0...v2.43.1) (2024-10-01)
+
+
+### Bug Fixes
+
+* Fix row sharing ([d6c6b29](https://github.com/datavzrd/datavzrd/commit/d6c6b295759eed5278d5ccb4d240e333713d6609))
+
+## [2.43.0](https://github.com/datavzrd/datavzrd/compare/v2.42.1...v2.43.0) (2024-09-27)
+
+
+### Features
+
+* Add datavzrd spells ([#783](https://github.com/datavzrd/datavzrd/issues/783)) ([f27011f](https://github.com/datavzrd/datavzrd/commit/f27011f05b0439b7e356e0a0a6833a92118193c3))
+
+## [2.42.1](https://github.com/datavzrd/datavzrd/compare/v2.42.0...v2.42.1) (2024-09-24)
+
+
+### Bug Fixes
+
+* Deactivate plot view resize controls for composite plots ([#781](https://github.com/datavzrd/datavzrd/issues/781)) ([bb739be](https://github.com/datavzrd/datavzrd/commit/bb739be1cb44a38e67fb815aba08253739d7e366))
+
+## [2.42.0](https://github.com/datavzrd/datavzrd/compare/v2.41.3...v2.42.0) (2024-09-16)
+
+
+### Features
+
+* Add size controls for plot views ([#778](https://github.com/datavzrd/datavzrd/issues/778)) ([a33f28d](https://github.com/datavzrd/datavzrd/commit/a33f28dc1c4235aea9c1e7db9a850cc48db6eb02))
+
+## [2.41.3](https://github.com/datavzrd/datavzrd/compare/v2.41.2...v2.41.3) (2024-09-03)
+
+
+### Bug Fixes
+
+* Reconstruct table after SVG export ([0cd425a](https://github.com/datavzrd/datavzrd/commit/0cd425a0e601b5b35610d1e0ebf37e06659a6829))
+
+## [2.41.2](https://github.com/datavzrd/datavzrd/compare/v2.41.1...v2.41.2) (2024-08-20)
+
+
+### Bug Fixes
+
+* Fix heatmaps in detail mode when another heatmap uses custom-content ([c1114ef](https://github.com/datavzrd/datavzrd/commit/c1114ef5c3983e3e28c2673be2d4a961d0a10065))
+* Fix precision for heatmaps with display-mode: detail ([f46962b](https://github.com/datavzrd/datavzrd/commit/f46962bced945b7480082c71b6eb86ab27e3775c))
+
+## [2.41.1](https://github.com/datavzrd/datavzrd/compare/v2.41.0...v2.41.1) (2024-07-22)
+
+
+### Bug Fixes
+
+* Fix additional header row offset ([#756](https://github.com/datavzrd/datavzrd/issues/756)) ([d095ca2](https://github.com/datavzrd/datavzrd/commit/d095ca26ccaabc5e3eab873053315800a4c1845c))
+
+## [2.41.0](https://github.com/datavzrd/datavzrd/compare/v2.40.0...v2.41.0) (2024-07-12)
+
+
+### Features
+
+* Allow unsorting tables ([#751](https://github.com/datavzrd/datavzrd/issues/751)) ([de3fd98](https://github.com/datavzrd/datavzrd/commit/de3fd98120e271fa3770afe6305c888d1048a612))
+
+## [2.40.0](https://github.com/datavzrd/datavzrd/compare/v2.39.1...v2.40.0) (2024-07-10)
+
+
+### Features
+
+* Improve context of error messages with format_serde_error ([#749](https://github.com/datavzrd/datavzrd/issues/749)) ([af7cfbe](https://github.com/datavzrd/datavzrd/commit/af7cfbe4f66d34f65d7a699ae91a0cdd063f3a8d))
+
+## [2.39.1](https://github.com/datavzrd/datavzrd/compare/v2.39.0...v2.39.1) (2024-07-09)
+
+
+### Bug Fixes
+
+* Fix SVG export for basic views without webview controls and linkouts ([f75bbc4](https://github.com/datavzrd/datavzrd/commit/f75bbc407d6659baee5c119f74cbc0cc2e725311))
+
+## [2.39.0](https://github.com/datavzrd/datavzrd/compare/v2.38.3...v2.39.0) (2024-07-09)
+
+
+### Features
+
+* Show active sort order visually ([4d9956a](https://github.com/datavzrd/datavzrd/commit/4d9956aaadcf7215a531ab378094ddc65745cf21))
+
+## [2.38.3](https://github.com/datavzrd/datavzrd/compare/v2.38.2...v2.38.3) (2024-07-05)
+
+
+### Bug Fixes
+
+* Escape description string ([#737](https://github.com/datavzrd/datavzrd/issues/737)) ([5f82cf9](https://github.com/datavzrd/datavzrd/commit/5f82cf943f546ffdb360a47d60cf333c47d1061c))
+
+## [2.38.2](https://github.com/datavzrd/datavzrd/compare/v2.38.1...v2.38.2) (2024-06-26)
+
+
+### Bug Fixes
+
+* Fix last column hidden on exported svg and adjust header height to eventual label ([#733](https://github.com/datavzrd/datavzrd/issues/733)) ([0fcd3d7](https://github.com/datavzrd/datavzrd/commit/0fcd3d750c345d19c84aa78f7ee07e2464b57645))
+* Remove heatmap table export which is superseeded by svg export ([#731](https://github.com/datavzrd/datavzrd/issues/731)) ([be98965](https://github.com/datavzrd/datavzrd/commit/be98965a2027fd64474602f701e22b21870f269b))
+
+## [2.38.1](https://github.com/datavzrd/datavzrd/compare/v2.38.0...v2.38.1) (2024-06-25)
+
+
+### Performance Improvements
+
+* Use better link time optimization on release profile ([#728](https://github.com/datavzrd/datavzrd/issues/728)) ([2aad0a6](https://github.com/datavzrd/datavzrd/commit/2aad0a61d456010b955587e8ae9eeca213eadbe6))
+
+## [2.38.0](https://github.com/datavzrd/datavzrd/compare/v2.37.0...v2.38.0) (2024-06-21)
+
+
+### Features
+
+* Add user notification for horizontal scrolling when viewport width is exceeded ([4bcb22b](https://github.com/datavzrd/datavzrd/commit/4bcb22bfec3316f0a827a792d7190535e4be257f))
+* Allow hiding columns for in-memory-reports ([#726](https://github.com/datavzrd/datavzrd/issues/726)) ([4656016](https://github.com/datavzrd/datavzrd/commit/4656016519484d653125f732be7570888b1d7f13))
+* Allow sorting for in-memory-reports ([#724](https://github.com/datavzrd/datavzrd/issues/724)) ([9eb38b1](https://github.com/datavzrd/datavzrd/commit/9eb38b1ff8d71f17fb16e764a47806ca0d76ff97))
+
+
+### Bug Fixes
+
+* Fix static search and plot views ([0be4d7a](https://github.com/datavzrd/datavzrd/commit/0be4d7ab1dbe3eb9e6a1034a30991d1109e2f585))
+
 ## [2.37.0](https://github.com/datavzrd/datavzrd/compare/v2.36.15...v2.37.0) (2024-06-18)
 
 

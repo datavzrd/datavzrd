@@ -90,15 +90,6 @@
     z-index: 9999;
 }
 
-#modal-dialog-heatmap {
-    position: relative;
-    display: table;
-    overflow-y: auto;
-    overflow-x: auto;
-    width: auto;
-    min-width: 300px;
-}
-
 .modal-body {
     max-width: calc(100vw - 50px);
     overflow-x: auto;
@@ -159,7 +150,7 @@ th .th-inner {
 }
 
 #vis-container {
-    height: calc(100vh - 200px)
+    height: calc(100vh - 105px)
 }
 
 .fa {
@@ -316,4 +307,64 @@ footer {
 
 .nav-btn {
     display: block !important;
+}
+
+.sym-container svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+.sym-container svg:hover {
+    color: grey;
+}
+
+.sym-container .bi-caret-down {
+    top: 8px;
+}
+
+.hide-sym {
+    margin-left: 14px;
+}
+
+.pulsating-button {
+    animation: pulsate 2s infinite;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-top: 10px;
+}
+
+@keyframes pulsate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.hide-sym:hover {
+    color: grey;
+}
+
+#plot-size-control {
+    position: absolute;
+    bottom: 52px;
+    z-index: 2;
+    right: calc(50% - 50px);
+}
+
+.popover {
+    z-index: 2 !important;
+}
+
+.datavzrd-img {
+    max-width: 85vw;
+    max-height: 85vh;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 5rem auto;
+}
+
+.linkout-raw-value {
+    display: none;
 }
