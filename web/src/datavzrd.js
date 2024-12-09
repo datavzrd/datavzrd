@@ -1153,25 +1153,22 @@ export function load() {
             add_scroll_button();
         }
 
-        let to_be_highlighted = parseInt(window.location.href.toString().split("highlight=").pop(), 10);
-        let page_size = $('#table').bootstrapTable('getOptions').pageSize;
-        if (config.is_single_page) {
-            $('#table').bootstrapTable('selectPage', Math.floor(to_be_highlighted / page_size) + 1);
-        }
-        let rows = $("table > tbody > tr");
-        rows.each(function() {
-            if (this.dataset.index == to_be_highlighted) {
-                $(this).children().addClass('active-row');
-                if (!config.detail_mode && !config.header_label_length == 0) {
-                    $(this).children().first().removeClass('active-row');
-                }
-                var value = to_be_highlighted;
-                if (config.is_single_page) {
-                    value = to_be_highlighted % page_size;
-                }
-                $('#table').bootstrapTable('scrollTo', {unit: 'rows', value: to_be_highlighted})
+        let urlParams = new URLSearchParams(window.location.search);
+        let highlightIndex = urlParams.get("highlight");
+        let highlightValue = urlParams.get("highlight_value");
+        let highlightColumn = urlParams.get("highlight_column");
+
+        let to_be_highlighted = parseInt((highlightIndex), 10);
+        if (!isNaN(to_be_highlighted)) {
+            highlightRow(to_be_highlighted);
+        } else if (highlightValue !== null && highlightColumn !== null) {
+            let index = $('#table').bootstrapTable('getData').findIndex(row => row[highlightColumn] === highlightValue);
+            if (index !== -1) {
+                highlightRow(index);
+            } else {
+                showNotification(`Could not find row with value <strong>${highlightValue}</strong> in column <strong>${highlightColumn}</strong>.`);
             }
-        });
+        }
 
         $( window ).resize(function() {
             var he = $( window ).height() - 150;
@@ -1179,6 +1176,41 @@ export function load() {
         })
     });
 }
+
+function highlightRow(row) {
+    let page_size = $('#table').bootstrapTable('getOptions').pageSize;
+    if (config.is_single_page) {
+        $('#table').bootstrapTable('selectPage', Math.floor(row / page_size) + 1);
+    }
+    let rows = $("table > tbody > tr");
+    rows.each(function() {
+        if (this.dataset.index == row) {
+            $(this).children().addClass('active-row');
+            if (!config.detail_mode && !config.header_label_length == 0) {
+                $(this).children().first().removeClass('active-row');
+            }
+            var value = row;
+            if (config.is_single_page) {
+                value = row % page_size;
+            }
+            $('#table').bootstrapTable('scrollTo', {unit: 'rows', value: value})
+        }
+    });
+}
+
+function showNotification(message) {
+    const toast = document.getElementById('warningToast');
+    const toastBody = toast.querySelector('.toast-body');
+    toastBody.innerHTML = message;
+    $(toast).toast({ delay: 5000 });
+    $(toast).toast('show');
+}
+
+
+
+
+
+
 
 export function get_config_from_url_query() {
     const queryString = window.location.search;

@@ -78,6 +78,16 @@ export function render_html_contents() {
     }
     sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleLineNumbers">Show/Hide Line Numbers</li>';
     sidebar_html += '<li class="list-group-item sidebar-btn" id="screenshotTable">Export table page as SVG</li>';
+    let toast_html = `
+    <div class="toast m-3" role="alert" aria-live="polite" aria-atomic="true" id="warningToast" style="z-index: 1050; position: absolute; top: 0; right: 0;">
+        <div class="toast-header">
+            <strong class="mr-auto">Error</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body alert-danger" id="toastBody"></div>
+    </div>`;
     const content = `
         <div class="collapse" id="sidebar">
             <div class="card" id="sidebar-card">
@@ -102,6 +112,7 @@ export function render_html_contents() {
                 </div>
                 <div class="container-fluid">
                     ${description_html}
+                    ${toast_html}
                     <div class="row justify-content-center">
                         <div class="col-md-12 loading text-center">
                             <div class="spinner-border" role="status">
