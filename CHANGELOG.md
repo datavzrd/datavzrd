@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.45.0](https://github.com/datavzrd/datavzrd/compare/v2.44.4...v2.45.0) (2024-12-10)
+
+
+### Features
+
+* Allow highlighting values by name and column using URL parameters ([e7914bf](https://github.com/datavzrd/datavzrd/commit/e7914bf5cfdd10d6923705fdffd600987ab1f969))
+* Allow redirecting to specific views via URL parameter from reports index file ([#843](https://github.com/datavzrd/datavzrd/issues/843)) ([33107cb](https://github.com/datavzrd/datavzrd/commit/33107cbdbd4199a5cb47f10bc0c438e41fde0bb6))
+
 ## [2.44.4](https://github.com/datavzrd/datavzrd/compare/v2.44.3...v2.44.4) (2024-11-19)
 
 
