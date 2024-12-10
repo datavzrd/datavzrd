@@ -6,7 +6,13 @@
 </head>
 <body>
 <script type="text/javascript">
-    window.location.href = "{{ table }}/index_1.html";
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewParam = urlParams.get('view');
+    let redirectUrl = viewParam ? `${viewParam}/index_1.html` : `{{ table }}/index_1.html`;
+    urlParams.delete('view');
+    const remainingParams = urlParams.toString();
+    if (remainingParams) redirectUrl += `?${remainingParams}`;
+    window.location.href = redirectUrl;
 </script>
 </body>
 </html>
