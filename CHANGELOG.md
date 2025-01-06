@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.45.1](https://github.com/datavzrd/datavzrd/compare/v2.45.0...v2.45.1) (2025-01-06)
+
+
+### Bug Fixes
+
+* Make in-memory search case-insensitive ([#852](https://github.com/datavzrd/datavzrd/issues/852)) ([f49f374](https://github.com/datavzrd/datavzrd/commit/f49f374cf9acf877d0c7d9427c26d76466524503)), closes [#846](https://github.com/datavzrd/datavzrd/issues/846)
+
 ## [2.45.0](https://github.com/datavzrd/datavzrd/compare/v2.44.4...v2.45.0) (2024-12-10)
 
 
