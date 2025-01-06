@@ -2,13 +2,14 @@ use crate::render::portable::utils::{render_index_file, render_static_files};
 use crate::render::portable::ItemRenderer;
 use crate::render::Renderer;
 use crate::spec::ItemsSpec;
-use anyhow::{bail, Result};
+use anyhow::{bail, Context, Result};
 use clap::Parser;
-use log::LevelFilter;
+use log::{info, LevelFilter};
 use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
 use std::fs;
 use std::path::PathBuf;
 use thiserror::Error;
+use crate::cli::{CliError, Command};
 
 pub(crate) mod cli;
 pub(crate) mod render;
@@ -24,27 +25,49 @@ fn main() -> Result<()> {
         TerminalMode::Stderr,
         ColorChoice::Auto,
     );
-    let config = ItemsSpec::from_file(&opt.config)?;
-    config.validate()?;
 
-    if !opt.output.exists() {
-        std::fs::create_dir(&opt.output)?;
-    } else if opt.output.read_dir()?.next().is_some() {
-        if opt.overwrite_output {
-            fs::remove_dir_all(&opt.output)?;
-            std::fs::create_dir(&opt.output)?;
-        } else {
-            bail!(OutputError::OutputDirectoryNotEmpty {
-                output_path: opt.output
+    match opt.command {
+        Some(Command::Publish {
+            repo_name,
+            report_path,
+            org,
+        }) => {
+            unimplemented!("Publishing to GitHub Pages is not yet implemented.")
+        }
+        None => {
+            let config = opt
+                .config
+                .ok_or(CliError::MissingConfig)
+                .with_context(|| "Error validating required arguments")?;
+
+            let output = opt
+                .output
+                .ok_or(CliError::MissingOutput)
+                .with_context(|| "Error validating required arguments")?;
+
+            let config = ItemsSpec::from_file(&config)?;
+            config.validate()?;
+
+            if !output.exists() {
+                fs::create_dir(&output)?;
+            } else if output.read_dir()?.next().is_some() {
+                if opt.overwrite_output {
+                    fs::remove_dir_all(&output)?;
+                    fs::create_dir(&output)?;
+                } else {
+                    bail!(OutputError::OutputDirectoryNotEmpty {
+                output_path: output
             })
+                }
+            }
+
+            render_index_file(&output, &config)?;
+            render_static_files(&output)?;
+
+            let renderer = ItemRenderer::builder().specs(config).build();
+            renderer.render_tables(&output, &opt.webview_url, opt.debug)?;
         }
     }
-
-    render_index_file(&opt.output, &config)?;
-    render_static_files(&opt.output)?;
-
-    let renderer = ItemRenderer::builder().specs(config).build();
-    renderer.render_tables(&opt.output, &opt.webview_url, opt.debug)?;
 
     Ok(())
 }
