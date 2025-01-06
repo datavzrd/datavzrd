@@ -1093,7 +1093,7 @@ export function load() {
                         }
                     }
                     if (filters[title] !== undefined && filters[title] !== "") {
-                        if (!row[title].includes(filters[title])) {
+                        if (!row[title].toLowerCase().includes(filters[title].toLowerCase())) {
                             return false;
                         }
                     }
