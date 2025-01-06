@@ -9,7 +9,7 @@ edition = "2021"
 [dependencies]
 derefable = "0.1"
 serde = { version = "1", features = ["derive"] }
-structopt = "0.3"
+clap = { version = "4.5.23", features = ["color", "suggestions", "derive", "env"] }
 anyhow = "1"
 thiserror = "2"
 readervzrd = "0.1.1"

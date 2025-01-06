@@ -3,11 +3,11 @@ use crate::render::portable::ItemRenderer;
 use crate::render::Renderer;
 use crate::spec::ItemsSpec;
 use anyhow::{bail, Result};
+use clap::Parser;
 use log::LevelFilter;
 use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
 use std::fs;
 use std::path::PathBuf;
-use structopt::StructOpt;
 use thiserror::Error;
 
 pub(crate) mod cli;
@@ -17,7 +17,7 @@ pub(crate) mod spells;
 pub(crate) mod utils;
 
 fn main() -> Result<()> {
-    let opt = cli::Datavzrd::from_args();
+    let opt = cli::Datavzrd::parse();
     let _ = TermLogger::init(
         LevelFilter::Warn,
         Config::default(),
