@@ -1,3 +1,4 @@
+use crate::cli::{CliError, Command};
 use crate::render::portable::utils::{render_index_file, render_static_files};
 use crate::render::portable::ItemRenderer;
 use crate::render::Renderer;
@@ -9,9 +10,9 @@ use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
 use std::fs;
 use std::path::PathBuf;
 use thiserror::Error;
-use crate::cli::{CliError, Command};
 
 pub(crate) mod cli;
+pub(crate) mod publish;
 pub(crate) mod render;
 pub(crate) mod spec;
 pub(crate) mod spells;
@@ -56,8 +57,8 @@ fn main() -> Result<()> {
                     fs::create_dir(&output)?;
                 } else {
                     bail!(OutputError::OutputDirectoryNotEmpty {
-                output_path: output
-            })
+                        output_path: output
+                    })
                 }
             }
 

@@ -48,7 +48,7 @@ pub enum Command {
     /// Publish a generated report to GitHub Pages.
     Publish {
         /// GitHub repository name to publish to
-        #[arg(short='n', long)]
+        #[arg(short = 'n', long)]
         repo_name: String,
 
         /// Path to the report directory
