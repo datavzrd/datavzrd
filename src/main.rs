@@ -5,7 +5,7 @@ use crate::render::Renderer;
 use crate::spec::ItemsSpec;
 use anyhow::{bail, Context, Result};
 use clap::Parser;
-use log::{info, LevelFilter};
+use log::LevelFilter;
 use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
 use std::fs;
 use std::path::PathBuf;

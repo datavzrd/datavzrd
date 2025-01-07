@@ -89,7 +89,7 @@ impl Repository {
         for entry in fs::read_dir(&self.path).context("Failed to read report directory")? {
             let entry = entry.context("Failed to read directory entry")?;
             let destination = deployment_path.join(entry.file_name());
-            if let Err(_) = fs::remove_file(&destination) {
+            if fs::remove_file(&destination).is_err() {
                 // Ignore errors when removing files (e.g., file doesn't exist)
             }
 
