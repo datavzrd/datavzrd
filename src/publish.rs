@@ -4,14 +4,14 @@ use std::path::PathBuf;
 use std::process::Command;
 use thiserror::Error;
 
-struct Repository {
+pub(crate) struct Repository {
     name: String,
     owner: String,
     path: PathBuf,
 }
 
 impl Repository {
-    fn new(name: String, owner: Option<String>, path: PathBuf) -> Result<Self> {
+    pub(crate) fn new(name: String, owner: Option<String>, path: PathBuf) -> Result<Self> {
         if !path.exists() {
             bail!(PublishError::PathDoesNotExist(path));
         }
@@ -25,7 +25,7 @@ impl Repository {
         }
     }
 
-    fn publish(&self) -> Result<()> {
+    pub(crate) fn publish(&self) -> Result<()> {
         verify()?;
         if !self.exists()? {
             self.create()?;

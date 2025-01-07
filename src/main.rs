@@ -33,7 +33,8 @@ fn main() -> Result<()> {
             report_path,
             org,
         }) => {
-            unimplemented!("Publishing to GitHub Pages is not yet implemented.")
+            let repo = publish::Repository::new(repo_name, org, report_path)?;
+            repo.publish()?;
         }
         None => {
             let config = opt
