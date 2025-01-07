@@ -75,7 +75,7 @@ impl Repository {
     }
 
     fn deploy_action(&self) -> Result<()> {
-        let file = include_str!("../templates/pages.yml");
+        let file = include_str!("../templates/pages.yaml");
         let path = self.path.join("deployment/.github/workflows/pages.yml");
         if !path.exists() {
             fs::write(&path, file)?;
