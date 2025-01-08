@@ -35,7 +35,10 @@ impl Repository {
         self.clone_repository()?;
         self.update()?;
         println!("Your files are now published. Please make sure GitHub Pages is enabled for the 'main' branch in your repository settings at: https://github.com/{}/settings/pages", self.repository_name());
-        println!("The URL of your published report is: https://{}.github.io/{}/", self.owner, self.name);
+        println!(
+            "The URL of your published report is: https://{}.github.io/{}/",
+            self.owner, self.name
+        );
         Ok(())
     }
 
