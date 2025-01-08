@@ -1,4 +1,6 @@
 use anyhow::{bail, Context, Result};
+use fs_extra::dir;
+use fs_extra::dir::CopyOptions;
 use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
@@ -76,6 +78,10 @@ impl Repository {
 
     fn deploy_action(&self) -> Result<()> {
         let file = include_str!("../templates/pages.yaml");
+        let workflow_path = self.path.join("deployment/.github/workflows");
+        if !workflow_path.exists() {
+            fs::create_dir_all(&workflow_path).context("Failed to create workflows directory")?;
+        }
         let path = self.path.join("deployment/.github/workflows/pages.yml");
         if !path.exists() {
             fs::write(&path, file)?;
@@ -86,49 +92,80 @@ impl Repository {
     fn update(&self) -> Result<()> {
         let deployment_path = self.path.join("deployment");
 
-        for entry in fs::read_dir(&self.path).context("Failed to read report directory")? {
-            let entry = entry.context("Failed to read directory entry")?;
-            let destination = deployment_path.join(entry.file_name());
-            if fs::remove_file(&destination).is_err() {
-                // Ignore errors when removing files (e.g., file doesn't exist)
-            }
-
-            fs::copy(entry.path(), destination).context("Failed to copy report")?;
-        }
-
         for entry in
             fs::read_dir(&deployment_path).context("Failed to read deployment directory")?
         {
             let entry = entry.context("Failed to read directory entry")?;
             let entry_path = entry.path();
-            if entry_path.ends_with(".git") || entry_path.ends_with(".github") {
-                continue;
-            }
-            if entry_path.is_dir() {
-                fs::remove_dir_all(&entry_path).context("Failed to remove directory")?;
-            } else {
-                fs::remove_file(&entry_path).context("Failed to remove file")?;
+            if !entry_path.ends_with(".git") && !entry_path.ends_with(".github") {
+                if entry_path.is_dir() {
+                    fs::remove_dir_all(&entry_path).context("Failed to remove directory")?;
+                } else {
+                    fs::remove_file(&entry_path).context("Failed to remove file")?;
+                }
             }
         }
 
+        for entry in fs::read_dir(&self.path).context("Failed to read source directory")? {
+            let entry = entry.context("Failed to read directory entry")?;
+            let entry_path = entry.path();
+            if entry_path.ends_with("deployment") {
+                continue;
+            }
+            let destination_path = deployment_path.join(entry.file_name());
+
+            if entry_path.is_dir() {
+                dir::copy(
+                    &entry_path,
+                    &destination_path,
+                    &CopyOptions {
+                        overwrite: true,
+                        skip_exist: false,
+                        buffer_size: 64000,
+                        copy_inside: false,
+                        content_only: true,
+                        depth: 0,
+                    },
+                )
+                .context(format!("Failed to copy directory: {:?}", entry_path))?;
+            } else {
+                fs::copy(&entry_path, &destination_path)
+                    .context(format!("Failed to copy file: {:?}", entry_path))?;
+            }
+        }
+
+        let deployment_dir = deployment_path.clone();
+
         std::env::set_current_dir(&deployment_path)
             .context("Failed to change to deployment directory")?;
-        Command::new("git")
-            .arg("add")
-            .arg(".")
-            .output()
-            .context("Failed to run git add")?;
-        Command::new("git")
-            .arg("commit")
-            .arg("-m")
-            .arg("Deploy report")
-            .output()
-            .context("Failed to run git commit")?;
-        Command::new("git")
-            .arg("push")
-            .output()
-            .context("Failed to run git push")?;
 
+        if !deployment_dir.join(".git").exists() {
+            Command::new("git")
+                .args(["init"])
+                .output()
+                .context("Failed to initialize Git repository")?;
+        }
+
+        Command::new("git")
+            .args(["checkout", "-b", "main"])
+            .output()
+            .context("Failed to create or switch to `main` branch")?;
+        Command::new("git")
+            .args(["add", "."])
+            .output()
+            .context("Failed to run `git add .`")?;
+        Command::new("git")
+            .args(["commit", "-m", "Deploy report"])
+            .output()
+            .context("Failed to commit changes")?;
+        Command::new("git")
+            .args(["remote", "add", "origin", &self.repository_name()])
+            .output()
+            .context("Failed to add remote repository")?;
+        Command::new("git")
+            .args(["push", "-u", "origin", "main"])
+            .output()
+            .context("Failed to push to the remote repository")?;
         Ok(())
     }
 }
