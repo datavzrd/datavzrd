@@ -33,8 +33,9 @@ impl Repository {
             self.create()?;
         }
         self.clone_repository()?;
-        self.deploy_action()?;
         self.update()?;
+        println!("Your files are now published. Please make sure GitHub Pages is enabled for the 'main' branch in your repository settings at: https://github.com/{}/settings/pages", self.repository_name());
+        println!("The URL of your published report is: https://{}.github.io/{}/", self.owner, self.name);
         Ok(())
     }
 
@@ -74,19 +75,6 @@ impl Repository {
         } else {
             Ok(false)
         }
-    }
-
-    fn deploy_action(&self) -> Result<()> {
-        let file = include_str!("../templates/pages.yaml");
-        let workflow_path = self.path.join("deployment/.github/workflows");
-        if !workflow_path.exists() {
-            fs::create_dir_all(&workflow_path).context("Failed to create workflows directory")?;
-        }
-        let path = self.path.join("deployment/.github/workflows/pages.yml");
-        if !path.exists() {
-            fs::write(&path, file)?;
-        }
-        Ok(())
     }
 
     fn update(&self) -> Result<()> {
