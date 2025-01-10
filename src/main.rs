@@ -16,6 +16,7 @@ pub(crate) mod publish;
 pub(crate) mod render;
 pub(crate) mod spec;
 pub(crate) mod spells;
+mod suggest;
 pub(crate) mod utils;
 
 fn main() -> Result<()> {
@@ -35,6 +36,16 @@ fn main() -> Result<()> {
         }) => {
             let repo = publish::Repository::new(repo_name, org, report_path)?;
             repo.publish()?;
+        }
+        Some(Command::Suggest {
+            files,
+            separators,
+            name,
+        }) => {
+            if files.len() != separators.len() {
+                bail!(CliError::MismatchedSeparators);
+            }
+            suggest::suggest(files, separators, name)?;
         }
         None => {
             let config = opt

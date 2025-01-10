@@ -59,6 +59,20 @@ pub enum Command {
         #[arg(long)]
         org: Option<String>,
     },
+    /// Suggest a configuration file based on the given tabular input files.
+    Suggest {
+        /// List of paths to input files
+        #[arg(required = true, short, long, value_parser)]
+        files: Vec<PathBuf>,
+
+        /// Separators for the corresponding input files (e.g., comma for CSV, tab for TSV)
+        #[arg(required = true, short, long, value_parser, value_name = "SEPARATORS")]
+        separators: Vec<char>,
+
+        /// Name of the report
+        #[arg(short, long, default_value = "Datavzrd Report")]
+        name: String,
+    },
 }
 
 #[derive(Error, Debug)]
@@ -68,4 +82,7 @@ pub enum CliError {
 
     #[error("`<CONFIG>` is required when no subcommand is used.")]
     MissingConfig,
+
+    #[error("Given separators don not match the number of input files.")]
+    MismatchedSeparators,
 }
