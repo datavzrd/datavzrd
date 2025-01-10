@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.46.0](https://github.com/datavzrd/datavzrd/compare/v2.45.1...v2.46.0) (2025-01-10)
+
+
+### Features
+
+* Add new subcommand for suggesting configurations based on files ([#858](https://github.com/datavzrd/datavzrd/issues/858)) ([e460e04](https://github.com/datavzrd/datavzrd/commit/e460e046a74e241d842391d56c52f95cf9fc368f))
+* Add publish subcommand ([#856](https://github.com/datavzrd/datavzrd/issues/856)) ([1c8facc](https://github.com/datavzrd/datavzrd/commit/1c8faccf41764aa69c3a82414f48ff0e7523a5a3))
+
 ## [2.45.1](https://github.com/datavzrd/datavzrd/compare/v2.45.0...v2.45.1) (2025-01-06)
 
 
