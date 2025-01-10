@@ -19,6 +19,7 @@ use crate::spells::SpellSpec;
 use format_serde_error::SerdeError;
 use serde::Deserialize;
 use serde::Serialize;
+use serde_with::skip_serializing_none;
 use std::borrow::BorrowMut;
 use std::collections::HashMap;
 use std::fmt::Debug;
@@ -29,7 +30,8 @@ use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use thiserror::Error;
 
-#[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
+#[skip_serializing_none]
+#[derive(Derefable, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct ItemsSpec {
     #[serde(default, rename = "name")]
@@ -341,7 +343,7 @@ impl ItemsSpec {
     }
 }
 
-fn default_single_page_threshold() -> usize {
+pub(crate) fn default_single_page_threshold() -> usize {
     20000_usize
 }
 
@@ -349,7 +351,7 @@ fn default_separator() -> char {
     char::from_str(",").unwrap()
 }
 
-fn default_page_size() -> usize {
+pub(crate) fn default_page_size() -> usize {
     20
 }
 
@@ -368,8 +370,8 @@ fn default_render_table() -> Option<RenderTableSpecs> {
 fn default_links() -> Option<HashMap<String, LinkSpec>> {
     Some(HashMap::new())
 }
-
-#[derive(Deserialize, Debug, Clone, PartialEq, Default)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct DatasetSpecs {
     pub(crate) path: PathBuf,
@@ -427,7 +429,8 @@ impl DatasetSpecs {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct ItemSpecs {
     #[serde(default)]
@@ -487,7 +490,8 @@ impl ItemSpecs {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderTableSpecs {
     #[serde(default)]
@@ -498,7 +502,7 @@ pub(crate) struct RenderTableSpecs {
     pub(crate) headers: Option<HashMap<u32, HeaderSpecs>>,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct AdditionalColumnSpec {
     #[serde(default = "default_value_function")]
@@ -515,7 +519,8 @@ fn default_value_function() -> String {
     String::from("function(row) { return '' }")
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct HeaderSpecs {
     #[serde(default)]
@@ -687,7 +692,8 @@ fn default_precision() -> u32 {
     2_u32
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderColumnSpec {
     #[serde(default)]
@@ -905,7 +911,8 @@ impl BarPlot {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderPlotSpec {
     #[serde(default, rename = "spec")]
@@ -927,19 +934,19 @@ impl RenderPlotSpec {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderHtmlSpec {
     pub(crate) script_path: String,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderImgSpec {
     pub(crate) path: String,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct LinkSpec {
     #[serde(default)]
@@ -978,7 +985,8 @@ impl CustomPlot {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct PlotSpec {
     #[serde(rename = "ticks")]
@@ -1023,6 +1031,7 @@ fn default_clamp() -> bool {
     true
 }
 
+#[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct Heatmap {
