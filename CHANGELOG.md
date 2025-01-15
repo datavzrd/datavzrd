@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.46.1](https://github.com/datavzrd/datavzrd/compare/v2.46.0...v2.46.1) (2025-01-15)
+
+
+### Bug Fixes
+
+* Fix wrong case for configs generated with datavzrd suggest ([#865](https://github.com/datavzrd/datavzrd/issues/865)) ([8323cee](https://github.com/datavzrd/datavzrd/commit/8323ceea480d788f83d31480ed648bebe59e1f6c)), closes [#864](https://github.com/datavzrd/datavzrd/issues/864)
+* Remove suffix from dataset name for datavzrd suggest ([88fa251](https://github.com/datavzrd/datavzrd/commit/88fa25154122b5d9099a3f27ce6a5f38cf3758c8))
+
 ## [2.46.0](https://github.com/datavzrd/datavzrd/compare/v2.45.1...v2.46.0) (2025-01-10)
 
 
