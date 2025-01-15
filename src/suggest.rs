@@ -7,7 +7,7 @@ use anyhow::Result;
 use std::collections::HashMap;
 use std::path::PathBuf;
 
-pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -> Result<()> {
+pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -> Result<String> {
     let mut items_spec = ItemsSpec {
         report_name: name,
         datasets: HashMap::new(),
@@ -94,7 +94,30 @@ pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -
         };
         items_spec.views.insert(dataset_name.to_string(), item_spec);
     }
-    let mut stdout = std::io::stdout();
-    serde_yaml::to_writer(&mut stdout, &items_spec)?;
-    Ok(())
+    Ok(serde_yaml::to_string(&items_spec)?)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use anyhow::Result;
+    use std::io::Write;
+    use std::path::PathBuf;
+
+    #[test]
+    fn test_suggest() -> Result<()> {
+        let files = vec![
+            PathBuf::from(".examples/data/movies.csv"),
+            PathBuf::from(".examples/data/oscars.csv"),
+        ];
+        let separators = vec![',', ','];
+        let name = "Test Report".to_string();
+        let result = suggest(files, separators, name);
+        assert!(result.is_ok());
+        let tmp = tempfile::NamedTempFile::new()?;
+        tmp.as_file().write_all(result.unwrap().as_bytes())?;
+        let config = ItemsSpec::from_file(tmp.path())?;
+        assert!(config.validate().is_ok());
+        Ok(())
+    }
 }

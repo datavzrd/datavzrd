@@ -604,6 +604,7 @@ dependencies = [
  "simple_excel_writer",
  "simplelog",
  "slug",
+ "tempfile",
  "tera",
  "thiserror 2.0.11",
  "typed-builder",

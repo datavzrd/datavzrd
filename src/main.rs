@@ -8,6 +8,7 @@ use clap::Parser;
 use log::LevelFilter;
 use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
 use std::fs;
+use std::io::{stdout, Write};
 use std::path::PathBuf;
 use thiserror::Error;
 
@@ -45,7 +46,8 @@ fn main() -> Result<()> {
             if files.len() != separators.len() {
                 bail!(CliError::MismatchedSeparators);
             }
-            suggest::suggest(files, separators, name)?;
+            let config = suggest::suggest(files, separators, name)?;
+            stdout().write_all(config.as_bytes())?;
         }
         None => {
             let config = opt
