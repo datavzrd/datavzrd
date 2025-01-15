@@ -25,7 +25,7 @@ pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -
             links: None,
             offer_excel: false,
         };
-        let dataset_name = file.file_name().unwrap().to_str().unwrap().to_string();
+        let dataset_name = file.file_stem().unwrap().to_str().unwrap().to_string();
         items_spec
             .datasets
             .insert(dataset_name.to_string(), dataset.clone());
