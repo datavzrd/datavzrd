@@ -19,6 +19,7 @@ use crate::spells::SpellSpec;
 use format_serde_error::SerdeError;
 use serde::Deserialize;
 use serde::Serialize;
+use serde_with::skip_serializing_none;
 use std::borrow::BorrowMut;
 use std::collections::HashMap;
 use std::fmt::Debug;
@@ -29,8 +30,9 @@ use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use thiserror::Error;
 
-#[derive(Derefable, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[skip_serializing_none]
+#[derive(Derefable, Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct ItemsSpec {
     #[serde(default, rename = "name")]
     pub(crate) report_name: String,
@@ -341,7 +343,7 @@ impl ItemsSpec {
     }
 }
 
-fn default_single_page_threshold() -> usize {
+pub(crate) fn default_single_page_threshold() -> usize {
     20000_usize
 }
 
@@ -349,7 +351,7 @@ fn default_separator() -> char {
     char::from_str(",").unwrap()
 }
 
-fn default_page_size() -> usize {
+pub(crate) fn default_page_size() -> usize {
     20
 }
 
@@ -368,9 +370,9 @@ fn default_render_table() -> Option<RenderTableSpecs> {
 fn default_links() -> Option<HashMap<String, LinkSpec>> {
     Some(HashMap::new())
 }
-
-#[derive(Deserialize, Debug, Clone, PartialEq, Default)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct DatasetSpecs {
     pub(crate) path: PathBuf,
     #[serde(default = "default_separator")]
@@ -427,8 +429,9 @@ impl DatasetSpecs {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct ItemSpecs {
     #[serde(default)]
     pub(crate) hidden: bool,
@@ -487,8 +490,9 @@ impl ItemSpecs {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderTableSpecs {
     #[serde(default)]
     pub(crate) columns: HashMap<String, RenderColumnSpec>,
@@ -498,8 +502,8 @@ pub(crate) struct RenderTableSpecs {
     pub(crate) headers: Option<HashMap<u32, HeaderSpecs>>,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct AdditionalColumnSpec {
     #[serde(default = "default_value_function")]
     pub(crate) value: String,
@@ -515,8 +519,9 @@ fn default_value_function() -> String {
     String::from("function(row) { return '' }")
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct HeaderSpecs {
     #[serde(default)]
     pub(crate) label: Option<String>,
@@ -687,8 +692,9 @@ fn default_precision() -> u32 {
     2_u32
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderColumnSpec {
     #[serde(default)]
     pub(crate) optional: Option<bool>,
@@ -791,7 +797,7 @@ impl RenderColumnSpec {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case")]
+#[serde(rename_all(deserialize = "kebab-case"))]
 pub(crate) struct LinkToUrlSpec {
     #[serde(flatten)]
     pub(crate) entries: HashMap<String, LinkToUrlSpecEntry>,
@@ -799,7 +805,7 @@ pub(crate) struct LinkToUrlSpec {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct LinkToUrlSpecEntry {
     url: String,
     #[serde(default = "default_new_window")]
@@ -905,8 +911,9 @@ impl BarPlot {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderPlotSpec {
     #[serde(default, rename = "spec")]
     pub(crate) schema: Option<String>,
@@ -927,20 +934,20 @@ impl RenderPlotSpec {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderHtmlSpec {
     pub(crate) script_path: String,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct RenderImgSpec {
     pub(crate) path: String,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct LinkSpec {
     #[serde(default)]
     pub(crate) column: String,
@@ -953,7 +960,7 @@ pub(crate) struct LinkSpec {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct CustomPlot {
     #[serde(default, rename = "data")]
     pub(crate) plot_data: String,
@@ -978,8 +985,9 @@ impl CustomPlot {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct PlotSpec {
     #[serde(rename = "ticks")]
     pub(crate) tick_plot: Option<TickPlot>,
@@ -989,7 +997,7 @@ pub(crate) struct PlotSpec {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct TickPlot {
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: ScaleType,
@@ -1001,7 +1009,7 @@ pub(crate) struct TickPlot {
     pub(crate) color: Option<ColorDefinition>,
 }
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct ColorDefinition {
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: ScaleType,
@@ -1023,8 +1031,9 @@ fn default_clamp() -> bool {
     true
 }
 
+#[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct Heatmap {
     #[serde(default, rename = "type")]
     pub(crate) vega_type: Option<VegaType>,
@@ -1091,7 +1100,7 @@ lazy_static! {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+#[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub(crate) struct BarPlot {
     #[serde(default, rename = "scale")]
     pub(crate) scale_type: ScaleType,
