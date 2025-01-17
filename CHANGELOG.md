@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.46.2](https://github.com/datavzrd/datavzrd/compare/v2.46.1...v2.46.2) (2025-01-17)
+
+
+### Bug Fixes
+
+* Fix heatmap not working due to serialization with kebab-case ([148a742](https://github.com/datavzrd/datavzrd/commit/148a7424f986df2ffff86bf53d748b81760c6939))
+* Fix menu not working due to toast placement ([f100bbe](https://github.com/datavzrd/datavzrd/commit/f100bbea988780018964bf277218bbe472c658b2))
+
 ## [2.46.1](https://github.com/datavzrd/datavzrd/compare/v2.46.0...v2.46.1) (2025-01-15)
 
 
