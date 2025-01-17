@@ -189,7 +189,7 @@ function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) 
     let index = get_index(heatmap.title, columns, detail_mode, header_label_length);
     let row = 0;
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
-    var custom_func = heatmap.heatmap.custom_content;
+    var custom_func = heatmap.heatmap["custom-content"];
 
     
     let scale = datavzrdScale(heatmap);
@@ -201,7 +201,7 @@ function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) 
             if (value !== "") {
                 this.style.setProperty("background-color", scale(value), "important");
             }
-            if (custom_func !== null) {
+            if (custom_func) {
                 var data_function = window[custom_func];
                 value = data_function(value, table_rows[row]);
                 this.innerHTML = value;
@@ -214,16 +214,16 @@ function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) 
 function datavzrdScale(heatmap) {
     let scale = null;
     if (heatmap.heatmap.scale == "ordinal") {
-        if (heatmap.heatmap.color_scheme != "") {
-            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap.color_scheme));
+        if (heatmap.heatmap["color-scheme"] != "") {
+            scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(vega.scheme(heatmap.heatmap["color-scheme"]));
         } else if (!heatmap.heatmap.range.length == 0) {
             scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain).range(heatmap.heatmap.range);
         } else {
             scale = vega.scale(heatmap.heatmap.scale)().domain(heatmap.heatmap.domain);
         }
     } else {
-        if (heatmap.heatmap.color_scheme != "") {
-            let scheme = heatmap.heatmap.color_scheme;
+        if (heatmap.heatmap["color-scheme"] != "") {
+            let scheme = heatmap.heatmap["color-scheme"];
             let d3_scheme = d3[`interpolate${scheme.charAt(0).toUpperCase()}${scheme.slice(1).toLowerCase()}`];
             let s = heatmap.heatmap.scale;
             if (heatmap.heatmap.scale == "linear") {
@@ -328,8 +328,8 @@ function colorizeDetailCard(value, div, heatmap, row, is_float, precision) {
     if (value !== "") {
         $(`${div}`).css( "background-color", scale(value) );
     }
-    if (heatmap.heatmap.custom_content !== null) {
-        var data_function = window[heatmap.heatmap.custom_content];
+    if (heatmap.heatmap["custom-content"]) {
+        var data_function = window[heatmap.heatmap["custom-content"]];
         value = data_function(value, row);
         $(`${div}`)[0].innerHTML = value;
     } else if (is_float && precision !== undefined) {
@@ -343,16 +343,16 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
 
     if (heatmap.scale == "ordinal") {
         if (heatmap.domain != null) {
-            if (heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.scale)().domain(heatmap.domain).range(vega.scheme(heatmap.color_scheme));
+            if (heatmap["color-scheme"] != "") {
+                scale = vega.scale(heatmap.scale)().domain(heatmap.domain).range(vega.scheme(heatmap["color-scheme"]));
             } else if (!heatmap.range.length == 0) {
                 scale = vega.scale(heatmap.scale)().domain(heatmap.domain).range(heatmap.range);
             } else {
                 scale = vega.scale(heatmap.scale)().domain(heatmap.domain);
             }
         } else {
-            if (heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.scale)().range(vega.scheme(heatmap.color_scheme));
+            if (heatmap["color-scheme"] != "") {
+                scale = vega.scale(heatmap.scale)().range(vega.scheme(heatmap["color-scheme"]));
             } else if (!heatmap.range.length == 0) {
                 scale = vega.scale(heatmap.scale)().range(heatmap.range);
             } else {
@@ -361,16 +361,16 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
         }
     } else {
         if (heatmap.domain != null) {
-            if (heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.scale)().domain(heatmap.domain).clamp(heatmap.clamp).range(vega.scheme(heatmap.color_scheme));
+            if (heatmap["color-scheme"] != "") {
+                scale = vega.scale(heatmap.scale)().domain(heatmap.domain).clamp(heatmap.clamp).range(vega.scheme(heatmap["color-scheme"]));
             } else if (!heatmap.range == 0) {
                 scale = vega.scale(heatmap.scale)().domain(heatmap.domain).clamp(heatmap.clamp).range(heatmap.range);
             } else {
                 scale = vega.scale(heatmap.scale)().domain(heatmap.domain).clamp(heatmap.clamp);
             }
         } else {
-            if (heatmap.color_scheme != "") {
-                scale = vega.scale(heatmap.scale)().clamp(heatmap.clamp).range(vega.scheme(heatmap.color_scheme));
+            if (heatmap["color-scheme"] != "") {
+                scale = vega.scale(heatmap.scale)().clamp(heatmap.clamp).range(vega.scheme(heatmap["color-scheme"]));
             } else if (!heatmap.range == 0) {
                 scale = vega.scale(heatmap.scale)().clamp(heatmap.clamp).range(heatmap.range);
             } else {
@@ -553,7 +553,7 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 
     for (const o of config.link_urls) {
         if (displayed_columns.includes(o.title)) {
-            linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, o.custom_content, config.detail_mode, config.header_label_length);
+            linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, o["custom-content"], config.detail_mode, config.header_label_length);
         }
     }
 
@@ -643,7 +643,7 @@ export function load() {
             });
         }
 
-        
+
         bs_table_cols.push({
             field: 'line_number',
             title: '',
@@ -651,7 +651,7 @@ export function load() {
                 return value;
             }
         });
-        
+
 
         for (const column of config.columns) {
             if (config.displayed_columns.includes(column)) {
