@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.47.0](https://github.com/datavzrd/datavzrd/compare/v2.46.2...v2.47.0) (2025-01-20)
+
+
+### Features
+
+* Add warning for potential floats using comma ([#872](https://github.com/datavzrd/datavzrd/issues/872)) ([e82075c](https://github.com/datavzrd/datavzrd/commit/e82075c87966ac0b2f429783d7f7ad154d31cc49))
+
 ## [2.46.2](https://github.com/datavzrd/datavzrd/compare/v2.46.1...v2.46.2) (2025-01-17)
 
 
