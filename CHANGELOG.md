@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.47.1](https://github.com/datavzrd/datavzrd/compare/v2.47.0...v2.47.1) (2025-01-27)
+
+
+### Bug Fixes
+
+* Only warn if possible flaot value contains comma ([fdb79ac](https://github.com/datavzrd/datavzrd/commit/fdb79ac9bbbcbc10bb4efab6030008eb425b03ca))
+
 ## [2.47.0](https://github.com/datavzrd/datavzrd/compare/v2.46.2...v2.47.0) (2025-01-20)
 
 
