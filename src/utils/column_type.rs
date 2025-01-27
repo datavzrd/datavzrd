@@ -30,7 +30,7 @@ impl ColumnType {
                 | (true, false, ColumnType::Integer) => ColumnType::Float,
                 (false, false, _) | (_, _, ColumnType::String) => {
                     let replaced_comma = value.replace(",", ".");
-                    if f64::from_str(&replaced_comma).is_ok() {
+                    if f64::from_str(&replaced_comma).is_ok() && value.contains(",") {
                         warn!("The value '{value}' contains a comma and will not be parsed as a float. Consider using '.' for decimal points.")
                     }
                     ColumnType::String
