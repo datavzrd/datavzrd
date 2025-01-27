@@ -59,7 +59,7 @@ pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -
                             vega_type: None,
                             scale_type: ScaleType::Linear,
                             clamp: false,
-                            color_scheme: "viridis".to_string(),
+                            color_scheme: "blues".to_string(),
                             color_range: Default::default(),
                             domain: None,
                             domain_mid: None,
