@@ -49,6 +49,7 @@ pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -
                             custom_content: None,
                         }),
                         bar_plot: None,
+                        pills: None,
                     }),
                     ..RenderColumnSpec::default()
                 },
@@ -67,6 +68,7 @@ pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -
                             custom_content: None,
                         }),
                         bar_plot: None,
+                        pills: None,
                     }),
                     ..RenderColumnSpec::default()
                 },

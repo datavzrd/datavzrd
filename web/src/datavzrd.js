@@ -211,6 +211,61 @@ function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) 
     );
 }
 
+function renderPills(ah, columns, pills, detail_mode, header_label_length) {
+    let index = get_index(pills.title, columns, detail_mode, header_label_length);
+    let row = 0;
+    var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
+    let heatmap = {
+        heatmap: {
+            scale: "ordinal",
+            domain: pills.pills.domain,
+            range: pills.pills.range,
+            "color-scheme": pills.pills["color-scheme"],
+            clamp: true,
+            "custom-content": undefined
+        }
+    }
+    let scale = datavzrdScale(heatmap);
+
+    $(`table > tbody > tr td:nth-child(${index})`).each(
+        function() {
+            var value = table_rows[row][pills.title];
+            if (value !== "") {
+                let values = value.split(pills.pills.separator).map(item => item.trim());
+                let content = values.map( v => {
+                    let color = scale(v);
+                    return `<span style="padding: 4px 8px; margin: 2px; border-radius: 12px; background-color: ${color};">${v}</span>`;
+                }).join("");
+                this.innerHTML = `<div style="display: inline-block">${content}</div>`;
+            }
+            row++;
+        }
+    );
+}
+
+function renderDetailPills(value, div, pills) {
+    let heatmap = {
+        heatmap: {
+            scale: "ordinal",
+            domain: pills.pills.domain,
+            range: pills.pills.range,
+            "color-scheme": pills.pills["color-scheme"],
+            clamp: true,
+            "custom-content": undefined
+        }
+    }
+    let scale = datavzrdScale(heatmap);
+
+    if (value !== "") {
+        let values = value.split(pills.pills.separator).map(item => item.trim());
+        let content = values.map( v => {
+            let color = scale(v);
+            return `<span style="padding: 4px 8px; margin: 2px; border-radius: 12px; background-color: ${color};">${v}</span>`;
+        }).join("");
+        $(`${div}`)[0].innerHTML = content;
+    }
+}
+
 function datavzrdScale(heatmap) {
     let scale = null;
     if (heatmap.heatmap.scale == "ordinal") {
@@ -503,6 +558,17 @@ function detailFormatter(index, row) {
                   </div>
                 </div>`;
                 html.push(card);
+            } else if (config.pill_titles.includes(key)) {
+                id = `pills-${index}-${config.columns.indexOf(key)}`;
+                var card = `<div class="card">
+                  <div class="card-header">
+                    ${card_title}
+                  </div>
+                  <div id="${id}" class="card-body">
+                    ${value}
+                  </div>
+                </div>`;
+                html.push(card);
             } else if (config.format[key] !== undefined) {
                 var data_function = window[config.format[key]];
                 value = data_function(value, row);
@@ -560,6 +626,12 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
     for (const o of config.heatmaps) {
         if (displayed_columns.includes(o.title)) {
             colorizeColumn(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
+        }
+    }
+
+    for (const o of config.pills) {
+        if (displayed_columns.includes(o.title)) {
+            renderPills(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
         }
     }
 
@@ -844,6 +916,12 @@ export function load() {
             for (const o of config.heatmaps) {
                 if (!config.displayed_columns.includes(o.title)) {
                     colorizeDetailCard(row[o.title], `#heatmap-${index}-${config.columns.indexOf(o.title)}`, o, row, config.column_config[o.title].is_float, config.column_config[o.title].precision);
+                }
+            }
+
+            for (const o of config.pills) {
+                if (!config.displayed_columns.includes(o.title)) {
+                    renderDetailPills(row[o.title], `#pills-${index}-${config.columns.indexOf(o.title)}`, o);
                 }
             }
 

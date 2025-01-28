@@ -843,6 +843,8 @@ impl RenderColumnSpec {
                     heatmap.preprocess(dataset, title)?;
                 } else if let Some(bars) = &mut plot.bar_plot {
                     bars.preprocess(dataset)?;
+                } else if let Some(pills) = &mut plot.pills {
+                    pills.preprocess(dataset, title)?;
                 }
             }
         }
@@ -994,6 +996,54 @@ pub(crate) struct PlotSpec {
     pub(crate) heatmap: Option<Heatmap>,
     #[serde(rename = "bars")]
     pub(crate) bar_plot: Option<BarPlot>,
+    #[serde(default)]
+    pub(crate) pills: Option<PillsSpec>,
+}
+
+#[skip_serializing_none]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+pub(crate) struct PillsSpec {
+    #[serde(default = "default_pill_separator")]
+    pub(crate) separator: String,
+    #[serde(default)]
+    pub(crate) color_scheme: String,
+    #[serde(default, rename = "range")]
+    pub(crate) color_range: ColorRange,
+    #[serde(default)]
+    pub(crate) domain: Option<Vec<String>>,
+}
+
+fn default_pill_separator() -> String {
+    String::from(",")
+}
+
+impl PillsSpec {
+    fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
+        if self.domain.is_none() {
+            let mut reader = dataset.reader()?;
+            let index = column_position(title, dataset)?;
+            let domain = reader
+                .records()?
+                .skip(dataset.header_rows - 1)
+                .flat_map(|record| {
+                    record
+                        .get(index)
+                        .unwrap()
+                        .to_string()
+                        .split(&self.separator)
+                        .map(|s| s.trim().to_string())
+                        .collect_vec()
+                })
+                .unique()
+                .collect_vec();
+            self.domain = Some(domain);
+        }
+        if !self.color_range.0.is_empty() {
+            self.color_range.preprocess()?;
+        }
+        Ok(())
+    }
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -1541,6 +1591,7 @@ mod tests {
                                 custom_content: None,
                             }),
                             bar_plot: None,
+                            pills: None,
                         }),
                         display_mode: HeaderDisplayMode::Normal,
                         ellipsis: None,
@@ -1931,6 +1982,7 @@ mod tests {
             tick_plot: Some(expected_ticks),
             heatmap: None,
             bar_plot: None,
+            pills: None,
         };
         let expected_render_columns = RenderColumnSpec {
             optional: Some(false),

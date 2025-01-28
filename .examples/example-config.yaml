@@ -88,7 +88,10 @@ views:
     render-table:
       columns:
         Genre:
-          ellipsis: 15
+          plot:
+            pills:
+              separator: ","
+              color-scheme: category20
         imdbID:
           link-to-url:
             IMDB:
