@@ -87,6 +87,8 @@ views:
     dataset: movies
     render-table:
       columns:
+        Director:
+          ellipsis: 40
         Genre:
           plot:
             pills:
