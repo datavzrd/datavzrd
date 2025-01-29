@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.48.0](https://github.com/datavzrd/datavzrd/compare/v2.47.1...v2.48.0) (2025-01-29)
+
+
+### Features
+
+* Add new pills keyword ([#877](https://github.com/datavzrd/datavzrd/issues/877)) ([7c52a7f](https://github.com/datavzrd/datavzrd/commit/7c52a7fbfb57599d81778c89d5e71cbc8ca941fd))
+
 ## [2.47.1](https://github.com/datavzrd/datavzrd/compare/v2.47.0...v2.47.1) (2025-01-27)
 
 
