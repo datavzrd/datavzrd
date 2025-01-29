@@ -4,7 +4,7 @@ use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
-use crate::spec::{AdditionalColumnSpec, LinkToUrlSpecEntry};
+use crate::spec::{AdditionalColumnSpec, LinkToUrlSpecEntry, PillsSpec};
 use crate::spec::{
     BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
     RenderColumnSpec, TickPlot,
@@ -621,6 +621,7 @@ struct JavascriptConfig {
     tick_titles: Vec<String>,
     bar_titles: Vec<String>,
     heatmap_titles: Vec<String>,
+    pill_titles: Vec<String>,
     custom_plot_titles: Vec<String>,
     links: Vec<String>,
     column_config: HashMap<String, JavascriptColumnConfig>,
@@ -628,6 +629,7 @@ struct JavascriptConfig {
     ticks: Vec<JavascriptTickAndBarConfig>,
     bars: Vec<JavascriptTickAndBarConfig>,
     heatmaps: Vec<JavascriptHeatmapConfig>,
+    pills: Vec<JavascriptPillsConfig>,
     brush_domains: HashMap<String, Vec<f32>>,
     aux_domains: HashMap<String, Vec<String>>,
     link_urls: Vec<JavascriptLinkConfig>,
@@ -722,6 +724,7 @@ impl JavascriptConfig {
             tick_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some()),
             bar_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().bar_plot.is_some()),
             heatmap_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().heatmap.is_some()),
+            pill_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().pills.is_some()),
             custom_plot_titles: filter_columns_for(config, additional_columns, |(_, k)| k.custom_plot.is_some(), |(_, k)| k.custom_plot.is_some()),
             links: filter_columns_for(config, additional_columns, |(_, k)| k.link_to_url.is_some(), |(_, k)| k.link_to_url.is_some()),
             column_config: config
@@ -793,6 +796,18 @@ impl JavascriptConfig {
                         )
                         .unwrap(),
                     )
+                })
+                .collect(),
+            pills: config
+                .iter()
+                .filter(|(_, k)| k.plot.is_some())
+                .filter(|(_, k)| k.plot.as_ref().unwrap().pills.is_some())
+                .map(|(k, v)| {
+                    JavascriptPillsConfig {
+                        title: k.to_string(),
+                        slug_title: slug::slugify(k),
+                        pills: v.plot.as_ref().unwrap().pills.as_ref().unwrap().clone(),
+                    }
                 })
                 .collect(),
             brush_domains: config
@@ -970,6 +985,13 @@ impl JavascriptTickAndBarConfig {
             specs: serde_json::from_str(&specs).unwrap(),
         }
     }
+}
+
+#[derive(Serialize, Debug, Clone, PartialEq)]
+struct JavascriptPillsConfig {
+    title: String,
+    slug_title: String,
+    pills: PillsSpec,
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]

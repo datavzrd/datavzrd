@@ -187,6 +187,7 @@ mod tests {
                     custom_content: None,
                 }),
                 bar_plot: None,
+                pills: None,
             }),
             custom_plot: None,
             ellipsis: None,
