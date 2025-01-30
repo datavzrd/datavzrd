@@ -248,6 +248,7 @@ mod tests {
             "datavzrd".to_string(),
             Some("datavzrd".to_string()),
             PathBuf::from("."),
+            None,
         )?;
         let output = repo.exists()?;
         assert!(output);
@@ -260,6 +261,7 @@ mod tests {
             "nonexistent_repo".to_string(),
             Some("owner".to_string()),
             PathBuf::from("."),
+            None,
         )?;
         let output = repo.exists()?;
         assert!(!output);
