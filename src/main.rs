@@ -34,8 +34,9 @@ fn main() -> Result<()> {
             repo_name,
             report_path,
             org,
+            entry,
         }) => {
-            let repo = publish::Repository::new(repo_name, org, report_path)?;
+            let repo = publish::Repository::new(repo_name, org, report_path, entry)?;
             repo.publish()?;
         }
         Some(Command::Suggest {
