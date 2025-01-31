@@ -58,6 +58,10 @@ pub enum Command {
         /// Optional: Specify the organization for the repo
         #[arg(long)]
         org: Option<String>,
+
+        /// Optional: Specify the entry point for the report
+        #[arg(long)]
+        entry: Option<PathBuf>,
     },
     /// Suggest a configuration file based on the given tabular input files.
     Suggest {
