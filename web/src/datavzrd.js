@@ -5,13 +5,12 @@ import showdownKatex from 'showdown-katex';
 import jsonm from 'jsonm';
 import * as vega from "vega";
 import vegaEmbed from 'vega-embed';
-import vegalite from 'vega-lite';
 import QRCode from 'qrcode';
 import * as d3 from "d3";
 import 'bootstrap';
 import 'bootstrap-table/src/bootstrap-table.js';
 import 'bootstrap-select';
-import { documentToSVG, elementToSVG, inlineResources, formatXML } from 'dom-to-svg';
+import {elementToSVG} from 'dom-to-svg';
 import {render_html_contents, render_plot_size_controls} from "./page";
 import '../style/bootstrap.min.css';
 import '../style/bootstrap-table.min.css';
@@ -224,11 +223,8 @@ function renderPill(value, color, ellipsis) {
   }
 }
 
-function renderPills(ah, columns, pills, detail_mode, header_label_length) {
-    let index = get_index(pills.title, columns, detail_mode, header_label_length);
-    let row = 0;
-    var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
-    let heatmap = {
+function pillsToHeatmap(pills) {
+    return {
         heatmap: {
             scale: "ordinal",
             domain: pills.pills.domain,
@@ -237,7 +233,14 @@ function renderPills(ah, columns, pills, detail_mode, header_label_length) {
             clamp: true,
             "custom-content": undefined
         }
-    }
+    };
+}
+
+function renderPills(ah, columns, pills, detail_mode, header_label_length) {
+    let index = get_index(pills.title, columns, detail_mode, header_label_length);
+    let row = 0;
+    var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
+    let heatmap = pillsToHeatmap(pills);
     let scale = datavzrdScale(heatmap);
 
     $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -257,26 +260,18 @@ function renderPills(ah, columns, pills, detail_mode, header_label_length) {
 }
 
 function renderDetailPills(value, div, pills) {
-    let heatmap = {
-        heatmap: {
-            scale: "ordinal",
-            domain: pills.pills.domain,
-            range: pills.pills.range,
-            "color-scheme": pills.pills["color-scheme"],
-            clamp: true,
-            "custom-content": undefined
-        }
-    }
+    let heatmap = pillsToHeatmap(pills);
     let scale = datavzrdScale(heatmap);
 
     if (value !== "") {
         let values = value.split(pills.pills.separator).map(item => item.trim());
         let content = values.map( v => {
             let color = scale(v);
-            return `<span style="padding: 4px 8px; margin: 2px; border-radius: 12px; background-color: ${color};">${v}</span>`;
+            return renderPill(v, color, pills.pills.ellipsis);
         }).join("");
         $(`${div}`)[0].innerHTML = content;
     }
+    $('[data-toggle="tooltip"]').tooltip({ sanitizeFn: function (content) { return content; } })
 }
 
 function datavzrdScale(heatmap) {
