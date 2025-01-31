@@ -70,7 +70,7 @@ impl Repository {
         if let Some(entry) = &self.entry {
             if *entry != PathBuf::from("index.html") {
                 let destination = self.path.join("deployment").join("index.html");
-                let redirect = format!("<!DOCTYPE html><html><head></head><body><script>window.location.href = {};</script></body></html>", entry.display());
+                let redirect = format!("<!DOCTYPE html><html><head></head><body><script>window.location.href = \"{}\";</script></body></html>", entry.display());
                 fs::write(&destination, redirect).context("Failed to write entry file")?;
             }
         }
