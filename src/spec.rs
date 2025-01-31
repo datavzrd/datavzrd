@@ -1012,6 +1012,8 @@ pub(crate) struct PillsSpec {
     pub(crate) color_range: ColorRange,
     #[serde(default)]
     pub(crate) domain: Option<Vec<String>>,
+    #[serde(default)]
+    pub(crate) ellipsis: Option<u32>,
 }
 
 fn default_pill_separator() -> String {

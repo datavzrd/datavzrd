@@ -94,6 +94,7 @@ views:
             pills:
               separator: ","
               color-scheme: category20
+              ellipsis: 5
         imdbID:
           link-to-url:
             IMDB:
