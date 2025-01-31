@@ -191,9 +191,9 @@ function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) 
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
     var custom_func = heatmap.heatmap["custom-content"];
 
-    
+
     let scale = datavzrdScale(heatmap);
-    
+
 
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
@@ -209,6 +209,19 @@ function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) 
             row++;
         }
     );
+}
+
+function renderPill(value, color, ellipsis) {
+  if (ellipsis === 0) {
+    return `<span style="margin: 2px; padding:6px 12px; border-radius: 12px; height:24px; width: 24px; background-color: ${color};" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'></span>`;
+  } else {
+    const styles = `padding: 4px 8px; margin: 2px; border-radius: 12px; background-color: ${color};`;
+    if (ellipsis === undefined || value.length <= ellipsis) {
+      return `<span style="${styles}">${value}</span>`;
+    } else {
+      return `<span style="${styles}" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'>${value.substring(0, ellipsis)}...</span>`;
+    }
+  }
 }
 
 function renderPills(ah, columns, pills, detail_mode, header_label_length) {
@@ -234,7 +247,7 @@ function renderPills(ah, columns, pills, detail_mode, header_label_length) {
                 let values = value.split(pills.pills.separator).map(item => item.trim());
                 let content = values.map( v => {
                     let color = scale(v);
-                    return `<span style="padding: 4px 8px; margin: 2px; border-radius: 12px; background-color: ${color};">${v}</span>`;
+                    return renderPill(v, color, pills.pills.ellipsis);
                 }).join("");
                 this.innerHTML = `<div style="display: inline-block">${content}</div>`;
             }
