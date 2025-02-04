@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.50.0](https://github.com/datavzrd/datavzrd/compare/v2.49.0...v2.50.0) (2025-02-04)
+
+
+### Features
+
+* Add landing page with view overview when no default-view is set via config ([#886](https://github.com/datavzrd/datavzrd/issues/886)) ([10a0927](https://github.com/datavzrd/datavzrd/commit/10a0927080d5844735f07dc5a80ea55fbf5cc7cc))
+
 ## [2.49.0](https://github.com/datavzrd/datavzrd/compare/v2.48.0...v2.49.0) (2025-01-31)
 
 
