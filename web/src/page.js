@@ -212,26 +212,31 @@ export function render_html_contents() {
                     </div>
                 </div>
             </div>
-            <footer class="footer">
-                <nav class="navbar navbar-expand navbar-light navbar-top">
-                    <a class="navbar-brand" href="#">datavzrd</a>
-                    <div class="collapse navbar-collapse" id="navbarText">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" id="datavzrd-version" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">${config.version}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="https://github.com/datavzrd/datavzrd">github</a>
-                            </li>
-                        </ul>
-                        <span class="navbar-text">
-                            created ${config.time}
-                        </span>
-                    </div>
-                </nav>
-            </footer>
+            ${footer(config.version, config.time)}
         </div>`;
     document.querySelector('body').innerHTML = content;
+}
+
+function footer(version, time) {
+    return `
+    <footer class="footer">
+        <nav class="navbar navbar-expand navbar-light navbar-top">
+            <a class="navbar-brand" href="#">datavzrd</a>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" id="datavzrd-version" href="https://github.com/datavzrd/datavzrd/blob/master/CHANGELOG.md">${version}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/datavzrd/datavzrd">github</a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                    ${time || ""}
+                </span>
+            </div>
+        </nav>
+    </footer>`;
 }
 
 export function render_plot_size_controls() {
@@ -251,4 +256,29 @@ export function render_plot_size_controls() {
             </div>
         </div>`;
     $('.container-fluid').append(controls);
+}
+
+export function render_landing_page() {
+    let landing_page = `
+        <div class="container mt-4">
+            <h1>${name}</h1>
+            <table class="table">
+                <thead class="thead">
+                    <tr>
+                        <th>View</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${Object.entries(views).map(([table, description]) => `
+                        <tr>
+                            <td><a href="./${table}/index_1.html">${table}</a></td>
+                            <td data-markdown="${description || 'No description available'}"></td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+        ${footer(version)}`;
+    return landing_page;
 }

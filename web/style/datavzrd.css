@@ -121,8 +121,8 @@ td {
     position: relative;
 }
 
-.table td,
-.table th {
+#table td,
+#table th {
     padding: 0 5px !important;
     font-size: 12px !important;
     /* Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=688556 see https://github.com/koesterlab/datavzrd/issues/144 */
