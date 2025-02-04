@@ -1,7 +1,7 @@
-use std::collections::HashMap;
 use crate::spec::ItemsSpec;
 use anyhow::Result;
 use minify_js::{minify, Session, TopLevelMode};
+use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -39,14 +39,11 @@ pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> R
         "index.html.tera",
         include_str!("../../../templates/index.html.tera"),
     )?;
-    let views: HashMap<_, _> = specs.views.iter().map(
-        |(name, view)| {
-            (
-                name,
-                view.description.as_deref().map(escape_html),
-            )
-        },
-    ).collect();
+    let views: HashMap<_, _> = specs
+        .views
+        .iter()
+        .map(|(name, view)| (name, view.description.as_deref().map(escape_html)))
+        .collect();
     let mut context = Context::new();
     context.insert("table", &specs.default_view);
     context.insert("views", &views);
