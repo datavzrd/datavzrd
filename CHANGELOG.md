@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.49.0](https://github.com/datavzrd/datavzrd/compare/v2.48.0...v2.49.0) (2025-01-31)
+
+
+### Features
+
+* Add --entry option for datavzrd publish command ([#879](https://github.com/datavzrd/datavzrd/issues/879)) ([2de5359](https://github.com/datavzrd/datavzrd/commit/2de5359fd93276482132f09baa32f5a6a8ca0681))
+* Support the `ellipsis` setting on pill plots. ([#881](https://github.com/datavzrd/datavzrd/issues/881)) ([57335c2](https://github.com/datavzrd/datavzrd/commit/57335c2e9330b8a7fbb2f97c9e5afea2b31ed4bb))
+
 ## [2.48.0](https://github.com/datavzrd/datavzrd/compare/v2.47.1...v2.48.0) (2025-01-29)
 
 

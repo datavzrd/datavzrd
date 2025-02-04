@@ -10,19 +10,31 @@ pub(crate) struct Repository {
     name: String,
     owner: String,
     path: PathBuf,
+    entry: Option<PathBuf>,
 }
 
 impl Repository {
-    pub(crate) fn new(name: String, owner: Option<String>, path: PathBuf) -> Result<Self> {
+    pub(crate) fn new(
+        name: String,
+        owner: Option<String>,
+        path: PathBuf,
+        entry: Option<PathBuf>,
+    ) -> Result<Self> {
         if !path.exists() {
             bail!(PublishError::PathDoesNotExist(path));
         }
         match owner {
-            Some(owner) => Ok(Self { name, owner, path }),
+            Some(owner) => Ok(Self {
+                name,
+                owner,
+                path,
+                entry,
+            }),
             None => Ok(Self {
                 name,
                 owner: user()?,
                 path,
+                entry,
             }),
         }
     }
@@ -52,6 +64,17 @@ impl Repository {
 
     pub fn repository_name(&self) -> String {
         format!("{}/{}", self.owner, self.name)
+    }
+
+    fn entry(&self) -> Result<()> {
+        if let Some(entry) = &self.entry {
+            if *entry != PathBuf::from("index.html") {
+                let destination = self.path.join("deployment").join("index.html");
+                let redirect = format!("<!DOCTYPE html><html><head></head><body><script>window.location.href = \"{}\";</script></body></html>", entry.display());
+                fs::write(&destination, redirect).context("Failed to write entry file")?;
+            }
+        }
+        Ok(())
     }
 
     fn clone_repository(&self) -> Result<()> {
@@ -124,6 +147,8 @@ impl Repository {
                     .context(format!("Failed to copy file: {:?}", entry_path))?;
             }
         }
+
+        self.entry()?;
 
         let deployment_dir = deployment_path.clone();
 
@@ -223,6 +248,7 @@ mod tests {
             "datavzrd".to_string(),
             Some("datavzrd".to_string()),
             PathBuf::from("."),
+            None,
         )?;
         let output = repo.exists()?;
         assert!(output);
@@ -235,6 +261,7 @@ mod tests {
             "nonexistent_repo".to_string(),
             Some("owner".to_string()),
             PathBuf::from("."),
+            None,
         )?;
         let output = repo.exists()?;
         assert!(!output);
