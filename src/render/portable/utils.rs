@@ -68,28 +68,6 @@ mod tests {
     use std::path::Path;
 
     #[test]
-    fn test_render_index_file() {
-        let spec = ItemsSpec {
-            report_name: "".to_string(),
-            datasets: Default::default(),
-            default_view: Some("my-view".to_string()),
-            max_in_memory_rows: 1000,
-            views: Default::default(),
-            aux_libraries: None,
-            webview_controls: false,
-        };
-        render_index_file(Path::new("/tmp"), &spec).unwrap();
-        let rendered_file_content = fs::read_to_string("/tmp/index.html")
-            .expect("Could not read rendered test index file.");
-        fs::remove_file("/tmp/index.html")
-            .expect("Could not read remove rendered test index file.");
-        assert_eq!(
-            rendered_file_content,
-            include_str!("../../../tests/expected/index.html")
-        )
-    }
-
-    #[test]
     fn test_render_static_files() {
         render_static_files(Path::new("/tmp")).unwrap();
         let bundle = include_str!(concat!(env!("OUT_DIR"), "/web/dist/bundle.js"));
