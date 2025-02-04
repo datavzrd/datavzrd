@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.50.1](https://github.com/datavzrd/datavzrd/compare/v2.50.0...v2.50.1) (2025-02-04)
+
+
+### Bug Fixes
+
+* Fix landing page container overflow ([7e3d77b](https://github.com/datavzrd/datavzrd/commit/7e3d77b80b524597cc423e65b3a3f7620bb5ac4c))
+
 ## [2.50.0](https://github.com/datavzrd/datavzrd/compare/v2.49.0...v2.50.0) (2025-02-04)
 
 
