@@ -260,7 +260,7 @@ export function render_plot_size_controls() {
 
 export function render_landing_page() {
     let landing_page = `
-        <div class="container mt-4">
+        <div class="container mt-4" style="height: 85vh; overflow-y: auto;">
             <h1>${name}</h1>
             <table class="table">
                 <thead class="thead">
