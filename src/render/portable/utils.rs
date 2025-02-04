@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use crate::spec::ItemsSpec;
 use anyhow::Result;
 use minify_js::{minify, Session, TopLevelMode};
@@ -5,7 +6,7 @@ use std::fs;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
-use tera::{Context, Tera};
+use tera::{escape_html, Context, Tera};
 
 pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
     let path = Path::new(path.as_ref()).join("static");
@@ -33,18 +34,24 @@ pub(crate) fn minify_js(file: &str, debug: bool) -> Result<Vec<u8>> {
 }
 
 pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> Result<()> {
-    let table = if let Some(default_view) = &specs.default_view {
-        default_view
-    } else {
-        specs.views.keys().next().unwrap()
-    };
     let mut templates = Tera::default();
     templates.add_raw_template(
         "index.html.tera",
         include_str!("../../../templates/index.html.tera"),
     )?;
+    let views: HashMap<_, _> = specs.views.iter().map(
+        |(name, view)| {
+            (
+                name,
+                view.description.as_deref().map(escape_html),
+            )
+        },
+    ).collect();
     let mut context = Context::new();
-    context.insert("table", table);
+    context.insert("table", &specs.default_view);
+    context.insert("views", &views);
+    context.insert("version", &env!("CARGO_PKG_VERSION"));
+    context.insert("name", &specs.report_name);
     let file_path = Path::new(path.as_ref()).join(Path::new("index").with_extension("html"));
     let html = templates.render("index.html.tera", &context)?;
     let mut file = fs::File::create(file_path)?;

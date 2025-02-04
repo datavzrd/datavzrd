@@ -12,7 +12,7 @@ import 'bootstrap';
 import 'bootstrap-table/src/bootstrap-table.js';
 import 'bootstrap-select';
 import { documentToSVG, elementToSVG, inlineResources, formatXML } from 'dom-to-svg';
-import {render_html_contents, render_plot_size_controls} from "./page";
+import {render_html_contents, render_plot_size_controls, render_landing_page} from "./page";
 import '../style/bootstrap.min.css';
 import '../style/bootstrap-table.min.css';
 import '../style/bootstrap-select.min.css';
@@ -41,6 +41,24 @@ function renderMarkdownDescription() {
         $('#vis-container').css('padding-top', innerDescription.offsetHeight + 50);
     }
 }
+
+function renderMarkdownTableDescriptions() {
+    const converter = new showdown.Converter({
+        extensions: [
+            showdownKatex({
+                throwOnError: true,
+                displayMode: false,
+                errorColor: '#1500ff',
+            }),
+        ],
+    });
+    converter.setFlavor('github');
+
+    document.querySelectorAll('table tbody td:nth-child(2)').forEach(td => {
+        td.innerHTML = converter.makeHtml(td.dataset.markdown);
+    });
+}
+
 
 export function downloadCSV() {
     var data = $('#table').bootstrapTable('getData');
@@ -1284,10 +1302,10 @@ function showNotification(message) {
     $(toast).toast('show');
 }
 
-
-
-
-
+export function landing_page() {
+    $('body').append(render_landing_page());
+    renderMarkdownTableDescriptions();
+}
 
 
 export function get_config_from_url_query() {

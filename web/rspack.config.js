@@ -7,8 +7,10 @@ module.exports = {
     devtool: 'source-map',
     output: {
         library: 'datavzrd',
+        libraryTarget: 'umd',
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
+        globalObject: 'window',
     },
     module: {
         rules: [
