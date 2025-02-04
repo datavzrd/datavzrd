@@ -63,7 +63,7 @@ pub(crate) fn round(x: f32, decimals: u32) -> f32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::{render_index_file, render_static_files, ItemsSpec};
+    use crate::render_static_files;
     use std::fs;
     use std::path::Path;
 
