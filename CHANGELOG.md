@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.50.2](https://github.com/datavzrd/datavzrd/compare/v2.50.1...v2.50.2) (2025-02-05)
+
+
+### Bug Fixes
+
+* Add back to overview button to menu ([576aa3c](https://github.com/datavzrd/datavzrd/commit/576aa3c239d2b4bad401a79d29cfcd6f2b3dc35b))
+
 ## [2.50.1](https://github.com/datavzrd/datavzrd/compare/v2.50.0...v2.50.1) (2025-02-04)
 
 
