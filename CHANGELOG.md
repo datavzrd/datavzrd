@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.50.3](https://github.com/datavzrd/datavzrd/compare/v2.50.2...v2.50.3) (2025-02-06)
+
+
+### Bug Fixes
+
+* Sort views on landing page lexicographical ([13b9318](https://github.com/datavzrd/datavzrd/commit/13b931841532ae677c13626392285eda0455f785))
+
 ## [2.50.2](https://github.com/datavzrd/datavzrd/compare/v2.50.1...v2.50.2) (2025-02-05)
 
 
