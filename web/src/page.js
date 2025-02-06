@@ -273,7 +273,7 @@ export function render_landing_page() {
                     </tr>
                 </thead>
                 <tbody>
-                    ${Object.entries(views).map(([table, description]) => `
+                    ${Object.entries(views).sort(([a], [b]) => a.localeCompare(b)).map(([table, description]) => `
                         <tr>
                             <td><a href="./${table}/index_1.html">${table}</a></td>
                             <td data-markdown="${description || 'No description available'}"></td>
