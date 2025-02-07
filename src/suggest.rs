@@ -1,6 +1,7 @@
 use crate::spec::{
-    default_page_size, default_single_page_threshold, AuxDomainColumns, DatasetSpecs, Heatmap,
-    ItemSpecs, ItemsSpec, PlotSpec, RenderColumnSpec, RenderTableSpecs, ScaleType,
+    default_page_size, default_single_page_threshold, AuxDomainColumns, Color, ColorRange,
+    DatasetSpecs, Heatmap, ItemSpecs, ItemsSpec, PlotSpec, RenderColumnSpec, RenderTableSpecs,
+    ScaleType,
 };
 use crate::utils::column_type::ColumnType;
 use anyhow::Result;
@@ -60,8 +61,11 @@ pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -
                             vega_type: None,
                             scale_type: ScaleType::Linear,
                             clamp: false,
-                            color_scheme: "blues".to_string(),
-                            color_range: Default::default(),
+                            color_scheme: "".to_string(),
+                            color_range: ColorRange(vec![
+                                Color("white".to_string()),
+                                Color("blue".to_string()),
+                            ]),
                             domain: None,
                             domain_mid: None,
                             aux_domain_columns: AuxDomainColumns(None),
