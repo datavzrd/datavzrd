@@ -47,6 +47,9 @@ export function render_html_contents() {
         report_name_html = `<li class="breadcrumb-item"><div>${config.report_name}</div></li>`;
     }
     let selection_html = "";
+    if (!config.default_view) {
+        selection_html += `<option value="../index.html">Back to overview</option>`;
+    }
     if (config.default_view) {
         selection_html += `<option value="../${config.default_view}/index_1.html" data-content="${config.default_view} ${config.view_sizes[config.default_view] ? `<span class='badge badge-light'>${config.view_sizes[config.default_view]}</span>` : ""}">${config.default_view}</option>`;
     }
@@ -78,9 +81,6 @@ export function render_html_contents() {
     }
     sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleLineNumbers">Show/Hide Line Numbers</li>';
     sidebar_html += '<li class="list-group-item sidebar-btn" id="screenshotTable">Export table page as SVG</li>';
-    if (!config.default_view) {
-        sidebar_html += `<li class="list-group-item sidebar-btn" id="back-btn" onclick="location = '../index.html'">Back to overview</li>`;
-    }
     let toast_html = `
     <div class="toast m-3" role="alert" aria-live="polite" aria-atomic="true" id="warningToast" style="z-index: 1050; position: absolute; top: 0; left: 0;">
         <div class="toast-header">
