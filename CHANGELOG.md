@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.50.4](https://github.com/datavzrd/datavzrd/compare/v2.50.3...v2.50.4) (2025-02-07)
+
+
+### Bug Fixes
+
+* Improve suggestion for integer and float columns ([71808d5](https://github.com/datavzrd/datavzrd/commit/71808d587c336dd1c22f71f6f41d3fe2ca3c83cd))
+
 ## [2.50.3](https://github.com/datavzrd/datavzrd/compare/v2.50.2...v2.50.3) (2025-02-06)
 
 
