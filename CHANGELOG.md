@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.50.5](https://github.com/datavzrd/datavzrd/compare/v2.50.4...v2.50.5) (2025-02-10)
+
+
+### Bug Fixes
+
+* Add back to overview button to plot, image and html views ([1d0eb0a](https://github.com/datavzrd/datavzrd/commit/1d0eb0a72c1eab6716f3473d3160ea43f0a87849))
+* Move back to overview button to view menu ([d425db1](https://github.com/datavzrd/datavzrd/commit/d425db19cbfff4ff628cd6f289bdec48f01e861b))
+
 ## [2.50.4](https://github.com/datavzrd/datavzrd/compare/v2.50.3...v2.50.4) (2025-02-07)
 
 
