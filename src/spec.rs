@@ -1014,6 +1014,8 @@ pub(crate) struct PillsSpec {
     pub(crate) domain: Option<Vec<String>>,
     #[serde(default)]
     pub(crate) ellipsis: Option<u32>,
+    #[serde(default)]
+    pub(crate) aux_domain_columns: AuxDomainColumns,
 }
 
 fn default_pill_separator() -> String {
@@ -1022,19 +1024,39 @@ fn default_pill_separator() -> String {
 
 impl PillsSpec {
     fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
+        self.aux_domain_columns.preprocess(dataset)?;
+        let domain_columns = if let Some(aux) = &self.aux_domain_columns.0 {
+            let mut columns = aux.clone();
+            columns.push(title.to_string());
+            columns
+        } else {
+            vec![title.to_string()]
+        };
         if self.domain.is_none() {
             let mut reader = dataset.reader()?;
-            let index = column_position(title, dataset)?;
-            let domain = reader
-                .records()?
-                .skip(dataset.header_rows - 1)
-                .flat_map(|record| {
-                    record
-                        .get(index)
+            let domain = domain_columns
+                .iter()
+                .flat_map(|column| {
+                    let index = column_position(column, dataset).unwrap_or_else(|_| {
+                        panic!(
+                            "Column {} not found when calculating domain for {}.",
+                            column, title
+                        )
+                    });
+                    reader
+                        .records()
                         .unwrap()
-                        .to_string()
-                        .split(&self.separator)
-                        .map(|s| s.trim().to_string())
+                        .skip(dataset.header_rows - 1)
+                        .flat_map(|record| {
+                            record
+                                .get(index)
+                                .unwrap()
+                                .to_string()
+                                .split(&self.separator)
+                                .map(|s| s.trim().to_string())
+                                .collect_vec()
+                        })
+                        .unique()
                         .collect_vec()
                 })
                 .unique()
