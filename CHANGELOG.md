@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.51.0](https://github.com/datavzrd/datavzrd/compare/v2.50.5...v2.51.0) (2025-02-17)
+
+
+### Features
+
+* Allow aux-domain-columns for pills plot ([f64a37c](https://github.com/datavzrd/datavzrd/commit/f64a37cbbc9d28d0bba71f8679b35e3e3acb2a7a))
+
+
+### Bug Fixes
+
+* Avoid vertical overlapping pills by adding margin ([4237a9b](https://github.com/datavzrd/datavzrd/commit/4237a9bbff0a7561c6d7f7df9d5a0056bc491ce4))
+
 ## [2.50.5](https://github.com/datavzrd/datavzrd/compare/v2.50.4...v2.50.5) (2025-02-10)
 
 
