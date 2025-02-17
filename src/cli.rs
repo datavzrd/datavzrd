@@ -64,6 +64,8 @@ pub enum Command {
         entry: Option<PathBuf>,
     },
     /// Suggest a configuration file based on the given tabular input files.
+    ///
+    /// Example: `datavzrd suggest -f data1.csv -s , -f data2.tsv -s $'\t'`
     Suggest {
         /// List of paths to input files
         #[arg(required = true, short, long, value_parser)]
