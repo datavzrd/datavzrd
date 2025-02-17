@@ -270,7 +270,7 @@ function renderPills(ah, columns, pills, detail_mode, header_label_length) {
                     let color = scale(v);
                     return renderPill(v, color, pills.pills.ellipsis);
                 }).join("");
-                this.innerHTML = `<div style="display: inline-block">${content}</div>`;
+                this.innerHTML = `<div style="display: inline-block; margin: 8px 0;">${content}</div>`;
             }
             row++;
         }
