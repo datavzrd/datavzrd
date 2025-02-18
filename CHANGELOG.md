@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.52.0](https://github.com/datavzrd/datavzrd/compare/v2.51.0...v2.52.0) (2025-02-18)
+
+
+### Features
+
+* Automatically display underscores as whitespaces in headers and view names ([4d4b86a](https://github.com/datavzrd/datavzrd/commit/4d4b86ae15971f33f4674c28ebcd35213b9375bb))
+
+
+### Bug Fixes
+
+* Fix aux-domain-columns for pills plot ([b7900b7](https://github.com/datavzrd/datavzrd/commit/b7900b718ca053c3cbfab7d135cb4acdb0821573))
+
 ## [2.51.0](https://github.com/datavzrd/datavzrd/compare/v2.50.5...v2.51.0) (2025-02-17)
 
 
