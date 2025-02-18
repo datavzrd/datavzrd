@@ -51,19 +51,19 @@ export function render_html_contents() {
         selection_html += `<option value="../index.html">Back to overview</option>`;
     }
     if (config.default_view) {
-        selection_html += `<option value="../${config.default_view}/index_1.html" data-content="${config.default_view} ${config.view_sizes[config.default_view] ? `<span class='badge badge-light'>${config.view_sizes[config.default_view]}</span>` : ""}">${config.default_view}</option>`;
+        selection_html += `<option value="../${config.default_view}/index_1.html" data-content="${config.default_view.replace(/_/g, " ")} ${config.view_sizes[config.default_view] ? `<span class='badge badge-light'>${config.view_sizes[config.default_view]}</span>` : ""}">${config.default_view.replace(/_/g, " ")}</option>`;
     }
     for (let table of config.tables) {
         if (table === config.default_view) {
             continue;
         }
-        selection_html += `<option value="../${table}/index_1.html" data-content="${table} ${config.view_sizes[table] ? `<span class='badge badge-light'>${config.view_sizes[table]}</span>` : ""}">${table}</option>`;
+        selection_html += `<option value="../${table}/index_1.html" data-content="${table.replace(/_/g, " ")} ${config.view_sizes[table] ? `<span class='badge badge-light'>${config.view_sizes[table]}</span>` : ""}">${table.replace(/_/g, " ")}</option>`;
     }
     let nav_html = `
         <ol class="navbar-nav mr-auto breadcrumb">
             ${report_name_html}
             <li class="breadcrumb-item">
-                <select id="view-selection" title="${config.title}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true">
+                <select id="view-selection" title="${config.title.replace(/_/g, " ")}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true">
                     ${selection_html}
                 </select>
             </li>
@@ -275,7 +275,7 @@ export function render_landing_page() {
                 <tbody>
                     ${Object.entries(views).sort(([a], [b]) => a.localeCompare(b)).map(([table, description]) => `
                         <tr>
-                            <td><a href="./${table}/index_1.html">${table}</a></td>
+                            <td><a href="./${table}/index_1.html">${table.replace(/_/g, " ")}</a></td>
                             <td data-markdown="${description || 'No description available'}"></td>
                         </tr>
                     `).join('')}

@@ -229,16 +229,16 @@ function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) 
 }
 
 function renderPill(value, color, ellipsis) {
-  if (ellipsis === 0) {
-    return `<span style="margin: 2px; padding:6px 12px; border-radius: 12px; height:24px; width: 24px; background-color: ${color};" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'></span>`;
-  } else {
-    const styles = `padding: 4px 8px; margin: 2px; border-radius: 12px; background-color: ${color};`;
-    if (ellipsis === undefined || value.length <= ellipsis) {
-      return `<span style="${styles}">${value}</span>`;
+    if (ellipsis === 0) {
+        return `<span style="margin: 2px; padding:6px 12px; border-radius: 12px; height:24px; width: 24px; background-color: ${color};" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'></span>`;
     } else {
-      return `<span style="${styles}" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'>${value.substring(0, ellipsis)}...</span>`;
+        const styles = `padding: 4px 8px; margin: 2px; border-radius: 12px; background-color: ${color};`;
+        if (ellipsis === undefined || value.length <= ellipsis) {
+            return `<span style="${styles}">${value}</span>`;
+        } else {
+            return `<span style="${styles}" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'>${value.substring(0, ellipsis)}...</span>`;
+        }
     }
-  }
 }
 
 function pillsToHeatmap(pills) {
@@ -758,7 +758,7 @@ export function load() {
                 if (config.column_config[column].label) {
                     title = config.column_config[column].label;
                 } else {
-                    title = column;
+                    title = column.replace(/_/g, " ");
                 }
 
                 // Add histogram button

@@ -23,14 +23,14 @@
                     <ol class="navbar-nav mr-auto breadcrumb">
                         {% if report_name %}<li class="breadcrumb-item"><div>{{ report_name }}</div></li>{% endif %}
                         <li class="breadcrumb-item">
-                            <select id="view-selection" title="{{ name }}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true">
+                            <select id="view-selection" title="{{ name | replace(from="_", to=" ") }}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true">
                                 {% if default_view %}
-                                <option value="../{{ default_view }}/index_1.html" data-content="{{ default_view }} {% if view_sizes[default_view] %}<span class='badge badge-light'>{{ view_sizes[default_view] }} rows</span>{% endif %}">{{ default_view }}</option>
+                                <option value="../{{ default_view }}/index_1.html" data-content="{{ default_view | replace(from="_", to=" ") }} {% if view_sizes[default_view] %}<span class='badge badge-light'>{{ view_sizes[default_view] }} rows</span>{% endif %}">{{ default_view | replace(from="_", to=" ") }}</option>
                                 {% else %}
                                 <option value="../index.html" data-content="Back to overview">Back to overview</option>
                                 {% endif %}
                                 {% for table in tables | sort %}
-                                <option value="../{{ table }}/index_1.html" data-content="{{ table }} {% if view_sizes[table] %}<span class='badge badge-light'>{{ view_sizes[table] }} rows</span>{% endif %}">{{ table }}</option>
+                                <option value="../{{ table }}/index_1.html" data-content="{{ table | replace(from="_", to=" ") }} {% if view_sizes[table] %}<span class='badge badge-light'>{{ view_sizes[table] }} rows</span>{% endif %}">{{ table | replace(from="_", to=" ") }}</option>
                                 {% endfor %}
                             </select>
                         </li>
