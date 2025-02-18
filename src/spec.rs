@@ -1057,6 +1057,7 @@ impl PillsSpec {
                                 .collect_vec()
                         })
                         .unique()
+                        .sorted_by(|a, b| a.cmp(b))
                         .collect_vec()
                 })
                 .unique()
