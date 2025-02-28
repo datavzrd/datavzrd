@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.52.1](https://github.com/datavzrd/datavzrd/compare/v2.52.0...v2.52.1) (2025-02-28)
+
+
+### Bug Fixes
+
+* Unify icon popovers and styles ([5c56fd5](https://github.com/datavzrd/datavzrd/commit/5c56fd5e53f84389a142c215562a1b12da94ade3))
+
 ## [2.52.0](https://github.com/datavzrd/datavzrd/compare/v2.51.0...v2.52.0) (2025-02-18)
 
 
