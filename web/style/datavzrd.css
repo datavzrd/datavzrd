@@ -305,6 +305,10 @@ footer {
     max-width: 800px;
 }
 
+.ic:hover {
+    color: grey;
+}
+
 .nav-btn {
     display: block !important;
 }
