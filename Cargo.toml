@@ -29,7 +29,7 @@ fancy-regex = "0.14.0"
 log = "0.4.26"
 simplelog = "0.12.2"
 minify-js = "=0.6.0" # newer versions generate display issues (see PR #375)
-minify-html = "0.15.0"
+minify-html = "0.16.4"
 simple_excel_writer = "0.2"
 slug = "0.1.6"
 md5 = "0.7.0"
