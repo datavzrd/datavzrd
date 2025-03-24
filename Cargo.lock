@@ -595,7 +595,7 @@ dependencies = [
  "lz-str",
  "md5",
  "minify-html",
- "minify-js 0.6.0",
+ "minify-js",
  "ndhistogram",
  "pyo3",
  "readervzrd",
@@ -1355,18 +1355,17 @@ checksum = "6877bb514081ee2a7ff5ef9de3281f14a4dd4bceac4c09388074a6b5df8a139a"
 
 [[package]]
 name = "minify-html"
-version = "0.15.0"
+version = "0.16.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1cd4517942a8e7425c990b14977f86a63e4996eed7b15cfcca1540126ac5ff25"
+checksum = "f0df760078ad1daa3e9a37629e1a5aa50ec0429ed512e567f18a1b5ec54cbbd5"
 dependencies = [
+ "ahash 0.8.11",
  "aho-corasick 0.7.20",
- "lazy_static",
  "lightningcss",
  "memchr",
  "minify-html-common",
- "minify-js 0.5.6",
+ "minify-js",
  "once_cell",
- "rustc-hash",
 ]
 
 [[package]]
@@ -1386,23 +1385,13 @@ dependencies = [
 
 [[package]]
 name = "minify-js"
-version = "0.5.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "22d6c512a82abddbbc13b70609cb2beff01be2c7afff534d6e5e1c85e438fc8b"
-dependencies = [
- "lazy_static",
- "parse-js 0.17.0",
-]
-
-[[package]]
-name = "minify-js"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b1fa5546ee8bd66024113e506cabe4230e76635a094c06ea2051b66021dda92e"
 dependencies = [
  "aho-corasick 0.7.20",
  "lazy_static",
- "parse-js 0.20.1",
+ "parse-js",
 ]
 
 [[package]]
@@ -1583,19 +1572,6 @@ dependencies = [
  "redox_syscall",
  "smallvec",
  "windows-targets 0.52.6",
-]
-
-[[package]]
-name = "parse-js"
-version = "0.17.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9ec3b11d443640ec35165ee8f6f0559f1c6f41878d70330fe9187012b5935f02"
-dependencies = [
- "aho-corasick 0.7.20",
- "bumpalo",
- "hashbrown 0.13.2",
- "lazy_static",
- "memchr",
 ]
 
 [[package]]
