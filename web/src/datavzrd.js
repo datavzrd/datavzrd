@@ -10,7 +10,7 @@ import * as d3 from "d3";
 import 'bootstrap';
 import 'bootstrap-table/src/bootstrap-table.js';
 import 'bootstrap-select';
-import {elementToSVG} from 'dom-to-svg';
+import * as htmlToImage from 'html-to-image';
 import {render_html_contents, render_plot_size_controls, render_landing_page} from "./page";
 import '../style/bootstrap.min.css';
 import '../style/bootstrap-table.min.css';
@@ -369,9 +369,9 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content
                     link = link.replaceAll(`{${column}}`, table_rows[row][column]);
                 }
                 if (link_urls[0].link.new_window) {
-                    this.innerHTML = `<a href='${link}' target='_blank' rel='noopener noreferrer' >${shown_value}</a>`;
+                    this.innerHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer" >${shown_value}</a>`;
                 } else {
-                    this.innerHTML = `<a href='${link}'>${shown_value}</a>`;
+                    this.innerHTML = `<a href="${link}">${shown_value}</a>`;
                 }
             } else {
                 let links = "";
@@ -381,9 +381,9 @@ function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content
                         link = link.replaceAll(`{${column}}`, table_rows[row][column]);
                     }
                     if (l.link.new_window) {
-                        links = `${links}<a class="dropdown-item" href='${link}' target='_blank' rel='noopener noreferrer' >${l.name}</a>`;
+                        links = `${links}<a class="dropdown-item" href="${link}" target='_blank' rel="noopener noreferrer" >${l.name}</a>`;
                     } else {
-                        links = `${links}<a class="dropdown-item" href='${link}' >${l.name}</a>`;
+                        links = `${links}<a class="dropdown-item" href="${link}" >${l.name}</a>`;
                     }
                 }
                 this.innerHTML = `
@@ -1436,40 +1436,8 @@ export function toggle_line_numbers() {
     LINE_NUMBERS = !LINE_NUMBERS;
 }
 
-function addRotationTransform(svgString) {
-    let table_headers = config.displayed_columns.map(column =>
-        config.column_config[column].label !== null ? config.column_config[column].label : column
-    );
-
-    const widthMatch = svgString.match(/<svg[^>]*width="([\d.]+)"[^>]*>/);
-    let svgWidth = 0;
-    if (widthMatch) {
-        svgWidth = parseFloat(widthMatch[1]);
-    }
-
-    const maxLength = Math.max(...table_headers.map(word => word.length));
-    const headerHeight = (80 + 6 * maxLength * Math.SQRT2) / 2 + 80;
-
-    svgWidth += headerHeight;
-
-    svgString = svgString.replace(/(<svg[^>]*width=")([\d.]+)"/, `$1${svgWidth}"`);
-
-    return svgString.replace(/<text\b([^>]*)>(<tspan[^>]*x="([\d.]+)"[^>]*y="([\d.]+)"[^>]*>([^<]+)<\/tspan>)(<\/text>)/g,
-        (match, textAttributes, tspanContent, x, y, word, closingTag) => {
-            if (table_headers.includes(word)) {
-                const transform = `transform="rotate(-45, ${x}, ${y})"`;
-                return `<text${textAttributes} ${transform}>${tspanContent}${closingTag}`;
-            }
-            return match;
-        }
-    );
-}
-
-
-
-function downloadSVG(svgString, fileName) {
-    svgString = addRotationTransform(svgString);
-    const blob = new Blob([svgString], { type: 'image/svg+xml' });
+function downloadSVG(dataUrl, fileName) {
+    const blob = new Blob([decodeURIComponent(dataUrl.split(',')[1])], { type: 'image/svg+xml' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = fileName;
@@ -1478,10 +1446,14 @@ function downloadSVG(svgString, fileName) {
     document.body.removeChild(link);
 }
 
+function filter(node) {
+    return !(node.classList && node.classList.contains('sym'));
+}
+
+
 export function screenshot_table() {
     let header_height = parseFloat($(this).css('height'));
     $('th').each(function() { $(this).css('height', `${header_height - 80}`); });
-    document.querySelectorAll('.sym').forEach(el => el.style.display = 'none');
     document.querySelectorAll('table tr').forEach(row => {
         const cells = row.querySelectorAll('td');
         let s = linkouts !== null ? -2 : -1;
@@ -1503,31 +1475,30 @@ export function screenshot_table() {
     document.querySelectorAll('.linkout-group').forEach(el => el.style.display = 'none');
     document.querySelectorAll('.linkout-raw-value').forEach(el => el.style.display = 'table-cell');
     const table_element = document.getElementById("table");
-    const svgDocument = elementToSVG(table_element);
-    const svgString = new XMLSerializer().serializeToString(svgDocument);
-    downloadSVG(svgString, `${$("#view-selection").attr("title")}.svg`);
-    $('th').each(function() { $(this).css('height', `${header_height}px`); });
-    document.querySelectorAll('.sym').forEach(el => el.style.display = 'inline');
+    htmlToImage
+        .toSvg(table_element, {filter: filter})
+        .then((dataUrl) => downloadSVG(dataUrl, `${$("#view-selection").attr("title")}.svg`))
     if (config.detail_mode) {
         document.querySelectorAll('table tr').forEach(row => {
             const cells = row.querySelectorAll('td, th');
             const first = Array.from(cells).slice(0, 1);
             first.forEach(cell => cell.style.display = 'block');
+            document.querySelectorAll('table tr').forEach(row => {
+                const cells = row.querySelectorAll('td');
+                let s = linkouts !== null ? -2 : -1;
+                if (!config.webview_controls) {
+                    s += 1;
+                }
+                if (s < 0) {
+                    const lastTwo = Array.from(cells).slice(s);
+                    lastTwo.forEach(cell => cell.style.display = 'table-cell');
+                }
+            });
+            document.querySelectorAll('.linkout-group').forEach(el => el.style.display = 'table-cell');
+            document.querySelectorAll('.linkout-raw-value').forEach(el => el.style.display = 'none');
+            $('th').each(function() { $(this).css('height', `${header_height}px`); });
         });
     }
-    document.querySelectorAll('table tr').forEach(row => {
-        const cells = row.querySelectorAll('td');
-        let s = linkouts !== null ? -2 : -1;
-        if (!config.webview_controls) {
-            s += 1;
-        }
-        if (s < 0) {
-            const lastTwo = Array.from(cells).slice(s);
-            lastTwo.forEach(cell => cell.style.display = 'table-cell');
-        }
-    });
-    document.querySelectorAll('.linkout-group').forEach(el => el.style.display = 'table-cell');
-    document.querySelectorAll('.linkout-raw-value').forEach(el => el.style.display = 'none');
 }
 
 function decompress(data) {
