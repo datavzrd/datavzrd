@@ -22,7 +22,7 @@
     "vega-embed": "^6.22.1",
     "vega-lite": "^5.9.3",
     "d3": "^7.8.5",
-    "dom-to-svg": "0.12.2"
+    "html-to-image": "1.11.13"
   },
   "devDependencies": {
     "@rspack/core": "^0.7.5",
