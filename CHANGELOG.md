@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.52.2](https://github.com/datavzrd/datavzrd/compare/v2.52.1...v2.52.2) (2025-04-02)
+
+
+### Bug Fixes
+
+* Replace dom-to-svg with html-to-image for SVG downloads ([#927](https://github.com/datavzrd/datavzrd/issues/927)) ([6f0850b](https://github.com/datavzrd/datavzrd/commit/6f0850bb0528dfaccf0ebd033942a22e75fd9d66))
+
 ## [2.52.1](https://github.com/datavzrd/datavzrd/compare/v2.52.0...v2.52.1) (2025-02-28)
 
 
