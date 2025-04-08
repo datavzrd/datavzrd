@@ -2,7 +2,7 @@ use crate::spec::DatasetSpecs;
 use anyhow::Result;
 
 pub(crate) mod column_index;
-pub(crate) mod column_type;
+pub mod column_type;
 pub(crate) mod compress;
 pub(crate) mod row_address;
 

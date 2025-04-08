@@ -6,7 +6,7 @@ use std::iter::FromIterator;
 use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Default)]
-pub(crate) enum ColumnType {
+pub enum ColumnType {
     #[default]
     None,
     String,
@@ -47,7 +47,7 @@ impl ColumnType {
 }
 
 /// Classifies table columns as String, Integer or Float
-pub(crate) fn classify_table(dataset: &DatasetSpecs) -> Result<HashMap<String, ColumnType>> {
+pub fn classify_table(dataset: &DatasetSpecs) -> Result<HashMap<String, ColumnType>> {
     let headers = dataset.reader()?.headers()?.clone();
     let mut classification = HashMap::from_iter(
         headers
