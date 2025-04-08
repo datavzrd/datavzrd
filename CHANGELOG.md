@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.52.3](https://github.com/datavzrd/datavzrd/compare/v2.52.2...v2.52.3) (2025-04-08)
+
+
+### Bug Fixes
+
+* Update popover event handling and increase z-index for better visibility ([#933](https://github.com/datavzrd/datavzrd/issues/933)) ([3495e6b](https://github.com/datavzrd/datavzrd/commit/3495e6bdd3ee76afddd44d40b67164bc1ddb0ed7))
+
 ## [2.52.2](https://github.com/datavzrd/datavzrd/compare/v2.52.1...v2.52.2) (2025-04-02)
 
 
