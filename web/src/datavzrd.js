@@ -1125,7 +1125,7 @@ export function load() {
                                 data_content = data_content.concat(checkbox);
                             }
                             $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym ic" id="filter-${index}-container" data-column-title='${title.replace(/'/g, "&#39;")}' data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="${data_content}"> ${search_icon}</div>`);
-                            $(`#filter-${index}-container`).on('click', function (e) {
+                            $(`#filter-${index}-container`).on('shown.bs.popover', function (e) {
                                 $('input:checkbox').change(function (event) {
                                     if (!event.currentTarget.checked) {
                                         checkbox_filters[title].push(event.currentTarget.id);
@@ -1152,7 +1152,7 @@ export function load() {
                         if(!reset) {
                             let search_icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
                             $(`table > thead > tr th:nth-child(${index}) > div.th-inner`).append(`<div class="sym ic" id="filter-${index}-container" data-column-title='${title.replace(/'/g, "&#39;")}' data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title.replace(/'/g, "&#39;")}' placeholder='Filter...'>"> ${search_icon}</div>`);
-                            $(`#filter-${index}-container`).on('click', function (e) {
+                            $(`#filter-${index}-container`).on('shown.bs.popover', function (e) {
                                 $(`#filter-${index}`).on('input', function(event) {
                                     filters[event.target.dataset.title] = $(`#filter-${index}`).val();
                                     $('#table').bootstrapTable('filterBy', {"":""}, {

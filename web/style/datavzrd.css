@@ -357,7 +357,7 @@ footer {
 }
 
 .popover {
-    z-index: 2 !important;
+    z-index: 9999 !important;
 }
 
 .datavzrd-img {
