@@ -1,7 +1,7 @@
 use crate::cli::{CliError, Command};
 use anyhow::{bail, Context, Result};
 use clap::Parser;
-use datavzrd_lib::render_report;
+use datavzrd::render_report;
 use log::LevelFilter;
 use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
 use std::io::{stdout, Write};

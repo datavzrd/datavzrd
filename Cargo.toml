@@ -47,7 +47,6 @@ codegen-units = 1
 lto = "fat"
 
 [lib]
-name = "datavzrd_lib"
 path = "src/lib.rs"
 
 [[bin]]
