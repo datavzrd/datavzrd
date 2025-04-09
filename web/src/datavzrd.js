@@ -1251,7 +1251,6 @@ export function load() {
             })
         }
 
-
         var rect = $('.fixed-table-container')[0].getBoundingClientRect();
         if (rect.left < 0 || rect.right > $(window).width()) {
             add_scroll_button();
@@ -1278,6 +1277,29 @@ export function load() {
             var he = $( window ).height() - 150;
             // $('#table').bootstrapTable('resetView',{height: he});
         })
+
+        $('#colum-filter-icon').on('shown.bs.popover', function () {
+            $('#filter-columns-input').on('input', function () {
+                const query = $(this).val().toLowerCase();
+
+                // Reset column visibility
+                config.displayed_columns.forEach((col) => {
+                    const column_index = get_index(col, config.displayed_columns, config.detail_mode, config.header_label_length);
+                    $(`table > thead > tr:first-child th:nth-child(${column_index})`).css("display", "");
+                    $(`table > tbody > tr td:nth-child(${column_index})`).css("display", "");
+                });
+
+                if (!query) return;
+
+                // Hide non-matching columns
+                config.displayed_columns.forEach((col) => {
+                    const column_index = config.columns.indexOf(col);
+                    if (!col.toLowerCase().includes(query)) {
+                        hide(column_index, true);
+                    }
+                });
+            });
+        });
     });
 }
 
@@ -1533,9 +1555,6 @@ export function hide(c, render) {
         config["to_be_hidden"].push(column);
     }
 }
-
-
-
 
 function add_scroll_button() {
     var buttonHTML = `
