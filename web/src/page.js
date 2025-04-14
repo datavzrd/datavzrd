@@ -107,12 +107,14 @@ export function render_html_contents() {
                             ${nav_html}
                         </div>
                         <span
+                            class="pull-right"
                             id="colum-filter-icon"
                             tabindex="0"
                             data-toggle="popover"
                             data-trigger="click"
                             data-html="true"
-                            data-content='<input type="text" id="filter-columns-input" class="form-control form-control-sm" placeholder="Filter columns..."/>'
+                            data-placement="left"
+                            data-content='<select id="filter-columns-select" class="selectpicker form-control form-control-sm" multiple data-live-search="true" data-actions-box="true" title="Filter columns..."></select>'
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(0,0,0,.5)" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>

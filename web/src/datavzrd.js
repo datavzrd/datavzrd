@@ -1279,27 +1279,31 @@ export function load() {
         })
 
         $('#colum-filter-icon').on('shown.bs.popover', function () {
-            $('#filter-columns-input').on('input', function () {
-                const query = $(this).val().toLowerCase();
+            const $select = $('#filter-columns-select');
 
-                // Reset column visibility
-                config.displayed_columns.forEach((col) => {
+            // Populate the select with columns
+            $select.empty();
+            config.displayed_columns.forEach(col => {
+                $select.append(`<option value="${col}" selected>${col}</option>`);
+            });
+
+            $select.selectpicker('refresh'); // Required after dynamic population
+            $('#colum-filter-icon').popover('update');
+
+            // Listen for selection changes
+            $select.on('changed.bs.select', function () {
+                const selectedCols = $(this).val();
+
+                config.displayed_columns.forEach(col => {
                     const column_index = get_index(col, config.displayed_columns, config.detail_mode, config.header_label_length);
-                    $(`table > thead > tr:first-child th:nth-child(${column_index})`).css("display", "");
-                    $(`table > tbody > tr td:nth-child(${column_index})`).css("display", "");
-                });
+                    const display = selectedCols.includes(col) ? "" : "none";
 
-                if (!query) return;
-
-                // Hide non-matching columns
-                config.displayed_columns.forEach((col) => {
-                    const column_index = config.columns.indexOf(col);
-                    if (!col.toLowerCase().includes(query)) {
-                        hide(column_index, true);
-                    }
+                    $(`table > thead > tr:first-child th:nth-child(${column_index})`).css("display", display);
+                    $(`table > tbody > tr td:nth-child(${column_index})`).css("display", display);
                 });
             });
         });
+
     });
 }
 
