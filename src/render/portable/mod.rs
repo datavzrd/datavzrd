@@ -685,7 +685,8 @@ impl JavascriptConfig {
                 .filter(|c| {
                     config
                         .get(c)
-                        .and_then(|v| v.display_mode).is_some_and(|dm| dp_modes.contains(&dm))
+                        .and_then(|v| v.display_mode)
+                        .is_some_and(|dm| dp_modes.contains(&dm))
                 })
                 .chain(
                     additional_columns
