@@ -129,7 +129,7 @@ function shareRow(index, webhost_url) {
     QRCode.toCanvas(document.getElementById("qr-code"), url, { width: window.innerHeight / 1.8 });
 }
 
-function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
+function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length, columnIndexMap) {
     let index = columnIndexMap[title];
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
@@ -159,7 +159,7 @@ function renderTickPlot(ah, columns, title, slug_title, specs, is_float, precisi
     );
 }
 
-function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length) {
+function renderBarPlot(ah, columns, title, slug_title, specs, is_float, precision, detail_mode, header_label_length, columnIndexMap) {
     let index = columnIndexMap[title];
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
@@ -202,7 +202,7 @@ function renderDetailTickBarPlot(value, div, specs, title) {
     }
 }
 
-function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length) {
+function colorizeColumn(ah, columns, heatmap, detail_mode, header_label_length, columnIndexMap) {
     let index = columnIndexMap[heatmap.title];
     let row = 0;
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
@@ -254,7 +254,7 @@ function pillsToHeatmap(pills) {
     };
 }
 
-function renderPills(ah, columns, pills, detail_mode, header_label_length) {
+function renderPills(ah, columns, pills, detail_mode, header_label_length, columnIndexMap) {
     let index = columnIndexMap[pills.title];
     let row = 0;
     var table_rows = $("#table").bootstrapTable('getData', {useCurrentPage: "true"});
@@ -321,7 +321,7 @@ function datavzrdScale(heatmap) {
     return scale;
 }
 
-function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_length) {
+function shortenColumn(ah, columns, title, ellipsis, detail_mode, header_label_length, columnIndexMap) {
     let index = columnIndexMap[title];
     let row = 0;
     $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -352,7 +352,7 @@ function shortenHeaderRow(row, ellipsis, skip_label) {
 }
 
 
-function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content, detail_mode, header_label_length) {
+function linkUrlColumn(ah, dp_columns, columns, title, link_urls, custom_content, detail_mode, header_label_length, columnIndexMap) {
     let index = columnIndexMap[title];
     let table_rows = $('#table').bootstrapTable('getData');
     $(`table > tbody > tr td:nth-child(${index})`).each(
@@ -473,7 +473,7 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
     );
 }
 
-function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length) {
+function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length, columnIndexMap) {
     let index = columnIndexMap[plot.title];
     let detail_mode = dp_columns.indexOf(plot.title) == -1;
     var data_function = window[plot.data_function];
@@ -624,46 +624,46 @@ function detailFormatter(index, row) {
 }
 
 // Renders plots, heatmaps etc. when the table is loaded or on page change
-function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers, custom_plots) {
+function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers, custom_plots, columnIndexMap) {
     for (const o of custom_plots) {
         if (displayed_columns.includes(o.title)) {
-            renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
+            renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length, columnIndexMap);
         }
     }
 
     for (const o of config.ticks) {
         if (displayed_columns.includes(o.title)) {
-            renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length);
+            renderTickPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length, columnIndexMap);
         }
     }
 
     for (const o of config.bars) {
         if (displayed_columns.includes(o.title)) {
-            renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length);
+            renderBarPlot(additional_headers.length, displayed_columns, o.title, o.slug_title, o.specs, config.column_config[o.title].is_float, config.column_config[o.title].precision, config.detail_mode, config.header_label_length, columnIndexMap);
         }
     }
 
     for (const o of config.link_urls) {
         if (displayed_columns.includes(o.title)) {
-            linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, o["custom-content"], config.detail_mode, config.header_label_length);
+            linkUrlColumn(additional_headers.length, displayed_columns, columns, o.title, o.links, o["custom-content"], config.detail_mode, config.header_label_length, columnIndexMap);
         }
     }
 
     for (const o of config.heatmaps) {
         if (displayed_columns.includes(o.title)) {
-            colorizeColumn(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
+            colorizeColumn(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length, columnIndexMap);
         }
     }
 
     for (const o of config.pills) {
         if (displayed_columns.includes(o.title)) {
-            renderPills(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length);
+            renderPills(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length, columnIndexMap);
         }
     }
 
     for (const o of config.ellipsis) {
         if (displayed_columns.includes(o.title)) {
-            shortenColumn(additional_headers.length, displayed_columns, o.title, o.ellipsis, config.detail_mode, config.header_label_length);
+            shortenColumn(additional_headers.length, displayed_columns, o.title, o.ellipsis, config.detail_mode, config.header_label_length, columnIndexMap);
         }
     }
 
@@ -690,7 +690,7 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 
     if (config["to_be_hidden"]) {
         for (var hc of config["to_be_hidden"]) {
-            hide(config.columns.indexOf(hc), true);
+            hide(config.columns.indexOf(hc), true, columnIndexMap);
         }
     }
 }
@@ -698,6 +698,7 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 export function load() {
     $(document).ready(function() {
         document.title = "datavzrd report";
+        const columnIndexMap = buildColumnIndexMap();
         render_html_contents();
         $('.table-container').show();
         $('.loading').hide();
@@ -782,7 +783,7 @@ export function load() {
                             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                         </svg>
                     </div>
-                    <div class="sym hide-sym" onclick="datavzrd.hide(${config.columns.indexOf(column)}, false)">
+                    <div class="sym hide-sym" onclick="datavzrd.hide(${config.columns.indexOf(column)}, false, columnIndexMap)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
                             <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
                             <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
@@ -986,7 +987,7 @@ export function load() {
         });
         addNumClass(config.displayed_numeric_columns, additional_headers.length, config.detail_mode, config);
 
-        render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true, custom_plots);
+        render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true, custom_plots, columnIndexMap);
         config["to_be_hidden"] = [];
 
         if (!config.detail_mode && !config.header_label_length == 0) {
@@ -1214,12 +1215,12 @@ export function load() {
         if (config.is_single_page) {
             $('#table').on('page-change.bs.table', (number, size) => {
                 setTimeout(function (){
-                    render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
+                    render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots, columnIndexMap);
                 }, 0);
             })
             $('#table').on('sort.bs.table', (number, size) => {
                 setTimeout(function (){
-                    render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
+                    render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots, columnIndexMap);
                 }, 0);
             })
             $('#unhide-btn').on('click', function() {
@@ -1235,7 +1236,7 @@ export function load() {
                 }
             })
             $('#unsort-btn').on('click', function() {
-                render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots);
+                render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots, columnIndexMap);
             });
             $('#downloadCSV-btn').on('click', function() {
                 downloadCSV()
@@ -1274,7 +1275,7 @@ export function load() {
         }
 
         for (const title of config.available_columns) {
-            hide(config.columns.indexOf(title), false);
+            hide(config.columns.indexOf(title), false, columnIndexMap);
         }
 
         $( window ).resize(function() {
@@ -1305,9 +1306,9 @@ export function load() {
 
                 config.displayed_columns.forEach(col => {
                     if (!selectedCols.has(col)) {
-                        hide(config.columns.indexOf(col), false);
+                        hide(config.columns.indexOf(col), false, columnIndexMap);
                     } else {
-                        unhide(config.columns.indexOf(col));
+                        unhide(config.columns.indexOf(col), columnIndexMap);
                     }
                 });
                 $select.selectpicker('refresh');
@@ -1550,7 +1551,7 @@ export function sort(c, order, svg) {
     $('#table').bootstrapTable('sortBy', {field: column, sortOrder: order})
 }
 
-const columnIndexMap = (() => {
+function buildColumnIndexMap() {
     const map = {};
     const base_offset = 2 + ((config.detail_mode || config.header_label_length !== 0) ? 1 : 0);
 
@@ -1559,9 +1560,9 @@ const columnIndexMap = (() => {
     });
 
     return map;
-})();
+}
 
-export function hide(c, render) {
+export function hide(c, render, columnIndexMap) {
     let column = config.columns[c];
     const column_index = columnIndexMap[column];
     $(`table > thead > tr:first-child th:nth-child(${column_index})`).css("display", "none");
@@ -1573,7 +1574,7 @@ export function hide(c, render) {
     }
 }
 
-export function unhide(c) {
+export function unhide(c, columnIndexMap) {
     let column = config.columns[c];
     const column_index = columnIndexMap[column];
     $(`table > thead > tr:first-child th:nth-child(${column_index})`).css("display", "");
