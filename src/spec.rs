@@ -823,7 +823,7 @@ pub(crate) enum DisplayMode {
     Normal,
     Detail,
     Hidden,
-    Available
+    Available,
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
