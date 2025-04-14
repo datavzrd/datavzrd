@@ -690,7 +690,7 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
 
     if (config["to_be_hidden"]) {
         for (var hc of config["to_be_hidden"]) {
-            hide(hc, true);
+            hide(config.columns.indexOf(hc), true);
         }
     }
 }
@@ -1297,7 +1297,6 @@ export function load() {
 
             $select.selectpicker('refresh'); // Required after dynamic population
             $('#colum-filter-icon').popover('update');
-
             $select.selectpicker('toggle');
 
             // Listen for selection changes
@@ -1305,12 +1304,13 @@ export function load() {
                 const selectedCols = $(this).val();
 
                 config.displayed_columns.forEach(col => {
-                    const column_index = get_index(col, config.displayed_columns, config.detail_mode, config.header_label_length);
-                    const display = selectedCols.includes(col) ? "" : "none";
-
-                    $(`table > thead > tr:first-child th:nth-child(${column_index})`).css("display", display);
-                    $(`table > tbody > tr td:nth-child(${column_index})`).css("display", display);
+                    if (!selectedCols.includes(col)) {
+                        hide(config.columns.indexOf(col), false);
+                    } else {
+                        unhide(config.columns.indexOf(col));
+                    }
                 });
+                $select.selectpicker('refresh');
             });
         });
 
@@ -1569,6 +1569,20 @@ export function hide(c, render) {
         config["to_be_hidden"].push(column);
     }
 }
+
+export function unhide(c) {
+    let column = config.columns[c];
+    const column_index = get_index(column, config.displayed_columns, config.detail_mode, config.header_label_length);
+    $(`table > thead > tr:first-child th:nth-child(${column_index})`).css("display", "");
+    $(`table > tbody > tr td:nth-child(${column_index})`).each(function () {
+        this.style.setProperty("display", "");
+    });
+    const idx = config["to_be_hidden"].indexOf(column);
+    if (idx !== -1) {
+        config["to_be_hidden"].splice(idx, 1);
+    }
+}
+
 
 function add_scroll_button() {
     var buttonHTML = `
