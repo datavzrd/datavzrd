@@ -1,3 +1,4 @@
+[![bioRxiv Preprint](https://img.shields.io/badge/bioRxiv-10.1101%2F2025.04.03.647146-B31B1B.svg)](https://doi.org/10.1101/2025.04.03.647146)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/datavzrd/datavzrd/rust.yml?branch=main&label=tests)](https://github.com/datavzrd/datavzrd/actions)
 [![Conda Recipe](https://img.shields.io/badge/recipe-datavzrd-green.svg)](https://anaconda.org/conda-forge/datavzrd)
 [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/datavzrd.svg)](https://anaconda.org/conda-forge/datavzrd)
