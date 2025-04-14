@@ -616,6 +616,7 @@ struct JavascriptConfig {
     page_size: usize,
     columns: Vec<String>,
     displayed_columns: Vec<String>,
+    available_columns: Vec<String>,
     hidden_columns: Vec<String>,
     displayed_numeric_columns: Vec<String>,
     tick_titles: Vec<String>,
@@ -677,17 +678,22 @@ impl JavascriptConfig {
             0
         };
         let local: DateTime<Local> = Local::now();
-        let column_display_mode_filter = |dp_mode: DisplayMode| -> Vec<String> {
+        let column_display_mode_filter = |dp_modes: &[DisplayMode]| -> Vec<String> {
             columns
                 .iter()
                 .map(|c| c.to_string())
-                .filter(|c| config.get(c).unwrap().display_mode.unwrap() == dp_mode)
+                .filter(|c| {
+                    config
+                        .get(c)
+                        .and_then(|v| v.display_mode)
+                        .is_some_and(|dm| dp_modes.contains(&dm))
+                })
                 .chain(
                     additional_columns
                         .as_ref()
                         .unwrap_or(&HashMap::new())
                         .iter()
-                        .filter(|(_, v)| v.display_mode == dp_mode)
+                        .filter(|(_, v)| dp_modes.contains(&v.display_mode))
                         .map(|(k, _)| k.to_string()),
                 )
                 .collect()
@@ -712,8 +718,9 @@ impl JavascriptConfig {
             is_single_page,
             page_size,
             columns: columns.iter().map(|c| c.to_string()).chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).keys().map(|c| c.to_string())).collect(),
-            displayed_columns: column_display_mode_filter(DisplayMode::Normal),
-            hidden_columns: column_display_mode_filter(DisplayMode::Hidden),
+            displayed_columns: column_display_mode_filter(&[DisplayMode::Normal, DisplayMode::Available]),
+            available_columns: column_display_mode_filter(&[DisplayMode::Available]),
+            hidden_columns: column_display_mode_filter(&[DisplayMode::Hidden]),
             displayed_numeric_columns: classify_table(dataset)
                 .unwrap()
                 .iter()

@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.53.0](https://github.com/datavzrd/datavzrd/compare/v2.52.3...v2.53.0) (2025-04-14)
+
+
+### Features
+
+* Add column filter functionality with popover input ([#935](https://github.com/datavzrd/datavzrd/issues/935)) ([c198777](https://github.com/datavzrd/datavzrd/commit/c1987779f56f5af6f56679f5d946a96dda529a1d))
+
 ## [2.52.3](https://github.com/datavzrd/datavzrd/compare/v2.52.2...v2.52.3) (2025-04-08)
 
 

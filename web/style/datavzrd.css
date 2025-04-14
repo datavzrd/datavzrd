@@ -372,3 +372,12 @@ footer {
 .linkout-raw-value {
     display: none;
 }
+
+#filter-columns-input {
+    min-width: 140px;
+}
+
+#colum-filter-icon:hover {
+    cursor: pointer;
+    color: grey;
+}
