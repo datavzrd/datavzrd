@@ -1251,7 +1251,6 @@ export function load() {
             })
         }
 
-
         var rect = $('.fixed-table-container')[0].getBoundingClientRect();
         if (rect.left < 0 || rect.right > $(window).width()) {
             add_scroll_button();
@@ -1274,10 +1273,47 @@ export function load() {
             }
         }
 
+        for (const title of config.available_columns) {
+            hide(config.columns.indexOf(title), false);
+        }
+
         $( window ).resize(function() {
             var he = $( window ).height() - 150;
             // $('#table').bootstrapTable('resetView',{height: he});
         })
+
+        $('#colum-filter-icon').on('shown.bs.popover', function () {
+            const $select = $('#filter-columns-select');
+
+            // Populate the select with columns
+            $select.empty();
+            config.displayed_columns.forEach(col => {
+                if (config.available_columns.includes(col)) {
+                    $select.append(`<option value="${col}">${col}</option>`);
+                } else {
+                    $select.append(`<option value="${col}" selected>${col}</option>`);
+                }
+            });
+
+            $select.selectpicker('refresh'); // Required after dynamic population
+            $('#colum-filter-icon').popover('update');
+
+            $select.selectpicker('toggle');
+
+            // Listen for selection changes
+            $select.on('changed.bs.select', function () {
+                const selectedCols = $(this).val();
+
+                config.displayed_columns.forEach(col => {
+                    const column_index = get_index(col, config.displayed_columns, config.detail_mode, config.header_label_length);
+                    const display = selectedCols.includes(col) ? "" : "none";
+
+                    $(`table > thead > tr:first-child th:nth-child(${column_index})`).css("display", display);
+                    $(`table > tbody > tr td:nth-child(${column_index})`).css("display", display);
+                });
+            });
+        });
+
     });
 }
 
@@ -1533,9 +1569,6 @@ export function hide(c, render) {
         config["to_be_hidden"].push(column);
     }
 }
-
-
-
 
 function add_scroll_button() {
     var buttonHTML = `
