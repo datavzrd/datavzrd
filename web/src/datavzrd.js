@@ -1273,6 +1273,10 @@ export function load() {
             }
         }
 
+        for (const title of config.available_columns) {
+            hide(config.columns.indexOf(title), false);
+        }
+
         $( window ).resize(function() {
             var he = $( window ).height() - 150;
             // $('#table').bootstrapTable('resetView',{height: he});
@@ -1284,11 +1288,17 @@ export function load() {
             // Populate the select with columns
             $select.empty();
             config.displayed_columns.forEach(col => {
-                $select.append(`<option value="${col}" selected>${col}</option>`);
+                if (config.available_columns.includes(col)) {
+                    $select.append(`<option value="${col}">${col}</option>`);
+                } else {
+                    $select.append(`<option value="${col}" selected>${col}</option>`);
+                }
             });
 
             $select.selectpicker('refresh'); // Required after dynamic population
             $('#colum-filter-icon').popover('update');
+
+            $select.selectpicker('toggle');
 
             // Listen for selection changes
             $select.on('changed.bs.select', function () {
