@@ -13,10 +13,10 @@ use std::path::Path;
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
-pub(crate) struct SpellSpec {
-    pub(crate) url: String,
+pub struct SpellSpec {
+    pub url: String,
     #[serde(default)]
-    pub(crate) with: HashMap<String, String>,
+    pub with: HashMap<String, String>,
 }
 
 lazy_static! {

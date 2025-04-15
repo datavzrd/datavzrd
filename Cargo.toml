@@ -45,3 +45,10 @@ fs_extra = "1.3"
 [profile.release]
 codegen-units = 1
 lto = "fat"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "datavzrd"
+path = "src/main.rs"
