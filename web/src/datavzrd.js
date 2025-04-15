@@ -475,28 +475,25 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
 
 function renderCustomPlot(ah, dp_columns, plot, dm, header_label_length, columnIndexMap) {
     let index = columnIndexMap[plot.title];
-    let detail_mode = dp_columns.indexOf(plot.title) == -1;
     var data_function = window[plot.data_function];
     var specs = plot.specs;
     let row = 0;
     let table_rows = $('#table').bootstrapTable('getData', { useCurrentPage: true });
     $(`table > tbody > tr td:nth-child(${index})`).each(
         function() {
-            if (!detail_mode) {
-                var id = `${plot.title}-${row}`;
-                this.classList.add("plotcell");
-                const div = document.createElement("div");
-                let value = table_rows[row][plot.title];
-                let value_row = table_rows[row];
-                var data = data_function(value, value_row);
-                var s = specs;
-                s.data = {};
-                s.data.values = data;
-                var opt = {"actions": plot.vega_controls, 'renderer': 'svg'};
-                this.innerHTML = "";
-                this.appendChild(div);
-                vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
-            }
+            var id = `${plot.title}-${row}`;
+            this.classList.add("plotcell");
+            const div = document.createElement("div");
+            let value = table_rows[row][plot.title];
+            let value_row = table_rows[row];
+            var data = data_function(value, value_row);
+            var s = specs;
+            s.data = {};
+            s.data.values = data;
+            var opt = {"actions": plot.vega_controls, 'renderer': 'svg'};
+            this.innerHTML = "";
+            this.appendChild(div);
+            vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
             row++;
         }
     );
@@ -624,7 +621,7 @@ function detailFormatter(index, row) {
 }
 
 // Renders plots, heatmaps etc. when the table is loaded or on page change
-function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers, custom_plots, columnIndexMap) {
+function render(additional_headers, displayed_columns, table_rows, columns, config, render_headers, custom_plots, columnIndexMap, columnIdMap) {
     for (const o of custom_plots) {
         if (displayed_columns.includes(o.title)) {
             renderCustomPlot(additional_headers.length, displayed_columns, o, config.detail_mode, config.header_label_length, columnIndexMap);
@@ -689,8 +686,8 @@ function render(additional_headers, displayed_columns, table_rows, columns, conf
     }
 
     if (config["to_be_hidden"]) {
-        for (var hc of config["to_be_hidden"]) {
-            hide(config.columns.indexOf(hc), true, columnIndexMap);
+        for (const hc of config["to_be_hidden"]) {
+            hide(columnIdMap[hc], true, columnIndexMap);
         }
     }
 }
@@ -751,6 +748,11 @@ export function load() {
             }
         });
 
+        const columnIdMap = config.columns.reduce((acc, col, i) => {
+            acc[col] = i;
+            return acc;
+        }, {});
+
 
         for (const column of config.columns) {
             if (config.displayed_columns.includes(column)) {
@@ -763,27 +765,27 @@ export function load() {
                 }
 
                 // Add histogram button
-                let histogram_icon = `<span class="sym ic" style="margin-left: 2px;" data-toggle="modal" data-target="#histogram_modal" onclick="datavzrd.embedHistogram(show_plot_${config.columns.indexOf(column)}, ${config.columns.indexOf(column)}, plot_${config.columns.indexOf(column)})"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></span>`;
+                let histogram_icon = `<span class="sym ic" style="margin-left: 2px;" data-toggle="modal" data-target="#histogram_modal" onclick="datavzrd.embedHistogram(show_plot_${columnIdMap[column]}, ${columnIdMap[column]}, plot_${columnIdMap[column]})"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></span>`;
                 if (!config.additional_colums[column]) {
                     title += histogram_icon;
                 }
 
                 // Add static search if not single page mode
                 if (!config.is_single_page && !config.additional_colums[column] && !config.column_config[column].is_float) {
-                    title += `<span class="sym ic" style="margin-left: 2px;" data-toggle="modal" onclick="datavzrd.embedSearch(${config.columns.indexOf(column)})" data-target="#search"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg></span>`;
+                    title += `<span class="sym ic" style="margin-left: 2px;" data-toggle="modal" onclick="datavzrd.embedSearch(${columnIdMap[column]})" data-target="#search"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg></span>`;
                 }
 
                 if (config.is_single_page) {
                     title += `
                     <div class="sym sym-container" style="position: relative;">
-                        <svg onclick="datavzrd.sort(${config.columns.indexOf(column)}, 'asc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                        <svg onclick="datavzrd.sort(${columnIdMap[column]}, 'asc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
                           <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
                         </svg>
-                        <svg onclick="datavzrd.sort(${config.columns.indexOf(column)}, 'desc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                        <svg onclick="datavzrd.sort(${columnIdMap[column]}, 'desc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                         </svg>
                     </div>
-                    <div class="sym hide-sym" onclick="datavzrd.hide(${config.columns.indexOf(column)}, false, columnIndexMap)">
+                    <div class="sym hide-sym" onclick="datavzrd.hide(${columnIdMap[column]}, false, columnIndexMap)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
                             <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
                             <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
@@ -936,31 +938,31 @@ export function load() {
         $('#table').on('expand-row.bs.table', (event, index, row, detailView) => {
             for (const o of custom_plots) {
                 if (!config.displayed_columns.includes(o.title)) {
-                    renderCustomPlotDetailView(row[o.title], row, `#detail-plot-${index}-cp-${config.columns.indexOf(o.title)}`, window[o.data_function], o.specs, o.vega_controls);
+                    renderCustomPlotDetailView(row[o.title], row, `#detail-plot-${index}-cp-${columnIdMap[o.title]}`, window[o.data_function], o.specs, o.vega_controls);
                 }
             }
 
             for (const o of config.heatmaps) {
                 if (!config.displayed_columns.includes(o.title)) {
-                    colorizeDetailCard(row[o.title], `#heatmap-${index}-${config.columns.indexOf(o.title)}`, o, row, config.column_config[o.title].is_float, config.column_config[o.title].precision);
+                    colorizeDetailCard(row[o.title], `#heatmap-${index}-${columnIdMap[o.title]}`, o, row, config.column_config[o.title].is_float, config.column_config[o.title].precision);
                 }
             }
 
             for (const o of config.pills) {
                 if (!config.displayed_columns.includes(o.title)) {
-                    renderDetailPills(row[o.title], `#pills-${index}-${config.columns.indexOf(o.title)}`, o);
+                    renderDetailPills(row[o.title], `#pills-${index}-${columnIdMap[o.title]}`, o);
                 }
             }
 
             for (const o of config.ticks) {
                 if (!config.displayed_columns.includes(o.title)) {
-                    renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-ticks-${config.columns.indexOf(o.title)}`, o.specs, o.title);
+                    renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-ticks-${columnIdMap[o.title]}`, o.specs, o.title);
                 }
             }
 
             for (const o of config.bars) {
                 if (!config.displayed_columns.includes(o.title)) {
-                    renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-bars-${config.columns.indexOf(o.title)}`, o.specs, o.title);
+                    renderDetailTickBarPlot(row[o.title], `#detail-plot-${index}-bars-${columnIdMap[o.title]}`, o.specs, o.title);
                 }
             }
         })
@@ -987,8 +989,8 @@ export function load() {
         });
         addNumClass(config.displayed_numeric_columns, additional_headers.length, config.detail_mode, config);
 
-        render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true, custom_plots, columnIndexMap);
-        config["to_be_hidden"] = [];
+        render(additional_headers, config.displayed_columns, table_rows, config.columns, config, true, custom_plots, columnIndexMap, columnIdMap);
+        config["to_be_hidden"] = new Set();
 
         if (!config.detail_mode && !config.header_label_length == 0) {
             $("table > thead > tr:first-child th:first-child").css("visibility", "hidden");
@@ -1213,18 +1215,11 @@ export function load() {
         }
 
         if (config.is_single_page) {
-            $('#table').on('page-change.bs.table', (number, size) => {
-                setTimeout(function (){
-                    render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots, columnIndexMap);
-                }, 0);
-            })
-            $('#table').on('sort.bs.table', (number, size) => {
-                setTimeout(function (){
-                    render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots, columnIndexMap);
-                }, 0);
+            $('#table').on('post-body.bs.table', (number, size) => {
+                render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots, columnIndexMap, columnIdMap);
             })
             $('#unhide-btn').on('click', function() {
-                config["to_be_hidden"] = [];
+                config["to_be_hidden"] = new Set();
                 $(`table > thead > tr:first-child th`).each(function () {
                     this.style.setProperty("display", "");
                 });
@@ -1236,7 +1231,7 @@ export function load() {
                 }
             })
             $('#unsort-btn').on('click', function() {
-                render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots, columnIndexMap);
+                render(additional_headers, config.displayed_columns, table_rows, config.columns, config, false, custom_plots, columnIndexMap, columnIdMap);
             });
             $('#downloadCSV-btn').on('click', function() {
                 downloadCSV()
@@ -1275,7 +1270,7 @@ export function load() {
         }
 
         for (const title of config.available_columns) {
-            hide(config.columns.indexOf(title), false, columnIndexMap);
+            hide(columnIdMap[title], false, columnIndexMap);
         }
 
         $( window ).resize(function() {
@@ -1303,14 +1298,23 @@ export function load() {
             // Listen for selection changes
             $select.on('changed.bs.select', function () {
                 const selectedCols = new Set($(this).val());
+                const displayedCols = new Set(config.displayed_columns);
+                const hiddenCols = config.to_be_hidden;
 
-                config.displayed_columns.forEach(col => {
-                    if (!selectedCols.has(col)) {
-                        hide(config.columns.indexOf(col), false, columnIndexMap);
-                    } else {
-                        unhide(config.columns.indexOf(col), columnIndexMap);
-                    }
-                });
+                // Columns to hide: in displayed but not selected and not already hidden
+                const toHide = [...displayedCols].filter(col => !selectedCols.has(col) && !hiddenCols.has(col));
+
+                // Columns to unhide: in hidden but now selected
+                const toUnhide = [...hiddenCols].filter(col => selectedCols.has(col));
+
+                for (const col of toHide) {
+                    hide(columnIdMap[col], false, columnIndexMap);
+                }
+
+                for (const col of toUnhide) {
+                    unhide(columnIdMap[col], columnIndexMap);
+                }
+
                 $select.selectpicker('refresh');
             });
         });
@@ -1570,7 +1574,7 @@ export function hide(c, render, columnIndexMap) {
         this.style.setProperty("display", "none");
     });
     if (!render) {
-        config["to_be_hidden"].push(column);
+        config["to_be_hidden"].add(column);
     }
 }
 
@@ -1581,10 +1585,7 @@ export function unhide(c, columnIndexMap) {
     $(`table > tbody > tr td:nth-child(${column_index})`).each(function () {
         this.style.setProperty("display", "");
     });
-    const idx = config["to_be_hidden"].indexOf(column);
-    if (idx !== -1) {
-        config["to_be_hidden"].splice(idx, 1);
-    }
+    config["to_be_hidden"].delete(column);
 }
 
 
