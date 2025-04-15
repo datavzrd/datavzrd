@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.53.1](https://github.com/datavzrd/datavzrd/compare/v2.53.0...v2.53.1) (2025-04-15)
+
+
+### Bug Fixes
+
+* Build column index map after config init ([e4ee4d8](https://github.com/datavzrd/datavzrd/commit/e4ee4d82db679cb8981afd1cc35e45a25ae8b69a))
+* Fix unhidden columns after page change or sorting ([#941](https://github.com/datavzrd/datavzrd/issues/941)) ([69bc502](https://github.com/datavzrd/datavzrd/commit/69bc5024e67fd0289381aaf359d6cfaa602f319c))
+
+
+### Performance Improvements
+
+* Replace get_index function calls with columnIndexMap for improved performance and use Set for lookups ([01ea6c2](https://github.com/datavzrd/datavzrd/commit/01ea6c2ce347d23ef95d7b0b9b78ea8b005c8a40))
+
 ## [2.53.0](https://github.com/datavzrd/datavzrd/compare/v2.52.3...v2.53.0) (2025-04-14)
 
 
