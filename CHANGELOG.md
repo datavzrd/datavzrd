@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.53.2](https://github.com/datavzrd/datavzrd/compare/v2.53.1...v2.53.2) (2025-04-16)
+
+
+### Performance Improvements
+
+* Remove unnecessary selectpicker refresh after multiselect change ([88d216a](https://github.com/datavzrd/datavzrd/commit/88d216ad2f878587c304751dcef6f2d8ebf5a7f7))
+
 ## [2.53.1](https://github.com/datavzrd/datavzrd/compare/v2.53.0...v2.53.1) (2025-04-15)
 
 
