@@ -1314,8 +1314,6 @@ export function load() {
                 for (const col of toUnhide) {
                     unhide(columnIdMap[col], columnIndexMap);
                 }
-
-                $select.selectpicker('refresh');
             });
         });
 
