@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.54.0](https://github.com/datavzrd/datavzrd/compare/v2.53.1...v2.54.0) (2025-04-23)
+
+
+### Features
+
+* Refactor library structure and expose public API for rendering reports ([#938](https://github.com/datavzrd/datavzrd/issues/938)) ([c9163b7](https://github.com/datavzrd/datavzrd/commit/c9163b71cf4cdcd6fc1ed07d08042d3d86d500bf))
+
+
+### Bug Fixes
+
+* Simplify render table preprocessing logic by removing unnecessary mutable borrow and preprocessing individual columns after applying regex, index, etc. ([#946](https://github.com/datavzrd/datavzrd/issues/946)) ([1f9e8c6](https://github.com/datavzrd/datavzrd/commit/1f9e8c688a2051a857b6f6a05bd426d69f3e0387))
+
+
+### Performance Improvements
+
+* Remove unnecessary selectpicker refresh after multiselect change ([88d216a](https://github.com/datavzrd/datavzrd/commit/88d216ad2f878587c304751dcef6f2d8ebf5a7f7))
+
 ## [2.53.1](https://github.com/datavzrd/datavzrd/compare/v2.53.0...v2.53.1) (2025-04-15)
 
 
