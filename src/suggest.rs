@@ -1,10 +1,10 @@
-use crate::spec::{
+use anyhow::Result;
+use datavzrd::spec::{
     default_page_size, default_single_page_threshold, AuxDomainColumns, Color, ColorRange,
     DatasetSpecs, Heatmap, ItemSpecs, ItemsSpec, PlotSpec, RenderColumnSpec, RenderTableSpecs,
     ScaleType,
 };
-use crate::utils::column_type::ColumnType;
-use anyhow::Result;
+use datavzrd::utils::column_type::ColumnType;
 use std::collections::HashMap;
 use std::path::PathBuf;
 
@@ -30,7 +30,7 @@ pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -
         items_spec
             .datasets
             .insert(dataset_name.to_string(), dataset.clone());
-        let column_types = crate::utils::column_type::classify_table(&dataset)?;
+        let column_types = datavzrd::utils::column_type::classify_table(&dataset)?;
         let mut columns = HashMap::new();
         for (column_name, column_type) in column_types.iter() {
             let render_column_spec = match column_type {

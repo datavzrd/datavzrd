@@ -32,22 +32,22 @@ use thiserror::Error;
 #[skip_serializing_none]
 #[derive(Derefable, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct ItemsSpec {
+pub struct ItemsSpec {
     #[serde(default, rename = "name")]
-    pub(crate) report_name: String,
-    pub(crate) datasets: HashMap<String, DatasetSpecs>,
+    pub report_name: String,
+    pub datasets: HashMap<String, DatasetSpecs>,
     #[deref]
-    pub(crate) default_view: Option<String>,
+    pub default_view: Option<String>,
     #[serde(default = "default_single_page_threshold")]
-    pub(crate) max_in_memory_rows: usize,
-    pub(crate) views: HashMap<String, ItemSpecs>,
-    pub(crate) aux_libraries: Option<Vec<String>>,
+    pub max_in_memory_rows: usize,
+    pub views: HashMap<String, ItemSpecs>,
+    pub aux_libraries: Option<Vec<String>>,
     #[serde(default)]
-    pub(crate) webview_controls: bool,
+    pub webview_controls: bool,
 }
 
 impl ItemsSpec {
-    pub(crate) fn from_file<P: AsRef<Path> + Debug>(path: P) -> Result<ItemsSpec> {
+    pub fn from_file<P: AsRef<Path> + Debug>(path: P) -> Result<ItemsSpec> {
         let config_file = fs::read_to_string(&path).context(format!(
             "Could not find config file under given path {:?}",
             &path
@@ -77,11 +77,11 @@ impl ItemsSpec {
         Ok(items_spec)
     }
 
-    pub(crate) fn needs_excel_sheet(&self) -> bool {
+    pub fn needs_excel_sheet(&self) -> bool {
         self.datasets.values().any(|dataset| dataset.offer_excel)
     }
 
-    pub(crate) fn validate(&self) -> Result<()> {
+    pub fn validate(&self) -> Result<()> {
         if let Some(view) = &self.default_view {
             if !self.views.contains_key(view) {
                 bail!(ConfigError::MissingDefaultView {
@@ -342,7 +342,7 @@ impl ItemsSpec {
     }
 }
 
-pub(crate) fn default_single_page_threshold() -> usize {
+pub fn default_single_page_threshold() -> usize {
     20000_usize
 }
 
@@ -350,7 +350,7 @@ fn default_separator() -> char {
     char::from_str(",").unwrap()
 }
 
-pub(crate) fn default_page_size() -> usize {
+pub fn default_page_size() -> usize {
     20
 }
 
@@ -372,28 +372,28 @@ fn default_links() -> Option<HashMap<String, LinkSpec>> {
 #[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct DatasetSpecs {
-    pub(crate) path: PathBuf,
+pub struct DatasetSpecs {
+    pub path: PathBuf,
     #[serde(default = "default_separator")]
-    pub(crate) separator: char,
+    pub separator: char,
     #[serde(default = "default_header_size", rename = "headers")]
-    pub(crate) header_rows: usize,
+    pub header_rows: usize,
     #[serde(default = "default_links")]
-    pub(crate) links: Option<HashMap<String, LinkSpec>>,
+    pub links: Option<HashMap<String, LinkSpec>>,
     #[serde(default)]
-    pub(crate) offer_excel: bool,
+    pub offer_excel: bool,
 }
 
 impl DatasetSpecs {
-    pub(crate) fn size(&self) -> Result<usize> {
+    pub fn size(&self) -> Result<usize> {
         Ok(self.reader()?.records()?.count() - (self.header_rows - 1))
     }
 
-    pub(crate) fn is_empty(&self) -> Result<bool> {
+    pub fn is_empty(&self) -> Result<bool> {
         Ok(self.size()? == 0)
     }
 
-    pub(crate) fn reader(&self) -> Result<readervzrd::FileReader> {
+    pub fn reader(&self) -> Result<readervzrd::FileReader> {
         let path = &self
             .path
             .to_str()
@@ -403,7 +403,7 @@ impl DatasetSpecs {
     }
 
     /// Returns a hashmap counting the number of unique values of all columns of the dataset
-    pub(crate) fn unique_column_values(&self) -> Result<HashMap<String, usize>> {
+    pub fn unique_column_values(&self) -> Result<HashMap<String, usize>> {
         let mut reader = self.reader()?;
         let headers = reader.headers()?.clone();
         let column_counts: HashMap<String, usize> = headers
@@ -431,29 +431,29 @@ impl DatasetSpecs {
 #[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct ItemSpecs {
+pub struct ItemSpecs {
     #[serde(default)]
-    pub(crate) hidden: bool,
-    pub(crate) dataset: Option<String>,
-    pub(crate) datasets: Option<HashMap<String, String>>,
+    pub hidden: bool,
+    pub dataset: Option<String>,
+    pub datasets: Option<HashMap<String, String>>,
     #[serde(default = "default_page_size")]
-    pub(crate) page_size: usize,
+    pub page_size: usize,
     #[serde(skip)]
-    pub(crate) single_page_page_size: usize,
+    pub single_page_page_size: usize,
     #[serde(rename = "desc")]
-    pub(crate) description: Option<String>,
+    pub description: Option<String>,
     #[serde(default = "default_render_table")]
-    pub(crate) render_table: Option<RenderTableSpecs>,
+    pub render_table: Option<RenderTableSpecs>,
     #[serde(default)]
-    pub(crate) render_plot: Option<RenderPlotSpec>,
+    pub render_plot: Option<RenderPlotSpec>,
     #[serde(default)]
-    pub(crate) render_html: Option<RenderHtmlSpec>,
+    pub render_html: Option<RenderHtmlSpec>,
     #[serde(default)]
-    pub(crate) render_img: Option<RenderImgSpec>,
+    pub render_img: Option<RenderImgSpec>,
     #[serde(default)]
-    pub(crate) max_in_memory_rows: Option<usize>,
+    pub max_in_memory_rows: Option<usize>,
     #[serde(default)]
-    pub(crate) spell: Option<SpellSpec>,
+    pub spell: Option<SpellSpec>,
 }
 
 impl ItemSpecs {
@@ -492,26 +492,26 @@ impl ItemSpecs {
 #[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct RenderTableSpecs {
+pub struct RenderTableSpecs {
     #[serde(default)]
-    pub(crate) columns: HashMap<String, RenderColumnSpec>,
+    pub columns: HashMap<String, RenderColumnSpec>,
     #[serde(default, rename = "add-columns")]
-    pub(crate) additional_columns: Option<HashMap<String, AdditionalColumnSpec>>,
+    pub additional_columns: Option<HashMap<String, AdditionalColumnSpec>>,
     #[serde(default)]
-    pub(crate) headers: Option<HashMap<u32, HeaderSpecs>>,
+    pub headers: Option<HashMap<u32, HeaderSpecs>>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct AdditionalColumnSpec {
+pub struct AdditionalColumnSpec {
     #[serde(default = "default_value_function")]
-    pub(crate) value: String,
+    pub value: String,
     #[serde(default)]
-    pub(crate) display_mode: DisplayMode,
+    pub display_mode: DisplayMode,
     #[serde(default)]
-    pub(crate) custom_plot: Option<CustomPlot>,
+    pub custom_plot: Option<CustomPlot>,
     #[serde(default)]
-    pub(crate) link_to_url: Option<LinkToUrlSpec>,
+    pub link_to_url: Option<LinkToUrlSpec>,
 }
 
 fn default_value_function() -> String {
@@ -521,15 +521,15 @@ fn default_value_function() -> String {
 #[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct HeaderSpecs {
+pub struct HeaderSpecs {
     #[serde(default)]
-    pub(crate) label: Option<String>,
+    pub label: Option<String>,
     #[serde(default)]
-    pub(crate) plot: Option<PlotSpec>,
+    pub plot: Option<PlotSpec>,
     #[serde(default)]
-    pub(crate) display_mode: HeaderDisplayMode,
+    pub display_mode: HeaderDisplayMode,
     #[serde(default)]
-    pub(crate) ellipsis: Option<u32>,
+    pub ellipsis: Option<u32>,
 }
 
 lazy_static! {
@@ -694,31 +694,31 @@ fn default_precision() -> u32 {
 #[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct RenderColumnSpec {
+pub struct RenderColumnSpec {
     #[serde(default)]
-    pub(crate) optional: Option<bool>,
+    pub optional: Option<bool>,
     #[serde(default)]
-    pub(crate) precision: Option<u32>,
+    pub precision: Option<u32>,
     #[serde(default)]
-    pub(crate) label: Option<String>,
+    pub label: Option<String>,
     #[serde(default)]
-    pub(crate) custom: Option<String>,
+    pub custom: Option<String>,
     #[serde(default)]
-    pub(crate) custom_path: Option<String>,
+    pub custom_path: Option<String>,
     #[serde(default)]
-    pub(crate) display_mode: Option<DisplayMode>,
+    pub display_mode: Option<DisplayMode>,
     #[serde(default)]
-    pub(crate) link_to_url: Option<LinkToUrlSpec>,
+    pub link_to_url: Option<LinkToUrlSpec>,
     #[serde(default)]
-    pub(crate) plot: Option<PlotSpec>,
+    pub plot: Option<PlotSpec>,
     #[serde(default)]
-    pub(crate) custom_plot: Option<CustomPlot>,
+    pub custom_plot: Option<CustomPlot>,
     #[serde(default)]
-    pub(crate) ellipsis: Option<u32>,
+    pub ellipsis: Option<u32>,
     #[serde(default)]
-    pub(crate) plot_view_legend: Option<bool>,
+    pub plot_view_legend: Option<bool>,
     #[serde(default)]
-    pub(crate) spell: Option<SpellSpec>,
+    pub spell: Option<SpellSpec>,
 }
 
 impl Default for RenderColumnSpec {
@@ -797,15 +797,15 @@ impl RenderColumnSpec {
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case")]
-pub(crate) struct LinkToUrlSpec {
+pub struct LinkToUrlSpec {
     #[serde(flatten)]
-    pub(crate) entries: HashMap<String, LinkToUrlSpecEntry>,
-    pub(crate) custom_content: Option<String>,
+    pub entries: HashMap<String, LinkToUrlSpecEntry>,
+    pub custom_content: Option<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct LinkToUrlSpecEntry {
+pub struct LinkToUrlSpecEntry {
     url: String,
     #[serde(default = "default_new_window")]
     new_window: bool,
@@ -817,7 +817,7 @@ fn default_new_window() -> bool {
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
-pub(crate) enum DisplayMode {
+pub enum DisplayMode {
     #[default]
     Normal,
     Detail,
@@ -827,7 +827,7 @@ pub(crate) enum DisplayMode {
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
-pub(crate) enum HeaderDisplayMode {
+pub enum HeaderDisplayMode {
     #[default]
     Normal,
     Hidden,
@@ -916,16 +916,16 @@ impl BarPlot {
 #[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct RenderPlotSpec {
+pub struct RenderPlotSpec {
     #[serde(default, rename = "spec")]
-    pub(crate) schema: Option<String>,
+    pub schema: Option<String>,
     #[serde(default, rename = "spec-path")]
-    pub(crate) schema_path: Option<String>,
+    pub schema_path: Option<String>,
 }
 
 impl RenderPlotSpec {
     /// Reads schema for RenderPlotSpec from path and saves it under the schema attribute
-    pub(crate) fn read_schema(&mut self) -> Result<()> {
+    pub fn read_schema(&mut self) -> Result<()> {
         if let Some(path) = self.schema_path.as_ref() {
             let mut file = File::open(path)?;
             let mut contents = String::new();
@@ -938,45 +938,45 @@ impl RenderPlotSpec {
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct RenderHtmlSpec {
-    pub(crate) script_path: String,
+pub struct RenderHtmlSpec {
+    pub script_path: String,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct RenderImgSpec {
-    pub(crate) path: String,
+pub struct RenderImgSpec {
+    pub path: String,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct LinkSpec {
+pub struct LinkSpec {
     #[serde(default)]
-    pub(crate) column: String,
+    pub column: String,
     #[serde(default)]
-    pub(crate) view: Option<String>,
+    pub view: Option<String>,
     #[serde(default)]
-    pub(crate) table_row: Option<String>,
+    pub table_row: Option<String>,
     #[serde(default)]
-    pub(crate) optional: bool,
+    pub optional: bool,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct CustomPlot {
+pub struct CustomPlot {
     #[serde(default, rename = "data")]
-    pub(crate) plot_data: String,
+    pub plot_data: String,
     #[serde(default, rename = "spec")]
-    pub(crate) schema: Option<String>,
+    pub schema: Option<String>,
     #[serde(default, rename = "spec-path")]
-    pub(crate) schema_path: Option<String>,
+    pub schema_path: Option<String>,
     #[serde(default)]
-    pub(crate) vega_controls: bool,
+    pub vega_controls: bool,
 }
 
 impl CustomPlot {
     /// Reads schema for CustomPlot from path and saves it under the schema attribute
-    pub(crate) fn read_schema(&mut self) -> Result<()> {
+    pub fn read_schema(&mut self) -> Result<()> {
         if let Some(path) = self.schema_path.as_ref() {
             let mut file = File::open(path)?;
             let mut contents = String::new();
@@ -990,32 +990,32 @@ impl CustomPlot {
 #[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct PlotSpec {
+pub struct PlotSpec {
     #[serde(rename = "ticks")]
-    pub(crate) tick_plot: Option<TickPlot>,
-    pub(crate) heatmap: Option<Heatmap>,
+    pub tick_plot: Option<TickPlot>,
+    pub heatmap: Option<Heatmap>,
     #[serde(rename = "bars")]
-    pub(crate) bar_plot: Option<BarPlot>,
+    pub bar_plot: Option<BarPlot>,
     #[serde(default)]
-    pub(crate) pills: Option<PillsSpec>,
+    pub pills: Option<PillsSpec>,
 }
 
 #[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct PillsSpec {
+pub struct PillsSpec {
     #[serde(default = "default_pill_separator")]
-    pub(crate) separator: String,
+    pub separator: String,
     #[serde(default)]
-    pub(crate) color_scheme: String,
+    pub color_scheme: String,
     #[serde(default, rename = "range")]
-    pub(crate) color_range: ColorRange,
+    pub color_range: ColorRange,
     #[serde(default)]
-    pub(crate) domain: Option<Vec<String>>,
+    pub domain: Option<Vec<String>>,
     #[serde(default)]
-    pub(crate) ellipsis: Option<u32>,
+    pub ellipsis: Option<u32>,
     #[serde(default)]
-    pub(crate) aux_domain_columns: AuxDomainColumns,
+    pub aux_domain_columns: AuxDomainColumns,
 }
 
 fn default_pill_separator() -> String {
@@ -1073,27 +1073,27 @@ impl PillsSpec {
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct TickPlot {
+pub struct TickPlot {
     #[serde(default, rename = "scale")]
-    pub(crate) scale_type: ScaleType,
+    pub scale_type: ScaleType,
     #[serde(default)]
-    pub(crate) domain: Option<Vec<f32>>,
+    pub domain: Option<Vec<f32>>,
     #[serde(default)]
-    pub(crate) aux_domain_columns: AuxDomainColumns,
+    pub aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
-    pub(crate) color: Option<ColorDefinition>,
+    pub color: Option<ColorDefinition>,
 }
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct ColorDefinition {
+pub struct ColorDefinition {
     #[serde(default, rename = "scale")]
-    pub(crate) scale_type: ScaleType,
+    pub scale_type: ScaleType,
     #[serde(default, rename = "range")]
-    pub(crate) color_range: ColorRange,
+    pub color_range: ColorRange,
     #[serde(default)]
-    pub(crate) domain: Option<Vec<String>>,
+    pub domain: Option<Vec<String>>,
     #[serde(default)]
-    pub(crate) domain_mid: Option<f32>,
+    pub domain_mid: Option<f32>,
 }
 
 impl ColorDefinition {
@@ -1109,29 +1109,29 @@ fn default_clamp() -> bool {
 #[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct Heatmap {
+pub struct Heatmap {
     #[serde(default, rename = "type")]
-    pub(crate) vega_type: Option<VegaType>,
+    pub vega_type: Option<VegaType>,
     #[serde(default, rename = "scale")]
-    pub(crate) scale_type: ScaleType,
+    pub scale_type: ScaleType,
     #[serde(default = "default_clamp")]
-    pub(crate) clamp: bool,
+    pub clamp: bool,
     #[serde(default)]
-    pub(crate) color_scheme: String,
+    pub color_scheme: String,
     #[serde(default, rename = "range")]
-    pub(crate) color_range: ColorRange,
+    pub color_range: ColorRange,
     #[serde(default)]
-    pub(crate) domain: Option<Vec<String>>,
+    pub domain: Option<Vec<String>>,
     #[serde(default)]
-    pub(crate) domain_mid: Option<f32>,
+    pub domain_mid: Option<f32>,
     #[serde(default)]
-    pub(crate) aux_domain_columns: AuxDomainColumns,
+    pub aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
-    pub(crate) custom_content: Option<String>,
+    pub custom_content: Option<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
-pub(crate) struct ColorRange(pub(crate) Vec<Color>);
+pub struct ColorRange(pub Vec<Color>);
 
 impl ColorRange {
     fn preprocess(&mut self) -> Result<()> {
@@ -1140,7 +1140,7 @@ impl ColorRange {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-pub(crate) struct Color(pub(crate) String);
+pub struct Color(pub String);
 
 impl Color {
     fn preprocess(&mut self) -> Result<()> {
@@ -1176,20 +1176,20 @@ lazy_static! {
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct BarPlot {
+pub struct BarPlot {
     #[serde(default, rename = "scale")]
-    pub(crate) scale_type: ScaleType,
+    pub scale_type: ScaleType,
     #[serde(default)]
-    pub(crate) domain: Option<Vec<f32>>,
+    pub domain: Option<Vec<f32>>,
     #[serde(default)]
-    pub(crate) aux_domain_columns: AuxDomainColumns,
+    pub aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
-    pub(crate) color: Option<ColorDefinition>,
+    pub color: Option<ColorDefinition>,
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
-pub(crate) enum ScaleType {
+pub enum ScaleType {
     Linear,
     Pow,
     Sqrt,
@@ -1207,7 +1207,7 @@ pub(crate) enum ScaleType {
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
-pub(crate) enum VegaType {
+pub enum VegaType {
     Nominal,
     Ordinal,
     Quantitative,
@@ -1215,7 +1215,7 @@ pub(crate) enum VegaType {
 }
 
 impl ScaleType {
-    pub(crate) fn is_quantitative(&self) -> bool {
+    pub fn is_quantitative(&self) -> bool {
         matches!(
             self,
             ScaleType::Linear
@@ -1226,7 +1226,7 @@ impl ScaleType {
         )
     }
 
-    pub(crate) fn preprocess(&mut self) {
+    pub fn preprocess(&mut self) {
         if self == &ScaleType::Nominal {
             *self = ScaleType::Ordinal;
         }
@@ -1234,7 +1234,7 @@ impl ScaleType {
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
-pub struct AuxDomainColumns(pub(crate) Option<Vec<String>>);
+pub struct AuxDomainColumns(pub Option<Vec<String>>);
 
 impl AuxDomainColumns {
     fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
