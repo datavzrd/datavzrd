@@ -20,7 +20,6 @@ use format_serde_error::SerdeError;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_with::skip_serializing_none;
-use std::borrow::BorrowMut;
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::fs;
@@ -573,11 +572,6 @@ impl ItemSpecs {
             self.page_size = *rows;
         }
         let headers = dataset.reader()?.headers()?;
-        if let Some(render_table) = self.render_table.borrow_mut() {
-            for (title, render_column_specs) in render_table.columns.iter_mut() {
-                render_column_specs.preprocess(dataset, title)?;
-            }
-        }
         for (key, render_column_specs) in self.render_table.as_ref().unwrap().columns.iter() {
             let mut apply_indexed_config = |index: usize| {
                 match headers.get(index) {
@@ -639,6 +633,11 @@ impl ItemSpecs {
                     column: key.to_string(),
                     table_path: dataset.path.clone(),
                 })
+            }
+        }
+        if self.render_table.is_some() {
+            for (title, render_column_specs) in indexed_keys.iter_mut() {
+                render_column_specs.preprocess(dataset, title)?;
             }
         }
         self.render_table = Some(RenderTableSpecs {
