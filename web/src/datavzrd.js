@@ -1284,11 +1284,13 @@ export function load() {
             // Populate the select with columns
             $select.empty();
             config.displayed_columns.forEach(col => {
+              if (config.pinned_columns.includes(col)) {
                 if (config.available_columns.includes(col)) {
-                    $select.append(`<option value="${col}">${col}</option>`);
+                  $select.append(`<option value="${col}">${col}</option>`);
                 } else {
-                    $select.append(`<option value="${col}" selected>${col}</option>`);
+                  $select.append(`<option value="${col}" selected>${col}</option>`);
                 }
+              }
             });
 
             $select.selectpicker('refresh'); // Required after dynamic population
