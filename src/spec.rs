@@ -823,6 +823,7 @@ pub enum DisplayMode {
     Detail,
     Hidden,
     Available,
+    Pinned,
 }
 
 #[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
