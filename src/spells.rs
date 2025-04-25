@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
+use std::sync::Mutex;
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
@@ -21,6 +22,10 @@ pub struct SpellSpec {
 
 lazy_static! {
     static ref SPELL_RE: Regex = Regex::new(r"^(v\d+\.\d+\.\d+)/([^/]+)/(.+)$").unwrap();
+}
+
+lazy_static! {
+    static ref SPELL_CACHE: Mutex<HashMap<String, String>> = Mutex::new(HashMap::new());
 }
 
 impl SpellSpec {
@@ -79,7 +84,14 @@ pub fn fetch_spell(input: &str) -> Result<String> {
         let version = captures.get(1).unwrap().as_str();
         let category = captures.get(2).unwrap().as_str();
         let spell = captures.get(3).unwrap().as_str();
-        fetch_from_url(&format!("https://github.com/datavzrd/datavzrd-spells/raw/{version}/{category}/{spell}/spell.yaml"))
+        let url = format!("https://github.com/datavzrd/datavzrd-spells/raw/{version}/{category}/{spell}/spell.yaml");
+        let mut cache = SPELL_CACHE.lock().unwrap();
+        if let Some(cached_spell) = cache.get(&url) {
+            return Ok(cached_spell.clone());
+        }
+        let fetched_spell = fetch_from_url(&url)?;
+        cache.insert(url.clone(), fetched_spell.clone());
+        Ok(fetched_spell)
     } else if input.starts_with("http://") || input.starts_with("https://") {
         fetch_from_url(input)
     } else {
@@ -204,5 +216,19 @@ mod tests {
         let relative_path = "../README.md".to_string();
         let result = fetch_content(&url, &relative_path).unwrap();
         assert!(result.contains("A tool to create visual and interactive HTML reports from collections of CSV/TSV tables."));
+    }
+
+    #[test]
+    fn test_spell_cache_insertion() {
+        SPELL_CACHE.lock().unwrap().clear();
+        let spell_url = "v1.3.0/stats/p-value";
+
+        let result = fetch_spell(spell_url);
+        assert!(result.is_ok());
+
+        let cache = SPELL_CACHE.lock().unwrap();
+        let expected_url =
+            "https://github.com/datavzrd/datavzrd-spells/raw/v1.3.0/stats/p-value/spell.yaml";
+        assert!(cache.contains_key(expected_url));
     }
 }
