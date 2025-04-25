@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.55.0](https://github.com/datavzrd/datavzrd/compare/v2.54.0...v2.55.0) (2025-04-25)
+
+
+### Features
+
+* Add new display-mode for pinned columns ([#947](https://github.com/datavzrd/datavzrd/issues/947)) ([0fc8b75](https://github.com/datavzrd/datavzrd/commit/0fc8b75d9748228487e491282bdd8ec08a144cc8))
+
 ## [2.54.0](https://github.com/datavzrd/datavzrd/compare/v2.53.1...v2.54.0) (2025-04-23)
 
 
