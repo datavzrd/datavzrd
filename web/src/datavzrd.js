@@ -1284,11 +1284,13 @@ export function load() {
             // Populate the select with columns
             $select.empty();
             config.displayed_columns.forEach(col => {
+              if (!config.pinned_columns.includes(col)) {
                 if (config.available_columns.includes(col)) {
-                    $select.append(`<option value="${col}">${col}</option>`);
+                  $select.append(`<option value="${col}">${col}</option>`);
                 } else {
-                    $select.append(`<option value="${col}" selected>${col}</option>`);
+                  $select.append(`<option value="${col}" selected>${col}</option>`);
                 }
+              }
             });
 
             $select.selectpicker('refresh'); // Required after dynamic population
@@ -1299,10 +1301,11 @@ export function load() {
             $select.on('changed.bs.select', function () {
                 const selectedCols = new Set($(this).val());
                 const displayedCols = new Set(config.displayed_columns);
+                const pinnedCols = new Set(config.pinned_columns);
                 const hiddenCols = config.to_be_hidden;
 
                 // Columns to hide: in displayed but not selected and not already hidden
-                const toHide = [...displayedCols].filter(col => !selectedCols.has(col) && !hiddenCols.has(col));
+                const toHide = [...displayedCols].filter(col => !selectedCols.has(col) && !hiddenCols.has(col) && !pinnedCols.has(col));
 
                 // Columns to unhide: in hidden but now selected
                 const toUnhide = [...hiddenCols].filter(col => selectedCols.has(col));
@@ -1314,6 +1317,8 @@ export function load() {
                 for (const col of toUnhide) {
                     unhide(columnIdMap[col], columnIndexMap);
                 }
+
+                $select.selectpicker('refresh');
             });
         });
 

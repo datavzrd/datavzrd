@@ -617,6 +617,7 @@ struct JavascriptConfig {
     columns: Vec<String>,
     displayed_columns: Vec<String>,
     available_columns: Vec<String>,
+    pinned_columns: Vec<String>,
     hidden_columns: Vec<String>,
     displayed_numeric_columns: Vec<String>,
     tick_titles: Vec<String>,
@@ -718,8 +719,9 @@ impl JavascriptConfig {
             is_single_page,
             page_size,
             columns: columns.iter().map(|c| c.to_string()).chain(additional_columns.as_ref().unwrap_or(&HashMap::new()).keys().map(|c| c.to_string())).collect(),
-            displayed_columns: column_display_mode_filter(&[DisplayMode::Normal, DisplayMode::Available]),
+            displayed_columns: column_display_mode_filter(&[DisplayMode::Normal, DisplayMode::Available, DisplayMode::Pinned]),
             available_columns: column_display_mode_filter(&[DisplayMode::Available]),
+            pinned_columns: column_display_mode_filter(&[DisplayMode::Pinned]),
             hidden_columns: column_display_mode_filter(&[DisplayMode::Hidden]),
             displayed_numeric_columns: classify_table(dataset)
                 .unwrap()
