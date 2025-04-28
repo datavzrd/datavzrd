@@ -1016,6 +1016,8 @@ pub struct PillsSpec {
     #[serde(default)]
     pub ellipsis: Option<u32>,
     #[serde(default)]
+    pub merge: bool,
+    #[serde(default)]
     pub aux_domain_columns: AuxDomainColumns,
 }
 
