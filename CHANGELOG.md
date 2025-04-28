@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.56.0](https://github.com/datavzrd/datavzrd/compare/v2.55.0...v2.56.0) (2025-04-28)
+
+
+### Features
+
+* Add support for merged pill rendering ([#949](https://github.com/datavzrd/datavzrd/issues/949)) ([18f75b1](https://github.com/datavzrd/datavzrd/commit/18f75b16df21e32169acd41f99427a4c394a82f9))
+
 ## [2.55.0](https://github.com/datavzrd/datavzrd/compare/v2.54.0...v2.55.0) (2025-04-25)
 
 
