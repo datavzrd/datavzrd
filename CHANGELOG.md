@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.56.1](https://github.com/datavzrd/datavzrd/compare/v2.56.0...v2.56.1) (2025-05-07)
+
+
+### Bug Fixes
+
+* Add retry logic to fetch_from_url with exponential backoff ([2f0e454](https://github.com/datavzrd/datavzrd/commit/2f0e454cd99069aedb1aef70aa0ecb1613476e1e))
+
 ## [2.56.0](https://github.com/datavzrd/datavzrd/compare/v2.55.0...v2.56.0) (2025-04-28)
 
 
