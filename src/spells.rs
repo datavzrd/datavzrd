@@ -1,4 +1,5 @@
 use crate::spec::{ItemSpecs, RenderColumnSpec};
+use anyhow::anyhow;
 use anyhow::Result;
 use fancy_regex::Regex;
 use lazy_static::lazy_static;
@@ -11,6 +12,7 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 use std::sync::Mutex;
+use std::{thread::sleep, time::Duration};
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
@@ -27,6 +29,8 @@ lazy_static! {
 lazy_static! {
     static ref SPELL_CACHE: Mutex<HashMap<String, String>> = Mutex::new(HashMap::new());
 }
+
+const MAX_RETRIES: u32 = 3;
 
 impl SpellSpec {
     pub(crate) fn render_column_spec(&self) -> Result<RenderColumnSpec> {
@@ -101,8 +105,16 @@ pub fn fetch_spell(input: &str) -> Result<String> {
 
 /// Fetches content from a URL.
 fn fetch_from_url(url: &str) -> Result<String> {
-    let response = get(url)?.text()?;
-    Ok(response)
+    for attempt in 1..=MAX_RETRIES {
+        match get(url).and_then(|r| r.text()) {
+            Ok(text) => return Ok(text),
+            Err(_) if attempt < MAX_RETRIES => {
+                sleep(Duration::from_millis(100 * attempt as u64));
+            }
+            Err(e) => return Err(anyhow!("Failed after {} attempts: {}", MAX_RETRIES, e)),
+        }
+    }
+    unreachable!()
 }
 
 /// Fetches content from a local file.
