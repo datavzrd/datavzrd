@@ -14,7 +14,7 @@ export function render_html_contents() {
                 </div>
             </div>
         </div>`;
-    if (!config.description) {
+    if (!config.description && !config.heatmaps.some(h => h.heatmap.legend)) {
         description_html = "";
     }
     let inner_pagination_html = "";

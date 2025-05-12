@@ -1027,6 +1027,7 @@ impl JavascriptHeatmapConfig {
             domain_mid: heatmap.domain_mid,
             aux_domain_columns: heatmap.aux_domain_columns.clone(),
             custom_content: js_function_name,
+            legend: heatmap.legend.clone(),
         };
         Self {
             title: title.clone(),
