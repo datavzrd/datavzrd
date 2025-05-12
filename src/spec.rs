@@ -1131,6 +1131,13 @@ pub struct Heatmap {
     pub aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
     pub custom_content: Option<String>,
+    #[serde(default)]
+    pub legend: Option<LegendSpec>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+pub struct LegendSpec {
+    pub title: String,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
@@ -1617,6 +1624,7 @@ mod tests {
                                 domain_mid: None,
                                 aux_domain_columns: Default::default(),
                                 custom_content: None,
+                                legend: None,
                             }),
                             bar_plot: None,
                             pills: None,

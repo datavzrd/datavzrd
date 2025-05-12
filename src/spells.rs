@@ -209,6 +209,7 @@ mod tests {
                     domain_mid: None,
                     aux_domain_columns: Default::default(),
                     custom_content: None,
+                    legend: None,
                 }),
                 bar_plot: None,
                 pills: None,

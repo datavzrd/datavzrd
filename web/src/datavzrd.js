@@ -34,7 +34,11 @@ function renderMarkdownDescription() {
         ],
     });
     converter.setFlavor('github');
-    innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
+    if (innerDescription.dataset.markdown != "null") {
+      innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
+    }
+    var legends = renderHeatmapLegends(config.heatmaps);
+    innerDescription.innerHTML += legends;
     if (innerDescription.offsetHeight < window.screen.height/3) {
         $('#table-container').css('padding-top', innerDescription.offsetHeight - 25);
         $('#vis-container').css('padding-top', innerDescription.offsetHeight + 50);
@@ -58,6 +62,68 @@ function renderMarkdownTableDescriptions() {
     });
 }
 
+function renderHeatmapLegends(heatmaps) {
+    const legends = {};
+
+    for (const h of heatmaps) {
+        const { legend } = h.heatmap;
+        if (!legend || legends[legend.title] || !(legend.domain || h.heatmap.domain)?.length) continue;
+
+        const legendTitle = legend.title;
+        const domain = legend.domain || h.heatmap.domain;
+
+        const scale = datavzrdScale(h);
+        const scaleType = h.heatmap.scale;
+
+        if (scaleType === "ordinal") {
+            const legendItems = domain.map(val => {
+                const color = scale(val);
+                return `<span style="display:inline-flex;align-items:center;margin-right:10px;">
+                    <span style="width:10px;height:10px;border-radius:50%;background-color:${color};display:inline-block;margin-right:5px;"></span>
+                    ${val}
+                </span>`;
+            });
+            legends[legendTitle] = `<div><strong>${legendTitle}</strong>: ${legendItems.join(' ')}</div>`;
+        } else {
+            const gradientHTML = generateSVGGradientLegend(scale, domain, `grad-${legendTitle.replace(/\s+/g, '-')}`);
+            legends[legendTitle] = `
+                <div style="display:flex;align-items:center;gap:10px;margin:5px 0;">
+                    <div style="font-weight:bold;">${legendTitle}:</div>
+                    ${gradientHTML}
+                </div>`;
+
+        }
+    }
+
+    return Object.values(legends).join('<br>');
+}
+
+function generateSVGGradientLegend(scale, domain, legendId) {
+    const stops = domain.map((val, i) => {
+        const offset = (i / (domain.length - 1)) * 100;
+        const color = scale(val);
+        return `<stop offset="${offset}%" stop-color="${color}" />`;
+    }).join('\n');
+
+    const min = domain[0];
+    const max = domain[domain.length - 1];
+
+    return `
+        <div style="display:flex;flex-direction:column;">
+            <svg width="100%" height="10" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="${legendId}" x1="0%" y1="0%" x2="100%" y2="0%">
+                        ${stops}
+                    </linearGradient>
+                </defs>
+                <rect x="0" y="0" width="100%" height="10" fill="url(#${legendId})" stroke="#ccc" rx="2" ry="2" />
+            </svg>
+            <div style="display:flex;justify-content:space-between;font-size:smaller;margin-top:2px;">
+                <span>${min}</span>
+                <span>${max}</span>
+            </div>
+        </div>`;
+}
 
 export function downloadCSV() {
     var data = $('#table').bootstrapTable('getData');
@@ -90,8 +156,6 @@ export function downloadCSV() {
     document.body.appendChild(link);
     link.click();
 }
-
-
 
 function precision_formatter(precision, value) {
     if (value == "") {
