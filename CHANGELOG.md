@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.57.0](https://github.com/datavzrd/datavzrd/compare/v2.56.1...v2.57.0) (2025-05-12)
+
+
+### Features
+
+* Add support for heatmap legends in configuration and rendering ([#956](https://github.com/datavzrd/datavzrd/issues/956)) ([e340ef2](https://github.com/datavzrd/datavzrd/commit/e340ef2ece3a91d75c4f41c24a0b38c444c660c5))
+
 ## [2.56.1](https://github.com/datavzrd/datavzrd/compare/v2.56.0...v2.56.1) (2025-05-07)
 
 
