@@ -46,6 +46,10 @@ pub struct Datavzrd {
 #[derive(Subcommand, Debug)]
 pub enum Command {
     /// Publish a generated report to GitHub Pages.
+    ///
+    /// Example: `datavzrd publish --repo-name my-awesome-report --report-path ./output --org my-awesome-org --entry index.html`
+    ///
+    /// This will create a repository under https://my-awesome-org.github.io/my-awesome-report/
     Publish {
         /// GitHub repository name to publish to
         #[arg(short = 'n', long)]
