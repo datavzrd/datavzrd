@@ -45,7 +45,7 @@ pub struct Datavzrd {
 
 #[derive(Subcommand, Debug)]
 pub enum Command {
-    /// Publish a generated report to GitHub Pages.
+    /// Allows to publish a generated report to GitHub Pages. This requires the user to have gh (GitHub CLI) installed and authenticated (`gh auth login`).
     ///
     /// Example: `datavzrd publish --repo-name my-awesome-report --report-path ./output --org my-awesome-org --entry index.html`
     ///
