@@ -13,7 +13,6 @@ use anyhow::{bail, Context};
 use derefable::Derefable;
 use fancy_regex::Regex;
 use itertools::Itertools;
-use lazy_static::lazy_static;
 
 use crate::spells::SpellSpec;
 use format_serde_error::SerdeError;
@@ -27,6 +26,7 @@ use std::fs::File;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
+use std::sync::LazyLock;
 use thiserror::Error;
 
 #[skip_serializing_none]
@@ -532,17 +532,14 @@ pub struct HeaderSpecs {
     pub ellipsis: Option<u32>,
 }
 
-lazy_static! {
-    static ref INDEX_RE: Regex = Regex::new(r"^index\(([0-9]+)\)$").unwrap();
-}
+static INDEX_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^index\(([0-9]+)\)$").unwrap());
 
-lazy_static! {
-    static ref REGEX_RE: Regex = Regex::new(r#"^regex\((?:'|")(.+)(?:'|")\)$"#).unwrap();
-}
+static REGEX_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r#"^regex\((?:'|")(.+)(?:'|")\)$"#).unwrap());
 
-lazy_static! {
-    static ref RANGE_RE: Regex = Regex::new(r"^range\(([0-9]+,[0-9]+)\)$").unwrap();
-}
+static RANGE_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^range\(([0-9]+,[0-9]+)\)$").unwrap());
 
 fn get_first_match_group(regex: &Regex, key: &str) -> String {
     regex
@@ -1161,28 +1158,26 @@ impl Color {
     }
 }
 
-lazy_static! {
-    static ref COLOR_MAPPING: HashMap<&'static str, &'static str> = {
-        let mut m = HashMap::new();
-        m.insert("red", "#d62728");
-        m.insert("blue", "#1f77b4");
-        m.insert("yellow", "#eeca3b");
-        m.insert("green", "#2ca02c");
-        m.insert("purple", "#9467bd");
-        m.insert("orange", "#ff7f0e");
-        m.insert("pink", "#e377c2");
-        m.insert("black", "#000000");
-        m.insert("white", "#ffffff");
-        m.insert("gray", "#7f7f7f");
-        m.insert("grey", "#7f7f7f");
-        m.insert("brown", "#8c564b");
-        m.insert("olive", "#bcbd22");
-        m.insert("cyan", "#17becf");
-        m.insert("lime", "#98df8a");
-        m.insert("magenta", "#ff9896");
-        m
-    };
-}
+static COLOR_MAPPING: LazyLock<HashMap<&'static str, &'static str>> = LazyLock::new(|| {
+    let mut m = HashMap::new();
+    m.insert("red", "#d62728");
+    m.insert("blue", "#1f77b4");
+    m.insert("yellow", "#eeca3b");
+    m.insert("green", "#2ca02c");
+    m.insert("purple", "#9467bd");
+    m.insert("orange", "#ff7f0e");
+    m.insert("pink", "#e377c2");
+    m.insert("black", "#000000");
+    m.insert("white", "#ffffff");
+    m.insert("gray", "#7f7f7f");
+    m.insert("grey", "#7f7f7f");
+    m.insert("brown", "#8c564b");
+    m.insert("olive", "#bcbd22");
+    m.insert("cyan", "#17becf");
+    m.insert("lime", "#98df8a");
+    m.insert("magenta", "#ff9896");
+    m
+});
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
