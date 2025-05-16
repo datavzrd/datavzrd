@@ -2,7 +2,6 @@ use crate::spec::{ItemSpecs, RenderColumnSpec};
 use anyhow::anyhow;
 use anyhow::Result;
 use fancy_regex::Regex;
-use lazy_static::lazy_static;
 use pyo3::prelude::*;
 use pyo3::types::IntoPyDict;
 use pyo3::types::PyModule;
@@ -11,6 +10,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
+use std::sync::LazyLock;
 use std::sync::Mutex;
 use std::{thread::sleep, time::Duration};
 
@@ -22,13 +22,11 @@ pub struct SpellSpec {
     pub with: HashMap<String, String>,
 }
 
-lazy_static! {
-    static ref SPELL_RE: Regex = Regex::new(r"^(v\d+\.\d+\.\d+)/([^/]+)/(.+)$").unwrap();
-}
+static SPELL_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^(v\d+\.\d+\.\d+)/([^/]+)/(.+)$").unwrap());
 
-lazy_static! {
-    static ref SPELL_CACHE: Mutex<HashMap<String, String>> = Mutex::new(HashMap::new());
-}
+static SPELL_CACHE: LazyLock<Mutex<HashMap<String, String>>> =
+    LazyLock::new(|| Mutex::new(HashMap::new()));
 
 const MAX_RETRIES: u32 = 3;
 
