@@ -532,8 +532,7 @@ pub struct HeaderSpecs {
     pub ellipsis: Option<u32>,
 }
 
-static INDEX_RE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^index\(([0-9]+)\)$").unwrap());
+static INDEX_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^index\(([0-9]+)\)$").unwrap());
 
 static REGEX_RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r#"^regex\((?:'|")(.+)(?:'|")\)$"#).unwrap());
