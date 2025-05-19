@@ -590,7 +590,6 @@ dependencies = [
  "fs_extra",
  "itertools 0.14.0",
  "jsonm",
- "lazy_static",
  "log",
  "lz-str",
  "md5",
