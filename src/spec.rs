@@ -248,7 +248,7 @@ impl ItemsSpec {
                                 if let Some(domain) = domain {
                                     let mut reader = dataset.reader()?;
                                     let colum_pos = column_position(column, dataset)?;
-                                    for record in reader.records()? {
+                                    for record in reader.records()?.skip(dataset.header_rows - 1) {
                                         let value = record.get(colum_pos).unwrap();
                                         if let Ok(value) = value.parse::<f32>() {
                                             if (value < domain[0]
