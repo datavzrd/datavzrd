@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.57.1](https://github.com/datavzrd/datavzrd/compare/v2.57.0...v2.57.1) (2025-05-22)
+
+
+### Bug Fixes
+
+* Allow legend definition for header definitions ([#962](https://github.com/datavzrd/datavzrd/issues/962)) ([a1798a8](https://github.com/datavzrd/datavzrd/commit/a1798a8070368b71b909891b436ddd0e7619dbb5))
+
 ## [2.57.0](https://github.com/datavzrd/datavzrd/compare/v2.56.1...v2.57.0) (2025-05-12)
 
 
