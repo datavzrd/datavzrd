@@ -37,7 +37,35 @@ function renderMarkdownDescription() {
     if (innerDescription.dataset.markdown != "null") {
       innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
     }
-    var legends = renderHeatmapLegends(config.heatmaps);
+    var heatmaps = config.heatmaps;
+    if (header_config.heatmaps) {
+      for (const e of header_config.heatmaps) {
+        var domain = domain = [
+          ...new Set(
+            header_config.headers
+              .filter(d => d.row === e.row)
+              .flatMap(d => Object.values(d.header))
+          )
+        ];
+        if (e.heatmap.scale !== "ordinal") {
+          const numericDomain = domain
+              .map(parseFloat)
+              .filter(n => !Number.isNaN(n));
+          domain = [
+            Math.min(...numericDomain),
+            Math.max(...numericDomain)
+          ];
+        }
+        if (!e.heatmap.domain) {
+          e.heatmap.domain = domain;
+        }
+        heatmaps.push({
+          "heatmap": e.heatmap,
+          "domain": domain,
+        });
+      }
+    }
+    var legends = renderHeatmapLegends(heatmaps);
     innerDescription.innerHTML += legends;
     if (innerDescription.offsetHeight < window.screen.height/3) {
         $('#table-container').css('padding-top', innerDescription.offsetHeight - 25);
