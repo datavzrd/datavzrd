@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.57.2](https://github.com/datavzrd/datavzrd/compare/v2.57.1...v2.57.2) (2025-05-28)
+
+
+### Bug Fixes
+
+* Fix hide icon not working ([5ce8fd0](https://github.com/datavzrd/datavzrd/commit/5ce8fd01b8e8de908e4a72a31bc13327dfb68e79))
+* Fix plot rendering ([24c99f0](https://github.com/datavzrd/datavzrd/commit/24c99f064f0a49a628403301171d28e836645edb))
+
 ## [2.57.1](https://github.com/datavzrd/datavzrd/compare/v2.57.0...v2.57.1) (2025-05-22)
 
 
