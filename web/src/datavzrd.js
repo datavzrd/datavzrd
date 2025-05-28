@@ -22,7 +22,7 @@ let LINE_NUMBERS = false;
 
 let VEGA_EMBED_OPTIONS = { 'renderer': 'svg', 'actions': false };
 
-function renderMarkdownDescription() {
+function renderMarkdownDescription(is_plot_view) {
     var innerDescription = document.getElementById('innerDescription');
     const converter = new showdown.Converter({
         extensions: [
@@ -37,36 +37,38 @@ function renderMarkdownDescription() {
     if (innerDescription.dataset.markdown != "null") {
       innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
     }
-    var heatmaps = config.heatmaps;
-    if (header_config.heatmaps) {
-      for (const e of header_config.heatmaps) {
-        var domain = domain = [
-          ...new Set(
-            header_config.headers
-              .filter(d => d.row === e.row)
-              .flatMap(d => Object.values(d.header))
-          )
-        ];
-        if (e.heatmap.scale !== "ordinal") {
-          const numericDomain = domain
-              .map(parseFloat)
-              .filter(n => !Number.isNaN(n));
-          domain = [
-            Math.min(...numericDomain),
-            Math.max(...numericDomain)
+    if (!is_plot_view) {
+      var heatmaps = config.heatmaps;
+      if (header_config.heatmaps) {
+        for (const e of header_config.heatmaps) {
+          var domain = domain = [
+            ...new Set(
+              header_config.headers
+                .filter(d => d.row === e.row)
+                .flatMap(d => Object.values(d.header))
+            )
           ];
+          if (e.heatmap.scale !== "ordinal") {
+            const numericDomain = domain
+                .map(parseFloat)
+                .filter(n => !Number.isNaN(n));
+            domain = [
+              Math.min(...numericDomain),
+              Math.max(...numericDomain)
+            ];
+          }
+          if (!e.heatmap.domain) {
+            e.heatmap.domain = domain;
+          }
+          heatmaps.push({
+            "heatmap": e.heatmap,
+            "domain": domain,
+          });
         }
-        if (!e.heatmap.domain) {
-          e.heatmap.domain = domain;
-        }
-        heatmaps.push({
-          "heatmap": e.heatmap,
-          "domain": domain,
-        });
       }
+      var legends = renderHeatmapLegends(heatmaps);
+      innerDescription.innerHTML += legends;
     }
-    var legends = renderHeatmapLegends(heatmaps);
-    innerDescription.innerHTML += legends;
     if (innerDescription.offsetHeight < window.screen.height/3) {
         $('#table-container').css('padding-top', innerDescription.offsetHeight - 25);
         $('#vis-container').css('padding-top', innerDescription.offsetHeight + 50);
@@ -820,7 +822,7 @@ export function load() {
             window.dispatchEvent(new Event('resize'));
         });
         if ($("#collapseDescription").length > 0) {
-            renderMarkdownDescription();
+            renderMarkdownDescription(false);
         }
 
         let decompressed = decompress(data);
@@ -1076,7 +1078,7 @@ export function load() {
             }
         })
 
-        $("#markdown-btn").click(function() { renderMarkdownDescription(); });
+        $("#markdown-btn").click(function() { renderMarkdownDescription(false); });
 
         $( ".btn-sm" ).click(function() {
             var col = $(this).data( "col" );
@@ -1483,9 +1485,9 @@ export function compress_data(data) {
 }
 
 export function load_plot(specs, data, multiple_datasets, resize) {
-    $("#markdown-btn").click(function() { renderMarkdownDescription(); });
+    $("#markdown-btn").click(function() { renderMarkdownDescription(true); });
     if ($("#collapseDescription").length > 0) {
-        renderMarkdownDescription();
+        renderMarkdownDescription(true);
     }
     if (multiple_datasets) {
         specs.datasets = {};
