@@ -1131,7 +1131,8 @@ export function load() {
                         "axis": {
                             "title": null,
                             "orient": "top",
-                            "labelFontWeight": "lighter"
+                            "labelFontWeight": "lighter",
+                            "labelExpr": "datum.value"
                         }
                     },
                     "color": {"condition": {"param": "selection", "value": "#0275d8"}, "value": "grey"}
