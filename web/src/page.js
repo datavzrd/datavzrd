@@ -279,7 +279,7 @@ export function render_landing_page() {
     let landing_page = `
         <div class="container mt-4" style="height: 85vh; overflow-y: auto;">
             <h1>${name}</h1>
-            <table class="table">
+            <table class="table" id="landing-table">
                 <thead class="thead">
                     <tr>
                         <th>View</th>

@@ -381,3 +381,28 @@ footer {
     cursor: pointer;
     color: grey;
 }
+
+#landing-table h1 {
+  font-weight: 900;
+  font-size: inherit;
+}
+
+#landing-table h2 {
+  font-weight: 800;
+  font-size: inherit;
+}
+
+#landing-table h3 {
+  font-weight: 700;
+  font-size: inherit;
+}
+
+#landing-table h4 {
+  font-weight: 600;
+  font-size: inherit;
+}
+
+#landing-table h5 {
+  font-weight: 500;
+  font-size: inherit;
+}
