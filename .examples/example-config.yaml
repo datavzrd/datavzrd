@@ -22,7 +22,7 @@ views:
   oscars:
     dataset: oscars
     desc: |
-      ### All winning oscars beginning in the year 1929.
+      **All winning oscars beginning in the year 1929.**
       This table contains *all* winning oscars for best actress and best actor.
     page-size: 25
     render-table:
@@ -80,8 +80,8 @@ views:
   oscar-plot:
     dataset: oscars
     desc: |
-      ## My beautiful oscar scatter plot
-      *So many great actors and actresses*
+      **My beautiful oscar scatter plot**
+      So many great actors and actresses
     render-plot:
       spec-path: ".examples/specs/oscars.vl.json"
   movies:
