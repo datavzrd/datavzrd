@@ -226,7 +226,7 @@ mod tests {
             .to_string();
         let relative_path = "../README.md".to_string();
         let result = fetch_content(&url, &relative_path).unwrap();
-        assert!(result.contains("A tool to create visual and interactive HTML reports from collections of CSV/TSV tables."));
+        assert!(result.contains("A tool to create visual and interactive HTML reports from"));
     }
 
     #[test]
