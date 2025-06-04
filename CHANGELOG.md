@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.58.0](https://github.com/datavzrd/datavzrd/compare/v2.57.2...v2.58.0) (2025-06-04)
+
+
+### Features
+
+* Support parquet datasets via readervzrd 0.2 ([f61733b](https://github.com/datavzrd/datavzrd/commit/f61733b771b5f43d45956fece52da3ad7405d2d3))
+
+
+### Bug Fixes
+
+* Use formatted axis labels for brush plots ([df88962](https://github.com/datavzrd/datavzrd/commit/df88962a24eca62bed945ee3201a4d2953b6c6ed))
+
 ## [2.57.2](https://github.com/datavzrd/datavzrd/compare/v2.57.1...v2.57.2) (2025-05-28)
 
 
