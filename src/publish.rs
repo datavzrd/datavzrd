@@ -141,10 +141,10 @@ impl Repository {
                         depth: 0,
                     },
                 )
-                .context(format!("Failed to copy directory: {:?}", entry_path))?;
+                .context(format!("Failed to copy directory: {entry_path:?}"))?;
             } else {
                 fs::copy(&entry_path, &destination_path)
-                    .context(format!("Failed to copy file: {:?}", entry_path))?;
+                    .context(format!("Failed to copy file: {entry_path:?}"))?;
             }
         }
 

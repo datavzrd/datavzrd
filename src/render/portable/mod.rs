@@ -748,7 +748,7 @@ impl JavascriptConfig {
                     )
                 })
                 .chain(
-            additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, _)| (k.to_owned(), JavascriptColumnConfig {
+            additional_columns.as_ref().unwrap_or(&HashMap::new()).keys().map(|k| (k.to_owned(), JavascriptColumnConfig {
                 label: None,
                 is_float: false,
                 precision: 0
