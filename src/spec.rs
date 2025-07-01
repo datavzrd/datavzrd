@@ -1037,10 +1037,7 @@ impl PillsSpec {
                 .iter()
                 .flat_map(|column| {
                     let index = column_position(column, dataset).unwrap_or_else(|_| {
-                        panic!(
-                            "Column {} not found when calculating domain for {}.",
-                            column, title
-                        )
+                        panic!("Column {column} not found when calculating domain for {title}.")
                     });
                     reader
                         .records()
