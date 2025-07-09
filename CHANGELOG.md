@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.58.1](https://github.com/datavzrd/datavzrd/compare/v2.58.0...v2.58.1) (2025-07-09)
+
+
+### Bug Fixes
+
+* Fix new-window keyword behaviour ([8d2f612](https://github.com/datavzrd/datavzrd/commit/8d2f612fdef0370fb59d7976e96d2518a5a3a17d))
+
 ## [2.58.0](https://github.com/datavzrd/datavzrd/compare/v2.57.2...v2.58.0) (2025-06-04)
 
 
