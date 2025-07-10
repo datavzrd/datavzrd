@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.58.2](https://github.com/datavzrd/datavzrd/compare/v2.58.1...v2.58.2) (2025-07-10)
+
+
+### Bug Fixes
+
+* Improve error for empty config files ([#988](https://github.com/datavzrd/datavzrd/issues/988)) ([dd0b81f](https://github.com/datavzrd/datavzrd/commit/dd0b81f57005acad202554d833ecbccc885a483e))
+* Improve error message for views with missing dataset ([#986](https://github.com/datavzrd/datavzrd/issues/986)) ([5bada22](https://github.com/datavzrd/datavzrd/commit/5bada229d953ae16e057ed6d1f54367f1fba21f4))
+
 ## [2.58.1](https://github.com/datavzrd/datavzrd/compare/v2.58.0...v2.58.1) (2025-07-09)
 
 
