@@ -54,7 +54,7 @@ impl ItemsSpec {
         ))?;
         let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)
             .map_err(|err| SerdeError::new(config_file.to_string(), err))?;
-        for (_, spec) in items_spec.views.iter_mut() {
+        for (name, spec) in items_spec.views.iter_mut() {
             if let Some(spell) = spec.spell.as_ref() {
                 let rendered_spec = spell.render_item_spec()?;
                 *spec = spec.merge_item_specs(&rendered_spec)?;
@@ -63,7 +63,14 @@ impl ItemsSpec {
                 && spec.render_plot.is_none()
                 && spec.render_img.is_none()
             {
-                let dataset = match items_spec.datasets.get(spec.dataset.as_ref().unwrap()) {
+                let dataset_name = if let Some(dataset) = spec.dataset.as_ref() {
+                    dataset
+                } else {
+                    bail!(ConfigError::MissingDatasetProperty {
+                        view: name.to_string()
+                    })
+                };
+                let dataset = match items_spec.datasets.get(dataset_name) {
                     Some(dataset) => dataset,
                     None => {
                         bail!(DatasetError::NotFound {
