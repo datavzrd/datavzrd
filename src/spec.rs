@@ -52,6 +52,9 @@ impl ItemsSpec {
             "Could not find config file under given path {:?}",
             &path
         ))?;
+        if config_file.is_empty() {
+            bail!(ConfigError::EmptyConfigFile);
+        }
         let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)
             .map_err(|err| SerdeError::new(config_file.to_string(), err))?;
         for (name, spec) in items_spec.views.iter_mut() {
@@ -1365,6 +1368,8 @@ pub enum ConfigError {
     },
     #[error("Cannot customize the first header row of view {view:?} in given config. Please start customizing additional headers at index 1.")]
     HeadersFirstColumnCustomized { view: String },
+    #[error("Given config file is empty. Consider adding a valid configuration.")]
+    EmptyConfigFile,
 }
 
 #[cfg(test)]
