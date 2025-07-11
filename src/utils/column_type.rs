@@ -15,7 +15,8 @@ pub enum ColumnType {
 }
 
 impl ColumnType {
-    fn update(&mut self, value: &str) -> Result<()> {
+    fn update(&mut self, value: &str, warn: bool) -> Result<bool> {
+        let mut float_warning = false;
         if !value.is_na() {
             *self = match (
                 f64::from_str(value).is_ok(),
@@ -30,15 +31,16 @@ impl ColumnType {
                 | (true, false, ColumnType::Integer) => ColumnType::Float,
                 (false, false, _) | (_, _, ColumnType::String) => {
                     let replaced_comma = value.replace(",", ".");
-                    if f64::from_str(&replaced_comma).is_ok() && value.contains(",") {
-                        warn!("The value '{value}' contains a comma and will not be parsed as a float. Consider using '.' for decimal points.")
+                    if f64::from_str(&replaced_comma).is_ok() && value.contains(",") && !warn {
+                        warn!("The value '{value}' and potentially more values of the same column contain a comma and may be a float and will not be parsed as a one. Consider using '.' for decimal points.");
+                        float_warning = true;
                     }
                     ColumnType::String
                 }
                 (false, true, _) => unreachable!(),
             };
         }
-        Ok(())
+        Ok(float_warning)
     }
 
     pub(crate) fn is_numeric(&self) -> bool {
@@ -54,10 +56,15 @@ pub fn classify_table(dataset: &DatasetSpecs) -> Result<HashMap<String, ColumnTy
             .iter()
             .map(|f| (f.to_owned(), ColumnType::default())),
     );
+    let mut warnings: HashMap<String, bool> =
+        HashMap::from_iter(headers.iter().cloned().map(|s| (s.to_string(), false)));
     for record in dataset.reader()?.records()?.skip(dataset.header_rows - 1) {
         for (title, value) in headers.iter().zip(record.iter()) {
             let column_type = classification.get_mut(title).unwrap();
-            column_type.update(value)?;
+            warnings.insert(
+                title.to_string(),
+                column_type.update(value, *warnings.get(title).unwrap())?,
+            );
         }
     }
 
