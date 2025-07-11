@@ -30,7 +30,7 @@ pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -
         items_spec
             .datasets
             .insert(dataset_name.to_string(), dataset.clone());
-        let column_types = datavzrd::utils::column_type::classify_table(&dataset)?;
+        let column_types = datavzrd::utils::column_type::classify_table(&dataset, true)?;
         let mut columns = HashMap::new();
         for (column_name, column_type) in column_types.iter() {
             let render_column_spec = match column_type {

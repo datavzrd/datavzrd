@@ -127,7 +127,7 @@ impl ItemsSpec {
                     let dataset = self.datasets.get(view.dataset.as_ref().unwrap()).unwrap();
                     let mut reader = dataset.reader()?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-                    let column_types = classify_table(dataset)?;
+                    let column_types = classify_table(dataset, false)?;
                     for (column, render_columns) in &render_table.columns {
                         if !titles.contains(column) && !render_columns.optional.unwrap() {
                             bail!(ConfigError::MissingColumn {
