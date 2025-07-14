@@ -21,7 +21,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
     dataset: &DatasetSpecs,
     debug: bool,
 ) -> Result<()> {
-    let column_types = classify_table(dataset)?;
+    let column_types = classify_table(dataset, true)?;
 
     let mut reader = dataset.reader()?;
 

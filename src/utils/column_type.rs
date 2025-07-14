@@ -15,7 +15,8 @@ pub enum ColumnType {
 }
 
 impl ColumnType {
-    fn update(&mut self, value: &str) -> Result<()> {
+    fn update(&mut self, value: &str, warn: bool) -> Result<bool> {
+        let mut float_warning = warn;
         if !value.is_na() {
             *self = match (
                 f64::from_str(value).is_ok(),
@@ -30,15 +31,16 @@ impl ColumnType {
                 | (true, false, ColumnType::Integer) => ColumnType::Float,
                 (false, false, _) | (_, _, ColumnType::String) => {
                     let replaced_comma = value.replace(",", ".");
-                    if f64::from_str(&replaced_comma).is_ok() && value.contains(",") {
-                        warn!("The value '{value}' contains a comma and will not be parsed as a float. Consider using '.' for decimal points.")
+                    if f64::from_str(&replaced_comma).is_ok() && value.contains(",") && !warn {
+                        warn!("The value '{value}' and potentially more values of the same column contain a comma and may be a float and will not be parsed as a one. Consider using '.' for decimal points.");
+                        float_warning = true;
                     }
                     ColumnType::String
                 }
                 (false, true, _) => unreachable!(),
             };
         }
-        Ok(())
+        Ok(float_warning)
     }
 
     pub(crate) fn is_numeric(&self) -> bool {
@@ -47,17 +49,23 @@ impl ColumnType {
 }
 
 /// Classifies table columns as String, Integer or Float
-pub fn classify_table(dataset: &DatasetSpecs) -> Result<HashMap<String, ColumnType>> {
+/// The warn parameter controls whether warnings are printed to the console.
+pub fn classify_table(dataset: &DatasetSpecs, warn: bool) -> Result<HashMap<String, ColumnType>> {
     let headers = dataset.reader()?.headers()?.clone();
     let mut classification = HashMap::from_iter(
         headers
             .iter()
             .map(|f| (f.to_owned(), ColumnType::default())),
     );
+    let mut warnings: HashMap<String, bool> =
+        HashMap::from_iter(headers.iter().cloned().map(|s| (s.to_string(), !warn)));
     for record in dataset.reader()?.records()?.skip(dataset.header_rows - 1) {
         for (title, value) in headers.iter().zip(record.iter()) {
             let column_type = classification.get_mut(title).unwrap();
-            column_type.update(value)?;
+            warnings.insert(
+                title.to_string(),
+                column_type.update(value, *warnings.get(title).unwrap())?,
+            );
         }
     }
 
@@ -93,7 +101,7 @@ mod tests {
             links: None,
             offer_excel: false,
         };
-        let classification = classify_table(&dataset).unwrap();
+        let classification = classify_table(&dataset, true).unwrap();
         let expected = HashMap::from([
             (String::from("first"), ColumnType::String),
             (String::from("last"), ColumnType::String),
@@ -115,7 +123,7 @@ mod tests {
             links: None,
             offer_excel: false,
         };
-        let classification = classify_table(&dataset).unwrap();
+        let classification = classify_table(&dataset, true).unwrap();
         let expected = HashMap::from([
             (String::from("first"), ColumnType::String),
             (String::from("last"), ColumnType::String),
@@ -134,7 +142,7 @@ mod tests {
             links: None,
             offer_excel: false,
         };
-        let classification = classify_table(&dataset).unwrap();
+        let classification = classify_table(&dataset, true).unwrap();
         for column_type in classification.values() {
             assert_eq!(&ColumnType::None, column_type)
         }

@@ -672,7 +672,7 @@ impl JavascriptConfig {
         report_name: &String,
         title: &String,
     ) -> Self {
-        let column_classification = classify_table(dataset).unwrap();
+        let column_classification = classify_table(dataset, false).unwrap();
         let header_label_length = if let Some(headers) = header_specs {
             headers.iter().filter(|(_, v)| v.label.is_some()).count()
         } else {
@@ -723,7 +723,7 @@ impl JavascriptConfig {
             available_columns: column_display_mode_filter(&[DisplayMode::Available]),
             pinned_columns: column_display_mode_filter(&[DisplayMode::Pinned]),
             hidden_columns: column_display_mode_filter(&[DisplayMode::Hidden]),
-            displayed_numeric_columns: classify_table(dataset)
+            displayed_numeric_columns: classify_table(dataset, false)
                 .unwrap()
                 .iter()
                 .map(|(k, v)| (k.to_owned(), v.is_numeric()))
@@ -1237,7 +1237,7 @@ fn render_search_dialogs<P: AsRef<Path>>(
 ) -> Result<()> {
     let output_path = Path::new(path.as_ref()).join("search");
     fs::create_dir(&output_path)?;
-    let table_classes = classify_table(dataset)?;
+    let table_classes = classify_table(dataset, false)?;
     for (column, title) in titles.iter().enumerate() {
         if table_classes.get(title).unwrap() != &ColumnType::Float {
             let mut reader = dataset.reader()?;
