@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.58.3](https://github.com/datavzrd/datavzrd/compare/v2.58.2...v2.58.3) (2025-07-14)
+
+
+### Bug Fixes
+
+* Limit number of warnings for possible floats per column ([#989](https://github.com/datavzrd/datavzrd/issues/989)) ([73c2a81](https://github.com/datavzrd/datavzrd/commit/73c2a81cde232b7a00ab9428f5698e4d8852f911)), closes [#985](https://github.com/datavzrd/datavzrd/issues/985)
+
 ## [2.58.2](https://github.com/datavzrd/datavzrd/compare/v2.58.1...v2.58.2) (2025-07-10)
 
 
