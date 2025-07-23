@@ -15,7 +15,7 @@ pub enum ColumnType {
 }
 
 impl ColumnType {
-    fn update(&mut self, value: &str, warn: bool) -> Result<bool> {
+    fn update(&mut self, value: &str, column: &str, warn: bool) -> Result<bool> {
         let mut float_warning = warn;
         if !value.is_na() {
             *self = match (
@@ -32,7 +32,7 @@ impl ColumnType {
                 (false, false, _) | (_, _, ColumnType::String) => {
                     let replaced_comma = value.replace(",", ".");
                     if f64::from_str(&replaced_comma).is_ok() && value.contains(",") && !warn {
-                        warn!("The value '{value}' and potentially more values of the same column contain a comma and may be a float and will not be parsed as a one. Consider using '.' for decimal points.");
+                        warn!("The value '{value}' and potentially more values of the column {column} contain a comma and may be a float and will not be parsed as a one. Consider using '.' for decimal points.");
                         float_warning = true;
                     }
                     ColumnType::String
@@ -64,7 +64,7 @@ pub fn classify_table(dataset: &DatasetSpecs, warn: bool) -> Result<HashMap<Stri
             let column_type = classification.get_mut(title).unwrap();
             warnings.insert(
                 title.to_string(),
-                column_type.update(value, *warnings.get(title).unwrap())?,
+                column_type.update(value, title, *warnings.get(title).unwrap())?,
             );
         }
     }
