@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.58.4](https://github.com/datavzrd/datavzrd/compare/v2.58.3...v2.58.4) (2025-07-23)
+
+
+### Bug Fixes
+
+* Add column name to float warning message ([#994](https://github.com/datavzrd/datavzrd/issues/994)) ([496062a](https://github.com/datavzrd/datavzrd/commit/496062ab79690e9f0d9df49843c1e539a6793da9))
+* Fix float formatting issue in example dataset ([d4d9cb2](https://github.com/datavzrd/datavzrd/commit/d4d9cb260cd8adf8638deb18643c82f2a94578dd))
+
 ## [2.58.3](https://github.com/datavzrd/datavzrd/compare/v2.58.2...v2.58.3) (2025-07-14)
 
 
