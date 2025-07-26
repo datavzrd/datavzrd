@@ -68,19 +68,25 @@ export function render_html_contents() {
                 </select>
             </li>
         </ol>`;
-    let sidebar_html = "";
-    if (config.has_excel_sheet) {
-        sidebar_html += '<li class="list-group-item sidebar-btn" id="btnExcel">Download excel sheet</li>';
-    }
-    if (config.description) {
-        sidebar_html += '<li class="list-group-item sidebar-btn" id="markdown-btn" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">Show description</li>';
-    }
-    if (config.is_single_page) {
-        sidebar_html += '<li class="list-group-item sidebar-btn" id="downloadCSV-btn">Download CSV</li>';
-        sidebar_html += '<li class="list-group-item sidebar-btn" id="unhide-btn">Unhide columns</li>';
-    }
-    sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleLineNumbers">Show/Hide Line Numbers</li>';
-    sidebar_html += '<li class="list-group-item sidebar-btn" id="screenshotTable">Export table page as SVG</li>';
+        let sidebar_html = "";
+
+        // Group: Visual Changes
+        if (config.description) {
+            sidebar_html += '<li class="list-group-item sidebar-btn" id="markdown-btn" type="button" data-toggle="collapse" data-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">Show description</li>';
+        }
+        if (config.is_single_page) {
+            sidebar_html += '<li class="list-group-item sidebar-btn" id="unhide-btn">Unhide columns</li>';
+        }
+        sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleLineNumbers">Show/Hide Line Numbers</li>';
+        
+        // Group: Downloads
+        if (config.has_excel_sheet) {
+            sidebar_html += '<li class="list-group-item sidebar-btn" id="btnExcel">Download Excel Sheet</li>';
+        }
+        if (config.is_single_page) {
+            sidebar_html += '<li class="list-group-item sidebar-btn" id="downloadCSV-btn">Download CSV</li>';
+        }
+        sidebar_html += '<li class="list-group-item sidebar-btn" id="screenshotTable">Export Table Page as SVG</li>';
     let toast_html = `
     <div class="toast m-3" role="alert" aria-live="polite" aria-atomic="true" id="warningToast" style="z-index: 1050; position: absolute; top: 0; left: 0;">
         <div class="toast-header">
