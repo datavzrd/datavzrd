@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.58.5](https://github.com/datavzrd/datavzrd/compare/v2.58.4...v2.58.5) (2025-07-26)
+
+
+### Bug Fixes
+
+* Menu items ordered differently ([#996](https://github.com/datavzrd/datavzrd/issues/996)) ([ecb0db9](https://github.com/datavzrd/datavzrd/commit/ecb0db9ae4eb5982301daddb1ced07f1a3e22176))
+
 ## [2.58.4](https://github.com/datavzrd/datavzrd/compare/v2.58.3...v2.58.4) (2025-07-23)
 
 
