@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.58.6](https://github.com/datavzrd/datavzrd/compare/v2.58.5...v2.58.6) (2025-07-31)
+
+
+### Bug Fixes
+
+* Update readervzrd ([#998](https://github.com/datavzrd/datavzrd/issues/998)) ([5595146](https://github.com/datavzrd/datavzrd/commit/5595146b1c1fe4d8e4ab410b7e98ed54533ac394))
+
 ## [2.58.5](https://github.com/datavzrd/datavzrd/compare/v2.58.4...v2.58.5) (2025-07-26)
 
 
