@@ -2414,9 +2414,9 @@ dependencies = [
 
 [[package]]
 name = "readervzrd"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8cfde2263efdcd7d1424f1d96326be8d41b22da0842cb29474b1b1c933d12072"
+checksum = "a4263c6bc393cdff1aca99dea026377b61a688973f7484e5d2bd9aae526a71a6"
 dependencies = [
  "csv",
  "parquet",
