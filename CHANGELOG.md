@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.58.7](https://github.com/datavzrd/datavzrd/compare/v2.58.6...v2.58.7) (2025-08-01)
+
+
+### Bug Fixes
+
+* Add version to CLI using CARGO_PKG_VERSION ([1346747](https://github.com/datavzrd/datavzrd/commit/1346747fcdae1164e819dbb71da6c0768745dd3c))
+
 ## [2.58.6](https://github.com/datavzrd/datavzrd/compare/v2.58.5...v2.58.6) (2025-07-31)
 
 
