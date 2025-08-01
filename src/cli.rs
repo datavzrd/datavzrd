@@ -6,6 +6,7 @@ use thiserror::Error;
 #[derive(Parser, Debug)]
 #[command(
     name = "datavzrd",
+    version = env!("CARGO_PKG_VERSION"),
     about = "A tool to create visual HTML reports from collections of CSV/TSV tables."
 )]
 pub struct Datavzrd {
