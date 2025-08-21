@@ -20,6 +20,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_with::skip_serializing_none;
 use std::collections::HashMap;
+use std::fmt;
 use std::fmt::Debug;
 use std::fs;
 use std::fs::File;
@@ -175,25 +176,17 @@ impl ItemsSpec {
                                 } else if let Some(heatmap) = &plot_spec.heatmap {
                                     if !heatmap.color_scheme.is_empty()
                                         && column_types.get(column).unwrap().is_numeric()
-                                        && !matches!(
-                                            heatmap.color_scheme.to_lowercase().as_str(),
-                                            "blues"
-                                                | "greens"
-                                                | "greys"
-                                                | "oranges"
-                                                | "purples"
-                                                | "reds"
-                                                | "viridis"
-                                                | "inferno"
-                                                | "magma"
-                                                | "plasma"
-                                                | "cividis"
-                                        )
+                                        && SequentialScheme::from_str(&heatmap.color_scheme)
+                                            .is_err()
                                     {
                                         bail!(UnsupportedColorScheme {
                                             view: name.to_string(),
                                             column: column.to_string(),
                                             scheme: heatmap.color_scheme.to_string(),
+                                            options: SequentialScheme::all()
+                                                .iter()
+                                                .map(|s| s.to_string())
+                                                .collect()
                                         })
                                     }
                                     if heatmap.domain_mid.is_some() {
@@ -1185,6 +1178,79 @@ static COLOR_MAPPING: LazyLock<HashMap<&'static str, &'static str>> = LazyLock::
     m
 });
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub(crate) enum SequentialScheme {
+    Blues,
+    Greens,
+    Greys,
+    Oranges,
+    Purples,
+    Reds,
+    Viridis,
+    Inferno,
+    Magma,
+    Plasma,
+    Cividis,
+}
+
+impl FromStr for SequentialScheme {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s.to_lowercase().as_str() {
+            "blues" => Ok(Self::Blues),
+            "greens" => Ok(Self::Greens),
+            "greys" => Ok(Self::Greys),
+            "oranges" => Ok(Self::Oranges),
+            "purples" => Ok(Self::Purples),
+            "reds" => Ok(Self::Reds),
+            "viridis" => Ok(Self::Viridis),
+            "inferno" => Ok(Self::Inferno),
+            "magma" => Ok(Self::Magma),
+            "plasma" => Ok(Self::Plasma),
+            "cividis" => Ok(Self::Cividis),
+            _ => Err(()),
+        }
+    }
+}
+
+impl fmt::Display for SequentialScheme {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            SequentialScheme::Blues => "blues",
+            SequentialScheme::Greens => "greens",
+            SequentialScheme::Greys => "greys",
+            SequentialScheme::Oranges => "oranges",
+            SequentialScheme::Purples => "purples",
+            SequentialScheme::Reds => "reds",
+            SequentialScheme::Viridis => "viridis",
+            SequentialScheme::Inferno => "inferno",
+            SequentialScheme::Magma => "magma",
+            SequentialScheme::Plasma => "plasma",
+            SequentialScheme::Cividis => "cividis",
+        };
+        write!(f, "{s}")
+    }
+}
+
+impl SequentialScheme {
+    pub fn all() -> &'static [SequentialScheme] {
+        &[
+            SequentialScheme::Blues,
+            SequentialScheme::Greens,
+            SequentialScheme::Greys,
+            SequentialScheme::Oranges,
+            SequentialScheme::Purples,
+            SequentialScheme::Reds,
+            SequentialScheme::Viridis,
+            SequentialScheme::Inferno,
+            SequentialScheme::Magma,
+            SequentialScheme::Plasma,
+            SequentialScheme::Cividis,
+        ]
+    }
+}
+
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct BarPlot {
@@ -1331,12 +1397,13 @@ pub enum ConfigError {
     )]
     LogScaleDomainIncludesZero { view: String, column: String },
     #[error(
-    "Given color-scheme {scheme:?} for numeric column {column:?} of view {view:?} is not supported. Please use a sequential scheme from d3."
+    "Given color-scheme {scheme:?} for numeric column {column:?} of view {view:?} is not supported. Please use a sequential scheme from d3. Available options are: {options:?}"
     )]
     UnsupportedColorScheme {
         view: String,
         column: String,
         scheme: String,
+        options: Vec<String>,
     },
     #[error(
     "Given value for column {column:?} of view {view:?} with scale type log cannot include value {value:?}."
