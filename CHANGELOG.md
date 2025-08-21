@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.58.8](https://github.com/datavzrd/datavzrd/compare/v2.58.7...v2.58.8) (2025-08-21)
+
+
+### Bug Fixes
+
+* Add SequentialScheme enum for supported heatmap color schemes ([8e21078](https://github.com/datavzrd/datavzrd/commit/8e2107830058ad869f57c562285960982b727de5))
+
 ## [2.58.7](https://github.com/datavzrd/datavzrd/compare/v2.58.6...v2.58.7) (2025-08-01)
 
 
