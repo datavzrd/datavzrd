@@ -339,6 +339,11 @@ function renderDetailTickBarPlot(value, div, specs, title) {
   }
 }
 
+function isDark(c) {
+  let rgb = d3.color(c).rgb();
+  return (0.299*rgb.r + 0.587*rgb.g + 0.114*rgb.b) < 128;
+}
+
 function colorizeColumn(
   ah,
   columns,
@@ -358,8 +363,12 @@ function colorizeColumn(
 
   $(`table > tbody > tr td:nth-child(${index})`).each(function () {
     var value = table_rows[row][heatmap.title];
+    let color = scale(value);
     if (value !== "") {
-      this.style.setProperty("background-color", scale(value), "important");
+      this.style.setProperty("background-color", color, "important");
+    }
+    if (isDark(color)) {
+      this.style.setProperty("color", "white", "important");
     }
     if (custom_func) {
       var data_function = window[custom_func];
@@ -643,7 +652,11 @@ function colorizeDetailCard(value, div, heatmap, row, is_float, precision) {
   let scale = datavzrdScale(heatmap);
 
   if (value !== "") {
-    $(`${div}`).css("background-color", scale(value));
+    let color = scale(value);
+    $(`${div}`).css("background-color", color);
+    if (isDark(color)) {
+      $(`${div}`).css("color", "white", "important");
+    }
   }
   if (heatmap.heatmap["custom-content"]) {
     var data_function = window[heatmap.heatmap["custom-content"]];
