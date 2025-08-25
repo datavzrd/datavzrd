@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.58.9](https://github.com/datavzrd/datavzrd/compare/v2.58.8...v2.58.9) (2025-08-25)
+
+
+### Bug Fixes
+
+* Set text color to white on dark heatmap backgrounds ([#1008](https://github.com/datavzrd/datavzrd/issues/1008)) ([a319b71](https://github.com/datavzrd/datavzrd/commit/a319b71ca48856ded1e6fbf4e01a5345a975c628))
+
 ## [2.58.8](https://github.com/datavzrd/datavzrd/compare/v2.58.7...v2.58.8) (2025-08-21)
 
 
