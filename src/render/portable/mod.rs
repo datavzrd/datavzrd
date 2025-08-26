@@ -486,7 +486,11 @@ impl CustomPlotsConfig {
                 .filter(|(_, k)| k.custom_plot.is_some())
                 .map(|(k, v)| {
                     let mut custom_plot = v.custom_plot.as_ref().unwrap().to_owned();
-                    custom_plot.read_schema().unwrap();
+                    custom_plot.read_schema().with_context(|| {
+                        format!(
+                            "Failed to read schema for custom_plot in column '{k}' in view '{view}'"
+                        )
+                    }).unwrap();
                     CustomPlotConfig {
                         title: k.to_string(),
                         specs: serde_json::Value::from_str(&custom_plot.schema.unwrap())
@@ -507,7 +511,11 @@ impl CustomPlotsConfig {
                         .filter(|(_, v)| v.custom_plot.is_some())
                         .map(|(k, v)| {
                             let mut custom_plot = v.custom_plot.as_ref().unwrap().to_owned();
-                            custom_plot.read_schema().unwrap();
+                            custom_plot.read_schema().with_context(|| {
+                                format!(
+                                    "Failed to read schema for custom_plot in additional column '{k}' in view '{view}'"
+                                )
+                            }).unwrap();
                             CustomPlotConfig {
                                 title: k.to_string(),
                                 specs: serde_json::Value::from_str(&custom_plot.schema.unwrap())
