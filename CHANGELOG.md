@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.58.11](https://github.com/datavzrd/datavzrd/compare/v2.58.10...v2.58.11) (2025-08-26)
+
+
+### Bug Fixes
+
+* Auto replace underscores with spaces in card titles in detail mode ([f6f191d](https://github.com/datavzrd/datavzrd/commit/f6f191dcf7d8d9f7cc120d45134a6784adb8926d))
+
 ## [2.58.10](https://github.com/datavzrd/datavzrd/compare/v2.58.9...v2.58.10) (2025-08-26)
 
 
