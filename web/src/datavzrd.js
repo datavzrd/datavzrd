@@ -842,7 +842,7 @@ function detailFormatter(index, row) {
       key !== "line_number"
     ) {
       let id;
-      let card_title = key;
+      let card_title = key.replace(/_/g, " ");
       if (config.column_config[key].label) {
         card_title = config.column_config[key].label;
       }
