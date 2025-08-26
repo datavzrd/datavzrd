@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.58.10](https://github.com/datavzrd/datavzrd/compare/v2.58.9...v2.58.10) (2025-08-26)
+
+
+### Bug Fixes
+
+* Add context to schema read errors in custom plot config ([6a9fbbe](https://github.com/datavzrd/datavzrd/commit/6a9fbbeb307b966585cce63fc327d969fc085f12))
+
 ## [2.58.9](https://github.com/datavzrd/datavzrd/compare/v2.58.8...v2.58.9) (2025-08-25)
 
 
