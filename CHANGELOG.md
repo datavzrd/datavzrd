@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.58.12](https://github.com/datavzrd/datavzrd/compare/v2.58.11...v2.58.12) (2025-08-29)
+
+
+### Bug Fixes
+
+* Add white text to dark pill backgrounds for readability ([b320b69](https://github.com/datavzrd/datavzrd/commit/b320b69d53902ee9b3346a0a8eb11d3e0d203c02))
+
 ## [2.58.11](https://github.com/datavzrd/datavzrd/compare/v2.58.10...v2.58.11) (2025-08-26)
 
 
