@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.59.0](https://github.com/datavzrd/datavzrd/compare/v2.58.12...v2.59.0) (2025-09-02)
+
+
+### Features
+
+* Add new bubble plot type ([#1022](https://github.com/datavzrd/datavzrd/issues/1022)) ([1bfee11](https://github.com/datavzrd/datavzrd/commit/1bfee1106151080549bd9da1295290367924f8ed))
+
 ## [2.58.12](https://github.com/datavzrd/datavzrd/compare/v2.58.11...v2.58.12) (2025-08-29)
 
 
