@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.59.1](https://github.com/datavzrd/datavzrd/compare/v2.59.0...v2.59.1) (2025-09-02)
+
+
+### Bug Fixes
+
+* Fix bubble plot in detail view ([4cb774c](https://github.com/datavzrd/datavzrd/commit/4cb774c7fba3b3a9482a09e4e2bf48870e83433d))
+
 ## [2.59.0](https://github.com/datavzrd/datavzrd/compare/v2.58.12...v2.59.0) (2025-09-02)
 
 
