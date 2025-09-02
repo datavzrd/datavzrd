@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   Formatting:
@@ -19,33 +19,34 @@ jobs:
           toolchain: stable
           override: true
           components: rustfmt
-      
+
       - name: Check format
         run: cargo fmt -- --check
 
   Linting:
-     runs-on: ubuntu-latest
-     steps:
-       - name: Checkout repository
-         uses: actions/checkout@v2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-       - name: Install stable toolchain
-         uses: actions-rs/toolchain@v1
-         with:
-           toolchain: stable
-           override: true
-           components: clippy
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: clippy
 
-       - name: Install yte
-         run: pip install yte
+      - name: Install yte
+        run: pip install yte
 
-       - name: Install pnpm
-         run: npm install -g pnpm
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
-       - name: Lint with clippy
-         uses: actions-rs/clippy-check@v1
-         with:
-           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Lint with clippy
+        uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   Testing:
     needs: Formatting
@@ -63,8 +64,9 @@ jobs:
       - name: Install yte
         run: pip install yte
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Install GitHub CLI
         run: |
@@ -73,10 +75,9 @@ jobs:
 
       - name: Authenticate with GitHub
         run: gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
-      
+
       - uses: Swatinem/rust-cache@v1.3.0
 
       - uses: actions-rs/cargo@v1
         with:
           command: test
-
