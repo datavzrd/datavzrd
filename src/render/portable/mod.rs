@@ -4,6 +4,7 @@ use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
+use crate::spec::BubblePlot;
 use crate::spec::{AdditionalColumnSpec, LinkToUrlSpecEntry, PillsSpec};
 use crate::spec::{
     BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
@@ -632,14 +633,16 @@ struct JavascriptConfig {
     bar_titles: Vec<String>,
     heatmap_titles: Vec<String>,
     pill_titles: Vec<String>,
+    bubble_titles: Vec<String>,
     custom_plot_titles: Vec<String>,
     links: Vec<String>,
     column_config: HashMap<String, JavascriptColumnConfig>,
     header_label_length: usize,
-    ticks: Vec<JavascriptTickAndBarConfig>,
-    bars: Vec<JavascriptTickAndBarConfig>,
+    ticks: Vec<JavascriptPlotConfig>,
+    bars: Vec<JavascriptPlotConfig>,
     heatmaps: Vec<JavascriptHeatmapConfig>,
     pills: Vec<JavascriptPillsConfig>,
+    bubbles: Vec<JavascriptPlotConfig>,
     brush_domains: HashMap<String, Vec<f32>>,
     aux_domains: HashMap<String, Vec<String>>,
     link_urls: Vec<JavascriptLinkConfig>,
@@ -742,6 +745,7 @@ impl JavascriptConfig {
             bar_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().bar_plot.is_some()),
             heatmap_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().heatmap.is_some()),
             pill_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().pills.is_some()),
+            bubble_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().bubble_plot.is_some()),
             custom_plot_titles: filter_columns_for(config, additional_columns, |(_, k)| k.custom_plot.is_some(), |(_, k)| k.custom_plot.is_some()),
             links: filter_columns_for(config, additional_columns, |(_, k)| k.link_to_url.is_some(), |(_, k)| k.link_to_url.is_some()),
             column_config: config
@@ -769,7 +773,7 @@ impl JavascriptConfig {
                 .filter(|(_, v)| v.plot.is_some())
                 .filter(|(_, v)| v.plot.as_ref().unwrap().tick_plot.is_some())
                 .map(|(k, v)| {
-                    JavascriptTickAndBarConfig::from_config(
+                    JavascriptPlotConfig::from_config(
                         k.to_string(),
                         render_tick_plot(
                             k,
@@ -781,12 +785,29 @@ impl JavascriptConfig {
                     )
                 })
                 .collect(),
+            bubbles: config
+                .iter()
+                .filter(|(_, v)| v.plot.is_some())
+                .filter(|(_, v)| v.plot.as_ref().unwrap().bubble_plot.is_some())
+                .map(|(k, v)| {
+                    JavascriptPlotConfig::from_config(
+                        k.to_string(),
+                        render_bubble_plot(
+                            k,
+                            dataset,
+                            v.plot.as_ref().unwrap().bubble_plot.as_ref().unwrap(),
+                            v.precision.unwrap(),
+                        )
+                        .unwrap(),
+                    )
+                })
+                .collect(),
             bars: config
                 .iter()
                 .filter(|(_, v)| v.plot.is_some())
                 .filter(|(_, v)| v.plot.as_ref().unwrap().bar_plot.is_some())
                 .map(|(k, v)| {
-                    JavascriptTickAndBarConfig::from_config(
+                    JavascriptPlotConfig::from_config(
                         k.to_string(),
                         render_bar_plot(
                             k,
@@ -988,13 +1009,13 @@ impl JavascriptColumnConfig {
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
-struct JavascriptTickAndBarConfig {
+struct JavascriptPlotConfig {
     title: String,
     slug_title: String,
     specs: Value,
 }
 
-impl JavascriptTickAndBarConfig {
+impl JavascriptPlotConfig {
     fn from_config(title: String, specs: String) -> Self {
         Self {
             title: title.clone(),
@@ -1366,6 +1387,53 @@ fn render_tick_plot(
     context.insert("color_definition", &tick_plot.color);
 
     Ok(templates.render("tick_plot.vl.tera", &context)?)
+}
+
+/// Renders bubble plots for given csv column
+fn render_bubble_plot(
+    title: &str,
+    dataset: &DatasetSpecs,
+    bubble_plot: &BubblePlot,
+    precision: u32,
+) -> Result<String> {
+    let mut reader = dataset.reader()?;
+
+    let column_index = reader.headers().map(|s| {
+        s.iter()
+            .position(|t| t == title)
+            .context(ColumnError::NotFound {
+                column: title.to_string(),
+                path: dataset.path.to_str().unwrap().to_string(),
+            })
+            .unwrap()
+    })?;
+
+    let (min, max) = if let Some(domain) = &bubble_plot.domain {
+        (domain[0], domain[1])
+    } else if let Some(aux_domain_columns) = &bubble_plot.aux_domain_columns.0 {
+        let columns = aux_domain_columns
+            .iter()
+            .map(|s| s.to_string())
+            .chain(vec![title.to_string()])
+            .collect();
+        get_min_max_multiple_columns(dataset, columns, Some(precision))?
+    } else {
+        get_min_max(dataset, column_index, Some(precision))?
+    };
+
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "bubble_plot.vl.tera",
+        include_str!("../../../templates/bubble_plot.vl.tera"),
+    )?;
+    let mut context = Context::new();
+    context.insert("minimum", &min);
+    context.insert("maximum", &max);
+    context.insert("field", &title);
+    context.insert("scale_type", &bubble_plot.scale_type);
+    context.insert("color_definition", &bubble_plot.color);
+
+    Ok(templates.render("bubble_plot.vl.tera", &context)?)
 }
 
 /// Renders bar plots for given csv column
