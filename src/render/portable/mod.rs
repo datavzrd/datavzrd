@@ -5,10 +5,11 @@ use crate::render::portable::plot::render_plots;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
 use crate::spec::BubblePlot;
+use crate::spec::ColorDefinition;
 use crate::spec::{AdditionalColumnSpec, LinkToUrlSpecEntry, PillsSpec};
 use crate::spec::{
     BarPlot, DatasetSpecs, DisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
-    RenderColumnSpec, TickPlot,
+    RenderColumnSpec, ScaleType, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
 use crate::utils::column_position;
@@ -775,7 +776,7 @@ impl JavascriptConfig {
                 .map(|(k, v)| {
                     JavascriptPlotConfig::from_config(
                         k.to_string(),
-                        render_tick_plot(
+                        render_plot(
                             k,
                             dataset,
                             v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
@@ -792,7 +793,7 @@ impl JavascriptConfig {
                 .map(|(k, v)| {
                     JavascriptPlotConfig::from_config(
                         k.to_string(),
-                        render_bubble_plot(
+                        render_plot(
                             k,
                             dataset,
                             v.plot.as_ref().unwrap().bubble_plot.as_ref().unwrap(),
@@ -809,7 +810,7 @@ impl JavascriptConfig {
                 .map(|(k, v)| {
                     JavascriptPlotConfig::from_config(
                         k.to_string(),
-                        render_bar_plot(
+                        render_plot(
                             k,
                             dataset,
                             v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
@@ -1342,109 +1343,93 @@ fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
     Ok(result)
 }
 
-/// Renders tick plots for given csv column
-fn render_tick_plot(
-    title: &str,
-    dataset: &DatasetSpecs,
-    tick_plot: &TickPlot,
-    precision: u32,
-) -> Result<String> {
-    let mut reader = dataset.reader()?;
-
-    let column_index = reader.headers().map(|s| {
-        s.iter()
-            .position(|t| t == title)
-            .context(ColumnError::NotFound {
-                column: title.to_string(),
-                path: dataset.path.to_str().unwrap().to_string(),
-            })
-            .unwrap()
-    })?;
-
-    let (min, max) = if let Some(domain) = &tick_plot.domain {
-        (domain[0], domain[1])
-    } else if let Some(aux_domain_columns) = &tick_plot.aux_domain_columns.0 {
-        let columns = aux_domain_columns
-            .iter()
-            .map(|s| s.to_string())
-            .chain(vec![title.to_string()])
-            .collect();
-        get_min_max_multiple_columns(dataset, columns, Some(precision))?
-    } else {
-        get_min_max(dataset, column_index, Some(precision))?
-    };
-
-    let mut templates = Tera::default();
-    templates.add_raw_template(
-        "tick_plot.vl.tera",
-        include_str!("../../../templates/tick_plot.vl.tera"),
-    )?;
-    let mut context = Context::new();
-    context.insert("minimum", &min);
-    context.insert("maximum", &max);
-    context.insert("field", &title);
-    context.insert("scale_type", &tick_plot.scale_type);
-    context.insert("color_definition", &tick_plot.color);
-
-    Ok(templates.render("tick_plot.vl.tera", &context)?)
+trait PlotConfig {
+    fn domain(&self) -> Option<[f32; 2]>;
+    fn aux_domain_columns(&self) -> Option<&Vec<String>>;
+    fn scale_type(&self) -> &ScaleType;
+    fn color(&self) -> &Option<ColorDefinition>;
+    fn template(&self) -> &'static str;
 }
 
-/// Renders bubble plots for given csv column
-fn render_bubble_plot(
-    title: &str,
-    dataset: &DatasetSpecs,
-    bubble_plot: &BubblePlot,
-    precision: u32,
-) -> Result<String> {
-    let mut reader = dataset.reader()?;
-
-    let column_index = reader.headers().map(|s| {
-        s.iter()
-            .position(|t| t == title)
-            .context(ColumnError::NotFound {
-                column: title.to_string(),
-                path: dataset.path.to_str().unwrap().to_string(),
-            })
-            .unwrap()
-    })?;
-
-    let (min, max) = if let Some(domain) = &bubble_plot.domain {
-        (domain[0], domain[1])
-    } else if let Some(aux_domain_columns) = &bubble_plot.aux_domain_columns.0 {
-        let columns = aux_domain_columns
-            .iter()
-            .map(|s| s.to_string())
-            .chain(vec![title.to_string()])
-            .collect();
-        get_min_max_multiple_columns(dataset, columns, Some(precision))?
-    } else {
-        get_min_max(dataset, column_index, Some(precision))?
-    };
-
-    let mut templates = Tera::default();
-    templates.add_raw_template(
-        "bubble_plot.vl.tera",
-        include_str!("../../../templates/bubble_plot.vl.tera"),
-    )?;
-    let mut context = Context::new();
-    context.insert("minimum", &min);
-    context.insert("maximum", &max);
-    context.insert("field", &title);
-    context.insert("scale_type", &bubble_plot.scale_type);
-    context.insert("color_definition", &bubble_plot.color);
-
-    Ok(templates.render("bubble_plot.vl.tera", &context)?)
+impl PlotConfig for TickPlot {
+    fn domain(&self) -> Option<[f32; 2]> {
+        self.domain.as_ref().and_then(|v| {
+            if v.len() == 2 {
+                Some([v[0], v[1]])
+            } else {
+                None
+            }
+        })
+    }
+    fn aux_domain_columns(&self) -> Option<&Vec<String>> {
+        self.aux_domain_columns.0.as_ref()
+    }
+    fn scale_type(&self) -> &ScaleType {
+        &self.scale_type
+    }
+    fn color(&self) -> &Option<ColorDefinition> {
+        &self.color
+    }
+    fn template(&self) -> &'static str {
+        include_str!("../../../templates/tick_plot.vl.tera")
+    }
 }
 
-/// Renders bar plots for given csv column
-fn render_bar_plot(
+impl PlotConfig for BubblePlot {
+    fn domain(&self) -> Option<[f32; 2]> {
+        self.domain.as_ref().and_then(|v| {
+            if v.len() == 2 {
+                Some([v[0], v[1]])
+            } else {
+                None
+            }
+        })
+    }
+    fn aux_domain_columns(&self) -> Option<&Vec<String>> {
+        self.aux_domain_columns.0.as_ref()
+    }
+    fn scale_type(&self) -> &ScaleType {
+        &self.scale_type
+    }
+    fn color(&self) -> &Option<ColorDefinition> {
+        &self.color
+    }
+    fn template(&self) -> &'static str {
+        include_str!("../../../templates/bubble_plot.vl.tera")
+    }
+}
+
+impl PlotConfig for BarPlot {
+    fn domain(&self) -> Option<[f32; 2]> {
+        self.domain.as_ref().and_then(|v| {
+            if v.len() == 2 {
+                Some([v[0], v[1]])
+            } else {
+                None
+            }
+        })
+    }
+    fn aux_domain_columns(&self) -> Option<&Vec<String>> {
+        self.aux_domain_columns.0.as_ref()
+    }
+    fn scale_type(&self) -> &ScaleType {
+        &self.scale_type
+    }
+    fn color(&self) -> &Option<ColorDefinition> {
+        &self.color
+    }
+    fn template(&self) -> &'static str {
+        include_str!("../../../templates/bar_plot.vl.tera")
+    }
+}
+
+fn render_plot<T: PlotConfig>(
     title: &str,
     dataset: &DatasetSpecs,
-    bar_plot: &BarPlot,
+    plot: &T,
     precision: u32,
 ) -> Result<String> {
     let mut reader = dataset.reader()?;
-
     let column_index = reader.headers().map(|s| {
         s.iter()
             .position(|t| t == title)
@@ -1455,13 +1440,13 @@ fn render_bar_plot(
             .unwrap()
     })?;
 
-    let (min, max) = if let Some(domain) = &bar_plot.domain {
+    let (min, max) = if let Some(domain) = plot.domain() {
         (domain[0], domain[1])
-    } else if let Some(aux_domain_columns) = &bar_plot.aux_domain_columns.0 {
+    } else if let Some(aux_domain_columns) = plot.aux_domain_columns() {
         let columns = aux_domain_columns
             .iter()
             .map(|s| s.to_string())
-            .chain(vec![title.to_string()])
+            .chain(std::iter::once(title.to_string()))
             .collect();
         get_min_max_multiple_columns(dataset, columns, Some(precision))?
     } else {
@@ -1469,18 +1454,16 @@ fn render_bar_plot(
     };
 
     let mut templates = Tera::default();
-    templates.add_raw_template(
-        "bar_plot.vl.tera",
-        include_str!("../../../templates/bar_plot.vl.tera"),
-    )?;
+    templates.add_raw_template("plot.vl.tera", plot.template())?;
+
     let mut context = Context::new();
     context.insert("minimum", &min);
     context.insert("maximum", &max);
     context.insert("field", &title);
-    context.insert("scale_type", &bar_plot.scale_type);
-    context.insert("color_definition", &bar_plot.color);
+    context.insert("scale_type", plot.scale_type());
+    context.insert("color_definition", plot.color());
 
-    Ok(templates.render("bar_plot.vl.tera", &context)?)
+    Ok(templates.render("plot.vl.tera", &context)?)
 }
 
 pub(crate) fn get_column_domain(
@@ -1501,7 +1484,7 @@ pub(crate) fn get_column_domain(
             let columns = aux_domain_columns
                 .iter()
                 .map(|s| s.to_string())
-                .chain(vec![title.to_string()])
+                .chain(std::iter::once(title.to_string()))
                 .collect_vec();
             let column_indexes: HashSet<_> = dataset.reader()?.headers().map(|s| {
                 s.iter()
@@ -1539,7 +1522,7 @@ pub(crate) fn get_column_domain(
         let columns = aux_domain_columns
             .iter()
             .map(|s| s.to_string())
-            .chain(vec![title.to_string()])
+            .chain(std::iter::once(title.to_string()))
             .collect();
         Ok(json!(get_min_max_multiple_columns(dataset, columns, None)?).to_string())
     } else {
@@ -2055,7 +2038,7 @@ pub enum SpecError {
 
 #[cfg(test)]
 mod tests {
-    use crate::render::portable::{render_tick_plot, JavascriptFunction};
+    use crate::render::portable::{render_plot, JavascriptFunction};
     use crate::spec::{Color, ColorDefinition, ColorRange, DatasetSpecs, ScaleType, TickPlot};
     use std::path::PathBuf;
 
@@ -2107,7 +2090,7 @@ mod tests {
             links: None,
         };
 
-        let tick_plot = render_tick_plot("price", &dataset, &tick_plot_spec, 2);
+        let tick_plot = render_plot("price", &dataset, &tick_plot_spec, 2);
         assert!(tick_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&tick_plot.unwrap()).is_ok());
     }
@@ -2139,7 +2122,7 @@ mod tests {
             links: None,
         };
 
-        let tick_plot = render_tick_plot("price", &dataset, &tick_plot_spec, 2);
+        let tick_plot = render_plot("price", &dataset, &tick_plot_spec, 2);
         assert!(tick_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&tick_plot.unwrap()).is_ok());
     }
@@ -2161,7 +2144,7 @@ mod tests {
             links: None,
         };
 
-        let bar_plot = render_tick_plot("price", &dataset, &bar_plot_spec, 2);
+        let bar_plot = render_plot("price", &dataset, &bar_plot_spec, 2);
         assert!(bar_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&bar_plot.unwrap()).is_ok());
     }
@@ -2193,7 +2176,7 @@ mod tests {
             links: None,
         };
 
-        let bar_plot = render_tick_plot("price", &dataset, &bar_plot_spec, 2);
+        let bar_plot = render_plot("price", &dataset, &bar_plot_spec, 2);
         assert!(bar_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&bar_plot.unwrap()).is_ok());
     }
