@@ -108,9 +108,10 @@ views:
               url: "https://letterboxd.com/search/{value}"
               new-window: false
         imdbRating:
+          display-mode: detail
           precision: 1
           plot:
-            bars:
+            bubbles:
               scale: linear
               domain:
                 - 1

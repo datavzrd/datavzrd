@@ -809,7 +809,12 @@ function detailFormatter(index, row) {
       if (config.column_config[key].label) {
         card_title = config.column_config[key].label;
       }
-      if (cp.includes(key) || ticks.includes(key) || bars.includes(key)) {
+      if (
+        cp.includes(key) ||
+        ticks.includes(key) ||
+        bars.includes(key) ||
+        bubbles.includes(key)
+      ) {
         if (cp.includes(key)) {
           id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
         } else if (bars.includes(key)) {
@@ -1359,18 +1364,18 @@ export function load() {
           );
         }
       }
-    });
 
-    for (const o of config.bubbles) {
-      if (!config.displayed_columns.includes(o.title)) {
-        renderDetailTickBarBubblePlot(
-          row[o.title],
-          `#detail-plot-${index}-bubbles-${columnIdMap[o.title]}`,
-          o.specs,
-          o.title,
-        );
+      for (const o of config.bubbles) {
+        if (!config.displayed_columns.includes(o.title)) {
+          renderDetailTickBarBubblePlot(
+            row[o.title],
+            `#detail-plot-${index}-bubbles-${columnIdMap[o.title]}`,
+            o.specs,
+            o.title,
+          );
+        }
       }
-    }
+    });
 
     $("#markdown-btn").click(function () {
       renderMarkdownDescription(false);
