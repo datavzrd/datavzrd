@@ -845,6 +845,8 @@ impl RenderColumnSpec {
                     bars.preprocess(dataset)?;
                 } else if let Some(pills) = &mut plot.pills {
                     pills.preprocess(dataset, title)?;
+                } else if let Some(bubbles) = &mut plot.bubble_plot {
+                    bubbles.preprocess(dataset)?;
                 }
             }
         }
@@ -998,6 +1000,8 @@ pub struct PlotSpec {
     pub bar_plot: Option<BarPlot>,
     #[serde(default)]
     pub pills: Option<PillsSpec>,
+    #[serde(rename = "bubbles")]
+    pub bubble_plot: Option<BubblePlot>,
 }
 
 #[skip_serializing_none]
@@ -1072,6 +1076,28 @@ impl PillsSpec {
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
+pub struct BubblePlot {
+    #[serde(default, rename = "scale")]
+    pub scale_type: ScaleType,
+    #[serde(default)]
+    pub domain: Option<Vec<f32>>,
+    #[serde(default)]
+    pub aux_domain_columns: AuxDomainColumns,
+    #[serde(default)]
+    pub color: Option<ColorDefinition>,
+}
+
+impl BubblePlot {
+    fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
+        if let Some(color_definition) = &mut self.color {
+            color_definition.preprocess()?;
+        }
+        self.aux_domain_columns.preprocess(dataset)
+    }
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct TickPlot {
     #[serde(default, rename = "scale")]
     pub scale_type: ScaleType,
@@ -1082,6 +1108,7 @@ pub struct TickPlot {
     #[serde(default)]
     pub color: Option<ColorDefinition>,
 }
+
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct ColorDefinition {
@@ -1683,6 +1710,7 @@ mod tests {
                     HeaderSpecs {
                         label: Some("my header".to_string()),
                         plot: Some(PlotSpec {
+                            bubble_plot: None,
                             tick_plot: None,
                             heatmap: Some(Heatmap {
                                 vega_type: None,
@@ -2089,6 +2117,7 @@ mod tests {
             heatmap: None,
             bar_plot: None,
             pills: None,
+            bubble_plot: None,
         };
         let expected_render_columns = RenderColumnSpec {
             optional: Some(false),
