@@ -211,6 +211,7 @@ mod tests {
                 }),
                 bar_plot: None,
                 pills: None,
+                bubble_plot: None,
             }),
             custom_plot: None,
             ellipsis: None,
