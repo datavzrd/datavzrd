@@ -244,89 +244,7 @@ function shareRow(index, webhost_url) {
   });
 }
 
-function renderTickPlot(
-  ah,
-  columns,
-  title,
-  slug_title,
-  specs,
-  is_float,
-  precision,
-  detail_mode,
-  header_label_length,
-  columnIndexMap,
-) {
-  let index = columnIndexMap[title];
-  let row = 0;
-  let table_rows = $("#table").bootstrapTable("getData", {
-    useCurrentPage: true,
-  });
-  $(`table > tbody > tr td:nth-child(${index})`).each(function () {
-    var id = `${slug_title}-${row}`;
-    this.classList.add("plotcell");
-    const div = document.createElement("div");
-    let value = table_rows[row][title];
-    if (is_float && precision !== undefined) {
-      value = precision_formatter(precision, value);
-    }
-    if (value != "") {
-      this.innerHTML = "";
-      this.appendChild(div);
-      var data = [];
-      var v = {};
-      v[title] = value;
-      data.push(v);
-      var s = specs;
-      s.data = {};
-      s.data.values = data;
-      vegaEmbed(div, JSON.parse(JSON.stringify(s)), VEGA_EMBED_OPTIONS);
-    }
-    row++;
-  });
-}
-
-function renderBubblePlot(
-  ah,
-  columns,
-  title,
-  slug_title,
-  specs,
-  is_float,
-  precision,
-  detail_mode,
-  header_label_length,
-  columnIndexMap,
-) {
-  let index = columnIndexMap[title];
-  let row = 0;
-  let table_rows = $("#table").bootstrapTable("getData", {
-    useCurrentPage: true,
-  });
-  $(`table > tbody > tr td:nth-child(${index})`).each(function () {
-    var id = `${slug_title}-${row}`;
-    this.classList.add("plotcell");
-    const div = document.createElement("div");
-    let value = table_rows[row][title];
-    if (is_float && precision !== undefined) {
-      value = precision_formatter(precision, value);
-    }
-    if (value != "") {
-      this.innerHTML = "";
-      this.appendChild(div);
-      var data = [];
-      var v = {};
-      v[title] = value;
-      data.push(v);
-      var s = specs;
-      s.data = {};
-      s.data.values = data;
-      vegaEmbed(div, JSON.parse(JSON.stringify(s)), VEGA_EMBED_OPTIONS);
-    }
-    row++;
-  });
-}
-
-function renderBarPlot(
+function renderPlot(
   ah,
   columns,
   title,
@@ -985,43 +903,9 @@ function render(
     }
   }
 
-  for (const o of config.ticks) {
+  for (const o of [...config.ticks, ...config.bars, ...config.bubbles]) {
     if (displayed_columns.includes(o.title)) {
-      renderTickPlot(
-        additional_headers.length,
-        displayed_columns,
-        o.title,
-        o.slug_title,
-        o.specs,
-        config.column_config[o.title].is_float,
-        config.column_config[o.title].precision,
-        config.detail_mode,
-        config.header_label_length,
-        columnIndexMap,
-      );
-    }
-  }
-
-  for (const o of config.bars) {
-    if (displayed_columns.includes(o.title)) {
-      renderBarPlot(
-        additional_headers.length,
-        displayed_columns,
-        o.title,
-        o.slug_title,
-        o.specs,
-        config.column_config[o.title].is_float,
-        config.column_config[o.title].precision,
-        config.detail_mode,
-        config.header_label_length,
-        columnIndexMap,
-      );
-    }
-  }
-
-  for (const o of config.bubbles) {
-    if (displayed_columns.includes(o.title)) {
-      renderBubblePlot(
+      renderPlot(
         additional_headers.length,
         displayed_columns,
         o.title,
