@@ -1484,7 +1484,7 @@ pub(crate) fn get_column_domain(
             let columns = aux_domain_columns
                 .iter()
                 .map(|s| s.to_string())
-                .chain(vec![title.to_string()])
+                .chain(std::iter::once(title.to_string()))
                 .collect_vec();
             let column_indexes: HashSet<_> = dataset.reader()?.headers().map(|s| {
                 s.iter()
@@ -1522,7 +1522,7 @@ pub(crate) fn get_column_domain(
         let columns = aux_domain_columns
             .iter()
             .map(|s| s.to_string())
-            .chain(vec![title.to_string()])
+            .chain(std::iter::once(title.to_string()))
             .collect();
         Ok(json!(get_min_max_multiple_columns(dataset, columns, None)?).to_string())
     } else {
