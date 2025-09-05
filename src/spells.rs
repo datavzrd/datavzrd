@@ -22,8 +22,9 @@ pub struct SpellSpec {
     pub with: HashMap<String, String>,
 }
 
-static SPELL_RE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^(v\d+\.\d+\.\d+)/([^/]+)/(.+)$").expect("Failed to compile regex."));
+static SPELL_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"^(v\d+\.\d+\.\d+)/([^/]+)/(.+)$").expect("Failed to compile regex.")
+});
 
 static SPELL_CACHE: LazyLock<Mutex<HashMap<String, String>>> =
     LazyLock::new(|| Mutex::new(HashMap::new()));
