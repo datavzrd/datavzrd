@@ -23,7 +23,7 @@ pub struct SpellSpec {
 }
 
 static SPELL_RE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^(v\d+\.\d+\.\d+)/([^/]+)/(.+)$").expect("to compile regex"));
+    LazyLock::new(|| Regex::new(r"^(v\d+\.\d+\.\d+)/([^/]+)/(.+)$").expect("Failed to compile regex."));
 
 static SPELL_CACHE: LazyLock<Mutex<HashMap<String, String>>> =
     LazyLock::new(|| Mutex::new(HashMap::new()));
@@ -85,15 +85,15 @@ pub fn fetch_spell(input: &str) -> Result<String> {
     if let Ok(Some(captures)) = SPELL_RE.captures(input) {
         let version = captures
             .get(1)
-            .ok_or(anyhow!(format!("missing version in {input}")))?
+            .ok_or(anyhow!(format!("Missing spell version in {input}")))?
             .as_str();
         let category = captures
             .get(2)
-            .ok_or(anyhow!(format!("missing category in {input}")))?
+            .ok_or(anyhow!(format!("Missing spell category in {input}")))?
             .as_str();
         let spell = captures
             .get(3)
-            .ok_or(anyhow!(format!("missing spell in {input}")))?
+            .ok_or(anyhow!(format!("Missing spell name in {input}")))?
             .as_str();
         let url = format!("https://github.com/datavzrd/datavzrd-spells/raw/{version}/{category}/{spell}/spell.yaml");
 
