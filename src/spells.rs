@@ -22,8 +22,9 @@ pub struct SpellSpec {
     pub with: HashMap<String, String>,
 }
 
-static SPELL_RE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^(v\d+\.\d+\.\d+)/([^/]+)/(.+)$").unwrap());
+static SPELL_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"^(v\d+\.\d+\.\d+)/([^/]+)/(.+)$").expect("Failed to compile regex.")
+});
 
 static SPELL_CACHE: LazyLock<Mutex<HashMap<String, String>>> =
     LazyLock::new(|| Mutex::new(HashMap::new()));
@@ -83,17 +84,30 @@ pub fn fetch_content(url: &String, relative_path: &String) -> Result<String> {
 
 pub fn fetch_spell(input: &str) -> Result<String> {
     if let Ok(Some(captures)) = SPELL_RE.captures(input) {
-        let version = captures.get(1).unwrap().as_str();
-        let category = captures.get(2).unwrap().as_str();
-        let spell = captures.get(3).unwrap().as_str();
+        let version = captures
+            .get(1)
+            .ok_or(anyhow!(format!("Missing spell version in {input}")))?
+            .as_str();
+        let category = captures
+            .get(2)
+            .ok_or(anyhow!(format!("Missing spell category in {input}")))?
+            .as_str();
+        let spell = captures
+            .get(3)
+            .ok_or(anyhow!(format!("Missing spell name in {input}")))?
+            .as_str();
         let url = format!("https://github.com/datavzrd/datavzrd-spells/raw/{version}/{category}/{spell}/spell.yaml");
-        let mut cache = SPELL_CACHE.lock().unwrap();
-        if let Some(cached_spell) = cache.get(&url) {
-            return Ok(cached_spell.clone());
+
+        if let Ok(mut cache) = SPELL_CACHE.lock() {
+            if let Some(cached_spell) = cache.get(&url) {
+                return Ok(cached_spell.clone());
+            }
+            let fetched_spell = fetch_from_url(&url)?;
+            cache.insert(url.clone(), fetched_spell.clone());
+            Ok(fetched_spell)
+        } else {
+            Err(anyhow!("Failed to aquire spell cache."))
         }
-        let fetched_spell = fetch_from_url(&url)?;
-        cache.insert(url.clone(), fetched_spell.clone());
-        Ok(fetched_spell)
     } else if input.starts_with("http://") || input.starts_with("https://") {
         fetch_from_url(input)
     } else {
