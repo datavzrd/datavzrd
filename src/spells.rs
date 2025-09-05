@@ -51,7 +51,7 @@ impl SpellSpec {
                     specs
                         .render_table
                         .as_mut()
-                        .unwrap()
+                        .ok_or(anyhow!(format!("Spell {:} misses render_table", self.url)))?
                         .columns
                         .insert(column.clone(), column_spec);
                 }
