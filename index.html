@@ -11,7 +11,7 @@
     const viewParam = urlParams.get('view');
     const version = '2.59.1';
     const name = 'My oscar report';
-    const views = {"movies-plot":"All movies with its *runtime* and *ratings* plotted over *time*.\n","oscars":"## All winning oscars beginning in the year 1929.\nThis table contains *all* winning oscars for best actress and best actor.\n","oscar-plot":"### My beautiful oscar scatter plot\nSo many great actors and actresses\n","movies":null};
+    const views = {"movies":null,"oscar-plot":"### My beautiful oscar scatter plot\nSo many great actors and actresses\n","movies-plot":"All movies with its *runtime* and *ratings* plotted over *time*.\n","oscars":"## All winning oscars beginning in the year 1929.\nThis table contains *all* winning oscars for best actress and best actor.\n"};
     const table = null;
     let redirectUrl = viewParam ? `${viewParam}/index_1.html` : `${table}/index_1.html`;
     urlParams.delete('view');
