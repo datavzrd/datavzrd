@@ -58,6 +58,9 @@ impl ItemsSpec {
         }
         let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)
             .map_err(|err| SerdeError::new(config_file.to_string(), err))?;
+        for dataset in items_spec.datasets.values_mut() {
+            dataset.preprocess()?;
+        }
         for (name, spec) in items_spec.views.iter_mut() {
             if let Some(spell) = spec.spell.as_ref() {
                 let rendered_spec = spell.render_item_spec()?;
@@ -349,10 +352,6 @@ pub fn default_single_page_threshold() -> usize {
     20000_usize
 }
 
-fn default_separator() -> char {
-    char::from_str(",").unwrap()
-}
-
 pub fn default_page_size() -> usize {
     20
 }
@@ -377,7 +376,7 @@ fn default_links() -> Option<HashMap<String, LinkSpec>> {
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct DatasetSpecs {
     pub path: PathBuf,
-    #[serde(default = "default_separator")]
+    #[serde(default)]
     pub separator: char,
     #[serde(default = "default_header_size", rename = "headers")]
     pub header_rows: usize,
@@ -388,6 +387,13 @@ pub struct DatasetSpecs {
 }
 
 impl DatasetSpecs {
+    pub fn preprocess(&mut self) -> Result<()> {
+        if self.separator == char::default() {
+            self.separator = self.default_separator()?;
+        }
+        Ok(())
+    }
+
     pub fn size(&self) -> Result<usize> {
         Ok(self.reader()?.records()?.count() - (self.header_rows - 1))
     }
@@ -403,6 +409,13 @@ impl DatasetSpecs {
             .ok_or(anyhow!("Failed to create dataset reader."))?;
         let reader = readervzrd::FileReader::new(path, Some(self.separator))?;
         Ok(reader)
+    }
+
+    pub fn default_separator(&self) -> Result<char> {
+        match self.path.extension().and_then(|ext| ext.to_str()) {
+            Some("tsv") => Ok('\t'),
+            _ => Ok(','),
+        }
     }
 
     /// Returns a hashmap counting the number of unique values of all columns of the dataset
