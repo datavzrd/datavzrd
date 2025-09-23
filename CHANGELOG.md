@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.60.0](https://github.com/datavzrd/datavzrd/compare/v2.59.1...v2.60.0) (2025-09-23)
+
+
+### Features
+
+* Auto-detect CSV/TSV separator based on file extension ([#1045](https://github.com/datavzrd/datavzrd/issues/1045)) ([92d102a](https://github.com/datavzrd/datavzrd/commit/92d102adb79cf626bd963606cebca4f6adae43d6))
+
 ## [2.59.1](https://github.com/datavzrd/datavzrd/compare/v2.59.0...v2.59.1) (2025-09-02)
 
 
