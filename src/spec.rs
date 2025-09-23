@@ -1519,7 +1519,7 @@ mod tests {
 
         let expected_dataset_spec = DatasetSpecs {
             path: PathBuf::from("test.tsv"),
-            separator: ',',
+            separator: char::default(),
             header_rows: 1,
             links: default_links(),
             offer_excel: false,
@@ -1596,7 +1596,7 @@ mod tests {
 
         let expected_dataset_spec = DatasetSpecs {
             path: PathBuf::from("test.tsv"),
-            separator: ',',
+            separator: char::default(),
             header_rows: 1,
             links: Some(expected_links),
             offer_excel: false,
@@ -1657,7 +1657,7 @@ mod tests {
 
         let expected_dataset_spec = DatasetSpecs {
             path: PathBuf::from("test.tsv"),
-            separator: ',',
+            separator: char::default(),
             header_rows: 1,
             links: Some(HashMap::from([])),
             offer_excel: false,
@@ -1757,7 +1757,7 @@ mod tests {
                 "table-a".to_string(),
                 DatasetSpecs {
                     path: PathBuf::from("test.tsv"),
-                    separator: ',',
+                    separator: char::default(),
                     header_rows: 2,
                     links: Some(HashMap::from([])),
                     offer_excel: false,
@@ -2194,7 +2194,7 @@ mod tests {
     fn test_dataset_size_with_json() {
         let dataset = DatasetSpecs {
             path: PathBuf::from("tests/data/uniform_datatypes.json"),
-            separator: ',',
+            separator: char::default(),
             header_rows: 1,
             links: None,
             offer_excel: false,
@@ -2204,13 +2204,14 @@ mod tests {
 
     #[test]
     fn test_dataset_empty() {
-        let empty_dataset = DatasetSpecs {
+        let mut empty_dataset = DatasetSpecs {
             path: PathBuf::from("tests/data/empty_table.csv"),
-            separator: ',',
+            separator: char::default(),
             header_rows: 4,
             links: None,
             offer_excel: false,
         };
+        empty_dataset.preprocess().unwrap();
         assert!(empty_dataset.is_empty().unwrap());
     }
 
