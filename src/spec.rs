@@ -1834,6 +1834,7 @@ mod tests {
             datasets:
                 oscars:
                     path: ".examples/data/oscars.csv"
+                    separator: ","
             views:
                 oscars:
                     dataset: oscars
@@ -1857,6 +1858,7 @@ mod tests {
             datasets:
                 oscars:
                     path: ".examples/data/oscars.csv"
+                    separator: ","
             views:
                 oscars:
                     dataset: oscars
@@ -2095,6 +2097,7 @@ mod tests {
             datasets:
                 table-a:
                     path: .examples/data/oscars.csv
+                    separator: ","
             views:
                 table-a:
                     dataset: table-a
