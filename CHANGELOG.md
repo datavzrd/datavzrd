@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.60.1](https://github.com/datavzrd/datavzrd/compare/v2.60.0...v2.60.1) (2025-09-25)
+
+
+### Bug Fixes
+
+* Hide hidden views from view list in report ([#1048](https://github.com/datavzrd/datavzrd/issues/1048)) ([2ac3ad5](https://github.com/datavzrd/datavzrd/commit/2ac3ad5d4830fa1180e05d12682a8b06b7b0e4ba))
+
 ## [2.60.0](https://github.com/datavzrd/datavzrd/compare/v2.59.1...v2.60.0) (2025-09-23)
 
 
