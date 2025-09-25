@@ -271,7 +271,13 @@ impl Renderer for ItemRenderer {
                         name,
                         dataset,
                         &view_sizes,
-                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
+                        &self
+                            .specs
+                            .views
+                            .iter()
+                            .filter(|(_, v)| !v.hidden)
+                            .map(|(s, _)| s.to_owned())
+                            .collect_vec(),
                         &self.specs.default_view,
                         self.specs.needs_excel_sheet(),
                         table.description.as_deref(),
