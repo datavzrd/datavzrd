@@ -17,4 +17,4 @@ jobs:
         with:
           version: 10
       - name: Auto apply clippy lints
-        uses: fxwiegand/apply-clippy-lints@v1.0.5
+        uses: fxwiegand/apply-clippy-lints@v1.0.6
