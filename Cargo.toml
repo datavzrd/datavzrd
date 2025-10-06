@@ -2,7 +2,7 @@
 name = "datavzrd"
 description = "A tool to create visual HTML reports from collections of CSV/TSV tables"
 license = "MIT"
-version = "2.60.1"
+version = "2.61.0"
 authors = [
     "Johannes Köster <johannes.koester@tu-dortmund.de>",
     "Felix Wiegand <felix.wiegand@tu-dortmund.de>",
@@ -24,7 +24,7 @@ thiserror = "2"
 readervzrd = "0.3.0"
 typed-builder = "0.22"
 serde_yaml = "0.8" # https://github.com/AlexanderThaller/format_serde_error/pull/23
-serde_with = { version = "3.15.0", features = ["macros"] }
+serde_with = { version = "3.14.1", features = ["macros"] }
 derive-new = "0.7"
 itertools = "0.14.0"
 tera = "1.20.0"
