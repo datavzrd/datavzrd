@@ -9,7 +9,7 @@ import QRCode from "qrcode";
 import * as d3 from "d3";
 import "bootstrap";
 import "bootstrap-table/src/bootstrap-table.js";
-import 'bootstrap-table/src/extensions/multiple-sort/bootstrap-table-multiple-sort.js';
+import "bootstrap-table/src/extensions/multiple-sort/bootstrap-table-multiple-sort.js";
 import "bootstrap-select";
 import * as htmlToImage from "html-to-image";
 import {
@@ -1117,10 +1117,10 @@ export function load() {
         if (config.is_single_page) {
           title += `
                     <div class="sym sym-container" data-col="${columnIdMap[column]}" style="position: relative;">
-                        <svg onclick="datavzrd.sort(${columnIdMap[column]}, 'asc', this, event)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                        <svg onclick="datavzrd.sort(${columnIdMap[column]}, 'asc', event)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
                           <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
                         </svg>
-                        <svg onclick="datavzrd.sort(${columnIdMap[column]}, 'desc', this, event)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                        <svg onclick="datavzrd.sort(${columnIdMap[column]}, 'desc', event)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                         </svg>
                     </div>
@@ -2129,7 +2129,7 @@ function decompress(data) {
   return decompressed;
 }
 
-export function sort(c, order, svg, event) {
+export function sort(c, order, event) {
   const column = config.columns[c];
   const table = $("#table");
   const options = table.bootstrapTable("getOptions");
@@ -2148,6 +2148,7 @@ export function sort(c, order, svg, event) {
   } else {
     sortPriority.push({ sortName: column, sortOrder: order });
   }
+  console.log(sortPriority);
   table.bootstrapTable("multiSort", sortPriority);
 
   // Reset all icons to default color
@@ -2160,7 +2161,7 @@ export function sort(c, order, svg, event) {
     const idx = config.columns.indexOf(sp.sortName);
     if (idx !== -1) {
       const container = document.querySelector(
-        `.sym-container[data-col="${idx}"]`
+        `.sym-container[data-col="${idx}"]`,
       );
       if (container) {
         const up = container.querySelector(".bi-caret-up-fill");
