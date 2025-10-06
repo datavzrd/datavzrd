@@ -2134,11 +2134,14 @@ export function sort(c, order, event) {
   const table = $("#table");
   const options = table.bootstrapTable("getOptions");
   let sortPriority = options.sortPriority || [];
+  const existing = sortPriority.find((x) => x.sortName === column);
   if (!event.ctrlKey && !event.metaKey) {
-    sortPriority = [];
+    if (existing && existing.sortOrder === order && sortPriority.length === 1) {
+      window.location.reload(); // Workaround to reset to original sorting state as bootstrapTable("multiSort", []) doesnt work
+    }
+    sortPriority = existing ? [existing] : [];
   }
 
-  const existing = sortPriority.find((x) => x.sortName === column);
   if (existing) {
     if (existing.sortOrder === order) {
       sortPriority = sortPriority.filter((x) => x.sortName !== column);
@@ -2148,15 +2151,13 @@ export function sort(c, order, event) {
   } else {
     sortPriority.push({ sortName: column, sortOrder: order });
   }
-  console.log(sortPriority);
+
   table.bootstrapTable("multiSort", sortPriority);
 
-  // Reset all icons to default color
   document
     .querySelectorAll(".sym-container svg")
     .forEach((s) => (s.style.color = "currentColor"));
 
-  // Highlight active columns properly
   sortPriority.forEach((sp) => {
     const idx = config.columns.indexOf(sp.sortName);
     if (idx !== -1) {
@@ -2168,10 +2169,8 @@ export function sort(c, order, event) {
         const down = container.querySelector(".bi-caret-down");
         if (sp.sortOrder === "asc") {
           up.style.color = "#c21f30";
-          down.style.color = "currentColor";
         } else {
           down.style.color = "#c21f30";
-          up.style.color = "currentColor";
         }
       }
     }
