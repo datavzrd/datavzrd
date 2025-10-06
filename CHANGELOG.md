@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.61.0](https://github.com/datavzrd/datavzrd/compare/v2.60.1...v2.61.0) (2025-10-06)
+
+
+### Features
+
+* Add multiple sort support ([#1054](https://github.com/datavzrd/datavzrd/issues/1054)) ([f2008be](https://github.com/datavzrd/datavzrd/commit/f2008beab19301825bcce43125c106ba979b830a))
+
 ## [2.60.1](https://github.com/datavzrd/datavzrd/compare/v2.60.0...v2.60.1) (2025-09-25)
 
 
