@@ -9,6 +9,7 @@ import QRCode from "qrcode";
 import * as d3 from "d3";
 import "bootstrap";
 import "bootstrap-table/src/bootstrap-table.js";
+import 'bootstrap-table/src/extensions/multiple-sort/bootstrap-table-multiple-sort.js';
 import "bootstrap-select";
 import * as htmlToImage from "html-to-image";
 import {
@@ -1115,11 +1116,11 @@ export function load() {
 
         if (config.is_single_page) {
           title += `
-                    <div class="sym sym-container" style="position: relative;">
-                        <svg onclick="datavzrd.sort(${columnIdMap[column]}, 'asc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                    <div class="sym sym-container" data-col="${columnIdMap[column]}" style="position: relative;">
+                        <svg onclick="datavzrd.sort(${columnIdMap[column]}, 'asc', this, event)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
                           <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
                         </svg>
-                        <svg onclick="datavzrd.sort(${columnIdMap[column]}, 'desc', this)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                        <svg onclick="datavzrd.sort(${columnIdMap[column]}, 'desc', this, event)" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                         </svg>
                     </div>
@@ -1197,6 +1198,8 @@ export function load() {
       bs_table_config.pagination = true;
       bs_table_config.pageSize = config.page_size;
       bs_table_config.sortable = true;
+      bs_table_config.multipleSort = true;
+      bs_table_config.sortPriority = [];
     }
 
     if (config.detail_mode) {
@@ -2126,22 +2129,52 @@ function decompress(data) {
   return decompressed;
 }
 
-export function sort(c, order, svg) {
-  let column = config.columns[c];
-  const options = $("#table").bootstrapTable("getOptions");
-  if (options.sortName === column && options.sortOrder === order) {
-    $("#table").bootstrapTable("sortBy", { "": "" });
-    document
-      .querySelectorAll(".sym-container svg")
-      .forEach((svg) => (svg.style.color = "currentColor"));
-    svg.style.color = "#007bff";
-    return;
+export function sort(c, order, svg, event) {
+  const column = config.columns[c];
+  const table = $("#table");
+  const options = table.bootstrapTable("getOptions");
+  let sortPriority = options.sortPriority || [];
+  if (!event.ctrlKey && !event.metaKey) {
+    sortPriority = [];
   }
+
+  const existing = sortPriority.find((x) => x.sortName === column);
+  if (existing) {
+    if (existing.sortOrder === order) {
+      sortPriority = sortPriority.filter((x) => x.sortName !== column);
+    } else {
+      existing.sortOrder = order;
+    }
+  } else {
+    sortPriority.push({ sortName: column, sortOrder: order });
+  }
+  table.bootstrapTable("multiSort", sortPriority);
+
+  // Reset all icons to default color
   document
     .querySelectorAll(".sym-container svg")
-    .forEach((svg) => (svg.style.color = "currentColor"));
-  svg.style.color = "#c21f30";
-  $("#table").bootstrapTable("sortBy", { field: column, sortOrder: order });
+    .forEach((s) => (s.style.color = "currentColor"));
+
+  // Highlight active columns properly
+  sortPriority.forEach((sp) => {
+    const idx = config.columns.indexOf(sp.sortName);
+    if (idx !== -1) {
+      const container = document.querySelector(
+        `.sym-container[data-col="${idx}"]`
+      );
+      if (container) {
+        const up = container.querySelector(".bi-caret-up-fill");
+        const down = container.querySelector(".bi-caret-down");
+        if (sp.sortOrder === "asc") {
+          up.style.color = "#c21f30";
+          down.style.color = "currentColor";
+        } else {
+          down.style.color = "#c21f30";
+          up.style.color = "currentColor";
+        }
+      }
+    }
+  });
 }
 
 function buildColumnIndexMap() {
