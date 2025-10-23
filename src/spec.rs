@@ -403,11 +403,14 @@ impl DatasetSpecs {
     }
 
     pub fn reader(&self) -> Result<readervzrd::FileReader> {
-        let path = &self
-            .path
-            .to_str()
-            .ok_or(anyhow!("Failed to create dataset reader."))?;
-        let reader = readervzrd::FileReader::new(path, Some(self.separator))?;
+        let path = &self.path.to_str().ok_or(anyhow!(
+            "Failed to convert given path to string: {}",
+            self.path.display()
+        ))?;
+        let reader = readervzrd::FileReader::new(path, Some(self.separator)).context(format!(
+            "Failed to read dataset from path {}",
+            self.path.display()
+        ))?;
         Ok(reader)
     }
 
