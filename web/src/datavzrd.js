@@ -236,11 +236,18 @@ function createShareURL(index, webhost_url) {
 
 function shareRow(index, webhost_url) {
   $("#qr-modal").modal("show");
-  document.getElementById("qr-code").innerHTML = "";
+  const canvas = document.getElementById("qr-code");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   let url = createShareURL(index, webhost_url);
   $("#open-url").attr("href", url);
   QRCode.toCanvas(document.getElementById("qr-code"), url, {
     width: window.innerHeight / 1.8,
+  }).catch((err) => {
+    console.error("QR code generation failed:", err);
+    showNotification(
+      `Data too large for QR code.`,
+    );
   });
 }
 
