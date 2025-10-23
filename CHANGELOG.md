@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.61.2](https://github.com/datavzrd/datavzrd/compare/v2.61.1...v2.61.2) (2025-10-23)
+
+
+### Bug Fixes
+
+* Improve error messages in DatasetSpecs::reader ([#1066](https://github.com/datavzrd/datavzrd/issues/1066)) ([9b9afb8](https://github.com/datavzrd/datavzrd/commit/9b9afb89cd98d2825239d99392e49424658e0804)), closes [#1063](https://github.com/datavzrd/datavzrd/issues/1063)
+
 ## [2.61.1](https://github.com/datavzrd/datavzrd/compare/v2.61.0...v2.61.1) (2025-10-23)
 
 
