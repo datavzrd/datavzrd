@@ -299,6 +299,7 @@ impl ItemsSpec {
         for (name, dataset) in &self.datasets {
             if let Some(linkouts) = &dataset.links {
                 for (link_name, link) in linkouts {
+                    link.validate(link_name.to_string())?;
                     let mut reader = dataset.reader()?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
                     if !titles.contains(&link.column) {
@@ -979,6 +980,15 @@ pub struct LinkSpec {
     pub optional: bool,
 }
 
+impl LinkSpec {
+    fn validate(&self, name: String) -> Result<()> {
+        if self.view.is_none() && self.table_row.is_none() {
+            bail!(ConfigError::IncompleteLinkSpecification { name })
+        }
+        Ok(())
+    }
+}
+
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct CustomPlot {
@@ -1480,6 +1490,8 @@ pub enum ConfigError {
     HeadersFirstColumnCustomized { view: String },
     #[error("Given config file is empty. Consider adding a valid configuration.")]
     EmptyConfigFile,
+    #[error("Given linkout definition {name} is incomplete and must either specify a view or a table_row.")]
+    IncompleteLinkSpecification { name: String },
 }
 
 #[cfg(test)]
