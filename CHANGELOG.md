@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.61.3](https://github.com/datavzrd/datavzrd/compare/v2.61.2...v2.61.3) (2025-10-24)
+
+
+### Bug Fixes
+
+* Add proper error handling and validation for incomplete LinkSpec ([#1069](https://github.com/datavzrd/datavzrd/issues/1069)) ([01edc1a](https://github.com/datavzrd/datavzrd/commit/01edc1a4e2e4465f7c47b6f8fdfc6e8572a5a871)), closes [#1068](https://github.com/datavzrd/datavzrd/issues/1068)
+
 ## [2.61.2](https://github.com/datavzrd/datavzrd/compare/v2.61.1...v2.61.2) (2025-10-23)
 
 
