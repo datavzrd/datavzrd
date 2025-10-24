@@ -2,7 +2,7 @@
 name = "datavzrd"
 description = "A tool to create visual HTML reports from collections of CSV/TSV tables"
 license = "MIT"
-version = "2.61.2"
+version = "2.61.3"
 authors = [
     "Johannes Köster <johannes.koester@tu-dortmund.de>",
     "Felix Wiegand <felix.wiegand@tu-dortmund.de>",
