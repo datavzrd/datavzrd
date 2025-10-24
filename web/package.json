@@ -18,9 +18,9 @@
     "qrcode": "^1.5.3",
     "showdown": "^1.9.1",
     "showdown-katex": "^0.8.0",
-    "vega": "^5.25.0",
-    "vega-embed": "^6.22.1",
-    "vega-lite": "^5.9.3",
+    "vega": "^6.2.0",
+    "vega-embed": "^7.1.0",
+    "vega-lite": "^6.4.1",
     "d3": "^7.8.5",
     "html-to-image": "1.11.13"
   },
