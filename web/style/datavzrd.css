@@ -150,7 +150,8 @@ th .th-inner {
 }
 
 #vis-container {
-    height: calc(100vh - 105px)
+    height: calc(100vh - 105px);
+    padding-top: 60px;
 }
 
 .fa {
