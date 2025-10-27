@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.61.4](https://github.com/datavzrd/datavzrd/compare/v2.61.3...v2.61.4) (2025-10-27)
+
+
+### Bug Fixes
+
+* Add padding-top to plot container for spacing ([d6614a5](https://github.com/datavzrd/datavzrd/commit/d6614a5d9167379df8c0f93d84283962a234ee2c))
+
 ## [2.61.3](https://github.com/datavzrd/datavzrd/compare/v2.61.2...v2.61.3) (2025-10-24)
 
 
