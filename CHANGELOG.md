@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.61.5](https://github.com/datavzrd/datavzrd/compare/v2.61.4...v2.61.5) (2025-10-28)
+
+
+### Bug Fixes
+
+* Validate plot datasets exist in ItemsSpec ([#1078](https://github.com/datavzrd/datavzrd/issues/1078)) ([bc40afe](https://github.com/datavzrd/datavzrd/commit/bc40afe5d63cdc842515bf860f0fac93f8ee59a7))
+
 ## [2.61.4](https://github.com/datavzrd/datavzrd/compare/v2.61.3...v2.61.4) (2025-10-27)
 
 
