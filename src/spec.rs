@@ -295,6 +295,17 @@ impl ItemsSpec {
                     }
                 }
             }
+            if view.render_plot.is_some() {
+                if let Some(datasets) = &view.datasets {
+                    for dataset in datasets.values() {
+                        if !self.datasets.contains_key(dataset) {
+                            bail!(ConfigError::MissingDataset {
+                                dataset: dataset.to_string()
+                            })
+                        }
+                    }
+                }
+            }
         }
         for (name, dataset) in &self.datasets {
             if let Some(linkouts) = &dataset.links {
