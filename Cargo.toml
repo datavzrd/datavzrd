@@ -21,7 +21,7 @@ clap = { version = "4.5.50", features = [
 ] }
 anyhow = "1"
 thiserror = "2"
-readervzrd = "0.3.0"
+readervzrd = "0.3.1"
 typed-builder = "0.23"
 serde_yaml = "0.8" # https://github.com/AlexanderThaller/format_serde_error/pull/23
 serde_with = { version = "3.15.1", features = ["macros"] }
