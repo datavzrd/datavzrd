@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.61.7](https://github.com/datavzrd/datavzrd/compare/v2.61.6...v2.61.7) (2025-10-31)
+
+
+### Miscellaneous Chores
+
+* release 2.61.7 ([f13c2a6](https://github.com/datavzrd/datavzrd/commit/f13c2a6427495df37d33da3e4daab12840734134))
+
 ## [2.61.6](https://github.com/datavzrd/datavzrd/compare/v2.61.5...v2.61.6) (2025-10-31)
 
 
