@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.61.8](https://github.com/datavzrd/datavzrd/compare/v2.61.7...v2.61.8) (2025-11-10)
+
+
+### Bug Fixes
+
+* Improve error message for missing columns ([#1087](https://github.com/datavzrd/datavzrd/issues/1087)) ([72d77b6](https://github.com/datavzrd/datavzrd/commit/72d77b6074631ea98161f9ab07291b6abf8cb600))
+* Improve spec parsing error for custom plots ([#1086](https://github.com/datavzrd/datavzrd/issues/1086)) ([64e1ae4](https://github.com/datavzrd/datavzrd/commit/64e1ae4dfa1762dc4732b50d4c832d408c404540))
+
 ## [2.61.7](https://github.com/datavzrd/datavzrd/compare/v2.61.6...v2.61.7) (2025-10-31)
 
 
