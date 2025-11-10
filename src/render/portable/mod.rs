@@ -501,7 +501,7 @@ impl CustomPlotsConfig {
                     }).unwrap();
                     CustomPlotConfig {
                         title: k.to_string(),
-                        specs: serde_json::Value::from_str(&custom_plot.schema.as_ref().unwrap())
+                        specs: serde_json::Value::from_str(custom_plot.schema.as_ref().unwrap())
                             .context(SpecError::CouldNotParse {
                                 column: k.to_string(),
                                 view: view.to_string(),
@@ -527,7 +527,7 @@ impl CustomPlotsConfig {
                             }).unwrap();
                             CustomPlotConfig {
                                 title: k.to_string(),
-                                specs: serde_json::Value::from_str(&custom_plot.schema.as_ref().unwrap())
+                                specs: serde_json::Value::from_str(custom_plot.schema.as_ref().unwrap())
                                     .context(SpecError::CouldNotParse {
                                         column: k.to_string(),
                                         view: view.to_string(),
