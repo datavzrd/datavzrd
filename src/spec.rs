@@ -136,7 +136,8 @@ impl ItemsSpec {
                         if !titles.contains(column) && !render_columns.optional.unwrap() {
                             bail!(ConfigError::MissingColumn {
                                 column: column.to_string(),
-                                view: name.to_string()
+                                view: name.to_string(),
+                                columns: titles.join(", "),
                             })
                         }
                         if titles.contains(column) {
@@ -1485,8 +1486,8 @@ pub enum ConfigError {
         dataset: String,
         link: String,
     },
-    #[error("Could not find column named '{column}' in the dataset that is used by view {view}.")]
-    MissingColumn { column: String, view: String },
+    #[error("Could not find column named '{column}' in the dataset that is used by view {view}. Available columns are: {columns}")]
+    MissingColumn { column: String, view: String, columns: String },
     #[error(
         "Could not find view named {view:?} in given config that is referred to with {link:?}."
     )]
