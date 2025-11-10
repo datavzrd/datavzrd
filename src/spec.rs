@@ -1487,7 +1487,11 @@ pub enum ConfigError {
         link: String,
     },
     #[error("Could not find column named '{column}' in the dataset that is used by view {view}. Available columns are: {columns}")]
-    MissingColumn { column: String, view: String, columns: String },
+    MissingColumn {
+        column: String,
+        view: String,
+        columns: String,
+    },
     #[error(
         "Could not find view named {view:?} in given config that is referred to with {link:?}."
     )]
