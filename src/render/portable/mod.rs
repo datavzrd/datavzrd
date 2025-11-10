@@ -501,10 +501,11 @@ impl CustomPlotsConfig {
                     }).unwrap();
                     CustomPlotConfig {
                         title: k.to_string(),
-                        specs: serde_json::Value::from_str(&custom_plot.schema.unwrap())
+                        specs: serde_json::Value::from_str(&custom_plot.schema.as_ref().unwrap())
                             .context(SpecError::CouldNotParse {
                                 column: k.to_string(),
                                 view: view.to_string(),
+                                schema: custom_plot.schema.unwrap(),
                             })
                             .unwrap(),
                         data_function: JavascriptFunction(custom_plot.plot_data).name(),
@@ -526,10 +527,11 @@ impl CustomPlotsConfig {
                             }).unwrap();
                             CustomPlotConfig {
                                 title: k.to_string(),
-                                specs: serde_json::Value::from_str(&custom_plot.schema.unwrap())
+                                specs: serde_json::Value::from_str(&custom_plot.schema.as_ref().unwrap())
                                     .context(SpecError::CouldNotParse {
                                         column: k.to_string(),
                                         view: view.to_string(),
+                                        schema: custom_plot.schema.unwrap(),
                                     })
                                     .unwrap(),
                                 data_function: JavascriptFunction(custom_plot.plot_data).name(),
@@ -2038,8 +2040,12 @@ pub enum DatasetError {
 
 #[derive(Error, Debug)]
 pub enum SpecError {
-    #[error("Could not parse specs of plot for {column:?} in view {view:?}. Please make sure your specs contain valid JSON.")]
-    CouldNotParse { column: String, view: String },
+    #[error("Could not parse specs of plot for {column:?} in view {view:?}. Please make sure your specs contain valid JSON. Given specs: {schema}")]
+    CouldNotParse {
+        column: String,
+        view: String,
+        schema: String,
+    },
 }
 
 #[cfg(test)]
