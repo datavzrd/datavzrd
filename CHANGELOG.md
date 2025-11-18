@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.61.9](https://github.com/datavzrd/datavzrd/compare/v2.61.8...v2.61.9) (2025-11-18)
+
+
+### Bug Fixes
+
+* Fix detail-view links and refactor link generation ([#1090](https://github.com/datavzrd/datavzrd/issues/1090)) ([3b12ba5](https://github.com/datavzrd/datavzrd/commit/3b12ba581cf37877923275997115152f51cbf1d0))
+
 ## [2.61.8](https://github.com/datavzrd/datavzrd/compare/v2.61.7...v2.61.8) (2025-11-10)
 
 
