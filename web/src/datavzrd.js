@@ -246,9 +246,7 @@ function shareRow(index, webhost_url) {
     width: window.innerHeight / 1.8,
   }).catch((err) => {
     console.error("QR code generation failed:", err);
-    showNotification(
-      `Data too large for QR code.`,
-    );
+    showNotification(`Data too large for QR code.`);
   });
 }
 
@@ -559,11 +557,11 @@ function shortenHeaderRow(row, ellipsis, skip_label) {
   });
 }
 
-function createLinkHtml(columns, title, link_urls, value) {
+function createLinkHtml(columns, link_urls, value, shown_value, row) {
   if (link_urls.length == 1) {
     let link = link_urls[0].link.url.replaceAll("{value}", value);
     for (const column of columns) {
-      link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+      link = link.replaceAll(`{${column}}`, row[column]);
     }
     if (link_urls[0].link["new-window"]) {
       return `<a href="${link}" target="_blank" rel="noopener noreferrer" >${shown_value}</a>`;
@@ -575,7 +573,7 @@ function createLinkHtml(columns, title, link_urls, value) {
     for (let l of link_urls) {
       let link = l.link.url.replaceAll("{value}", value);
       for (const column of columns) {
-        link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+        link = link.replaceAll(`{${column}}`, row[column]);
       }
       if (l.link["new-window"]) {
         links = `${links}<a class="dropdown-item" href="${link}" target='_blank' rel="noopener noreferrer" >${l.name}</a>`;
@@ -613,17 +611,32 @@ function linkUrlColumn(
     if (custom_content) {
       shown_value = window[custom_content](value, table_rows[row]);
     }
-    this.innerHTML = createLinkHtml(columns, title, link_urls, shown_value);
+    this.innerHTML = createLinkHtml(
+      columns,
+      link_urls,
+      value,
+      shown_value,
+      table_rows[row],
+    );
     row++;
   });
 }
 
 function linkDetailUrlColumn(row, div, link_urls, columns) {
   var custom_content = link_urls["custom-content"];
+  var value = row[link_urls["title"]];
+  var shown_value = value;
   if (custom_content) {
-    value = window[custom_content](value, table_rows[row]);
+    shown_value = window[custom_content](value, row);
   }
-  $(`${div}`)[0].innerHTML = createLinkHtml(columns, title, link_urls, value);
+  console.log($(`${div}`));
+  $(`${div}`)[0].innerHTML = createLinkHtml(
+    columns,
+    link_urls["links"],
+    value,
+    shown_value,
+    row,
+  );
 }
 
 function colorizeDetailCard(value, div, heatmap, row, is_float, precision) {
@@ -1329,9 +1342,9 @@ export function load() {
         if (!config.displayed_columns.includes(o.title)) {
           linkDetailUrlColumn(
             row,
-            `detail-plot-${index}-links-${columnIdMap[o.title]}`,
+            `#detail-plot-${index}-links-${columnIdMap[o.title]}`,
             o,
-            config.columns
+            config.columns,
           );
         }
       }
