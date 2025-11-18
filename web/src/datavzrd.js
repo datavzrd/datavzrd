@@ -559,15 +559,49 @@ function shortenHeaderRow(row, ellipsis, skip_label) {
   });
 }
 
+function createLinkHtml(columns, title, link_urls, value) {
+  if (link_urls.length == 1) {
+    let link = link_urls[0].link.url.replaceAll("{value}", value);
+    for (const column of columns) {
+      link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+    }
+    if (link_urls[0].link["new-window"]) {
+      return `<a href="${link}" target="_blank" rel="noopener noreferrer" >${shown_value}</a>`;
+    } else {
+      return `<a href="${link}">${shown_value}</a>`;
+    }
+  } else {
+    let links = "";
+    for (let l of link_urls) {
+      let link = l.link.url.replaceAll("{value}", value);
+      for (const column of columns) {
+        link = link.replaceAll(`{${column}}`, table_rows[row][column]);
+      }
+      if (l.link["new-window"]) {
+        links = `${links}<a class="dropdown-item" href="${link}" target='_blank' rel="noopener noreferrer" >${l.name}</a>`;
+      } else {
+        links = `${links}<a class="dropdown-item" href="${link}" >${l.name}</a>`;
+      }
+    }
+    return `
+              <div class="linkout-raw-value">${shown_value}</div>
+              <div class="btn-group linkout-group">
+                <button class="btn btn-outline-secondary btn-table btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  ${shown_value}
+                </button>
+                <div class="dropdown-menu">
+                  ${links}
+                </div>
+              </div>
+            `;
+  }
+}
+
 function linkUrlColumn(
-  ah,
-  dp_columns,
   columns,
   title,
   link_urls,
   custom_content,
-  detail_mode,
-  header_label_length,
   columnIndexMap,
 ) {
   let index = columnIndexMap[title];
@@ -579,43 +613,17 @@ function linkUrlColumn(
     if (custom_content) {
       shown_value = window[custom_content](value, table_rows[row]);
     }
-    if (link_urls.length == 1) {
-      let link = link_urls[0].link.url.replaceAll("{value}", value);
-      for (const column of columns) {
-        link = link.replaceAll(`{${column}}`, table_rows[row][column]);
-      }
-      if (link_urls[0].link["new-window"]) {
-        this.innerHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer" >${shown_value}</a>`;
-      } else {
-        this.innerHTML = `<a href="${link}">${shown_value}</a>`;
-      }
-    } else {
-      let links = "";
-      for (let l of link_urls) {
-        let link = l.link.url.replaceAll("{value}", value);
-        for (const column of columns) {
-          link = link.replaceAll(`{${column}}`, table_rows[row][column]);
-        }
-        if (l.link["new-window"]) {
-          links = `${links}<a class="dropdown-item" href="${link}" target='_blank' rel="noopener noreferrer" >${l.name}</a>`;
-        } else {
-          links = `${links}<a class="dropdown-item" href="${link}" >${l.name}</a>`;
-        }
-      }
-      this.innerHTML = `
-                <div class="linkout-raw-value">${shown_value}</div>
-                <div class="btn-group linkout-group">
-                  <button class="btn btn-outline-secondary btn-table btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ${shown_value}
-                  </button>
-                  <div class="dropdown-menu">
-                    ${links}
-                  </div>
-                </div>
-                `;
-    }
+    this.innerHTML = createLinkHtml(columns, title, link_urls, shown_value);
     row++;
   });
+}
+
+function linkDetailUrlColumn(row, div, link_urls, columns) {
+  var custom_content = link_urls["custom-content"];
+  if (custom_content) {
+    value = window[custom_content](value, table_rows[row]);
+  }
+  $(`${div}`)[0].innerHTML = createLinkHtml(columns, title, link_urls, value);
 }
 
 function colorizeDetailCard(value, div, heatmap, row, is_float, precision) {
@@ -801,6 +809,7 @@ function detailFormatter(index, row) {
   let ticks = config.tick_titles;
   let bars = config.bar_titles;
   let bubbles = config.bubble_titles;
+  let link_urls = config.link_urls;
   let displayed_columns = config.displayed_columns;
   let hidden_columns = config.hidden_columns;
   var html = [];
@@ -821,7 +830,8 @@ function detailFormatter(index, row) {
         cp.includes(key) ||
         ticks.includes(key) ||
         bars.includes(key) ||
-        bubbles.includes(key)
+        bubbles.includes(key) ||
+        link_urls.includes(key)
       ) {
         if (cp.includes(key)) {
           id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
@@ -829,6 +839,8 @@ function detailFormatter(index, row) {
           id = `detail-plot-${index}-bars-${config.columns.indexOf(key)}`;
         } else if (bubbles.includes(key)) {
           id = `detail-plot-${index}-bubbles-${config.columns.indexOf(key)}`;
+        } else if (link_urls.includes(key)) {
+          id = `detail-plot-${index}-links-${config.columns.indexOf(key)}`;
         } else {
           id = `detail-plot-${index}-ticks-${config.columns.indexOf(key)}`;
         }
@@ -936,14 +948,10 @@ function render(
   for (const o of config.link_urls) {
     if (displayed_columns.includes(o.title)) {
       linkUrlColumn(
-        additional_headers.length,
-        displayed_columns,
         columns,
         o.title,
         o.links,
         o["custom-content"],
-        config.detail_mode,
-        config.header_label_length,
         columnIndexMap,
       );
     }
@@ -1317,6 +1325,17 @@ export function load() {
     $("#table").bootstrapTable("append", table_rows);
 
     $("#table").on("expand-row.bs.table", (event, index, row, detailView) => {
+      for (const o of config.link_urls) {
+        if (!config.displayed_columns.includes(o.title)) {
+          linkDetailUrlColumn(
+            row,
+            `detail-plot-${index}-links-${columnIdMap[o.title]}`,
+            o,
+            config.columns
+          );
+        }
+      }
+
       for (const o of custom_plots) {
         if (!config.displayed_columns.includes(o.title)) {
           renderCustomPlotDetailView(
