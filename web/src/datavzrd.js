@@ -629,7 +629,6 @@ function linkDetailUrlColumn(row, div, link_urls, columns) {
   if (custom_content) {
     shown_value = window[custom_content](value, row);
   }
-  console.log($(`${div}`));
   $(`${div}`)[0].innerHTML = createLinkHtml(
     columns,
     link_urls["links"],
@@ -822,7 +821,7 @@ function detailFormatter(index, row) {
   let ticks = config.tick_titles;
   let bars = config.bar_titles;
   let bubbles = config.bubble_titles;
-  let link_urls = config.link_urls;
+  let link_urls = config.links;
   let displayed_columns = config.displayed_columns;
   let hidden_columns = config.hidden_columns;
   var html = [];
