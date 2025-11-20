@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.61.10](https://github.com/datavzrd/datavzrd/compare/v2.61.9...v2.61.10) (2025-11-20)
+
+
+### Bug Fixes
+
+* Provide proper error for missing heatmap scale when omitted ([#1092](https://github.com/datavzrd/datavzrd/issues/1092)) ([636bba3](https://github.com/datavzrd/datavzrd/commit/636bba3ff003f85c3f5d6761a25a2a75bbc6fdd4))
+
 ## [2.61.9](https://github.com/datavzrd/datavzrd/compare/v2.61.8...v2.61.9) (2025-11-18)
 
 
