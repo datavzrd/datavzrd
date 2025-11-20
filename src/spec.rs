@@ -914,7 +914,9 @@ impl Heatmap {
             _ => {}
         }
         if self.scale_type == ScaleType::None {
-            bail!(ConfigError::HeatmapMissingScale { column: title.to_string() })
+            bail!(ConfigError::HeatmapMissingScale {
+                column: title.to_string()
+            })
         }
         if self.domain.is_none() {
             let d = get_column_domain(title, dataset, self)?;
