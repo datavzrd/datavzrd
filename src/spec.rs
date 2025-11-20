@@ -913,6 +913,11 @@ impl Heatmap {
             }
             _ => {}
         }
+        if self.scale_type == ScaleType::None {
+            bail!(ConfigError::HeatmapMissingScale {
+                column: title.to_string()
+            })
+        }
         if self.domain.is_none() {
             let d = get_column_domain(title, dataset, self)?;
             let domain: Vec<String> = if self.scale_type.is_quantitative() {
@@ -1437,6 +1442,8 @@ pub enum ConfigError {
     MissingDataset { dataset: String },
     #[error("Could not find default view named {view:?} in given config.")]
     MissingDefaultView { view: String },
+    #[error("Heatmap definition for column {column:?} misses a scale. Please provide a scale in the heatmap configuration.")]
+    HeatmapMissingScale { column: String },
     #[error("View {view:?} consists of a configuration with render-plot and render-table present while only one should be present. If you want both please define two separate views.")]
     PlotAndTablePresentConfiguration { view: String },
     #[error("Found conflicting render-table configuration for column {column:?} of view {view:?}. The conflicting configuration are {conflict:?}.")]
