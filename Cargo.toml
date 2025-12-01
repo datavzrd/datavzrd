@@ -43,7 +43,7 @@ md5 = "0.8.0"
 jsonm = "0.2.0"
 format_serde_error = "0.3.0"
 reqwest = { version = "0.12.24", features = ["blocking"] }
-pyo3 = { version = "0.27.1", features = ["auto-initialize", "abi3-py310"] }
+pyo3 = { version = "0.27.2", features = ["auto-initialize", "abi3-py310"] }
 tempfile = "3.23.0"
 
 [build-dependencies]
