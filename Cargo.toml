@@ -33,7 +33,7 @@ lz-str = "0.2.1"
 chrono = "0.4"
 ndhistogram = "0.10.0"
 fancy-regex = "0.16.2"
-log = "0.4.28"
+log = "0.4.29"
 simplelog = "0.12.2"
 minify-js = "=0.6.0" # newer versions generate display issues (see PR #375)
 minify-html = "0.18.1"
