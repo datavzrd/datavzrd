@@ -32,7 +32,7 @@ pub struct Datavzrd {
     pub(crate) webview_url: String,
 
     /// Overwrites the contents of the given output directory if it is not empty.
-    #[arg(long)]
+    #[arg(long, short = 'x')]
     pub(crate) overwrite_output: bool,
 
     /// Output file
