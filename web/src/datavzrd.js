@@ -81,7 +81,6 @@ function renderMarkdownDescription(is_plot_view) {
         wrapper.appendChild(title);
         const legendDiv = document.createElement("div");
         legendDiv.style.display = "inline-block";
-        legendDiv.style.marginLeft = "8px";
         wrapper.appendChild(legendDiv);
         innerDescription.appendChild(wrapper);
         renderVegaLegend(legendDiv, cp.specs);
