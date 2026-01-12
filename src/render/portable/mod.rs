@@ -510,6 +510,7 @@ impl CustomPlotsConfig {
                             .unwrap(),
                         data_function: JavascriptFunction(custom_plot.plot_data).name(),
                         vega_controls: custom_plot.vega_controls,
+                        legend: custom_plot.legend,
                     }
                 })
                 .chain(
@@ -536,6 +537,7 @@ impl CustomPlotsConfig {
                                     .unwrap(),
                                 data_function: JavascriptFunction(custom_plot.plot_data).name(),
                                 vega_controls: custom_plot.vega_controls,
+                                legend: custom_plot.legend,
                             }
                         }),
                 )
@@ -623,6 +625,7 @@ struct CustomPlotConfig {
     specs: Value,
     data_function: String,
     vega_controls: bool,
+    legend: bool,
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]

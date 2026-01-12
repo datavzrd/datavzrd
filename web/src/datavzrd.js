@@ -72,6 +72,21 @@ function renderMarkdownDescription(is_plot_view) {
     }
     var legends = renderHeatmapLegends(heatmaps);
     innerDescription.innerHTML += legends;
+    for (const cp of custom_plots) {
+      if (cp.legend) {
+        const wrapper = document.createElement("div");
+        wrapper.style.margin = "6px 0";
+        const title = document.createElement("strong");
+        title.textContent = cp.title.replace(/_/g, " ");
+        wrapper.appendChild(title);
+        const legendDiv = document.createElement("div");
+        legendDiv.style.display = "inline-block";
+        legendDiv.style.marginLeft = "8px";
+        wrapper.appendChild(legendDiv);
+        innerDescription.appendChild(wrapper);
+        renderVegaLegend(legendDiv, cp.specs);
+      }
+    }
   }
   if (innerDescription.offsetHeight < window.screen.height / 3) {
     $("#table-container").css(
@@ -97,6 +112,23 @@ function renderMarkdownTableDescriptions() {
   document.querySelectorAll("table tbody td:nth-child(2)").forEach((td) => {
     td.innerHTML = converter.makeHtml(td.dataset.markdown);
   });
+}
+
+function renderVegaLegend(div, specs) {
+  const legendSpec = JSON.parse(JSON.stringify(specs));
+  legendSpec.width = 0;
+  legendSpec.height = 0;
+  legendSpec.mark = legendSpec.mark || "point";
+  legendSpec.config = legendSpec.config || {};
+  legendSpec.config.view = { stroke: null };
+  if (!legendSpec.data) {
+    legendSpec.data = { values: [] };
+  }
+  const embedOpts = {
+    actions: false,
+    renderer: "svg",
+  };
+  vegaEmbed(div, legendSpec, embedOpts);
 }
 
 function renderHeatmapLegends(heatmaps) {

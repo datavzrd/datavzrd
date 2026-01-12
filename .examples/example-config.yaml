@@ -72,6 +72,7 @@ views:
           display-mode: detail
           label: overall wins and nominations
           custom-plot:
+            legend: true
             data: |
               function(value, row) {
                 return [{"category": "wins", "amount": value.split("/")[0]}, {"category": "nominations", "amount": value.split("/")[1]}]
