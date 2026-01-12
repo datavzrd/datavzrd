@@ -793,6 +793,9 @@ function renderCustomPlot(
     var s = specs;
     s.data = {};
     s.data.values = data;
+    if (plot.legend) {
+      disableVegaLegend(s);
+    }
     var opt = { actions: plot.vega_controls, renderer: "svg" };
     this.innerHTML = "";
     this.appendChild(div);
@@ -808,13 +811,25 @@ function renderCustomPlotDetailView(
   data_function,
   specs,
   vega_controls,
+  legend
 ) {
   var data = data_function(value, row);
   var s = specs;
   s.data = {};
   s.data.values = data;
+  if (legend) {
+    disableVegaLegend(s);
+  }
   var opt = { actions: vega_controls, renderer: "svg" };
   vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+}
+
+function disableVegaLegend(spec) {
+  if (!spec.config) spec.config = {};
+  spec.config.legend = {
+    ...(spec.config.legend || {}),
+    disable: true,
+  };
 }
 
 export function embedSearch(index) {
@@ -1388,6 +1403,7 @@ export function load() {
             window[o.data_function],
             o.specs,
             o.vega_controls,
+            o.legend
           );
         }
       }
