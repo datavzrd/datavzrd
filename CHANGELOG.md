@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.62.0](https://github.com/datavzrd/datavzrd/compare/v2.61.10...v2.62.0) (2026-01-12)
+
+
+### Features
+
+* Add -x short flag for overwrite_output ([#1110](https://github.com/datavzrd/datavzrd/issues/1110)) ([3bdebd8](https://github.com/datavzrd/datavzrd/commit/3bdebd877567aab77c9c42f5d7401d1174ea5bbc))
+* Add legend support for custom plots ([#1109](https://github.com/datavzrd/datavzrd/issues/1109)) ([b8e7a47](https://github.com/datavzrd/datavzrd/commit/b8e7a4733b30a5d47b8c1336a9942ff17b194db2))
+
 ## [2.61.10](https://github.com/datavzrd/datavzrd/compare/v2.61.9...v2.61.10) (2025-11-20)
 
 
