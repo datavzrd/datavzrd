@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.62.1](https://github.com/datavzrd/datavzrd/compare/v2.62.0...v2.62.1) (2026-01-12)
+
+
+### Bug Fixes
+
+* Disable legend for in cell custom plots when global legend is turned on ([#1112](https://github.com/datavzrd/datavzrd/issues/1112)) ([16e5546](https://github.com/datavzrd/datavzrd/commit/16e5546df8ea57a27d7f117cb031938335b0f0d6))
+
 ## [2.62.0](https://github.com/datavzrd/datavzrd/compare/v2.61.10...v2.62.0) (2026-01-12)
 
 
