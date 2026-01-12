@@ -1017,6 +1017,8 @@ pub struct CustomPlot {
     pub schema_path: Option<String>,
     #[serde(default)]
     pub vega_controls: bool,
+    #[serde(default)]
+    pub legend: bool,
 }
 
 impl CustomPlot {
