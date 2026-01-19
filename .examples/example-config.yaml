@@ -69,7 +69,7 @@ views:
               legend:
                 title: award
         overall_wins_and_overall_nominations:
-          display-mode: normal
+          display-mode: detail
           label: overall wins and nominations
           custom-plot:
             data: |
