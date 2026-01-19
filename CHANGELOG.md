@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.63.0](https://github.com/datavzrd/datavzrd/compare/v2.62.1...v2.63.0) (2026-01-19)
+
+
+### Features
+
+* Pass full table data to custom-plot functions ([#1115](https://github.com/datavzrd/datavzrd/issues/1115)) ([3abfbd4](https://github.com/datavzrd/datavzrd/commit/3abfbd404b1a182d835bd4cf11e8118d051124c3))
+
 ## [2.62.1](https://github.com/datavzrd/datavzrd/compare/v2.62.0...v2.62.1) (2026-01-12)
 
 
