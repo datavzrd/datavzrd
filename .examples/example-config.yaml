@@ -73,7 +73,7 @@ views:
           label: overall wins and nominations
           custom-plot:
             data: |
-              function(value, row) {
+              function(value, row, table) {
                 return [{"category": "wins", "amount": value.split("/")[0]}, {"category": "nominations", "amount": value.split("/")[1]}]
               }
             spec-path: ".examples/specs/overall-wins-and-overall-nominations.vl.json"

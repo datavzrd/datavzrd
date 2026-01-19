@@ -783,13 +783,14 @@ function renderCustomPlot(
   let table_rows = $("#table").bootstrapTable("getData", {
     useCurrentPage: true,
   });
+  let all_rows = $("#table").bootstrapTable("getData");
   $(`table > tbody > tr td:nth-child(${index})`).each(function () {
     var id = `${plot.title}-${row}`;
     this.classList.add("plotcell");
     const div = document.createElement("div");
     let value = table_rows[row][plot.title];
     let value_row = table_rows[row];
-    var data = data_function(value, value_row);
+    var data = data_function(value, value_row, all_rows);
     var s = specs;
     s.data = {};
     s.data.values = data;
@@ -811,9 +812,10 @@ function renderCustomPlotDetailView(
   data_function,
   specs,
   vega_controls,
-  legend
+  legend,
 ) {
-  var data = data_function(value, row);
+  let all_rows = $("#table").bootstrapTable("getData");
+  var data = data_function(value, row, all_rows);
   var s = specs;
   s.data = {};
   s.data.values = data;
