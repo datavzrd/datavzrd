@@ -460,8 +460,12 @@ fn render_table_javascript<P: AsRef<Path>>(
         title,
     );
 
-    let custom_plot_config =
-        CustomPlotsConfig::from_column_config(render_columns, additional_columns, view);
+    let custom_plot_config = CustomPlotsConfig::from_column_config(
+        render_columns,
+        additional_columns,
+        view,
+        is_single_page,
+    );
     let header_config = HeaderConfig::from_headers(header_specs, &titles, additional_headers);
 
     context.insert("config", &config);
@@ -487,31 +491,38 @@ impl CustomPlotsConfig {
         config: &HashMap<String, RenderColumnSpec>,
         additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
         view: &str,
+        is_single_page: bool,
     ) -> Self {
         CustomPlotsConfig(
             config
                 .iter()
                 .filter(|(_, k)| k.custom_plot.is_some())
-                .map(|(k, v)| {
+                .map(|(k, v)| -> Result<CustomPlotConfig, anyhow::Error> {
                     let mut custom_plot = v.custom_plot.as_ref().unwrap().to_owned();
                     custom_plot.read_schema().with_context(|| {
                         format!(
                             "Failed to read schema for custom_plot in column '{k}' in view '{view}'"
                         )
-                    }).unwrap();
-                    CustomPlotConfig {
+                    })?;
+                    let data_function = JavascriptFunction(custom_plot.plot_data);
+                    if data_function.count_args() >= 3 && !is_single_page {
+                        bail!(CustomPlotJavascriptFunctionError::TooManyArgs {
+                            column: k.to_string(),
+                            view: view.to_string(),
+                        });
+                    }
+                    Ok(CustomPlotConfig {
                         title: k.to_string(),
                         specs: serde_json::Value::from_str(custom_plot.schema.as_ref().unwrap())
                             .context(SpecError::CouldNotParse {
                                 column: k.to_string(),
                                 view: view.to_string(),
                                 schema: custom_plot.schema.unwrap(),
-                            })
-                            .unwrap(),
-                        data_function: JavascriptFunction(custom_plot.plot_data).name(),
+                            })?,
+                        data_function: data_function.name(),
                         vega_controls: custom_plot.vega_controls,
                         legend: custom_plot.legend,
-                    }
+                    })
                 })
                 .chain(
                     additional_columns
@@ -519,29 +530,36 @@ impl CustomPlotsConfig {
                         .unwrap_or(&HashMap::new())
                         .iter()
                         .filter(|(_, v)| v.custom_plot.is_some())
-                        .map(|(k, v)| {
+                        .map(|(k, v)| -> Result<CustomPlotConfig, anyhow::Error> {
                             let mut custom_plot = v.custom_plot.as_ref().unwrap().to_owned();
                             custom_plot.read_schema().with_context(|| {
                                 format!(
                                     "Failed to read schema for custom_plot in additional column '{k}' in view '{view}'"
                                 )
-                            }).unwrap();
-                            CustomPlotConfig {
+                            })?;
+                            let data_function = JavascriptFunction(custom_plot.plot_data);
+                            if data_function.count_args() >= 3 && !is_single_page {
+                                bail!(CustomPlotJavascriptFunctionError::TooManyArgs {
+                                    column: k.to_string(),
+                                    view: view.to_string(),
+                                });
+                            }
+                            Ok(CustomPlotConfig {
                                 title: k.to_string(),
                                 specs: serde_json::Value::from_str(custom_plot.schema.as_ref().unwrap())
                                     .context(SpecError::CouldNotParse {
                                         column: k.to_string(),
                                         view: view.to_string(),
                                         schema: custom_plot.schema.unwrap(),
-                                    })
-                                    .unwrap(),
-                                data_function: JavascriptFunction(custom_plot.plot_data).name(),
+                                    })?,
+                                data_function: data_function.name(),
                                 vega_controls: custom_plot.vega_controls,
                                 legend: custom_plot.legend,
-                            }
+                            })
                         }),
                 )
-                .collect(),
+                .collect::<Result<Vec<_>, _>>()
+                .unwrap(),
         )
     }
 }
@@ -1126,6 +1144,10 @@ impl JavascriptFunction {
             .unwrap()
             .0
             .to_string()
+    }
+
+    fn count_args(&self) -> usize {
+        self.args().split(',').count()
     }
 
     fn to_javascript_function(&self, column: &str) -> String {
@@ -2049,6 +2071,12 @@ pub enum SpecError {
         view: String,
         schema: String,
     },
+}
+
+#[derive(Error, Debug)]
+pub enum CustomPlotJavascriptFunctionError {
+    #[error("The data function for the custom plot view of {column:?} in view {view:?} has more than two arguments. The third argument is only allowed when the view does not exceed the max-in-memory threshold.")]
+    TooManyArgs { column: String, view: String },
 }
 
 #[cfg(test)]
