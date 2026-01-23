@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.63.1](https://github.com/datavzrd/datavzrd/compare/v2.63.0...v2.63.1) (2026-01-23)
+
+
+### Bug Fixes
+
+* Wrap detail pills in responsive wrapper ([1a0cd36](https://github.com/datavzrd/datavzrd/commit/1a0cd364ab83a0f367e16b74052134460c072e5e))
+
 ## [2.63.0](https://github.com/datavzrd/datavzrd/compare/v2.62.1...v2.63.0) (2026-01-19)
 
 
