@@ -496,7 +496,7 @@ function renderDetailPills(value, div, pills) {
         );
       })
       .join("");
-    $(`${div}`)[0].innerHTML = content;
+    $(`${div}`)[0].innerHTML = `<div class="detail-pills-wrapper">${content}</div>`;
   }
   $('[data-toggle="tooltip"]').tooltip({
     sanitizeFn: function (content) {
