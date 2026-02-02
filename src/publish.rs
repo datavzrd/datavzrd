@@ -217,6 +217,10 @@ fn verify() -> Result<()> {
         bail!("GitHub CLI (`gh`) is not installed. Please install it.");
     }
 
+    if std::env::var("GITHUB_TOKEN").is_ok() {
+        return Ok(());
+    }
+
     let output = Command::new("gh")
         .arg("auth")
         .arg("status")
@@ -224,7 +228,7 @@ fn verify() -> Result<()> {
         .context("Failed to execute `gh auth status` command")?;
 
     if !output.status.success() {
-        bail!("You are not authenticated with GitHub. Please log in using `gh auth login`.");
+        bail!("You are not authenticated with GitHub. Please log in using `gh auth login` or set the GITHUB_TOKEN environment variable.");
     }
 
     Ok(())
