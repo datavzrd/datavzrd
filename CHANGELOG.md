@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.63.2](https://github.com/datavzrd/datavzrd/compare/v2.63.1...v2.63.2) (2026-02-02)
+
+
+### Bug Fixes
+
+* Allow GITHUB_TOKEN verification in publish subcommand ([#1125](https://github.com/datavzrd/datavzrd/issues/1125)) ([d2fa51e](https://github.com/datavzrd/datavzrd/commit/d2fa51e85581144c47bce4e49d10380a9e3c95d5))
+* Reject custom plot JS functions with third table parameter for non single page views ([#1119](https://github.com/datavzrd/datavzrd/issues/1119)) ([b28c337](https://github.com/datavzrd/datavzrd/commit/b28c33772dd7f072ef20784dd1e7bc70a63b5cba))
+
 ## [2.63.1](https://github.com/datavzrd/datavzrd/compare/v2.63.0...v2.63.1) (2026-01-23)
 
 
