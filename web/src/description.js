@@ -2,6 +2,7 @@ import showdown from "showdown";
 import showdownKatex from "showdown-katex";
 import $ from "jquery";
 import { datavzrdScale } from "./plot/heatmap";
+import vegaEmbed from "vega-embed";
 
 export function renderMarkdownDescription(is_plot_view) {
   var innerDescription = document.getElementById("innerDescription");
