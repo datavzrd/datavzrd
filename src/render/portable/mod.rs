@@ -244,7 +244,7 @@ impl Renderer for ItemRenderer {
                             &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                             name,
                             &linked_tables,
-                            &mut dataset.links.as_ref().unwrap().clone(),
+                            &mut dataset.links.clone().unwrap(),
                             &self.specs.report_name,
                             &self.specs.views,
                             &self.specs.default_view,
