@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.63.3](https://github.com/datavzrd/datavzrd/compare/v2.63.2...v2.63.3) (2026-02-03)
+
+
+### Bug Fixes
+
+* Exclude self-links when rendering pages ([#1126](https://github.com/datavzrd/datavzrd/issues/1126)) ([52f1561](https://github.com/datavzrd/datavzrd/commit/52f15614fa11d87a2e75d95aa20ee3a3e4f31af1))
+
 ## [2.63.2](https://github.com/datavzrd/datavzrd/compare/v2.63.1...v2.63.2) (2026-02-02)
 
 
