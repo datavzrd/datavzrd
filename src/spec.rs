@@ -1004,6 +1004,18 @@ impl LinkSpec {
         }
         Ok(())
     }
+
+    /// Returns the view which is linked to
+    pub(crate) fn links_to_view(&self, name: String) -> Result<String> {
+        if let Some(view) = &self.view {
+            Ok(view.to_string())
+        } else if let Some(table_row) = &self.table_row {
+            let (view, _) = table_row.split_once('/').unwrap();
+            Ok(view.to_string())
+        } else {
+            bail!(ConfigError::IncompleteLinkSpecification { name })
+        }
+    }
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]

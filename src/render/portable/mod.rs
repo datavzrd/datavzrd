@@ -244,7 +244,7 @@ impl Renderer for ItemRenderer {
                             &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                             name,
                             &linked_tables,
-                            dataset.links.as_ref().unwrap(),
+                            &mut dataset.links.as_ref().unwrap().clone(),
                             &self.specs.report_name,
                             &self.specs.views,
                             &self.specs.default_view,
@@ -319,7 +319,7 @@ fn render_page<P: AsRef<Path>>(
     tables: &[String],
     name: &str,
     linked_tables: &LinkedTable,
-    links: &HashMap<String, LinkSpec>,
+    links: &mut HashMap<String, LinkSpec>,
     report_name: &str,
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
@@ -341,6 +341,8 @@ fn render_page<P: AsRef<Path>>(
         .iter()
         .map(|s| s.iter().map(|s| s.to_string()).collect_vec())
         .collect_vec();
+
+    links.retain(|_, ls| ls.links_to_view(name.to_string()).unwrap() != name);
 
     let compressed_linkouts = if !links.is_empty() {
         let linkouts = data
