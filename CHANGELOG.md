@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.63.4](https://github.com/datavzrd/datavzrd/compare/v2.63.3...v2.63.4) (2026-02-23)
+
+
+### Bug Fixes
+
+* Make description a proper collapse and refine header height and layout spacing ([#1139](https://github.com/datavzrd/datavzrd/issues/1139)) ([fa373c9](https://github.com/datavzrd/datavzrd/commit/fa373c94d1fb4d89706c4c6e0f544cbee9fc98e3))
+
 ## [2.63.3](https://github.com/datavzrd/datavzrd/compare/v2.63.2...v2.63.3) (2026-02-03)
 
 
