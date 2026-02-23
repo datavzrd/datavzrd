@@ -64,11 +64,6 @@ export function renderMarkdownDescription(is_plot_view) {
       }
     }
   }
-  $("#table-container").css(
-    "padding-top",
-    innerDescription.offsetHeight,
-  );
-  $("#vis-container").css("padding-top", innerDescription.offsetHeight + 50);
 }
 
 export function renderMarkdownTableDescriptions() {
