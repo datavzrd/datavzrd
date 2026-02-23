@@ -64,13 +64,11 @@ export function renderMarkdownDescription(is_plot_view) {
       }
     }
   }
-  if (innerDescription.offsetHeight < window.screen.height / 3) {
-    $("#table-container").css(
-      "padding-top",
-      innerDescription.offsetHeight - 25,
-    );
-    $("#vis-container").css("padding-top", innerDescription.offsetHeight + 50);
-  }
+  $("#table-container").css(
+    "padding-top",
+    innerDescription.offsetHeight,
+  );
+  $("#vis-container").css("padding-top", innerDescription.offsetHeight + 50);
 }
 
 export function renderMarkdownTableDescriptions() {
