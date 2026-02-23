@@ -595,19 +595,18 @@ export function load() {
     }
 
     var header_height =
-      (80 +
-        6 *
-          Math.max(
-            ...config.displayed_columns.map((el) => {
-              var columnConfig = config.column_config[el];
-              return columnConfig && columnConfig.label
-                ? columnConfig.label.length
-                : el.length;
-            }),
-          ) *
-          Math.SQRT2) /
-        2 +
-      80;
+      40 +
+      6 *
+        Math.max(
+          ...config.displayed_columns.map((el) => {
+            var columnConfig = config.column_config[el];
+            return columnConfig && columnConfig.label
+              ? columnConfig.label.length
+              : el.length;
+          }),
+        ) *
+        (Math.SQRT2 / 2) +
+      40;
 
     $("th").css("height", header_height);
 
