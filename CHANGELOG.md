@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.63.5](https://github.com/datavzrd/datavzrd/compare/v2.63.4...v2.63.5) (2026-02-26)
+
+
+### Bug Fixes
+
+* Require heatmap color scheme or range to be present to avoid unexpected behaviour ([#1141](https://github.com/datavzrd/datavzrd/issues/1141)) ([9b42369](https://github.com/datavzrd/datavzrd/commit/9b423694a6d41623558e484f997944a948dc6a3e))
+
 ## [2.63.4](https://github.com/datavzrd/datavzrd/compare/v2.63.3...v2.63.4) (2026-02-23)
 
 
