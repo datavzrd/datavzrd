@@ -193,6 +193,15 @@ impl ItemsSpec {
                                                 .collect()
                                         })
                                     }
+                                    if heatmap.vega_type.is_none()
+                                        && heatmap.color_scheme.is_empty()
+                                        && heatmap.color_range.0.is_empty()
+                                    {
+                                        bail!(ConfigError::HeatmapMissingColorDefinition {
+                                            view: name.to_string(),
+                                            column: column.to_string()
+                                        })
+                                    }
                                     if heatmap.domain_mid.is_some() {
                                         if column_types
                                             .get(column)
@@ -1458,6 +1467,8 @@ pub enum ConfigError {
     MissingDefaultView { view: String },
     #[error("Heatmap definition for column {column:?} misses a scale. Please provide a scale in the heatmap configuration.")]
     HeatmapMissingScale { column: String },
+    #[error("Heatmap definition for column {column:?} of view {view:?} misses a color scheme or color range. Please provide either a color scheme or a color range in the heatmap configuration.")]
+    HeatmapMissingColorDefinition { view: String, column: String },
     #[error("View {view:?} consists of a configuration with render-plot and render-table present while only one should be present. If you want both please define two separate views.")]
     PlotAndTablePresentConfiguration { view: String },
     #[error("Found conflicting render-table configuration for column {column:?} of view {view:?}. The conflicting configuration are {conflict:?}.")]
