@@ -665,7 +665,9 @@ impl ItemSpecs {
         }
         if self.render_table.is_some() {
             for (title, render_column_specs) in indexed_keys.iter_mut() {
-                render_column_specs.preprocess(dataset, title)?;
+                if headers.contains(title) {
+                    render_column_specs.preprocess(dataset, title)?;
+                }
             }
         }
         self.render_table = Some(RenderTableSpecs {
