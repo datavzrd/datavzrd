@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.63.6](https://github.com/datavzrd/datavzrd/compare/v2.63.5...v2.63.6) (2026-03-12)
+
+
+### Bug Fixes
+
+* Only preprocess columns when they exist ([#1147](https://github.com/datavzrd/datavzrd/issues/1147)) ([5a8155e](https://github.com/datavzrd/datavzrd/commit/5a8155e3b1755070ae866dc832f6e130e379c92d))
+
 ## [2.63.5](https://github.com/datavzrd/datavzrd/compare/v2.63.4...v2.63.5) (2026-02-26)
 
 
