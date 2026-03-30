@@ -2010,9 +2010,9 @@ dependencies = [
 
 [[package]]
 name = "ndhistogram"
-version = "0.10.0"
+version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "64e2008ccebc56163dc5e95a4319ac719eeb0b09c6721a06859b75ed2b88cce4"
+checksum = "80665c116bab6da83e18e1e302b8eca1ee7c320d6f9123c809c128498845b992"
 dependencies = [
  "num-traits",
  "thiserror 1.0.69",
