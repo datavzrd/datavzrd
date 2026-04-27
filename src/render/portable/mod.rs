@@ -1352,8 +1352,8 @@ fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
         .links
         .as_ref()
         .unwrap()
-        .iter()
-        .filter_map(|(_, link_spec)| link_spec.table_row.as_ref())
+        .values()
+        .filter_map(|link_spec| link_spec.table_row.as_ref())
         .map(|link| link.split_once('/').unwrap())
         .collect_vec();
 
