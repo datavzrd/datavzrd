@@ -343,6 +343,27 @@ footer {
     color: grey;
 }
 
+.col-drag-handle {
+    display: inline-block;
+    cursor: grab;
+    opacity: 0.35;
+    margin-left: 4px;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+.col-drag-handle:hover {
+    opacity: 0.75;
+}
+
+th.col-dragging {
+    opacity: 0.45;
+}
+
+th.col-drag-over {
+    border-left: 2px solid #0275d8 !important;
+}
+
 #plot-size-control {
     position: absolute;
     bottom: 52px;
