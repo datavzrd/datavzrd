@@ -4,8 +4,6 @@ use crate::utils::column_type::IsNa;
 use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::Result;
 use itertools::Itertools;
-use ndhistogram::axis::Uniform;
-use ndhistogram::{ndhistogram, Histogram};
 use serde::Serialize;
 use serde_json::json;
 use std::collections::HashMap;
@@ -64,7 +62,62 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
     Ok(())
 }
 
-/// Generates plot records for columns of types Float and Integer
+fn binned_counts(values: &[f32], min: f32, max: f32, num_bins: usize) -> Vec<u32> {
+    let bin_width = (max - min) / num_bins as f32;
+    let mut counts = vec![0u32; num_bins];
+    for &v in values {
+        let idx = ((v - min) / bin_width) as usize;
+        counts[idx.min(num_bins - 1)] += 1;
+    }
+    counts
+}
+
+fn counts_to_records(counts: &[u32], min: f32, max: f32) -> Vec<BinnedPlotRecord> {
+    let bin_width = (max - min) / counts.len() as f32;
+    counts
+        .iter()
+        .enumerate()
+        .map(|(i, &value)| BinnedPlotRecord {
+            bin_start: min + i as f32 * bin_width,
+            bin_end: min + (i + 1) as f32 * bin_width,
+            value,
+        })
+        .collect()
+}
+
+fn refined_bins(values: &[f32], min: f32, max: f32) -> Vec<BinnedPlotRecord> {
+    let mut num_bins = NUMERIC_BINS;
+    let mut counts = binned_counts(values, min, max, num_bins);
+
+    for _ in 0..MAX_BIN_REFINEMENT_ROUNDS {
+        let max_idx = counts
+            .iter()
+            .enumerate()
+            .max_by_key(|(_, &c)| c)
+            .map(|(i, _)| i)
+            .unwrap_or(0);
+
+        let doubled = binned_counts(values, min, max, num_bins * 2);
+        let left = doubled[max_idx * 2];
+        let right = doubled[max_idx * 2 + 1];
+        let total = left + right;
+
+        if total == 0 {
+            break;
+        }
+
+        let ratio = left as f32 / total as f32;
+        if (ratio - 0.5).abs() <= 0.1 {
+            break;
+        }
+
+        num_bins *= 2;
+        counts = doubled;
+    }
+
+    counts_to_records(&counts, min, max)
+}
+
 fn generate_numeric_plot(
     dataset: &DatasetSpecs,
     column_index: usize,
@@ -77,34 +130,26 @@ fn generate_numeric_plot(
         return Ok(None);
     }
 
-    let bin_width = (max - min) / NUMERIC_BINS as f32;
-    let mut hist = ndhistogram!(Uniform::new(NUMERIC_BINS, min, max)?);
-    let mut nan = 0;
+    let mut values = Vec::new();
+    let mut nan = 0u32;
 
     for record in reader.records()?.skip(dataset.header_rows - 1) {
         let value = record.get(column_index).unwrap();
         if let Ok(number) = f32::from_str(value) {
-            hist.fill(&number)
+            values.push(number);
         } else {
             nan += 1;
         }
     }
 
-    let mut result = hist
-        .iter()
-        .map(|h| BinnedPlotRecord {
-            bin_start: h.bin.start().unwrap_or(min - bin_width),
-            bin_end: h.bin.end().unwrap_or(max + bin_width),
-            value: *h.value as u32,
-        })
-        .collect_vec();
+    let mut result = refined_bins(&values, min, max);
 
     if nan > 0 {
         result.push(BinnedPlotRecord {
             bin_start: f32::NAN,
             bin_end: f32::NAN,
             value: nan,
-        })
+        });
     }
 
     Ok(Some(result))
@@ -182,6 +227,7 @@ fn generate_nominal_plot(
 
 const MAX_NOMINAL_BINS: usize = 10;
 const NUMERIC_BINS: usize = 20;
+const MAX_BIN_REFINEMENT_ROUNDS: usize = 3;
 
 #[derive(Serialize, Debug, Clone, Ord, PartialOrd, Eq, PartialEq)]
 struct PlotRecord {
