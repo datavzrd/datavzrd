@@ -909,7 +909,6 @@ dependencies = [
  "md5",
  "minify-html",
  "minify-js",
- "ndhistogram",
  "pyo3",
  "readervzrd",
  "reqwest",
@@ -2015,16 +2014,6 @@ dependencies = [
  "libc",
  "wasi 0.11.1+wasi-snapshot-preview1",
  "windows-sys 0.59.0",
-]
-
-[[package]]
-name = "ndhistogram"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1818c0de28cee5f7e1ad898e267d9435f7b0f24a69ced0d280eaec7b165edc64"
-dependencies = [
- "num-traits",
- "thiserror 2.0.18",
 ]
 
 [[package]]
