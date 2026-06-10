@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.64.0](https://github.com/datavzrd/datavzrd/compare/v2.63.6...v2.64.0) (2026-06-10)
+
+
+### Features
+
+* Dynamically adjust bin sizes for numerical histograms ([#1170](https://github.com/datavzrd/datavzrd/issues/1170)) ([8476aa6](https://github.com/datavzrd/datavzrd/commit/8476aa6f92cb3003c0ab2b02dd02df068c8976b6))
+
+
+### Bug Fixes
+
+* Remove overflow from histogram modal ([#1168](https://github.com/datavzrd/datavzrd/issues/1168)) ([0151288](https://github.com/datavzrd/datavzrd/commit/01512888bb07934756a5f3ee7607d9f90e6985f3))
+
 ## [2.63.6](https://github.com/datavzrd/datavzrd/compare/v2.63.5...v2.63.6) (2026-03-12)
 
 
