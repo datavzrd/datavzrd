@@ -78,7 +78,7 @@ export function render_html_contents() {
             sidebar_html += '<li class="list-group-item sidebar-btn" id="unhide-btn">Unhide columns</li>';
         }
         sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleLineNumbers">Show/Hide Line Numbers</li>';
-        
+
         // Group: Downloads
         if (config.has_excel_sheet) {
             sidebar_html += '<li class="list-group-item sidebar-btn" id="btnExcel">Download Excel Sheet</li>';
@@ -162,7 +162,7 @@ export function render_html_contents() {
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <div class="modal-body">
+                                    <div class="modal-body" style="height: 370px;">
                                         <div id="histogram-plot">
                                         </div>
                                     </div>

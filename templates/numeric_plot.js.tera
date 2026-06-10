@@ -2,6 +2,7 @@ let show_plot_{{ index }} = {% if table == "null" %}false{% else %}true{% endif 
 let plot_{{ index }} = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "width": "container",
+    "height": 300,
     "layer": [
         {
             "data": {"values": {{ table }}},
