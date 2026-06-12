@@ -380,6 +380,7 @@ export function load() {
     document.title = "datavzrd report";
     const columnIndexMap = buildColumnIndexMap();
     window.columnIndexMap = columnIndexMap;
+    config.original_displayed_columns = [...config.displayed_columns];
     render_html_contents();
     $(".table-container").show();
     $(".loading").hide();
@@ -487,6 +488,11 @@ export function load() {
                             <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
                         </svg>
                     </div>
+                    <div class="col-drag-handle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-grip-vertical" viewBox="0 0 16 16">
+                            <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                        </svg>
+                    </div>
                     `;
         }
 
@@ -565,6 +571,11 @@ export function load() {
     }
 
     $("#table").bootstrapTable(bs_table_config);
+
+    if (config.is_single_page) {
+      attachColumnDragAttributes();
+      setupColumnDragAndDrop();
+    }
 
     let additional_headers = "";
 
@@ -1115,6 +1126,7 @@ export function load() {
 
     if (config.is_single_page) {
       $("#table").on("post-body.bs.table", (number, size) => {
+        applyColumnOrderToBody();
         render(
           additional_headers,
           config.displayed_columns,
@@ -1123,7 +1135,7 @@ export function load() {
           config,
           false,
           custom_plots,
-          columnIndexMap,
+          window.columnIndexMap,
           columnIdMap,
         );
       });
@@ -1139,6 +1151,9 @@ export function load() {
           line_numbers("none");
         }
       });
+      $("#resetColumnOrder-btn").on("click", function () {
+        resetColumnOrder();
+      });
       $("#unsort-btn").on("click", function () {
         render(
           additional_headers,
@@ -1148,7 +1163,7 @@ export function load() {
           config,
           false,
           custom_plots,
-          columnIndexMap,
+          window.columnIndexMap,
           columnIdMap,
         );
       });
@@ -1542,6 +1557,147 @@ export function sort(c, order, event) {
         }
       }
     }
+  });
+}
+
+function applyColumnOrderToBody() {
+  const original = config.original_displayed_columns;
+  const current = config.displayed_columns;
+  if (original.every((col, i) => col === current[i])) return;
+
+  const n = current.length;
+  const base = 1 + (config.detail_mode || config.header_label_length !== 0 ? 1 : 0);
+
+  document.querySelectorAll("table > tbody > tr").forEach(row => {
+    const children = row.children;
+    if (children.length < base + n) return;
+
+    const afterRef = base + n < children.length ? children[base + n] : null;
+    const dataCells = {};
+    original.forEach((col, i) => { dataCells[col] = children[base + i]; });
+
+    for (let i = n - 1; i >= 0; i--) row.removeChild(dataCells[original[i]]);
+    current.forEach(col => row.insertBefore(dataCells[col], afterRef));
+  });
+}
+
+function reorderColumn(srcColName, targetColName) {
+  const srcIdx = window.columnIndexMap[srcColName];
+  const targetIdx = window.columnIndexMap[targetColName];
+  if (srcIdx === targetIdx) return;
+
+  const moveCell = (row, from, to) => {
+    const src = row.children[from - 1];
+    const target = row.children[to - 1];
+    if (!src || !target) return;
+    row.insertBefore(src, target);
+  };
+
+  moveCell(document.querySelector("table > thead > tr:first-child"), srcIdx, targetIdx);
+  document.querySelectorAll("table > thead > tr:not(:first-child)").forEach(row => moveCell(row, srcIdx, targetIdx));
+  document.querySelectorAll("table > tbody > tr").forEach(row => moveCell(row, srcIdx, targetIdx));
+
+  const from = config.displayed_columns.indexOf(srcColName);
+  config.displayed_columns.splice(from, 1);
+  const to = config.displayed_columns.indexOf(targetColName);
+  config.displayed_columns.splice(to, 0, srcColName);
+
+  window.columnIndexMap = buildColumnIndexMap();
+}
+
+export function resetColumnOrder() {
+  const original = config.original_displayed_columns;
+  for (let i = 0; i < original.length; i++) {
+    const target = original[i];
+    const current = config.displayed_columns.indexOf(target);
+    if (current !== i) {
+      reorderColumn(target, config.displayed_columns[i]);
+    }
+  }
+}
+
+function attachColumnDragAttributes() {
+  const headerRow = document.querySelector("table > thead > tr:first-child");
+  if (!headerRow) return;
+  config.displayed_columns.forEach(colName => {
+    const idx = window.columnIndexMap[colName];
+    const th = headerRow.children[idx - 1];
+    if (th) {
+      th.draggable = true;
+      th.dataset.colName = colName;
+    }
+  });
+}
+
+let _dragSrcColName = null;
+let _dropTargetColName = null;
+
+function resolveDropTarget(th, clientX) {
+  const rect = th.getBoundingClientRect();
+  if (clientX >= rect.left + rect.width / 2) {
+    const colIdx = config.displayed_columns.indexOf(th.dataset.colName);
+    return colIdx < config.displayed_columns.length - 1
+      ? config.displayed_columns[colIdx + 1]
+      : null;
+  }
+  return th.dataset.colName;
+}
+
+function setupColumnDragAndDrop() {
+  const thead = document.querySelector("table > thead");
+  if (!thead || thead.dataset.dragReady) return;
+  thead.dataset.dragReady = "1";
+
+  thead.addEventListener("dragstart", e => {
+    const th = e.target.closest("th[data-col-name]");
+    if (!th) return;
+    _dragSrcColName = th.dataset.colName;
+    th.classList.add("col-dragging");
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", _dragSrcColName);
+  });
+
+  thead.addEventListener("dragover", e => {
+    const th = e.target.closest("th[data-col-name]");
+    if (!th || !_dragSrcColName) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+
+    const target = resolveDropTarget(th, e.clientX);
+    _dropTargetColName = (target && target !== _dragSrcColName) ? target : null;
+
+    document.querySelectorAll("th.col-drag-over").forEach(el => el.classList.remove("col-drag-over"));
+    if (_dropTargetColName) {
+      const indicatorTh = thead.querySelector(`th[data-col-name="${_dropTargetColName}"]`);
+      if (indicatorTh) indicatorTh.classList.add("col-drag-over");
+    }
+  });
+
+  thead.addEventListener("dragleave", e => {
+    if (!thead.contains(e.relatedTarget)) {
+      document.querySelectorAll("th.col-drag-over").forEach(el => el.classList.remove("col-drag-over"));
+      _dropTargetColName = null;
+    }
+  });
+
+  thead.addEventListener("drop", e => {
+    e.preventDefault();
+    const src = _dragSrcColName;
+    const target = _dropTargetColName;
+    _dragSrcColName = null;
+    _dropTargetColName = null;
+    document.querySelectorAll("th.col-drag-over, th.col-dragging").forEach(el => {
+      el.classList.remove("col-drag-over", "col-dragging");
+    });
+    if (src && target) reorderColumn(src, target);
+  });
+
+  thead.addEventListener("dragend", () => {
+    document.querySelectorAll("th.col-dragging, th.col-drag-over").forEach(el => {
+      el.classList.remove("col-dragging", "col-drag-over");
+    });
+    _dragSrcColName = null;
+    _dropTargetColName = null;
   });
 }
 
