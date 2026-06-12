@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.65.0](https://github.com/datavzrd/datavzrd/compare/v2.64.0...v2.65.0) (2026-06-12)
+
+
+### Features
+
+* Allow column reordering via drag and drop ([#1171](https://github.com/datavzrd/datavzrd/issues/1171)) ([03e034b](https://github.com/datavzrd/datavzrd/commit/03e034bdc42f2eb23b093af7cdb3c1a39d561d0d))
+
 ## [2.64.0](https://github.com/datavzrd/datavzrd/compare/v2.63.6...v2.64.0) (2026-06-10)
 
 
