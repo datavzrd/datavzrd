@@ -346,6 +346,7 @@ footer {
 .col-drag-handle {
     display: inline-block;
     cursor: grab;
+    color: #007bff;
     opacity: 0.35;
     margin-left: 4px;
     vertical-align: middle;
