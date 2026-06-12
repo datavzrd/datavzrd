@@ -76,8 +76,8 @@ export function render_html_contents() {
         }
         if (config.is_single_page) {
             sidebar_html += '<li class="list-group-item sidebar-btn" id="unhide-btn">Unhide columns</li>';
-            sidebar_html += '<li class="list-group-item sidebar-btn" id="resetColumnOrder-btn">Reset column order</li>';
         }
+        sidebar_html += '<li class="list-group-item sidebar-btn" id="resetColumnOrder-btn">Reset column order</li>';
         sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleLineNumbers">Show/Hide Line Numbers</li>';
 
         // Group: Downloads
