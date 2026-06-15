@@ -137,39 +137,30 @@ export function colorizeHeaderRow(row, heatmap, header_label_length) {
       }
     }
   } else {
-    if (heatmap.domain != null) {
-      if (heatmap["color-scheme"] != "") {
-        scale = vega
-          .scale(heatmap.scale)()
-          .domain(heatmap.domain)
-          .clamp(heatmap.clamp)
-          .range(vega.scheme(heatmap["color-scheme"]));
-      } else if (!heatmap.range == 0) {
-        scale = vega
-          .scale(heatmap.scale)()
-          .domain(heatmap.domain)
-          .clamp(heatmap.clamp)
-          .range(heatmap.range);
-      } else {
-        scale = vega
-          .scale(heatmap.scale)()
-          .domain(heatmap.domain)
-          .clamp(heatmap.clamp);
+    if (heatmap["color-scheme"] != "") {
+      let scheme = heatmap["color-scheme"];
+      let d3_scheme =
+        d3[
+          `interpolate${scheme.charAt(0).toUpperCase()}${scheme.slice(1).toLowerCase()}`
+        ];
+      let s = heatmap.scale;
+      if (heatmap.scale == "linear") {
+        s = "";
       }
+      scale = d3[
+        `scaleSequential${s.charAt(0).toUpperCase()}${s.slice(1).toLowerCase()}`
+      ](heatmap.domain, d3_scheme);
+    } else if (heatmap.range && heatmap.range.length > 0) {
+      scale = vega
+        .scale(heatmap.scale)()
+        .domain(heatmap.domain)
+        .clamp(heatmap.clamp)
+        .range(heatmap.range);
     } else {
-      if (heatmap["color-scheme"] != "") {
-        scale = vega
-          .scale(heatmap.scale)()
-          .clamp(heatmap.clamp)
-          .range(vega.scheme(heatmap["color-scheme"]));
-      } else if (!heatmap.range == 0) {
-        scale = vega
-          .scale(heatmap.scale)()
-          .clamp(heatmap.clamp)
-          .range(heatmap.range);
-      } else {
-        scale = vega.scale(heatmap.scale)().clamp(heatmap.clamp);
-      }
+      scale = vega
+        .scale(heatmap.scale)()
+        .domain(heatmap.domain)
+        .clamp(heatmap.clamp);
     }
   }
   var start = 0;
@@ -180,7 +171,11 @@ export function colorizeHeaderRow(row, heatmap, header_label_length) {
     function () {
       var value = this.innerHTML;
       if (value !== "") {
-        this.style.setProperty("background-color", scale(value), "important");
+        let color = scale(value);
+        this.style.setProperty("background-color", color, "important");
+        if (isDark(color)) {
+          this.style.setProperty("color", "white", "important");
+        }
       }
     },
   );

@@ -603,10 +603,24 @@ impl HeaderConfig {
                 }
 
                 if let Some(p) = &specs.plot {
-                    heatmaps.push(HeaderHeatmapConfig {
-                        row: *row as usize,
-                        heatmap: p.heatmap.clone().unwrap(),
-                    });
+                    if let Some(mut heatmap) = p.heatmap.clone() {
+                        if heatmap.domain.is_none() && heatmap.scale_type.is_quantitative() {
+                            let row_values: Vec<f32> = header_rows[*row as usize - 1]
+                                .iter()
+                                .filter_map(|v| v.parse::<f32>().ok())
+                                .collect();
+                            if !row_values.is_empty() {
+                                let min = row_values.iter().cloned().fold(f32::INFINITY, f32::min);
+                                let max =
+                                    row_values.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+                                heatmap.domain = Some(vec![min.to_string(), max.to_string()]);
+                            }
+                        }
+                        heatmaps.push(HeaderHeatmapConfig {
+                            row: *row as usize,
+                            heatmap,
+                        });
+                    }
                 }
             }
         }
