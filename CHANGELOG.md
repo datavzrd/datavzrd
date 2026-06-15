@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.66.0](https://github.com/datavzrd/datavzrd/compare/v2.65.0...v2.66.0) (2026-06-15)
+
+
+### Features
+
+* Allow reordering columns in paginated mode ([#1174](https://github.com/datavzrd/datavzrd/issues/1174)) ([d3da116](https://github.com/datavzrd/datavzrd/commit/d3da116ac5e1f263f383290867011c9e3d3ef3d7))
+
+
+### Bug Fixes
+
+* Fix quantitative heatmaps in additional header rows ([#1175](https://github.com/datavzrd/datavzrd/issues/1175)) ([858be25](https://github.com/datavzrd/datavzrd/commit/858be2512a7e576468e3311c4120f6968f695863))
+
 ## [2.65.0](https://github.com/datavzrd/datavzrd/compare/v2.64.0...v2.65.0) (2026-06-12)
 
 
