@@ -488,13 +488,15 @@ export function load() {
                             <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
                         </svg>
                     </div>
+                    `;
+        }
+        title += `
                     <div class="col-drag-handle">
                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-grip-vertical" viewBox="0 0 16 16">
                             <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                         </svg>
                     </div>
                     `;
-        }
 
         let formatter = undefined;
         if (config.format[column] != undefined) {
@@ -572,10 +574,8 @@ export function load() {
 
     $("#table").bootstrapTable(bs_table_config);
 
-    if (config.is_single_page) {
-      attachColumnDragAttributes();
-      setupColumnDragAndDrop();
-    }
+    attachColumnDragAttributes();
+    setupColumnDragAndDrop();
 
     let additional_headers = "";
 
@@ -800,6 +800,21 @@ export function load() {
       columnIdMap,
     );
     config["to_be_hidden"] = new Set();
+
+    if (!config.is_single_page) {
+      const colOrderParam = new URLSearchParams(window.location.search).get("col_order");
+      if (colOrderParam) {
+        const desired = colOrderParam.split(",").filter(c => config.displayed_columns.includes(c));
+        if (desired.length === config.displayed_columns.length) {
+          for (let i = 0; i < desired.length; i++) {
+            const col = desired[i];
+            if (config.displayed_columns.indexOf(col) !== i) {
+              reorderColumn(col, config.displayed_columns[i]);
+            }
+          }
+        }
+      }
+    }
 
     if (!config.detail_mode && !config.header_label_length == 0) {
       $("table > thead > tr:first-child th:first-child").css(
@@ -1178,6 +1193,13 @@ export function load() {
       });
       $("#btnExcel").on("click", function () {
         window.location.href = "../data.xlsx";
+      });
+    }
+
+    if (!config.is_single_page) {
+      $("#resetColumnOrder-btn").on("click", function () {
+        resetColumnOrder();
+        persistColumnOrder();
       });
     }
 
@@ -1603,6 +1625,21 @@ function reorderColumn(srcColName, targetColName) {
   config.displayed_columns.splice(to, 0, srcColName);
 
   window.columnIndexMap = buildColumnIndexMap();
+  if (!config.is_single_page) persistColumnOrder();
+}
+
+function persistColumnOrder() {
+  const order = config.displayed_columns.join(",");
+  const params = new URLSearchParams(window.location.search);
+  params.set("col_order", order);
+  history.replaceState(null, "", "?" + params.toString());
+  document.querySelectorAll("#pagination a.page-link[href]").forEach(a => {
+    const href = a.getAttribute("href");
+    const [path, existingQuery] = href.split("?");
+    const linkParams = new URLSearchParams(existingQuery || "");
+    linkParams.set("col_order", order);
+    a.setAttribute("href", `${path}?${linkParams.toString()}`);
+  });
 }
 
 export function resetColumnOrder() {
