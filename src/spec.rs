@@ -3,8 +3,8 @@ use crate::render::portable::DatasetError;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
     MissingLinkoutColumn, PlotAndTablePresentConfiguration, UnsupportedColorScheme,
-    ValueOutsideDomain, WrongColumnTypeMidDomain, WrongDomainLengthWithMidDomain,
-    WrongRangeLengthWithMidDomain,
+    UnsupportedHeaderColorScheme, ValueOutsideDomain, WrongColumnTypeMidDomain,
+    WrongDomainLengthWithMidDomain, WrongRangeLengthWithMidDomain,
 };
 use crate::utils::column_position;
 use crate::utils::column_type::{classify_table, ColumnType};
@@ -299,6 +299,28 @@ impl ItemsSpec {
                                             })
                                         }
                                     }
+                                }
+                            }
+                        }
+                    }
+                    if let Some(headers) = &render_table.headers {
+                        for (row, header) in headers {
+                            if let Some(heatmap) =
+                                header.plot.as_ref().and_then(|plot| plot.heatmap.as_ref())
+                            {
+                                if !heatmap.color_scheme.is_empty()
+                                    && heatmap.scale_type.is_quantitative()
+                                    && SequentialScheme::from_str(&heatmap.color_scheme).is_err()
+                                {
+                                    bail!(UnsupportedHeaderColorScheme {
+                                        view: name.to_string(),
+                                        row: *row,
+                                        scheme: heatmap.color_scheme.to_string(),
+                                        options: SequentialScheme::all()
+                                            .iter()
+                                            .map(|s| s.to_string())
+                                            .collect()
+                                    })
                                 }
                             }
                         }
@@ -1286,6 +1308,12 @@ pub(crate) enum SequentialScheme {
     Magma,
     Plasma,
     Cividis,
+    Turbo,
+    Rainbow,
+    Sinebow,
+    Spectral,
+    Warm,
+    Cool,
 }
 
 impl FromStr for SequentialScheme {
@@ -1304,6 +1332,12 @@ impl FromStr for SequentialScheme {
             "magma" => Ok(Self::Magma),
             "plasma" => Ok(Self::Plasma),
             "cividis" => Ok(Self::Cividis),
+            "turbo" => Ok(Self::Turbo),
+            "rainbow" => Ok(Self::Rainbow),
+            "sinebow" => Ok(Self::Sinebow),
+            "spectral" => Ok(Self::Spectral),
+            "warm" => Ok(Self::Warm),
+            "cool" => Ok(Self::Cool),
             _ => Err(()),
         }
     }
@@ -1323,6 +1357,12 @@ impl fmt::Display for SequentialScheme {
             SequentialScheme::Magma => "magma",
             SequentialScheme::Plasma => "plasma",
             SequentialScheme::Cividis => "cividis",
+            SequentialScheme::Turbo => "turbo",
+            SequentialScheme::Rainbow => "rainbow",
+            SequentialScheme::Sinebow => "sinebow",
+            SequentialScheme::Spectral => "spectral",
+            SequentialScheme::Warm => "warm",
+            SequentialScheme::Cool => "cool",
         };
         write!(f, "{s}")
     }
@@ -1342,6 +1382,12 @@ impl SequentialScheme {
             SequentialScheme::Magma,
             SequentialScheme::Plasma,
             SequentialScheme::Cividis,
+            SequentialScheme::Turbo,
+            SequentialScheme::Rainbow,
+            SequentialScheme::Sinebow,
+            SequentialScheme::Spectral,
+            SequentialScheme::Warm,
+            SequentialScheme::Cool,
         ]
     }
 }
@@ -1501,6 +1547,13 @@ pub enum ConfigError {
     UnsupportedColorScheme {
         view: String,
         column: String,
+        scheme: String,
+        options: Vec<String>,
+    },
+    #[error("Given color-scheme {scheme:?} for header row {row:?} of view {view:?} is not supported. Please use a sequential scheme from d3. Available options are: {options:?}")]
+    UnsupportedHeaderColorScheme {
+        view: String,
+        row: u32,
         scheme: String,
         options: Vec<String>,
     },
