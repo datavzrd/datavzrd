@@ -365,6 +365,28 @@ th.col-drag-over {
     border-left: 2px solid #0275d8 !important;
 }
 
+.header-sort {
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: middle;
+    margin-left: 4px;
+    margin-right: 7px;
+}
+
+.header-sort svg {
+    display: block;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.header-sort .bi-caret-down {
+    margin-top: -4px;
+}
+
+.header-sort svg:hover {
+    color: grey;
+}
+
 #plot-size-control {
     position: absolute;
     bottom: 52px;
