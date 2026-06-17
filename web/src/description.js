@@ -146,16 +146,27 @@ function renderHeatmapLegends(heatmaps) {
 }
 
 function generateSVGGradientLegend(scale, domain, legendId) {
-  const stops = domain
-    .map((val, i) => {
-      const offset = (i / (domain.length - 1)) * 100;
-      const color = scale(val);
-      return `<stop offset="${offset}%" stop-color="${color}" />`;
-    })
-    .join("\n");
-
   const min = domain[0];
   const max = domain[domain.length - 1];
+
+  const lo = Number(min);
+  const hi = Number(max);
+  const steps = 32;
+  let stops;
+  if (Number.isFinite(lo) && Number.isFinite(hi) && lo !== hi) {
+    stops = Array.from({ length: steps + 1 }, (_, i) => {
+      const t = i / steps;
+      const color = scale(lo + t * (hi - lo));
+      return `<stop offset="${t * 100}%" stop-color="${color}" />`;
+    }).join("\n");
+  } else {
+    stops = domain
+      .map((val, i) => {
+        const offset = (i / (domain.length - 1)) * 100;
+        return `<stop offset="${offset}%" stop-color="${scale(val)}" />`;
+      })
+      .join("\n");
+  }
 
   return `
         <div style="display:flex;flex-direction:column;">
