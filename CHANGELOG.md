@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.67.0](https://github.com/datavzrd/datavzrd/compare/v2.66.0...v2.67.0) (2026-06-17)
+
+
+### Features
+
+* Allow sorting columns by additional header rows ([#1180](https://github.com/datavzrd/datavzrd/issues/1180)) ([8143b6e](https://github.com/datavzrd/datavzrd/commit/8143b6e3a5853da89daa10f0cd475afc9eb8d1f6))
+* Auto focus search input field ([#1185](https://github.com/datavzrd/datavzrd/issues/1185)) ([baec82c](https://github.com/datavzrd/datavzrd/commit/baec82c454749ccae0257f8733b7b5f851796281))
+* Verify header color schemes and add missing scheme options ([#1187](https://github.com/datavzrd/datavzrd/issues/1187)) ([7e15ee1](https://github.com/datavzrd/datavzrd/commit/7e15ee186e863e09edd14c7c9a0dfb30594a80c6))
+
+
+### Bug Fixes
+
+* Fix arbitrary additional header order ([#1183](https://github.com/datavzrd/datavzrd/issues/1183)) ([432f91b](https://github.com/datavzrd/datavzrd/commit/432f91b74eeb9c54ba5e0a1fd2bf65d5c7d2ef34))
+* Pre-calculate ordinal header row domains ([#1184](https://github.com/datavzrd/datavzrd/issues/1184)) ([03f7f45](https://github.com/datavzrd/datavzrd/commit/03f7f459414b56961a2416c578d033d7304e3844))
+* Properly render schemes like viridis in legend gradients ([#1186](https://github.com/datavzrd/datavzrd/issues/1186)) ([ef029d2](https://github.com/datavzrd/datavzrd/commit/ef029d2e52ff80e05a6b9ffd061080cb065e96c5))
+* Sanitize heatmap legend gradient ids properly ([#1188](https://github.com/datavzrd/datavzrd/issues/1188)) ([c1f48e4](https://github.com/datavzrd/datavzrd/commit/c1f48e4bba751352483b03517e7112e811eeb250))
+* Show header row sort controls when additional headers have no label ([#1189](https://github.com/datavzrd/datavzrd/issues/1189)) ([f3207a5](https://github.com/datavzrd/datavzrd/commit/f3207a5953c8da03baf643a84dde8009d5542e68))
+
 ## [2.66.0](https://github.com/datavzrd/datavzrd/compare/v2.65.0...v2.66.0) (2026-06-15)
 
 
