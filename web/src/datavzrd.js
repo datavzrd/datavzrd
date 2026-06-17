@@ -345,7 +345,7 @@ function render(
     }
 
     for (const o of header_config.ellipsis) {
-      shortenHeaderRow(o.index, o.ellipsis, config.header_label_length > 0);
+      shortenHeaderRow(o.index, o.ellipsis, header_config.headers.length > 0);
     }
   }
 
@@ -378,7 +378,7 @@ function render(
 }
 
 function hideLabelColumn() {
-  if (config.detail_mode || config.header_label_length === 0) return;
+  if (config.detail_mode || header_config.headers.length === 0) return;
   $("table > thead > tr:first-child th:first-child").css("visibility", "hidden");
   $("table > tbody > tr td:first-child").each(function () {
     this.style.setProperty("visibility", "hidden");
@@ -435,7 +435,7 @@ export function load() {
 
     let bs_table_cols = [];
 
-    if (!config.detail_mode && config.header_label_length > 0) {
+    if (!config.detail_mode && header_config.headers.length > 0) {
       bs_table_cols.push({
         field: "",
         title: "",
@@ -602,7 +602,7 @@ export function load() {
 
     for (const ah of [...header_config.headers].sort((a, b) => a.row - b.row)) {
       additional_headers += "<tr>";
-      if (config.detail_mode || config.header_label_length > 0) {
+      if (config.detail_mode || header_config.headers.length > 0) {
         additional_headers += "<td";
         if (!config.detail_mode) {
           additional_headers += " style='border: none !important;'";
@@ -892,7 +892,7 @@ export function load() {
         let tick_brush = 0;
         for (const title of config.displayed_columns) {
           let index = tick_brush + 2;
-          if (config.detail_mode || config.header_label_length > 0) {
+          if (config.detail_mode || header_config.headers.length > 0) {
             index += 1;
           }
           if (config.displayed_numeric_columns.includes(title)) {
@@ -1312,7 +1312,7 @@ function highlightRow(row) {
   rows.each(function () {
     if (this.dataset.index == row) {
       $(this).children().addClass("active-row");
-      if (!config.detail_mode && !config.header_label_length == 0) {
+      if (!config.detail_mode && header_config.headers.length > 0) {
         $(this).children().first().removeClass("active-row");
       }
       var value = row;
@@ -1437,10 +1437,9 @@ export function load_search() {
 }
 
 function line_numbers(style) {
-  const hasLabel = header_config.headers.some((header) => header.label);
   var table = document.getElementById("table");
   var rows = table.getElementsByTagName("tr");
-  var cell_index = config.detail_mode || hasLabel ? 1 : 0;
+  var cell_index = config.detail_mode || header_config.headers.length > 0 ? 1 : 0;
   for (var i = 0; i < rows.length; i++) {
     var cells = rows[i].getElementsByTagName("td");
     if (cells.length > 0) {
@@ -1602,7 +1601,7 @@ function applyColumnOrderToBody() {
   if (original.every((col, i) => col === current[i])) return;
 
   const n = current.length;
-  const base = 1 + (config.detail_mode || config.header_label_length !== 0 ? 1 : 0);
+  const base = 1 + (config.detail_mode || header_config.headers.length > 0 ? 1 : 0);
 
   document.querySelectorAll("table > tbody > tr").forEach(row => {
     const children = row.children;
@@ -1791,7 +1790,7 @@ function setupColumnDragAndDrop() {
 function buildColumnIndexMap() {
   const map = {};
   const base_offset =
-    2 + (config.detail_mode || config.header_label_length !== 0 ? 1 : 0);
+    2 + (config.detail_mode || header_config.headers.length > 0 ? 1 : 0);
 
   config.displayed_columns.forEach((col, i) => {
     map[col] = base_offset + i;
