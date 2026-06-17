@@ -579,7 +579,7 @@ export function load() {
 
     let additional_headers = "";
 
-    for (const ah of header_config.headers) {
+    for (const ah of [...header_config.headers].sort((a, b) => a.row - b.row)) {
       additional_headers += "<tr>";
       if (config.detail_mode || ah.label) {
         additional_headers += "<td";
