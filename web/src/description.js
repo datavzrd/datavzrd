@@ -132,7 +132,7 @@ function renderHeatmapLegends(heatmaps) {
       const gradientHTML = generateSVGGradientLegend(
         scale,
         domain,
-        `grad-${legendTitle.replace(/\s+/g, "-")}`,
+        `grad-${legendTitle.replace(/[^a-zA-Z0-9_-]+/g, "-")}`,
       );
       legends[legendTitle] = `
                 <div style="display:flex;align-items:center;gap:10px;margin:5px 0;">
