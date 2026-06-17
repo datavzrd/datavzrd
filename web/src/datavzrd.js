@@ -600,7 +600,7 @@ export function load() {
                         </svg>
                     </span>`;
 
-    for (const ah of header_config.headers) {
+    for (const ah of [...header_config.headers].sort((a, b) => a.row - b.row)) {
       additional_headers += "<tr>";
       if (config.detail_mode || config.header_label_length > 0) {
         additional_headers += "<td";
