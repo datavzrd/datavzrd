@@ -615,6 +615,18 @@ impl HeaderConfig {
                                     row_values.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
                                 heatmap.domain = Some(vec![min.to_string(), max.to_string()]);
                             }
+                        } else if heatmap.domain.is_none()
+                            && heatmap.scale_type == ScaleType::Ordinal
+                        {
+                            heatmap.domain = Some(
+                                header_rows[*row as usize - 1]
+                                    .iter()
+                                    .filter(|v| !v.as_str().is_na())
+                                    .cloned()
+                                    .unique()
+                                    .sorted()
+                                    .collect(),
+                            );
                         }
                         heatmaps.push(HeaderHeatmapConfig {
                             row: *row as usize,
