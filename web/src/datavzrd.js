@@ -1068,6 +1068,7 @@ export function load() {
               $(`#filter-${index}-container`).on(
                 "shown.bs.popover",
                 function (e) {
+                  $(`#filter-${index}`).focus();
                   $(`#filter-${index}`).on("input", function (event) {
                     filters[event.target.dataset.title] = $(
                       `#filter-${index}`,
