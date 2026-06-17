@@ -368,11 +368,22 @@ function render(
     line_numbers("none");
   }
 
+  hideLabelColumn();
+
   if (config["to_be_hidden"]) {
     for (const hc of config["to_be_hidden"]) {
       hide(columnIdMap[hc], true, columnIndexMap);
     }
   }
+}
+
+function hideLabelColumn() {
+  if (config.detail_mode || config.header_label_length === 0) return;
+  $("table > thead > tr:first-child th:first-child").css("visibility", "hidden");
+  $("table > tbody > tr td:first-child").each(function () {
+    this.style.setProperty("visibility", "hidden");
+    this.style.setProperty("border", "none");
+  });
 }
 
 export function load() {
@@ -579,14 +590,25 @@ export function load() {
 
     let additional_headers = "";
 
+    const sort_control = (row) => `
+                    <span class="header-sort" data-header-row="${row}">
+                        <svg onclick="datavzrd.sortColumns(${row}, 'asc')" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                            <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                        </svg>
+                        <svg onclick="datavzrd.sortColumns(${row}, 'desc')" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
+                    </span>`;
+
     for (const ah of header_config.headers) {
       additional_headers += "<tr>";
-      if (config.detail_mode || ah.label) {
+      if (config.detail_mode || config.header_label_length > 0) {
         additional_headers += "<td";
         if (!config.detail_mode) {
           additional_headers += " style='border: none !important;'";
         }
         additional_headers += ">";
+        additional_headers += sort_control(ah.row);
         if (ah.label) {
           additional_headers += `<b>${ah.label}</b>`;
         }
@@ -816,16 +838,7 @@ export function load() {
       }
     }
 
-    if (!config.detail_mode && !config.header_label_length == 0) {
-      $("table > thead > tr:first-child th:first-child").css(
-        "visibility",
-        "hidden",
-      );
-      $(`table > tbody > tr td:first-child`).each(function () {
-        this.style.setProperty("visibility", "hidden");
-        this.style.setProperty("border", "none");
-      });
-    }
+    hideLabelColumn();
 
     if (config.is_single_page) {
       $("#sidebar-list").append(
@@ -1650,6 +1663,42 @@ export function resetColumnOrder() {
     if (current !== i) {
       reorderColumn(target, config.displayed_columns[i]);
     }
+  }
+}
+
+export function sortColumns(row, order) {
+  const header = header_config.headers.find((h) => h.row === row);
+  if (!header) {
+    return;
+  }
+
+  const value = (col) => header.header[col] ?? "";
+  const numeric = config.displayed_columns.every((col) => {
+    const v = value(col);
+    return v === "" || !isNaN(Number(v));
+  });
+  const compare = numeric
+    ? (a, b) => Number(value(a)) - Number(value(b))
+    : (a, b) => value(a).localeCompare(value(b));
+
+  const sorted = [...config.displayed_columns].sort((a, b) =>
+    order === "asc" ? compare(a, b) : compare(b, a),
+  );
+
+  for (let i = 0; i < sorted.length; i++) {
+    if (config.displayed_columns[i] !== sorted[i]) {
+      reorderColumn(sorted[i], config.displayed_columns[i]);
+    }
+  }
+
+  document
+    .querySelectorAll(".header-sort svg")
+    .forEach((s) => (s.style.color = ""));
+  const caret = document.querySelector(
+    `.header-sort[data-header-row="${row}"] .${order === "asc" ? "bi-caret-up-fill" : "bi-caret-down"}`,
+  );
+  if (caret) {
+    caret.style.color = "#c21f30";
   }
 }
 
