@@ -501,13 +501,16 @@ export function load() {
                     </div>
                     `;
         }
-        title += `
+        // Pinned columns are anchored in place, so they get no drag handle.
+        if (!config.pinned_columns.includes(column)) {
+          title += `
                     <div class="col-drag-handle">
                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-grip-vertical" viewBox="0 0 16 16">
                             <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                         </svg>
                     </div>
                     `;
+        }
 
         let formatter = undefined;
         if (config.format[column] != undefined) {
@@ -1673,7 +1676,12 @@ export function sortColumns(row, order) {
   }
 
   const value = (col) => header.header[col] ?? "";
-  const numeric = config.displayed_columns.every((col) => {
+
+  // Pinned columns are excluded from sorting and keep their position.
+  const pinned = new Set(config.pinned_columns);
+  const movable = config.displayed_columns.filter((col) => !pinned.has(col));
+
+  const numeric = movable.every((col) => {
     const v = value(col);
     return v === "" || !isNaN(Number(v));
   });
@@ -1681,8 +1689,13 @@ export function sortColumns(row, order) {
     ? (a, b) => Number(value(a)) - Number(value(b))
     : (a, b) => value(a).localeCompare(value(b));
 
-  const sorted = [...config.displayed_columns].sort((a, b) =>
+  const sortedMovable = movable.sort((a, b) =>
     order === "asc" ? compare(a, b) : compare(b, a),
+  );
+
+  let next = 0;
+  const sorted = config.displayed_columns.map((col) =>
+    pinned.has(col) ? col : sortedMovable[next++],
   );
 
   for (let i = 0; i < sorted.length; i++) {
@@ -1709,7 +1722,7 @@ function attachColumnDragAttributes() {
     const idx = window.columnIndexMap[colName];
     const th = headerRow.children[idx - 1];
     if (th) {
-      th.draggable = true;
+      th.draggable = !config.pinned_columns.includes(colName);
       th.dataset.colName = colName;
     }
   });
@@ -1727,6 +1740,18 @@ function resolveDropTarget(th, clientX) {
       : null;
   }
   return th.dataset.colName;
+}
+
+// Moving srcColName in front of targetColName must not shift any pinned column
+// out of its position, otherwise a movable column could be dropped past a pinned one.
+function dropDisplacesPinned(srcColName, targetColName) {
+  const cols = config.displayed_columns;
+  const reordered = cols.slice();
+  reordered.splice(reordered.indexOf(srcColName), 1);
+  reordered.splice(reordered.indexOf(targetColName), 0, srcColName);
+  return config.pinned_columns.some(
+    col => cols.indexOf(col) !== reordered.indexOf(col)
+  );
 }
 
 function setupColumnDragAndDrop() {
@@ -1750,7 +1775,7 @@ function setupColumnDragAndDrop() {
     e.dataTransfer.dropEffect = "move";
 
     const target = resolveDropTarget(th, e.clientX);
-    _dropTargetColName = (target && target !== _dragSrcColName) ? target : null;
+    _dropTargetColName = (target && target !== _dragSrcColName && !dropDisplacesPinned(_dragSrcColName, target)) ? target : null;
 
     document.querySelectorAll("th.col-drag-over").forEach(el => el.classList.remove("col-drag-over"));
     if (_dropTargetColName) {
