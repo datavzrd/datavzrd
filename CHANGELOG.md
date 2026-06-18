@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.68.0](https://github.com/datavzrd/datavzrd/compare/v2.67.0...v2.68.0) (2026-06-18)
+
+
+### Features
+
+* Extend pinned column behaviour ([#1190](https://github.com/datavzrd/datavzrd/issues/1190)) ([d853f4b](https://github.com/datavzrd/datavzrd/commit/d853f4b15359a823e9bfda2817116145a2554dab))
+
+
+### Bug Fixes
+
+* Skip additional header rows when counting dataset rows ([#1191](https://github.com/datavzrd/datavzrd/issues/1191)) ([2037788](https://github.com/datavzrd/datavzrd/commit/2037788e9ed7d6a92ea6d211a22bb787dcb46218))
+
 ## [2.67.0](https://github.com/datavzrd/datavzrd/compare/v2.66.0...v2.67.0) (2026-06-17)
 
 
