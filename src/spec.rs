@@ -479,6 +479,7 @@ impl DatasetSpecs {
                     reader
                         .records()
                         .unwrap()
+                        .skip(self.header_rows - 1)
                         .map(|row| row.get(index).unwrap().to_string())
                         .unique()
                         .collect_vec()
@@ -625,7 +626,7 @@ impl ItemSpecs {
     ) -> Result<()> {
         let mut indexed_keys = HashMap::new();
         let mut reader = dataset.reader()?;
-        let rows = &reader.records()?.count();
+        let rows = &reader.records()?.skip(dataset.header_rows - 1).count();
         self.single_page_page_size = self.page_size;
         if rows <= &single_page_threshold {
             self.page_size = *rows;
@@ -2347,5 +2348,47 @@ mod tests {
             .unwrap();
         assert_eq!(unique_column_values.get("oscar_yr").unwrap(), &91_usize);
         assert_eq!(unique_column_values.get("award").unwrap(), &2_usize);
+    }
+
+    #[test]
+    fn test_unique_column_values_skips_additional_header_rows() {
+        let mut dataset = DatasetSpecs {
+            path: PathBuf::from("tests/data/additional_header_rows.csv"),
+            separator: char::default(),
+            header_rows: 2,
+            links: None,
+            offer_excel: false,
+        };
+        dataset.preprocess().unwrap();
+        let unique_column_values = dataset.unique_column_values().unwrap();
+        assert_eq!(unique_column_values.get("sample").unwrap(), &2_usize);
+        assert_eq!(unique_column_values.get("value").unwrap(), &3_usize);
+    }
+
+    #[test]
+    fn test_preprocess_columns_page_size_skips_additional_header_rows() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: tests/data/additional_header_rows.csv
+                    separator: ","
+                    headers: 2
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        columns:
+                            sample:
+                                display-mode: normal
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        let mut item_specs = config.views.get("table-a").unwrap().clone();
+        item_specs
+            .preprocess_columns(
+                config.datasets.get("table-a").unwrap(),
+                default_single_page_threshold(),
+            )
+            .unwrap();
+        assert_eq!(item_specs.page_size, 3);
     }
 }
