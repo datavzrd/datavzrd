@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.68.1](https://github.com/datavzrd/datavzrd/compare/v2.68.0...v2.68.1) (2026-06-23)
+
+
+### Bug Fixes
+
+* Clarify linkout column errors and include dataset paths ([#1195](https://github.com/datavzrd/datavzrd/issues/1195)) ([bef37df](https://github.com/datavzrd/datavzrd/commit/bef37dfec571751a4cae6f981aa8d0db9c9b24bf))
+
 ## [2.68.0](https://github.com/datavzrd/datavzrd/compare/v2.67.0...v2.68.0) (2026-06-18)
 
 
