@@ -349,6 +349,7 @@ impl ItemsSpec {
                         bail!(MissingLinkoutColumn {
                             column: link.column.to_string(),
                             dataset: name.to_string(),
+                            path: dataset.path.display().to_string(),
                             link: link_name.to_string(),
                         })
                     }
@@ -369,6 +370,7 @@ impl ItemsSpec {
                                         bail!(ConfigError::LinkToMissingColumn {
                                             view: table.to_string(),
                                             column: linked_column.to_string(),
+                                            path: dataset.path.display().to_string(),
                                             link: link_name.to_string()
                                         })
                                     }
@@ -1567,11 +1569,12 @@ pub enum ConfigError {
         value: f32,
     },
     #[error(
-        "Could not find column named {column:?} in given dataset {dataset:?} in linkout {link:?}."
+        "Linkout {link:?} refers to column {column:?}, which does not exist in its dataset {dataset:?} ({path}). A linkout's `column` must name a column of that same dataset."
     )]
     MissingLinkoutColumn {
         column: String,
         dataset: String,
+        path: String,
         link: String,
     },
     #[error("Could not find column named '{column}' in the dataset that is used by view {view}. Available columns are: {columns}")]
@@ -1584,10 +1587,11 @@ pub enum ConfigError {
         "Could not find view named {view:?} in given config that is referred to with {link:?}."
     )]
     LinkToMissingView { view: String, link: String },
-    #[error("Could not find column named {column:?} in {view:?} in given config that is referred to with {link:?}.")]
+    #[error("Linkout {link:?} points to column {column:?} of view {view:?}, which does not exist in that view's dataset ({path}).")]
     LinkToMissingColumn {
         view: String,
         column: String,
+        path: String,
         link: String,
     },
     #[error("Cannot customize the first header row of view {view:?} in given config. Please start customizing additional headers at index 1.")]
