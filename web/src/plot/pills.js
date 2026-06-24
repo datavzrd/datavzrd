@@ -38,7 +38,7 @@ function renderPill(
   }
 }
 
-function pillsToHeatmap(pills) {
+export function pillsToHeatmap(pills) {
   return {
     heatmap: {
       scale: "ordinal",
@@ -47,6 +47,7 @@ function pillsToHeatmap(pills) {
       "color-scheme": pills.pills["color-scheme"],
       clamp: true,
       "custom-content": undefined,
+      legend: pills.pills.legend,
     },
   };
 }

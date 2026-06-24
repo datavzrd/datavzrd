@@ -2,6 +2,7 @@ import showdown from "showdown";
 import showdownKatex from "showdown-katex";
 import $ from "jquery";
 import { datavzrdScale } from "./plot/heatmap";
+import { pillsToHeatmap } from "./plot/pills";
 import vegaEmbed from "vega-embed";
 
 export function renderMarkdownDescription(is_plot_view) {
@@ -45,6 +46,11 @@ export function renderMarkdownDescription(is_plot_view) {
           heatmap: e.heatmap,
           domain: domain,
         });
+      }
+    }
+    if (config.pills) {
+      for (const p of config.pills) {
+        heatmaps.push(pillsToHeatmap(p));
       }
     }
     var legends = renderHeatmapLegends(heatmaps);

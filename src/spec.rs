@@ -1115,6 +1115,8 @@ pub struct PillsSpec {
     pub merge: bool,
     #[serde(default)]
     pub aux_domain_columns: AuxDomainColumns,
+    #[serde(default)]
+    pub legend: Option<LegendSpec>,
 }
 
 fn default_pill_separator() -> String {
