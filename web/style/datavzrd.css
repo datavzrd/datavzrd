@@ -145,6 +145,26 @@ th .th-inner {
     margin-bottom: 5px;
 }
 
+#table td.narrow-col,
+#table th.narrow-col {
+    max-width: 4px;
+    width: 4px;
+    overflow: hidden;
+    padding: 0 !important;
+}
+
+#table td.narrow-col {
+    font-size: 0 !important;
+}
+
+th.narrow-col .th-inner,
+th.narrow-col .sym,
+th.narrow-col .sym-container,
+th.narrow-col .header-sort,
+th.narrow-col .col-drag-handle {
+    display: none;
+}
+
 #vis-container {
     height: calc(100vh - 105px);
     padding-top: 50px;

@@ -500,6 +500,8 @@ impl DatasetSpecs {
 pub struct ItemSpecs {
     #[serde(default)]
     pub hidden: bool,
+    #[serde(default)]
+    pub narrow: bool,
     pub dataset: Option<String>,
     pub datasets: Option<HashMap<String, String>>,
     #[serde(default = "default_page_size")]
@@ -526,6 +528,7 @@ impl ItemSpecs {
     fn merge_item_specs(&self, other: &ItemSpecs) -> Result<ItemSpecs> {
         let mut merged = self.clone();
         merged.hidden = other.hidden;
+        merged.narrow = other.narrow;
         if let Some(dataset) = &other.dataset {
             merged.dataset = Some(dataset.to_string());
         }
@@ -1650,6 +1653,7 @@ mod tests {
 
         let expected_table_spec = ItemSpecs {
             hidden: false,
+            narrow: false,
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: 100,
@@ -1727,6 +1731,7 @@ mod tests {
 
         let expected_item_spec = ItemSpecs {
             hidden: false,
+            narrow: false,
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: default_page_size(),
@@ -1788,6 +1793,7 @@ mod tests {
 
         let expected_item_spec = ItemSpecs {
             hidden: false,
+            narrow: false,
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: default_page_size(),
@@ -1833,6 +1839,7 @@ mod tests {
     fn test_additional_header_config_deserialization() {
         let expected_item_spec = ItemSpecs {
             hidden: false,
+            narrow: false,
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: default_page_size(),
@@ -2274,6 +2281,7 @@ mod tests {
         };
         let expected_item_specs = ItemSpecs {
             hidden: false,
+            narrow: false,
             dataset: Some("table-a".to_string()),
             datasets: None,
             page_size: 184_usize,

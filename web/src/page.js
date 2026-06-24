@@ -79,6 +79,7 @@ export function render_html_contents() {
         }
         sidebar_html += '<li class="list-group-item sidebar-btn" id="resetColumnOrder-btn">Reset column order</li>';
         sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleLineNumbers">Show/Hide Line Numbers</li>';
+        sidebar_html += '<li class="list-group-item sidebar-btn" id="toggleNarrowView">Toggle Narrow Columns</li>';
 
         // Group: Downloads
         if (config.has_excel_sheet) {
