@@ -1476,7 +1476,8 @@ function downloadSVG(dataUrl, fileName) {
 }
 
 function filter(node) {
-  return !(node.classList && node.classList.contains("sym"));
+  const hidden = ["sym", "header-sort", "col-drag-handle"];
+  return !hidden.some((c) => node.classList?.contains(c));
 }
 
 export function screenshot_table() {
