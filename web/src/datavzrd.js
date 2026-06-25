@@ -380,10 +380,6 @@ function render(
   }
 }
 
-// Collapses every column that is neither pinned nor backed by a plot into a thin
-// strip, hiding its header label and controls. The strip keeps a tooltip with the
-// column name so it stays identifiable. Reapplied on every render so the state
-// survives bootstrap-table rebuilds.
 function applyNarrowView(columnIndexMap) {
   const readable = new Set([
     ...config.pinned_columns,
@@ -1559,7 +1555,7 @@ export function screenshot_table() {
     .querySelectorAll(".linkout-raw-value")
     .forEach((el) => (el.style.display = "table-cell"));
   const table_element = document.getElementById("table");
-  // Narrow columns hide their values on screen via font-size: 0, which html-to-image does not honor.
+  // Narrow columns hide their values on screen via font-size: 0, which html-to-image does not respect.
   // Remove for scrrenshot then restore it.
   const narrow_contents = [];
   document.querySelectorAll("td.narrow-col").forEach((cell) => {
