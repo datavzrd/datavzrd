@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.69.0](https://github.com/datavzrd/datavzrd/compare/v2.68.1...v2.69.0) (2026-06-25)
+
+
+### Features
+
+* Add narrow column view option ([#1201](https://github.com/datavzrd/datavzrd/issues/1201)) ([8a923d0](https://github.com/datavzrd/datavzrd/commit/8a923d0122bd1a7def846bf4c6c084e2ec7a1ccf))
+* Support legends for pills ([#1198](https://github.com/datavzrd/datavzrd/issues/1198)) ([88baf3b](https://github.com/datavzrd/datavzrd/commit/88baf3b44d4ccc37a56428c127b6fd56414d8b95))
+
+
+### Bug Fixes
+
+* Hide header sort and column drag controls in SVG screenshot ([#1199](https://github.com/datavzrd/datavzrd/issues/1199)) ([6569eae](https://github.com/datavzrd/datavzrd/commit/6569eae28f804bdfecaac1dd9f06f8524c294947))
+
 ## [2.68.1](https://github.com/datavzrd/datavzrd/compare/v2.68.0...v2.68.1) (2026-06-23)
 
 
