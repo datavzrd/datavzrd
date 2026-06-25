@@ -263,6 +263,7 @@ impl Renderer for ItemRenderer {
                         additional_headers,
                         &table.render_table.as_ref().unwrap().headers,
                         is_single_page,
+                        table.narrow,
                         table.single_page_page_size,
                         pages,
                         webview_host,
@@ -420,6 +421,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     additional_headers: Option<Vec<Vec<String>>>,
     header_specs: &Option<HashMap<u32, HeaderSpecs>>,
     is_single_page: bool,
+    narrow: bool,
     page_size: usize,
     pages: usize,
     webview_host: &str,
@@ -446,6 +448,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         render_columns,
         additional_columns,
         is_single_page,
+        narrow,
         page_size,
         titles,
         webview_host,
@@ -677,6 +680,7 @@ struct CustomPlotConfig {
 #[derive(Serialize, Debug, Clone, PartialEq)]
 struct JavascriptConfig {
     detail_mode: bool,
+    narrow: bool,
     webview_controls: bool,
     webview_host: String,
     is_single_page: bool,
@@ -726,6 +730,7 @@ impl JavascriptConfig {
         config: &HashMap<String, RenderColumnSpec>,
         additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
         is_single_page: bool,
+        narrow: bool,
         page_size: usize,
         columns: &[String],
         webview_host: &str,
@@ -783,6 +788,7 @@ impl JavascriptConfig {
                 > 0;
         Self {
             detail_mode,
+            narrow,
             webview_controls,
             webview_host: webview_host.to_string(),
             is_single_page,

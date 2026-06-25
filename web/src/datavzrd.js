@@ -50,6 +50,7 @@ import "../style/bootstrap-table-fixed-columns.min.css";
 import "../style/datavzrd.css";
 
 let LINE_NUMBERS = false;
+let NARROW_VIEW = false;
 
 export function downloadCSV() {
   var data = $("#table").bootstrapTable("getData");
@@ -370,9 +371,44 @@ function render(
 
   hideLabelColumn();
 
+  applyNarrowView(columnIndexMap);
+
   if (config["to_be_hidden"]) {
     for (const hc of config["to_be_hidden"]) {
       hide(columnIdMap[hc], true, columnIndexMap);
+    }
+  }
+}
+
+function applyNarrowView(columnIndexMap) {
+  const readable = new Set([
+    ...config.pinned_columns,
+    ...config.tick_titles,
+    ...config.bar_titles,
+    ...config.bubble_titles,
+    ...config.custom_plot_titles,
+  ]);
+  for (const column of config.displayed_columns) {
+    if (readable.has(column)) continue;
+    const index = columnIndexMap[column];
+    const cells = $(
+      `table > thead > tr > :nth-child(${index}), table > tbody > tr > td:nth-child(${index})`,
+    );
+    const header = $(`table > thead > tr:first-child > :nth-child(${index})`);
+    if (NARROW_VIEW) {
+      cells.addClass("narrow-col");
+      if (!header.data("bs.tooltip")) {
+        header.attr("title", column).tooltip({
+          placement: "bottom",
+          trigger: "hover",
+          sanitizeFn: (content) => content,
+        });
+      }
+    } else {
+      cells.removeClass("narrow-col");
+      if (header.data("bs.tooltip")) {
+        header.tooltip("dispose");
+      }
     }
   }
 }
@@ -391,6 +427,7 @@ export function load() {
     document.title = "datavzrd report";
     const columnIndexMap = buildColumnIndexMap();
     window.columnIndexMap = columnIndexMap;
+    NARROW_VIEW = config.narrow;
     config.original_displayed_columns = [...config.displayed_columns];
     render_html_contents();
     $(".table-container").show();
@@ -1220,6 +1257,10 @@ export function load() {
       });
     }
 
+    $("#toggleNarrowView").on("click", function () {
+      toggle_narrow_view();
+    });
+
     var rect = $(".fixed-table-container")[0].getBoundingClientRect();
     if (rect.left < 0 || rect.right > $(window).width()) {
       add_scroll_button();
@@ -1463,6 +1504,11 @@ export function toggle_line_numbers() {
   LINE_NUMBERS = !LINE_NUMBERS;
 }
 
+export function toggle_narrow_view() {
+  NARROW_VIEW = !NARROW_VIEW;
+  applyNarrowView(window.columnIndexMap);
+}
+
 function downloadSVG(dataUrl, fileName) {
   const blob = new Blob([decodeURIComponent(dataUrl.split(",")[1])], {
     type: "image/svg+xml",
@@ -1510,11 +1556,23 @@ export function screenshot_table() {
     .querySelectorAll(".linkout-raw-value")
     .forEach((el) => (el.style.display = "table-cell"));
   const table_element = document.getElementById("table");
+  // Narrow columns hide their values on screen via font-size: 0, which html-to-image does not respect.
+  // Remove for scrrenshot then restore it.
+  const narrow_contents = [];
+  document.querySelectorAll("td.narrow-col").forEach((cell) => {
+    narrow_contents.push([cell, cell.innerHTML]);
+    cell.innerHTML = "";
+  });
   htmlToImage
     .toSvg(table_element, { filter: filter })
     .then((dataUrl) =>
       downloadSVG(dataUrl, `${$("#view-selection").attr("title")}.svg`),
-    );
+    )
+    .finally(() => {
+      narrow_contents.forEach(([cell, html]) => {
+        cell.innerHTML = html;
+      });
+    });
   if (config.detail_mode) {
     document.querySelectorAll("table tr").forEach((row) => {
       const cells = row.querySelectorAll("td, th");

@@ -90,6 +90,7 @@ pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -
         };
         let item_spec = ItemSpecs {
             hidden: false,
+            narrow: false,
             dataset: Some(dataset_name.to_string()),
             datasets: None,
             page_size: default_page_size(),
