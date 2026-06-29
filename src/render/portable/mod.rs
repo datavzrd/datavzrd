@@ -2,6 +2,7 @@ mod plot;
 pub(crate) mod utils;
 use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
+use crate::render::portable::utils::escape_html_string;
 use crate::render::portable::utils::minify_js;
 use crate::render::Renderer;
 use crate::spec::BubblePlot;
@@ -32,7 +33,7 @@ use std::io::Write;
 use std::option::Option::Some;
 use std::path::Path;
 use std::str::FromStr;
-use tera::{escape_html, Context, Tera};
+use tera::{Context, Tera};
 use thiserror::Error;
 use typed_builder::TypedBuilder;
 
@@ -438,6 +439,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     title: &String,
 ) -> Result<()> {
     let mut templates = Tera::default();
+    templates.register_filter("json_encode", tera_contrib::json::json_encode);
     templates.add_raw_template(
         "config.js.tera",
         include_str!("../../../templates/config.js.tera"),
@@ -1006,7 +1008,7 @@ impl JavascriptConfig {
             tables: sorted_tables,
             default_view: default_view.to_owned(),
             has_excel_sheet,
-            description: description.map(escape_html),
+            description: description.map(escape_html_string),
             report_name: report_name.to_owned(),
             time: local.format("%a %b %e %T %Y").to_string(),
             version: env!("CARGO_PKG_VERSION").to_string(),
@@ -1521,6 +1523,7 @@ fn render_plot<T: PlotConfig>(
     };
 
     let mut templates = Tera::default();
+    templates.register_filter("json_encode", tera_contrib::json::json_encode);
     templates.add_raw_template("plot.vl.tera", plot.template())?;
 
     let mut context = Context::new();

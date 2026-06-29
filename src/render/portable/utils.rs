@@ -17,6 +17,12 @@ pub(crate) fn render_static_files<P: AsRef<Path>>(path: P) -> Result<()> {
     Ok(())
 }
 
+pub(crate) fn escape_html_string(input: &str) -> String {
+    let mut buf = Vec::new();
+    escape_html(input, &mut buf).unwrap();
+    String::from_utf8(buf).unwrap()
+}
+
 pub(crate) fn minify_js(file: &str, debug: bool) -> Result<Vec<u8>> {
     if !debug {
         let mut minified: Vec<u8> = Vec::new();
@@ -35,6 +41,7 @@ pub(crate) fn minify_js(file: &str, debug: bool) -> Result<Vec<u8>> {
 
 pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> Result<()> {
     let mut templates = Tera::default();
+    templates.register_filter("json_encode", tera_contrib::json::json_encode);
     templates.add_raw_template(
         "index.html.tera",
         include_str!("../../../templates/index.html.tera"),
@@ -42,7 +49,7 @@ pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> R
     let views: HashMap<_, _> = specs
         .views
         .iter()
-        .map(|(name, view)| (name, view.description.as_deref().map(escape_html)))
+        .map(|(name, view)| (name, view.description.as_deref().map(escape_html_string)))
         .collect();
     let mut context = Context::new();
     context.insert("table", &specs.default_view);
