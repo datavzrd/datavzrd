@@ -53,7 +53,7 @@
                             <button id="close-description" type="button" data-toggle="collapse" data-target="#collapseDescription" class="close" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <div id="innerDescription" data-markdown="{{ description | escape }}"></div>
+                            <div id="innerDescription" data-markdown="{{ description | escape_html }}"></div>
                         </div>
                     </div>
                 </div>

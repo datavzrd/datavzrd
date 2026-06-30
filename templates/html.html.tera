@@ -77,7 +77,7 @@
                         <button type="button" data-toggle="collapse" data-target="#collapseDescription" class="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <div class="card card-body" id="innerDescription" data-markdown="{{ description | escape }}">
+                        <div class="card card-body" id="innerDescription" data-markdown="{{ description | escape_html }}">
                         </div>
                     </div>
                 </div>
