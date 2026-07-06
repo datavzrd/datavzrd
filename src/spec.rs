@@ -1640,8 +1640,8 @@ mod tests {
         RenderTableSpecs, ScaleType, TickPlot,
     };
     use std::collections::HashMap;
-    use std::path::PathBuf;
     use std::io::Write;
+    use std::path::PathBuf;
 
     #[test]
     fn test_table_config_deserialization() {
