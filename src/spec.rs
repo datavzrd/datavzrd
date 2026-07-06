@@ -61,6 +61,22 @@ impl ItemsSpec {
         for dataset in items_spec.datasets.values_mut() {
             dataset.preprocess()?;
         }
+        for (name, dataset) in &items_spec.datasets {
+            let lines = dataset
+                .reader()?
+                .records()?
+                .take(dataset.header_rows)
+                .count()
+                + 1;
+            if lines < dataset.header_rows {
+                bail!(ConfigError::NotEnoughHeaderRows {
+                    dataset: name.to_string(),
+                    path: dataset.path.clone(),
+                    header_rows: dataset.header_rows,
+                    lines,
+                })
+            }
+        }
         for (name, spec) in items_spec.views.iter_mut() {
             if let Some(spell) = spec.spell.as_ref() {
                 let rendered_spec = spell.render_item_spec()?;
@@ -1519,6 +1535,13 @@ pub enum ConfigError {
     MissingDatasetProperty { view: String },
     #[error("Could not find dataset named {dataset:?} in given config.")]
     MissingDataset { dataset: String },
+    #[error("Dataset {dataset:?} at path {path:?} is configured with {header_rows} header rows but the file only contains {lines} line(s). Please provide a file with at least {header_rows} rows or reduce the number of configured header rows.")]
+    NotEnoughHeaderRows {
+        dataset: String,
+        path: PathBuf,
+        header_rows: usize,
+        lines: usize,
+    },
     #[error("Could not find default view named {view:?} in given config.")]
     MissingDefaultView { view: String },
     #[error("Heatmap definition for column {column:?} misses a scale. Please provide a scale in the heatmap configuration.")]
@@ -1618,6 +1641,7 @@ mod tests {
     };
     use std::collections::HashMap;
     use std::path::PathBuf;
+    use std::io::Write;
 
     #[test]
     fn test_table_config_deserialization() {
@@ -1943,6 +1967,25 @@ mod tests {
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_not_enough_header_rows_config_validation() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/only_header.csv
+                    headers: 2
+            views:
+                d:
+                    dataset: d
+                    render-table:
+                        columns:
+                            gene: {}
+            "#;
+        let mut config_file = tempfile::NamedTempFile::new().unwrap();
+        config_file.write_all(raw_config.as_bytes()).unwrap();
+        assert!(ItemsSpec::from_file(config_file.path()).is_err());
     }
 
     #[test]
