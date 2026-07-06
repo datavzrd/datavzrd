@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.69.1](https://github.com/datavzrd/datavzrd/compare/v2.69.0...v2.69.1) (2026-07-06)
+
+
+### Bug Fixes
+
+* Validate datasets contain their configured header rows ([#1204](https://github.com/datavzrd/datavzrd/issues/1204)) ([a07d079](https://github.com/datavzrd/datavzrd/commit/a07d0793567a573e5736282aa8fd4f357c88b39a))
+
 ## [2.69.0](https://github.com/datavzrd/datavzrd/compare/v2.68.1...v2.69.0) (2026-06-25)
 
 
