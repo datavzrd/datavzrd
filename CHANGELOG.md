@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.69.2](https://github.com/datavzrd/datavzrd/compare/v2.69.1...v2.69.2) (2026-07-07)
+
+
+### Bug Fixes
+
+* NaN values corrupting heatmap rendering ([#1206](https://github.com/datavzrd/datavzrd/issues/1206)) ([c29a17b](https://github.com/datavzrd/datavzrd/commit/c29a17b9753f3b684ca7fa6c11e2fdb7f6c89700))
+
 ## [2.69.1](https://github.com/datavzrd/datavzrd/compare/v2.69.0...v2.69.1) (2026-07-06)
 
 
