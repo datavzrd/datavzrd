@@ -23,11 +23,11 @@ export function colorizeColumn(
   $(`table > tbody > tr td:nth-child(${index})`).each(function () {
     var value = table_rows[row][heatmap.title];
     let color = scale(value);
-    if (value !== "") {
+    if (value !== "" && d3.color(color)) {
       this.style.setProperty("background-color", color, "important");
-    }
-    if (isDark(color)) {
-      this.style.setProperty("color", "white", "important");
+      if (isDark(color)) {
+        this.style.setProperty("color", "white", "important");
+      }
     }
     if (custom_func) {
       var data_function = window[custom_func];
@@ -92,9 +92,11 @@ export function colorizeDetailCard(value, div, heatmap, row, is_float, precision
 
   if (value !== "") {
     let color = scale(value);
-    $(`${div}`).css("background-color", color);
-    if (isDark(color)) {
-      $(`${div}`).css("color", "white", "important");
+    if (d3.color(color)) {
+      $(`${div}`).css("background-color", color);
+      if (isDark(color)) {
+        $(`${div}`).css("color", "white", "important");
+      }
     }
   }
   if (heatmap.heatmap["custom-content"]) {
@@ -172,9 +174,11 @@ export function colorizeHeaderRow(row, heatmap, header_label_length) {
       var value = this.innerHTML;
       if (value !== "") {
         let color = scale(value);
-        this.style.setProperty("background-color", color, "important");
-        if (isDark(color)) {
-          this.style.setProperty("color", "white", "important");
+        if (d3.color(color)) {
+          this.style.setProperty("background-color", color, "important");
+          if (isDark(color)) {
+            this.style.setProperty("color", "white", "important");
+          }
         }
       }
     },
