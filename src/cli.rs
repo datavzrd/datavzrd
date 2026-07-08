@@ -14,7 +14,7 @@ pub struct Datavzrd {
     #[arg(short, long, action = clap::ArgAction::Count)]
     pub(crate) _verbose: u8,
 
-    /// Activates debug mode. Javascript files are not minified.
+    /// Activates debug mode. Javascript files are not minified and table data is human readable.
     #[arg(long)]
     pub(crate) debug: bool,
 
