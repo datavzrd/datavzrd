@@ -256,7 +256,13 @@ impl Renderer for ItemRenderer {
                         )?;
                     }
                     if !is_single_page {
-                        render_search_dialogs(&out_path, &headers, dataset, table.page_size, debug)?;
+                        render_search_dialogs(
+                            &out_path,
+                            &headers,
+                            dataset,
+                            table.page_size,
+                            debug,
+                        )?;
                     }
                     render_table_javascript(
                         &out_path,
