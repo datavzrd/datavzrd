@@ -110,6 +110,7 @@ impl Renderer for ItemRenderer {
                             .collect(),
                         &self.specs.views,
                         &self.specs.default_view,
+                        debug,
                     )?;
                     continue;
                 }
@@ -154,6 +155,7 @@ impl Renderer for ItemRenderer {
                         &self.specs.report_name,
                         self.specs.needs_excel_sheet(),
                         &view_sizes,
+                        debug,
                     )?;
                 // Render HTML
                 } else if let Some(table_specs) = &table.render_html {
@@ -254,7 +256,13 @@ impl Renderer for ItemRenderer {
                         )?;
                     }
                     if !is_single_page {
-                        render_search_dialogs(&out_path, &headers, dataset, table.page_size)?;
+                        render_search_dialogs(
+                            &out_path,
+                            &headers,
+                            dataset,
+                            table.page_size,
+                            debug,
+                        )?;
                     }
                     render_table_javascript(
                         &out_path,
@@ -360,15 +368,15 @@ fn render_page<P: AsRef<Path>>(
                 .unwrap()
             })
             .collect_vec();
-        Some(compress(json!(linkouts))?)
+        compress(json!(linkouts), debug)?
     } else {
-        None
+        Value::Null.to_string()
     };
 
-    let compressed_data = compress(json!(data))?;
+    let compressed_data = compress(json!(data), debug)?;
 
-    context.insert("data", &json!(compressed_data).to_string());
-    context.insert("linkouts", &json!(compressed_linkouts).to_string());
+    context.insert("data", &compressed_data);
+    context.insert("linkouts", &compressed_linkouts);
     context.insert("current_page", &page_index);
     context.insert("is_single_page", &is_single_page);
     context.insert(
@@ -1333,6 +1341,7 @@ fn render_search_dialogs<P: AsRef<Path>>(
     titles: &[String],
     dataset: &DatasetSpecs,
     page_size: usize,
+    debug: bool,
 ) -> Result<()> {
     let output_path = Path::new(path.as_ref()).join("search");
     fs::create_dir(&output_path)?;
@@ -1352,7 +1361,7 @@ fn render_search_dialogs<P: AsRef<Path>>(
                 .map(|(row, address)| (row, address.page + 1, address.row))
                 .collect_vec();
 
-            let compressed_data = compress(json!(records))?;
+            let compressed_data = compress(json!(records), debug)?;
 
             let mut templates = Tera::default();
             templates.add_raw_template(
@@ -1360,7 +1369,7 @@ fn render_search_dialogs<P: AsRef<Path>>(
                 include_str!("../../../templates/search_dialog.html.tera"),
             )?;
             let mut context = Context::new();
-            context.insert("data", &json!(compressed_data).to_string());
+            context.insert("data", &compressed_data);
             context.insert("records", &records);
             context.insert("title", &title);
 
@@ -1635,6 +1644,7 @@ fn render_plot_page<P: AsRef<Path>>(
     report_name: &String,
     has_excel_sheet: bool,
     view_sizes: &HashMap<String, String>,
+    debug: bool,
 ) -> Result<()> {
     let headers = dataset
         .reader()?
@@ -1691,9 +1701,9 @@ fn render_plot_page<P: AsRef<Path>>(
 
     let local: DateTime<Local> = Local::now();
 
-    let compressed_data = compress(json!(records))?;
+    let compressed_data = compress(json!(records), debug)?;
 
-    context.insert("data", &json!(compressed_data).to_string());
+    context.insert("data", &compressed_data);
     context.insert("description", &item_spec.description);
     context.insert("has_excel_sheet", &has_excel_sheet);
     context.insert(
@@ -1881,6 +1891,7 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
     datasets: HashMap<String, &DatasetSpecs>,
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
+    debug: bool,
 ) -> Result<()> {
     let mut data = HashMap::new();
 
@@ -1915,9 +1926,9 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
 
     let local: DateTime<Local> = Local::now();
 
-    let compressed_data = compress(json!(data))?;
+    let compressed_data = compress(json!(data), debug)?;
 
-    context.insert("datasets", &json!(compressed_data).to_string());
+    context.insert("datasets", &compressed_data);
     context.insert("description", &item_spec.description);
     context.insert(
         "tables",

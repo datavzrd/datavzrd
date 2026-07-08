@@ -1603,6 +1603,9 @@ export function screenshot_table() {
 }
 
 function decompress(data) {
+  if (typeof data !== "string") {
+    return data;
+  }
   var decompressed = JSON.parse(LZString.decompressFromUTF16(data));
   const unpacker = new jsonm.Unpacker();
   decompressed = unpacker.unpack(decompressed);
