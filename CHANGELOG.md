@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.70.0](https://github.com/datavzrd/datavzrd/compare/v2.69.2...v2.70.0) (2026-07-08)
+
+
+### Features
+
+* Allow gzipped csv and json inputs ([#1209](https://github.com/datavzrd/datavzrd/issues/1209)) ([28f6d75](https://github.com/datavzrd/datavzrd/commit/28f6d75324e7d0550eebe93c156ff07d778be25a))
+* Skip table data compression in debug mode ([#1208](https://github.com/datavzrd/datavzrd/issues/1208)) ([e3c7b7b](https://github.com/datavzrd/datavzrd/commit/e3c7b7bdafa8dd759a6d760778ca91336d4191ef))
+
 ## [2.69.2](https://github.com/datavzrd/datavzrd/compare/v2.69.1...v2.69.2) (2026-07-07)
 
 
