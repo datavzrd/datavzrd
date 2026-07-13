@@ -1198,9 +1198,9 @@ impl JavascriptFunction {
         let escaped_column = column.replace("'", "\\'");
         format!(
             "function {}({}) {{ try {{ {} }} catch (e) {{ datavzrd.custom_error(e, '{}') }}}}",
-            &self.name(),
-            &self.args(),
-            &self.body(),
+            self.name(),
+            self.args(),
+            self.body(),
             escaped_column,
         )
     }

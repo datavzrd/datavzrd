@@ -51,7 +51,7 @@ impl ItemsSpec {
     pub fn from_file<P: AsRef<Path> + Debug>(path: P) -> Result<ItemsSpec> {
         let config_file = fs::read_to_string(&path).context(format!(
             "Could not find config file under given path {:?}",
-            &path
+            path
         ))?;
         if config_file.is_empty() {
             bail!(ConfigError::EmptyConfigFile);
