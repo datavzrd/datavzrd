@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.70.1](https://github.com/datavzrd/datavzrd/compare/v2.70.0...v2.70.1) (2026-07-15)
+
+
+### Bug Fixes
+
+* Add error for quantitative scales for columns without numeric values ([#1215](https://github.com/datavzrd/datavzrd/issues/1215)) ([440a27d](https://github.com/datavzrd/datavzrd/commit/440a27d7dc9d2ff779d59a8638d230159d30523d))
+* Give clear error when a spell cannot be fetched ([#1213](https://github.com/datavzrd/datavzrd/issues/1213)) ([f10da69](https://github.com/datavzrd/datavzrd/commit/f10da69aee93fa08221510ec3f11faf1929f0001))
+
 ## [2.70.0](https://github.com/datavzrd/datavzrd/compare/v2.69.2...v2.70.0) (2026-07-08)
 
 
