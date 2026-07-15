@@ -976,7 +976,12 @@ impl Heatmap {
         if self.domain.is_none() {
             let d = get_column_domain(title, dataset, self)?;
             let domain: Vec<String> = if self.scale_type.is_quantitative() {
-                let floating_domain: Vec<f64> = serde_json::from_str(&d)?;
+                let floating_domain: Vec<f64> = serde_json::from_str(&d).map_err(|_| {
+                    ConfigError::NonNumericQuantitativeColumn {
+                        column: title.to_string(),
+                        path: dataset.path.clone(),
+                    }
+                })?;
                 floating_domain.iter().map(|x| x.to_string()).collect()
             } else {
                 serde_json::from_str(&d)?
@@ -1546,6 +1551,8 @@ pub enum ConfigError {
     MissingDefaultView { view: String },
     #[error("Heatmap definition for column {column:?} misses a scale. Please provide a scale in the heatmap configuration.")]
     HeatmapMissingScale { column: String },
+    #[error("Column {column:?} in dataset at {path:?} is configured with a quantitative scale (e.g. a heatmap), but does not contain any numeric values to derive a domain from. Please provide numeric values for this column, set an explicit domain, or use an ordinal scale.")]
+    NonNumericQuantitativeColumn { column: String, path: PathBuf },
     #[error("Heatmap definition for column {column:?} of view {view:?} misses a color scheme or color range. Please provide either a color scheme or a color range in the heatmap configuration.")]
     HeatmapMissingColorDefinition { view: String, column: String },
     #[error("View {view:?} consists of a configuration with render-plot and render-table present while only one should be present. If you want both please define two separate views.")]
@@ -1982,6 +1989,28 @@ mod tests {
                     render-table:
                         columns:
                             gene: {}
+            "#;
+        let mut config_file = tempfile::NamedTempFile::new().unwrap();
+        config_file.write_all(raw_config.as_bytes()).unwrap();
+        assert!(ItemsSpec::from_file(config_file.path()).is_err());
+    }
+
+    #[test]
+    fn test_non_numeric_quantitative_column_config_validation() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/null_column.csv
+            views:
+                d:
+                    dataset: d
+                    render-table:
+                        columns:
+                            score:
+                                plot:
+                                    heatmap:
+                                        scale: linear
+                                        color-scheme: viridis
             "#;
         let mut config_file = tempfile::NamedTempFile::new().unwrap();
         config_file.write_all(raw_config.as_bytes()).unwrap();
