@@ -73,7 +73,10 @@ pub fn fetch_content(url: &String, relative_path: &String) -> Result<String> {
     if url.starts_with("http://") || url.starts_with("https://") {
         let base_url = url.rsplit_once('/').unwrap_or(("", "")).0;
         let full_url = format!("{}/{}", base_url, relative_path.trim_start_matches('/'));
-        let content = get(full_url)?.text()?;
+        let content = get(&full_url)?
+            .error_for_status()
+            .map_err(|e| anyhow!("Failed to fetch {full_url}: {e}"))?
+            .text()?;
         Ok(content)
     } else {
         let path = Path::new(url).join(relative_path);
@@ -118,12 +121,12 @@ pub fn fetch_spell(input: &str) -> Result<String> {
 /// Fetches content from a URL.
 fn fetch_from_url(url: &str) -> Result<String> {
     for attempt in 1..=MAX_RETRIES {
-        match get(url).and_then(|r| r.text()) {
-            Ok(text) => return Ok(text),
-            Err(_) if attempt < MAX_RETRIES => {
+        match get(url).and_then(|r| r.error_for_status()) {
+            Ok(response) => return Ok(response.text()?),
+            Err(e) if attempt < MAX_RETRIES && e.status().is_none_or(|s| s.is_server_error()) => {
                 sleep(Duration::from_millis(100 * attempt as u64));
             }
-            Err(e) => return Err(anyhow!("Failed after {} attempts: {}", MAX_RETRIES, e)),
+            Err(e) => return Err(anyhow!("Failed to fetch spell from {url}: {e}")),
         }
     }
     unreachable!()
@@ -242,6 +245,13 @@ mod tests {
         let relative_path = "../README.md".to_string();
         let result = fetch_content(&url, &relative_path).unwrap();
         assert!(result.contains("A tool to create visual and interactive HTML reports from"));
+    }
+
+    #[test]
+    fn fetch_spell_fails_on_missing_spell() {
+        SPELL_CACHE.lock().unwrap().clear();
+        let result = fetch_spell("v0.0.0/does-not-exist/does-not-exist");
+        assert!(result.is_err());
     }
 
     #[test]
