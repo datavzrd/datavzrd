@@ -2,7 +2,7 @@ use anyhow::{bail, Context, Result};
 use fs_extra::dir;
 use fs_extra::dir::CopyOptions;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 use thiserror::Error;
 
@@ -68,7 +68,7 @@ impl Repository {
 
     fn entry(&self) -> Result<()> {
         if let Some(entry) = &self.entry {
-            if *entry != PathBuf::from("index.html") {
+            if entry.as_path() != Path::new("index.html") {
                 let destination = self.path.join("deployment").join("index.html");
                 let redirect = format!("<!DOCTYPE html><html><head></head><body><script>window.location.href = \"{}\";</script></body></html>", entry.display());
                 fs::write(&destination, redirect).context("Failed to write entry file")?;
