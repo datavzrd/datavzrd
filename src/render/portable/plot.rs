@@ -218,7 +218,7 @@ fn generate_nominal_plot(
     };
 
     if plot_data.len() > MAX_NOMINAL_BINS {
-        plot_data.sort_by(|a, b| b.value.cmp(&a.value));
+        plot_data.sort_by_key(|b| std::cmp::Reverse(b.value));
         plot_data = plot_data.into_iter().take(MAX_NOMINAL_BINS).collect();
     }
 

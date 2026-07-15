@@ -1198,9 +1198,9 @@ impl JavascriptFunction {
         let escaped_column = column.replace("'", "\\'");
         format!(
             "function {}({}) {{ try {{ {} }} catch (e) {{ datavzrd.custom_error(e, '{}') }}}}",
-            &self.name(),
-            &self.args(),
-            &self.body(),
+            self.name(),
+            self.args(),
+            self.body(),
             escaped_column,
         )
     }
@@ -1883,6 +1883,7 @@ fn render_img_page<P: AsRef<Path>>(
 }
 
 /// Renders a plot page from given render-plot spec containing multiple datasets
+#[allow(clippy::too_many_arguments)]
 fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
     output_path: P,
     tables: &[String],
