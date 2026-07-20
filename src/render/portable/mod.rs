@@ -110,6 +110,9 @@ impl Renderer for ItemRenderer {
                             .collect(),
                         &self.specs.views,
                         &self.specs.default_view,
+                        &self.specs.report_name,
+                        self.specs.needs_excel_sheet(),
+                        &view_sizes,
                         debug,
                     )?;
                     continue;
@@ -1892,6 +1895,9 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
     datasets: HashMap<String, &DatasetSpecs>,
     views: &HashMap<String, ItemSpecs>,
     default_view: &Option<String>,
+    report_name: &String,
+    has_excel_sheet: bool,
+    view_sizes: &HashMap<String, String>,
     debug: bool,
 ) -> Result<()> {
     let mut data = HashMap::new();
@@ -1946,6 +1952,9 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
             .collect_vec(),
     );
     context.insert("default_view", default_view);
+    context.insert("report_name", report_name);
+    context.insert("has_excel_sheet", &has_excel_sheet);
+    context.insert("view_sizes", &view_sizes);
     context.insert("name", name);
     context.insert("specs", &render_plot_specs.schema.as_ref().unwrap());
     context.insert("time", &local.format("%a %b %e %T %Y").to_string());
