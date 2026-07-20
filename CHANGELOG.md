@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.70.2](https://github.com/datavzrd/datavzrd/compare/v2.70.1...v2.70.2) (2026-07-20)
+
+
+### Bug Fixes
+
+* Add missing params for render_plot_page_with_multiple_datasets ([#1218](https://github.com/datavzrd/datavzrd/issues/1218)) ([616be5f](https://github.com/datavzrd/datavzrd/commit/616be5ffe463bcc114a7f13938c11c568bff292f))
+
 ## [2.70.1](https://github.com/datavzrd/datavzrd/compare/v2.70.0...v2.70.1) (2026-07-15)
 
 
