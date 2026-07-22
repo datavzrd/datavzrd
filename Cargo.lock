@@ -1627,8 +1627,9 @@ checksum = "a3c2a6c0b4b5637c41719973ef40c6a1cf564f9db6958350de6193fbee9c23f5"
 
 [[package]]
 name = "jsonm"
-version = "0.2.1"
-source = "git+https://github.com/andrewnester/rust-jsonm?branch=master#160862694f139df95763e1b72f3f0ceef524cf86"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1b86792f3504fd604d10f67b87c0db3514df881542e22e4c46af9031dcce3262"
 dependencies = [
  "regex",
  "serde",
