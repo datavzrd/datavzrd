@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.70.3](https://github.com/datavzrd/datavzrd/compare/v2.70.2...v2.70.3) (2026-07-23)
+
+
+### Bug Fixes
+
+* Disable memoize_objects in rust-jsonm to prevent data corruption ([#1225](https://github.com/datavzrd/datavzrd/issues/1225)) ([c650ddf](https://github.com/datavzrd/datavzrd/commit/c650ddffe7b0e097f24e1e66e7a70b6c3c556837))
+
 ## [2.70.2](https://github.com/datavzrd/datavzrd/compare/v2.70.1...v2.70.2) (2026-07-20)
 
 
