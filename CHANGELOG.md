@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.71.0](https://github.com/datavzrd/datavzrd/compare/v2.70.3...v2.71.0) (2026-08-03)
+
+
+### Features
+
+* Add --dryrun option ([#1232](https://github.com/datavzrd/datavzrd/issues/1232)) ([ef88ebb](https://github.com/datavzrd/datavzrd/commit/ef88ebbef1ac7c1676086fbfe648f5f3c25eba36))
+
 ## [2.70.3](https://github.com/datavzrd/datavzrd/compare/v2.70.2...v2.70.3) (2026-07-23)
 
 
