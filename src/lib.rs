@@ -21,6 +21,7 @@ pub mod utils;
 /// * `webview_url` - A string slice representing the base URL for webview links in the report.
 /// * `debug` - A boolean flag indicating whether to enable debug mode for rendering.
 /// * `overwrite_output` - A boolean flag indicating whether to overwrite the output directory if it is not empty.
+/// * `dryrun` - A boolean flag indicating whether to only validate the configuration and report what would be rendered, without writing anything.
 ///
 /// # Returns
 ///
@@ -37,9 +38,19 @@ pub fn render_report(
     webview_url: &str,
     debug: bool,
     overwrite_output: bool,
+    dryrun: bool,
 ) -> Result<()> {
     let config = ItemsSpec::from_file(config_file)?;
     config.validate()?;
+
+    if dryrun {
+        let count = config.views.len();
+        let views = if count == 1 { "view" } else { "views" };
+        println!(
+            "Configuration is valid. {count} {views} would be rendered to {output:?}. Nothing written as called with --dryrun/-n flag."
+        );
+        return Ok(());
+    }
 
     if !output.exists() {
         fs::create_dir(output)?;

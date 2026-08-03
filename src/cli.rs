@@ -18,6 +18,10 @@ pub struct Datavzrd {
     #[arg(long)]
     pub(crate) debug: bool,
 
+    /// Do not execute anything. Only validate the configuration and report what would be rendered.
+    #[arg(short = 'n', long)]
+    pub(crate) dryrun: bool,
+
     /// Config file containing file paths and settings
     #[arg(value_name = "CONFIG", value_parser)]
     pub(crate) config: Option<PathBuf>,

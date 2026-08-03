@@ -57,6 +57,7 @@ fn main() -> Result<()> {
                 &opt.webview_url,
                 opt.debug,
                 opt.overwrite_output,
+                opt.dryrun,
             )?;
         }
     }
