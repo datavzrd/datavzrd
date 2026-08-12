@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.71.1](https://github.com/datavzrd/datavzrd/compare/v2.71.0...v2.71.1) (2026-08-12)
+
+
+### Bug Fixes
+
+* Capture full table in SVG export to prevent clipping ([#1236](https://github.com/datavzrd/datavzrd/issues/1236)) ([ba1690b](https://github.com/datavzrd/datavzrd/commit/ba1690b983e922fab454202baf81f74d725d6301))
+
 ## [2.71.0](https://github.com/datavzrd/datavzrd/compare/v2.70.3...v2.71.0) (2026-08-03)
 
 
