@@ -1563,8 +1563,30 @@ export function screenshot_table() {
     narrow_contents.push([cell, cell.innerHTML]);
     cell.innerHTML = "";
   });
+  const rect = table_element.getBoundingClientRect();
+  let [left, top, right, bottom] = [rect.left, rect.top, rect.right, rect.bottom];
+  table_element.querySelectorAll("*").forEach((node) => {
+    const r = node.getBoundingClientRect();
+    if (!r.width && !r.height) {
+      return;
+    }
+    left = Math.min(left, r.left);
+    top = Math.min(top, r.top);
+    right = Math.max(right, r.right);
+    bottom = Math.max(bottom, r.bottom);
+  });
   htmlToImage
-    .toSvg(table_element, { filter: filter })
+    .toSvg(table_element, {
+      filter: filter,
+      width: Math.ceil(right - left),
+      height: Math.ceil(bottom - top),
+      style: {
+        width: `${rect.width}px`,
+        height: `${rect.height}px`,
+        transform: `translate(${rect.left - left}px, ${rect.top - top}px)`,
+        transformOrigin: "top left",
+      },
+    })
     .then((dataUrl) =>
       downloadSVG(dataUrl, `${$("#view-selection").attr("title")}.svg`),
     )
