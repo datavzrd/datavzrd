@@ -1148,6 +1148,7 @@ impl JavascriptHeatmapConfig {
 struct JavascriptLinkConfig {
     title: String,
     links: Vec<JavascriptLink>,
+    #[serde(rename = "custom-content")]
     custom_content: Option<String>,
 }
 
