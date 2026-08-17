@@ -1164,11 +1164,23 @@ struct JavascriptEllipsisConfig {
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
-struct JavascriptFunction(String);
+pub(crate) struct JavascriptFunction(pub(crate) String);
 
 impl JavascriptFunction {
     fn name(&self) -> String {
         format!("custom_func_{:x}", md5::compute(self.0.as_bytes()))
+    }
+
+    pub(crate) fn is_valid(&self) -> bool {
+        self.0
+            .split_once('(')
+            .and_then(|(_, rest)| rest.split_once(')'))
+            .is_some()
+            && self
+                .0
+                .split_once('{')
+                .and_then(|(_, rest)| rest.rsplit_once('}'))
+                .is_some()
     }
 
     fn body(&self) -> String {
@@ -1197,7 +1209,7 @@ impl JavascriptFunction {
         self.args().split(',').count()
     }
 
-    fn to_javascript_function(&self, column: &str) -> String {
+    fn with_error_handling(&self, column: &str) -> String {
         let escaped_column = column.replace("'", "\\'");
         format!(
             "function {}({}) {{ try {{ {} }} catch (e) {{ datavzrd.custom_error(e, '{}') }}}}",
@@ -1227,7 +1239,7 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
         .iter()
         .filter(|(_, k)| k.custom.is_some())
         .map(|(k, v)| {
-            JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).to_javascript_function(k)
+            JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).with_error_handling(k)
         })
         .chain(
             render_columns
@@ -1244,7 +1256,7 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                             .unwrap()
                             .to_string(),
                     )
-                    .to_javascript_function(k)
+                    .with_error_handling(k)
                 }),
         )
         .chain(
@@ -1253,7 +1265,7 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                 .filter(|(_, k)| k.custom_plot.is_some())
                 .map(|(k, v)| {
                     JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
-                        .to_javascript_function(k)
+                        .with_error_handling(k)
                 }),
         )
         .chain(
@@ -1266,7 +1278,7 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                 .filter(|(_, k)| k.custom_content.is_some())
                 .map(|(k, v)| {
                     JavascriptFunction(v.custom_content.as_ref().unwrap().to_owned())
-                        .to_javascript_function(k)
+                        .with_error_handling(k)
                 }),
         )
         .chain(
@@ -1274,7 +1286,7 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                 .as_ref()
                 .unwrap_or(&HashMap::new())
                 .iter()
-                .map(|(k, v)| JavascriptFunction(v.value.to_string()).to_javascript_function(k)),
+                .map(|(k, v)| JavascriptFunction(v.value.to_string()).with_error_handling(k)),
         )
         .chain(
             additional_columns
@@ -1284,7 +1296,7 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                 .filter(|(_, k)| k.custom_plot.is_some())
                 .map(|(k, v)| {
                     JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
-                        .to_javascript_function(k)
+                        .with_error_handling(k)
                 }),
         )
         .collect_vec();

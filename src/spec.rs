@@ -1,5 +1,6 @@
 use crate::render::portable::get_column_domain;
 use crate::render::portable::DatasetError;
+use crate::render::portable::JavascriptFunction;
 use crate::spec::ConfigError::{
     ConflictingConfiguration, LinkToMissingView, LogScaleDomainIncludesZero, LogScaleIncludesZero,
     MissingLinkoutColumn, PlotAndTablePresentConfiguration, UnsupportedColorScheme,
@@ -187,6 +188,34 @@ impl ItemsSpec {
                                     column: column.to_string(),
                                     conflict: possible_conflicting
                                 })
+                            }
+                            for (field, source) in [
+                                ("custom", render_columns.custom.as_deref()),
+                                (
+                                    "link-to-url custom-content",
+                                    render_columns
+                                        .link_to_url
+                                        .as_ref()
+                                        .and_then(|link| link.custom_content.as_deref()),
+                                ),
+                                (
+                                    "custom-plot data",
+                                    render_columns
+                                        .custom_plot
+                                        .as_ref()
+                                        .map(|plot| plot.plot_data.as_str())
+                                        .filter(|source| !source.is_empty()),
+                                ),
+                            ] {
+                                if let Some(source) = source {
+                                    if !JavascriptFunction(source.to_owned()).is_valid() {
+                                        bail!(ConfigError::InvalidJavascriptFunction {
+                                            view: name.to_string(),
+                                            column: column.to_string(),
+                                            field: field.to_string(),
+                                        })
+                                    }
+                                }
                             }
                             if let Some(plot_spec) = &render_columns.plot {
                                 let domain = if let Some(tick_plot) = &plot_spec.tick_plot {
@@ -1527,6 +1556,12 @@ impl AuxDomainColumns {
 
 #[derive(Error, Debug)]
 pub enum ConfigError {
+    #[error("The {field} of column {column:?} in view {view:?} is not a valid JavaScript function. Please provide a function such as `function(value, row) {{ return value; }}`.")]
+    InvalidJavascriptFunction {
+        view: String,
+        column: String,
+        field: String,
+    },
     #[error("Could not find column with index {index:?} under path {table_path:?} with only {header_length:?} columns.")]
     IndexTooLarge {
         index: usize,
