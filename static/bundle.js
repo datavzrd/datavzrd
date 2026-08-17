@@ -70146,7 +70146,7 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */var _plot_heatmap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plot/heatmap */ "./src/plot/heatmap.js");
 /* harmony import */var _plot_pills__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plot/pills */ "./src/plot/pills.js");
-/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.1.0_vega-lite@6.4.3_vega@6.3.1__vega@6.3.1/node_modules/vega-embed/build/embed.js");
+/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.1.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
 
 
 
@@ -70673,7 +70673,7 @@ __webpack_require__.d(__webpack_exports__, {
 });
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.1.0_vega-lite@6.4.3_vega@6.3.1__vega@6.3.1/node_modules/vega-embed/build/embed.js");
+/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.1.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
 
 
 
@@ -70804,7 +70804,7 @@ __webpack_require__.d(__webpack_exports__, {
 });
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */var vega__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega */ "./node_modules/.pnpm/vega@6.3.1/node_modules/vega/build/vega.module.js");
+/* harmony import */var vega__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega */ "./node_modules/.pnpm/vega@6.4.0/node_modules/vega/build/vega.module.js");
 /* harmony import */var d3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3 */ "./node_modules/.pnpm/d3@7.9.0/node_modules/d3/src/index.js");
 /* harmony import */var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./src/utils.js");
 
@@ -71243,7 +71243,7 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./src/utils.js");
-/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.1.0_vega-lite@6.4.3_vega@6.3.1__vega@6.3.1/node_modules/vega-embed/build/embed.js");
+/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.1.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
 
 
 
@@ -108312,7 +108312,7 @@ const domImage = () => typeof Image !== 'undefined' ? Image : null;
 
 
 }),
-"./node_modules/.pnpm/vega-crossfilter@5.1.2/node_modules/vega-crossfilter/build/vega-crossfilter.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-crossfilter@5.1.3/node_modules/vega-crossfilter/build/vega-crossfilter.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -108321,8 +108321,8 @@ __webpack_require__.d(__webpack_exports__, {
 });
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/bisect.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/permute.js");
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 
 
 
@@ -108999,7 +108999,7 @@ ResolveFilter.Definition = {
 
 
 }),
-"./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -109025,9 +109025,9 @@ __webpack_require__.d(__webpack_exports__, {
   transforms: function() { return transforms; },
   tupleid: function() { return tupleid; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
-/* harmony import */var vega_loader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-loader */ "./node_modules/.pnpm/vega-loader@5.1.2/node_modules/vega-loader/build/vega-loader.browser.js");
-/* harmony import */var vega_format__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-format */ "./node_modules/.pnpm/vega-format@2.1.2/node_modules/vega-format/build/vega-format.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_loader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-loader */ "./node_modules/.pnpm/vega-loader@5.1.3/node_modules/vega-loader/build/vega-loader.browser.js");
+/* harmony import */var vega_format__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-format */ "./node_modules/.pnpm/vega-format@2.1.3/node_modules/vega-format/build/vega-format.js");
 
 
 
@@ -111112,7 +111112,7 @@ function transform(type) {
 
 
 }),
-"./node_modules/.pnpm/vega-embed@7.1.0_vega-lite@6.4.3_vega@6.3.1__vega@6.3.1/node_modules/vega-embed/build/embed.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-embed@7.1.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -111124,11 +111124,11 @@ __webpack_require__.d(__webpack_exports__, {
   version: function() { return version; }
 });
 /* harmony import */var json_stringify_pretty_compact__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! json-stringify-pretty-compact */ "./node_modules/.pnpm/json-stringify-pretty-compact@4.0.0/node_modules/json-stringify-pretty-compact/index.js");
-/* harmony import */var vega__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega */ "./node_modules/.pnpm/vega@6.3.1/node_modules/vega/build/vega.module.js");
-/* harmony import */var vega_interpreter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-interpreter */ "./node_modules/.pnpm/vega-interpreter@2.3.1/node_modules/vega-interpreter/build/vega-interpreter.js");
-/* harmony import */var vega_lite__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-lite */ "./node_modules/.pnpm/vega-lite@6.4.3_vega@6.3.1/node_modules/vega-lite/build/index.js");
+/* harmony import */var vega__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega */ "./node_modules/.pnpm/vega@6.4.0/node_modules/vega/build/vega.module.js");
+/* harmony import */var vega_interpreter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-interpreter */ "./node_modules/.pnpm/vega-interpreter@2.3.2/node_modules/vega-interpreter/build/vega-interpreter.js");
+/* harmony import */var vega_lite__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-lite */ "./node_modules/.pnpm/vega-lite@6.4.3_vega@6.4.0/node_modules/vega-lite/build/index.js");
 /* harmony import */var vega_schema_url_parser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-schema-url-parser */ "./node_modules/.pnpm/vega-schema-url-parser@3.0.2/node_modules/vega-schema-url-parser/dist/parser.modern.js");
-/* harmony import */var vega_themes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-themes */ "./node_modules/.pnpm/vega-themes@3.0.0_vega-lite@6.4.3_vega@6.3.1__vega@6.3.1/node_modules/vega-themes/build/index.js");
+/* harmony import */var vega_themes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-themes */ "./node_modules/.pnpm/vega-themes@3.0.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-themes/build/index.js");
 /* harmony import */var vega_tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vega-tooltip */ "./node_modules/.pnpm/vega-tooltip@1.0.0/node_modules/vega-tooltip/build/index.js");
 
 
@@ -114072,7 +114072,7 @@ async function _embed(el, spec, opts = {}, loader) {
 
 
 }),
-"./node_modules/.pnpm/vega-encode@5.2.1/node_modules/vega-encode/build/vega-encode.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-encode@5.2.2/node_modules/vega-encode/build/vega-encode.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -114086,9 +114086,9 @@ __webpack_require__.d(__webpack_exports__, {
   sortitems: function() { return SortItems; },
   stack: function() { return Stack; }
 });
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.2/node_modules/vega-scale/build/vega-scale.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.3/node_modules/vega-scale/build/vega-scale.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/sum.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/range.js");
 /* harmony import */var d3_interpolate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! d3-interpolate */ "./node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/round.js");
@@ -114858,7 +114858,7 @@ function configureScheme(type, _, count) {
   }
 
   // determine size for potential discrete range
-  count = type === vega_scale__WEBPACK_IMPORTED_MODULE_1__.Threshold ? count + 1 : type === vega_scale__WEBPACK_IMPORTED_MODULE_1__.BinOrdinal ? count - 1 : type === vega_scale__WEBPACK_IMPORTED_MODULE_1__.Quantile || type === vega_scale__WEBPACK_IMPORTED_MODULE_1__.Quantize ? +_.schemeCount || DEFAULT_COUNT : count;
+  count = type === vega_scale__WEBPACK_IMPORTED_MODULE_1__.Threshold ? count + 1 : type === vega_scale__WEBPACK_IMPORTED_MODULE_1__.BinOrdinal ? count - 1 : type === vega_scale__WEBPACK_IMPORTED_MODULE_1__.Ordinal ? +_.schemeCount || count || DEFAULT_COUNT : type === vega_scale__WEBPACK_IMPORTED_MODULE_1__.Quantile || type === vega_scale__WEBPACK_IMPORTED_MODULE_1__.Quantize ? +_.schemeCount || DEFAULT_COUNT : count;
 
   // adjust and/or quantize scheme as appropriate
   return (0,vega_scale__WEBPACK_IMPORTED_MODULE_1__.isInterpolating)(type) ? adjustScheme(scheme$1, extent, _.reverse) : (0,vega_util__WEBPACK_IMPORTED_MODULE_2__.isFunction)(scheme$1) ? (0,vega_scale__WEBPACK_IMPORTED_MODULE_1__.quantizeInterpolator)(adjustScheme(scheme$1, extent), count) : type === vega_scale__WEBPACK_IMPORTED_MODULE_1__.Ordinal ? scheme$1 : scheme$1.slice(0, count);
@@ -115270,7 +115270,7 @@ __webpack_require__.d(__webpack_exports__, {
   functions: function() { return Functions; },
   parseExpression: function() { return parser; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 
 
 const RawCode = 'RawCode';
@@ -116872,7 +116872,7 @@ function codegen (opt) {
 
 
 }),
-"./node_modules/.pnpm/vega-expression@6.2.1/node_modules/vega-expression/build/vega-expression.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-expression@6.2.2/node_modules/vega-expression/build/vega-expression.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -116894,7 +116894,7 @@ __webpack_require__.d(__webpack_exports__, {
   functions: function() { return Functions; },
   parseExpression: function() { return parser; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 
 
 const RawCode = 'RawCode';
@@ -118462,7 +118462,7 @@ function codegen (opt) {
     ObjectExpression: n => {
       // If any keys would override Object prototype methods, throw error
       for (const prop of n.properties) {
-        const keyName = prop.key.name;
+        const keyName = prop.key.type === 'Literal' ? String(prop.key.value) : prop.key.name;
         if (vega_util__WEBPACK_IMPORTED_MODULE_0__.DisallowedObjectProperties.has(keyName)) {
           (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)('Illegal property: ' + keyName);
         }
@@ -118496,14 +118496,14 @@ function codegen (opt) {
 
 
 }),
-"./node_modules/.pnpm/vega-force@5.1.2/node_modules/vega-force/build/vega-force.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-force@5.1.3/node_modules/vega-force/build/vega-force.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   force: function() { return Force; }
 });
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 /* harmony import */var d3_force__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3-force */ "./node_modules/.pnpm/d3-force@3.0.0/node_modules/d3-force/src/center.js");
 /* harmony import */var d3_force__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! d3-force */ "./node_modules/.pnpm/d3-force@3.0.0/node_modules/d3-force/src/collide.js");
 /* harmony import */var d3_force__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! d3-force */ "./node_modules/.pnpm/d3-force@3.0.0/node_modules/d3-force/src/manyBody.js");
@@ -118802,7 +118802,7 @@ function setForceParam(f, v, _) {
 
 
 }),
-"./node_modules/.pnpm/vega-format@2.1.2/node_modules/vega-format/build/vega-format.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-format@2.1.3/node_modules/vega-format/build/vega-format.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -118823,8 +118823,8 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var d3_format__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! d3-format */ "./node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/precisionFixed.js");
 /* harmony import */var d3_format__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! d3-format */ "./node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/defaultLocale.js");
 /* harmony import */var d3_format__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! d3-format */ "./node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/locale.js");
-/* harmony import */var vega_time__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-time */ "./node_modules/.pnpm/vega-time@3.2.1/node_modules/vega-time/build/vega-time.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_time__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-time */ "./node_modules/.pnpm/vega-time@3.3.0/node_modules/vega-time/build/vega-time.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 /* harmony import */var d3_time_format__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! d3-time-format */ "./node_modules/.pnpm/d3-time-format@4.1.0/node_modules/d3-time-format/src/defaultLocale.js");
 /* harmony import */var d3_time_format__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! d3-time-format */ "./node_modules/.pnpm/d3-time-format@4.1.0/node_modules/d3-time-format/src/locale.js");
 
@@ -119016,7 +119016,7 @@ function resetDefaultLocale() {
 
 
 }),
-"./node_modules/.pnpm/vega-functions@6.1.3/node_modules/vega-functions/build/vega-functions.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-functions@6.2.0/node_modules/vega-functions/build/vega-functions.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -119037,6 +119037,7 @@ __webpack_require__.d(__webpack_exports__, {
   dayFormat: function() { return dayFormat; },
   debug: function() { return debug; },
   domain: function() { return domain; },
+  easeFunctions: function() { return easeFunctions; },
   encode: function() { return encode; },
   expressionFunction: function() { return expressionFunction; },
   format: function() { return format; },
@@ -119046,11 +119047,13 @@ __webpack_require__.d(__webpack_exports__, {
   geoCentroid: function() { return geoCentroid; },
   geoScale: function() { return geoScale; },
   geoShape: function() { return geoShape; },
+  geoTranslate: function() { return geoTranslate; },
   inScope: function() { return inScope; },
   indata: function() { return indata; },
   indataVisitor: function() { return indataVisitor; },
   indexof: function() { return indexof; },
   info: function() { return info; },
+  interpolateLinear: function() { return interpolateLinear; },
   invert: function() { return invert; },
   join: function() { return join; },
   lastindexof: function() { return lastindexof; },
@@ -119083,20 +119086,31 @@ __webpack_require__.d(__webpack_exports__, {
   warn: function() { return warn; },
   windowSize: function() { return windowSize; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
-/* harmony import */var vega_expression__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-expression */ "./node_modules/.pnpm/vega-expression@6.2.1/node_modules/vega-expression/build/vega-expression.js");
-/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.2/node_modules/vega-scale/build/vega-scale.js");
-/* harmony import */var d3_geo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! d3-geo */ "./node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/area.js");
-/* harmony import */var d3_geo__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! d3-geo */ "./node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/bounds.js");
-/* harmony import */var d3_geo__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! d3-geo */ "./node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/centroid.js");
-/* harmony import */var d3_color__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! d3-color */ "./node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/color.js");
-/* harmony import */var d3_color__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! d3-color */ "./node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/lab.js");
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_scenegraph__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-scenegraph */ "./node_modules/.pnpm/vega-scenegraph@5.2.1/node_modules/vega-scenegraph/build/vega-scenegraph.js");
-/* harmony import */var vega_selections__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-selections */ "./node_modules/.pnpm/vega-selections@6.1.4/node_modules/vega-selections/build/vega-selection.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
+/* harmony import */var d3_ease__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! d3-ease */ "./node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/linear.js");
+/* harmony import */var d3_ease__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! d3-ease */ "./node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/quad.js");
+/* harmony import */var d3_ease__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! d3-ease */ "./node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/cubic.js");
+/* harmony import */var d3_ease__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! d3-ease */ "./node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/poly.js");
+/* harmony import */var d3_ease__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! d3-ease */ "./node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/sin.js");
+/* harmony import */var d3_ease__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! d3-ease */ "./node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/exp.js");
+/* harmony import */var d3_ease__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! d3-ease */ "./node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/circle.js");
+/* harmony import */var d3_ease__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! d3-ease */ "./node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/bounce.js");
+/* harmony import */var d3_ease__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! d3-ease */ "./node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/back.js");
+/* harmony import */var d3_ease__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! d3-ease */ "./node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/elastic.js");
+/* harmony import */var vega_expression__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-expression */ "./node_modules/.pnpm/vega-expression@6.2.2/node_modules/vega-expression/build/vega-expression.js");
+/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.3/node_modules/vega-scale/build/vega-scale.js");
+/* harmony import */var d3_geo__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! d3-geo */ "./node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/area.js");
+/* harmony import */var d3_geo__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! d3-geo */ "./node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/bounds.js");
+/* harmony import */var d3_geo__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! d3-geo */ "./node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/centroid.js");
+/* harmony import */var d3_color__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! d3-color */ "./node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/color.js");
+/* harmony import */var d3_color__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! d3-color */ "./node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/lab.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_scenegraph__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-scenegraph */ "./node_modules/.pnpm/vega-scenegraph@5.3.0/node_modules/vega-scenegraph/build/vega-scenegraph.js");
+/* harmony import */var vega_selections__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-selections */ "./node_modules/.pnpm/vega-selections@6.1.5/node_modules/vega-selections/build/vega-selection.js");
 /* harmony import */var vega_statistics__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vega-statistics */ "./node_modules/.pnpm/vega-statistics@2.0.0/node_modules/vega-statistics/build/vega-statistics.js");
-/* harmony import */var vega_time__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vega-time */ "./node_modules/.pnpm/vega-time@3.2.1/node_modules/vega-time/build/vega-time.js");
-/* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/range.js");
+/* harmony import */var vega_time__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vega-time */ "./node_modules/.pnpm/vega-time@3.3.0/node_modules/vega-time/build/vega-time.js");
+/* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/range.js");
+
 
 
 
@@ -119126,6 +119140,55 @@ function setdata(name, tuples) {
   return 1;
 }
 
+/**
+ * The d3-ease easing functions, exposed to the expression language under their
+ * d3 names. Each maps a normalized time in [0, 1] to an eased position in
+ * [0, 1], letting animations vary their playback rate over the time domain.
+ *
+ * The parametric families (`easePoly`, `easeBack`, `easeElastic`) are exposed
+ * at their default parameters only; d3's `.exponent()` / `.overshoot()` /
+ * `.amplitude()` configuration has no expression-language equivalent.
+ */
+const easeFunctions = {
+  easeLinear: d3_ease__WEBPACK_IMPORTED_MODULE_8__.linear,
+  easeQuad: d3_ease__WEBPACK_IMPORTED_MODULE_9__.quadInOut,
+  easeQuadIn: d3_ease__WEBPACK_IMPORTED_MODULE_9__.quadIn,
+  easeQuadOut: d3_ease__WEBPACK_IMPORTED_MODULE_9__.quadOut,
+  easeQuadInOut: d3_ease__WEBPACK_IMPORTED_MODULE_9__.quadInOut,
+  easeCubic: d3_ease__WEBPACK_IMPORTED_MODULE_10__.cubicInOut,
+  easeCubicIn: d3_ease__WEBPACK_IMPORTED_MODULE_10__.cubicIn,
+  easeCubicOut: d3_ease__WEBPACK_IMPORTED_MODULE_10__.cubicOut,
+  easeCubicInOut: d3_ease__WEBPACK_IMPORTED_MODULE_10__.cubicInOut,
+  easePoly: d3_ease__WEBPACK_IMPORTED_MODULE_11__.polyInOut,
+  easePolyIn: d3_ease__WEBPACK_IMPORTED_MODULE_11__.polyIn,
+  easePolyOut: d3_ease__WEBPACK_IMPORTED_MODULE_11__.polyOut,
+  easePolyInOut: d3_ease__WEBPACK_IMPORTED_MODULE_11__.polyInOut,
+  easeSin: d3_ease__WEBPACK_IMPORTED_MODULE_12__.sinInOut,
+  easeSinIn: d3_ease__WEBPACK_IMPORTED_MODULE_12__.sinIn,
+  easeSinOut: d3_ease__WEBPACK_IMPORTED_MODULE_12__.sinOut,
+  easeSinInOut: d3_ease__WEBPACK_IMPORTED_MODULE_12__.sinInOut,
+  easeExp: d3_ease__WEBPACK_IMPORTED_MODULE_13__.expInOut,
+  easeExpIn: d3_ease__WEBPACK_IMPORTED_MODULE_13__.expIn,
+  easeExpOut: d3_ease__WEBPACK_IMPORTED_MODULE_13__.expOut,
+  easeExpInOut: d3_ease__WEBPACK_IMPORTED_MODULE_13__.expInOut,
+  easeCircle: d3_ease__WEBPACK_IMPORTED_MODULE_14__.circleInOut,
+  easeCircleIn: d3_ease__WEBPACK_IMPORTED_MODULE_14__.circleIn,
+  easeCircleOut: d3_ease__WEBPACK_IMPORTED_MODULE_14__.circleOut,
+  easeCircleInOut: d3_ease__WEBPACK_IMPORTED_MODULE_14__.circleInOut,
+  easeBounce: d3_ease__WEBPACK_IMPORTED_MODULE_15__.bounceOut,
+  easeBounceIn: d3_ease__WEBPACK_IMPORTED_MODULE_15__.bounceIn,
+  easeBounceOut: d3_ease__WEBPACK_IMPORTED_MODULE_15__.bounceOut,
+  easeBounceInOut: d3_ease__WEBPACK_IMPORTED_MODULE_15__.bounceInOut,
+  easeBack: d3_ease__WEBPACK_IMPORTED_MODULE_16__.backInOut,
+  easeBackIn: d3_ease__WEBPACK_IMPORTED_MODULE_16__.backIn,
+  easeBackOut: d3_ease__WEBPACK_IMPORTED_MODULE_16__.backOut,
+  easeBackInOut: d3_ease__WEBPACK_IMPORTED_MODULE_16__.backInOut,
+  easeElastic: d3_ease__WEBPACK_IMPORTED_MODULE_17__.elasticOut,
+  easeElasticIn: d3_ease__WEBPACK_IMPORTED_MODULE_17__.elasticIn,
+  easeElasticOut: d3_ease__WEBPACK_IMPORTED_MODULE_17__.elasticOut,
+  easeElasticInOut: d3_ease__WEBPACK_IMPORTED_MODULE_17__.elasticInOut
+};
+
 function encode (item, name, retval) {
   if (item) {
     const df = this.context.dataflow,
@@ -119133,6 +119196,32 @@ function encode (item, name, retval) {
     df.pulse(target, df.changeset().encode(item, name));
   }
   return retval !== undefined ? retval : item;
+}
+
+/**
+ * Piecewise-linear interpolation across an array of values.
+ *
+ * Unlike `lerp`, which interpolates between the first and last entries only,
+ * this treats the array as evenly-spaced control points and interpolates
+ * within the segment that `frac` falls into. It turns an array into a
+ * piecewise-linear function of position -- a custom easing curve, for
+ * instance, or any sampled series read at an arbitrary point.
+ *
+ * @param {Array<number>} values - The control points, in order.
+ * @param {number} frac - Position along the array, in [0, 1].
+ * @return {number} The interpolated value.
+ */
+function interpolateLinear(values, frac) {
+  if (!(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(values) || !values.length) return undefined;
+  const n = values.length,
+    lo = values[0],
+    f = +frac;
+  if (n === 1 || !(f > 0)) return lo;
+  if (f >= 1) return (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.peek)(values);
+  const pos = f * (n - 1),
+    i = Math.floor(pos),
+    t = pos - i;
+  return t ? values[i] + t * (values[i + 1] - values[i]) : values[i];
 }
 
 const wrap = method => function (value, spec) {
@@ -119262,12 +119351,16 @@ function geoMethod(methodName, globalMethod) {
     }
   };
 }
-const geoArea = geoMethod('area', d3_geo__WEBPACK_IMPORTED_MODULE_8__["default"]);
-const geoBounds = geoMethod('bounds', d3_geo__WEBPACK_IMPORTED_MODULE_9__["default"]);
-const geoCentroid = geoMethod('centroid', d3_geo__WEBPACK_IMPORTED_MODULE_10__["default"]);
+const geoArea = geoMethod('area', d3_geo__WEBPACK_IMPORTED_MODULE_18__["default"]);
+const geoBounds = geoMethod('bounds', d3_geo__WEBPACK_IMPORTED_MODULE_19__["default"]);
+const geoCentroid = geoMethod('centroid', d3_geo__WEBPACK_IMPORTED_MODULE_20__["default"]);
 function geoScale(projection, group) {
   const p = getScale(projection, (group || this).context);
   return p && p.scale();
+}
+function geoTranslate(projection, group) {
+  const p = getScale(projection, (group || this).context);
+  return p && p.translate();
 }
 
 function inScope (item) {
@@ -119310,7 +119403,7 @@ function channel_luminance_value(channelValue) {
   return Math.pow((val + 0.055) / 1.055, 2.4);
 }
 function luminance(color) {
-  const c = (0,d3_color__WEBPACK_IMPORTED_MODULE_11__.rgb)(color),
+  const c = (0,d3_color__WEBPACK_IMPORTED_MODULE_21__.rgb)(color),
     r = channel_luminance_value(c.r),
     g = channel_luminance_value(c.g),
     b = channel_luminance_value(c.b);
@@ -119701,6 +119794,7 @@ const functionContext = {
   slice,
   flush: vega_util__WEBPACK_IMPORTED_MODULE_0__.flush,
   lerp: vega_util__WEBPACK_IMPORTED_MODULE_0__.lerp,
+  interpolateLinear,
   merge,
   pad: vega_util__WEBPACK_IMPORTED_MODULE_0__.pad,
   peek: vega_util__WEBPACK_IMPORTED_MODULE_0__.peek,
@@ -119708,13 +119802,13 @@ const functionContext = {
   span: vega_util__WEBPACK_IMPORTED_MODULE_0__.span,
   inrange: vega_util__WEBPACK_IMPORTED_MODULE_0__.inrange,
   truncate: vega_util__WEBPACK_IMPORTED_MODULE_0__.truncate,
-  rgb: d3_color__WEBPACK_IMPORTED_MODULE_11__.rgb,
-  lab: d3_color__WEBPACK_IMPORTED_MODULE_12__["default"],
-  hcl: d3_color__WEBPACK_IMPORTED_MODULE_12__.hcl,
-  hsl: d3_color__WEBPACK_IMPORTED_MODULE_11__.hsl,
+  rgb: d3_color__WEBPACK_IMPORTED_MODULE_21__.rgb,
+  lab: d3_color__WEBPACK_IMPORTED_MODULE_22__["default"],
+  hcl: d3_color__WEBPACK_IMPORTED_MODULE_22__.hcl,
+  hsl: d3_color__WEBPACK_IMPORTED_MODULE_21__.hsl,
   luminance,
   contrast,
-  sequence: d3_array__WEBPACK_IMPORTED_MODULE_13__["default"],
+  sequence: d3_array__WEBPACK_IMPORTED_MODULE_23__["default"],
   format,
   utcFormat,
   utcParse,
@@ -119733,6 +119827,8 @@ const functionContext = {
   utcquarter: vega_util__WEBPACK_IMPORTED_MODULE_0__.utcquarter,
   week: vega_time__WEBPACK_IMPORTED_MODULE_7__.week,
   utcweek: vega_time__WEBPACK_IMPORTED_MODULE_7__.utcweek,
+  isoweek: vega_time__WEBPACK_IMPORTED_MODULE_7__.isoweek,
+  utcisoweek: vega_time__WEBPACK_IMPORTED_MODULE_7__.utcisoweek,
   dayofyear: vega_time__WEBPACK_IMPORTED_MODULE_7__.dayofyear,
   utcdayofyear: vega_time__WEBPACK_IMPORTED_MODULE_7__.utcdayofyear,
   warn,
@@ -119765,7 +119861,8 @@ const functionContext = {
   modify,
   lassoAppend,
   lassoPath,
-  intersectLasso
+  intersectLasso,
+  ...easeFunctions
 };
 const eventFunctions = ['view', 'item', 'group', 'xy', 'x', 'y'],
   // event functions
@@ -119831,6 +119928,7 @@ expressionFunction('geoBounds', geoBounds, scaleVisitor);
 expressionFunction('geoCentroid', geoCentroid, scaleVisitor);
 expressionFunction('geoShape', geoShape, scaleVisitor);
 expressionFunction('geoScale', geoScale, scaleVisitor);
+expressionFunction('geoTranslate', geoTranslate, scaleVisitor);
 expressionFunction('indata', indata, indataVisitor);
 expressionFunction('data', data, dataVisitor);
 expressionFunction('treePath', treePath, dataVisitor);
@@ -119890,7 +119988,7 @@ function parser (expr, scope) {
 
 
 }),
-"./node_modules/.pnpm/vega-geo@5.1.2/node_modules/vega-geo/build/vega-geo.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-geo@5.1.3/node_modules/vega-geo/build/vega-geo.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -119905,14 +120003,14 @@ __webpack_require__.d(__webpack_exports__, {
   kde2d: function() { return KDE2D; },
   projection: function() { return Projection; }
 });
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/ticks.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/range.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/max.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/sum.js");
 /* harmony import */var vega_statistics__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-statistics */ "./node_modules/.pnpm/vega-statistics@2.0.0/node_modules/vega-statistics/build/vega-statistics.js");
-/* harmony import */var vega_projection__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-projection */ "./node_modules/.pnpm/vega-projection@2.1.2/node_modules/vega-projection/build/vega-projection.js");
+/* harmony import */var vega_projection__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-projection */ "./node_modules/.pnpm/vega-projection@2.1.3/node_modules/vega-projection/build/vega-projection.js");
 /* harmony import */var d3_geo__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! d3-geo */ "./node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/graticule.js");
 /* harmony import */var d3_color__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! d3-color */ "./node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/color.js");
 /* harmony import */var vega_canvas__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-canvas */ "./node_modules/.pnpm/vega-canvas@2.0.0/node_modules/vega-canvas/build/vega-canvas.browser.js");
@@ -121239,7 +121337,7 @@ function featurize(f) {
 
 
 }),
-"./node_modules/.pnpm/vega-hierarchy@5.1.2/node_modules/vega-hierarchy/build/vega-hierarchy.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-hierarchy@5.1.3/node_modules/vega-hierarchy/build/vega-hierarchy.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -121251,8 +121349,8 @@ __webpack_require__.d(__webpack_exports__, {
   treelinks: function() { return TreeLinks; },
   treemap: function() { return Treemap; }
 });
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 /* harmony import */var d3_hierarchy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3-hierarchy */ "./node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/index.js");
 /* harmony import */var d3_hierarchy__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! d3-hierarchy */ "./node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/pack/index.js");
 /* harmony import */var d3_hierarchy__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! d3-hierarchy */ "./node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/partition.js");
@@ -121830,13 +121928,13 @@ Treemap.Definition = {
 
 
 }),
-"./node_modules/.pnpm/vega-interpreter@2.3.1/node_modules/vega-interpreter/build/vega-interpreter.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-interpreter@2.3.2/node_modules/vega-interpreter/build/vega-interpreter.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   expressionInterpreter: function() { return expression; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 
 
 function adjustSpatial (item, encode, swap) {
@@ -121935,6 +122033,7 @@ var Functions = {
   cos: Math.cos,
   exp: Math.exp,
   floor: Math.floor,
+  hypot: Math.hypot,
   log: Math.log,
   max: Math.max,
   min: Math.min,
@@ -122014,7 +122113,9 @@ const EventFunctions = ['view', 'item', 'group', 'xy', 'x', 'y'];
 const DisallowedMethods = new Set([Function, eval, setTimeout, setInterval]);
 if (typeof setImmediate === 'function') DisallowedMethods.add(setImmediate);
 const Visitors = {
-  Literal: ($, n) => n.value,
+  // global and sticky regexps carry lastIndex across calls, so hand out a
+  // fresh instance per evaluation, as the generated code path does
+  Literal: ($, n) => n.regex && n.value && (n.value.global || n.value.sticky) ? new RegExp(n.regex.pattern, n.regex.flags) : n.value,
   Identifier: ($, n) => {
     const id = n.name;
     return $.memberDepth > 0 ? id : id === 'datum' ? $.datum : id === 'event' ? $.event : id === 'item' ? $.item : Constants[id] || $.params['$' + id];
@@ -122151,16 +122252,16 @@ var expression = {
 
 
 }),
-"./node_modules/.pnpm/vega-label@2.1.2/node_modules/vega-label/build/vega-label.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-label@2.1.3/node_modules/vega-label/build/vega-label.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   label: function() { return Label; }
 });
-/* harmony import */var vega_scenegraph__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-scenegraph */ "./node_modules/.pnpm/vega-scenegraph@5.2.1/node_modules/vega-scenegraph/build/vega-scenegraph.js");
+/* harmony import */var vega_scenegraph__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-scenegraph */ "./node_modules/.pnpm/vega-scenegraph@5.3.0/node_modules/vega-scenegraph/build/vega-scenegraph.js");
 /* harmony import */var vega_canvas__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-canvas */ "./node_modules/.pnpm/vega-canvas@2.0.0/node_modules/vega-canvas/build/vega-canvas.browser.js");
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 
 
 
@@ -123039,7 +123140,7 @@ Label.Definition = {
 
 
 }),
-"./node_modules/.pnpm/vega-lite@6.4.3_vega@6.3.1/node_modules/vega-lite/build/index.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-lite@6.4.3_vega@6.4.0/node_modules/vega-lite/build/index.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -123091,8 +123192,8 @@ __webpack_require__.d(__webpack_exports__, {
   varName: function() { return varName; },
   version: function() { return version; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
-/* harmony import */var vega__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega */ "./node_modules/.pnpm/vega@6.3.1/node_modules/vega/build/vega.module.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
+/* harmony import */var vega__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega */ "./node_modules/.pnpm/vega@6.4.0/node_modules/vega/build/vega.module.js");
 /* harmony import */var vega_event_selector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-event-selector */ "./node_modules/.pnpm/vega-event-selector@4.0.0/node_modules/vega-event-selector/build/vega-event-selector.js");
 /* harmony import */var vega_expression__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-expression */ "./node_modules/.pnpm/vega-expression@6.1.0/node_modules/vega-expression/build/vega-expression.js");
 
@@ -143377,7 +143478,7 @@ const version = pkg.version;
 
 
 }),
-"./node_modules/.pnpm/vega-loader@5.1.2/node_modules/vega-loader/build/vega-loader.browser.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-loader@5.1.3/node_modules/vega-loader/build/vega-loader.browser.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -143390,10 +143491,10 @@ __webpack_require__.d(__webpack_exports__, {
   responseType: function() { return responseType; },
   typeParsers: function() { return typeParsers; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 /* harmony import */var d3_dsv__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! d3-dsv */ "./node_modules/.pnpm/d3-dsv@3.0.1/node_modules/d3-dsv/src/dsv.js");
 /* harmony import */var topojson_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! topojson-client */ "./node_modules/.pnpm/topojson-client@3.1.0/node_modules/topojson-client/src/index.js");
-/* harmony import */var vega_format__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-format */ "./node_modules/.pnpm/vega-format@2.1.2/node_modules/vega-format/build/vega-format.js");
+/* harmony import */var vega_format__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-format */ "./node_modules/.pnpm/vega-format@2.1.3/node_modules/vega-format/build/vega-format.js");
 
 
 
@@ -143730,7 +143831,7 @@ const loader = loaderFactory(null // no file system access
 
 
 }),
-"./node_modules/.pnpm/vega-parser@7.1.2/node_modules/vega-parser/build/vega-parser.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-parser@7.1.3/node_modules/vega-parser/build/vega-parser.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -143756,11 +143857,11 @@ __webpack_require__.d(__webpack_exports__, {
   signalUpdates: function() { return parseSignalUpdates; },
   stream: function() { return parseStream; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
-/* harmony import */var vega_functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-functions */ "./node_modules/.pnpm/vega-functions@6.1.3/node_modules/vega-functions/build/vega-functions.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-functions */ "./node_modules/.pnpm/vega-functions@6.2.0/node_modules/vega-functions/build/vega-functions.js");
 /* harmony import */var vega_event_selector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-event-selector */ "./node_modules/.pnpm/vega-event-selector@4.0.0/node_modules/vega-event-selector/build/vega-event-selector.js");
-/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.2/node_modules/vega-scale/build/vega-scale.js");
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.3/node_modules/vega-scale/build/vega-scale.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
 
 
 
@@ -144436,12 +144537,13 @@ function multipleDomain(domain, spec, scope) {
 function fieldRef(data, scope) {
   const name = '_:vega:_' + FIELD_REF_ID++,
     coll = Collect({});
-  if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(data)) {
+  if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(data) && !data.some(isSignal)) {
     coll.value = {
       $ingest: data
     };
-  } else if (data.signal) {
-    const code = 'setdata(' + (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(name) + ',' + data.signal + ')';
+  } else {
+    const values = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(data) ? '[' + data.map(v => isSignal(v) ? v.signal : (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(v)).join(',') + ']' : data.signal;
+    const code = 'setdata(' + (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(name) + ',' + values + ')';
     coll.params.input = scope.signalRef(code);
   }
   scope.addDataPipeline(name, [coll, Sieve({})]);
@@ -147554,7 +147656,7 @@ function parse (spec, config, options) {
 
 
 }),
-"./node_modules/.pnpm/vega-projection@2.1.2/node_modules/vega-projection/build/vega-projection.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-projection@2.1.3/node_modules/vega-projection/build/vega-projection.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -147580,7 +147682,7 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var d3_geo__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! d3-geo */ "./node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/stereographic.js");
 /* harmony import */var d3_geo__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! d3-geo */ "./node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/transverseMercator.js");
 /* harmony import */var d3_geo_projection__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! d3-geo-projection */ "./node_modules/.pnpm/d3-geo-projection@4.0.0/node_modules/d3-geo-projection/src/mollweide.js");
-/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.2/node_modules/vega-scale/build/vega-scale.js");
+/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.3/node_modules/vega-scale/build/vega-scale.js");
 
 
 
@@ -147655,7 +147757,7 @@ for (const key in projections) {
 
 
 }),
-"./node_modules/.pnpm/vega-regression@2.1.2/node_modules/vega-regression/build/vega-regression.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-regression@2.1.3/node_modules/vega-regression/build/vega-regression.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -147663,8 +147765,8 @@ __webpack_require__.d(__webpack_exports__, {
   regression: function() { return Regression; }
 });
 /* harmony import */var vega_statistics__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-statistics */ "./node_modules/.pnpm/vega-statistics@2.0.0/node_modules/vega-statistics/build/vega-statistics.js");
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 
 
 
@@ -147902,14 +148004,14 @@ Regression.Definition = {
 
 
 }),
-"./node_modules/.pnpm/vega-runtime@7.1.2/node_modules/vega-runtime/build/vega-runtime.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-runtime@7.1.3/node_modules/vega-runtime/build/vega-runtime.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   context: function() { return context; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
 
 
 
@@ -148500,7 +148602,7 @@ Context.prototype = Subcontext.prototype = {
 
 
 }),
-"./node_modules/.pnpm/vega-scale@8.1.2/node_modules/vega-scale/build/vega-scale.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-scale@8.1.3/node_modules/vega-scale/build/vega-scale.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -148553,7 +148655,7 @@ __webpack_require__.d(__webpack_exports__, {
   tickValues: function() { return tickValues; },
   validTicks: function() { return validTicks; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/range.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/bisect.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/ticks.js");
@@ -148583,7 +148685,7 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var d3_scale_chromatic__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! d3-scale-chromatic */ "./node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Set1.js");
 /* harmony import */var d3_scale_chromatic__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! d3-scale-chromatic */ "./node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Set2.js");
 /* harmony import */var d3_scale_chromatic__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! d3-scale-chromatic */ "./node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Set3.js");
-/* harmony import */var vega_time__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-time */ "./node_modules/.pnpm/vega-time@3.2.1/node_modules/vega-time/build/vega-time.js");
+/* harmony import */var vega_time__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-time */ "./node_modules/.pnpm/vega-time@3.3.0/node_modules/vega-time/build/vega-time.js");
 
 
 
@@ -149377,7 +149479,7 @@ function domainCaption(locale, scale, opt) {
 
 
 }),
-"./node_modules/.pnpm/vega-scenegraph@5.2.1/node_modules/vega-scenegraph/build/vega-scenegraph.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-scenegraph@5.3.0/node_modules/vega-scenegraph/build/vega-scenegraph.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -149439,7 +149541,7 @@ __webpack_require__.d(__webpack_exports__, {
   setHybridRendererOptions: function() { return setHybridRendererOptions; },
   textMetrics: function() { return textMetrics; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 /* harmony import */var d3_shape__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! d3-shape */ "./node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basis.js");
 /* harmony import */var d3_shape__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! d3-shape */ "./node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basisClosed.js");
 /* harmony import */var d3_shape__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! d3-shape */ "./node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basisOpen.js");
@@ -149462,8 +149564,8 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var d3_path__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! d3-path */ "./node_modules/.pnpm/d3-path@3.1.0/node_modules/d3-path/src/path.js");
 /* harmony import */var d3_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-path */ "./node_modules/.pnpm/d3-path@3.1.0/node_modules/d3-path/src/index.js");
 /* harmony import */var vega_canvas__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-canvas */ "./node_modules/.pnpm/vega-canvas@2.0.0/node_modules/vega-canvas/build/vega-canvas.browser.js");
-/* harmony import */var vega_loader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-loader */ "./node_modules/.pnpm/vega-loader@5.1.2/node_modules/vega-loader/build/vega-loader.browser.js");
-/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.2/node_modules/vega-scale/build/vega-scale.js");
+/* harmony import */var vega_loader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-loader */ "./node_modules/.pnpm/vega-loader@5.1.3/node_modules/vega-loader/build/vega-loader.browser.js");
+/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.3/node_modules/vega-scale/build/vega-scale.js");
 
 
 
@@ -152826,7 +152928,7 @@ function resize (canvas, width, height, origin, scaleFactor, opt) {
   for (const key in opt) {
     context[key] = opt[key];
   }
-  if (inDOM && ratio !== 1) {
+  if (inDOM) {
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
   }
@@ -152850,6 +152952,9 @@ class CanvasRenderer extends Renderer {
     if (el && this._canvas) {
       domClear(el, 0).appendChild(this._canvas);
       this._canvas.setAttribute('class', 'marks');
+      // an inline element sits on the text baseline, leaving a few pixels of
+      // descender space below it that count towards the container's height
+      this._canvas.style.setProperty('vertical-align', 'bottom');
     }
 
     // this method will invoke resize to size the canvas appropriately
@@ -153258,6 +153363,9 @@ class SVGRenderer extends Renderer {
       this._svg.setAttributeNS(xmlns, 'xmlns:xlink', metadata['xmlns:xlink']);
       this._svg.setAttribute('version', metadata['version']);
       this._svg.setAttribute('class', 'marks');
+      // an inline element sits on the text baseline, leaving a few pixels of
+      // descender space below it that count towards the container's height
+      this._svg.style.setProperty('vertical-align', 'bottom');
       domClear(el, 1);
 
       // set the svg root group
@@ -153323,9 +153431,12 @@ class SVGRenderer extends Renderer {
     const svg = this._svg,
       bg = this._bgcolor;
     if (!svg) return null;
+
+    // styles position the element on the page; they are not part of the image
+    const style = svg.getAttribute('style');
+    svg.removeAttribute('style');
     let node;
     if (bg) {
-      svg.removeAttribute('style');
       node = domChild(svg, RootIndex, 'rect', svgns);
       setAttributes(node, {
         width: this._width,
@@ -153334,10 +153445,8 @@ class SVGRenderer extends Renderer {
       });
     }
     const text = serializeXML(svg);
-    if (bg) {
-      svg.removeChild(node);
-      this._svg.style.setProperty('background-color', bg);
-    }
+    if (bg) svg.removeChild(node);
+    if (style) svg.setAttribute('style', style);
     return text;
   }
 
@@ -154472,7 +154581,7 @@ function e(e){const[n,r]=/schema\/([\w-]+)\/([\w\.\-]+)\.json$/g.exec(e).slice(1
 
 
 }),
-"./node_modules/.pnpm/vega-selections@6.1.4/node_modules/vega-selections/build/vega-selection.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-selections@6.1.5/node_modules/vega-selections/build/vega-selection.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -154485,8 +154594,8 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/bisector.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/union.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/intersection.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
-/* harmony import */var vega_expression__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-expression */ "./node_modules/.pnpm/vega-expression@6.2.1/node_modules/vega-expression/build/vega-expression.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_expression__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-expression */ "./node_modules/.pnpm/vega-expression@6.2.2/node_modules/vega-expression/build/vega-expression.js");
 
 
 
@@ -156034,7 +156143,7 @@ function angleDelta(p, q, r, sx, sy) {
 
 
 }),
-"./node_modules/.pnpm/vega-themes@3.0.0_vega-lite@6.4.3_vega@6.3.1__vega@6.3.1/node_modules/vega-themes/build/index.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-themes@3.0.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-themes/build/index.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -156895,7 +157004,7 @@ const version = pkg.version;
 
 
 }),
-"./node_modules/.pnpm/vega-time@3.2.1/node_modules/vega-time/build/vega-time.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-time@3.3.0/node_modules/vega-time/build/vega-time.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -156903,6 +157012,7 @@ __webpack_require__.d(__webpack_exports__, {
   DAY: function() { return DAY; },
   DAYOFYEAR: function() { return DAYOFYEAR; },
   HOURS: function() { return HOURS; },
+  ISOWEEK: function() { return ISOWEEK; },
   MILLISECONDS: function() { return MILLISECONDS; },
   MINUTES: function() { return MINUTES; },
   MONTH: function() { return MONTH; },
@@ -156913,6 +157023,7 @@ __webpack_require__.d(__webpack_exports__, {
   YEAR: function() { return YEAR; },
   dayofyear: function() { return dayofyear; },
   detectTimeUnits: function() { return detectTimeUnits; },
+  isoweek: function() { return isoweek; },
   timeBin: function() { return bin; },
   timeFloor: function() { return timeFloor; },
   timeInterval: function() { return timeInterval; },
@@ -156925,10 +157036,11 @@ __webpack_require__.d(__webpack_exports__, {
   utcOffset: function() { return utcOffset; },
   utcSequence: function() { return utcSequence; },
   utcdayofyear: function() { return utcdayofyear; },
+  utcisoweek: function() { return utcisoweek; },
   utcweek: function() { return utcweek; },
   week: function() { return week; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 /* harmony import */var d3_time__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-time */ "./node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/day.js");
 /* harmony import */var d3_time__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3-time */ "./node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/week.js");
 /* harmony import */var d3_time__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! d3-time */ "./node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/year.js");
@@ -156947,6 +157059,7 @@ const YEAR = 'year';
 const QUARTER = 'quarter';
 const MONTH = 'month';
 const WEEK = 'week';
+const ISOWEEK = 'isoweek';
 const DATE = 'date';
 const DAY = 'day';
 const DAYOFYEAR = 'dayofyear';
@@ -156954,7 +157067,7 @@ const HOURS = 'hours';
 const MINUTES = 'minutes';
 const SECONDS = 'seconds';
 const MILLISECONDS = 'milliseconds';
-const TIME_UNITS = [YEAR, QUARTER, MONTH, WEEK, DATE, DAY, DAYOFYEAR, HOURS, MINUTES, SECONDS, MILLISECONDS];
+const TIME_UNITS = [YEAR, QUARTER, MONTH, WEEK, ISOWEEK, DATE, DAY, DAYOFYEAR, HOURS, MINUTES, SECONDS, MILLISECONDS];
 const UNITS = TIME_UNITS.reduce((o, u, i) => (o[u] = 1 + i, o), {});
 function timeUnits(units) {
   const u = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.array)(units).slice(),
@@ -156969,8 +157082,8 @@ function timeUnits(units) {
       (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)(`Invalid time unit: ${unit}.`);
     }
   });
-  const numTypes = (m[WEEK] || m[DAY] ? 1 : 0) + (m[QUARTER] || m[MONTH] || m[DATE] ? 1 : 0) + (m[DAYOFYEAR] ? 1 : 0);
-  if (numTypes > 1) {
+  const numTypes = (m[WEEK] || m[ISOWEEK] || m[DAY] ? 1 : 0) + (m[QUARTER] || m[MONTH] || m[DATE] ? 1 : 0) + (m[DAYOFYEAR] ? 1 : 0);
+  if (numTypes > 1 || m[WEEK] && m[ISOWEEK]) {
     (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)(`Incompatible time units: ${units}`);
   }
 
@@ -156984,12 +157097,14 @@ const defaultSpecifiers = {
   [MONTH]: '%b ',
   [DATE]: '%d ',
   [WEEK]: 'W%U ',
+  [ISOWEEK]: 'W%V ',
   [DAY]: '%a ',
   [DAYOFYEAR]: '%j ',
   [HOURS]: '%H:00',
   [MINUTES]: '00:%M',
   [SECONDS]: ':%S',
   [MILLISECONDS]: '.%L',
+  [`${YEAR}-${ISOWEEK}`]: '%G W%V ',
   [`${YEAR}-${MONTH}`]: '%Y-%m ',
   [`${YEAR}-${MONTH}-${DATE}`]: '%Y-%m-%d ',
   [`${HOURS}-${MINUTES}`]: '%H:%M'
@@ -157029,11 +157144,32 @@ function dayofyear(d) {
 function week(d) {
   return localWeekNum(new Date(d));
 }
+function isoweek(d) {
+  return localISOWeekNum(new Date(d));
+}
 function localDayOfYear(d) {
   return d3_time__WEBPACK_IMPORTED_MODULE_1__.timeDay.count(localYear(d.getFullYear()) - 1, d);
 }
 function localWeekNum(d) {
   return d3_time__WEBPACK_IMPORTED_MODULE_2__.timeSunday.count(localYear(d.getFullYear()) - 1, d);
+}
+function localISOWeekYear(d) {
+  return d3_time__WEBPACK_IMPORTED_MODULE_1__.timeDay.offset(d3_time__WEBPACK_IMPORTED_MODULE_2__.timeMonday.floor(d), 3).getFullYear();
+}
+function localISOWeekNum(d) {
+  return 1 + d3_time__WEBPACK_IMPORTED_MODULE_2__.timeMonday.count(localISOWeekOne(localISOWeekYear(d)), d);
+}
+
+// The Monday on which week 1 of the given week-numbering year begins.
+function localISOWeekOne(y) {
+  return d3_time__WEBPACK_IMPORTED_MODULE_2__.timeMonday.floor(d3_time__WEBPACK_IMPORTED_MODULE_1__.timeDay.offset(localYear(y), 3));
+}
+
+// The day of January on which week 1 of the given week-numbering year begins. Values of zero or
+// less refer to the preceding December, which localDate rolls over for us.
+function localISOWeekOneDate(y) {
+  const d = localISOWeekOne(y);
+  return d.getMonth() ? d.getDate() - 31 : d.getDate();
 }
 function localFirst(y) {
   return localYear(y).getDay();
@@ -157052,6 +157188,9 @@ function utcdayofyear(d) {
 function utcweek(d) {
   return utcWeekNum(new Date(d));
 }
+function utcisoweek(d) {
+  return utcISOWeekNum(new Date(d));
+}
 function utcDayOfYear(d) {
   const y = Date.UTC(d.getUTCFullYear(), 0, 1);
   return d3_time__WEBPACK_IMPORTED_MODULE_1__.utcDay.count(y - 1, d);
@@ -157059,6 +157198,19 @@ function utcDayOfYear(d) {
 function utcWeekNum(d) {
   const y = Date.UTC(d.getUTCFullYear(), 0, 1);
   return d3_time__WEBPACK_IMPORTED_MODULE_2__.utcSunday.count(y - 1, d);
+}
+function utcISOWeekYear(d) {
+  return d3_time__WEBPACK_IMPORTED_MODULE_1__.utcDay.offset(d3_time__WEBPACK_IMPORTED_MODULE_2__.utcMonday.floor(d), 3).getUTCFullYear();
+}
+function utcISOWeekNum(d) {
+  return 1 + d3_time__WEBPACK_IMPORTED_MODULE_2__.utcMonday.count(utcISOWeekOne(utcISOWeekYear(d)), d);
+}
+function utcISOWeekOne(y) {
+  return d3_time__WEBPACK_IMPORTED_MODULE_2__.utcMonday.floor(d3_time__WEBPACK_IMPORTED_MODULE_1__.utcDay.offset(Date.UTC(y, 0, 1), 3));
+}
+function utcISOWeekOneDate(y) {
+  const d = utcISOWeekOne(y);
+  return d.getUTCMonth() ? d.getUTCDate() - 31 : d.getUTCDate();
 }
 function utcFirst(y) {
   t0.setTime(Date.UTC(y, 0, 1));
@@ -157073,6 +157225,15 @@ function utcDate(y, m, d, H, M, S, L) {
   return new Date(Date.UTC(y, m, d, H, M, S, L));
 }
 
+// Just like Vega's timeunit transform, set default year to 2012, so domain conversion will be
+// compatible with Vega. 2012 is a leap year beginning on a Sunday, so days of the week order
+// properly at the start of the year.
+const REFERENCE_YEAR = 2012;
+
+// Reference year for isoweek units with no year unit. ISO 8601 week numbers run to 53 in a long
+// year, and 2015 is one (its week 1 starts on 2014-12-29), so every week number maps to a real
+// week that formats back to the same number.
+const ISOWEEK_REFERENCE_YEAR = 2015;
 function floor(units, step, get, inv, newDate) {
   const s = step || 1,
     b = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.peek)(units),
@@ -157082,9 +157243,9 @@ function floor(units, step, get, inv, newDate) {
     };
   const t = new Date(),
     u = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.toSet)(units),
-    y = u[YEAR] ? _(YEAR) : (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.constant)(2012),
+    y = u[YEAR] ? _(YEAR, null, u[ISOWEEK] ? YEAR + ISOWEEK : YEAR) : (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.constant)(u[ISOWEEK] ? ISOWEEK_REFERENCE_YEAR : REFERENCE_YEAR),
     m = u[MONTH] ? _(MONTH) : u[QUARTER] ? _(QUARTER) : vega_util__WEBPACK_IMPORTED_MODULE_0__.zero,
-    d = u[WEEK] && u[DAY] ? _(DAY, 1, WEEK + DAY) : u[WEEK] ? _(WEEK, 1) : u[DAY] ? _(DAY, 1) : u[DATE] ? _(DATE, 1) : u[DAYOFYEAR] ? _(DAYOFYEAR, 1) : vega_util__WEBPACK_IMPORTED_MODULE_0__.one,
+    d = u[WEEK] && u[DAY] ? _(DAY, 1, WEEK + DAY) : u[ISOWEEK] && u[DAY] ? _(DAY, 1, ISOWEEK + DAY) : u[WEEK] ? _(WEEK, 1) : u[ISOWEEK] ? _(ISOWEEK, 1) : u[DAY] ? _(DAY, 1) : u[DATE] ? _(DATE, 1) : u[DAYOFYEAR] ? _(DAYOFYEAR, 1) : vega_util__WEBPACK_IMPORTED_MODULE_0__.one,
     H = u[HOURS] ? _(HOURS) : vega_util__WEBPACK_IMPORTED_MODULE_0__.zero,
     M = u[MINUTES] ? _(MINUTES) : vega_util__WEBPACK_IMPORTED_MODULE_0__.zero,
     S = u[SECONDS] ? _(SECONDS) : vega_util__WEBPACK_IMPORTED_MODULE_0__.zero,
@@ -157106,6 +157267,17 @@ function weekday(week, day, firstDay) {
   return day + week * 7 - (firstDay + 6) % 7;
 }
 
+// day within an ISO week, Monday = 0 through Sunday = 6
+function isoDay(day) {
+  return (day + 6) % 7;
+}
+
+// returns the day of the year for the given day of the given ISO week number, where
+// weekOneDate is the day of January on which week 1 begins
+function isoWeekday(weekOneDate, week, day) {
+  return weekOneDate + (week - 1) * 7 + day;
+}
+
 // -- LOCAL TIME --
 
 const localGet = {
@@ -157120,11 +157292,15 @@ const localGet = {
   [DAYOFYEAR]: d => localDayOfYear(d),
   [WEEK]: d => localWeekNum(d),
   [WEEK + DAY]: (d, y) => weekday(localWeekNum(d), d.getDay(), localFirst(y)),
-  [DAY]: (d, y) => weekday(1, d.getDay(), localFirst(y))
+  [DAY]: (d, y) => weekday(1, d.getDay(), localFirst(y)),
+  [ISOWEEK]: d => localISOWeekNum(d),
+  [YEAR + ISOWEEK]: d => localISOWeekYear(d),
+  [ISOWEEK + DAY]: (d, y) => isoWeekday(localISOWeekOneDate(y), localISOWeekNum(d), isoDay(d.getDay()))
 };
 const localInv = {
   [QUARTER]: q => 3 * q,
-  [WEEK]: (w, y) => weekday(w, 0, localFirst(y))
+  [WEEK]: (w, y) => weekday(w, 0, localFirst(y)),
+  [ISOWEEK]: (w, y) => isoWeekday(localISOWeekOneDate(y), w, 0)
 };
 function timeFloor(units, step) {
   return floor(units, step || 1, localGet, localInv, localDate);
@@ -157144,11 +157320,15 @@ const utcGet = {
   [DAYOFYEAR]: d => utcDayOfYear(d),
   [WEEK]: d => utcWeekNum(d),
   [DAY]: (d, y) => weekday(1, d.getUTCDay(), utcFirst(y)),
-  [WEEK + DAY]: (d, y) => weekday(utcWeekNum(d), d.getUTCDay(), utcFirst(y))
+  [WEEK + DAY]: (d, y) => weekday(utcWeekNum(d), d.getUTCDay(), utcFirst(y)),
+  [ISOWEEK]: d => utcISOWeekNum(d),
+  [YEAR + ISOWEEK]: d => utcISOWeekYear(d),
+  [ISOWEEK + DAY]: (d, y) => isoWeekday(utcISOWeekOneDate(y), utcISOWeekNum(d), isoDay(d.getUTCDay()))
 };
 const utcInv = {
   [QUARTER]: q => 3 * q,
-  [WEEK]: (w, y) => weekday(w, 0, utcFirst(y))
+  [WEEK]: (w, y) => weekday(w, 0, utcFirst(y)),
+  [ISOWEEK]: (w, y) => isoWeekday(utcISOWeekOneDate(y), w, 0)
 };
 function utcFloor(units, step) {
   return floor(units, step || 1, utcGet, utcInv, utcDate);
@@ -157159,6 +157339,7 @@ const timeIntervals = {
   [QUARTER]: d3_time__WEBPACK_IMPORTED_MODULE_4__.timeMonth.every(3),
   [MONTH]: d3_time__WEBPACK_IMPORTED_MODULE_4__.timeMonth,
   [WEEK]: d3_time__WEBPACK_IMPORTED_MODULE_2__.timeSunday,
+  [ISOWEEK]: d3_time__WEBPACK_IMPORTED_MODULE_2__.timeMonday,
   [DATE]: d3_time__WEBPACK_IMPORTED_MODULE_1__.timeDay,
   [DAY]: d3_time__WEBPACK_IMPORTED_MODULE_1__.timeDay,
   [DAYOFYEAR]: d3_time__WEBPACK_IMPORTED_MODULE_1__.timeDay,
@@ -157172,6 +157353,7 @@ const utcIntervals = {
   [QUARTER]: d3_time__WEBPACK_IMPORTED_MODULE_4__.utcMonth.every(3),
   [MONTH]: d3_time__WEBPACK_IMPORTED_MODULE_4__.utcMonth,
   [WEEK]: d3_time__WEBPACK_IMPORTED_MODULE_2__.utcSunday,
+  [ISOWEEK]: d3_time__WEBPACK_IMPORTED_MODULE_2__.utcMonday,
   [DATE]: d3_time__WEBPACK_IMPORTED_MODULE_1__.utcDay,
   [DAY]: d3_time__WEBPACK_IMPORTED_MODULE_1__.utcDay,
   [DAYOFYEAR]: d3_time__WEBPACK_IMPORTED_MODULE_1__.utcDay,
@@ -157363,7 +157545,7 @@ __webpack_require__.d(__webpack_exports__, {
   tooltipIsInViewport: function() { return tooltipIsInViewport; },
   version: function() { return version; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 
 
 var version$1 = "1.0.0";
@@ -157724,7 +157906,7 @@ function index (view, opt) {
 
 
 }),
-"./node_modules/.pnpm/vega-transforms@5.2.1/node_modules/vega-transforms/build/vega-transforms.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-transforms@5.2.2/node_modules/vega-transforms/build/vega-transforms.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -157769,8 +157951,8 @@ __webpack_require__.d(__webpack_exports__, {
   values: function() { return Values; },
   window: function() { return Window; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
 /* harmony import */var vega_statistics__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-statistics */ "./node_modules/.pnpm/vega-statistics@2.0.0/node_modules/vega-statistics/build/vega-statistics.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/median.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/mean.js");
@@ -157778,7 +157960,7 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/max.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/range.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/bisector.js");
-/* harmony import */var vega_time__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-time */ "./node_modules/.pnpm/vega-time@3.2.1/node_modules/vega-time/build/vega-time.js");
+/* harmony import */var vega_time__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-time */ "./node_modules/.pnpm/vega-time@3.3.0/node_modules/vega-time/build/vega-time.js");
 
 
 
@@ -161536,7 +161718,7 @@ function adjustRange(w, bisect) {
 
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/accessor.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/accessor.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -161559,7 +161741,7 @@ function accessorFields(fn) {
 //# sourceMappingURL=accessor.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/accessors.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/accessors.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -161570,8 +161752,8 @@ __webpack_require__.d(__webpack_exports__, {
   truthy: function() { return truthy; },
   zero: function() { return zero; }
 });
-/* harmony import */var _accessor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./accessor.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/accessor.js");
-/* harmony import */var _field_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./field.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/field.js");
+/* harmony import */var _accessor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./accessor.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/accessor.js");
+/* harmony import */var _field_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./field.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/field.js");
 
 
 const id = (0,_field_js__WEBPACK_IMPORTED_MODULE_1__["default"])('id');
@@ -161583,13 +161765,13 @@ const falsy = (0,_accessor_js__WEBPACK_IMPORTED_MODULE_0__["default"])(() => fal
 //# sourceMappingURL=accessors.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/array.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/array.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* export default binding */ __WEBPACK_DEFAULT_EXPORT__; }
 });
-/* harmony import */var _isArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isArray.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isArray.js");
+/* harmony import */var _isArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isArray.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isArray.js");
 
 /* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(_) {
     return _ != null ? ((0,_isArray_js__WEBPACK_IMPORTED_MODULE_0__.isArray)(_) ? _ : [_]) : [];
@@ -161597,7 +161779,7 @@ __webpack_require__.d(__webpack_exports__, {
 //# sourceMappingURL=array.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/clampRange.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/clampRange.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -161628,17 +161810,17 @@ function clampRange(range, min, max) {
 //# sourceMappingURL=clampRange.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/compare.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/compare.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   ascending: function() { return ascending; },
   "default": function() { return compare; }
 });
-/* harmony import */var _accessor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./accessor.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/accessor.js");
-/* harmony import */var _array_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./array.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/array.js");
-/* harmony import */var _field_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./field.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/field.js");
-/* harmony import */var _isFunction_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./isFunction.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isFunction.js");
+/* harmony import */var _accessor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./accessor.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/accessor.js");
+/* harmony import */var _array_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./array.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/array.js");
+/* harmony import */var _field_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./field.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/field.js");
+/* harmony import */var _isFunction_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./isFunction.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isFunction.js");
 
 
 
@@ -161689,13 +161871,13 @@ const compareN = (fields, orders, n) => {
 //# sourceMappingURL=compare.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/constant.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/constant.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* export default binding */ __WEBPACK_DEFAULT_EXPORT__; }
 });
-/* harmony import */var _isFunction_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isFunction.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isFunction.js");
+/* harmony import */var _isFunction_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isFunction.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isFunction.js");
 
 /* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(_) {
     return (0,_isFunction_js__WEBPACK_IMPORTED_MODULE_0__["default"])(_) ? _ : () => _;
@@ -161703,7 +161885,7 @@ __webpack_require__.d(__webpack_exports__, {
 //# sourceMappingURL=constant.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/debounce.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/debounce.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -161720,7 +161902,7 @@ function debounce(delay, handler) {
 //# sourceMappingURL=debounce.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/error.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/error.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -161732,7 +161914,7 @@ function error(message) {
 //# sourceMappingURL=error.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/extend.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/extend.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -161749,7 +161931,7 @@ function extend(_, ...args) {
 //# sourceMappingURL=extend.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/extent.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/extent.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -161805,7 +161987,7 @@ function extent(array, f) {
 //# sourceMappingURL=extent.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/extentIndex.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/extentIndex.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -161883,13 +162065,13 @@ function extentIndex(array, f) {
 //# sourceMappingURL=extentIndex.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/fastmap.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/fastmap.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return fastmap; }
 });
-/* harmony import */var _hasOwnProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./hasOwnProperty.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/hasOwnProperty.js");
+/* harmony import */var _hasOwnProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./hasOwnProperty.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/hasOwnProperty.js");
 
 const NULL = {};
 function fastmap(input) {
@@ -161960,15 +162142,15 @@ function fastmap(input) {
 //# sourceMappingURL=fastmap.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/field.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/field.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return field; }
 });
-/* harmony import */var _accessor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./accessor.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/accessor.js");
-/* harmony import */var _getter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getter.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/getter.js");
-/* harmony import */var _splitAccessPath_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./splitAccessPath.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/splitAccessPath.js");
+/* harmony import */var _accessor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./accessor.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/accessor.js");
+/* harmony import */var _getter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getter.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/getter.js");
+/* harmony import */var _splitAccessPath_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./splitAccessPath.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/splitAccessPath.js");
 
 
 
@@ -161980,13 +162162,13 @@ function field(field, name, opt) {
 //# sourceMappingURL=field.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/flush.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/flush.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* export default binding */ __WEBPACK_DEFAULT_EXPORT__; }
 });
-/* harmony import */var _peek_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./peek.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/peek.js");
+/* harmony import */var _peek_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./peek.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/peek.js");
 
 /**
  * Selects one of three values (left, right, or center) based on whether
@@ -162015,7 +162197,7 @@ __webpack_require__.d(__webpack_exports__, {
 //# sourceMappingURL=flush.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/getter.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/getter.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162039,7 +162221,7 @@ const getN = (path) => {
 //# sourceMappingURL=getter.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/hasOwnProperty.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/hasOwnProperty.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162051,7 +162233,7 @@ function hasOwnProperty(object, property) {
 //# sourceMappingURL=hasOwnProperty.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162126,54 +162308,54 @@ __webpack_require__.d(__webpack_exports__, {
   zoomPow: function() { return /* reexport safe */ _transform_js__WEBPACK_IMPORTED_MODULE_5__.zoomPow; },
   zoomSymlog: function() { return /* reexport safe */ _transform_js__WEBPACK_IMPORTED_MODULE_5__.zoomSymlog; }
 });
-/* harmony import */var _accessor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./accessor.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/accessor.js");
-/* harmony import */var _accessors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./accessors.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/accessors.js");
-/* harmony import */var _interpreter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./interpreter.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/interpreter.js");
-/* harmony import */var _logger_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./logger.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/logger.js");
-/* harmony import */var _mergeConfig_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mergeConfig.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/mergeConfig.js");
-/* harmony import */var _transform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./transform.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/transform.js");
-/* harmony import */var _quarter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./quarter.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/quarter.js");
-/* harmony import */var _array_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./array.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/array.js");
-/* harmony import */var _clampRange_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./clampRange.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/clampRange.js");
-/* harmony import */var _compare_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./compare.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/compare.js");
-/* harmony import */var _constant_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./constant.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/constant.js");
-/* harmony import */var _debounce_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./debounce.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/debounce.js");
-/* harmony import */var _error_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./error.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/error.js");
-/* harmony import */var _extend_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./extend.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/extend.js");
-/* harmony import */var _extent_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./extent.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/extent.js");
-/* harmony import */var _extentIndex_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./extentIndex.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/extentIndex.js");
-/* harmony import */var _fastmap_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./fastmap.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/fastmap.js");
-/* harmony import */var _field_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./field.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/field.js");
-/* harmony import */var _flush_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./flush.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/flush.js");
-/* harmony import */var _hasOwnProperty_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./hasOwnProperty.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/hasOwnProperty.js");
-/* harmony import */var _inherits_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./inherits.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/inherits.js");
-/* harmony import */var _inrange_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./inrange.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/inrange.js");
-/* harmony import */var _isArray_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./isArray.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isArray.js");
-/* harmony import */var _isBoolean_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./isBoolean.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isBoolean.js");
-/* harmony import */var _isDate_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./isDate.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isDate.js");
-/* harmony import */var _isFunction_js__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./isFunction.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isFunction.js");
-/* harmony import */var _isIterable_js__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./isIterable.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isIterable.js");
-/* harmony import */var _isNumber_js__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./isNumber.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isNumber.js");
-/* harmony import */var _isObject_js__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./isObject.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isObject.js");
-/* harmony import */var _isRegExp_js__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./isRegExp.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isRegExp.js");
-/* harmony import */var _isString_js__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./isString.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isString.js");
-/* harmony import */var _key_js__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./key.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/key.js");
-/* harmony import */var _lerp_js__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./lerp.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/lerp.js");
-/* harmony import */var _lruCache_js__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./lruCache.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/lruCache.js");
-/* harmony import */var _merge_js__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./merge.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/merge.js");
-/* harmony import */var _pad_js__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./pad.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/pad.js");
-/* harmony import */var _peek_js__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./peek.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/peek.js");
-/* harmony import */var _repeat_js__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./repeat.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/repeat.js");
-/* harmony import */var _span_js__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./span.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/span.js");
-/* harmony import */var _splitAccessPath_js__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./splitAccessPath.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/splitAccessPath.js");
-/* harmony import */var _stringValue_js__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./stringValue.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/stringValue.js");
-/* harmony import */var _toBoolean_js__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./toBoolean.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/toBoolean.js");
-/* harmony import */var _toDate_js__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./toDate.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/toDate.js");
-/* harmony import */var _toNumber_js__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./toNumber.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/toNumber.js");
-/* harmony import */var _toString_js__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./toString.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/toString.js");
-/* harmony import */var _toSet_js__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./toSet.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/toSet.js");
-/* harmony import */var _truncate_js__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./truncate.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/truncate.js");
-/* harmony import */var _visitArray_js__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./visitArray.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/visitArray.js");
+/* harmony import */var _accessor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./accessor.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/accessor.js");
+/* harmony import */var _accessors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./accessors.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/accessors.js");
+/* harmony import */var _interpreter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./interpreter.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/interpreter.js");
+/* harmony import */var _logger_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./logger.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/logger.js");
+/* harmony import */var _mergeConfig_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mergeConfig.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/mergeConfig.js");
+/* harmony import */var _transform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./transform.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/transform.js");
+/* harmony import */var _quarter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./quarter.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/quarter.js");
+/* harmony import */var _array_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./array.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/array.js");
+/* harmony import */var _clampRange_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./clampRange.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/clampRange.js");
+/* harmony import */var _compare_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./compare.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/compare.js");
+/* harmony import */var _constant_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./constant.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/constant.js");
+/* harmony import */var _debounce_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./debounce.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/debounce.js");
+/* harmony import */var _error_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./error.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/error.js");
+/* harmony import */var _extend_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./extend.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/extend.js");
+/* harmony import */var _extent_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./extent.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/extent.js");
+/* harmony import */var _extentIndex_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./extentIndex.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/extentIndex.js");
+/* harmony import */var _fastmap_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./fastmap.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/fastmap.js");
+/* harmony import */var _field_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./field.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/field.js");
+/* harmony import */var _flush_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./flush.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/flush.js");
+/* harmony import */var _hasOwnProperty_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./hasOwnProperty.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/hasOwnProperty.js");
+/* harmony import */var _inherits_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./inherits.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/inherits.js");
+/* harmony import */var _inrange_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./inrange.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/inrange.js");
+/* harmony import */var _isArray_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./isArray.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isArray.js");
+/* harmony import */var _isBoolean_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./isBoolean.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isBoolean.js");
+/* harmony import */var _isDate_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./isDate.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isDate.js");
+/* harmony import */var _isFunction_js__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./isFunction.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isFunction.js");
+/* harmony import */var _isIterable_js__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./isIterable.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isIterable.js");
+/* harmony import */var _isNumber_js__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./isNumber.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isNumber.js");
+/* harmony import */var _isObject_js__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./isObject.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isObject.js");
+/* harmony import */var _isRegExp_js__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./isRegExp.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isRegExp.js");
+/* harmony import */var _isString_js__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./isString.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isString.js");
+/* harmony import */var _key_js__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./key.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/key.js");
+/* harmony import */var _lerp_js__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./lerp.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/lerp.js");
+/* harmony import */var _lruCache_js__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./lruCache.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/lruCache.js");
+/* harmony import */var _merge_js__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./merge.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/merge.js");
+/* harmony import */var _pad_js__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./pad.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/pad.js");
+/* harmony import */var _peek_js__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./peek.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/peek.js");
+/* harmony import */var _repeat_js__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./repeat.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/repeat.js");
+/* harmony import */var _span_js__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./span.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/span.js");
+/* harmony import */var _splitAccessPath_js__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./splitAccessPath.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/splitAccessPath.js");
+/* harmony import */var _stringValue_js__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./stringValue.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/stringValue.js");
+/* harmony import */var _toBoolean_js__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./toBoolean.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/toBoolean.js");
+/* harmony import */var _toDate_js__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./toDate.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/toDate.js");
+/* harmony import */var _toNumber_js__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./toNumber.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/toNumber.js");
+/* harmony import */var _toString_js__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./toString.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/toString.js");
+/* harmony import */var _toSet_js__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./toSet.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/toSet.js");
+/* harmony import */var _truncate_js__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./truncate.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/truncate.js");
+/* harmony import */var _visitArray_js__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./visitArray.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/visitArray.js");
 
 
 
@@ -162225,13 +162407,13 @@ __webpack_require__.d(__webpack_exports__, {
 //# sourceMappingURL=index.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/inherits.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/inherits.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* export default binding */ __WEBPACK_DEFAULT_EXPORT__; }
 });
-/* harmony import */var _extend_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./extend.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/extend.js");
+/* harmony import */var _extend_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./extend.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/extend.js");
 
 /* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(child, parent, members) {
     const proto = (child.prototype = Object.create(parent.prototype));
@@ -162246,7 +162428,7 @@ __webpack_require__.d(__webpack_exports__, {
 //# sourceMappingURL=inherits.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/inrange.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/inrange.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162272,21 +162454,26 @@ function inrange(value, range, left, right) {
 //# sourceMappingURL=inrange.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/interpreter.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/interpreter.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   DisallowedObjectProperties: function() { return DisallowedObjectProperties; }
 });
 /** Utilities common to vega-interpreter and vega-expression for evaluating expresions */
-/** JSON authors are not allowed to set these properties, as these are built-in to the JS Object Prototype and should not be overridden. */
+/**
+ * Properties JSON authors may not set. Most are function-valued members of
+ * Object.prototype; `__proto__` and `then` are listed explicitly because they
+ * are not, but the language still treats them specially.
+ */
 const DisallowedObjectProperties = new Set([...Object.getOwnPropertyNames(Object.prototype)
         .filter(name => typeof Object.prototype[name] === 'function'),
-    '__proto__']);
+    '__proto__',
+    'then']);
 //# sourceMappingURL=interpreter.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isArray.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isArray.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162299,7 +162486,7 @@ const isArray = Array.isArray;
 //# sourceMappingURL=isArray.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isBoolean.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isBoolean.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162314,7 +162501,7 @@ function isBoolean(value) {
 //# sourceMappingURL=isBoolean.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isDate.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isDate.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162329,7 +162516,7 @@ function isDate(value) {
 //# sourceMappingURL=isDate.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isFunction.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isFunction.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162344,13 +162531,13 @@ function isFunction(value) {
 //# sourceMappingURL=isFunction.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isIterable.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isIterable.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return isIterable; }
 });
-/* harmony import */var _isFunction_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isFunction.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isFunction.js");
+/* harmony import */var _isFunction_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isFunction.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isFunction.js");
 
 /**
  * Test if the value exposes the iterator protocol via `Symbol.iterator`.
@@ -162361,7 +162548,7 @@ function isIterable(value) {
 //# sourceMappingURL=isIterable.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isNumber.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isNumber.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162376,7 +162563,7 @@ function isNumber(value) {
 //# sourceMappingURL=isNumber.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isObject.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isObject.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162388,7 +162575,7 @@ function isObject(_) {
 //# sourceMappingURL=isObject.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isRegExp.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isRegExp.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162403,7 +162590,7 @@ function isRegExp(value) {
 //# sourceMappingURL=isRegExp.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isString.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isString.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162415,16 +162602,16 @@ function isString(_) {
 //# sourceMappingURL=isString.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/key.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/key.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return key; }
 });
-/* harmony import */var _accessor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./accessor.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/accessor.js");
-/* harmony import */var _array_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./array.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/array.js");
-/* harmony import */var _getter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getter.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/getter.js");
-/* harmony import */var _splitAccessPath_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./splitAccessPath.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/splitAccessPath.js");
+/* harmony import */var _accessor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./accessor.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/accessor.js");
+/* harmony import */var _array_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./array.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/array.js");
+/* harmony import */var _getter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getter.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/getter.js");
+/* harmony import */var _splitAccessPath_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./splitAccessPath.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/splitAccessPath.js");
 
 
 
@@ -162458,13 +162645,13 @@ function key(fields, flat, opt) {
 //# sourceMappingURL=key.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/lerp.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/lerp.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* export default binding */ __WEBPACK_DEFAULT_EXPORT__; }
 });
-/* harmony import */var _peek_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./peek.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/peek.js");
+/* harmony import */var _peek_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./peek.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/peek.js");
 
 /* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(array, frac) {
     const lo = array[0], hi = (0,_peek_js__WEBPACK_IMPORTED_MODULE_0__["default"])(array), f = +frac;
@@ -162475,7 +162662,7 @@ __webpack_require__.d(__webpack_exports__, {
 //# sourceMappingURL=lerp.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/logger.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/logger.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162532,13 +162719,13 @@ const Debug = 4;
 //# sourceMappingURL=logger.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/lruCache.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/lruCache.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* export default binding */ __WEBPACK_DEFAULT_EXPORT__; }
 });
-/* harmony import */var _hasOwnProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./hasOwnProperty.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/hasOwnProperty.js");
+/* harmony import */var _hasOwnProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./hasOwnProperty.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/hasOwnProperty.js");
 
 const DEFAULT_MAX_SIZE = 10000;
 /**
@@ -162575,7 +162762,7 @@ const DEFAULT_MAX_SIZE = 10000;
 //# sourceMappingURL=lruCache.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/merge.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/merge.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162615,15 +162802,15 @@ function merge(compare, array0, array1, output) {
 //# sourceMappingURL=merge.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/mergeConfig.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/mergeConfig.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   mergeConfig: function() { return mergeConfig; },
   writeConfig: function() { return writeConfig; }
 });
-/* harmony import */var _isArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isArray.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isArray.js");
-/* harmony import */var _isObject_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./isObject.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isObject.js");
+/* harmony import */var _isArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isArray.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isArray.js");
+/* harmony import */var _isObject_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./isObject.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isObject.js");
 
 
 const isLegalKey = (key) => key !== '__proto__' && key !== 'constructor' && key !== 'prototype';
@@ -162693,13 +162880,13 @@ function mergeNamed(a, b) {
 //# sourceMappingURL=mergeConfig.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/pad.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/pad.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return pad; }
 });
-/* harmony import */var _repeat_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./repeat.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/repeat.js");
+/* harmony import */var _repeat_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./repeat.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/repeat.js");
 
 /**
  * Pads a string to a specified length with a padding character.
@@ -162714,7 +162901,7 @@ function pad(str, length, padchar, align) {
 //# sourceMappingURL=pad.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/peek.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/peek.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162726,7 +162913,7 @@ function peek(array) {
 //# sourceMappingURL=peek.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/quarter.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/quarter.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162742,7 +162929,7 @@ function utcquarter(date) {
 //# sourceMappingURL=quarter.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/repeat.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/repeat.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162760,13 +162947,13 @@ function repeat(str, reps) {
 //# sourceMappingURL=repeat.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/span.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/span.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* export default binding */ __WEBPACK_DEFAULT_EXPORT__; }
 });
-/* harmony import */var _peek_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./peek.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/peek.js");
+/* harmony import */var _peek_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./peek.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/peek.js");
 
 /**
  * Return the numerical span of an array: the difference between
@@ -162778,13 +162965,13 @@ __webpack_require__.d(__webpack_exports__, {
 //# sourceMappingURL=span.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/splitAccessPath.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/splitAccessPath.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return splitAccessPath; }
 });
-/* harmony import */var _error_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./error.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/error.js");
+/* harmony import */var _error_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./error.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/error.js");
 
 /**
  * Splits an access path string into its component parts.
@@ -162859,15 +163046,15 @@ function splitAccessPath(p) {
 //# sourceMappingURL=splitAccessPath.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/stringValue.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/stringValue.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return stringValue; }
 });
-/* harmony import */var _isArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isArray.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isArray.js");
-/* harmony import */var _isObject_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./isObject.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isObject.js");
-/* harmony import */var _isString_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./isString.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isString.js");
+/* harmony import */var _isArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isArray.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isArray.js");
+/* harmony import */var _isObject_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./isObject.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isObject.js");
+/* harmony import */var _isString_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./isString.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isString.js");
 
 
 
@@ -162888,7 +163075,7 @@ function stringValue(x) {
 //# sourceMappingURL=stringValue.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/toBoolean.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/toBoolean.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162904,14 +163091,14 @@ function toBoolean(_) {
 //# sourceMappingURL=toBoolean.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/toDate.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/toDate.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   "default": function() { return toDate; }
 });
-/* harmony import */var _isDate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isDate.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isDate.js");
-/* harmony import */var _isNumber_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./isNumber.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/isNumber.js");
+/* harmony import */var _isDate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isDate.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isDate.js");
+/* harmony import */var _isNumber_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./isNumber.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/isNumber.js");
 
 
 const defaultParser = (_) => 
@@ -162928,7 +163115,7 @@ function toDate(_, parser) {
 //# sourceMappingURL=toDate.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/toNumber.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/toNumber.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162943,7 +163130,7 @@ function toNumber(_) {
 //# sourceMappingURL=toNumber.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/toSet.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/toSet.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162958,7 +163145,7 @@ function toSet(_) {
 //# sourceMappingURL=toSet.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/toString.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/toString.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162973,7 +163160,7 @@ function toString(_) {
 //# sourceMappingURL=toString.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/transform.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/transform.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -162986,9 +163173,9 @@ __webpack_require__.d(__webpack_exports__, {
   zoomPow: function() { return zoomPow; },
   zoomSymlog: function() { return zoomSymlog; }
 });
-/* harmony import */var _error_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./error.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/error.js");
-/* harmony import */var _peek_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./peek.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/peek.js");
-/* harmony import */var _toNumber_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./toNumber.js */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/toNumber.js");
+/* harmony import */var _error_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./error.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/error.js");
+/* harmony import */var _peek_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./peek.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/peek.js");
+/* harmony import */var _toNumber_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./toNumber.js */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/toNumber.js");
 
 
 
@@ -163051,7 +163238,7 @@ function zoomSymlog(domain, anchor, scale, constant) {
 //# sourceMappingURL=transform.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/truncate.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/truncate.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -163070,7 +163257,7 @@ function truncate(str, length, align, ellipsis) {
 //# sourceMappingURL=truncate.js.map
 
 }),
-"./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/visitArray.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/visitArray.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -163098,7 +163285,7 @@ function visitArray(array, filter, visitor) {
 //# sourceMappingURL=visitArray.js.map
 
 }),
-"./node_modules/.pnpm/vega-view-transforms@5.2.1/node_modules/vega-view-transforms/build/vega-view-transforms.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-view-transforms@5.2.2/node_modules/vega-view-transforms/build/vega-view-transforms.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -163109,9 +163296,9 @@ __webpack_require__.d(__webpack_exports__, {
   render: function() { return Render; },
   viewlayout: function() { return ViewLayout; }
 });
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_scenegraph__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-scenegraph */ "./node_modules/.pnpm/vega-scenegraph@5.2.1/node_modules/vega-scenegraph/build/vega-scenegraph.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_scenegraph__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-scenegraph */ "./node_modules/.pnpm/vega-scenegraph@5.3.0/node_modules/vega-scenegraph/build/vega-scenegraph.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 
 
 
@@ -164433,20 +164620,20 @@ function viewSizeLayout(view, group, viewBounds, _) {
 
 
 }),
-"./node_modules/.pnpm/vega-view@6.1.2/node_modules/vega-view/build/vega-view.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-view@6.2.0/node_modules/vega-view/build/vega-view.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   View: function() { return View; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_scenegraph__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-scenegraph */ "./node_modules/.pnpm/vega-scenegraph@5.2.1/node_modules/vega-scenegraph/build/vega-scenegraph.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_scenegraph__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-scenegraph */ "./node_modules/.pnpm/vega-scenegraph@5.3.0/node_modules/vega-scenegraph/build/vega-scenegraph.js");
 /* harmony import */var d3_array__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! d3-array */ "./node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/ticks.js");
-/* harmony import */var vega_functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-functions */ "./node_modules/.pnpm/vega-functions@6.1.3/node_modules/vega-functions/build/vega-functions.js");
-/* harmony import */var vega_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-runtime */ "./node_modules/.pnpm/vega-runtime@7.1.2/node_modules/vega-runtime/build/vega-runtime.js");
+/* harmony import */var vega_functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-functions */ "./node_modules/.pnpm/vega-functions@6.2.0/node_modules/vega-functions/build/vega-functions.js");
+/* harmony import */var vega_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-runtime */ "./node_modules/.pnpm/vega-runtime@7.1.3/node_modules/vega-runtime/build/vega-runtime.js");
 /* harmony import */var d3_timer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! d3-timer */ "./node_modules/.pnpm/d3-timer@3.0.1/node_modules/d3-timer/src/interval.js");
-/* harmony import */var vega_format__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-format */ "./node_modules/.pnpm/vega-format@2.1.2/node_modules/vega-format/build/vega-format.js");
+/* harmony import */var vega_format__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-format */ "./node_modules/.pnpm/vega-format@2.1.3/node_modules/vega-format/build/vega-format.js");
 
 
 
@@ -164654,9 +164841,42 @@ function extension(view, item, point) {
   };
 }
 
+/**
+ * Observe the container element and dispatch 'container:resize' events to any
+ * event streams registered for them.
+ * @param {View} view - The view whose container should be observed.
+ */
+function observeContainer(view) {
+  if (view._resizeObserver) {
+    view._resizeObserver.disconnect();
+    view._resizeObserver = null;
+  }
+  const el = view.container(),
+    listeners = view._containerListeners;
+  if (typeof ResizeObserver === 'undefined' || !el || !listeners.length) return;
+
+  // the size the listeners last saw, so that the observe-time notification
+  // and fractional changes that leave the client size intact dispatch nothing
+  let width = el.clientWidth,
+    height = el.clientHeight;
+  view._resizeObserver = new ResizeObserver(() => {
+    if (!el.clientWidth && !el.clientHeight) return;
+    if (el.clientWidth === width && el.clientHeight === height) return;
+    width = el.clientWidth;
+    height = el.clientHeight;
+    listeners.forEach(handler => handler({
+      type: 'resize',
+      target: el
+    }));
+  });
+  view._resizeObserver.observe(el);
+}
+
 const VIEW = 'view',
   TIMER = 'timer',
   WINDOW = 'window',
+  CONTAINER = 'container',
+  RESIZE = 'resize',
   NO_TRAP = {
     trap: false
   };
@@ -164676,7 +164896,7 @@ function initializeEventConfig(config) {
     });
   };
   unpack(events.defaults, ['prevent', 'allow']);
-  unpack(events, ['view', 'window', 'selector']);
+  unpack(events, ['view', 'window', 'selector', 'container']);
   return events;
 }
 function trackEventListener(view, sources, type, handler) {
@@ -164728,6 +164948,14 @@ function events(source, type, filter) {
     if (permit(view, 'view', type)) {
       // send traps errors, so use {trap: false} option
       view.addEventListener(type, send, NO_TRAP);
+    }
+  } else if (source === CONTAINER) {
+    if (type !== RESIZE) {
+      view.warn('Unsupported container event type: ' + type);
+    } else if (permit(view, 'container', type)) {
+      // the container element is not known until the view is initialized
+      view._containerListeners.push(send);
+      if (view.container()) observeContainer(view);
     }
   } else {
     if (source === WINDOW) {
@@ -164795,6 +165023,12 @@ function finalize () {
   while (--n >= 0) {
     timers[n].stop();
   }
+
+  // disconnect the container resize observer, if any
+  if (this._resizeObserver) {
+    this._resizeObserver.disconnect();
+    this._resizeObserver = null;
+  }
   n = listeners.length;
   while (--n >= 0) {
     e = listeners[n];
@@ -164827,6 +165061,7 @@ function element (tag, attr, text) {
 const BindClass = 'vega-bind',
   NameClass = 'vega-bind-name',
   RadioClass = 'vega-bind-radio';
+const EventHandlerAttr = /^on/i;
 
 /**
  * Bind a signal to an external HTML input element. The resulting two-way
@@ -164930,17 +165165,19 @@ function generate(bind, el, param, view) {
       input = range;
       break;
   }
-  input(bind, wrapper, param, value);
+  input === form ? input(bind, wrapper, param, value, view) : input(bind, wrapper, param, value);
 }
 
 /**
  * Generates an arbitrary input form element.
  * The input type is controlled via user-provided parameters.
  */
-function form(bind, el, param, value) {
+function form(bind, el, param, value, view) {
   const node = element('input');
   for (const key in param) {
-    if (key !== 'signal' && key !== 'element') {
+    if (EventHandlerAttr.test(key)) {
+      view.warn(`Ignoring unsupported signal binding property "${key}" for signal "${param.signal}".`);
+    } else if (key !== 'signal' && key !== 'element') {
       node.setAttribute(key === 'input' ? 'type' : key, param[key]);
     }
   }
@@ -165131,6 +165368,7 @@ function initialize (el, elBind) {
       bind(view, _.element || elBind, _);
     });
   }
+  observeContainer(view);
   return view;
 }
 function lookup(view, el, clear) {
@@ -165473,6 +165711,8 @@ function View(spec, options) {
   view._timers = [];
   view._eventListeners = [];
   view._resizeListeners = [];
+  view._containerListeners = [];
+  view._resizeObserver = null;
 
   // initialize event configuration
   view._eventConfig = initializeEventConfig(spec.eventConfig);
@@ -165755,14 +165995,14 @@ function removeOperatorListener(view, op, handler) {
 
 
 }),
-"./node_modules/.pnpm/vega-voronoi@5.1.2/node_modules/vega-voronoi/build/vega-voronoi.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-voronoi@5.1.3/node_modules/vega-voronoi/build/vega-voronoi.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   voronoi: function() { return Voronoi; }
 });
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 /* harmony import */var d3_delaunay__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3-delaunay */ "./node_modules/.pnpm/d3-delaunay@6.0.4/node_modules/d3-delaunay/src/delaunay.js");
 
 
@@ -165846,16 +166086,16 @@ function isPoint(p) {
 
 
 }),
-"./node_modules/.pnpm/vega-wordcloud@5.1.2/node_modules/vega-wordcloud/build/vega-wordcloud.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-wordcloud@5.1.3/node_modules/vega-wordcloud/build/vega-wordcloud.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   wordcloud: function() { return Wordcloud; }
 });
 /* harmony import */var vega_canvas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-canvas */ "./node_modules/.pnpm/vega-canvas@2.0.0/node_modules/vega-canvas/build/vega-canvas.browser.js");
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
-/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.2/node_modules/vega-scale/build/vega-scale.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.3/node_modules/vega-scale/build/vega-scale.js");
 /* harmony import */var vega_statistics__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-statistics */ "./node_modules/.pnpm/vega-statistics@2.0.0/node_modules/vega-statistics/build/vega-statistics.js");
 
 
@@ -166399,7 +166639,7 @@ Wordcloud.Definition = {
 
 
 }),
-"./node_modules/.pnpm/vega@6.3.1/node_modules/vega/build/vega.module.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega@6.4.0/node_modules/vega/build/vega.module.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -166420,6 +166660,7 @@ __webpack_require__.d(__webpack_exports__, {
   Handler: function() { return /* reexport safe */ vega_scenegraph__WEBPACK_IMPORTED_MODULE_16__.Handler; },
   HybridHandler: function() { return /* reexport safe */ vega_scenegraph__WEBPACK_IMPORTED_MODULE_16__.HybridHandler; },
   HybridRenderer: function() { return /* reexport safe */ vega_scenegraph__WEBPACK_IMPORTED_MODULE_16__.HybridRenderer; },
+  ISOWEEK: function() { return /* reexport safe */ vega_time__WEBPACK_IMPORTED_MODULE_14__.ISOWEEK; },
   Info: function() { return /* reexport safe */ vega_util__WEBPACK_IMPORTED_MODULE_0__.Info; },
   Item: function() { return /* reexport safe */ vega_scenegraph__WEBPACK_IMPORTED_MODULE_16__.Item; },
   MILLISECONDS: function() { return /* reexport safe */ vega_time__WEBPACK_IMPORTED_MODULE_14__.MILLISECONDS; },
@@ -166521,6 +166762,7 @@ __webpack_require__.d(__webpack_exports__, {
   isRegExp: function() { return /* reexport safe */ vega_util__WEBPACK_IMPORTED_MODULE_0__.isRegExp; },
   isString: function() { return /* reexport safe */ vega_util__WEBPACK_IMPORTED_MODULE_0__.isString; },
   isTuple: function() { return /* reexport safe */ vega_dataflow__WEBPACK_IMPORTED_MODULE_1__.isTuple; },
+  isoweek: function() { return /* reexport safe */ vega_time__WEBPACK_IMPORTED_MODULE_14__.isoweek; },
   key: function() { return /* reexport safe */ vega_util__WEBPACK_IMPORTED_MODULE_0__.key; },
   lerp: function() { return /* reexport safe */ vega_util__WEBPACK_IMPORTED_MODULE_0__.lerp; },
   lineHeight: function() { return /* reexport safe */ vega_scenegraph__WEBPACK_IMPORTED_MODULE_16__.lineHeight; },
@@ -166625,6 +166867,7 @@ __webpack_require__.d(__webpack_exports__, {
   utcOffset: function() { return /* reexport safe */ vega_time__WEBPACK_IMPORTED_MODULE_14__.utcOffset; },
   utcSequence: function() { return /* reexport safe */ vega_time__WEBPACK_IMPORTED_MODULE_14__.utcSequence; },
   utcdayofyear: function() { return /* reexport safe */ vega_time__WEBPACK_IMPORTED_MODULE_14__.utcdayofyear; },
+  utcisoweek: function() { return /* reexport safe */ vega_time__WEBPACK_IMPORTED_MODULE_14__.utcisoweek; },
   utcquarter: function() { return /* reexport safe */ vega_util__WEBPACK_IMPORTED_MODULE_0__.utcquarter; },
   utcweek: function() { return /* reexport safe */ vega_time__WEBPACK_IMPORTED_MODULE_14__.utcweek; },
   version: function() { return version; },
@@ -166637,31 +166880,31 @@ __webpack_require__.d(__webpack_exports__, {
   zoomPow: function() { return /* reexport safe */ vega_util__WEBPACK_IMPORTED_MODULE_0__.zoomPow; },
   zoomSymlog: function() { return /* reexport safe */ vega_util__WEBPACK_IMPORTED_MODULE_0__.zoomSymlog; }
 });
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.2/node_modules/vega-util/build/index.js");
-/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.2/node_modules/vega-dataflow/build/vega-dataflow.js");
-/* harmony import */var vega_transforms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-transforms */ "./node_modules/.pnpm/vega-transforms@5.2.1/node_modules/vega-transforms/build/vega-transforms.js");
-/* harmony import */var vega_view_transforms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-view-transforms */ "./node_modules/.pnpm/vega-view-transforms@5.2.1/node_modules/vega-view-transforms/build/vega-view-transforms.js");
-/* harmony import */var vega_encode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-encode */ "./node_modules/.pnpm/vega-encode@5.2.1/node_modules/vega-encode/build/vega-encode.js");
-/* harmony import */var vega_geo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-geo */ "./node_modules/.pnpm/vega-geo@5.1.2/node_modules/vega-geo/build/vega-geo.js");
-/* harmony import */var vega_force__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vega-force */ "./node_modules/.pnpm/vega-force@5.1.2/node_modules/vega-force/build/vega-force.js");
-/* harmony import */var vega_hierarchy__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vega-hierarchy */ "./node_modules/.pnpm/vega-hierarchy@5.1.2/node_modules/vega-hierarchy/build/vega-hierarchy.js");
-/* harmony import */var vega_label__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vega-label */ "./node_modules/.pnpm/vega-label@2.1.2/node_modules/vega-label/build/vega-label.js");
-/* harmony import */var vega_regression__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vega-regression */ "./node_modules/.pnpm/vega-regression@2.1.2/node_modules/vega-regression/build/vega-regression.js");
-/* harmony import */var vega_voronoi__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vega-voronoi */ "./node_modules/.pnpm/vega-voronoi@5.1.2/node_modules/vega-voronoi/build/vega-voronoi.js");
-/* harmony import */var vega_wordcloud__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vega-wordcloud */ "./node_modules/.pnpm/vega-wordcloud@5.1.2/node_modules/vega-wordcloud/build/vega-wordcloud.js");
-/* harmony import */var vega_crossfilter__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vega-crossfilter */ "./node_modules/.pnpm/vega-crossfilter@5.1.2/node_modules/vega-crossfilter/build/vega-crossfilter.js");
+/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
+/* harmony import */var vega_dataflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-dataflow */ "./node_modules/.pnpm/vega-dataflow@6.1.3/node_modules/vega-dataflow/build/vega-dataflow.js");
+/* harmony import */var vega_transforms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-transforms */ "./node_modules/.pnpm/vega-transforms@5.2.2/node_modules/vega-transforms/build/vega-transforms.js");
+/* harmony import */var vega_view_transforms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-view-transforms */ "./node_modules/.pnpm/vega-view-transforms@5.2.2/node_modules/vega-view-transforms/build/vega-view-transforms.js");
+/* harmony import */var vega_encode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-encode */ "./node_modules/.pnpm/vega-encode@5.2.2/node_modules/vega-encode/build/vega-encode.js");
+/* harmony import */var vega_geo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-geo */ "./node_modules/.pnpm/vega-geo@5.1.3/node_modules/vega-geo/build/vega-geo.js");
+/* harmony import */var vega_force__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vega-force */ "./node_modules/.pnpm/vega-force@5.1.3/node_modules/vega-force/build/vega-force.js");
+/* harmony import */var vega_hierarchy__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vega-hierarchy */ "./node_modules/.pnpm/vega-hierarchy@5.1.3/node_modules/vega-hierarchy/build/vega-hierarchy.js");
+/* harmony import */var vega_label__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vega-label */ "./node_modules/.pnpm/vega-label@2.1.3/node_modules/vega-label/build/vega-label.js");
+/* harmony import */var vega_regression__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vega-regression */ "./node_modules/.pnpm/vega-regression@2.1.3/node_modules/vega-regression/build/vega-regression.js");
+/* harmony import */var vega_voronoi__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vega-voronoi */ "./node_modules/.pnpm/vega-voronoi@5.1.3/node_modules/vega-voronoi/build/vega-voronoi.js");
+/* harmony import */var vega_wordcloud__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vega-wordcloud */ "./node_modules/.pnpm/vega-wordcloud@5.1.3/node_modules/vega-wordcloud/build/vega-wordcloud.js");
+/* harmony import */var vega_crossfilter__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vega-crossfilter */ "./node_modules/.pnpm/vega-crossfilter@5.1.3/node_modules/vega-crossfilter/build/vega-crossfilter.js");
 /* harmony import */var vega_statistics__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vega-statistics */ "./node_modules/.pnpm/vega-statistics@2.0.0/node_modules/vega-statistics/build/vega-statistics.js");
-/* harmony import */var vega_time__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! vega-time */ "./node_modules/.pnpm/vega-time@3.2.1/node_modules/vega-time/build/vega-time.js");
-/* harmony import */var vega_loader__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! vega-loader */ "./node_modules/.pnpm/vega-loader@5.1.2/node_modules/vega-loader/build/vega-loader.browser.js");
-/* harmony import */var vega_scenegraph__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! vega-scenegraph */ "./node_modules/.pnpm/vega-scenegraph@5.2.1/node_modules/vega-scenegraph/build/vega-scenegraph.js");
-/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.2/node_modules/vega-scale/build/vega-scale.js");
-/* harmony import */var vega_projection__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! vega-projection */ "./node_modules/.pnpm/vega-projection@2.1.2/node_modules/vega-projection/build/vega-projection.js");
-/* harmony import */var vega_view__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! vega-view */ "./node_modules/.pnpm/vega-view@6.1.2/node_modules/vega-view/build/vega-view.js");
-/* harmony import */var vega_format__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! vega-format */ "./node_modules/.pnpm/vega-format@2.1.2/node_modules/vega-format/build/vega-format.js");
-/* harmony import */var vega_functions__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! vega-functions */ "./node_modules/.pnpm/vega-functions@6.1.3/node_modules/vega-functions/build/vega-functions.js");
-/* harmony import */var vega_parser__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! vega-parser */ "./node_modules/.pnpm/vega-parser@7.1.2/node_modules/vega-parser/build/vega-parser.js");
-/* harmony import */var vega_runtime__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! vega-runtime */ "./node_modules/.pnpm/vega-runtime@7.1.2/node_modules/vega-runtime/build/vega-runtime.js");
-/* harmony import */var vega_expression__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! vega-expression */ "./node_modules/.pnpm/vega-expression@6.2.1/node_modules/vega-expression/build/vega-expression.js");
+/* harmony import */var vega_time__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! vega-time */ "./node_modules/.pnpm/vega-time@3.3.0/node_modules/vega-time/build/vega-time.js");
+/* harmony import */var vega_loader__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! vega-loader */ "./node_modules/.pnpm/vega-loader@5.1.3/node_modules/vega-loader/build/vega-loader.browser.js");
+/* harmony import */var vega_scenegraph__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! vega-scenegraph */ "./node_modules/.pnpm/vega-scenegraph@5.3.0/node_modules/vega-scenegraph/build/vega-scenegraph.js");
+/* harmony import */var vega_scale__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! vega-scale */ "./node_modules/.pnpm/vega-scale@8.1.3/node_modules/vega-scale/build/vega-scale.js");
+/* harmony import */var vega_projection__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! vega-projection */ "./node_modules/.pnpm/vega-projection@2.1.3/node_modules/vega-projection/build/vega-projection.js");
+/* harmony import */var vega_view__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! vega-view */ "./node_modules/.pnpm/vega-view@6.2.0/node_modules/vega-view/build/vega-view.js");
+/* harmony import */var vega_format__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! vega-format */ "./node_modules/.pnpm/vega-format@2.1.3/node_modules/vega-format/build/vega-format.js");
+/* harmony import */var vega_functions__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! vega-functions */ "./node_modules/.pnpm/vega-functions@6.2.0/node_modules/vega-functions/build/vega-functions.js");
+/* harmony import */var vega_parser__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! vega-parser */ "./node_modules/.pnpm/vega-parser@7.1.3/node_modules/vega-parser/build/vega-parser.js");
+/* harmony import */var vega_runtime__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! vega-runtime */ "./node_modules/.pnpm/vega-runtime@7.1.3/node_modules/vega-runtime/build/vega-runtime.js");
+/* harmony import */var vega_expression__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! vega-expression */ "./node_modules/.pnpm/vega-expression@6.2.2/node_modules/vega-expression/build/vega-expression.js");
 /* harmony import */var vega_event_selector__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! vega-event-selector */ "./node_modules/.pnpm/vega-event-selector@4.0.0/node_modules/vega-event-selector/build/vega-event-selector.js");
 
 
@@ -166692,7 +166935,7 @@ __webpack_require__.d(__webpack_exports__, {
 
 
 
-var version$1 = "6.3.1";
+var version$1 = "6.4.0";
 
 // -- Transforms -----
 
@@ -166846,7 +167089,7 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var lz_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lz-string */ "./node_modules/.pnpm/lz-string@1.5.0/node_modules/lz-string/libs/lz-string.js");
 /* harmony import */var lz_string__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lz_string__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */var jsonm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsonm */ "./node_modules/.pnpm/jsonm@1.0.10/node_modules/jsonm/build/node/index.js");
-/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.1.0_vega-lite@6.4.3_vega@6.3.1__vega@6.3.1/node_modules/vega-embed/build/embed.js");
+/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.1.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
 /* harmony import */var qrcode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! qrcode */ "./node_modules/.pnpm/qrcode@1.5.4/node_modules/qrcode/lib/browser.js");
 /* harmony import */var bootstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bootstrap */ "./node_modules/.pnpm/bootstrap@4.6.2_jquery@3.7.1_popper.js@1.16.1/node_modules/bootstrap/dist/js/bootstrap.js");
 /* harmony import */var bootstrap__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(bootstrap__WEBPACK_IMPORTED_MODULE_5__);
