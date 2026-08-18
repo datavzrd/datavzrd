@@ -1158,7 +1158,11 @@ pub struct PillsSpec {
     pub separator: String,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub color_scheme: String,
-    #[serde(default, rename = "range", skip_serializing_if = "ColorRange::is_empty")]
+    #[serde(
+        default,
+        rename = "range",
+        skip_serializing_if = "ColorRange::is_empty"
+    )]
     pub color_range: ColorRange,
     #[serde(default)]
     pub domain: Option<Vec<String>>,
@@ -1261,7 +1265,11 @@ pub struct TickPlot {
 pub struct ColorDefinition {
     #[serde(default, rename = "scale")]
     pub scale_type: ScaleType,
-    #[serde(default, rename = "range", skip_serializing_if = "ColorRange::is_empty")]
+    #[serde(
+        default,
+        rename = "range",
+        skip_serializing_if = "ColorRange::is_empty"
+    )]
     pub color_range: ColorRange,
     #[serde(default)]
     pub domain: Option<Vec<String>>,
@@ -1307,7 +1315,11 @@ pub struct Heatmap {
     pub clamp: bool,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub color_scheme: String,
-    #[serde(default, rename = "range", skip_serializing_if = "ColorRange::is_empty")]
+    #[serde(
+        default,
+        rename = "range",
+        skip_serializing_if = "ColorRange::is_empty"
+    )]
     pub color_range: ColorRange,
     #[serde(default)]
     pub domain: Option<Vec<String>>,
