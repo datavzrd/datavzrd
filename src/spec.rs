@@ -40,11 +40,14 @@ pub struct ItemsSpec {
     pub datasets: HashMap<String, DatasetSpecs>,
     #[deref]
     pub default_view: Option<String>,
-    #[serde(default = "default_single_page_threshold")]
+    #[serde(
+        default = "default_single_page_threshold",
+        skip_serializing_if = "is_default_in_memory_rows"
+    )]
     pub max_in_memory_rows: usize,
     pub views: HashMap<String, ItemSpecs>,
     pub aux_libraries: Option<Vec<String>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub webview_controls: bool,
 }
 
@@ -469,11 +472,15 @@ pub struct DatasetSpecs {
     pub path: PathBuf,
     #[serde(default)]
     pub separator: char,
-    #[serde(default = "default_header_size", rename = "headers")]
+    #[serde(
+        default = "default_header_size",
+        rename = "headers",
+        skip_serializing_if = "is_default_header_size"
+    )]
     pub header_rows: usize,
     #[serde(default = "default_links")]
     pub links: Option<HashMap<String, LinkSpec>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub offer_excel: bool,
 }
 
@@ -543,13 +550,16 @@ impl DatasetSpecs {
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct ItemSpecs {
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub hidden: bool,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub narrow: bool,
     pub dataset: Option<String>,
     pub datasets: Option<HashMap<String, String>>,
-    #[serde(default = "default_page_size")]
+    #[serde(
+        default = "default_page_size",
+        skip_serializing_if = "is_default_page_size"
+    )]
     pub page_size: usize,
     #[serde(skip)]
     pub single_page_page_size: usize,
@@ -1301,6 +1311,22 @@ fn is_default_display_mode(value: &Option<DisplayMode>) -> bool {
 
 fn is_default_clamp(value: &bool) -> bool {
     *value == default_clamp()
+}
+
+fn is_false(value: &bool) -> bool {
+    !*value
+}
+
+fn is_default_header_size(value: &usize) -> bool {
+    *value == default_header_size()
+}
+
+fn is_default_page_size(value: &usize) -> bool {
+    *value == default_page_size()
+}
+
+fn is_default_in_memory_rows(value: &usize) -> bool {
+    *value == default_single_page_threshold()
 }
 
 #[skip_serializing_none]
