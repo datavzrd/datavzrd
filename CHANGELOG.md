@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.71.2](https://github.com/datavzrd/datavzrd/compare/v2.71.1...v2.71.2) (2026-08-18)
+
+
+### Bug Fixes
+
+* Fix custom-content for link-to-url ([#1239](https://github.com/datavzrd/datavzrd/issues/1239)) ([2905f83](https://github.com/datavzrd/datavzrd/commit/2905f8389e01695ba4c433a8ccf321221a4b6704))
+* Skip serializing config values that are equal to their default ([#1244](https://github.com/datavzrd/datavzrd/issues/1244)) ([97adbf7](https://github.com/datavzrd/datavzrd/commit/97adbf75730b00f6065cfec014d25c30c18c7d85))
+* Validate string fields with js functions ([#1238](https://github.com/datavzrd/datavzrd/issues/1238)) ([92897ca](https://github.com/datavzrd/datavzrd/commit/92897ca9af2b07008d23661eba013802bab16919))
+
 ## [2.71.1](https://github.com/datavzrd/datavzrd/compare/v2.71.0...v2.71.1) (2026-08-12)
 
 
