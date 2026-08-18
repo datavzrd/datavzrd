@@ -40,11 +40,14 @@ pub struct ItemsSpec {
     pub datasets: HashMap<String, DatasetSpecs>,
     #[deref]
     pub default_view: Option<String>,
-    #[serde(default = "default_single_page_threshold")]
+    #[serde(
+        default = "default_single_page_threshold",
+        skip_serializing_if = "is_default_in_memory_rows"
+    )]
     pub max_in_memory_rows: usize,
     pub views: HashMap<String, ItemSpecs>,
     pub aux_libraries: Option<Vec<String>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub webview_controls: bool,
 }
 
@@ -469,11 +472,15 @@ pub struct DatasetSpecs {
     pub path: PathBuf,
     #[serde(default)]
     pub separator: char,
-    #[serde(default = "default_header_size", rename = "headers")]
+    #[serde(
+        default = "default_header_size",
+        rename = "headers",
+        skip_serializing_if = "is_default_header_size"
+    )]
     pub header_rows: usize,
     #[serde(default = "default_links")]
     pub links: Option<HashMap<String, LinkSpec>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub offer_excel: bool,
 }
 
@@ -543,13 +550,16 @@ impl DatasetSpecs {
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct ItemSpecs {
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub hidden: bool,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub narrow: bool,
     pub dataset: Option<String>,
     pub datasets: Option<HashMap<String, String>>,
-    #[serde(default = "default_page_size")]
+    #[serde(
+        default = "default_page_size",
+        skip_serializing_if = "is_default_page_size"
+    )]
     pub page_size: usize,
     #[serde(skip)]
     pub single_page_page_size: usize,
@@ -807,9 +817,9 @@ fn default_precision() -> u32 {
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct RenderColumnSpec {
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default_flag")]
     pub optional: Option<bool>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default_precision")]
     pub precision: Option<u32>,
     #[serde(default)]
     pub label: Option<String>,
@@ -817,7 +827,7 @@ pub struct RenderColumnSpec {
     pub custom: Option<String>,
     #[serde(default)]
     pub custom_path: Option<String>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default_display_mode")]
     pub display_mode: Option<DisplayMode>,
     #[serde(default)]
     pub link_to_url: Option<LinkToUrlSpec>,
@@ -827,7 +837,7 @@ pub struct RenderColumnSpec {
     pub custom_plot: Option<CustomPlot>,
     #[serde(default)]
     pub ellipsis: Option<u32>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default_flag")]
     pub plot_view_legend: Option<bool>,
     #[serde(default)]
     pub spell: Option<SpellSpec>,
@@ -1156,9 +1166,13 @@ pub struct PlotSpec {
 pub struct PillsSpec {
     #[serde(default = "default_pill_separator")]
     pub separator: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub color_scheme: String,
-    #[serde(default, rename = "range")]
+    #[serde(
+        default,
+        rename = "range",
+        skip_serializing_if = "ColorRange::is_empty"
+    )]
     pub color_range: ColorRange,
     #[serde(default)]
     pub domain: Option<Vec<String>>,
@@ -1166,7 +1180,7 @@ pub struct PillsSpec {
     pub ellipsis: Option<u32>,
     #[serde(default)]
     pub merge: bool,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "AuxDomainColumns::is_none")]
     pub aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
     pub legend: Option<LegendSpec>,
@@ -1228,7 +1242,7 @@ pub struct BubblePlot {
     pub scale_type: ScaleType,
     #[serde(default)]
     pub domain: Option<Vec<f32>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "AuxDomainColumns::is_none")]
     pub aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
     pub color: Option<ColorDefinition>,
@@ -1250,7 +1264,7 @@ pub struct TickPlot {
     pub scale_type: ScaleType,
     #[serde(default)]
     pub domain: Option<Vec<f32>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "AuxDomainColumns::is_none")]
     pub aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
     pub color: Option<ColorDefinition>,
@@ -1261,7 +1275,11 @@ pub struct TickPlot {
 pub struct ColorDefinition {
     #[serde(default, rename = "scale")]
     pub scale_type: ScaleType,
-    #[serde(default, rename = "range")]
+    #[serde(
+        default,
+        rename = "range",
+        skip_serializing_if = "ColorRange::is_empty"
+    )]
     pub color_range: ColorRange,
     #[serde(default)]
     pub domain: Option<Vec<String>>,
@@ -1279,6 +1297,38 @@ fn default_clamp() -> bool {
     true
 }
 
+fn is_default_flag(value: &Option<bool>) -> bool {
+    !matches!(value, Some(true))
+}
+
+fn is_default_precision(value: &Option<u32>) -> bool {
+    value.is_none() || *value == Some(default_precision())
+}
+
+fn is_default_display_mode(value: &Option<DisplayMode>) -> bool {
+    value.is_none() || matches!(value, Some(DisplayMode::Normal))
+}
+
+fn is_default_clamp(value: &bool) -> bool {
+    *value == default_clamp()
+}
+
+fn is_false(value: &bool) -> bool {
+    !*value
+}
+
+fn is_default_header_size(value: &usize) -> bool {
+    *value == default_header_size()
+}
+
+fn is_default_page_size(value: &usize) -> bool {
+    *value == default_page_size()
+}
+
+fn is_default_in_memory_rows(value: &usize) -> bool {
+    *value == default_single_page_threshold()
+}
+
 #[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
@@ -1287,17 +1337,21 @@ pub struct Heatmap {
     pub vega_type: Option<VegaType>,
     #[serde(default, rename = "scale")]
     pub scale_type: ScaleType,
-    #[serde(default = "default_clamp")]
+    #[serde(default = "default_clamp", skip_serializing_if = "is_default_clamp")]
     pub clamp: bool,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub color_scheme: String,
-    #[serde(default, rename = "range")]
+    #[serde(
+        default,
+        rename = "range",
+        skip_serializing_if = "ColorRange::is_empty"
+    )]
     pub color_range: ColorRange,
     #[serde(default)]
     pub domain: Option<Vec<String>>,
     #[serde(default)]
     pub domain_mid: Option<f32>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "AuxDomainColumns::is_none")]
     pub aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
     pub custom_content: Option<String>,
@@ -1314,6 +1368,10 @@ pub struct LegendSpec {
 pub struct ColorRange(pub Vec<Color>);
 
 impl ColorRange {
+    fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
+
     fn preprocess(&mut self) -> Result<()> {
         self.0.iter_mut().try_for_each(|color| color.preprocess())
     }
@@ -1456,7 +1514,7 @@ pub struct BarPlot {
     pub scale_type: ScaleType,
     #[serde(default)]
     pub domain: Option<Vec<f32>>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "AuxDomainColumns::is_none")]
     pub aux_domain_columns: AuxDomainColumns,
     #[serde(default)]
     pub color: Option<ColorDefinition>,
@@ -1512,6 +1570,10 @@ impl ScaleType {
 pub struct AuxDomainColumns(pub Option<Vec<String>>);
 
 impl AuxDomainColumns {
+    fn is_none(&self) -> bool {
+        self.0.is_none()
+    }
+
     fn preprocess(&mut self, dataset: &DatasetSpecs) -> Result<()> {
         let mut reader = dataset.reader()?;
         let headers = reader.headers()?;
