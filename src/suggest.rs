@@ -41,7 +41,7 @@ pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -
                         heatmap: Some(Heatmap {
                             vega_type: None,
                             scale_type: ScaleType::Ordinal,
-                            clamp: false,
+                            clamp: true,
                             color_scheme: "category20".to_string(),
                             color_range: Default::default(),
                             domain: None,
@@ -62,7 +62,7 @@ pub(crate) fn suggest(files: Vec<PathBuf>, separator: Vec<char>, name: String) -
                         heatmap: Some(Heatmap {
                             vega_type: None,
                             scale_type: ScaleType::Linear,
-                            clamp: false,
+                            clamp: true,
                             color_scheme: "".to_string(),
                             color_range: ColorRange(vec![
                                 Color("white".to_string()),
