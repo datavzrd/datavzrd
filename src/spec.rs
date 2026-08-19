@@ -221,6 +221,16 @@ impl ItemsSpec {
                                 }
                             }
                             if let Some(plot_spec) = &render_columns.plot {
+                                if let Some(pills) = &plot_spec.pills {
+                                    if pills.color_scheme.is_empty()
+                                        && pills.color_range.0.is_empty()
+                                    {
+                                        bail!(ConfigError::PillsMissingColorDefinition {
+                                            view: name.to_string(),
+                                            column: column.to_string()
+                                        })
+                                    }
+                                }
                                 let domain = if let Some(tick_plot) = &plot_spec.tick_plot {
                                     tick_plot.domain.clone()
                                 } else if let Some(bar_plot) = &plot_spec.bar_plot {
@@ -1651,6 +1661,8 @@ pub enum ConfigError {
     NonNumericQuantitativeColumn { column: String, path: PathBuf },
     #[error("Heatmap definition for column {column:?} of view {view:?} misses a color scheme or color range. Please provide either a color scheme or a color range in the heatmap configuration.")]
     HeatmapMissingColorDefinition { view: String, column: String },
+    #[error("Pills definition for column {column:?} of view {view:?} misses a color scheme or color range. Please provide either a color scheme or a color range in the pills configuration.")]
+    PillsMissingColorDefinition { view: String, column: String },
     #[error("View {view:?} consists of a configuration with render-plot and render-table present while only one should be present. If you want both please define two separate views.")]
     PlotAndTablePresentConfiguration { view: String },
     #[error("Found conflicting render-table configuration for column {column:?} of view {view:?}. The conflicting configuration are {conflict:?}.")]
