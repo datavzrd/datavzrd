@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.71.3](https://github.com/datavzrd/datavzrd/compare/v2.71.2...v2.71.3) (2026-08-19)
+
+
+### Bug Fixes
+
+* Reject link-to-url configurations without a url ([#1245](https://github.com/datavzrd/datavzrd/issues/1245)) ([5c156d2](https://github.com/datavzrd/datavzrd/commit/5c156d2671e31cb9457cbd49b45782de8fca8f01))
+* Require a color scheme or range for pills ([#1246](https://github.com/datavzrd/datavzrd/issues/1246)) ([4e9e007](https://github.com/datavzrd/datavzrd/commit/4e9e007278668c24f69b5e2e7ca3671b339bcf17))
+
 ## [2.71.2](https://github.com/datavzrd/datavzrd/compare/v2.71.1...v2.71.2) (2026-08-18)
 
 
