@@ -220,6 +220,14 @@ impl ItemsSpec {
                                     }
                                 }
                             }
+                            if let Some(link_to_url) = &render_columns.link_to_url {
+                                if link_to_url.entries.is_empty() {
+                                    bail!(ConfigError::LinkToUrlMissingUrl {
+                                        view: name.to_string(),
+                                        column: column.to_string()
+                                    })
+                                }
+                            }
                             if let Some(plot_spec) = &render_columns.plot {
                                 let domain = if let Some(tick_plot) = &plot_spec.tick_plot {
                                     tick_plot.domain.clone()
@@ -1624,6 +1632,8 @@ pub enum ConfigError {
         column: String,
         field: String,
     },
+    #[error("The link-to-url definition of column {column:?} in view {view:?} does not define any URL. Please provide at least one named link with a url.")]
+    LinkToUrlMissingUrl { view: String, column: String },
     #[error("Could not find column with index {index:?} under path {table_path:?} with only {header_length:?} columns.")]
     IndexTooLarge {
         index: usize,
