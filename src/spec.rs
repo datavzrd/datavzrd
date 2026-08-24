@@ -1253,6 +1253,7 @@ impl PillsSpec {
     }
 }
 
+#[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct BubblePlot {
@@ -1275,6 +1276,7 @@ impl BubblePlot {
     }
 }
 
+#[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct TickPlot {
@@ -1525,6 +1527,7 @@ impl SequentialScheme {
     }
 }
 
+#[skip_serializing_none]
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct BarPlot {
@@ -2410,6 +2413,31 @@ mod tests {
         assert_eq!(
             oscar_config.get("birth_y").unwrap().to_owned(),
             expected_render_column_spec
+        );
+    }
+
+    #[test]
+    fn unset_tick_plot_fields_are_omitted() {
+        let plot = PlotSpec {
+            tick_plot: Some(TickPlot {
+                scale_type: ScaleType::Linear,
+                domain: None,
+                aux_domain_columns: AuxDomainColumns(None),
+                color: None,
+            }),
+            heatmap: None,
+            bar_plot: None,
+            pills: None,
+            bubble_plot: None,
+        };
+        let yaml = serde_yaml::to_string(&plot).unwrap();
+        assert!(
+            !yaml.contains("domain"),
+            "unset domain should be omitted:\n{yaml}"
+        );
+        assert!(
+            !yaml.contains("color"),
+            "unset color should be omitted:\n{yaml}"
         );
     }
 
