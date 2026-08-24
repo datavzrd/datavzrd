@@ -2431,8 +2431,14 @@ mod tests {
             bubble_plot: None,
         };
         let yaml = serde_yaml::to_string(&plot).unwrap();
-        assert!(!yaml.contains("domain"), "unset domain should be omitted:\n{yaml}");
-        assert!(!yaml.contains("color"), "unset color should be omitted:\n{yaml}");
+        assert!(
+            !yaml.contains("domain"),
+            "unset domain should be omitted:\n{yaml}"
+        );
+        assert!(
+            !yaml.contains("color"),
+            "unset color should be omitted:\n{yaml}"
+        );
     }
 
     #[test]
