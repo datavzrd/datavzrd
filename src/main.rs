@@ -7,6 +7,7 @@ use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
 use std::io::{stdout, Write};
 
 pub(crate) mod cli;
+mod llm;
 pub(crate) mod publish;
 mod suggest;
 
@@ -33,11 +34,30 @@ fn main() -> Result<()> {
             files,
             separators,
             name,
+            llm_url,
+            llm_model,
+            llm_token,
+            prompt,
         }) => {
             if files.len() != separators.len() {
                 bail!(CliError::MismatchedSeparators);
             }
-            let config = suggest::suggest(files, separators, name)?;
+            let llm = match (llm_url, llm_model) {
+                (Some(url), Some(model)) => {
+                    let prompt = match prompt {
+                        Some(prompt) => prompt,
+                        None => llm::ask_prompt()?,
+                    };
+                    Some(llm::LlmConfig {
+                        url,
+                        model,
+                        token: llm_token,
+                        prompt,
+                    })
+                }
+                _ => None,
+            };
+            let config = suggest::suggest(files, separators, name, llm)?;
             stdout().write_all(config.as_bytes())?;
         }
         None => {

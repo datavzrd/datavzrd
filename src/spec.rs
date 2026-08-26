@@ -17,6 +17,7 @@ use itertools::Itertools;
 
 use crate::spells::SpellSpec;
 use format_serde_error::SerdeError;
+use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_with::skip_serializing_none;
@@ -52,6 +53,18 @@ pub struct ItemsSpec {
 }
 
 impl ItemsSpec {
+    pub fn new(report_name: String) -> Self {
+        ItemsSpec {
+            report_name,
+            datasets: HashMap::new(),
+            default_view: None,
+            max_in_memory_rows: default_single_page_threshold(),
+            views: HashMap::new(),
+            aux_libraries: None,
+            webview_controls: false,
+        }
+    }
+
     pub fn from_file<P: AsRef<Path> + Debug>(path: P) -> Result<ItemsSpec> {
         let config_file = fs::read_to_string(&path).context(format!(
             "Could not find config file under given path {:?}",
@@ -62,10 +75,15 @@ impl ItemsSpec {
         }
         let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)
             .map_err(|err| SerdeError::new(config_file.to_string(), err))?;
-        for dataset in items_spec.datasets.values_mut() {
+        items_spec.preprocess()?;
+        Ok(items_spec)
+    }
+
+    pub fn preprocess(&mut self) -> Result<()> {
+        for dataset in self.datasets.values_mut() {
             dataset.preprocess()?;
         }
-        for (name, dataset) in &items_spec.datasets {
+        for (name, dataset) in &self.datasets {
             let lines = dataset
                 .reader()?
                 .records()?
@@ -81,7 +99,7 @@ impl ItemsSpec {
                 })
             }
         }
-        for (name, spec) in items_spec.views.iter_mut() {
+        for (name, spec) in self.views.iter_mut() {
             if let Some(spell) = spec.spell.as_ref() {
                 let rendered_spec = spell.render_item_spec()?;
                 *spec = spec.merge_item_specs(&rendered_spec)?;
@@ -97,7 +115,7 @@ impl ItemsSpec {
                         view: name.to_string()
                     })
                 };
-                let dataset = match items_spec.datasets.get(dataset_name) {
+                let dataset = match self.datasets.get(dataset_name) {
                     Some(dataset) => dataset,
                     None => {
                         bail!(DatasetError::NotFound {
@@ -105,10 +123,10 @@ impl ItemsSpec {
                         })
                     }
                 };
-                spec.preprocess_columns(dataset, items_spec.max_in_memory_rows)?;
+                spec.preprocess_columns(dataset, self.max_in_memory_rows)?;
             }
         }
-        Ok(items_spec)
+        Ok(())
     }
 
     pub fn needs_excel_sheet(&self) -> bool {
@@ -228,10 +246,19 @@ impl ItemsSpec {
                                     })
                                 }
                             }
+                            if let Some(custom_plot) = &render_columns.custom_plot {
+                                if let Some(spec) = custom_plot.schema.as_deref() {
+                                    if serde_json::from_str::<serde_json::Value>(spec).is_err() {
+                                        bail!(ConfigError::InvalidCustomPlotSpec {
+                                            view: name.to_string(),
+                                            column: column.to_string(),
+                                        })
+                                    }
+                                }
+                            }
                             if let Some(plot_spec) = &render_columns.plot {
                                 if let Some(pills) = &plot_spec.pills {
-                                    if pills.color_scheme.is_empty()
-                                        && pills.color_range.0.is_empty()
+                                    if pills.color_scheme.is_empty() && pills.color_range.is_empty()
                                     {
                                         bail!(ConfigError::PillsMissingColorDefinition {
                                             view: name.to_string(),
@@ -832,7 +859,7 @@ fn default_precision() -> u32 {
 }
 
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct RenderColumnSpec {
     #[serde(default, skip_serializing_if = "is_default_flag")]
@@ -935,7 +962,7 @@ impl RenderColumnSpec {
     }
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub struct LinkToUrlSpec {
     #[serde(flatten)]
@@ -943,7 +970,7 @@ pub struct LinkToUrlSpec {
     pub custom_content: Option<String>,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct LinkToUrlSpecEntry {
     url: String,
@@ -955,7 +982,7 @@ fn default_new_window() -> bool {
     true
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[derive(JsonSchema, Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
 pub enum DisplayMode {
     #[default]
@@ -1135,7 +1162,7 @@ impl LinkSpec {
     }
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct CustomPlot {
     #[serde(default, rename = "data")]
@@ -1164,7 +1191,7 @@ impl CustomPlot {
 }
 
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct PlotSpec {
     #[serde(rename = "ticks")]
@@ -1178,8 +1205,31 @@ pub struct PlotSpec {
     pub bubble_plot: Option<BubblePlot>,
 }
 
+impl PlotSpec {
+    pub fn heatmap(scale_type: ScaleType, color_scheme: String, color_range: ColorRange) -> Self {
+        PlotSpec {
+            tick_plot: None,
+            heatmap: Some(Heatmap {
+                vega_type: None,
+                scale_type,
+                clamp: default_clamp(),
+                color_scheme,
+                color_range,
+                domain: None,
+                domain_mid: None,
+                aux_domain_columns: AuxDomainColumns(None),
+                custom_content: None,
+                legend: None,
+            }),
+            bar_plot: None,
+            pills: None,
+            bubble_plot: None,
+        }
+    }
+}
+
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct PillsSpec {
     #[serde(default = "default_pill_separator")]
@@ -1254,7 +1304,7 @@ impl PillsSpec {
 }
 
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct BubblePlot {
     #[serde(default, rename = "scale")]
@@ -1277,7 +1327,7 @@ impl BubblePlot {
 }
 
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct TickPlot {
     #[serde(default, rename = "scale")]
@@ -1290,7 +1340,7 @@ pub struct TickPlot {
     pub color: Option<ColorDefinition>,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct ColorDefinition {
     #[serde(default, rename = "scale")]
@@ -1350,7 +1400,7 @@ fn is_default_in_memory_rows(value: &usize) -> bool {
 }
 
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct Heatmap {
     #[serde(default, rename = "type")]
@@ -1379,12 +1429,12 @@ pub struct Heatmap {
     pub legend: Option<LegendSpec>,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 pub struct LegendSpec {
     pub title: String,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 pub struct ColorRange(pub Vec<Color>);
 
 impl ColorRange {
@@ -1397,7 +1447,7 @@ impl ColorRange {
     }
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Color(pub String);
 
 impl Color {
@@ -1528,7 +1578,7 @@ impl SequentialScheme {
 }
 
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct BarPlot {
     #[serde(default, rename = "scale")]
@@ -1541,7 +1591,7 @@ pub struct BarPlot {
     pub color: Option<ColorDefinition>,
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[derive(JsonSchema, Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
 pub enum ScaleType {
     Linear,
@@ -1559,7 +1609,7 @@ pub enum ScaleType {
     None,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
 pub enum VegaType {
     Nominal,
@@ -1587,7 +1637,7 @@ impl ScaleType {
     }
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
+#[derive(JsonSchema, Default, Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
 pub struct AuxDomainColumns(pub Option<Vec<String>>);
 
 impl AuxDomainColumns {
@@ -1647,6 +1697,8 @@ pub enum ConfigError {
     },
     #[error("The link-to-url definition of column {column:?} in view {view:?} does not define any URL. Please provide at least one named link with a url.")]
     LinkToUrlMissingUrl { view: String, column: String },
+    #[error("The custom-plot spec of column {column:?} in view {view:?} is not valid JSON. Please provide a valid Vega-Lite specification.")]
+    InvalidCustomPlotSpec { view: String, column: String },
     #[error("Could not find column with index {index:?} under path {table_path:?} with only {header_length:?} columns.")]
     IndexTooLarge {
         index: usize,
