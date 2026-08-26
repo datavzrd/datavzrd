@@ -87,6 +87,24 @@ pub enum Command {
         /// Name of the report
         #[arg(short, long, default_value = "Datavzrd Report")]
         name: String,
+
+        /// Base URL of an OpenAI-compatible chat completions endpoint.
+        /// When given, the configuration is drafted by the LLM instead of the built-in heuristic.
+        #[arg(long, requires = "llm_model")]
+        llm_url: Option<String>,
+
+        /// Model to request from the LLM endpoint. Required when `--llm-url` is set.
+        #[arg(long)]
+        llm_model: Option<String>,
+
+        /// API token for the LLM endpoint, sent as a bearer token. Required by most hosted
+        /// providers and ignored by backends that do not need authentication.
+        #[arg(long, env = "DATAVZRD_LLM_TOKEN")]
+        llm_token: Option<String>,
+
+        /// Description of the desired report passed to the LLM backend. If omitted, it is requested interactively.
+        #[arg(short, long)]
+        prompt: Option<String>,
     },
 }
 

@@ -6,6 +6,7 @@ use pyo3::prelude::*;
 use pyo3::types::IntoPyDict;
 use pyo3::types::PyModule;
 use reqwest::blocking::get;
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;
@@ -14,7 +15,7 @@ use std::sync::LazyLock;
 use std::sync::Mutex;
 use std::{thread::sleep, time::Duration};
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all(deserialize = "kebab-case"), deny_unknown_fields)]
 pub struct SpellSpec {
     pub url: String,

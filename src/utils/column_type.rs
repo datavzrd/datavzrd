@@ -48,6 +48,18 @@ impl ColumnType {
     }
 }
 
+impl std::fmt::Display for ColumnType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let label = match self {
+            ColumnType::None => "empty",
+            ColumnType::String => "text",
+            ColumnType::Integer => "integer",
+            ColumnType::Float => "float",
+        };
+        write!(f, "{label}")
+    }
+}
+
 /// Classifies table columns as String, Integer or Float
 /// The warn parameter controls whether warnings are printed to the console.
 pub fn classify_table(dataset: &DatasetSpecs, warn: bool) -> Result<HashMap<String, ColumnType>> {
@@ -72,13 +84,14 @@ pub fn classify_table(dataset: &DatasetSpecs, warn: bool) -> Result<HashMap<Stri
     Ok(classification)
 }
 
-pub(crate) trait IsNa {
+pub trait IsNa {
     fn is_na(&self) -> bool;
 }
 
-impl IsNa for &str {
+impl<T: AsRef<str> + ?Sized> IsNa for T {
     fn is_na(&self) -> bool {
-        self.is_empty() || self == &"NA"
+        let value = self.as_ref();
+        value.is_empty() || value == "NA"
     }
 }
 
