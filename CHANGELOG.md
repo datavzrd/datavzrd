@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.72.0](https://github.com/datavzrd/datavzrd/compare/v2.71.3...v2.72.0) (2026-08-26)
+
+
+### Features
+
+* Add LLM based config generation via suggest subcommand ([#1251](https://github.com/datavzrd/datavzrd/issues/1251)) ([c20dfaf](https://github.com/datavzrd/datavzrd/commit/c20dfafa0bd8b09fdf07b9ad2f5dc54c9108fea9))
+
+
+### Bug Fixes
+
+* Skip serializing unset tick, bar and bubble plot fields ([#1249](https://github.com/datavzrd/datavzrd/issues/1249)) ([89662be](https://github.com/datavzrd/datavzrd/commit/89662be8a833f3434665273e79fae6fa94449d19))
+
 ## [2.71.3](https://github.com/datavzrd/datavzrd/compare/v2.71.2...v2.71.3) (2026-08-19)
 
 
