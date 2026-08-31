@@ -3843,9 +3843,9 @@ dependencies = [
 
 [[package]]
 name = "tera-contrib"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a3792553c620406661d510095e5885bfb77b2296db30369bcc8308329a6fe78c"
+checksum = "e6c07f9f25dce5c40e92d0dcaa33508c451a07395dfcdd9040320ed6bb4a52a9"
 dependencies = [
  "serde_json",
  "tera",
