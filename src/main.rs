@@ -11,6 +11,10 @@ mod llm;
 pub(crate) mod publish;
 mod suggest;
 
+#[cfg(feature = "mimalloc")]
+#[global_allocator]
+static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+
 fn main() -> Result<()> {
     let opt = cli::Datavzrd::parse();
     let _ = TermLogger::init(
