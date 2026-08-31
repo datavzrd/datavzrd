@@ -1457,10 +1457,11 @@ export function load_search() {
     let decompressed = decompress(search_data);
     let table_data = [];
     for (var i = 0; i < decompressed.length; i++) {
-      var row = decompressed[i];
+      var page = Math.floor(i / page_size) + 1;
+      var highlight = i % page_size;
       table_data.push({
-        page: `<a target="_parent" href="../index_${row[1]}.html?highlight=${row[2]}" style="display: table-cell">${row[1]}</a>`,
-        title: row[0],
+        page: `<a target="_parent" href="../index_${page}.html?highlight=${highlight}" style="display: table-cell">${page}</a>`,
+        title: decompressed[i],
       });
     }
     $("#search-table").bootstrapTable({

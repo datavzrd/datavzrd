@@ -1366,18 +1366,13 @@ fn render_search_dialogs<P: AsRef<Path>>(
         if table_classes.get(title).unwrap() != &ColumnType::Float {
             let mut reader = dataset.reader()?;
 
-            let row_address_factory = RowAddressFactory::new(page_size);
-
-            let records = &reader
+            let values = reader
                 .records()?
                 .skip(dataset.header_rows - 1)
                 .map(|row| row.get(column).unwrap().to_string())
-                .enumerate()
-                .map(|(i, row)| (row, row_address_factory.get(i)))
-                .map(|(row, address)| (row, address.page + 1, address.row))
                 .collect_vec();
 
-            let compressed_data = compress(json!(records), debug)?;
+            let compressed_data = compress(json!(values), debug)?;
 
             let mut templates = Tera::default();
             templates.add_raw_template(
@@ -1386,7 +1381,7 @@ fn render_search_dialogs<P: AsRef<Path>>(
             )?;
             let mut context = Context::new();
             context.insert("data", &compressed_data);
-            context.insert("records", &records);
+            context.insert("page_size", &page_size);
             context.insert("title", &title);
 
             let file_path = Path::new(&output_path)
