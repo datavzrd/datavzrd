@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.72.1](https://github.com/datavzrd/datavzrd/compare/v2.72.0...v2.72.1) (2026-08-31)
+
+
+### Performance Improvements
+
+* Compute numeric overview plots in a single pass ([#1252](https://github.com/datavzrd/datavzrd/issues/1252)) ([78d2ce6](https://github.com/datavzrd/datavzrd/commit/78d2ce634d289812c7a069756a1b18c296ca9c0c))
+* Store only values in the search index ([#1262](https://github.com/datavzrd/datavzrd/issues/1262)) ([540d2b8](https://github.com/datavzrd/datavzrd/commit/540d2b8af014abf88e690716dd26690176dfbb9a))
+* Use mimalloc as the global allocator ([#1259](https://github.com/datavzrd/datavzrd/issues/1259)) ([e3fd2fa](https://github.com/datavzrd/datavzrd/commit/e3fd2fadc1c37b145b7caabbd6f3330f21f8324d))
+
 ## [2.72.0](https://github.com/datavzrd/datavzrd/compare/v2.71.3...v2.72.0) (2026-08-26)
 
 
