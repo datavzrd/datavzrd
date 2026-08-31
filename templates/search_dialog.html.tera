@@ -10,6 +10,7 @@
 <script>
     const search_data = {{ data | safe }};
     const table_title = "{{ title }}";
+    const page_size = {{ page_size }};
     datavzrd.load_search();
 </script>
 <div class="container-fluid">
