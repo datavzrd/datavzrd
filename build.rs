@@ -45,7 +45,8 @@ fn fetch_configuration_reference() -> String {
         match ureq::get(DOCS_URL).call() {
             Ok(response) => {
                 return response
-                    .into_string()
+                    .into_body()
+                    .read_to_string()
                     .expect("failed to read the configuration reference")
             }
             Err(error) => {
