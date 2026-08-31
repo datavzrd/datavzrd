@@ -124,22 +124,24 @@ fn generate_numeric_plot(
 ) -> Result<Option<Vec<BinnedPlotRecord>>> {
     let mut reader = dataset.reader()?;
 
-    let (min, max) = get_min_max(dataset, column_index, None)?;
-
-    if min == max {
-        return Ok(None);
-    }
-
     let mut values = Vec::new();
     let mut nan = 0u32;
+    let mut min = f32::INFINITY;
+    let mut max = f32::NEG_INFINITY;
 
     for record in reader.records()?.skip(dataset.header_rows - 1) {
         let value = record.get(column_index).unwrap();
         if let Ok(number) = f32::from_str(value) {
             values.push(number);
+            min = min.min(number);
+            max = max.max(number);
         } else {
             nan += 1;
         }
+    }
+
+    if min == max {
+        return Ok(None);
     }
 
     let mut result = refined_bins(&values, min, max);
@@ -161,21 +163,16 @@ pub(crate) fn get_min_max(
     column_index: usize,
     precision: Option<u32>,
 ) -> Result<(f32, f32)> {
-    let mut min_reader = dataset.reader()?;
-    let mut max_reader = dataset.reader()?;
+    let mut reader = dataset.reader()?;
 
-    let min = min_reader
+    let (min, max) = reader
         .records()?
         .skip(dataset.header_rows - 1)
         .map(|r| r.get(column_index).unwrap().to_string())
-        .filter_map(|s| s.parse().ok())
-        .fold(f32::INFINITY, |a, b| a.min(b));
-    let max = max_reader
-        .records()?
-        .skip(dataset.header_rows - 1)
-        .map(|r| r.get(column_index).unwrap().to_string())
-        .filter_map(|s| s.parse().ok())
-        .fold(f32::NEG_INFINITY, |a, b| a.max(b));
+        .filter_map(|s| s.parse::<f32>().ok())
+        .fold((f32::INFINITY, f32::NEG_INFINITY), |(min, max), v| {
+            (min.min(v), max.max(v))
+        });
 
     if let Some(p) = precision {
         Ok((round(min, p), round(max, p)))
