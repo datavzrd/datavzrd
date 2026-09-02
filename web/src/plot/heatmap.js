@@ -41,12 +41,12 @@ export function colorizeColumn(
 export function datavzrdScale(heatmap) {
   let scale = null;
   if (heatmap.heatmap.scale == "ordinal") {
-    if (heatmap.heatmap["color-scheme"] != "") {
+    if (heatmap.heatmap["color-scheme"]) {
       scale = vega
         .scale(heatmap.heatmap.scale)()
         .domain(heatmap.heatmap.domain)
         .range(vega.scheme(heatmap.heatmap["color-scheme"]));
-    } else if (!heatmap.heatmap.range.length == 0) {
+    } else if (heatmap.heatmap.range?.length) {
       scale = vega
         .scale(heatmap.heatmap.scale)()
         .domain(heatmap.heatmap.domain)
@@ -57,7 +57,7 @@ export function datavzrdScale(heatmap) {
         .domain(heatmap.heatmap.domain);
     }
   } else {
-    if (heatmap.heatmap["color-scheme"] != "") {
+    if (heatmap.heatmap["color-scheme"]) {
       let scheme = heatmap.heatmap["color-scheme"];
       let d3_scheme =
         d3[
@@ -70,7 +70,7 @@ export function datavzrdScale(heatmap) {
       scale = d3[
         `scaleSequential${s.charAt(0).toUpperCase()}${s.slice(1).toLowerCase()}`
       ](heatmap.heatmap.domain, d3_scheme);
-    } else if (!heatmap.heatmap.range == 0) {
+    } else if (heatmap.heatmap.range?.length) {
       scale = vega
         .scale(heatmap.heatmap.scale)()
         .domain(heatmap.heatmap.domain)
@@ -114,12 +114,12 @@ export function colorizeHeaderRow(row, heatmap, header_label_length) {
 
   if (heatmap.scale == "ordinal") {
     if (heatmap.domain != null) {
-      if (heatmap["color-scheme"] != "") {
+      if (heatmap["color-scheme"]) {
         scale = vega
           .scale(heatmap.scale)()
           .domain(heatmap.domain)
           .range(vega.scheme(heatmap["color-scheme"]));
-      } else if (!heatmap.range.length == 0) {
+      } else if (heatmap.range?.length) {
         scale = vega
           .scale(heatmap.scale)()
           .domain(heatmap.domain)
@@ -128,18 +128,18 @@ export function colorizeHeaderRow(row, heatmap, header_label_length) {
         scale = vega.scale(heatmap.scale)().domain(heatmap.domain);
       }
     } else {
-      if (heatmap["color-scheme"] != "") {
+      if (heatmap["color-scheme"]) {
         scale = vega
           .scale(heatmap.scale)()
           .range(vega.scheme(heatmap["color-scheme"]));
-      } else if (!heatmap.range.length == 0) {
+      } else if (heatmap.range?.length) {
         scale = vega.scale(heatmap.scale)().range(heatmap.range);
       } else {
         scale = vega.scale(heatmap.scale)();
       }
     }
   } else {
-    if (heatmap["color-scheme"] != "") {
+    if (heatmap["color-scheme"]) {
       let scheme = heatmap["color-scheme"];
       let d3_scheme =
         d3[
