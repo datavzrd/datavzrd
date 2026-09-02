@@ -15,7 +15,7 @@ pub enum ColumnType {
 }
 
 impl ColumnType {
-    fn update(&mut self, value: &str, column: &str, warn: bool) -> Result<bool> {
+    pub(crate) fn update(&mut self, value: &str, column: &str, warn: bool) -> Result<bool> {
         let mut float_warning = warn;
         if !value.is_na() {
             *self = match (

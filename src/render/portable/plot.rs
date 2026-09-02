@@ -1,7 +1,7 @@
-use crate::render::portable::utils::{minify_js, round};
+use crate::render::portable::utils::minify_js;
 use crate::spec::DatasetSpecs;
+use crate::utils::column_store::DatasetSummary;
 use crate::utils::column_type::IsNa;
-use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::Result;
 use itertools::Itertools;
 use serde::Serialize;
@@ -17,40 +17,46 @@ use tera::{Context, Tera};
 pub(crate) fn render_plots<P: AsRef<Path>>(
     output_path: P,
     dataset: &DatasetSpecs,
+    summary: &DatasetSummary,
+    records_length: usize,
     debug: bool,
 ) -> Result<()> {
-    let column_types = classify_table(dataset, true)?;
-
-    let mut reader = dataset.reader()?;
-
     let path = Path::new(output_path.as_ref()).join("plots");
     fs::create_dir(&path)?;
-    let mut plots = Vec::new();
 
-    for (index, column) in reader.headers()?.iter().enumerate() {
+    let numeric_indices: Vec<usize> = (0..summary.headers.len())
+        .filter(|index| summary.column_at(*index).column_type.is_numeric())
+        .collect();
+    let mut numeric_plots: HashMap<usize, Option<Vec<BinnedPlotRecord>>> = HashMap::new();
+    for chunk in numeric_indices.chunks(column_batch_size(records_length)) {
+        for (offset, values) in read_columns(dataset, chunk)?.into_iter().enumerate() {
+            numeric_plots.insert(chunk[offset], generate_numeric_plot(&values));
+        }
+    }
+
+    let mut plots = Vec::new();
+    for (index, column) in summary.headers.iter().enumerate() {
         let mut templates = Tera::default();
         let mut context = Context::new();
         context.insert("title", &column);
         context.insert("index", &index);
-        match column_types.get(column) {
-            None => unreachable!(),
-            Some(ColumnType::String) | Some(ColumnType::None) => {
-                let plot = generate_nominal_plot(dataset, index)?;
-                templates.add_raw_template(
-                    "plot.js.tera",
-                    include_str!("../../../templates/nominal_plot.js.tera"),
-                )?;
-                context.insert("table", &json!(plot).to_string())
-            }
-            Some(ColumnType::Integer) | Some(ColumnType::Float) => {
-                let plot = generate_numeric_plot(dataset, index)?;
-                templates.add_raw_template(
-                    "plot.js.tera",
-                    include_str!("../../../templates/numeric_plot.js.tera"),
-                )?;
-                context.insert("table", &json!(plot).to_string())
-            }
-        };
+        if summary.column_at(index).column_type.is_numeric() {
+            templates.add_raw_template(
+                "plot.js.tera",
+                include_str!("../../../templates/numeric_plot.js.tera"),
+            )?;
+            context.insert(
+                "table",
+                &json!(numeric_plots.remove(&index).unwrap()).to_string(),
+            );
+        } else {
+            let plot = generate_nominal_plot(&summary.column_at(index).value_counts);
+            templates.add_raw_template(
+                "plot.js.tera",
+                include_str!("../../../templates/nominal_plot.js.tera"),
+            )?;
+            context.insert("table", &json!(plot).to_string());
+        }
         let js = templates.render("plot.js.tera", &context)?;
         plots.push(js);
     }
@@ -60,6 +66,22 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
     let minified = minify_js(&js_plots, debug)?;
     file.write_all(&minified)?;
     Ok(())
+}
+
+const COLUMN_BUFFER_CELLS: usize = 4_000_000;
+
+pub(crate) fn column_batch_size(records_length: usize) -> usize {
+    (COLUMN_BUFFER_CELLS / records_length.max(1)).max(1)
+}
+
+pub(crate) fn read_columns(dataset: &DatasetSpecs, columns: &[usize]) -> Result<Vec<Vec<String>>> {
+    let mut buffers: Vec<Vec<String>> = columns.iter().map(|_| Vec::new()).collect();
+    for record in dataset.reader()?.records()?.skip(dataset.header_rows - 1) {
+        for (buffer, &column) in buffers.iter_mut().zip(columns) {
+            buffer.push(record.get(column).unwrap().to_string());
+        }
+    }
+    Ok(buffers)
 }
 
 fn binned_counts(values: &[f32], min: f32, max: f32, num_bins: usize) -> Vec<u32> {
@@ -118,21 +140,15 @@ fn refined_bins(values: &[f32], min: f32, max: f32) -> Vec<BinnedPlotRecord> {
     counts_to_records(&counts, min, max)
 }
 
-fn generate_numeric_plot(
-    dataset: &DatasetSpecs,
-    column_index: usize,
-) -> Result<Option<Vec<BinnedPlotRecord>>> {
-    let mut reader = dataset.reader()?;
-
-    let mut values = Vec::new();
+fn generate_numeric_plot(values: &[String]) -> Option<Vec<BinnedPlotRecord>> {
+    let mut numbers = Vec::new();
     let mut nan = 0u32;
     let mut min = f32::INFINITY;
     let mut max = f32::NEG_INFINITY;
 
-    for record in reader.records()?.skip(dataset.header_rows - 1) {
-        let value = record.get(column_index).unwrap();
+    for value in values {
         if let Ok(number) = f32::from_str(value) {
-            values.push(number);
+            numbers.push(number);
             min = min.min(number);
             max = max.max(number);
         } else {
@@ -141,10 +157,10 @@ fn generate_numeric_plot(
     }
 
     if min == max {
-        return Ok(None);
+        return None;
     }
 
-    let mut result = refined_bins(&values, min, max);
+    let mut result = refined_bins(&numbers, min, max);
 
     if nan > 0 {
         result.push(BinnedPlotRecord {
@@ -154,64 +170,32 @@ fn generate_numeric_plot(
         });
     }
 
-    Ok(Some(result))
-}
-
-/// Finds the numeric minimum and maximum value of a csv column
-pub(crate) fn get_min_max(
-    dataset: &DatasetSpecs,
-    column_index: usize,
-    precision: Option<u32>,
-) -> Result<(f32, f32)> {
-    let mut reader = dataset.reader()?;
-
-    let (min, max) = reader
-        .records()?
-        .skip(dataset.header_rows - 1)
-        .map(|r| r.get(column_index).unwrap().to_string())
-        .filter_map(|s| s.parse::<f32>().ok())
-        .fold((f32::INFINITY, f32::NEG_INFINITY), |(min, max), v| {
-            (min.min(v), max.max(v))
-        });
-
-    if let Some(p) = precision {
-        Ok((round(min, p), round(max, p)))
-    } else {
-        Ok((min, max))
-    }
+    Some(result)
 }
 
 /// Generates plot records for columns of type String
-fn generate_nominal_plot(
-    dataset: &DatasetSpecs,
-    column_index: usize,
-) -> Result<Option<Vec<PlotRecord>>> {
-    let mut reader = dataset.reader()?;
-
-    let mut count_values = HashMap::new();
-
-    for result in reader.records()?.skip(dataset.header_rows - 1) {
-        let value = result.get(column_index).unwrap();
-        if !value.as_str().is_na() {
-            let entry = count_values.entry(value.to_owned()).or_insert_with(|| 0);
-            *entry += 1;
+fn generate_nominal_plot(value_counts: &HashMap<String, usize>) -> Option<Vec<PlotRecord>> {
+    let mut counts: HashMap<&str, u32> = HashMap::new();
+    for (value, count) in value_counts {
+        let key = if value.as_str().is_na() {
+            "NA"
         } else {
-            let entry = count_values.entry("NA".to_owned()).or_insert_with(|| 0);
-            *entry += 1;
-        }
+            value.as_str()
+        };
+        *counts.entry(key).or_insert(0) += *count as u32;
     }
 
-    let mut plot_data = count_values
+    let mut plot_data = counts
         .iter()
-        .map(|(k, v)| PlotRecord {
-            key: k.to_string(),
-            value: *v,
+        .map(|(key, value)| PlotRecord {
+            key: key.to_string(),
+            value: *value,
         })
         .collect_vec();
 
-    let unique_values = count_values.values().unique().count();
+    let unique_values = counts.values().unique().count();
     if unique_values <= 1 {
-        return Ok(None);
+        return None;
     };
 
     if plot_data.len() > MAX_NOMINAL_BINS {
@@ -219,7 +203,7 @@ fn generate_nominal_plot(
         plot_data = plot_data.into_iter().take(MAX_NOMINAL_BINS).collect();
     }
 
-    Ok(Some(plot_data))
+    Some(plot_data)
 }
 
 const MAX_NOMINAL_BINS: usize = 10;
@@ -243,6 +227,7 @@ struct BinnedPlotRecord {
 mod tests {
     use crate::render::portable::plot::{generate_nominal_plot, PlotRecord};
     use crate::spec::DatasetSpecs;
+    use crate::utils::column_store::DatasetSummary;
     use std::str::FromStr;
 
     #[test]
@@ -257,7 +242,8 @@ mod tests {
             links: None,
             offer_excel: false,
         };
-        let mut records = generate_nominal_plot(&dataset, 0).unwrap().unwrap();
+        let summary = DatasetSummary::build(&dataset).unwrap();
+        let mut records = generate_nominal_plot(&summary.column_at(0).value_counts).unwrap();
         records.sort_unstable();
         let mut expected = vec![
             PlotRecord {
