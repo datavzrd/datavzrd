@@ -1426,15 +1426,15 @@ fn get_linked_tables(
             Some(column_index) => Rc::clone(column_index),
             None => {
                 let linked_table = &specs.views.get(*table).unwrap();
-                let other_dataset =
-                    match specs.datasets.get(linked_table.dataset.as_ref().unwrap()) {
-                        Some(dataset) => dataset,
-                        None => {
-                            bail!(DatasetError::NotFound {
-                                dataset_name: table_spec.dataset.as_ref().unwrap().clone()
-                            })
-                        }
-                    };
+                let other_dataset = match specs.datasets.get(linked_table.dataset.as_ref().unwrap())
+                {
+                    Some(dataset) => dataset,
+                    None => {
+                        bail!(DatasetError::NotFound {
+                            dataset_name: table_spec.dataset.as_ref().unwrap().clone()
+                        })
+                    }
+                };
                 let page_size = specs.views.get(*table).unwrap().page_size;
                 let column_index = Rc::new(ColumnIndex::new(other_dataset, column, page_size)?);
                 cache.insert(key.clone(), Rc::clone(&column_index));
