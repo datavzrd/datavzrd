@@ -1,9 +1,10 @@
 mod plot;
 pub(crate) mod utils;
-use crate::render::portable::plot::get_min_max;
 use crate::render::portable::plot::render_plots;
+use crate::render::portable::plot::{column_batch_size, read_columns};
 use crate::render::portable::utils::escape_html_string;
 use crate::render::portable::utils::minify_js;
+use crate::render::portable::utils::round;
 use crate::render::Renderer;
 use crate::spec::BubblePlot;
 use crate::spec::ColorDefinition;
@@ -13,9 +14,9 @@ use crate::spec::{
     RenderColumnSpec, ScaleType, TickPlot,
 };
 use crate::utils::column_index::ColumnIndex;
-use crate::utils::column_position;
+use crate::utils::column_store::DatasetSummary;
+use crate::utils::column_type::ColumnType;
 use crate::utils::column_type::IsNa;
-use crate::utils::column_type::{classify_table, ColumnType};
 use crate::utils::compress::compress;
 use crate::utils::row_address::RowAddressFactory;
 use anyhow::Result;
@@ -24,7 +25,7 @@ use chrono::{DateTime, Local};
 use itertools::Itertools;
 use serde::Serialize;
 use serde_json::{json, Value};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use minify_html::{minify, Cfg};
 use std::fs;
@@ -236,6 +237,8 @@ impl Renderer for ItemRenderer {
                         None
                     };
 
+                    let summary = DatasetSummary::build(dataset)?;
+
                     for (page, grouped_records) in &dataset
                         .reader()?
                         .records()?
@@ -265,7 +268,9 @@ impl Renderer for ItemRenderer {
                             &out_path,
                             &headers,
                             dataset,
+                            &summary,
                             table.page_size,
+                            records_length,
                             debug,
                         )?;
                     }
@@ -284,7 +289,7 @@ impl Renderer for ItemRenderer {
                         self.specs.webview_controls,
                         debug,
                         name,
-                        dataset,
+                        &summary,
                         &view_sizes,
                         &self
                             .specs
@@ -304,7 +309,7 @@ impl Renderer for ItemRenderer {
                         table_specs,
                         &table.render_table.as_ref().unwrap().additional_columns,
                     )?;
-                    render_plots(&out_path, dataset, debug)?;
+                    render_plots(&out_path, dataset, &summary, records_length, debug)?;
                 }
             } else {
                 render_empty_dataset(
@@ -443,7 +448,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     webview_controls: bool,
     debug: bool,
     view: &str,
-    dataset: &DatasetSpecs,
+    summary: &DatasetSummary,
     view_sizes: &HashMap<String, String>,
     tables: &[String],
     default_view: &Option<String>,
@@ -470,7 +475,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         webview_host,
         webview_controls,
         header_specs,
-        dataset,
+        summary,
         pages,
         view_sizes,
         tables,
@@ -752,7 +757,7 @@ impl JavascriptConfig {
         webview_host: &str,
         webview_controls: bool,
         header_specs: &Option<HashMap<u32, HeaderSpecs>>,
-        dataset: &DatasetSpecs,
+        summary: &DatasetSummary,
         pages: usize,
         view_sizes: &HashMap<String, String>,
         tables: &[String],
@@ -762,7 +767,6 @@ impl JavascriptConfig {
         report_name: &String,
         title: &String,
     ) -> Self {
-        let column_classification = classify_table(dataset, false).unwrap();
         let header_label_length = if let Some(headers) = header_specs {
             headers.iter().filter(|(_, v)| v.label.is_some()).count()
         } else {
@@ -814,12 +818,11 @@ impl JavascriptConfig {
             available_columns: column_display_mode_filter(&[DisplayMode::Available]),
             pinned_columns: column_display_mode_filter(&[DisplayMode::Pinned]),
             hidden_columns: column_display_mode_filter(&[DisplayMode::Hidden]),
-            displayed_numeric_columns: classify_table(dataset, false)
-                .unwrap()
+            displayed_numeric_columns: summary
+                .headers
                 .iter()
-                .map(|(k, v)| (k.to_owned(), v.is_numeric()))
-                .filter(|(_, v)| *v)
-                .map(|(k, _)| k)
+                .filter(|header| summary.column(header).column_type.is_numeric())
+                .map(|header| header.to_owned())
                 .collect(),
             tick_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().tick_plot.is_some()),
             bar_titles: filter_plot_columns(config, |(_, k)| k.plot.as_ref().unwrap().bar_plot.is_some()),
@@ -833,10 +836,7 @@ impl JavascriptConfig {
                 .map(|(k, v)| {
                     (
                         k.to_string(),
-                        JavascriptColumnConfig::from_column_spec(
-                            v,
-                            column_classification.get(k).unwrap_or_else(|| panic!("bug: failed to obtain column type for column '{k}'")),
-                        ),
+                        JavascriptColumnConfig::from_column_spec(v, &summary.column(k).column_type),
                     )
                 })
                 .chain(
@@ -857,7 +857,7 @@ impl JavascriptConfig {
                         k.to_string(),
                         render_plot(
                             k,
-                            dataset,
+                            summary,
                             v.plot.as_ref().unwrap().tick_plot.as_ref().unwrap(),
                             v.precision.unwrap(),
                         )
@@ -874,7 +874,7 @@ impl JavascriptConfig {
                         k.to_string(),
                         render_plot(
                             k,
-                            dataset,
+                            summary,
                             v.plot.as_ref().unwrap().bubble_plot.as_ref().unwrap(),
                             v.precision.unwrap(),
                         )
@@ -891,7 +891,7 @@ impl JavascriptConfig {
                         k.to_string(),
                         render_plot(
                             k,
-                            dataset,
+                            summary,
                             v.plot.as_ref().unwrap().bar_plot.as_ref().unwrap(),
                             v.precision.unwrap(),
                         )
@@ -909,7 +909,7 @@ impl JavascriptConfig {
                         v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
                         get_column_domain(
                             k,
-                            dataset,
+                            summary,
                             v.plot.as_ref().unwrap().heatmap.as_ref().unwrap(),
                         )
                         .unwrap(),
@@ -937,7 +937,7 @@ impl JavascriptConfig {
                 .chain(
                     config
                         .iter()
-                        .filter(|(title, _)| column_classification.get(&title.to_string()).unwrap().is_numeric())
+                        .filter(|(title, _)| summary.column(title).column_type.is_numeric())
                         .filter_map(|(title, k)| k.plot.as_ref().map(|plot| (title, plot)))
                         .filter_map(|(title, k)| k.heatmap.as_ref().map(|heatmap| (title, heatmap)))
                         .filter(|(_, k)| k.custom_content.is_none())
@@ -1016,7 +1016,11 @@ impl JavascriptConfig {
                 .map(|(k, v)| (k.to_owned(), JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).name()))
                 .collect(),
             additional_colums: additional_columns.as_ref().unwrap_or(&HashMap::new()).iter().map(|(k, v)| (k.to_owned(), JavascriptFunction(v.value.to_string()).name())).collect(),
-            unique_column_values: dataset.unique_column_values().unwrap(),
+            unique_column_values: summary
+                .headers
+                .iter()
+                .map(|header| (header.to_owned(), summary.column(header).unique_count()))
+                .collect(),
             pages,
             view_sizes: view_sizes.to_owned(),
             tables: sorted_tables,
@@ -1359,33 +1363,36 @@ fn render_search_dialogs<P: AsRef<Path>>(
     path: P,
     titles: &[String],
     dataset: &DatasetSpecs,
+    summary: &DatasetSummary,
     page_size: usize,
+    records_length: usize,
     debug: bool,
 ) -> Result<()> {
     let output_path = Path::new(path.as_ref()).join("search");
     fs::create_dir(&output_path)?;
-    let table_classes = classify_table(dataset, false)?;
-    for (column, title) in titles.iter().enumerate() {
-        if table_classes.get(title).unwrap() != &ColumnType::Float {
-            let mut reader = dataset.reader()?;
 
-            let values = reader
-                .records()?
-                .skip(dataset.header_rows - 1)
-                .map(|row| row.get(column).unwrap().to_string())
-                .collect_vec();
+    let mut templates = Tera::default();
+    templates.add_raw_template(
+        "search_dialog.html.tera",
+        include_str!("../../../templates/search_dialog.html.tera"),
+    )?;
 
+    let search_columns: Vec<usize> = titles
+        .iter()
+        .enumerate()
+        .filter(|(_, title)| summary.column(title).column_type != ColumnType::Float)
+        .map(|(column, _)| column)
+        .collect();
+
+    for chunk in search_columns.chunks(column_batch_size(records_length)) {
+        for (offset, values) in read_columns(dataset, chunk)?.into_iter().enumerate() {
+            let column = chunk[offset];
             let compressed_data = compress(json!(values), debug)?;
 
-            let mut templates = Tera::default();
-            templates.add_raw_template(
-                "search_dialog.html.tera",
-                include_str!("../../../templates/search_dialog.html.tera"),
-            )?;
             let mut context = Context::new();
             context.insert("data", &compressed_data);
             context.insert("page_size", &page_size);
-            context.insert("title", &title);
+            context.insert("title", &titles[column]);
 
             let file_path = Path::new(&output_path)
                 .join(Path::new(&format!("column_{column}")).with_extension("html"));
@@ -1526,34 +1533,44 @@ impl PlotConfig for BarPlot {
     }
 }
 
+fn summary_min_max(
+    summary: &DatasetSummary,
+    columns: impl Iterator<Item = String>,
+    precision: Option<u32>,
+) -> (f32, f32) {
+    let mut mins = Vec::new();
+    let mut maxs = Vec::new();
+    for column in columns {
+        let column = summary.column(&column);
+        let (min, max) = match precision {
+            Some(precision) => (round(column.min, precision), round(column.max, precision)),
+            None => (column.min, column.max),
+        };
+        mins.push(min);
+        maxs.push(max);
+    }
+    (
+        mins.into_iter().reduce(f32::min).unwrap(),
+        maxs.into_iter().reduce(f32::max).unwrap(),
+    )
+}
+
 fn render_plot<T: PlotConfig>(
     title: &str,
-    dataset: &DatasetSpecs,
+    summary: &DatasetSummary,
     plot: &T,
     precision: u32,
 ) -> Result<String> {
-    let mut reader = dataset.reader()?;
-    let column_index = reader.headers().map(|s| {
-        s.iter()
-            .position(|t| t == title)
-            .context(ColumnError::NotFound {
-                column: title.to_string(),
-                path: dataset.path.to_str().unwrap().to_string(),
-            })
-            .unwrap()
-    })?;
-
     let (min, max) = if let Some(domain) = plot.domain() {
         (domain[0], domain[1])
     } else if let Some(aux_domain_columns) = plot.aux_domain_columns() {
         let columns = aux_domain_columns
             .iter()
             .map(|s| s.to_string())
-            .chain(std::iter::once(title.to_string()))
-            .collect();
-        get_min_max_multiple_columns(dataset, columns, Some(precision))?
+            .chain(std::iter::once(title.to_string()));
+        summary_min_max(summary, columns, Some(precision))
     } else {
-        get_min_max(dataset, column_index, Some(precision))?
+        summary_min_max(summary, std::iter::once(title.to_string()), Some(precision))
     };
 
     let mut templates = Tera::default();
@@ -1572,86 +1589,34 @@ fn render_plot<T: PlotConfig>(
 
 pub(crate) fn get_column_domain(
     title: &str,
-    dataset: &DatasetSpecs,
+    summary: &DatasetSummary,
     heatmap: &Heatmap,
 ) -> Result<String> {
     if let Some(domain) = &heatmap.domain {
         return Ok(json!(domain).to_string());
     }
 
-    let mut reader = dataset.reader()?;
-
-    let column_index = column_position(title, dataset)?;
-
-    if !heatmap.scale_type.is_quantitative() {
-        if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
-            let columns = aux_domain_columns
-                .iter()
-                .map(|s| s.to_string())
-                .chain(std::iter::once(title.to_string()))
-                .collect_vec();
-            let column_indexes: HashSet<_> = dataset.reader()?.headers().map(|s| {
-                s.iter()
-                    .enumerate()
-                    .filter(|(_, title)| columns.contains(&title.to_string()))
-                    .map(|(index, _)| index)
-                    .collect()
-            })?;
-            Ok(json!(reader
-                .records()?
-                .skip(dataset.header_rows - 1)
-                .flat_map(|r| r
-                    .iter()
-                    .enumerate()
-                    .filter(|(index, _)| column_indexes.contains(index))
-                    .filter(|(_, value)| !value.as_str().is_na())
-                    .map(|(_, value)| value.to_string())
-                    .collect_vec())
-                .unique()
-                .sorted()
-                .collect_vec())
-            .to_string())
-        } else {
-            Ok(json!(reader
-                .records()?
-                .skip(dataset.header_rows - 1)
-                .map(|r| r.get(column_index).unwrap().to_owned())
-                .filter(|value| !value.as_str().is_na())
-                .unique()
-                .sorted()
-                .collect_vec())
-            .to_string())
-        }
-    } else if let Some(aux_domain_columns) = &heatmap.aux_domain_columns.0 {
-        let columns = aux_domain_columns
+    let columns: Vec<String> = match &heatmap.aux_domain_columns.0 {
+        Some(aux_domain_columns) => aux_domain_columns
             .iter()
-            .map(|s| s.to_string())
+            .map(|column| column.to_string())
             .chain(std::iter::once(title.to_string()))
-            .collect();
-        Ok(json!(get_min_max_multiple_columns(dataset, columns, None)?).to_string())
-    } else {
-        Ok(json!(get_min_max(dataset, column_index, None)?).to_string())
-    }
-}
+            .collect(),
+        None => vec![title.to_string()],
+    };
 
-/// Returns the minimum and maximum for multiple given columns
-fn get_min_max_multiple_columns(
-    dataset: &DatasetSpecs,
-    columns: Vec<String>,
-    precision: Option<u32>,
-) -> Result<(f32, f32)> {
-    let mut mins = Vec::new();
-    let mut maxs = Vec::new();
-    for column in columns {
-        let column_index = column_position(&column, dataset)?;
-        let (min, max) = get_min_max(dataset, column_index, precision)?;
-        mins.push(min);
-        maxs.push(max);
+    if heatmap.scale_type.is_quantitative() {
+        Ok(json!(summary_min_max(summary, columns.into_iter(), None)).to_string())
+    } else {
+        let domain = columns
+            .iter()
+            .flat_map(|column| summary.column(column).value_counts.keys())
+            .filter(|value| !value.as_str().is_na())
+            .unique()
+            .sorted()
+            .collect_vec();
+        Ok(json!(domain).to_string())
     }
-    Ok((
-        mins.into_iter().reduce(f32::min).unwrap(),
-        maxs.into_iter().reduce(f32::max).unwrap(),
-    ))
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -2148,12 +2113,6 @@ pub enum TableLinkingError {
 }
 
 #[derive(Error, Debug)]
-pub enum ColumnError {
-    #[error("Could not find column {column:?} in dataset with path {path:?}. If this is intentional try to use optional: true.")]
-    NotFound { column: String, path: String },
-}
-
-#[derive(Error, Debug)]
 pub enum DatasetError {
     #[error("Could not find dataset {dataset_name:?}.")]
     NotFound { dataset_name: String },
@@ -2179,6 +2138,7 @@ pub enum CustomPlotJavascriptFunctionError {
 mod tests {
     use crate::render::portable::{render_plot, JavascriptFunction};
     use crate::spec::{Color, ColorDefinition, ColorRange, DatasetSpecs, ScaleType, TickPlot};
+    use crate::utils::column_store::DatasetSummary;
     use std::path::PathBuf;
 
     #[test]
@@ -2229,7 +2189,8 @@ mod tests {
             links: None,
         };
 
-        let tick_plot = render_plot("price", &dataset, &tick_plot_spec, 2);
+        let summary = DatasetSummary::build(&dataset).unwrap();
+        let tick_plot = render_plot("price", &summary, &tick_plot_spec, 2);
         assert!(tick_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&tick_plot.unwrap()).is_ok());
     }
@@ -2261,7 +2222,8 @@ mod tests {
             links: None,
         };
 
-        let tick_plot = render_plot("price", &dataset, &tick_plot_spec, 2);
+        let summary = DatasetSummary::build(&dataset).unwrap();
+        let tick_plot = render_plot("price", &summary, &tick_plot_spec, 2);
         assert!(tick_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&tick_plot.unwrap()).is_ok());
     }
@@ -2283,7 +2245,8 @@ mod tests {
             links: None,
         };
 
-        let bar_plot = render_plot("price", &dataset, &bar_plot_spec, 2);
+        let summary = DatasetSummary::build(&dataset).unwrap();
+        let bar_plot = render_plot("price", &summary, &bar_plot_spec, 2);
         assert!(bar_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&bar_plot.unwrap()).is_ok());
     }
@@ -2315,7 +2278,8 @@ mod tests {
             links: None,
         };
 
-        let bar_plot = render_plot("price", &dataset, &bar_plot_spec, 2);
+        let summary = DatasetSummary::build(&dataset).unwrap();
+        let bar_plot = render_plot("price", &summary, &bar_plot_spec, 2);
         assert!(bar_plot.is_ok());
         assert!(serde_json::from_str::<serde_json::Value>(&bar_plot.unwrap()).is_ok());
     }

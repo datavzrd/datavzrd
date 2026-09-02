@@ -8,6 +8,7 @@ use crate::spec::ConfigError::{
     WrongDomainLengthWithMidDomain, WrongRangeLengthWithMidDomain,
 };
 use crate::utils::column_position;
+use crate::utils::column_store::DatasetSummary;
 use crate::utils::column_type::{classify_table, ColumnType};
 use anyhow::{anyhow, Result};
 use anyhow::{bail, Context};
@@ -563,32 +564,6 @@ impl DatasetSpecs {
             _ => Ok(','),
         }
     }
-
-    /// Returns a hashmap counting the number of unique values of all columns of the dataset
-    pub fn unique_column_values(&self) -> Result<HashMap<String, usize>> {
-        let mut reader = self.reader()?;
-        let headers = reader.headers()?.clone();
-        let column_counts: HashMap<String, usize> = headers
-            .iter()
-            .enumerate()
-            .map(|(index, column)| {
-                let mut reader = self.reader().unwrap();
-                (
-                    column.to_string(),
-                    reader
-                        .records()
-                        .unwrap()
-                        .skip(self.header_rows - 1)
-                        .map(|row| row.get(index).unwrap().to_string())
-                        .unique()
-                        .collect_vec()
-                        .len(),
-                )
-            })
-            .collect();
-
-        Ok(column_counts)
-    }
 }
 
 #[skip_serializing_none]
@@ -801,9 +776,22 @@ impl ItemSpecs {
             }
         }
         if self.render_table.is_some() {
+            let needs_summary = indexed_keys.iter().any(|(title, spec)| {
+                headers.contains(title)
+                    && spec
+                        .plot
+                        .as_ref()
+                        .and_then(|plot| plot.heatmap.as_ref())
+                        .is_some_and(|heatmap| heatmap.domain.is_none())
+            });
+            let summary = if needs_summary {
+                Some(DatasetSummary::build(dataset)?)
+            } else {
+                None
+            };
             for (title, render_column_specs) in indexed_keys.iter_mut() {
                 if headers.contains(title) {
-                    render_column_specs.preprocess(dataset, title)?;
+                    render_column_specs.preprocess(dataset, summary.as_ref(), title)?;
                 }
             }
         }
@@ -1002,13 +990,18 @@ pub enum HeaderDisplayMode {
 }
 
 impl RenderColumnSpec {
-    fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
+    fn preprocess(
+        &mut self,
+        dataset: &DatasetSpecs,
+        summary: Option<&DatasetSummary>,
+        title: &str,
+    ) -> Result<()> {
         if !dataset.is_empty()? {
             if let Some(plot) = &mut self.plot {
                 if let Some(ticks) = &mut plot.tick_plot {
                     ticks.preprocess(dataset)?;
                 } else if let Some(heatmap) = &mut plot.heatmap {
-                    heatmap.preprocess(dataset, title)?;
+                    heatmap.preprocess(dataset, summary, title)?;
                 } else if let Some(bars) = &mut plot.bar_plot {
                     bars.preprocess(dataset)?;
                 } else if let Some(pills) = &mut plot.pills {
@@ -1038,7 +1031,12 @@ impl TickPlot {
 }
 
 impl Heatmap {
-    fn preprocess(&mut self, dataset: &DatasetSpecs, title: &str) -> Result<()> {
+    fn preprocess(
+        &mut self,
+        dataset: &DatasetSpecs,
+        summary: Option<&DatasetSummary>,
+        title: &str,
+    ) -> Result<()> {
         self.aux_domain_columns.preprocess(dataset)?;
         self.scale_type.preprocess();
         match self.vega_type {
@@ -1058,7 +1056,7 @@ impl Heatmap {
             })
         }
         if self.domain.is_none() {
-            let d = get_column_domain(title, dataset, self)?;
+            let d = get_column_domain(title, summary.unwrap(), self)?;
             let domain: Vec<String> = if self.scale_type.is_quantitative() {
                 let floating_domain: Vec<f64> = serde_json::from_str(&d).map_err(|_| {
                     ConfigError::NonNumericQuantitativeColumn {
@@ -2619,34 +2617,6 @@ mod tests {
         };
         empty_dataset.preprocess().unwrap();
         assert!(empty_dataset.is_empty().unwrap());
-    }
-
-    #[test]
-    fn test_dataset_unique_column_values() {
-        let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
-        let unique_column_values = config
-            .datasets
-            .get("oscars")
-            .unwrap()
-            .unique_column_values()
-            .unwrap();
-        assert_eq!(unique_column_values.get("oscar_yr").unwrap(), &91_usize);
-        assert_eq!(unique_column_values.get("award").unwrap(), &2_usize);
-    }
-
-    #[test]
-    fn test_unique_column_values_skips_additional_header_rows() {
-        let mut dataset = DatasetSpecs {
-            path: PathBuf::from("tests/data/additional_header_rows.csv"),
-            separator: char::default(),
-            header_rows: 2,
-            links: None,
-            offer_excel: false,
-        };
-        dataset.preprocess().unwrap();
-        let unique_column_values = dataset.unique_column_values().unwrap();
-        assert_eq!(unique_column_values.get("sample").unwrap(), &2_usize);
-        assert_eq!(unique_column_values.get("value").unwrap(), &3_usize);
     }
 
     #[test]
