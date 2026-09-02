@@ -32,6 +32,7 @@ use std::fs::File;
 use std::io::Write;
 use std::option::Option::Some;
 use std::path::Path;
+use std::rc::Rc;
 use std::str::FromStr;
 use tera::{Context, Tera};
 use thiserror::Error;
@@ -42,7 +43,7 @@ pub(crate) struct ItemRenderer {
     specs: ItemsSpec,
 }
 
-type LinkedTable = HashMap<(String, String), ColumnIndex>;
+type LinkedTable = HashMap<(String, String), Rc<ColumnIndex>>;
 
 impl Renderer for ItemRenderer {
     /// Render all items of user config
@@ -91,6 +92,7 @@ impl Renderer for ItemRenderer {
                 }
             })
             .collect();
+        let mut column_index_cache: LinkedTable = HashMap::new();
         for (name, table) in &self.specs.views {
             let out_path = Path::new(path.as_ref()).join(name);
             fs::create_dir(&out_path)?;
@@ -139,7 +141,7 @@ impl Renderer for ItemRenderer {
             };
             if !is_empty {
                 let linked_tables = if table.render_img.is_none() {
-                    get_linked_tables(name, &self.specs)?
+                    get_linked_tables(name, &self.specs, &mut column_index_cache)?
                 } else {
                     HashMap::new()
                 };
@@ -358,13 +360,14 @@ fn render_page<P: AsRef<Path>>(
     links.retain(|_, ls| ls.links_to_view(name.to_string()).unwrap() != name);
 
     let compressed_linkouts = if !links.is_empty() {
+        let link_columns = link_column_positions(titles, links);
         let linkouts = data
             .iter()
             .map(|r| {
                 render_link_column(
                     r,
                     linked_tables,
-                    titles,
+                    &link_columns,
                     links,
                     views.get(name).unwrap().dataset.as_ref().unwrap(),
                 )
@@ -1396,7 +1399,11 @@ fn render_search_dialogs<P: AsRef<Path>>(
     Ok(())
 }
 
-fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
+fn get_linked_tables(
+    table: &str,
+    specs: &ItemsSpec,
+    cache: &mut LinkedTable,
+) -> Result<LinkedTable> {
     let table_spec = specs.views.get(table).unwrap();
     let dataset = &specs
         .datasets
@@ -1414,20 +1421,27 @@ fn get_linked_tables(table: &str, specs: &ItemsSpec) -> Result<LinkedTable> {
     let mut result = HashMap::new();
 
     for (table, column) in links {
-        let linked_table = &specs.views.get(*table).unwrap();
-        let other_dataset = match specs.datasets.get(linked_table.dataset.as_ref().unwrap()) {
-            Some(dataset) => dataset,
+        let key = (table.to_string(), column.to_string());
+        let column_index = match cache.get(&key) {
+            Some(column_index) => Rc::clone(column_index),
             None => {
-                bail!(DatasetError::NotFound {
-                    dataset_name: table_spec.dataset.as_ref().unwrap().clone()
-                })
+                let linked_table = &specs.views.get(*table).unwrap();
+                let other_dataset = match specs.datasets.get(linked_table.dataset.as_ref().unwrap())
+                {
+                    Some(dataset) => dataset,
+                    None => {
+                        bail!(DatasetError::NotFound {
+                            dataset_name: table_spec.dataset.as_ref().unwrap().clone()
+                        })
+                    }
+                };
+                let page_size = specs.views.get(*table).unwrap().page_size;
+                let column_index = Rc::new(ColumnIndex::new(other_dataset, column, page_size)?);
+                cache.insert(key.clone(), Rc::clone(&column_index));
+                column_index
             }
         };
-        let page_size = specs.views.get(*table).unwrap().page_size;
-
-        let column_index = ColumnIndex::new(other_dataset, column, page_size)?;
-
-        result.insert((table.to_string(), column.to_string()), column_index);
+        result.insert(key, column_index);
     }
     Ok(result)
 }
@@ -1675,6 +1689,7 @@ fn render_plot_page<P: AsRef<Path>>(
         })
         .collect_vec();
     if !links.is_empty() {
+        let link_columns = link_column_positions(&headers, links);
         let linkouts = dataset
             .reader()?
             .records()?
@@ -1683,7 +1698,7 @@ fn render_plot_page<P: AsRef<Path>>(
                 render_linkouts(
                     &row.iter().map(|s| s.to_owned()).collect_vec(),
                     linked_tables,
-                    &headers,
+                    &link_columns,
                     links,
                     views.get(name).unwrap().dataset.as_ref().unwrap(),
                 )
@@ -1989,11 +2004,11 @@ struct Linkout {
 fn render_link_column(
     row: &[String],
     linked_tables: &LinkedTable,
-    titles: &[String],
+    link_columns: &HashMap<&str, usize>,
     links: &HashMap<String, LinkSpec>,
     dataset_name: &str,
 ) -> Result<String> {
-    let linkouts = render_linkouts(row, linked_tables, titles, links, dataset_name)?;
+    let linkouts = render_linkouts(row, linked_tables, link_columns, links, dataset_name)?;
 
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -2006,17 +2021,32 @@ fn render_link_column(
     Ok(templates.render("linkout_button.html.tera", &context)?)
 }
 
+fn link_column_positions<'a>(
+    titles: &[String],
+    links: &'a HashMap<String, LinkSpec>,
+) -> HashMap<&'a str, usize> {
+    links
+        .values()
+        .map(|link_spec| {
+            (
+                link_spec.column.as_str(),
+                titles.iter().position(|t| t == &link_spec.column).unwrap(),
+            )
+        })
+        .collect()
+}
+
 /// Formats linkouts from given links config
 fn render_linkouts(
     row: &[String],
     linked_tables: &LinkedTable,
-    titles: &[String],
+    link_columns: &HashMap<&str, usize>,
     links: &HashMap<String, LinkSpec>,
     dataset_name: &str,
 ) -> Result<Vec<Linkout>> {
     let mut linkouts = Vec::new();
     for (name, link_specs) in links {
-        let index = titles.iter().position(|t| t == &link_specs.column).unwrap();
+        let index = link_columns[link_specs.column.as_str()];
         if let Some(table) = &link_specs.view {
             let val = table.replace("{value}", &row[index]);
             linkouts.push(Linkout {
