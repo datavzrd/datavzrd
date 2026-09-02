@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.72.2](https://github.com/datavzrd/datavzrd/compare/v2.72.1...v2.72.2) (2026-09-02)
+
+
+### Bug Fixes
+
+* Render heatmap legends when color-scheme is unset ([#1264](https://github.com/datavzrd/datavzrd/issues/1264)) ([95d04b4](https://github.com/datavzrd/datavzrd/commit/95d04b416c599f067606de0aa16f853e74cd978e))
+
+
+### Performance Improvements
+
+* Cache linked-table column indices across the report ([#1263](https://github.com/datavzrd/datavzrd/issues/1263)) ([b068793](https://github.com/datavzrd/datavzrd/commit/b068793cd4be78b18d2f9587f990e850235f13ae))
+* Compute per-column overview data in a single pass ([#1266](https://github.com/datavzrd/datavzrd/issues/1266)) ([c4b58e8](https://github.com/datavzrd/datavzrd/commit/c4b58e89382253aa349e8abb387b27c51f16a652))
+
 ## [2.72.1](https://github.com/datavzrd/datavzrd/compare/v2.72.0...v2.72.1) (2026-08-31)
 
 
