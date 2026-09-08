@@ -2129,7 +2129,7 @@ mod tests {
 
     #[test]
     fn test_valid_config_validation() {
-        let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
+        let config = ItemsSpec::from_file(".examples/example.datavzrd.yaml").unwrap();
         assert!(config.validate().is_ok());
     }
 
@@ -2411,7 +2411,7 @@ mod tests {
 
     #[test]
     fn test_config_preprocessing() {
-        let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
+        let config = ItemsSpec::from_file(".examples/example.datavzrd.yaml").unwrap();
         let oscar_config = &config
             .views
             .get("oscars")
@@ -2590,7 +2590,7 @@ mod tests {
 
     #[test]
     fn test_dataset_size() {
-        let config = ItemsSpec::from_file(".examples/example-config.yaml").unwrap();
+        let config = ItemsSpec::from_file(".examples/example.datavzrd.yaml").unwrap();
         assert_eq!(config.datasets.get("movies").unwrap().size().unwrap(), 184);
     }
 

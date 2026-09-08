@@ -25,7 +25,7 @@ jobs:
           version: 10
 
       - name: Generate report
-        run: cargo run .examples/example-config.yaml --output example-report
+        run: cargo run .examples/example.datavzrd.yaml --output example-report
 
       - uses: actions/upload-artifact@v4
         with:
