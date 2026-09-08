@@ -1,0 +1,49 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the article below."
+title: "Datavzrd: Rapid programming- and maintenance-free interactive visualization and communication of tabular data"
+authors:
+  - family-names: Wiegand
+    given-names: Felix
+  - family-names: Lähnemann
+    given-names: David
+  - family-names: Mölder
+    given-names: Felix
+  - family-names: Uzuner
+    given-names: Hamdiye
+  - family-names: Prinz
+    given-names: Adrian
+  - family-names: Schramm
+    given-names: Alexander
+  - family-names: Köster
+    given-names: Johannes
+repository-code: "https://github.com/datavzrd/datavzrd"
+url: "https://datavzrd.github.io/"
+license: MIT
+preferred-citation:
+  type: article
+  title: "Datavzrd: Rapid programming- and maintenance-free interactive visualization and communication of tabular data"
+  authors:
+    - family-names: Wiegand
+      given-names: Felix
+    - family-names: Lähnemann
+      given-names: David
+    - family-names: Mölder
+      given-names: Felix
+    - family-names: Uzuner
+      given-names: Hamdiye
+    - family-names: Prinz
+      given-names: Adrian
+    - family-names: Schramm
+      given-names: Alexander
+    - family-names: Köster
+      given-names: Johannes
+  journal: "PLOS ONE"
+  publisher:
+    name: "Public Library of Science"
+  year: 2025
+  month: 7
+  volume: 20
+  issue: 7
+  start: e0323079
+  doi: 10.1371/journal.pone.0323079
+  url: "https://doi.org/10.1371/journal.pone.0323079"
