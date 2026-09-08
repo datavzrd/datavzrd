@@ -34,7 +34,7 @@ use std::sync::LazyLock;
 use thiserror::Error;
 
 #[skip_serializing_none]
-#[derive(Derefable, Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Derefable, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct ItemsSpec {
     #[serde(default, rename = "name")]
@@ -512,7 +512,7 @@ fn default_links() -> Option<HashMap<String, LinkSpec>> {
     Some(HashMap::new())
 }
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct DatasetSpecs {
     pub path: PathBuf,
@@ -567,7 +567,7 @@ impl DatasetSpecs {
 }
 
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct ItemSpecs {
     #[serde(default, skip_serializing_if = "is_false")]
@@ -634,7 +634,7 @@ impl ItemSpecs {
 }
 
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct RenderTableSpecs {
     #[serde(default)]
@@ -645,7 +645,7 @@ pub struct RenderTableSpecs {
     pub headers: Option<HashMap<u32, HeaderSpecs>>,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct AdditionalColumnSpec {
     #[serde(default = "default_value_function")]
@@ -663,7 +663,7 @@ fn default_value_function() -> String {
 }
 
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct HeaderSpecs {
     #[serde(default)]
@@ -981,7 +981,7 @@ pub enum DisplayMode {
     Pinned,
 }
 
-#[derive(Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[derive(JsonSchema, Default, Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
 #[serde(rename_all = "lowercase")]
 pub enum HeaderDisplayMode {
     #[default]
@@ -1092,7 +1092,7 @@ impl BarPlot {
 }
 
 #[skip_serializing_none]
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct RenderPlotSpec {
     #[serde(default, rename = "spec")]
@@ -1114,19 +1114,19 @@ impl RenderPlotSpec {
     }
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct RenderHtmlSpec {
     pub script_path: String,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct RenderImgSpec {
     pub path: String,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(JsonSchema, Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub struct LinkSpec {
     #[serde(default)]

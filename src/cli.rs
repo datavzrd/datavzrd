@@ -106,6 +106,8 @@ pub enum Command {
         #[arg(short, long)]
         prompt: Option<String>,
     },
+    /// Print the JSON schema of the configuration file to stdout.
+    Schema,
 }
 
 #[derive(Error, Debug)]
