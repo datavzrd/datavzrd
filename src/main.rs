@@ -64,6 +64,10 @@ fn main() -> Result<()> {
             let config = suggest::suggest(files, separators, name, llm)?;
             stdout().write_all(config.as_bytes())?;
         }
+        Some(Command::Schema) => {
+            let schema = schemars::schema_for!(datavzrd::spec::ItemsSpec);
+            stdout().write_all(serde_json::to_string_pretty(&schema)?.as_bytes())?;
+        }
         None => {
             let config = opt
                 .config
