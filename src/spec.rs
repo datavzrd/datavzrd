@@ -200,9 +200,8 @@ impl ItemsSpec {
                                     possible_conflicting.push("ticks".to_string());
                                 }
                             }
-                            let has = |feature: &str| {
-                                possible_conflicting.iter().any(|c| c == feature)
-                            };
+                            let has =
+                                |feature: &str| possible_conflicting.iter().any(|c| c == feature);
                             let allowed_pairing = possible_conflicting.len() == 2
                                 && has("heatmap")
                                 && (has("ellipsis") || has("link-to-url"));
