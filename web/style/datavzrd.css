@@ -471,3 +471,33 @@ th.col-drag-over {
   font-weight: 500;
   font-size: inherit;
 }
+
+.pills-cell a,
+.detail-pills-wrapper a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.linked-cell a {
+  color: inherit;
+}
+
+.linked-cell .dropdown-toggle {
+  color: inherit;
+  border-color: currentColor;
+}
+
+.pill-dropdown {
+  display: inline-block;
+}
+
+.centered-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.detail-pills-wrapper {
+  padding: 4px 0;
+}

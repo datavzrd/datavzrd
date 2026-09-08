@@ -2,6 +2,7 @@ import $ from "jquery";
 import * as vega from "vega";
 import * as d3 from "d3";
 import { precision_formatter } from "../utils";
+import { createLinkHtml } from "./link-to-url";
 
 export function colorizeColumn(
   ah,
@@ -10,6 +11,8 @@ export function colorizeColumn(
   detail_mode,
   header_label_length,
   columnIndexMap,
+  link,
+  link_columns,
 ) {
   let index = columnIndexMap[heatmap.title];
   let row = 0;
@@ -29,10 +32,23 @@ export function colorizeColumn(
         this.style.setProperty("color", "white", "important");
       }
     }
+    let shown_value = value;
     if (custom_func) {
       var data_function = window[custom_func];
-      value = data_function(value, table_rows[row]);
-      this.innerHTML = value;
+      shown_value = data_function(value, table_rows[row]);
+      this.innerHTML = shown_value;
+    } else {
+      shown_value = this.innerHTML;
+    }
+    if (link && value !== "") {
+      this.classList.add("linked-cell");
+      this.innerHTML = createLinkHtml(
+        link_columns,
+        link.links,
+        value,
+        shown_value,
+        table_rows[row],
+      );
     }
     row++;
   });
@@ -87,7 +103,16 @@ export function datavzrdScale(heatmap) {
   return scale;
 }
 
-export function colorizeDetailCard(value, div, heatmap, row, is_float, precision) {
+export function colorizeDetailCard(
+  value,
+  div,
+  heatmap,
+  row,
+  is_float,
+  precision,
+  link,
+  link_columns,
+) {
   let scale = datavzrdScale(heatmap);
 
   if (value !== "") {
@@ -99,13 +124,24 @@ export function colorizeDetailCard(value, div, heatmap, row, is_float, precision
       }
     }
   }
+  let shown_value = value;
   if (heatmap.heatmap["custom-content"]) {
     var data_function = window[heatmap.heatmap["custom-content"]];
-    value = data_function(value, row);
-    $(`${div}`)[0].innerHTML = value;
+    shown_value = data_function(value, row);
+    $(`${div}`)[0].innerHTML = shown_value;
   } else if (is_float && precision !== undefined) {
-    value = precision_formatter(precision, value);
-    $(`${div}`)[0].innerHTML = value;
+    shown_value = precision_formatter(precision, value);
+    $(`${div}`)[0].innerHTML = shown_value;
+  }
+  if (link && value !== "") {
+    $(`${div}`).addClass("linked-cell");
+    $(`${div}`)[0].innerHTML = createLinkHtml(
+      link_columns,
+      link.links,
+      value,
+      shown_value,
+      row,
+    );
   }
 }
 

@@ -147,6 +147,16 @@ function addNumClass(dp_num, ah, detail_mode, config) {
   }
 }
 
+function findLink(title) {
+  return config.link_urls.find((l) => l.title === title);
+}
+
+function isAlreadyRenderedByPlot(title) {
+  return (
+    config.pill_titles.includes(title) || config.heatmap_titles.includes(title)
+  );
+}
+
 function detailFormatter(index, row) {
   let cp = config.custom_plot_titles;
   let ticks = config.tick_titles;
@@ -169,12 +179,13 @@ function detailFormatter(index, row) {
       if (config.column_config[key].label) {
         card_title = config.column_config[key].label;
       }
+      let isLink = link_urls.includes(key) && !isAlreadyRenderedByPlot(key);
       if (
         cp.includes(key) ||
         ticks.includes(key) ||
         bars.includes(key) ||
         bubbles.includes(key) ||
-        link_urls.includes(key)
+        isLink
       ) {
         if (cp.includes(key)) {
           id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
@@ -182,7 +193,7 @@ function detailFormatter(index, row) {
           id = `detail-plot-${index}-bars-${config.columns.indexOf(key)}`;
         } else if (bubbles.includes(key)) {
           id = `detail-plot-${index}-bubbles-${config.columns.indexOf(key)}`;
-        } else if (link_urls.includes(key)) {
+        } else if (isLink) {
           id = `detail-plot-${index}-links-${config.columns.indexOf(key)}`;
         } else {
           id = `detail-plot-${index}-ticks-${config.columns.indexOf(key)}`;
@@ -191,7 +202,7 @@ function detailFormatter(index, row) {
                    <div class="card-header">
                      ${card_title}
                    </div>
-                   <div class="card-body">
+                   <div class="card-body${isLink ? " centered-card" : ""}">
                      <div id="${id}"></div>
                    </div>
                  </div>`;
@@ -202,7 +213,7 @@ function detailFormatter(index, row) {
                   <div class="card-header">
                     ${card_title}
                   </div>
-                  <div id="${id}" class="card-body">
+                  <div id="${id}" class="card-body centered-card">
                     ${value}
                   </div>
                 </div>`;
@@ -213,7 +224,7 @@ function detailFormatter(index, row) {
                   <div class="card-header">
                     ${card_title}
                   </div>
-                  <div id="${id}" class="card-body">
+                  <div id="${id}" class="card-body centered-card">
                     ${value}
                   </div>
                 </div>`;
@@ -289,7 +300,7 @@ function render(
   }
 
   for (const o of config.link_urls) {
-    if (displayed_columns.includes(o.title)) {
+    if (displayed_columns.includes(o.title) && !isAlreadyRenderedByPlot(o.title)) {
       linkUrlColumn(
         columns,
         o.title,
@@ -309,6 +320,8 @@ function render(
         config.detail_mode,
         config.header_label_length,
         columnIndexMap,
+        findLink(o.title),
+        columns,
       );
     }
   }
@@ -322,6 +335,8 @@ function render(
         config.detail_mode,
         config.header_label_length,
         columnIndexMap,
+        findLink(o.title),
+        columns,
       );
     }
   }
@@ -740,7 +755,7 @@ export function load() {
 
     $("#table").on("expand-row.bs.table", (event, index, row, detailView) => {
       for (const o of config.link_urls) {
-        if (!config.displayed_columns.includes(o.title)) {
+        if (!config.displayed_columns.includes(o.title) && !isAlreadyRenderedByPlot(o.title)) {
           linkDetailUrlColumn(
             row,
             `#detail-plot-${index}-links-${columnIdMap[o.title]}`,
@@ -773,6 +788,8 @@ export function load() {
             row,
             config.column_config[o.title].is_float,
             config.column_config[o.title].precision,
+            findLink(o.title),
+            config.columns,
           );
         }
       }
@@ -783,6 +800,9 @@ export function load() {
             row[o.title],
             `#pills-${index}-${columnIdMap[o.title]}`,
             o,
+            findLink(o.title),
+            config.columns,
+            row,
           );
         }
       }
