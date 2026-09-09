@@ -12,7 +12,7 @@ Plots can be fully customized by users via a config file. These also allow the u
 
 Documentation is available via the official website: https://datavzrd.github.io/
 
-An example report can be [viewed online](https://datavzrd.github.io/datavzrd/index.html) with the [corresponding config file](https://github.com/datavzrd/datavzrd/tree/main/.examples/example-config.yaml).
+An example report can be [viewed online](https://datavzrd.github.io/datavzrd/index.html) with the [corresponding config file](https://github.com/datavzrd/datavzrd/tree/main/.examples/example.datavzrd.yaml).
 
 ## Citation
 
