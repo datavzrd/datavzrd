@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.73.0](https://github.com/datavzrd/datavzrd/compare/v2.72.2...v2.73.0) (2026-09-09)
+
+
+### Features
+
+* Add schema subcommand ([#1269](https://github.com/datavzrd/datavzrd/issues/1269)) ([e5663a1](https://github.com/datavzrd/datavzrd/commit/e5663a12d5422f44a8e5473140faee51e671523f))
+* Allow link-to-url on pills and heatmap columns ([#1271](https://github.com/datavzrd/datavzrd/issues/1271)) ([a471a98](https://github.com/datavzrd/datavzrd/commit/a471a982004d8aabd14564f18a73fc9efe4c125d))
+
+
+### Bug Fixes
+
+* Reject conflicting render-table configurations for all plot types ([#1273](https://github.com/datavzrd/datavzrd/issues/1273)) ([8a40b21](https://github.com/datavzrd/datavzrd/commit/8a40b215b69b34d6d80dc7d27405c18965b6c8f6))
+
 ## [2.72.2](https://github.com/datavzrd/datavzrd/compare/v2.72.1...v2.72.2) (2026-09-02)
 
 
