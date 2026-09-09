@@ -8237,7 +8237,37 @@ th.col-drag-over {
   font-weight: 500;
   font-size: inherit;
 }
-`, "",{"version":3,"sources":["webpack://./style/datavzrd.css"],"names":[],"mappings":"AAAA;IACI,6BAA6B;IAC7B,2CAA2C;IAC3C,mCAAmC;AACvC;;AAEA;IACI;QACI,aAAa;IACjB;IACA;QACI,eAAe;IACnB;AACJ;;AAEA;IACI,kBAAkB;IAClB,SAAS;IACT,WAAW;AACf;;AAEA;IACI,uBAAuB;IACvB,kBAAkB;IAClB,SAAS;AACb;;AAEA;IACI,gCAAgC;AACpC;;AAEA;IACI,gCAAgC;AACpC;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,eAAe;IACf,eAAe;IACf,cAAc;AAClB;;AAEA;IACI,4BAA4B;AAChC;;AAEA;IACI,wCAAwC;AAC5C;;AAEA;IACI,6BAA6B;AACjC;;AAEA;IACI,aAAa;IACb,iBAAiB;AACrB;;AAEA;IACI,WAAW;IACX,aAAa;IACb,WAAW;AACf;;AAEA;IACI,WAAW;IACX;AACJ;;AAEA;IACI,iBAAiB;IACjB,mBAAmB;IACnB,iBAAiB;AACrB;;AAEA;IACI,YAAY;IACZ,gBAAgB;AACpB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,6BAA6B;IAC7B,gBAAgB;AACpB;;AAEA;IACI,wCAAwC;IACxC,gCAAgC;AACpC;;AAEA;IACI,mBAAmB;IACnB,aAAa;IACb,oBAAoB;IACpB,iBAAiB;AACrB;;AAEA;IACI,eAAe;IACf,WAAW;AACf;;AAEA;IACI,uBAAuB;IACvB,6BAA6B;AACjC;;AAEA;IACI,kBAAkB;AACtB;;AAEA;;IAEI,yBAAyB;IACzB,0BAA0B;IAC1B,6HAA6H;IAC7H,4BAA4B;IAC5B,mBAAmB;IACnB,YAAY;IACZ,gBAAgB;AACpB;;AAEA;IACI,UAAU;AACd;;AAEA;IACI,mBAAmB;IACnB,aAAa;AACjB;;AAEA;IACI,gDAAgD;IAChD,UAAU;IACV,4BAA4B;IAC5B,0BAA0B;IAC1B,kBAAkB;AACtB;;AAEA;;IAEI,cAAc;IACd,UAAU;IACV,gBAAgB;IAChB,qBAAqB;AACzB;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;;;;;IAKI,aAAa;AACjB;;AAEA;IACI,2BAA2B;IAC3B,iBAAiB;AACrB;;AAEA;IACI,qBAAqB;IACrB,WAAW;IACX,YAAY;IACZ,qBAAqB;AACzB;;AAEA;IACI,yDAAmO;AACvO;;AAEA;IACI,yDAA+Q;AACnR;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,YAAY;IACZ,uBAAuB;IACvB,UAAU;AACd;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;IACI,YAAY;IACZ,kBAAkB;AACtB;;AAEA;IACI,kBAAkB;IAClB,SAAS;AACb;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,cAAc;IACd,gBAAgB;AACpB;;AAEA;IACI,mBAAmB;AACvB;;;AAGA;IACI,kBAAkB;IAClB,iBAAiB;AACrB;;AAEA;IACI,oBAAoB;AACxB;;AAEA;IACI,kBAAkB;IAClB,SAAS;IACT,WAAW;IACX,YAAY;AAChB;;AAEA;IACI,yBAAyB;IACzB,cAAc;AAClB;;AAEA;IACI,6CAA6C;IAC7C,aAAa;AACjB;;AAEA;IACI,UAAU;IACV,WAAW;AACf;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,SAAS;AACb;;AAEA;IACI,eAAe;IACf,QAAQ;IACR,SAAS;IACT,aAAa;IACb,iBAAiB;AACrB;;AAEA;IACI,YAAY;IACZ,wCAAwC;AAC5C;;AAEA;IACI,wCAAwC;AAC5C;;AAEA;IACI,wCAAwC;IACxC,eAAe;AACnB;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,kBAAkB;IAClB,wBAAwB;IACxB,MAAM;IACN,eAAe;AACnB;;AAEA;IACI,wCAAwC;IACxC,YAAY;IACZ,YAAY;IACZ,UAAU;AACd;;AAEA;IACI,cAAc;IACd,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,yBAAyB;AAC7B;;AAEA;IACI,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,eAAe;AACnB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,QAAQ;AACZ;;AAEA;IACI,iBAAiB;AACrB;;AAEA;IACI,8BAA8B;IAC9B,iBAAiB;IACjB,kBAAkB;IAClB,gBAAgB;AACpB;;AAEA;IACI,KAAK,mBAAmB,EAAE;IAC1B,MAAM,sBAAsB,EAAE;IAC9B,OAAO,mBAAmB,EAAE;AAChC;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,qBAAqB;IACrB,YAAY;IACZ,cAAc;IACd,aAAa;IACb,gBAAgB;IAChB,sBAAsB;IACtB,cAAc;AAClB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,oBAAoB;IACpB,sBAAsB;IACtB,sBAAsB;IACtB,gBAAgB;IAChB,iBAAiB;AACrB;;AAEA;IACI,cAAc;IACd,cAAc;IACd,eAAe;AACnB;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,kBAAkB;IAClB,YAAY;IACZ,UAAU;IACV,uBAAuB;AAC3B;;AAEA;IACI,wBAAwB;AAC5B;;AAEA;IACI,eAAe;IACf,gBAAgB;IAChB,WAAW;IACX,YAAY;IACZ,cAAc;IACd,iBAAiB;AACrB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,aAAa;IACb,eAAe;IACf,eAAe;IACf,gBAAgB;AACpB;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,eAAe;IACf,WAAW;AACf;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB","sourcesContent":["* {\n    color-adjust: exact!important;\n    -webkit-print-color-adjust: exact!important;\n    print-color-adjust: exact!important;\n}\n\n@media print {\n    .detail-icon, .dropdown, .form-control, .filter-brush-container, .sym, .navbar, .btn, .detail  {\n        display: none;\n    }\n    @page {\n        margin: 0 0 0 0;\n    }\n}\n\n.select-view {\n    position: relative;\n    top: -6px;\n    left: -13px;\n}\n\n.breadcrumb {\n    background-color: white;\n    position: relative;\n    top: 13px;\n}\n\n.navbar-brand, .breadcrumb-item {\n    color: rgba(0,0,0,.5) !important;\n}\n\n.navbar-brand:hover {\n    color: rgba(0,0,0,.7) !important;\n}\n\n.navbar-top {\n    height: 54px;\n}\n\n.sym {\n    cursor: pointer;\n    display: inline;\n    color: #007bff;\n}\n\n.fixed-table-body {\n    overflow: visible !important;\n}\n\n.fixed-top {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.navbar-nav.mr-auto.breadcrumb {\n    background-color: transparent;\n}\n\n.table-container {\n    display: none;\n    font-size: 0.8rem;\n}\n\n#histogram-plot {\n    width: 100%;\n    height: 300px;\n    border:none;\n}\n\n#search-iframe {\n    width: 100%;\n    height: min(530px, 50vh)\n}\n\n.linkout-btn {\n    font-size: 0.8rem;\n    white-space: nowrap;\n    text-align: right;\n}\n\n.loading {\n    height: 100%;\n    padding-top: 25%;\n}\n\n#heatmap-plot-modal {\n    z-index: 9999;\n}\n\n.modal-body {\n    max-width: calc(100vw - 50px);\n    overflow-x: auto;\n}\n\n.active-row {\n    border-top: 2px solid #6ea8fe !important;\n    border-bottom: 2px solid #6ea8fe;\n}\n\nth {\n    white-space: nowrap;\n    height: 150px;\n    border: 0 !important;\n    overflow: visible;\n}\n\n#table {\n    max-width: 100%;\n    width: auto;\n}\n\n.bootstrap-table {\n    margin: auto !important;\n    width: fit-content !important;\n}\n\ntd {\n    position: relative;\n}\n\n#table td,\n#table th {\n    padding: 0 5px !important;\n    font-size: 12px !important;\n    /* Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=688556 see https://github.com/koesterlab/datavzrd/issues/144 */\n    background-clip: padding-box;\n    white-space: nowrap;\n    height: 18px;\n    line-height: 0.8;\n}\n\n.table td.plotcell {\n    padding: 0;\n}\n\n#pagination {\n    padding-top: 0.5rem;\n    display: none;\n}\n\nth .th-inner {\n    transform: translate(-10px, 30px) rotate(-45deg);\n    width: 1em;\n    overflow: visible !important;\n    transform-origin: top left;\n    margin-bottom: 5px;\n}\n\n#table td.narrow-col,\n#table th.narrow-col {\n    max-width: 4px;\n    width: 4px;\n    overflow: hidden;\n    padding: 0 !important;\n}\n\n#table td.narrow-col {\n    font-size: 0 !important;\n}\n\nth.narrow-col .th-inner,\nth.narrow-col .sym,\nth.narrow-col .sym-container,\nth.narrow-col .header-sort,\nth.narrow-col .col-drag-handle {\n    display: none;\n}\n\n#vis-container {\n    height: calc(100vh - 105px);\n    padding-top: 50px;\n}\n\n.fa {\n    display: inline-block;\n    width: 24px;\n    height: 24px;\n    background-size: 100%;\n}\n\n.fa-minus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z\"/></svg>');\n}\n\n.fa-plus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z\"/></svg>');\n}\n\n.num-cell {\n    white-space: nowrap;\n}\n\n.form-control {\n    height: 35px;\n    border: none !important;\n    width: 5em;\n}\n\n.filter-control {\n    padding-bottom: 2px;\n}\n\n.fixed-table-container {\n    border: none !important;\n}\n\n.filter-brush-container {\n    height: 48px;\n    position: relative;\n}\n\n.no-labels {\n    position: absolute;\n    top: 12px;\n}\n\n.card {\n    margin: 0.5em;\n}\n\n.container-fluid {\n    overflow: auto;\n    margin-top: 50px;\n}\n\n.dropdown-item {\n    line-height: normal;\n}\n\n\n#page-container {\n    position: relative;\n    min-height: 100vh;\n}\n\n#content-wrap {\n    padding-bottom: 54px;\n}\n\nfooter {\n    position: absolute;\n    bottom: 0;\n    width: 100%;\n    height: 54px;\n}\n\n.badge-light {\n    background-color: #cbcbcb;\n    color: #222222;\n}\n\n.katex-html {\n    /* Hide unrendered mathematical expressions */\n    display: none;\n}\n\n.navbar-toggler-icon {\n    width: 1em;\n    height: 1em;\n}\n\n.navbar-toggler {\n    background-color: white;\n}\n\n#right-top-nav {\n    margin: auto;\n}\n\n.btn-table {\n    border: none;\n}\n\n.description-box {\n    margin: 0;\n}\n\n#sidebar {\n    position: fixed;\n    right: 0;\n    top: 3rem;\n    z-index: 9999;\n    margin-right: 7px;\n}\n\n#sidebar-card {\n    width: 13rem;\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn:hover {\n    background-color: rgba(203,203,203,0.75);\n    cursor: pointer;\n}\n\n.navbar-toggler {\n    border: none;\n}\n\n#close-description {\n    position: absolute;\n    left: calc(100vw - 72px);\n    top: 0;\n    padding: 0.2rem;\n}\n\n.description-card-body {\n    background-color: rgba(255,255,255,0.75);\n    width: 100vw;\n    border: none;\n    padding: 0;\n}\n\n#innerDescription {\n    margin: 0 auto;\n    max-width: 800px;\n}\n\n.ic:hover {\n    color: grey;\n}\n\n.nav-btn {\n    display: block !important;\n}\n\n.sym-container svg {\n    position: absolute;\n    top: 0;\n    left: 0;\n    cursor: pointer;\n}\n\n.sym-container svg:hover {\n    color: grey;\n}\n\n.sym-container .bi-caret-down {\n    top: 8px;\n}\n\n.hide-sym {\n    margin-left: 14px;\n}\n\n.pulsating-button {\n    animation: pulsate 2s infinite;\n    margin-left: 2rem;\n    margin-right: 2rem;\n    margin-top: 10px;\n}\n\n@keyframes pulsate {\n    0% { transform: scale(1); }\n    50% { transform: scale(1.05); }\n    100% { transform: scale(1); }\n}\n\n.hide-sym:hover {\n    color: grey;\n}\n\n.col-drag-handle {\n    display: inline-block;\n    cursor: grab;\n    color: #007bff;\n    opacity: 0.35;\n    margin-left: 4px;\n    vertical-align: middle;\n    line-height: 1;\n}\n\n.col-drag-handle:hover {\n    opacity: 0.75;\n}\n\nth.col-dragging {\n    opacity: 0.45;\n}\n\nth.col-drag-over {\n    border-left: 2px solid #0275d8 !important;\n}\n\n.header-sort {\n    display: inline-flex;\n    flex-direction: column;\n    vertical-align: middle;\n    margin-left: 4px;\n    margin-right: 7px;\n}\n\n.header-sort svg {\n    display: block;\n    color: #007bff;\n    cursor: pointer;\n}\n\n.header-sort .bi-caret-down {\n    margin-top: -4px;\n}\n\n.header-sort svg:hover {\n    color: grey;\n}\n\n#plot-size-control {\n    position: absolute;\n    bottom: 52px;\n    z-index: 2;\n    right: calc(50% - 50px);\n}\n\n.popover {\n    z-index: 9999 !important;\n}\n\n.datavzrd-img {\n    max-width: 85vw;\n    max-height: 85vh;\n    width: auto;\n    height: auto;\n    display: block;\n    margin: 5rem auto;\n}\n\n.linkout-raw-value {\n    display: none;\n}\n\n.detail-pills-wrapper {\n    display: flex;\n    flex-wrap: wrap;\n    max-width: 25vw;\n    line-height: 1.3;\n}\n\n#filter-columns-input {\n    min-width: 140px;\n}\n\n#colum-filter-icon:hover {\n    cursor: pointer;\n    color: grey;\n}\n\n#landing-table h1 {\n  font-weight: 900;\n  font-size: inherit;\n}\n\n#landing-table h2 {\n  font-weight: 800;\n  font-size: inherit;\n}\n\n#landing-table h3 {\n  font-weight: 700;\n  font-size: inherit;\n}\n\n#landing-table h4 {\n  font-weight: 600;\n  font-size: inherit;\n}\n\n#landing-table h5 {\n  font-weight: 500;\n  font-size: inherit;\n}\n"],"sourceRoot":""}]);
+
+.pills-cell a,
+.detail-pills-wrapper a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.linked-cell a {
+  color: inherit;
+}
+
+.linked-cell .dropdown-toggle {
+  color: inherit;
+  border-color: currentColor;
+}
+
+.pill-dropdown {
+  display: inline-block;
+}
+
+.centered-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.detail-pills-wrapper {
+  padding: 4px 0;
+}
+`, "",{"version":3,"sources":["webpack://./style/datavzrd.css"],"names":[],"mappings":"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","sourcesContent":["* {\n    color-adjust: exact!important;\n    -webkit-print-color-adjust: exact!important;\n    print-color-adjust: exact!important;\n}\n\n@media print {\n    .detail-icon, .dropdown, .form-control, .filter-brush-container, .sym, .navbar, .btn, .detail  {\n        display: none;\n    }\n    @page {\n        margin: 0 0 0 0;\n    }\n}\n\n.select-view {\n    position: relative;\n    top: -6px;\n    left: -13px;\n}\n\n.breadcrumb {\n    background-color: white;\n    position: relative;\n    top: 13px;\n}\n\n.navbar-brand, .breadcrumb-item {\n    color: rgba(0,0,0,.5) !important;\n}\n\n.navbar-brand:hover {\n    color: rgba(0,0,0,.7) !important;\n}\n\n.navbar-top {\n    height: 54px;\n}\n\n.sym {\n    cursor: pointer;\n    display: inline;\n    color: #007bff;\n}\n\n.fixed-table-body {\n    overflow: visible !important;\n}\n\n.fixed-top {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.navbar-nav.mr-auto.breadcrumb {\n    background-color: transparent;\n}\n\n.table-container {\n    display: none;\n    font-size: 0.8rem;\n}\n\n#histogram-plot {\n    width: 100%;\n    height: 300px;\n    border:none;\n}\n\n#search-iframe {\n    width: 100%;\n    height: min(530px, 50vh)\n}\n\n.linkout-btn {\n    font-size: 0.8rem;\n    white-space: nowrap;\n    text-align: right;\n}\n\n.loading {\n    height: 100%;\n    padding-top: 25%;\n}\n\n#heatmap-plot-modal {\n    z-index: 9999;\n}\n\n.modal-body {\n    max-width: calc(100vw - 50px);\n    overflow-x: auto;\n}\n\n.active-row {\n    border-top: 2px solid #6ea8fe !important;\n    border-bottom: 2px solid #6ea8fe;\n}\n\nth {\n    white-space: nowrap;\n    height: 150px;\n    border: 0 !important;\n    overflow: visible;\n}\n\n#table {\n    max-width: 100%;\n    width: auto;\n}\n\n.bootstrap-table {\n    margin: auto !important;\n    width: fit-content !important;\n}\n\ntd {\n    position: relative;\n}\n\n#table td,\n#table th {\n    padding: 0 5px !important;\n    font-size: 12px !important;\n    /* Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=688556 see https://github.com/koesterlab/datavzrd/issues/144 */\n    background-clip: padding-box;\n    white-space: nowrap;\n    height: 18px;\n    line-height: 0.8;\n}\n\n.table td.plotcell {\n    padding: 0;\n}\n\n#pagination {\n    padding-top: 0.5rem;\n    display: none;\n}\n\nth .th-inner {\n    transform: translate(-10px, 30px) rotate(-45deg);\n    width: 1em;\n    overflow: visible !important;\n    transform-origin: top left;\n    margin-bottom: 5px;\n}\n\n#table td.narrow-col,\n#table th.narrow-col {\n    max-width: 4px;\n    width: 4px;\n    overflow: hidden;\n    padding: 0 !important;\n}\n\n#table td.narrow-col {\n    font-size: 0 !important;\n}\n\nth.narrow-col .th-inner,\nth.narrow-col .sym,\nth.narrow-col .sym-container,\nth.narrow-col .header-sort,\nth.narrow-col .col-drag-handle {\n    display: none;\n}\n\n#vis-container {\n    height: calc(100vh - 105px);\n    padding-top: 50px;\n}\n\n.fa {\n    display: inline-block;\n    width: 24px;\n    height: 24px;\n    background-size: 100%;\n}\n\n.fa-minus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z\"/></svg>');\n}\n\n.fa-plus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z\"/></svg>');\n}\n\n.num-cell {\n    white-space: nowrap;\n}\n\n.form-control {\n    height: 35px;\n    border: none !important;\n    width: 5em;\n}\n\n.filter-control {\n    padding-bottom: 2px;\n}\n\n.fixed-table-container {\n    border: none !important;\n}\n\n.filter-brush-container {\n    height: 48px;\n    position: relative;\n}\n\n.no-labels {\n    position: absolute;\n    top: 12px;\n}\n\n.card {\n    margin: 0.5em;\n}\n\n.container-fluid {\n    overflow: auto;\n    margin-top: 50px;\n}\n\n.dropdown-item {\n    line-height: normal;\n}\n\n\n#page-container {\n    position: relative;\n    min-height: 100vh;\n}\n\n#content-wrap {\n    padding-bottom: 54px;\n}\n\nfooter {\n    position: absolute;\n    bottom: 0;\n    width: 100%;\n    height: 54px;\n}\n\n.badge-light {\n    background-color: #cbcbcb;\n    color: #222222;\n}\n\n.katex-html {\n    /* Hide unrendered mathematical expressions */\n    display: none;\n}\n\n.navbar-toggler-icon {\n    width: 1em;\n    height: 1em;\n}\n\n.navbar-toggler {\n    background-color: white;\n}\n\n#right-top-nav {\n    margin: auto;\n}\n\n.btn-table {\n    border: none;\n}\n\n.description-box {\n    margin: 0;\n}\n\n#sidebar {\n    position: fixed;\n    right: 0;\n    top: 3rem;\n    z-index: 9999;\n    margin-right: 7px;\n}\n\n#sidebar-card {\n    width: 13rem;\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn:hover {\n    background-color: rgba(203,203,203,0.75);\n    cursor: pointer;\n}\n\n.navbar-toggler {\n    border: none;\n}\n\n#close-description {\n    position: absolute;\n    left: calc(100vw - 72px);\n    top: 0;\n    padding: 0.2rem;\n}\n\n.description-card-body {\n    background-color: rgba(255,255,255,0.75);\n    width: 100vw;\n    border: none;\n    padding: 0;\n}\n\n#innerDescription {\n    margin: 0 auto;\n    max-width: 800px;\n}\n\n.ic:hover {\n    color: grey;\n}\n\n.nav-btn {\n    display: block !important;\n}\n\n.sym-container svg {\n    position: absolute;\n    top: 0;\n    left: 0;\n    cursor: pointer;\n}\n\n.sym-container svg:hover {\n    color: grey;\n}\n\n.sym-container .bi-caret-down {\n    top: 8px;\n}\n\n.hide-sym {\n    margin-left: 14px;\n}\n\n.pulsating-button {\n    animation: pulsate 2s infinite;\n    margin-left: 2rem;\n    margin-right: 2rem;\n    margin-top: 10px;\n}\n\n@keyframes pulsate {\n    0% { transform: scale(1); }\n    50% { transform: scale(1.05); }\n    100% { transform: scale(1); }\n}\n\n.hide-sym:hover {\n    color: grey;\n}\n\n.col-drag-handle {\n    display: inline-block;\n    cursor: grab;\n    color: #007bff;\n    opacity: 0.35;\n    margin-left: 4px;\n    vertical-align: middle;\n    line-height: 1;\n}\n\n.col-drag-handle:hover {\n    opacity: 0.75;\n}\n\nth.col-dragging {\n    opacity: 0.45;\n}\n\nth.col-drag-over {\n    border-left: 2px solid #0275d8 !important;\n}\n\n.header-sort {\n    display: inline-flex;\n    flex-direction: column;\n    vertical-align: middle;\n    margin-left: 4px;\n    margin-right: 7px;\n}\n\n.header-sort svg {\n    display: block;\n    color: #007bff;\n    cursor: pointer;\n}\n\n.header-sort .bi-caret-down {\n    margin-top: -4px;\n}\n\n.header-sort svg:hover {\n    color: grey;\n}\n\n#plot-size-control {\n    position: absolute;\n    bottom: 52px;\n    z-index: 2;\n    right: calc(50% - 50px);\n}\n\n.popover {\n    z-index: 9999 !important;\n}\n\n.datavzrd-img {\n    max-width: 85vw;\n    max-height: 85vh;\n    width: auto;\n    height: auto;\n    display: block;\n    margin: 5rem auto;\n}\n\n.linkout-raw-value {\n    display: none;\n}\n\n.detail-pills-wrapper {\n    display: flex;\n    flex-wrap: wrap;\n    max-width: 25vw;\n    line-height: 1.3;\n}\n\n#filter-columns-input {\n    min-width: 140px;\n}\n\n#colum-filter-icon:hover {\n    cursor: pointer;\n    color: grey;\n}\n\n#landing-table h1 {\n  font-weight: 900;\n  font-size: inherit;\n}\n\n#landing-table h2 {\n  font-weight: 800;\n  font-size: inherit;\n}\n\n#landing-table h3 {\n  font-weight: 700;\n  font-size: inherit;\n}\n\n#landing-table h4 {\n  font-weight: 600;\n  font-size: inherit;\n}\n\n#landing-table h5 {\n  font-weight: 500;\n  font-size: inherit;\n}\n\n.pills-cell a,\n.detail-pills-wrapper a {\n  color: inherit;\n  text-decoration: none;\n}\n\n.linked-cell a {\n  color: inherit;\n}\n\n.linked-cell .dropdown-toggle {\n  color: inherit;\n  border-color: currentColor;\n}\n\n.pill-dropdown {\n  display: inline-block;\n}\n\n.centered-card {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n}\n\n.detail-pills-wrapper {\n  padding: 4px 0;\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
 
@@ -70172,7 +70202,7 @@ function renderMarkdownDescription(is_plot_view) {
     );
   }
   if (!is_plot_view) {
-    var heatmaps = config.heatmaps;
+    var heatmaps = [...config.heatmaps];
     if (header_config.heatmaps) {
       for (const e of header_config.heatmaps) {
         var domain = (domain = [
@@ -70807,6 +70837,8 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var vega__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega */ "./node_modules/.pnpm/vega@6.4.0/node_modules/vega/build/vega.module.js");
 /* harmony import */var d3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3 */ "./node_modules/.pnpm/d3@7.9.0/node_modules/d3/src/index.js");
 /* harmony import */var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./src/utils.js");
+/* harmony import */var _link_to_url__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./link-to-url */ "./src/plot/link-to-url.js");
+
 
 
 
@@ -70819,6 +70851,8 @@ function colorizeColumn(
   detail_mode,
   header_label_length,
   columnIndexMap,
+  link,
+  link_columns,
 ) {
   let index = columnIndexMap[heatmap.title];
   let row = 0;
@@ -70838,10 +70872,23 @@ function colorizeColumn(
         this.style.setProperty("color", "white", "important");
       }
     }
+    let shown_value = value;
     if (custom_func) {
       var data_function = window[custom_func];
-      value = data_function(value, table_rows[row]);
-      this.innerHTML = value;
+      shown_value = data_function(value, table_rows[row]);
+      this.innerHTML = shown_value;
+    } else {
+      shown_value = this.innerHTML;
+    }
+    if (link && value !== "") {
+      this.classList.add("linked-cell");
+      this.innerHTML = (0,_link_to_url__WEBPACK_IMPORTED_MODULE_4__.createLinkHtml)(
+        link_columns,
+        link.links,
+        value,
+        shown_value,
+        table_rows[row],
+      );
     }
     row++;
   });
@@ -70891,7 +70938,16 @@ function datavzrdScale(heatmap) {
   return scale;
 }
 
-function colorizeDetailCard(value, div, heatmap, row, is_float, precision) {
+function colorizeDetailCard(
+  value,
+  div,
+  heatmap,
+  row,
+  is_float,
+  precision,
+  link,
+  link_columns,
+) {
   let scale = datavzrdScale(heatmap);
 
   if (value !== "") {
@@ -70903,13 +70959,24 @@ function colorizeDetailCard(value, div, heatmap, row, is_float, precision) {
       }
     }
   }
+  let shown_value = value;
   if (heatmap.heatmap["custom-content"]) {
     var data_function = window[heatmap.heatmap["custom-content"]];
-    value = data_function(value, row);
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(`${div}`)[0].innerHTML = value;
+    shown_value = data_function(value, row);
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(`${div}`)[0].innerHTML = shown_value;
   } else if (is_float && precision !== undefined) {
-    value = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.precision_formatter)(precision, value);
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(`${div}`)[0].innerHTML = value;
+    shown_value = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.precision_formatter)(precision, value);
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(`${div}`)[0].innerHTML = shown_value;
+  }
+  if (link && value !== "") {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(`${div}`).addClass("linked-cell");
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(`${div}`)[0].innerHTML = (0,_link_to_url__WEBPACK_IMPORTED_MODULE_4__.createLinkHtml)(
+      link_columns,
+      link.links,
+      value,
+      shown_value,
+      row,
+    );
   }
 }
 
@@ -70996,6 +71063,7 @@ function isDark(c) {
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   createLinkHtml: function() { return createLinkHtml; },
+  dropdownItems: function() { return dropdownItems; },
   linkDetailUrlColumn: function() { return linkDetailUrlColumn; },
   linkUrlColumn: function() { return linkUrlColumn; }
 });
@@ -71003,30 +71071,46 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 
-function createLinkHtml(columns, link_urls, value, shown_value, row) {
-  if (link_urls.length == 1) {
-    let link = link_urls[0].link.url.replaceAll("{value}", value);
-    for (const column of columns) {
-      link = link.replaceAll(`{${column}}`, row[column]);
+function buildLinkUrl(url, columns, value, row, pill_value) {
+  let link = url.replaceAll("{value}", value);
+  if (pill_value !== undefined) {
+    link = link.replaceAll("{pill-value}", pill_value);
+  }
+  for (const column of columns) {
+    link = link.replaceAll(`{${column}}`, row[column]);
+  }
+  return link;
+}
+
+function dropdownItems(columns, link_urls, value, row, pill_value) {
+  let items = "";
+  for (let l of link_urls) {
+    let link = buildLinkUrl(l.link.url, columns, value, row, pill_value);
+    if (l.link["new-window"]) {
+      items = `${items}<a class="dropdown-item" href="${link}" target='_blank' rel="noopener noreferrer" >${l.name}</a>`;
+    } else {
+      items = `${items}<a class="dropdown-item" href="${link}" >${l.name}</a>`;
     }
+  }
+  return items;
+}
+
+function createLinkHtml(
+  columns,
+  link_urls,
+  value,
+  shown_value,
+  row,
+  pill_value,
+) {
+  if (link_urls.length == 1) {
+    let link = buildLinkUrl(link_urls[0].link.url, columns, value, row, pill_value);
     if (link_urls[0].link["new-window"]) {
       return `<a href="${link}" target="_blank" rel="noopener noreferrer" >${shown_value}</a>`;
     } else {
       return `<a href="${link}">${shown_value}</a>`;
     }
   } else {
-    let links = "";
-    for (let l of link_urls) {
-      let link = l.link.url.replaceAll("{value}", value);
-      for (const column of columns) {
-        link = link.replaceAll(`{${column}}`, row[column]);
-      }
-      if (l.link["new-window"]) {
-        links = `${links}<a class="dropdown-item" href="${link}" target='_blank' rel="noopener noreferrer" >${l.name}</a>`;
-      } else {
-        links = `${links}<a class="dropdown-item" href="${link}" >${l.name}</a>`;
-      }
-    }
     return `
               <div class="linkout-raw-value">${shown_value}</div>
               <div class="btn-group linkout-group">
@@ -71034,7 +71118,7 @@ function createLinkHtml(columns, link_urls, value, shown_value, row) {
                   ${shown_value}
                 </button>
                 <div class="dropdown-menu">
-                  ${links}
+                  ${dropdownItems(columns, link_urls, value, row, pill_value)}
                 </div>
               </div>
             `;
@@ -71097,6 +71181,8 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */var _heatmap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./heatmap */ "./src/plot/heatmap.js");
+/* harmony import */var _link_to_url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./link-to-url */ "./src/plot/link-to-url.js");
+
 
 
 
@@ -71106,6 +71192,7 @@ function renderPill(
   ellipsis,
   merge = false,
   position = "middle",
+  dropdown = false,
 ) {
   let styles = `padding: 4px 8px; background-color: ${color};`;
   if ((0,_heatmap__WEBPACK_IMPORTED_MODULE_1__.isDark)(color)) {
@@ -71124,13 +71211,22 @@ function renderPill(
             : "0";
     styles += `border-radius: ${radius}; margin: 0;`;
   }
+  if (dropdown) {
+    styles += "cursor: pointer;";
+  }
+  let toggle = dropdown
+    ? ' class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"'
+    : "";
+  let tooltip = dropdown
+    ? ""
+    : ' data-toggle="tooltip" data-trigger="hover click focus"';
 
   if (ellipsis === 0) {
-    return `<span style="${styles}; padding:6px 12px; height:24px; width:24px;" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'></span>`;
+    return `<span style="${styles}; padding:6px 12px; height:24px; width:24px;"${toggle}${tooltip} title='${value}'></span>`;
   } else if (ellipsis === undefined || value.length <= ellipsis) {
-    return `<span style="${styles}">${value}</span>`;
+    return `<span style="${styles}"${toggle}>${value}</span>`;
   } else {
-    return `<span style="${styles}" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'>${value.substring(0, ellipsis)}...</span>`;
+    return `<span style="${styles}"${toggle}${tooltip} title='${value}'>${value.substring(0, ellipsis)}...</span>`;
   }
 }
 
@@ -71148,6 +71244,45 @@ function pillsToHeatmap(pills) {
   };
 }
 
+function renderPillGroup(value, pills, scale, link, columns, row) {
+  let values = value.split(pills.pills.separator).map((item) => item.trim());
+  return values
+    .map((v, i) => {
+      let pos =
+        values.length === 1
+          ? "only"
+          : i === 0
+            ? "first"
+            : i === values.length - 1
+              ? "last"
+              : "middle";
+      if (link && link.links.length > 1) {
+        let toggle = renderPill(
+          v,
+          scale(v),
+          pills.pills.ellipsis,
+          pills.pills.merge,
+          pos,
+          true,
+        );
+        let items = (0,_link_to_url__WEBPACK_IMPORTED_MODULE_2__.dropdownItems)(columns, link.links, value, row, v);
+        return `<span class="btn-group pill-dropdown">${toggle}<div class="dropdown-menu">${items}</div></span>`;
+      }
+      let pill = renderPill(
+        v,
+        scale(v),
+        pills.pills.ellipsis,
+        pills.pills.merge,
+        pos,
+      );
+      if (link) {
+        return (0,_link_to_url__WEBPACK_IMPORTED_MODULE_2__.createLinkHtml)(columns, link.links, value, pill, row, v);
+      }
+      return pill;
+    })
+    .join("");
+}
+
 function renderPills(
   ah,
   columns,
@@ -71155,6 +71290,8 @@ function renderPills(
   detail_mode,
   header_label_length,
   columnIndexMap,
+  link,
+  link_columns,
 ) {
   let index = columnIndexMap[pills.title];
   let row = 0;
@@ -71167,61 +71304,26 @@ function renderPills(
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(`table > tbody > tr td:nth-child(${index})`).each(function () {
     var value = table_rows[row][pills.title];
     if (value !== "") {
-      let values = value
-        .split(pills.pills.separator)
-        .map((item) => item.trim());
-      let content = values
-        .map((v, i) => {
-          let pos =
-            values.length === 1
-              ? "only"
-              : i === 0
-                ? "first"
-                : i === values.length - 1
-                  ? "last"
-                  : "middle";
-          let color = scale(v);
-          return renderPill(
-            v,
-            color,
-            pills.pills.ellipsis,
-            pills.pills.merge,
-            pos,
-          );
-        })
-        .join("");
-      this.innerHTML = `<div style="display: inline-block; margin: 8px 0;">${content}</div>`;
+      let content = renderPillGroup(
+        value,
+        pills,
+        scale,
+        link,
+        link_columns,
+        table_rows[row],
+      );
+      this.innerHTML = `<div class="pills-cell" style="display: inline-block; margin: 8px 0;">${content}</div>`;
     }
     row++;
   });
 }
 
-function renderDetailPills(value, div, pills) {
+function renderDetailPills(value, div, pills, link, link_columns, row) {
   let heatmap = pillsToHeatmap(pills);
   let scale = (0,_heatmap__WEBPACK_IMPORTED_MODULE_1__.datavzrdScale)(heatmap);
 
   if (value !== "") {
-    let values = value.split(pills.pills.separator).map((item) => item.trim());
-    let content = values
-      .map((v, i) => {
-        let pos =
-          values.length === 1
-            ? "only"
-            : i === 0
-              ? "first"
-              : i === values.length - 1
-                ? "last"
-                : "middle";
-        let color = scale(v);
-        return renderPill(
-          v,
-          color,
-          pills.pills.ellipsis,
-          pills.pills.merge,
-          pos,
-        );
-      })
-      .join("");
+    let content = renderPillGroup(value, pills, scale, link, link_columns, row);
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(`${div}`)[0].innerHTML = `<div class="detail-pills-wrapper">${content}</div>`;
   }
   jquery__WEBPACK_IMPORTED_MODULE_0___default()('[data-toggle="tooltip"]').tooltip({
@@ -167275,6 +167377,16 @@ function addNumClass(dp_num, ah, detail_mode, config) {
   }
 }
 
+function findLink(title) {
+  return config.link_urls.find((l) => l.title === title);
+}
+
+function isAlreadyRenderedByPlot(title) {
+  return (
+    config.pill_titles.includes(title) || config.heatmap_titles.includes(title)
+  );
+}
+
 function detailFormatter(index, row) {
   let cp = config.custom_plot_titles;
   let ticks = config.tick_titles;
@@ -167297,12 +167409,13 @@ function detailFormatter(index, row) {
       if (config.column_config[key].label) {
         card_title = config.column_config[key].label;
       }
+      let isLink = link_urls.includes(key) && !isAlreadyRenderedByPlot(key);
       if (
         cp.includes(key) ||
         ticks.includes(key) ||
         bars.includes(key) ||
         bubbles.includes(key) ||
-        link_urls.includes(key)
+        isLink
       ) {
         if (cp.includes(key)) {
           id = `detail-plot-${index}-cp-${config.columns.indexOf(key)}`;
@@ -167310,7 +167423,7 @@ function detailFormatter(index, row) {
           id = `detail-plot-${index}-bars-${config.columns.indexOf(key)}`;
         } else if (bubbles.includes(key)) {
           id = `detail-plot-${index}-bubbles-${config.columns.indexOf(key)}`;
-        } else if (link_urls.includes(key)) {
+        } else if (isLink) {
           id = `detail-plot-${index}-links-${config.columns.indexOf(key)}`;
         } else {
           id = `detail-plot-${index}-ticks-${config.columns.indexOf(key)}`;
@@ -167319,7 +167432,7 @@ function detailFormatter(index, row) {
                    <div class="card-header">
                      ${card_title}
                    </div>
-                   <div class="card-body">
+                   <div class="card-body${isLink ? " centered-card" : ""}">
                      <div id="${id}"></div>
                    </div>
                  </div>`;
@@ -167330,7 +167443,7 @@ function detailFormatter(index, row) {
                   <div class="card-header">
                     ${card_title}
                   </div>
-                  <div id="${id}" class="card-body">
+                  <div id="${id}" class="card-body centered-card">
                     ${value}
                   </div>
                 </div>`;
@@ -167341,7 +167454,7 @@ function detailFormatter(index, row) {
                   <div class="card-header">
                     ${card_title}
                   </div>
-                  <div id="${id}" class="card-body">
+                  <div id="${id}" class="card-body centered-card">
                     ${value}
                   </div>
                 </div>`;
@@ -167417,7 +167530,7 @@ function render(
   }
 
   for (const o of config.link_urls) {
-    if (displayed_columns.includes(o.title)) {
+    if (displayed_columns.includes(o.title) && !isAlreadyRenderedByPlot(o.title)) {
       (0,_plot_link_to_url__WEBPACK_IMPORTED_MODULE_16__.linkUrlColumn)(
         columns,
         o.title,
@@ -167437,6 +167550,8 @@ function render(
         config.detail_mode,
         config.header_label_length,
         columnIndexMap,
+        findLink(o.title),
+        columns,
       );
     }
   }
@@ -167450,6 +167565,8 @@ function render(
         config.detail_mode,
         config.header_label_length,
         columnIndexMap,
+        findLink(o.title),
+        columns,
       );
     }
   }
@@ -167868,7 +167985,7 @@ function load() {
 
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("#table").on("expand-row.bs.table", (event, index, row, detailView) => {
       for (const o of config.link_urls) {
-        if (!config.displayed_columns.includes(o.title)) {
+        if (!config.displayed_columns.includes(o.title) && !isAlreadyRenderedByPlot(o.title)) {
           (0,_plot_link_to_url__WEBPACK_IMPORTED_MODULE_16__.linkDetailUrlColumn)(
             row,
             `#detail-plot-${index}-links-${columnIdMap[o.title]}`,
@@ -167901,6 +168018,8 @@ function load() {
             row,
             config.column_config[o.title].is_float,
             config.column_config[o.title].precision,
+            findLink(o.title),
+            config.columns,
           );
         }
       }
@@ -167911,6 +168030,9 @@ function load() {
             row[o.title],
             `#pills-${index}-${columnIdMap[o.title]}`,
             o,
+            findLink(o.title),
+            config.columns,
+            row,
           );
         }
       }
