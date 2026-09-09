@@ -23,7 +23,7 @@ export function renderMarkdownDescription(is_plot_view) {
     );
   }
   if (!is_plot_view) {
-    var heatmaps = config.heatmaps;
+    var heatmaps = [...config.heatmaps];
     if (header_config.heatmaps) {
       for (const e of header_config.heatmaps) {
         var domain = (domain = [

@@ -1,29 +1,45 @@
 import $ from "jquery";
 
-export function createLinkHtml(columns, link_urls, value, shown_value, row) {
-  if (link_urls.length == 1) {
-    let link = link_urls[0].link.url.replaceAll("{value}", value);
-    for (const column of columns) {
-      link = link.replaceAll(`{${column}}`, row[column]);
+function buildLinkUrl(url, columns, value, row, pill_value) {
+  let link = url.replaceAll("{value}", value);
+  if (pill_value !== undefined) {
+    link = link.replaceAll("{pill-value}", pill_value);
+  }
+  for (const column of columns) {
+    link = link.replaceAll(`{${column}}`, row[column]);
+  }
+  return link;
+}
+
+export function dropdownItems(columns, link_urls, value, row, pill_value) {
+  let items = "";
+  for (let l of link_urls) {
+    let link = buildLinkUrl(l.link.url, columns, value, row, pill_value);
+    if (l.link["new-window"]) {
+      items = `${items}<a class="dropdown-item" href="${link}" target='_blank' rel="noopener noreferrer" >${l.name}</a>`;
+    } else {
+      items = `${items}<a class="dropdown-item" href="${link}" >${l.name}</a>`;
     }
+  }
+  return items;
+}
+
+export function createLinkHtml(
+  columns,
+  link_urls,
+  value,
+  shown_value,
+  row,
+  pill_value,
+) {
+  if (link_urls.length == 1) {
+    let link = buildLinkUrl(link_urls[0].link.url, columns, value, row, pill_value);
     if (link_urls[0].link["new-window"]) {
       return `<a href="${link}" target="_blank" rel="noopener noreferrer" >${shown_value}</a>`;
     } else {
       return `<a href="${link}">${shown_value}</a>`;
     }
   } else {
-    let links = "";
-    for (let l of link_urls) {
-      let link = l.link.url.replaceAll("{value}", value);
-      for (const column of columns) {
-        link = link.replaceAll(`{${column}}`, row[column]);
-      }
-      if (l.link["new-window"]) {
-        links = `${links}<a class="dropdown-item" href="${link}" target='_blank' rel="noopener noreferrer" >${l.name}</a>`;
-      } else {
-        links = `${links}<a class="dropdown-item" href="${link}" >${l.name}</a>`;
-      }
-    }
     return `
               <div class="linkout-raw-value">${shown_value}</div>
               <div class="btn-group linkout-group">
@@ -31,7 +47,7 @@ export function createLinkHtml(columns, link_urls, value, shown_value, row) {
                   ${shown_value}
                 </button>
                 <div class="dropdown-menu">
-                  ${links}
+                  ${dropdownItems(columns, link_urls, value, row, pill_value)}
                 </div>
               </div>
             `;
