@@ -196,15 +196,25 @@ impl ItemsSpec {
                             if let Some(plot) = &render_columns.plot {
                                 if plot.heatmap.is_some() {
                                     possible_conflicting.push("heatmap".to_string());
-                                } else if plot.tick_plot.is_some() {
+                                }
+                                if plot.tick_plot.is_some() {
                                     possible_conflicting.push("ticks".to_string());
+                                }
+                                if plot.bar_plot.is_some() {
+                                    possible_conflicting.push("bars".to_string());
+                                }
+                                if plot.bubble_plot.is_some() {
+                                    possible_conflicting.push("bubbles".to_string());
+                                }
+                                if plot.pills.is_some() {
+                                    possible_conflicting.push("pills".to_string());
                                 }
                             }
                             let has =
                                 |feature: &str| possible_conflicting.iter().any(|c| c == feature);
                             let allowed_pairing = possible_conflicting.len() == 2
-                                && has("heatmap")
-                                && (has("ellipsis") || has("link-to-url"));
+                                && ((has("heatmap") && (has("ellipsis") || has("link-to-url")))
+                                    || (has("pills") && has("link-to-url")));
                             if possible_conflicting.len() > 1 && !allowed_pairing {
                                 bail!(ConflictingConfiguration {
                                     view: name.to_string(),
@@ -2399,6 +2409,56 @@ mod tests {
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_ok());
+    }
+
+    #[test]
+    fn test_pills_with_link_to_url_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: tests/data/uniform_datatypes.csv
+                    separator: ","
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        columns:
+                            first:
+                                plot:
+                                    pills:
+                                        separator: ","
+                                        color-scheme: category20
+                                link-to-url:
+                                    example:
+                                        url: "https://example.com/{pill-value}"
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_ok());
+    }
+
+    #[test]
+    fn test_conflicting_plots_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: tests/data/uniform_datatypes.csv
+                    separator: ","
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        columns:
+                            first:
+                                plot:
+                                    heatmap:
+                                        scale: ordinal
+                                        color-scheme: tableau20
+                                    pills:
+                                        separator: ","
+                                        color-scheme: category20
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_err());
     }
 
     #[test]
