@@ -200,11 +200,12 @@ impl ItemsSpec {
                                     possible_conflicting.push("ticks".to_string());
                                 }
                             }
-                            if possible_conflicting.len() > 1
-                                && !(possible_conflicting.contains(&"heatmap".to_string())
-                                    && possible_conflicting.contains(&"ellipsis".to_string())
-                                    && possible_conflicting.len() == 2)
-                            {
+                            let has =
+                                |feature: &str| possible_conflicting.iter().any(|c| c == feature);
+                            let allowed_pairing = possible_conflicting.len() == 2
+                                && has("heatmap")
+                                && (has("ellipsis") || has("link-to-url"));
+                            if possible_conflicting.len() > 1 && !allowed_pairing {
                                 bail!(ConflictingConfiguration {
                                     view: name.to_string(),
                                     column: column.to_string(),
@@ -2350,6 +2351,54 @@ mod tests {
             "#;
         let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         assert!(config.validate().is_err());
+    }
+
+    #[test]
+    fn test_heatmap_with_link_to_url_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: tests/data/uniform_datatypes.csv
+                    separator: ","
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        columns:
+                            first:
+                                plot:
+                                    heatmap:
+                                        scale: ordinal
+                                        color-scheme: tableau20
+                                link-to-url:
+                                    example:
+                                        url: "https://example.com/{value}"
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_ok());
+    }
+
+    #[test]
+    fn test_heatmap_with_ellipsis_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: tests/data/uniform_datatypes.csv
+                    separator: ","
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        columns:
+                            first:
+                                plot:
+                                    heatmap:
+                                        scale: ordinal
+                                        color-scheme: tableau20
+                                ellipsis: 5
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        assert!(config.validate().is_ok());
     }
 
     #[test]

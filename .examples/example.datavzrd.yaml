@@ -95,7 +95,9 @@ views:
             pills:
               separator: ","
               color-scheme: category20
-              ellipsis: 5
+          link-to-url:
+            IMDb genre:
+              url: "https://www.imdb.com/search/title/?genres={pill-value}"
         imdbID:
           link-to-url:
             IMDB:
@@ -128,6 +130,9 @@ views:
               color-scheme: tableau20
               legend:
                 title: Rating
+          link-to-url:
+            Rating info:
+              url: "https://www.google.com/search?q={value}+film+rating"
         Runtime:
           custom-path: ".examples/specs/time-formatter.js"
   movies-plot:
