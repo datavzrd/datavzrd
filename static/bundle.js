@@ -167673,6 +167673,14 @@ function load() {
     const columnIndexMap = buildColumnIndexMap();
     window.columnIndexMap = columnIndexMap;
     NARROW_VIEW = config.narrow;
+    if (!config.is_single_page) {
+      const narrowParam = new URLSearchParams(window.location.search).get(
+        "narrow",
+      );
+      if (narrowParam !== null) {
+        NARROW_VIEW = narrowParam === "1";
+      }
+    }
     config.original_displayed_columns = [...config.displayed_columns];
     (0,_page__WEBPACK_IMPORTED_MODULE_11__.render_html_contents)();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".table-container").show();
@@ -168125,6 +168133,9 @@ function load() {
             }
           }
         }
+      }
+      if (new URLSearchParams(window.location.search).get("narrow") !== null) {
+        persistNarrowView();
       }
     }
 
@@ -168758,6 +168769,9 @@ function toggle_line_numbers() {
 function toggle_narrow_view() {
   NARROW_VIEW = !NARROW_VIEW;
   applyNarrowView(window.columnIndexMap);
+  if (!config.is_single_page) {
+    persistNarrowView();
+  }
 }
 
 function downloadSVG(dataUrl, fileName) {
@@ -168988,6 +169002,20 @@ function persistColumnOrder() {
     const [path, existingQuery] = href.split("?");
     const linkParams = new URLSearchParams(existingQuery || "");
     linkParams.set("col_order", order);
+    a.setAttribute("href", `${path}?${linkParams.toString()}`);
+  });
+}
+
+function persistNarrowView() {
+  const value = NARROW_VIEW ? "1" : "0";
+  const params = new URLSearchParams(window.location.search);
+  params.set("narrow", value);
+  history.replaceState(null, "", "?" + params.toString());
+  document.querySelectorAll("#pagination a.page-link[href]").forEach((a) => {
+    const href = a.getAttribute("href");
+    const [path, existingQuery] = href.split("?");
+    const linkParams = new URLSearchParams(existingQuery || "");
+    linkParams.set("narrow", value);
     a.setAttribute("href", `${path}?${linkParams.toString()}`);
   });
 }
