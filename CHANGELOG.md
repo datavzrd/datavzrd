@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.73.1](https://github.com/datavzrd/datavzrd/compare/v2.73.0...v2.73.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* Persist narrow column view across paginated pages ([#1278](https://github.com/datavzrd/datavzrd/issues/1278)) ([ab1d976](https://github.com/datavzrd/datavzrd/commit/ab1d976ef691b588509aa6570666a073b89d8c69))
+
 ## [2.73.0](https://github.com/datavzrd/datavzrd/compare/v2.72.2...v2.73.0) (2026-09-09)
 
 
