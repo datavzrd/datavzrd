@@ -1,5 +1,6 @@
 use crate::spec::ItemsSpec;
 use anyhow::Result;
+use itertools::Itertools;
 use minify_js::{minify, Session, TopLevelMode};
 use std::collections::HashMap;
 use std::fs;
@@ -51,8 +52,12 @@ pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> R
         .iter()
         .map(|(name, view)| (name, view.description.as_deref().map(escape_html_string)))
         .collect();
+    let default_view = specs
+        .default_view
+        .clone()
+        .or_else(|| specs.views.keys().exactly_one().ok().cloned());
     let mut context = Context::new();
-    context.insert("table", &specs.default_view);
+    context.insert("table", &default_view);
     context.insert("views", &views);
     context.insert("version", &env!("CARGO_PKG_VERSION"));
     context.insert("name", &specs.report_name);
