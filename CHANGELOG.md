@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.73.2](https://github.com/datavzrd/datavzrd/compare/v2.73.1...v2.73.2) (2026-09-18)
+
+
+### Bug Fixes
+
+* Keep the compact table styling out of detail mode cards ([#1280](https://github.com/datavzrd/datavzrd/issues/1280)) ([a5fd94b](https://github.com/datavzrd/datavzrd/commit/a5fd94b0444431df4b26c48f6919782046915475))
+* Skip the landing page for reports with a single view ([#1281](https://github.com/datavzrd/datavzrd/issues/1281)) ([d6be442](https://github.com/datavzrd/datavzrd/commit/d6be442dbf68da06879fc9b28aa3f07e0c096824))
+
 ## [2.73.1](https://github.com/datavzrd/datavzrd/compare/v2.73.0...v2.73.1) (2026-09-15)
 
 
