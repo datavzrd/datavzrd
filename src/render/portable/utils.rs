@@ -51,8 +51,15 @@ pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> R
         .iter()
         .map(|(name, view)| (name, view.description.as_deref().map(escape_html_string)))
         .collect();
+    let default_view = specs.default_view.clone().or_else(|| {
+        if specs.views.len() == 1 {
+            specs.views.keys().next().cloned()
+        } else {
+            None
+        }
+    });
     let mut context = Context::new();
-    context.insert("table", &specs.default_view);
+    context.insert("table", &default_view);
     context.insert("views", &views);
     context.insert("version", &env!("CARGO_PKG_VERSION"));
     context.insert("name", &specs.report_name);
