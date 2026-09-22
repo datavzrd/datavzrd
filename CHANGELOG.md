@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.73.3](https://github.com/datavzrd/datavzrd/compare/v2.73.2...v2.73.3) (2026-09-22)
+
+
+### Bug Fixes
+
+* Update readervzrd to 0.4.3 ([#1287](https://github.com/datavzrd/datavzrd/issues/1287)) ([79ce421](https://github.com/datavzrd/datavzrd/commit/79ce421db373e391abf879feb51bdfb2165d92cc))
+
 ## [2.73.2](https://github.com/datavzrd/datavzrd/compare/v2.73.1...v2.73.2) (2026-09-18)
 
 
