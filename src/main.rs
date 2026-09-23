@@ -17,8 +17,14 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 fn main() -> Result<()> {
     let opt = cli::Datavzrd::parse();
+    let level = match opt.verbose {
+        0 => LevelFilter::Warn,
+        1 => LevelFilter::Info,
+        2 => LevelFilter::Debug,
+        _ => LevelFilter::Trace,
+    };
     let _ = TermLogger::init(
-        LevelFilter::Warn,
+        level,
         Config::default(),
         TerminalMode::Stderr,
         ColorChoice::Auto,

@@ -12,7 +12,7 @@ use thiserror::Error;
 pub struct Datavzrd {
     /// Verbose mode (-v, -vv, -vvv, etc.)
     #[arg(short, long, action = clap::ArgAction::Count)]
-    pub(crate) _verbose: u8,
+    pub(crate) verbose: u8,
 
     /// Activates debug mode. Javascript files are not minified and table data is human readable.
     #[arg(long)]
