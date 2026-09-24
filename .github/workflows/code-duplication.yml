@@ -1,0 +1,14 @@
+name: Duplicate code
+
+on: pull_request
+
+jobs:
+  duplicate-code-check:
+    name: Check for duplicate code
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: run lizard
+        uses: Uno-Takashi/Lizard-Runner@v3
+        with:
+          language: rust
