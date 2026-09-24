@@ -23,6 +23,7 @@ use anyhow::Result;
 use anyhow::{bail, Context as AnyhowContext};
 use chrono::{DateTime, Local};
 use itertools::Itertools;
+use log::info;
 use serde::Serialize;
 use serde_json::{json, Value};
 use std::collections::HashMap;
@@ -94,7 +95,9 @@ impl Renderer for ItemRenderer {
             })
             .collect();
         let mut column_index_cache: LinkedTable = HashMap::new();
-        for (name, table) in &self.specs.views {
+        let total_views = self.specs.views.len();
+        for (index, (name, table)) in self.specs.views.iter().enumerate() {
+            info!("Rendering view '{name}' ({}/{total_views})", index + 1);
             let out_path = Path::new(path.as_ref()).join(name);
             fs::create_dir(&out_path)?;
             if table.render_plot.is_some() {
@@ -198,6 +201,7 @@ impl Renderer for ItemRenderer {
                     fs::create_dir(&data_path)?;
                     let row_address_factory = RowAddressFactory::new(table.page_size);
                     let pages = row_address_factory.get(records_length - 1).page + 1;
+                    let progress_step = (pages / 20).max(1);
 
                     let is_single_page = if let Some(max_rows) = table.max_in_memory_rows {
                         records_length <= max_rows
@@ -262,6 +266,9 @@ impl Renderer for ItemRenderer {
                             is_single_page,
                             debug,
                         )?;
+                        if pages > 1 && ((page + 1) % progress_step == 0 || page + 1 == pages) {
+                            info!("View '{name}': rendered page {}/{pages}", page + 1);
+                        }
                     }
                     if !is_single_page {
                         render_search_dialogs(
