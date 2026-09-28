@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.74.0](https://github.com/datavzrd/datavzrd/compare/v2.73.3...v2.74.0) (2026-09-28)
+
+
+### Features
+
+* Log rendering progress in verbose mode ([#1289](https://github.com/datavzrd/datavzrd/issues/1289)) ([b79d895](https://github.com/datavzrd/datavzrd/commit/b79d89568387d4cccac67499e46a1449cfce25cd))
+
+
+### Bug Fixes
+
+* Avoid horizontal scrollbar from full-width description card ([#1293](https://github.com/datavzrd/datavzrd/issues/1293)) ([71da494](https://github.com/datavzrd/datavzrd/commit/71da494f8cf408a3fcc275735fa112be29cd6f2f))
+
 ## [2.73.3](https://github.com/datavzrd/datavzrd/compare/v2.73.2...v2.73.3) (2026-09-22)
 
 
