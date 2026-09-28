@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.74.1](https://github.com/datavzrd/datavzrd/compare/v2.74.0...v2.74.1) (2026-09-28)
+
+
+### Bug Fixes
+
+* Escape column and report names in generated JavaScript ([#1295](https://github.com/datavzrd/datavzrd/issues/1295)) ([4fb630b](https://github.com/datavzrd/datavzrd/commit/4fb630bce3b68221afda02c888d58bea4d67448a))
+
 ## [2.74.0](https://github.com/datavzrd/datavzrd/compare/v2.73.3...v2.74.0) (2026-09-28)
 
 
