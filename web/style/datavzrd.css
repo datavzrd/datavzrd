@@ -87,6 +87,10 @@
     background-color: #f8f9fa;
 }
 
+.plot-column-icon {
+    margin-left: 3px;
+}
+
 .plot-column-icon.active {
     color: #c21f30;
 }

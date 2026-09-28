@@ -21,51 +21,38 @@ export function columnPlotIcon(index) {
 // The first click marks a column, the second one opens the plot of both.
 export function selectPlotColumn(index) {
   const column = config.columns[index];
-  if (selectedColumn === null) {
-    selectedColumn = column;
-  } else if (selectedColumn === column) {
-    selectedColumn = null;
-  } else {
-    const x = selectedColumn;
-    selectedColumn = null;
-    openColumnPlot(x, column);
+  if (selectedColumn !== null && selectedColumn !== column) {
+    openColumnPlot(selectedColumn, column);
   }
+  selectedColumn = selectedColumn === null ? column : null;
   $(".plot-column-icon").removeClass("active");
-  if (selectedColumn !== null) {
-    $(`.plot-column-icon[data-column="${index}"]`).addClass("active");
-  }
+  $(`.plot-column-icon[data-column="${index}"]`).toggleClass("active", selectedColumn !== null);
 }
 
 function columnPlotSpec(options) {
-  const mark = { type: options.mark };
-  if (options.mark !== "boxplot") {
-    mark.tooltip = { content: "data" };
-  }
-  if (options.opacity < 1) {
-    mark.opacity = Number(options.opacity);
-  }
-
   const x = channel(options.x, options.xType);
   const y =
     options.aggregate === "count"
-      ? { aggregate: "count", type: "quantitative" }
+      ? { type: "quantitative" }
       : channel(options.y, options.yType);
-  if (options.aggregate && options.aggregate !== "count") {
+  if (options.aggregate) {
     y.aggregate = options.aggregate;
   }
   addScale(x, options.xScale, options.mark);
   addScale(y, options.yScale, options.mark);
 
-  const encoding = { x, y };
-  if (options.color) {
-    encoding.color = channel(options.color, defaultType(options.color));
-  }
-  if (options.size) {
-    encoding.size = channel(options.size, defaultType(options.size));
-  }
-  if (options.shape) {
-    encoding.shape = channel(options.shape, "nominal");
-  }
+  const mark = {
+    type: options.mark,
+    ...(options.mark !== "boxplot" && { tooltip: { content: "data" } }),
+    ...(options.opacity < 1 && { opacity: Number(options.opacity) }),
+  };
+  const encoding = {
+    x,
+    y,
+    ...(options.color && { color: channel(options.color, defaultType(options.color)) }),
+    ...(options.size && { size: channel(options.size, defaultType(options.size)) }),
+    ...(options.shape && { shape: channel(options.shape, "nominal") }),
+  };
 
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v6.json",
