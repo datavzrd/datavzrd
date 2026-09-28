@@ -37,6 +37,7 @@ pub(crate) fn render_plots<P: AsRef<Path>>(
     let mut plots = Vec::new();
     for (index, column) in summary.headers.iter().enumerate() {
         let mut templates = Tera::default();
+        templates.register_filter("json_encode", tera_contrib::json::json_encode);
         let mut context = Context::new();
         context.insert("title", &column);
         context.insert("index", &index);

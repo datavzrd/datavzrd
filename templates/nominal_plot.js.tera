@@ -10,7 +10,7 @@ let plot_{{ index }} = {
                 "x": {
                     "field": "key",
                     "sort": {"field": "value", "order": "descending"},
-                    "title": "{{ title }}"
+                    "title": {{ title | json_encode }}
                 },
                 "y": {"field": "value", "type": "quantitative", "title": null}
             }
