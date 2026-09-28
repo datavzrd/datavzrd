@@ -8,7 +8,7 @@ import "bootstrap-table/src/bootstrap-table.js";
 import "bootstrap-table/src/extensions/multiple-sort/bootstrap-table-multiple-sort.js";
 import "bootstrap-select";
 import * as htmlToImage from "html-to-image";
-import { precision_formatter } from "./utils";
+import { download, precision_formatter } from "./utils";
 import {
   render_html_contents,
   render_plot_size_controls,
@@ -43,11 +43,14 @@ import {
   renderPlot,
   renderDetailTickBarBubblePlot
 } from "./plot/plot";
+import { columnPlotIcon } from "./plot/column-plot";
 import "../style/bootstrap.min.css";
 import "../style/bootstrap-table.min.css";
 import "../style/bootstrap-select.min.css";
 import "../style/bootstrap-table-fixed-columns.min.css";
 import "../style/datavzrd.css";
+
+export { selectPlotColumn } from "./plot/column-plot";
 
 let LINE_NUMBERS = false;
 let NARROW_VIEW = false;
@@ -532,6 +535,9 @@ export function load() {
         let histogram_icon = `<span class="sym ic" style="margin-left: 2px;" data-toggle="modal" data-target="#histogram_modal" onclick="datavzrd.embedHistogram(show_plot_${columnIdMap[column]}, ${columnIdMap[column]}, plot_${columnIdMap[column]})"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></span>`;
         if (!config.additional_colums[column]) {
           title += histogram_icon;
+          if (config.is_single_page) {
+            title += columnPlotIcon(columnIdMap[column]);
+          }
         }
 
         // Add static search if not single page mode
@@ -1544,18 +1550,6 @@ export function toggle_narrow_view() {
   }
 }
 
-function downloadSVG(dataUrl, fileName) {
-  const blob = new Blob([decodeURIComponent(dataUrl.split(",")[1])], {
-    type: "image/svg+xml",
-  });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
 function filter(node) {
   const hidden = ["sym", "header-sort", "col-drag-handle"];
   return !hidden.some((c) => node.classList?.contains(c));
@@ -1623,7 +1617,11 @@ export function screenshot_table() {
       },
     })
     .then((dataUrl) =>
-      downloadSVG(dataUrl, `${$("#view-selection").attr("title")}.svg`),
+      download(
+        decodeURIComponent(dataUrl.split(",")[1]),
+        "image/svg+xml",
+        `${$("#view-selection").attr("title")}.svg`,
+      ),
     )
     .finally(() => {
       narrow_contents.forEach(([cell, html]) => {

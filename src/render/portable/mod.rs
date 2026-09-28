@@ -310,6 +310,7 @@ impl Renderer for ItemRenderer {
                         table.description.as_deref(),
                         &self.specs.report_name,
                         name,
+                        table.dataset.as_ref().unwrap(),
                     )?;
                     render_custom_javascript_functions(
                         &out_path,
@@ -463,6 +464,7 @@ fn render_table_javascript<P: AsRef<Path>>(
     description: Option<&str>,
     report_name: &String,
     title: &String,
+    dataset: &str,
 ) -> Result<()> {
     let mut templates = Tera::default();
     templates.register_filter("json_encode", tera_contrib::json::json_encode);
@@ -491,6 +493,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         description,
         report_name,
         title,
+        dataset,
     );
 
     let custom_plot_config = CustomPlotsConfig::from_column_config(
@@ -750,6 +753,7 @@ struct JavascriptConfig {
     time: String,
     version: String,
     title: String,
+    dataset: String,
 }
 
 impl JavascriptConfig {
@@ -773,6 +777,7 @@ impl JavascriptConfig {
         description: Option<&str>,
         report_name: &String,
         title: &String,
+        dataset: &str,
     ) -> Self {
         let header_label_length = if let Some(headers) = header_specs {
             headers.iter().filter(|(_, v)| v.label.is_some()).count()
@@ -1038,6 +1043,7 @@ impl JavascriptConfig {
             time: local.format("%a %b %e %T %Y").to_string(),
             version: env!("CARGO_PKG_VERSION").to_string(),
             title: title.to_string(),
+            dataset: dataset.to_string(),
         }
     }
 }

@@ -9,3 +9,12 @@ export function precision_formatter(precision, value) {
     return value.toExponential(precision);
   }
 }
+
+export function download(content, type, fileName) {
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(new Blob([content], { type }));
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
