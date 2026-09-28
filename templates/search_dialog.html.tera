@@ -9,7 +9,7 @@
 <script src="../../static/bundle.js"></script>
 <script>
     const search_data = {{ data | safe }};
-    const table_title = "{{ title }}";
+    const table_title = {{ title | json_encode }};
     const page_size = {{ page_size }};
     datavzrd.load_search();
 </script>

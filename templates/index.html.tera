@@ -10,7 +10,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const viewParam = urlParams.get('view');
     const version = '{{ version }}';
-    const name = '{{ name }}';
+    const name = {{ name | json_encode }};
     const views = {{ views | json_encode}};
     const table = {{ table | json_encode }};
     let redirectUrl = viewParam ? `${viewParam}/index_1.html` : `${table}/index_1.html`;
