@@ -7,6 +7,8 @@ const POINT_MARKS = ["point", "circle", "square"];
 const TYPES = ["quantitative", "ordinal", "nominal", "temporal"];
 const SCALES = ["linear", "log", "sqrt", "symlog"];
 const AGGREGATES = ["count", "sum", "mean", "median", "min", "max"];
+const HEIGHT = 400;
+const MAX_SIZE = 2000;
 const LABEL_STEP = 14;
 const EXPORTS = {
   svg: async ({ view }) => [await view.toSVG(), "image/svg+xml"],
@@ -34,7 +36,7 @@ export function selectPlotColumn(index) {
   $(`.plot-column-icon[data-column="${index}"]`).toggleClass("active", selectedColumn !== null);
 }
 
-function columnPlotSpec(options, data) {
+function columnPlotSpec(options) {
   const x = channel(options.x, options.xType);
   const y =
     options.aggregate === "count"
@@ -62,8 +64,8 @@ function columnPlotSpec(options, data) {
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v6.json",
     ...(options.title && { title: options.title }),
-    width: axisSize(options.x, options.xType, data, options.width),
-    height: axisSize(options.y, options.yType, data, options.height),
+    width: Number(options.width),
+    height: Number(options.height),
     autosize: { type: "fit", contains: "padding" },
     ...(options.zoom && {
       params: [{ name: "zoom", select: "interval", bind: "scales" }],
@@ -73,12 +75,19 @@ function columnPlotSpec(options, data) {
   };
 }
 
-// Discrete axes with more categories than fit into the chosen size get a fixed
-// step per category, so that the plot scrolls instead of the labels overlapping.
-function axisSize(column, type, data, size) {
-  const discrete = type === "nominal" || type === "ordinal";
-  const categories = discrete ? new Set(data.map((row) => row[column])).size : 0;
-  return categories * LABEL_STEP > size ? { step: LABEL_STEP } : Number(size);
+// Sizes an axis to the available space or, if it is discrete and has more
+// categories than fit, to one step per category so that its labels stay
+// readable. The plot then scrolls, and the sliders can still change the size.
+function fitAxis(axis) {
+  const form = document.getElementById("column-plot-options");
+  const slider = form.elements[axis === "x" ? "width" : "height"];
+  const column = form.elements[axis].value;
+  const discrete = ["nominal", "ordinal"].includes(form.elements[`${axis}Type`].value);
+  const categories = discrete ? new Set(tableData().map((row) => row[column])).size : 0;
+  const available = axis === "x" ? $("#column-plot").width() : HEIGHT;
+  const size = Math.max(available, categories * LABEL_STEP);
+  slider.max = Math.max(MAX_SIZE, size);
+  slider.value = size;
 }
 
 function channel(column, type) {
@@ -128,8 +137,12 @@ function initModal() {
       .find(`[name=${name}]`)
       .append(datasetColumns().map((c) => new Option(label(c) ?? c, c)));
   }
-  form.find("[name=x], [name=y]").on("change", function () {
-    form.find(`[name=${this.name}Type]`).val(defaultType(this.value));
+  form.find("[name=x], [name=y], [name=xType], [name=yType]").on("change", function () {
+    const axis = this.name[0];
+    if (this.name === axis) {
+      form.find(`[name=${axis}Type]`).val(defaultType(this.value));
+    }
+    fitAxis(axis);
   });
   form.on("change", render);
   form.on("submit", (event) => event.preventDefault());
@@ -147,18 +160,18 @@ function initModal() {
     const [content, type] = await EXPORTS[format]({ ...plot, view });
     download(content, type, `${plot.name}.${format}`);
   });
-  // The plot initially fills the available width.
-  $("#column-plot-modal")
-    .one("shown.bs.modal", () => form.find("[name=width]").val($("#column-plot").width()))
-    .on("shown.bs.modal", render);
+  $("#column-plot-modal").on("shown.bs.modal", () => {
+    fitAxis("x");
+    fitAxis("y");
+    render();
+  });
 }
 
 function render() {
   const form = document.getElementById("column-plot-options");
   updateControls(form);
   const options = Object.fromEntries(new FormData(form));
-  const data = tableData();
-  const plot = { name: viewName(options), spec: columnPlotSpec(options, data), data };
+  const plot = { name: viewName(options), spec: columnPlotSpec(options), data: tableData() };
   plot.embedding = vegaEmbed("#column-plot", withData(plot), { actions: false });
   plot.embedding.catch((error) => {
     $("#column-plot").empty().append($('<p class="text-danger">').text(error.message));
@@ -196,6 +209,8 @@ function swapAxes() {
     const y = form.elements[`y${suffix}`];
     [x.value, y.value] = [y.value, x.value];
   }
+  fitAxis("x");
+  fitAxis("y");
   render();
 }
 
