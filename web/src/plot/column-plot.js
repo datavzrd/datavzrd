@@ -355,7 +355,7 @@ function modal() {
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary mr-auto" id="column-plot-swap">Swap axes</button>
-            <div class="dropup">
+            <div class="dropdown">
               <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download</button>
               <div class="dropdown-menu">
                 <button type="button" class="dropdown-item" data-export="svg">SVG</button>
