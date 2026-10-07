@@ -4,7 +4,7 @@
     "height": 10,
     "encoding": {
         "size": {
-            "field": "{{ field }}",
+            "field": {{ field | json_encode }},
             "type": "quantitative",
             "scale": {"type": "{{ scale_type }}","domain": [{{ minimum | json_encode }}, {{ maximum | json_encode }}]},
             "axis": {
@@ -29,7 +29,7 @@
                         "domain": {% if color_definition.domain %}{{ color_definition.domain | json_encode }}{% else %}[{{ minimum | json_encode }}, {{ maximum | json_encode }}]{% endif %}
                         {% if color_definition.domain_mid %}, "domainMid": {{ color_definition.domain_mid }}{% endif %}
                     },
-                    "field": "{{ field }}",
+                    "field": {{ field | json_encode }},
                     "legend": null,
                     "type": "quantitative"
                 }
@@ -37,7 +37,7 @@
         },
         {
         "mark": {"type": "text", "yOffset": -10, "xOffset": 10},
-        "encoding": {"x": {"value": 0}, "text": {"field": "{{ field }}"}, "size": {"value": 12}}
+        "encoding": {"x": {"value": 0}, "text": {"field": {{ field | json_encode }}}, "size": {"value": 12}}
         }
     ],
     "config": {

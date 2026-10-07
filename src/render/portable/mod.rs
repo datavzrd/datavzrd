@@ -1385,6 +1385,7 @@ fn render_search_dialogs<P: AsRef<Path>>(
     fs::create_dir(&output_path)?;
 
     let mut templates = Tera::default();
+    templates.register_filter("json_encode", tera_contrib::json::json_encode);
     templates.add_raw_template(
         "search_dialog.html.tera",
         include_str!("../../../templates/search_dialog.html.tera"),
