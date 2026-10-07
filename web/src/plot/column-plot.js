@@ -7,14 +7,17 @@ const POINT_MARKS = ["point", "circle", "square"];
 const TYPES = ["quantitative", "ordinal", "nominal", "temporal"];
 const SCALES = ["linear", "log", "sqrt", "symlog"];
 const AGGREGATES = ["count", "sum", "mean", "median", "min", "max"];
-const HEIGHT = 400;
 const LABEL_STEP = 14;
-const EMBED_OPTIONS = {
-  actions: { export: true, source: false, compiled: false, editor: false },
+const EXPORTS = {
+  svg: async ({ view }) => [await view.toSVG(), "image/svg+xml"],
+  png: async ({ view }) => [await (await fetch(await view.toImageURL("png", 2))).blob(), "image/png"],
+  json: (plot) => [JSON.stringify(withData(plot), null, 2), "application/json"],
+  html: (plot) => [standaloneHtml(plot), "text/html"],
+  yaml: (plot) => [viewConfig(plot), "text/yaml"],
 };
 
 let selectedColumn = null;
-let exportedView = null;
+let currentPlot = null;
 
 export function columnPlotIcon(index) {
   return `<span class="sym ic plot-column-icon" data-column="${index}" title="Plot against another column" onclick="datavzrd.selectPlotColumn(${index})"><svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M1 1h1v13h13v1H1z"/><circle cx="5" cy="10" r="1.5"/><circle cx="8" cy="6" r="1.5"/><circle cx="11.5" cy="8.5" r="1.5"/><circle cx="13" cy="3.5" r="1.5"/></svg></span>`;
@@ -31,7 +34,7 @@ export function selectPlotColumn(index) {
   $(`.plot-column-icon[data-column="${index}"]`).toggleClass("active", selectedColumn !== null);
 }
 
-function columnPlotSpec(options, data, width) {
+function columnPlotSpec(options, data) {
   const x = channel(options.x, options.xType);
   const y =
     options.aggregate === "count"
@@ -59,8 +62,9 @@ function columnPlotSpec(options, data, width) {
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v6.json",
     ...(options.title && { title: options.title }),
-    width: axisSize(options.x, options.xType, data, width) ?? "container",
-    height: axisSize(options.y, options.yType, data, HEIGHT) ?? HEIGHT,
+    width: axisSize(options.x, options.xType, data, options.width),
+    height: axisSize(options.y, options.yType, data, options.height),
+    autosize: { type: "fit", contains: "padding" },
     ...(options.zoom && {
       params: [{ name: "zoom", select: "interval", bind: "scales" }],
     }),
@@ -69,13 +73,12 @@ function columnPlotSpec(options, data, width) {
   };
 }
 
-// Discrete axes with more categories than fit into the available space get a
-// fixed step per category, so that the plot scrolls instead of the labels
-// overlapping.
-function axisSize(column, type, data, available) {
-  if (type !== "nominal" && type !== "ordinal") return undefined;
-  const categories = new Set(data.map((row) => row[column])).size;
-  return categories * LABEL_STEP > available ? { step: LABEL_STEP } : undefined;
+// Discrete axes with more categories than fit into the chosen size get a fixed
+// step per category, so that the plot scrolls instead of the labels overlapping.
+function axisSize(column, type, data, size) {
+  const discrete = type === "nominal" || type === "ordinal";
+  const categories = discrete ? new Set(data.map((row) => row[column])).size : 0;
+  return categories * LABEL_STEP > size ? { step: LABEL_STEP } : Number(size);
 }
 
 function channel(column, type) {
@@ -132,15 +135,22 @@ function initModal() {
   form.on("submit", (event) => event.preventDefault());
   $("#column-plot-swap").on("click", swapAxes);
   $("#column-plot-copy").on("click", function () {
-    navigator.clipboard.writeText(exportedView.yaml).then(() => {
+    navigator.clipboard.writeText(viewConfig(currentPlot)).then(() => {
       $(this).text("Copied");
       setTimeout(() => $(this).text("Copy"), 1500);
     });
   });
-  $("#column-plot-download").on("click", () =>
-    download(exportedView.yaml, "text/yaml", `${exportedView.name}.yaml`),
-  );
-  $("#column-plot-modal").on("shown.bs.modal", render);
+  $("#column-plot-modal").on("click", "[data-export]", async function () {
+    const plot = currentPlot;
+    const { view } = await plot.embedding;
+    const format = this.dataset.export;
+    const [content, type] = await EXPORTS[format]({ ...plot, view });
+    download(content, type, `${plot.name}.${format}`);
+  });
+  // The plot initially fills the available width.
+  $("#column-plot-modal")
+    .one("shown.bs.modal", () => form.find("[name=width]").val($("#column-plot").width()))
+    .on("shown.bs.modal", render);
 }
 
 function render() {
@@ -148,17 +158,15 @@ function render() {
   updateControls(form);
   const options = Object.fromEntries(new FormData(form));
   const data = tableData();
-  const spec = columnPlotSpec(options, data, $("#column-plot").width());
-  vegaEmbed(
-    "#column-plot",
-    { ...spec, data: { values: data } },
-    EMBED_OPTIONS,
-  ).catch((error) => {
+  const plot = { name: viewName(options), spec: columnPlotSpec(options, data), data };
+  plot.embedding = vegaEmbed("#column-plot", withData(plot), { actions: false });
+  plot.embedding.catch((error) => {
     $("#column-plot").empty().append($('<p class="text-danger">').text(error.message));
   });
-  const name = viewName(options);
-  exportedView = { name, yaml: viewConfig(name, spec) };
-  $("#column-plot-yaml").text(exportedView.yaml);
+  currentPlot = plot;
+  $("#column-plot-width").text(`${options.width} px`);
+  $("#column-plot-height").text(`${options.height} px`);
+  $("#column-plot-yaml").text(viewConfig(plot));
 }
 
 // Disabled controls are left out of the form data and hence out of the spec.
@@ -229,7 +237,11 @@ function viewName(options) {
   );
 }
 
-function viewConfig(name, spec) {
+function withData({ spec, data }) {
+  return { ...spec, data: { values: data } };
+}
+
+function viewConfig({ name, spec }) {
   const dataset = /^[A-Za-z_][\w.-]*$/.test(config.dataset)
     ? config.dataset
     : JSON.stringify(config.dataset);
@@ -242,6 +254,26 @@ function viewConfig(name, spec) {
     JSON.stringify(spec, null, 2).replace(/^/gm, "        "),
     "",
   ].join("\n");
+}
+
+function standaloneHtml(plot) {
+  // Escape "<" so that values like "</script>" cannot end the script early.
+  const spec = JSON.stringify(withData(plot)).replace(/</g, "\\u003c");
+  return `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>${plot.name}</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@7"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>vegaEmbed("#vis", ${spec}, { actions: false });</script>
+</body>
+</html>
+`;
 }
 
 function select(name, values, placeholder) {
@@ -284,6 +316,8 @@ function modal() {
                 ${field("Size", select("size", [], "none"))}
                 ${field("Shape", select("shape", [], "none"))}
                 ${field("Opacity", '<input type="range" class="custom-range" name="opacity" min="0.1" max="1" step="0.1" value="1">')}
+                ${field('Width <span id="column-plot-width"></span>', '<input type="range" class="custom-range" name="width" min="200" max="2000" step="10">')}
+                ${field('Height <span id="column-plot-height"></span>', '<input type="range" class="custom-range" name="height" min="200" max="1200" step="10" value="400">')}
                 ${field("Title", '<input type="text" name="title">')}
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="column-plot-zoom" name="zoom">
@@ -301,12 +335,18 @@ function modal() {
               </p>
               <pre id="column-plot-yaml"></pre>
               <button type="button" class="btn btn-sm btn-outline-secondary" id="column-plot-copy">Copy</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary" id="column-plot-download">Download</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" data-export="yaml">Download</button>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" id="column-plot-swap">Swap axes</button>
-            <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#column-plot-export">Export as view</button>
+            <button type="button" class="btn btn-outline-secondary mr-auto" id="column-plot-swap">Swap axes</button>
+            <div class="btn-group" role="group" aria-label="Download plot">
+              <button type="button" class="btn btn-outline-secondary" data-export="svg">SVG</button>
+              <button type="button" class="btn btn-outline-secondary" data-export="png">PNG</button>
+              <button type="button" class="btn btn-outline-secondary" data-export="json">JSON</button>
+              <button type="button" class="btn btn-outline-secondary" data-export="html">HTML</button>
+            </div>
+            <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#column-plot-export">datavzrd config</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>

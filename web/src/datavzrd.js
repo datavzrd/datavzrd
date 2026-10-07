@@ -1457,8 +1457,9 @@ export function load_plot(specs, data, multiple_datasets, resize) {
   }
   vegaEmbed("#vis", specs).then(({ spec, view }) => {
     if (resize && specs.width !== "container") {
-      let width = view.width();
-      let height = view.height();
+      // With autosize fit, the view only reports the inner plot size.
+      let width = typeof specs.width === "number" ? specs.width : view.width();
+      let height = typeof specs.height === "number" ? specs.height : view.height();
       let aspect_ratio = height / width;
       specs.width = width + resize;
       specs.height = height + resize * aspect_ratio;
