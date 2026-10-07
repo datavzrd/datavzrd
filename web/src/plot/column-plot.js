@@ -358,10 +358,10 @@ function modal() {
             <div class="dropup">
               <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download</button>
               <div class="dropdown-menu">
-                <button type="button" class="dropdown-item" data-export="svg">SVG image</button>
-                <button type="button" class="dropdown-item" data-export="png">PNG image</button>
-                <button type="button" class="dropdown-item" data-export="json">Vega-Lite JSON</button>
-                <button type="button" class="dropdown-item" data-export="html">HTML page</button>
+                <button type="button" class="dropdown-item" data-export="svg">SVG</button>
+                <button type="button" class="dropdown-item" data-export="png">PNG</button>
+                <button type="button" class="dropdown-item" data-export="json">JSON</button>
+                <button type="button" class="dropdown-item" data-export="html">HTML</button>
               </div>
             </div>
             <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#column-plot-export">Export as view</button>
