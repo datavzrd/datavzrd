@@ -7,6 +7,8 @@ const POINT_MARKS = ["point", "circle", "square"];
 const TYPES = ["quantitative", "ordinal", "nominal", "temporal"];
 const SCALES = ["linear", "log", "sqrt", "symlog"];
 const AGGREGATES = ["count", "sum", "mean", "median", "min", "max"];
+const HEIGHT = 400;
+const LABEL_STEP = 14;
 const EMBED_OPTIONS = {
   actions: { export: true, source: false, compiled: false, editor: false },
 };
@@ -29,7 +31,7 @@ export function selectPlotColumn(index) {
   $(`.plot-column-icon[data-column="${index}"]`).toggleClass("active", selectedColumn !== null);
 }
 
-function columnPlotSpec(options) {
+function columnPlotSpec(options, data, width) {
   const x = channel(options.x, options.xType);
   const y =
     options.aggregate === "count"
@@ -57,14 +59,23 @@ function columnPlotSpec(options) {
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v6.json",
     ...(options.title && { title: options.title }),
-    width: "container",
-    height: 400,
+    width: axisSize(options.x, options.xType, data, width) ?? "container",
+    height: axisSize(options.y, options.yType, data, HEIGHT) ?? HEIGHT,
     ...(options.zoom && {
       params: [{ name: "zoom", select: "interval", bind: "scales" }],
     }),
     mark,
     encoding,
   };
+}
+
+// Discrete axes with more categories than fit into the available space get a
+// fixed step per category, so that the plot scrolls instead of the labels
+// overlapping.
+function axisSize(column, type, data, available) {
+  if (type !== "nominal" && type !== "ordinal") return undefined;
+  const categories = new Set(data.map((row) => row[column])).size;
+  return categories * LABEL_STEP > available ? { step: LABEL_STEP } : undefined;
 }
 
 function channel(column, type) {
@@ -136,10 +147,11 @@ function render() {
   const form = document.getElementById("column-plot-options");
   updateControls(form);
   const options = Object.fromEntries(new FormData(form));
-  const spec = columnPlotSpec(options);
+  const data = tableData();
+  const spec = columnPlotSpec(options, data, $("#column-plot").width());
   vegaEmbed(
     "#column-plot",
-    { ...spec, data: { values: tableData() } },
+    { ...spec, data: { values: data } },
     EMBED_OPTIONS,
   ).catch((error) => {
     $("#column-plot").empty().append($('<p class="text-danger">').text(error.message));
