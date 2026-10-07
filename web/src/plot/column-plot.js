@@ -361,7 +361,7 @@ function modal() {
               <button type="button" class="btn btn-outline-secondary" data-export="json">JSON</button>
               <button type="button" class="btn btn-outline-secondary" data-export="html">HTML</button>
             </div>
-            <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#column-plot-export">datavzrd config</button>
+            <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#column-plot-export">Export as view</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
