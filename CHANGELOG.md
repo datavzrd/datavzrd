@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.75.0](https://github.com/datavzrd/datavzrd/compare/v2.74.0...v2.75.0) (2026-10-09)
+
+
+### Features
+
+* Plot two columns against each other in in-memory tables ([#1294](https://github.com/datavzrd/datavzrd/issues/1294)) ([e67f70b](https://github.com/datavzrd/datavzrd/commit/e67f70b4b6b93d81e5ad17bad8a55f4f78b4d163))
+
+
+### Bug Fixes
+
+* Escape column and report names in generated JavaScript ([#1295](https://github.com/datavzrd/datavzrd/issues/1295)) ([4fb630b](https://github.com/datavzrd/datavzrd/commit/4fb630bce3b68221afda02c888d58bea4d67448a))
+
 ## [2.74.0](https://github.com/datavzrd/datavzrd/compare/v2.73.3...v2.74.0) (2026-09-28)
 
 
