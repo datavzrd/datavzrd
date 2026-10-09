@@ -7832,6 +7832,37 @@ ___CSS_LOADER_EXPORT___.push([module.id, `* {
     border:none;
 }
 
+#column-plot {
+    display: block;
+    width: 100%;
+    max-height: 70vh;
+    overflow: auto;
+}
+
+#column-plot-options input[type="text"] {
+    width: 100%;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.2rem;
+}
+
+#column-plot-yaml {
+    max-height: 300px;
+    overflow: auto;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    background-color: #f8f9fa;
+}
+
+.plot-column-icon {
+    margin-left: 3px;
+}
+
+.plot-column-icon.active {
+    color: #c21f30;
+}
+
 #search-iframe {
     width: 100%;
     height: min(530px, 50vh)
@@ -8273,7 +8304,7 @@ th.col-drag-over {
 .detail-pills-wrapper {
   padding: 4px 0;
 }
-`, "",{"version":3,"sources":["webpack://./style/datavzrd.css"],"names":[],"mappings":"AAAA;IACI,6BAA6B;IAC7B,2CAA2C;IAC3C,mCAAmC;AACvC;;AAEA;IACI;QACI,aAAa;IACjB;IACA;QACI,eAAe;IACnB;AACJ;;AAEA;IACI,kBAAkB;IAClB,SAAS;IACT,WAAW;AACf;;AAEA;IACI,uBAAuB;IACvB,kBAAkB;IAClB,SAAS;AACb;;AAEA;IACI,gCAAgC;AACpC;;AAEA;IACI,gCAAgC;AACpC;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,eAAe;IACf,eAAe;IACf,cAAc;AAClB;;AAEA;IACI,4BAA4B;AAChC;;AAEA;IACI,wCAAwC;AAC5C;;AAEA;IACI,6BAA6B;AACjC;;AAEA;IACI,aAAa;IACb,iBAAiB;AACrB;;AAEA;IACI,WAAW;IACX,aAAa;IACb,WAAW;AACf;;AAEA;IACI,WAAW;IACX;AACJ;;AAEA;IACI,iBAAiB;IACjB,mBAAmB;IACnB,iBAAiB;AACrB;;AAEA;IACI,YAAY;IACZ,gBAAgB;AACpB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,6BAA6B;IAC7B,gBAAgB;AACpB;;AAEA;IACI,wCAAwC;IACxC,gCAAgC;AACpC;;AAEA;IACI,mBAAmB;IACnB,aAAa;IACb,oBAAoB;IACpB,iBAAiB;AACrB;;AAEA;IACI,eAAe;IACf,WAAW;AACf;;AAEA;IACI,uBAAuB;IACvB,6BAA6B;AACjC;;AAEA;IACI,kBAAkB;AACtB;;AAEA;;IAEI,yBAAyB;IACzB,0BAA0B;IAC1B,6HAA6H;IAC7H,4BAA4B;IAC5B,mBAAmB;IACnB,YAAY;IACZ,gBAAgB;AACpB;;AAEA;IACI,mBAAmB;IACnB,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,UAAU;AACd;;AAEA;IACI,mBAAmB;IACnB,aAAa;AACjB;;AAEA;IACI,gDAAgD;IAChD,UAAU;IACV,4BAA4B;IAC5B,0BAA0B;IAC1B,kBAAkB;AACtB;;AAEA;;IAEI,cAAc;IACd,UAAU;IACV,gBAAgB;IAChB,qBAAqB;AACzB;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;;;;;IAKI,aAAa;AACjB;;AAEA;IACI,2BAA2B;IAC3B,iBAAiB;AACrB;;AAEA;IACI,qBAAqB;IACrB,WAAW;IACX,YAAY;IACZ,qBAAqB;AACzB;;AAEA;IACI,yDAAmO;AACvO;;AAEA;IACI,yDAA+Q;AACnR;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,YAAY;IACZ,uBAAuB;IACvB,UAAU;AACd;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;IACI,YAAY;IACZ,kBAAkB;AACtB;;AAEA;IACI,kBAAkB;IAClB,SAAS;AACb;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,cAAc;IACd,gBAAgB;AACpB;;AAEA;IACI,mBAAmB;AACvB;;;AAGA;IACI,kBAAkB;IAClB,iBAAiB;AACrB;;AAEA;IACI,oBAAoB;AACxB;;AAEA;IACI,kBAAkB;IAClB,SAAS;IACT,WAAW;IACX,YAAY;AAChB;;AAEA;IACI,yBAAyB;IACzB,cAAc;AAClB;;AAEA;IACI,6CAA6C;IAC7C,aAAa;AACjB;;AAEA;IACI,UAAU;IACV,WAAW;AACf;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,SAAS;AACb;;AAEA;IACI,eAAe;IACf,QAAQ;IACR,SAAS;IACT,aAAa;IACb,iBAAiB;AACrB;;AAEA;IACI,YAAY;IACZ,wCAAwC;AAC5C;;AAEA;IACI,wCAAwC;AAC5C;;AAEA;IACI,wCAAwC;IACxC,eAAe;AACnB;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,kBAAkB;IAClB,uBAAuB;IACvB,MAAM;IACN,eAAe;AACnB;;AAEA;IACI,wCAAwC;IACxC,WAAW;IACX,YAAY;IACZ,UAAU;AACd;;AAEA;IACI,cAAc;IACd,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,yBAAyB;AAC7B;;AAEA;IACI,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,eAAe;AACnB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,QAAQ;AACZ;;AAEA;IACI,iBAAiB;AACrB;;AAEA;IACI,8BAA8B;IAC9B,iBAAiB;IACjB,kBAAkB;IAClB,gBAAgB;AACpB;;AAEA;IACI,KAAK,mBAAmB,EAAE;IAC1B,MAAM,sBAAsB,EAAE;IAC9B,OAAO,mBAAmB,EAAE;AAChC;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,qBAAqB;IACrB,YAAY;IACZ,cAAc;IACd,aAAa;IACb,gBAAgB;IAChB,sBAAsB;IACtB,cAAc;AAClB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,oBAAoB;IACpB,sBAAsB;IACtB,sBAAsB;IACtB,gBAAgB;IAChB,iBAAiB;AACrB;;AAEA;IACI,cAAc;IACd,cAAc;IACd,eAAe;AACnB;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,kBAAkB;IAClB,YAAY;IACZ,UAAU;IACV,uBAAuB;AAC3B;;AAEA;IACI,wBAAwB;AAC5B;;AAEA;IACI,eAAe;IACf,gBAAgB;IAChB,WAAW;IACX,YAAY;IACZ,cAAc;IACd,iBAAiB;AACrB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,aAAa;IACb,eAAe;IACf,eAAe;IACf,gBAAgB;AACpB;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,eAAe;IACf,WAAW;AACf;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;;EAEE,cAAc;EACd,qBAAqB;AACvB;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,cAAc;EACd,0BAA0B;AAC5B;;AAEA;EACE,qBAAqB;AACvB;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,uBAAuB;EACvB,kBAAkB;AACpB;;AAEA;EACE,cAAc;AAChB","sourcesContent":["* {\n    color-adjust: exact!important;\n    -webkit-print-color-adjust: exact!important;\n    print-color-adjust: exact!important;\n}\n\n@media print {\n    .detail-icon, .dropdown, .form-control, .filter-brush-container, .sym, .navbar, .btn, .detail  {\n        display: none;\n    }\n    @page {\n        margin: 0 0 0 0;\n    }\n}\n\n.select-view {\n    position: relative;\n    top: -6px;\n    left: -13px;\n}\n\n.breadcrumb {\n    background-color: white;\n    position: relative;\n    top: 13px;\n}\n\n.navbar-brand, .breadcrumb-item {\n    color: rgba(0,0,0,.5) !important;\n}\n\n.navbar-brand:hover {\n    color: rgba(0,0,0,.7) !important;\n}\n\n.navbar-top {\n    height: 54px;\n}\n\n.sym {\n    cursor: pointer;\n    display: inline;\n    color: #007bff;\n}\n\n.fixed-table-body {\n    overflow: visible !important;\n}\n\n.fixed-top {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.navbar-nav.mr-auto.breadcrumb {\n    background-color: transparent;\n}\n\n.table-container {\n    display: none;\n    font-size: 0.8rem;\n}\n\n#histogram-plot {\n    width: 100%;\n    height: 300px;\n    border:none;\n}\n\n#search-iframe {\n    width: 100%;\n    height: min(530px, 50vh)\n}\n\n.linkout-btn {\n    font-size: 0.8rem;\n    white-space: nowrap;\n    text-align: right;\n}\n\n.loading {\n    height: 100%;\n    padding-top: 25%;\n}\n\n#heatmap-plot-modal {\n    z-index: 9999;\n}\n\n.modal-body {\n    max-width: calc(100vw - 50px);\n    overflow-x: auto;\n}\n\n.active-row {\n    border-top: 2px solid #6ea8fe !important;\n    border-bottom: 2px solid #6ea8fe;\n}\n\nth {\n    white-space: nowrap;\n    height: 150px;\n    border: 0 !important;\n    overflow: visible;\n}\n\n#table {\n    max-width: 100%;\n    width: auto;\n}\n\n.bootstrap-table {\n    margin: auto !important;\n    width: fit-content !important;\n}\n\ntd {\n    position: relative;\n}\n\n#table td,\n#table th {\n    padding: 0 5px !important;\n    font-size: 12px !important;\n    /* Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=688556 see https://github.com/koesterlab/datavzrd/issues/144 */\n    background-clip: padding-box;\n    white-space: nowrap;\n    height: 18px;\n    line-height: 0.8;\n}\n\n#table tr.detail-view td {\n    white-space: normal;\n    height: auto;\n    line-height: normal;\n}\n\n.table td.plotcell {\n    padding: 0;\n}\n\n#pagination {\n    padding-top: 0.5rem;\n    display: none;\n}\n\nth .th-inner {\n    transform: translate(-10px, 30px) rotate(-45deg);\n    width: 1em;\n    overflow: visible !important;\n    transform-origin: top left;\n    margin-bottom: 5px;\n}\n\n#table td.narrow-col,\n#table th.narrow-col {\n    max-width: 4px;\n    width: 4px;\n    overflow: hidden;\n    padding: 0 !important;\n}\n\n#table td.narrow-col {\n    font-size: 0 !important;\n}\n\nth.narrow-col .th-inner,\nth.narrow-col .sym,\nth.narrow-col .sym-container,\nth.narrow-col .header-sort,\nth.narrow-col .col-drag-handle {\n    display: none;\n}\n\n#vis-container {\n    height: calc(100vh - 105px);\n    padding-top: 50px;\n}\n\n.fa {\n    display: inline-block;\n    width: 24px;\n    height: 24px;\n    background-size: 100%;\n}\n\n.fa-minus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z\"/></svg>');\n}\n\n.fa-plus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z\"/></svg>');\n}\n\n.num-cell {\n    white-space: nowrap;\n}\n\n.form-control {\n    height: 35px;\n    border: none !important;\n    width: 5em;\n}\n\n.filter-control {\n    padding-bottom: 2px;\n}\n\n.fixed-table-container {\n    border: none !important;\n}\n\n.filter-brush-container {\n    height: 48px;\n    position: relative;\n}\n\n.no-labels {\n    position: absolute;\n    top: 12px;\n}\n\n.card {\n    margin: 0.5em;\n}\n\n.container-fluid {\n    overflow: auto;\n    margin-top: 50px;\n}\n\n.dropdown-item {\n    line-height: normal;\n}\n\n\n#page-container {\n    position: relative;\n    min-height: 100vh;\n}\n\n#content-wrap {\n    padding-bottom: 54px;\n}\n\nfooter {\n    position: absolute;\n    bottom: 0;\n    width: 100%;\n    height: 54px;\n}\n\n.badge-light {\n    background-color: #cbcbcb;\n    color: #222222;\n}\n\n.katex-html {\n    /* Hide unrendered mathematical expressions */\n    display: none;\n}\n\n.navbar-toggler-icon {\n    width: 1em;\n    height: 1em;\n}\n\n.navbar-toggler {\n    background-color: white;\n}\n\n#right-top-nav {\n    margin: auto;\n}\n\n.btn-table {\n    border: none;\n}\n\n.description-box {\n    margin: 0;\n}\n\n#sidebar {\n    position: fixed;\n    right: 0;\n    top: 3rem;\n    z-index: 9999;\n    margin-right: 7px;\n}\n\n#sidebar-card {\n    width: 13rem;\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn:hover {\n    background-color: rgba(203,203,203,0.75);\n    cursor: pointer;\n}\n\n.navbar-toggler {\n    border: none;\n}\n\n#close-description {\n    position: absolute;\n    left: calc(100% - 72px);\n    top: 0;\n    padding: 0.2rem;\n}\n\n.description-card-body {\n    background-color: rgba(255,255,255,0.75);\n    width: 100%;\n    border: none;\n    padding: 0;\n}\n\n#innerDescription {\n    margin: 0 auto;\n    max-width: 800px;\n}\n\n.ic:hover {\n    color: grey;\n}\n\n.nav-btn {\n    display: block !important;\n}\n\n.sym-container svg {\n    position: absolute;\n    top: 0;\n    left: 0;\n    cursor: pointer;\n}\n\n.sym-container svg:hover {\n    color: grey;\n}\n\n.sym-container .bi-caret-down {\n    top: 8px;\n}\n\n.hide-sym {\n    margin-left: 14px;\n}\n\n.pulsating-button {\n    animation: pulsate 2s infinite;\n    margin-left: 2rem;\n    margin-right: 2rem;\n    margin-top: 10px;\n}\n\n@keyframes pulsate {\n    0% { transform: scale(1); }\n    50% { transform: scale(1.05); }\n    100% { transform: scale(1); }\n}\n\n.hide-sym:hover {\n    color: grey;\n}\n\n.col-drag-handle {\n    display: inline-block;\n    cursor: grab;\n    color: #007bff;\n    opacity: 0.35;\n    margin-left: 4px;\n    vertical-align: middle;\n    line-height: 1;\n}\n\n.col-drag-handle:hover {\n    opacity: 0.75;\n}\n\nth.col-dragging {\n    opacity: 0.45;\n}\n\nth.col-drag-over {\n    border-left: 2px solid #0275d8 !important;\n}\n\n.header-sort {\n    display: inline-flex;\n    flex-direction: column;\n    vertical-align: middle;\n    margin-left: 4px;\n    margin-right: 7px;\n}\n\n.header-sort svg {\n    display: block;\n    color: #007bff;\n    cursor: pointer;\n}\n\n.header-sort .bi-caret-down {\n    margin-top: -4px;\n}\n\n.header-sort svg:hover {\n    color: grey;\n}\n\n#plot-size-control {\n    position: absolute;\n    bottom: 52px;\n    z-index: 2;\n    right: calc(50% - 50px);\n}\n\n.popover {\n    z-index: 9999 !important;\n}\n\n.datavzrd-img {\n    max-width: 85vw;\n    max-height: 85vh;\n    width: auto;\n    height: auto;\n    display: block;\n    margin: 5rem auto;\n}\n\n.linkout-raw-value {\n    display: none;\n}\n\n.detail-pills-wrapper {\n    display: flex;\n    flex-wrap: wrap;\n    max-width: 25vw;\n    line-height: 1.3;\n}\n\n#filter-columns-input {\n    min-width: 140px;\n}\n\n#colum-filter-icon:hover {\n    cursor: pointer;\n    color: grey;\n}\n\n#landing-table h1 {\n  font-weight: 900;\n  font-size: inherit;\n}\n\n#landing-table h2 {\n  font-weight: 800;\n  font-size: inherit;\n}\n\n#landing-table h3 {\n  font-weight: 700;\n  font-size: inherit;\n}\n\n#landing-table h4 {\n  font-weight: 600;\n  font-size: inherit;\n}\n\n#landing-table h5 {\n  font-weight: 500;\n  font-size: inherit;\n}\n\n.pills-cell a,\n.detail-pills-wrapper a {\n  color: inherit;\n  text-decoration: none;\n}\n\n.linked-cell a {\n  color: inherit;\n}\n\n.linked-cell .dropdown-toggle {\n  color: inherit;\n  border-color: currentColor;\n}\n\n.pill-dropdown {\n  display: inline-block;\n}\n\n.centered-card {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n}\n\n.detail-pills-wrapper {\n  padding: 4px 0;\n}\n"],"sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./style/datavzrd.css"],"names":[],"mappings":"AAAA;IACI,6BAA6B;IAC7B,2CAA2C;IAC3C,mCAAmC;AACvC;;AAEA;IACI;QACI,aAAa;IACjB;IACA;QACI,eAAe;IACnB;AACJ;;AAEA;IACI,kBAAkB;IAClB,SAAS;IACT,WAAW;AACf;;AAEA;IACI,uBAAuB;IACvB,kBAAkB;IAClB,SAAS;AACb;;AAEA;IACI,gCAAgC;AACpC;;AAEA;IACI,gCAAgC;AACpC;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,eAAe;IACf,eAAe;IACf,cAAc;AAClB;;AAEA;IACI,4BAA4B;AAChC;;AAEA;IACI,wCAAwC;AAC5C;;AAEA;IACI,6BAA6B;AACjC;;AAEA;IACI,aAAa;IACb,iBAAiB;AACrB;;AAEA;IACI,WAAW;IACX,aAAa;IACb,WAAW;AACf;;AAEA;IACI,cAAc;IACd,WAAW;IACX,gBAAgB;IAChB,cAAc;AAClB;;AAEA;IACI,WAAW;IACX,uBAAuB;IACvB,mBAAmB;IACnB,yBAAyB;IACzB,qBAAqB;AACzB;;AAEA;IACI,iBAAiB;IACjB,cAAc;IACd,eAAe;IACf,kBAAkB;IAClB,yBAAyB;AAC7B;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,cAAc;AAClB;;AAEA;IACI,WAAW;IACX;AACJ;;AAEA;IACI,iBAAiB;IACjB,mBAAmB;IACnB,iBAAiB;AACrB;;AAEA;IACI,YAAY;IACZ,gBAAgB;AACpB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,6BAA6B;IAC7B,gBAAgB;AACpB;;AAEA;IACI,wCAAwC;IACxC,gCAAgC;AACpC;;AAEA;IACI,mBAAmB;IACnB,aAAa;IACb,oBAAoB;IACpB,iBAAiB;AACrB;;AAEA;IACI,eAAe;IACf,WAAW;AACf;;AAEA;IACI,uBAAuB;IACvB,6BAA6B;AACjC;;AAEA;IACI,kBAAkB;AACtB;;AAEA;;IAEI,yBAAyB;IACzB,0BAA0B;IAC1B,6HAA6H;IAC7H,4BAA4B;IAC5B,mBAAmB;IACnB,YAAY;IACZ,gBAAgB;AACpB;;AAEA;IACI,mBAAmB;IACnB,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,UAAU;AACd;;AAEA;IACI,mBAAmB;IACnB,aAAa;AACjB;;AAEA;IACI,gDAAgD;IAChD,UAAU;IACV,4BAA4B;IAC5B,0BAA0B;IAC1B,kBAAkB;AACtB;;AAEA;;IAEI,cAAc;IACd,UAAU;IACV,gBAAgB;IAChB,qBAAqB;AACzB;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;;;;;IAKI,aAAa;AACjB;;AAEA;IACI,2BAA2B;IAC3B,iBAAiB;AACrB;;AAEA;IACI,qBAAqB;IACrB,WAAW;IACX,YAAY;IACZ,qBAAqB;AACzB;;AAEA;IACI,yDAAmO;AACvO;;AAEA;IACI,yDAA+Q;AACnR;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,YAAY;IACZ,uBAAuB;IACvB,UAAU;AACd;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;IACI,YAAY;IACZ,kBAAkB;AACtB;;AAEA;IACI,kBAAkB;IAClB,SAAS;AACb;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,cAAc;IACd,gBAAgB;AACpB;;AAEA;IACI,mBAAmB;AACvB;;;AAGA;IACI,kBAAkB;IAClB,iBAAiB;AACrB;;AAEA;IACI,oBAAoB;AACxB;;AAEA;IACI,kBAAkB;IAClB,SAAS;IACT,WAAW;IACX,YAAY;AAChB;;AAEA;IACI,yBAAyB;IACzB,cAAc;AAClB;;AAEA;IACI,6CAA6C;IAC7C,aAAa;AACjB;;AAEA;IACI,UAAU;IACV,WAAW;AACf;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,SAAS;AACb;;AAEA;IACI,eAAe;IACf,QAAQ;IACR,SAAS;IACT,aAAa;IACb,iBAAiB;AACrB;;AAEA;IACI,YAAY;IACZ,wCAAwC;AAC5C;;AAEA;IACI,wCAAwC;AAC5C;;AAEA;IACI,wCAAwC;IACxC,eAAe;AACnB;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,kBAAkB;IAClB,uBAAuB;IACvB,MAAM;IACN,eAAe;AACnB;;AAEA;IACI,wCAAwC;IACxC,WAAW;IACX,YAAY;IACZ,UAAU;AACd;;AAEA;IACI,cAAc;IACd,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,yBAAyB;AAC7B;;AAEA;IACI,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,eAAe;AACnB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,QAAQ;AACZ;;AAEA;IACI,iBAAiB;AACrB;;AAEA;IACI,8BAA8B;IAC9B,iBAAiB;IACjB,kBAAkB;IAClB,gBAAgB;AACpB;;AAEA;IACI,KAAK,mBAAmB,EAAE;IAC1B,MAAM,sBAAsB,EAAE;IAC9B,OAAO,mBAAmB,EAAE;AAChC;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,qBAAqB;IACrB,YAAY;IACZ,cAAc;IACd,aAAa;IACb,gBAAgB;IAChB,sBAAsB;IACtB,cAAc;AAClB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,oBAAoB;IACpB,sBAAsB;IACtB,sBAAsB;IACtB,gBAAgB;IAChB,iBAAiB;AACrB;;AAEA;IACI,cAAc;IACd,cAAc;IACd,eAAe;AACnB;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,kBAAkB;IAClB,YAAY;IACZ,UAAU;IACV,uBAAuB;AAC3B;;AAEA;IACI,wBAAwB;AAC5B;;AAEA;IACI,eAAe;IACf,gBAAgB;IAChB,WAAW;IACX,YAAY;IACZ,cAAc;IACd,iBAAiB;AACrB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,aAAa;IACb,eAAe;IACf,eAAe;IACf,gBAAgB;AACpB;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,eAAe;IACf,WAAW;AACf;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;;EAEE,cAAc;EACd,qBAAqB;AACvB;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,cAAc;EACd,0BAA0B;AAC5B;;AAEA;EACE,qBAAqB;AACvB;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,uBAAuB;EACvB,kBAAkB;AACpB;;AAEA;EACE,cAAc;AAChB","sourcesContent":["* {\n    color-adjust: exact!important;\n    -webkit-print-color-adjust: exact!important;\n    print-color-adjust: exact!important;\n}\n\n@media print {\n    .detail-icon, .dropdown, .form-control, .filter-brush-container, .sym, .navbar, .btn, .detail  {\n        display: none;\n    }\n    @page {\n        margin: 0 0 0 0;\n    }\n}\n\n.select-view {\n    position: relative;\n    top: -6px;\n    left: -13px;\n}\n\n.breadcrumb {\n    background-color: white;\n    position: relative;\n    top: 13px;\n}\n\n.navbar-brand, .breadcrumb-item {\n    color: rgba(0,0,0,.5) !important;\n}\n\n.navbar-brand:hover {\n    color: rgba(0,0,0,.7) !important;\n}\n\n.navbar-top {\n    height: 54px;\n}\n\n.sym {\n    cursor: pointer;\n    display: inline;\n    color: #007bff;\n}\n\n.fixed-table-body {\n    overflow: visible !important;\n}\n\n.fixed-top {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.navbar-nav.mr-auto.breadcrumb {\n    background-color: transparent;\n}\n\n.table-container {\n    display: none;\n    font-size: 0.8rem;\n}\n\n#histogram-plot {\n    width: 100%;\n    height: 300px;\n    border:none;\n}\n\n#column-plot {\n    display: block;\n    width: 100%;\n    max-height: 70vh;\n    overflow: auto;\n}\n\n#column-plot-options input[type=\"text\"] {\n    width: 100%;\n    padding: 0.25rem 0.5rem;\n    font-size: 0.875rem;\n    border: 1px solid #ced4da;\n    border-radius: 0.2rem;\n}\n\n#column-plot-yaml {\n    max-height: 300px;\n    overflow: auto;\n    padding: 0.5rem;\n    font-size: 0.75rem;\n    background-color: #f8f9fa;\n}\n\n.plot-column-icon {\n    margin-left: 3px;\n}\n\n.plot-column-icon.active {\n    color: #c21f30;\n}\n\n#search-iframe {\n    width: 100%;\n    height: min(530px, 50vh)\n}\n\n.linkout-btn {\n    font-size: 0.8rem;\n    white-space: nowrap;\n    text-align: right;\n}\n\n.loading {\n    height: 100%;\n    padding-top: 25%;\n}\n\n#heatmap-plot-modal {\n    z-index: 9999;\n}\n\n.modal-body {\n    max-width: calc(100vw - 50px);\n    overflow-x: auto;\n}\n\n.active-row {\n    border-top: 2px solid #6ea8fe !important;\n    border-bottom: 2px solid #6ea8fe;\n}\n\nth {\n    white-space: nowrap;\n    height: 150px;\n    border: 0 !important;\n    overflow: visible;\n}\n\n#table {\n    max-width: 100%;\n    width: auto;\n}\n\n.bootstrap-table {\n    margin: auto !important;\n    width: fit-content !important;\n}\n\ntd {\n    position: relative;\n}\n\n#table td,\n#table th {\n    padding: 0 5px !important;\n    font-size: 12px !important;\n    /* Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=688556 see https://github.com/koesterlab/datavzrd/issues/144 */\n    background-clip: padding-box;\n    white-space: nowrap;\n    height: 18px;\n    line-height: 0.8;\n}\n\n#table tr.detail-view td {\n    white-space: normal;\n    height: auto;\n    line-height: normal;\n}\n\n.table td.plotcell {\n    padding: 0;\n}\n\n#pagination {\n    padding-top: 0.5rem;\n    display: none;\n}\n\nth .th-inner {\n    transform: translate(-10px, 30px) rotate(-45deg);\n    width: 1em;\n    overflow: visible !important;\n    transform-origin: top left;\n    margin-bottom: 5px;\n}\n\n#table td.narrow-col,\n#table th.narrow-col {\n    max-width: 4px;\n    width: 4px;\n    overflow: hidden;\n    padding: 0 !important;\n}\n\n#table td.narrow-col {\n    font-size: 0 !important;\n}\n\nth.narrow-col .th-inner,\nth.narrow-col .sym,\nth.narrow-col .sym-container,\nth.narrow-col .header-sort,\nth.narrow-col .col-drag-handle {\n    display: none;\n}\n\n#vis-container {\n    height: calc(100vh - 105px);\n    padding-top: 50px;\n}\n\n.fa {\n    display: inline-block;\n    width: 24px;\n    height: 24px;\n    background-size: 100%;\n}\n\n.fa-minus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z\"/></svg>');\n}\n\n.fa-plus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z\"/></svg>');\n}\n\n.num-cell {\n    white-space: nowrap;\n}\n\n.form-control {\n    height: 35px;\n    border: none !important;\n    width: 5em;\n}\n\n.filter-control {\n    padding-bottom: 2px;\n}\n\n.fixed-table-container {\n    border: none !important;\n}\n\n.filter-brush-container {\n    height: 48px;\n    position: relative;\n}\n\n.no-labels {\n    position: absolute;\n    top: 12px;\n}\n\n.card {\n    margin: 0.5em;\n}\n\n.container-fluid {\n    overflow: auto;\n    margin-top: 50px;\n}\n\n.dropdown-item {\n    line-height: normal;\n}\n\n\n#page-container {\n    position: relative;\n    min-height: 100vh;\n}\n\n#content-wrap {\n    padding-bottom: 54px;\n}\n\nfooter {\n    position: absolute;\n    bottom: 0;\n    width: 100%;\n    height: 54px;\n}\n\n.badge-light {\n    background-color: #cbcbcb;\n    color: #222222;\n}\n\n.katex-html {\n    /* Hide unrendered mathematical expressions */\n    display: none;\n}\n\n.navbar-toggler-icon {\n    width: 1em;\n    height: 1em;\n}\n\n.navbar-toggler {\n    background-color: white;\n}\n\n#right-top-nav {\n    margin: auto;\n}\n\n.btn-table {\n    border: none;\n}\n\n.description-box {\n    margin: 0;\n}\n\n#sidebar {\n    position: fixed;\n    right: 0;\n    top: 3rem;\n    z-index: 9999;\n    margin-right: 7px;\n}\n\n#sidebar-card {\n    width: 13rem;\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn:hover {\n    background-color: rgba(203,203,203,0.75);\n    cursor: pointer;\n}\n\n.navbar-toggler {\n    border: none;\n}\n\n#close-description {\n    position: absolute;\n    left: calc(100% - 72px);\n    top: 0;\n    padding: 0.2rem;\n}\n\n.description-card-body {\n    background-color: rgba(255,255,255,0.75);\n    width: 100%;\n    border: none;\n    padding: 0;\n}\n\n#innerDescription {\n    margin: 0 auto;\n    max-width: 800px;\n}\n\n.ic:hover {\n    color: grey;\n}\n\n.nav-btn {\n    display: block !important;\n}\n\n.sym-container svg {\n    position: absolute;\n    top: 0;\n    left: 0;\n    cursor: pointer;\n}\n\n.sym-container svg:hover {\n    color: grey;\n}\n\n.sym-container .bi-caret-down {\n    top: 8px;\n}\n\n.hide-sym {\n    margin-left: 14px;\n}\n\n.pulsating-button {\n    animation: pulsate 2s infinite;\n    margin-left: 2rem;\n    margin-right: 2rem;\n    margin-top: 10px;\n}\n\n@keyframes pulsate {\n    0% { transform: scale(1); }\n    50% { transform: scale(1.05); }\n    100% { transform: scale(1); }\n}\n\n.hide-sym:hover {\n    color: grey;\n}\n\n.col-drag-handle {\n    display: inline-block;\n    cursor: grab;\n    color: #007bff;\n    opacity: 0.35;\n    margin-left: 4px;\n    vertical-align: middle;\n    line-height: 1;\n}\n\n.col-drag-handle:hover {\n    opacity: 0.75;\n}\n\nth.col-dragging {\n    opacity: 0.45;\n}\n\nth.col-drag-over {\n    border-left: 2px solid #0275d8 !important;\n}\n\n.header-sort {\n    display: inline-flex;\n    flex-direction: column;\n    vertical-align: middle;\n    margin-left: 4px;\n    margin-right: 7px;\n}\n\n.header-sort svg {\n    display: block;\n    color: #007bff;\n    cursor: pointer;\n}\n\n.header-sort .bi-caret-down {\n    margin-top: -4px;\n}\n\n.header-sort svg:hover {\n    color: grey;\n}\n\n#plot-size-control {\n    position: absolute;\n    bottom: 52px;\n    z-index: 2;\n    right: calc(50% - 50px);\n}\n\n.popover {\n    z-index: 9999 !important;\n}\n\n.datavzrd-img {\n    max-width: 85vw;\n    max-height: 85vh;\n    width: auto;\n    height: auto;\n    display: block;\n    margin: 5rem auto;\n}\n\n.linkout-raw-value {\n    display: none;\n}\n\n.detail-pills-wrapper {\n    display: flex;\n    flex-wrap: wrap;\n    max-width: 25vw;\n    line-height: 1.3;\n}\n\n#filter-columns-input {\n    min-width: 140px;\n}\n\n#colum-filter-icon:hover {\n    cursor: pointer;\n    color: grey;\n}\n\n#landing-table h1 {\n  font-weight: 900;\n  font-size: inherit;\n}\n\n#landing-table h2 {\n  font-weight: 800;\n  font-size: inherit;\n}\n\n#landing-table h3 {\n  font-weight: 700;\n  font-size: inherit;\n}\n\n#landing-table h4 {\n  font-weight: 600;\n  font-size: inherit;\n}\n\n#landing-table h5 {\n  font-weight: 500;\n  font-size: inherit;\n}\n\n.pills-cell a,\n.detail-pills-wrapper a {\n  color: inherit;\n  text-decoration: none;\n}\n\n.linked-cell a {\n  color: inherit;\n}\n\n.linked-cell .dropdown-toggle {\n  color: inherit;\n  border-color: currentColor;\n}\n\n.pill-dropdown {\n  display: inline-block;\n}\n\n.centered-card {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n}\n\n.detail-pills-wrapper {\n  padding: 4px 0;\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
 
@@ -70182,7 +70213,7 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */var _plot_heatmap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plot/heatmap */ "./src/plot/heatmap.js");
 /* harmony import */var _plot_pills__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plot/pills */ "./src/plot/pills.js");
-/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
+/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.5.0_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
 
 
 
@@ -70700,6 +70731,393 @@ function render_landing_page() {
 
 
 }),
+"./src/plot/column-plot.js": (function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  columnPlotIcon: function() { return columnPlotIcon; },
+  selectPlotColumn: function() { return selectPlotColumn; }
+});
+/* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
+/* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.5.0_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
+/* harmony import */var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./src/utils.js");
+
+
+
+
+const MARKS = ["point", "circle", "square", "tick", "line", "area", "bar", "boxplot"];
+const POINT_MARKS = ["point", "circle", "square"];
+const TYPES = ["quantitative", "ordinal", "nominal", "temporal"];
+const SCALES = ["linear", "log", "sqrt", "symlog"];
+const AGGREGATES = ["count", "sum", "mean", "median", "min", "max"];
+const HEIGHT = 400;
+const MAX_SIZE = 2000;
+const LABEL_STEP = 14;
+const EXPORTS = {
+  svg: async ({ view }) => [await view.toSVG(), "image/svg+xml"],
+  png: async ({ view }) => [await (await fetch(await view.toImageURL("png", 2))).blob(), "image/png"],
+  json: (plot) => [JSON.stringify(withData(plot), null, 2), "application/json"],
+  html: (plot) => [standaloneHtml(plot), "text/html"],
+  yaml: (plot) => [viewConfig(plot), "text/yaml"],
+};
+
+let selectedColumn = null;
+let currentPlot = null;
+
+function columnPlotIcon(index) {
+  return `<span class="sym ic plot-column-icon" data-column="${index}" title="Plot against another column" onclick="datavzrd.selectPlotColumn(${index})"><svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M1 1h1v13h13v1H1z"/><circle cx="5" cy="10" r="1.5"/><circle cx="8" cy="6" r="1.5"/><circle cx="11.5" cy="8.5" r="1.5"/><circle cx="13" cy="3.5" r="1.5"/></svg></span>`;
+}
+
+// The first click marks a column, the second one opens the plot of both.
+function selectPlotColumn(index) {
+  const column = config.columns[index];
+  if (selectedColumn !== null && selectedColumn !== column) {
+    openColumnPlot(selectedColumn, column);
+  }
+  selectedColumn = selectedColumn === null ? column : null;
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".plot-column-icon").removeClass("active");
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(`.plot-column-icon[data-column="${index}"]`).toggleClass("active", selectedColumn !== null);
+}
+
+function columnPlotSpec(options) {
+  const x = channel(options.x, options.xType);
+  const y =
+    options.aggregate === "count"
+      ? { type: "quantitative" }
+      : channel(options.y, options.yType);
+  if (options.aggregate) {
+    y.aggregate = options.aggregate;
+  }
+  addScale(x, options.xScale, options.mark);
+  addScale(y, options.yScale, options.mark);
+
+  const mark = {
+    type: options.mark,
+    ...(options.mark !== "boxplot" && { tooltip: { content: "data" } }),
+    ...(options.opacity < 1 && { opacity: Number(options.opacity) }),
+  };
+  const encoding = {
+    x,
+    y,
+    ...(options.color && { color: channel(options.color, defaultType(options.color)) }),
+    ...(options.size && { size: channel(options.size, defaultType(options.size)) }),
+    ...(options.shape && { shape: channel(options.shape, "nominal") }),
+  };
+
+  return {
+    $schema: "https://vega.github.io/schema/vega-lite/v6.json",
+    ...(options.title && { title: options.title }),
+    width: Number(options.width),
+    height: Number(options.height),
+    autosize: { type: "fit", contains: "padding" },
+    ...(options.zoom && {
+      params: [{ name: "zoom", select: "interval", bind: "scales" }],
+    }),
+    mark,
+    encoding,
+  };
+}
+
+// Sizes an axis to the available space or, if it is discrete and has more
+// categories than fit, to one step per category so that its labels stay
+// readable. The plot then scrolls, and the sliders can still change the size.
+function fitAxis(axis) {
+  const form = document.getElementById("column-plot-options");
+  const slider = form.elements[axis === "x" ? "width" : "height"];
+  const column = form.elements[axis].value;
+  const discrete = ["nominal", "ordinal"].includes(form.elements[`${axis}Type`].value);
+  const categories = discrete ? new Set(tableData().map((row) => row[column])).size : 0;
+  const available = axis === "x" ? jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot").width() : HEIGHT;
+  const size = Math.max(available, categories * LABEL_STEP);
+  slider.max = Math.max(MAX_SIZE, size);
+  slider.value = size;
+}
+
+function channel(column, type) {
+  // Vega-Lite reads dots, brackets and quotes in field names as nested access.
+  const field = column.replace(/[.[\]'"\\]/g, "\\$&");
+  const encoding = { field, type };
+  const title = label(column) ?? column;
+  if (title !== field) {
+    encoding.title = title;
+  }
+  return encoding;
+}
+
+function addScale(encoding, type, mark) {
+  if (encoding.type !== "quantitative") return;
+  const scale = {};
+  if (type && type !== "linear") {
+    scale.type = type;
+  }
+  // Bars and areas are anchored at zero, everything else should fit the data.
+  // Log scales have no zero.
+  if (type !== "log" && mark !== "bar" && mark !== "area") {
+    scale.zero = false;
+  }
+  if (Object.keys(scale).length > 0) {
+    encoding.scale = scale;
+  }
+}
+
+function openColumnPlot(x, y) {
+  if (jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot-modal").length === 0) {
+    initModal();
+  }
+  const form = document.getElementById("column-plot-options");
+  for (const [axis, column] of [["x", x], ["y", y]]) {
+    form.elements[axis].value = column;
+    form.elements[`${axis}Type`].value = defaultType(column);
+  }
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot-modal").modal("show");
+}
+
+function initModal() {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#modal-container").append(modal());
+  const form = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot-options");
+  for (const name of ["x", "y", "color", "size", "shape"]) {
+    form
+      .find(`[name=${name}]`)
+      .append(datasetColumns().map((c) => new Option(label(c) ?? c, c)));
+  }
+  form.find("[name=x], [name=y], [name=xType], [name=yType]").on("change", function () {
+    const axis = this.name[0];
+    if (this.name === axis) {
+      form.find(`[name=${axis}Type]`).val(defaultType(this.value));
+    }
+    fitAxis(axis);
+  });
+  form.on("change", render);
+  form.on("submit", (event) => event.preventDefault());
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot-swap").on("click", swapAxes);
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot-copy").on("click", function () {
+    navigator.clipboard.writeText(viewConfig(currentPlot)).then(() => {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).text("Copied");
+      setTimeout(() => jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).text("Copy"), 1500);
+    });
+  });
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot-modal").on("click", "[data-export]", async function () {
+    const plot = currentPlot;
+    const { view } = await plot.embedding;
+    const format = this.dataset.export;
+    const [content, type] = await EXPORTS[format]({ ...plot, view });
+    (0,_utils__WEBPACK_IMPORTED_MODULE_2__.download)(content, type, `${plot.name}.${format}`);
+  });
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot-modal").on("shown.bs.modal", () => {
+    fitAxis("x");
+    fitAxis("y");
+    render();
+  });
+}
+
+function render() {
+  const form = document.getElementById("column-plot-options");
+  updateControls(form);
+  const options = Object.fromEntries(new FormData(form));
+  const plot = { name: viewName(options), spec: columnPlotSpec(options), data: tableData() };
+  plot.embedding = (0,vega_embed__WEBPACK_IMPORTED_MODULE_1__["default"])("#column-plot", withData(plot), { actions: false });
+  plot.embedding.catch((error) => {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot").empty().append(jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p class="text-danger">').text(error.message));
+  });
+  currentPlot = plot;
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot-width").text(`${options.width} px`);
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot-height").text(`${options.height} px`);
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#column-plot-yaml").text(viewConfig(plot));
+}
+
+// Disabled controls are left out of the form data and hence out of the spec.
+function updateControls(form) {
+  const { mark, aggregate, yType, xType } = form.elements;
+  const canAggregate = mark.value !== "boxplot";
+  const count = canAggregate && aggregate.value === "count";
+  const enabled = {
+    xScale: xType.value === "quantitative",
+    y: !count,
+    yType: !count,
+    yScale: count || yType.value === "quantitative",
+    aggregate: canAggregate,
+    size: POINT_MARKS.includes(mark.value),
+    shape: mark.value === "point",
+    zoom: mark.value !== "boxplot",
+  };
+  for (const [name, isEnabled] of Object.entries(enabled)) {
+    form.elements[name].disabled = !isEnabled;
+  }
+}
+
+function swapAxes() {
+  const form = document.getElementById("column-plot-options");
+  for (const suffix of ["", "Type", "Scale"]) {
+    const x = form.elements[`x${suffix}`];
+    const y = form.elements[`y${suffix}`];
+    [x.value, y.value] = [y.value, x.value];
+  }
+  fitAxis("x");
+  fitAxis("y");
+  render();
+}
+
+// Rows as currently filtered and sorted in the table, restricted to the
+// dataset columns so that tooltips do not show linkouts or share buttons.
+function tableData() {
+  const columns = datasetColumns();
+  return jquery__WEBPACK_IMPORTED_MODULE_0___default()("#table")
+    .bootstrapTable("getData")
+    .map((row) => Object.fromEntries(columns.map((c) => [c, row[c]])));
+}
+
+// Added columns only exist in the table and can therefore not be part of an
+// exported plot view.
+function datasetColumns() {
+  return config.columns.filter((column) => !config.additional_colums[column]);
+}
+
+function defaultType(column) {
+  return config.displayed_numeric_columns.includes(column)
+    ? "quantitative"
+    : "nominal";
+}
+
+function label(column) {
+  return config.column_config[column]?.label;
+}
+
+function viewName(options) {
+  const name =
+    options.aggregate === "count"
+      ? `${options.x} counts`
+      : `${options.y} vs ${options.x}`;
+  return (
+    name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || "plot"
+  );
+}
+
+function withData({ spec, data }) {
+  return { ...spec, data: { values: data } };
+}
+
+function viewConfig({ name, spec }) {
+  const dataset = /^[A-Za-z_][\w.-]*$/.test(config.dataset)
+    ? config.dataset
+    : JSON.stringify(config.dataset);
+  return [
+    "views:",
+    `  ${name}:`,
+    `    dataset: ${dataset}`,
+    "    render-plot:",
+    "      spec: |",
+    JSON.stringify(spec, null, 2).replace(/^/gm, "        "),
+    "",
+  ].join("\n");
+}
+
+function standaloneHtml(plot) {
+  // Escape "<" so that values like "</script>" cannot end the script early.
+  const spec = JSON.stringify(withData(plot)).replace(/</g, "\\u003c");
+  return `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>${plot.name}</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@7"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>vegaEmbed("#vis", ${spec}, { actions: false });</script>
+</body>
+</html>
+`;
+}
+
+function select(name, values, placeholder) {
+  const options = values.map((v) => `<option value="${v}">${v}</option>`);
+  if (placeholder !== undefined) {
+    options.unshift(`<option value="">${placeholder}</option>`);
+  }
+  return `<select name="${name}" class="custom-select custom-select-sm">${options.join("")}</select>`;
+}
+
+function field(title, content) {
+  return `<div class="form-group mb-2"><div class="small text-muted mb-1">${title}</div>${content}</div>`;
+}
+
+function modal() {
+  const axis = (name) => `
+    ${select(name, [])}
+    <div class="form-row mt-1">
+      <div class="col">${select(`${name}Type`, TYPES)}</div>
+      <div class="col">${select(`${name}Scale`, SCALES)}</div>
+    </div>`;
+  return `
+    <div class="modal fade" id="column-plot-modal" tabindex="-1" role="dialog" aria-labelledby="column-plot-title" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="column-plot-title">Plot columns</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <form id="column-plot-options" class="col-lg-3">
+                ${field("X axis", axis("x"))}
+                ${field("Y axis", axis("y"))}
+                ${field("Aggregate y", select("aggregate", AGGREGATES, "none"))}
+                ${field("Mark", select("mark", MARKS))}
+                ${field("Color", select("color", [], "none"))}
+                ${field("Size", select("size", [], "none"))}
+                ${field("Shape", select("shape", [], "none"))}
+                ${field("Opacity", '<input type="range" class="custom-range" name="opacity" min="0.1" max="1" step="0.1" value="1">')}
+                ${field('Width <span id="column-plot-width"></span>', '<input type="range" class="custom-range" name="width" min="200" max="2000" step="10">')}
+                ${field('Height <span id="column-plot-height"></span>', '<input type="range" class="custom-range" name="height" min="200" max="1200" step="10" value="400">')}
+                ${field("Title", '<input type="text" name="title">')}
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="column-plot-zoom" name="zoom">
+                  <label class="custom-control-label small" for="column-plot-zoom">Zoom and pan</label>
+                </div>
+              </form>
+              <div class="col-lg-9">
+                <div id="column-plot"></div>
+              </div>
+            </div>
+            <div class="collapse mt-3" id="column-plot-export">
+              <p class="small text-muted">
+                Add this view to your datavzrd config to render the plot as a separate page.
+                Note that the view shows all rows of the dataset, regardless of the filters applied to the table.
+              </p>
+              <pre id="column-plot-yaml"></pre>
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="column-plot-copy">Copy</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" data-export="yaml">Download</button>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary mr-auto" id="column-plot-swap">Swap axes</button>
+            <div class="dropdown">
+              <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download</button>
+              <div class="dropdown-menu">
+                <button type="button" class="dropdown-item" data-export="svg">SVG</button>
+                <button type="button" class="dropdown-item" data-export="png">PNG</button>
+                <button type="button" class="dropdown-item" data-export="json">JSON</button>
+                <button type="button" class="dropdown-item" data-export="html">HTML</button>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#column-plot-export">Export as view</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+
+}),
 "./src/plot/custom-plot.js": (function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -70709,7 +71127,7 @@ __webpack_require__.d(__webpack_exports__, {
 });
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
+/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.5.0_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
 
 
 
@@ -71351,7 +71769,7 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./src/utils.js");
-/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
+/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.5.0_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
 
 
 
@@ -71418,6 +71836,7 @@ function renderDetailTickBarBubblePlot(value, div, specs, title) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
+  download: function() { return download; },
   precision_formatter: function() { return precision_formatter; }
 });
 function precision_formatter(precision, value) {
@@ -71430,6 +71849,15 @@ function precision_formatter(precision, value) {
   } else {
     return value.toExponential(precision);
   }
+}
+
+function download(content, type, fileName) {
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(new Blob([content], { type }));
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 
@@ -111220,7 +111648,7 @@ function transform(type) {
 
 
 }),
-"./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.5.0_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -111234,9 +111662,9 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var json_stringify_pretty_compact__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! json-stringify-pretty-compact */ "./node_modules/.pnpm/json-stringify-pretty-compact@4.0.0/node_modules/json-stringify-pretty-compact/index.js");
 /* harmony import */var vega__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega */ "./node_modules/.pnpm/vega@6.4.0/node_modules/vega/build/vega.module.js");
 /* harmony import */var vega_interpreter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-interpreter */ "./node_modules/.pnpm/vega-interpreter@2.3.2/node_modules/vega-interpreter/build/vega-interpreter.js");
-/* harmony import */var vega_lite__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-lite */ "./node_modules/.pnpm/vega-lite@6.4.3_vega@6.4.0/node_modules/vega-lite/build/index.js");
+/* harmony import */var vega_lite__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-lite */ "./node_modules/.pnpm/vega-lite@6.5.0_vega@6.4.0/node_modules/vega-lite/build/index.js");
 /* harmony import */var vega_schema_url_parser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vega-schema-url-parser */ "./node_modules/.pnpm/vega-schema-url-parser@3.0.2/node_modules/vega-schema-url-parser/dist/parser.modern.js");
-/* harmony import */var vega_themes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-themes */ "./node_modules/.pnpm/vega-themes@3.0.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-themes/build/index.js");
+/* harmony import */var vega_themes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vega-themes */ "./node_modules/.pnpm/vega-themes@3.0.0_vega-lite@6.5.0_vega@6.4.0__vega@6.4.0/node_modules/vega-themes/build/index.js");
 /* harmony import */var vega_tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vega-tooltip */ "./node_modules/.pnpm/vega-tooltip@1.1.0/node_modules/vega-tooltip/build/index.js");
 
 
@@ -115389,1630 +115817,6 @@ function parseThrottle(s) {
 
 
 //# sourceMappingURL=vega-event-selector.js.map
-
-
-}),
-"./node_modules/.pnpm/vega-expression@6.1.0/node_modules/vega-expression/build/vega-expression.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-__webpack_require__.d(__webpack_exports__, {
-  ASTNode: function() { return ASTNode; },
-  ArrayExpression: function() { return ArrayExpression; },
-  BinaryExpression: function() { return BinaryExpression; },
-  CallExpression: function() { return CallExpression; },
-  ConditionalExpression: function() { return ConditionalExpression; },
-  Identifier: function() { return Identifier; },
-  Literal: function() { return Literal; },
-  LogicalExpression: function() { return LogicalExpression; },
-  MemberExpression: function() { return MemberExpression; },
-  ObjectExpression: function() { return ObjectExpression; },
-  Property: function() { return Property; },
-  RawCode: function() { return RawCode; },
-  UnaryExpression: function() { return UnaryExpression; },
-  codegenExpression: function() { return codegen; },
-  constants: function() { return Constants; },
-  functions: function() { return Functions; },
-  parseExpression: function() { return parser; }
-});
-/* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
-
-
-const RawCode = 'RawCode';
-const Literal = 'Literal';
-const Property = 'Property';
-const Identifier = 'Identifier';
-const ArrayExpression = 'ArrayExpression';
-const BinaryExpression = 'BinaryExpression';
-const CallExpression = 'CallExpression';
-const ConditionalExpression = 'ConditionalExpression';
-const LogicalExpression = 'LogicalExpression';
-const MemberExpression = 'MemberExpression';
-const ObjectExpression = 'ObjectExpression';
-const UnaryExpression = 'UnaryExpression';
-function ASTNode(type) {
-  this.type = type;
-}
-ASTNode.prototype.visit = function (visitor) {
-  let c, i, n;
-  if (visitor(this)) return 1;
-  for (c = children(this), i = 0, n = c.length; i < n; ++i) {
-    if (c[i].visit(visitor)) return 1;
-  }
-};
-function children(node) {
-  switch (node.type) {
-    case ArrayExpression:
-      return node.elements;
-    case BinaryExpression:
-    case LogicalExpression:
-      return [node.left, node.right];
-    case CallExpression:
-      return [node.callee].concat(node.arguments);
-    case ConditionalExpression:
-      return [node.test, node.consequent, node.alternate];
-    case MemberExpression:
-      return [node.object, node.property];
-    case ObjectExpression:
-      return node.properties;
-    case Property:
-      return [node.key, node.value];
-    case UnaryExpression:
-      return [node.argument];
-    case Identifier:
-    case Literal:
-    case RawCode:
-    default:
-      return [];
-  }
-}
-
-/*
-  The following expression parser is based on Esprima (http://esprima.org/).
-  Original header comment and license for Esprima is included here:
-
-  Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
-  Copyright (C) 2013 Thaddee Tyl <thaddee.tyl@gmail.com>
-  Copyright (C) 2013 Mathias Bynens <mathias@qiwi.be>
-  Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
-  Copyright (C) 2012 Mathias Bynens <mathias@qiwi.be>
-  Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
-  Copyright (C) 2012 Kris Kowal <kris.kowal@cixar.com>
-  Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
-  Copyright (C) 2012 Arpad Borsos <arpad.borsos@googlemail.com>
-  Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
-
-  Redistribution and use in source and binary forms, with or without
-  modification, are permitted provided that the following conditions are met:
-
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright
-      notice, this list of conditions and the following disclaimer in the
-      documentation and/or other materials provided with the distribution.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-  ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
-  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-var TokenName, source, index, length, lookahead;
-var TokenBooleanLiteral = 1,
-  TokenEOF = 2,
-  TokenIdentifier = 3,
-  TokenKeyword = 4,
-  TokenNullLiteral = 5,
-  TokenNumericLiteral = 6,
-  TokenPunctuator = 7,
-  TokenStringLiteral = 8,
-  TokenRegularExpression = 9;
-TokenName = {};
-TokenName[TokenBooleanLiteral] = 'Boolean';
-TokenName[TokenEOF] = '<end>';
-TokenName[TokenIdentifier] = 'Identifier';
-TokenName[TokenKeyword] = 'Keyword';
-TokenName[TokenNullLiteral] = 'Null';
-TokenName[TokenNumericLiteral] = 'Numeric';
-TokenName[TokenPunctuator] = 'Punctuator';
-TokenName[TokenStringLiteral] = 'String';
-TokenName[TokenRegularExpression] = 'RegularExpression';
-var SyntaxArrayExpression = 'ArrayExpression',
-  SyntaxBinaryExpression = 'BinaryExpression',
-  SyntaxCallExpression = 'CallExpression',
-  SyntaxConditionalExpression = 'ConditionalExpression',
-  SyntaxIdentifier = 'Identifier',
-  SyntaxLiteral = 'Literal',
-  SyntaxLogicalExpression = 'LogicalExpression',
-  SyntaxMemberExpression = 'MemberExpression',
-  SyntaxObjectExpression = 'ObjectExpression',
-  SyntaxProperty = 'Property',
-  SyntaxUnaryExpression = 'UnaryExpression';
-
-// Error messages should be identical to V8.
-var MessageUnexpectedToken = 'Unexpected token %0',
-  MessageUnexpectedNumber = 'Unexpected number',
-  MessageUnexpectedString = 'Unexpected string',
-  MessageUnexpectedIdentifier = 'Unexpected identifier',
-  MessageUnexpectedReserved = 'Unexpected reserved word',
-  MessageUnexpectedEOS = 'Unexpected end of input',
-  MessageInvalidRegExp = 'Invalid regular expression',
-  MessageUnterminatedRegExp = 'Invalid regular expression: missing /',
-  MessageStrictOctalLiteral = 'Octal literals are not allowed in strict mode.',
-  MessageStrictDuplicateProperty = 'Duplicate data property in object literal not allowed in strict mode';
-var ILLEGAL = 'ILLEGAL',
-  DISABLED = 'Disabled.';
-
-// See also tools/generate-unicode-regex.py.
-var RegexNonAsciiIdentifierStart = new RegExp('[\\xAA\\xB5\\xBA\\xC0-\\xD6\\xD8-\\xF6\\xF8-\\u02C1\\u02C6-\\u02D1\\u02E0-\\u02E4\\u02EC\\u02EE\\u0370-\\u0374\\u0376\\u0377\\u037A-\\u037D\\u037F\\u0386\\u0388-\\u038A\\u038C\\u038E-\\u03A1\\u03A3-\\u03F5\\u03F7-\\u0481\\u048A-\\u052F\\u0531-\\u0556\\u0559\\u0561-\\u0587\\u05D0-\\u05EA\\u05F0-\\u05F2\\u0620-\\u064A\\u066E\\u066F\\u0671-\\u06D3\\u06D5\\u06E5\\u06E6\\u06EE\\u06EF\\u06FA-\\u06FC\\u06FF\\u0710\\u0712-\\u072F\\u074D-\\u07A5\\u07B1\\u07CA-\\u07EA\\u07F4\\u07F5\\u07FA\\u0800-\\u0815\\u081A\\u0824\\u0828\\u0840-\\u0858\\u08A0-\\u08B2\\u0904-\\u0939\\u093D\\u0950\\u0958-\\u0961\\u0971-\\u0980\\u0985-\\u098C\\u098F\\u0990\\u0993-\\u09A8\\u09AA-\\u09B0\\u09B2\\u09B6-\\u09B9\\u09BD\\u09CE\\u09DC\\u09DD\\u09DF-\\u09E1\\u09F0\\u09F1\\u0A05-\\u0A0A\\u0A0F\\u0A10\\u0A13-\\u0A28\\u0A2A-\\u0A30\\u0A32\\u0A33\\u0A35\\u0A36\\u0A38\\u0A39\\u0A59-\\u0A5C\\u0A5E\\u0A72-\\u0A74\\u0A85-\\u0A8D\\u0A8F-\\u0A91\\u0A93-\\u0AA8\\u0AAA-\\u0AB0\\u0AB2\\u0AB3\\u0AB5-\\u0AB9\\u0ABD\\u0AD0\\u0AE0\\u0AE1\\u0B05-\\u0B0C\\u0B0F\\u0B10\\u0B13-\\u0B28\\u0B2A-\\u0B30\\u0B32\\u0B33\\u0B35-\\u0B39\\u0B3D\\u0B5C\\u0B5D\\u0B5F-\\u0B61\\u0B71\\u0B83\\u0B85-\\u0B8A\\u0B8E-\\u0B90\\u0B92-\\u0B95\\u0B99\\u0B9A\\u0B9C\\u0B9E\\u0B9F\\u0BA3\\u0BA4\\u0BA8-\\u0BAA\\u0BAE-\\u0BB9\\u0BD0\\u0C05-\\u0C0C\\u0C0E-\\u0C10\\u0C12-\\u0C28\\u0C2A-\\u0C39\\u0C3D\\u0C58\\u0C59\\u0C60\\u0C61\\u0C85-\\u0C8C\\u0C8E-\\u0C90\\u0C92-\\u0CA8\\u0CAA-\\u0CB3\\u0CB5-\\u0CB9\\u0CBD\\u0CDE\\u0CE0\\u0CE1\\u0CF1\\u0CF2\\u0D05-\\u0D0C\\u0D0E-\\u0D10\\u0D12-\\u0D3A\\u0D3D\\u0D4E\\u0D60\\u0D61\\u0D7A-\\u0D7F\\u0D85-\\u0D96\\u0D9A-\\u0DB1\\u0DB3-\\u0DBB\\u0DBD\\u0DC0-\\u0DC6\\u0E01-\\u0E30\\u0E32\\u0E33\\u0E40-\\u0E46\\u0E81\\u0E82\\u0E84\\u0E87\\u0E88\\u0E8A\\u0E8D\\u0E94-\\u0E97\\u0E99-\\u0E9F\\u0EA1-\\u0EA3\\u0EA5\\u0EA7\\u0EAA\\u0EAB\\u0EAD-\\u0EB0\\u0EB2\\u0EB3\\u0EBD\\u0EC0-\\u0EC4\\u0EC6\\u0EDC-\\u0EDF\\u0F00\\u0F40-\\u0F47\\u0F49-\\u0F6C\\u0F88-\\u0F8C\\u1000-\\u102A\\u103F\\u1050-\\u1055\\u105A-\\u105D\\u1061\\u1065\\u1066\\u106E-\\u1070\\u1075-\\u1081\\u108E\\u10A0-\\u10C5\\u10C7\\u10CD\\u10D0-\\u10FA\\u10FC-\\u1248\\u124A-\\u124D\\u1250-\\u1256\\u1258\\u125A-\\u125D\\u1260-\\u1288\\u128A-\\u128D\\u1290-\\u12B0\\u12B2-\\u12B5\\u12B8-\\u12BE\\u12C0\\u12C2-\\u12C5\\u12C8-\\u12D6\\u12D8-\\u1310\\u1312-\\u1315\\u1318-\\u135A\\u1380-\\u138F\\u13A0-\\u13F4\\u1401-\\u166C\\u166F-\\u167F\\u1681-\\u169A\\u16A0-\\u16EA\\u16EE-\\u16F8\\u1700-\\u170C\\u170E-\\u1711\\u1720-\\u1731\\u1740-\\u1751\\u1760-\\u176C\\u176E-\\u1770\\u1780-\\u17B3\\u17D7\\u17DC\\u1820-\\u1877\\u1880-\\u18A8\\u18AA\\u18B0-\\u18F5\\u1900-\\u191E\\u1950-\\u196D\\u1970-\\u1974\\u1980-\\u19AB\\u19C1-\\u19C7\\u1A00-\\u1A16\\u1A20-\\u1A54\\u1AA7\\u1B05-\\u1B33\\u1B45-\\u1B4B\\u1B83-\\u1BA0\\u1BAE\\u1BAF\\u1BBA-\\u1BE5\\u1C00-\\u1C23\\u1C4D-\\u1C4F\\u1C5A-\\u1C7D\\u1CE9-\\u1CEC\\u1CEE-\\u1CF1\\u1CF5\\u1CF6\\u1D00-\\u1DBF\\u1E00-\\u1F15\\u1F18-\\u1F1D\\u1F20-\\u1F45\\u1F48-\\u1F4D\\u1F50-\\u1F57\\u1F59\\u1F5B\\u1F5D\\u1F5F-\\u1F7D\\u1F80-\\u1FB4\\u1FB6-\\u1FBC\\u1FBE\\u1FC2-\\u1FC4\\u1FC6-\\u1FCC\\u1FD0-\\u1FD3\\u1FD6-\\u1FDB\\u1FE0-\\u1FEC\\u1FF2-\\u1FF4\\u1FF6-\\u1FFC\\u2071\\u207F\\u2090-\\u209C\\u2102\\u2107\\u210A-\\u2113\\u2115\\u2119-\\u211D\\u2124\\u2126\\u2128\\u212A-\\u212D\\u212F-\\u2139\\u213C-\\u213F\\u2145-\\u2149\\u214E\\u2160-\\u2188\\u2C00-\\u2C2E\\u2C30-\\u2C5E\\u2C60-\\u2CE4\\u2CEB-\\u2CEE\\u2CF2\\u2CF3\\u2D00-\\u2D25\\u2D27\\u2D2D\\u2D30-\\u2D67\\u2D6F\\u2D80-\\u2D96\\u2DA0-\\u2DA6\\u2DA8-\\u2DAE\\u2DB0-\\u2DB6\\u2DB8-\\u2DBE\\u2DC0-\\u2DC6\\u2DC8-\\u2DCE\\u2DD0-\\u2DD6\\u2DD8-\\u2DDE\\u2E2F\\u3005-\\u3007\\u3021-\\u3029\\u3031-\\u3035\\u3038-\\u303C\\u3041-\\u3096\\u309D-\\u309F\\u30A1-\\u30FA\\u30FC-\\u30FF\\u3105-\\u312D\\u3131-\\u318E\\u31A0-\\u31BA\\u31F0-\\u31FF\\u3400-\\u4DB5\\u4E00-\\u9FCC\\uA000-\\uA48C\\uA4D0-\\uA4FD\\uA500-\\uA60C\\uA610-\\uA61F\\uA62A\\uA62B\\uA640-\\uA66E\\uA67F-\\uA69D\\uA6A0-\\uA6EF\\uA717-\\uA71F\\uA722-\\uA788\\uA78B-\\uA78E\\uA790-\\uA7AD\\uA7B0\\uA7B1\\uA7F7-\\uA801\\uA803-\\uA805\\uA807-\\uA80A\\uA80C-\\uA822\\uA840-\\uA873\\uA882-\\uA8B3\\uA8F2-\\uA8F7\\uA8FB\\uA90A-\\uA925\\uA930-\\uA946\\uA960-\\uA97C\\uA984-\\uA9B2\\uA9CF\\uA9E0-\\uA9E4\\uA9E6-\\uA9EF\\uA9FA-\\uA9FE\\uAA00-\\uAA28\\uAA40-\\uAA42\\uAA44-\\uAA4B\\uAA60-\\uAA76\\uAA7A\\uAA7E-\\uAAAF\\uAAB1\\uAAB5\\uAAB6\\uAAB9-\\uAABD\\uAAC0\\uAAC2\\uAADB-\\uAADD\\uAAE0-\\uAAEA\\uAAF2-\\uAAF4\\uAB01-\\uAB06\\uAB09-\\uAB0E\\uAB11-\\uAB16\\uAB20-\\uAB26\\uAB28-\\uAB2E\\uAB30-\\uAB5A\\uAB5C-\\uAB5F\\uAB64\\uAB65\\uABC0-\\uABE2\\uAC00-\\uD7A3\\uD7B0-\\uD7C6\\uD7CB-\\uD7FB\\uF900-\\uFA6D\\uFA70-\\uFAD9\\uFB00-\\uFB06\\uFB13-\\uFB17\\uFB1D\\uFB1F-\\uFB28\\uFB2A-\\uFB36\\uFB38-\\uFB3C\\uFB3E\\uFB40\\uFB41\\uFB43\\uFB44\\uFB46-\\uFBB1\\uFBD3-\\uFD3D\\uFD50-\\uFD8F\\uFD92-\\uFDC7\\uFDF0-\\uFDFB\\uFE70-\\uFE74\\uFE76-\\uFEFC\\uFF21-\\uFF3A\\uFF41-\\uFF5A\\uFF66-\\uFFBE\\uFFC2-\\uFFC7\\uFFCA-\\uFFCF\\uFFD2-\\uFFD7\\uFFDA-\\uFFDC]'),
-  // eslint-disable-next-line no-misleading-character-class
-  RegexNonAsciiIdentifierPart = new RegExp('[\\xAA\\xB5\\xBA\\xC0-\\xD6\\xD8-\\xF6\\xF8-\\u02C1\\u02C6-\\u02D1\\u02E0-\\u02E4\\u02EC\\u02EE\\u0300-\\u0374\\u0376\\u0377\\u037A-\\u037D\\u037F\\u0386\\u0388-\\u038A\\u038C\\u038E-\\u03A1\\u03A3-\\u03F5\\u03F7-\\u0481\\u0483-\\u0487\\u048A-\\u052F\\u0531-\\u0556\\u0559\\u0561-\\u0587\\u0591-\\u05BD\\u05BF\\u05C1\\u05C2\\u05C4\\u05C5\\u05C7\\u05D0-\\u05EA\\u05F0-\\u05F2\\u0610-\\u061A\\u0620-\\u0669\\u066E-\\u06D3\\u06D5-\\u06DC\\u06DF-\\u06E8\\u06EA-\\u06FC\\u06FF\\u0710-\\u074A\\u074D-\\u07B1\\u07C0-\\u07F5\\u07FA\\u0800-\\u082D\\u0840-\\u085B\\u08A0-\\u08B2\\u08E4-\\u0963\\u0966-\\u096F\\u0971-\\u0983\\u0985-\\u098C\\u098F\\u0990\\u0993-\\u09A8\\u09AA-\\u09B0\\u09B2\\u09B6-\\u09B9\\u09BC-\\u09C4\\u09C7\\u09C8\\u09CB-\\u09CE\\u09D7\\u09DC\\u09DD\\u09DF-\\u09E3\\u09E6-\\u09F1\\u0A01-\\u0A03\\u0A05-\\u0A0A\\u0A0F\\u0A10\\u0A13-\\u0A28\\u0A2A-\\u0A30\\u0A32\\u0A33\\u0A35\\u0A36\\u0A38\\u0A39\\u0A3C\\u0A3E-\\u0A42\\u0A47\\u0A48\\u0A4B-\\u0A4D\\u0A51\\u0A59-\\u0A5C\\u0A5E\\u0A66-\\u0A75\\u0A81-\\u0A83\\u0A85-\\u0A8D\\u0A8F-\\u0A91\\u0A93-\\u0AA8\\u0AAA-\\u0AB0\\u0AB2\\u0AB3\\u0AB5-\\u0AB9\\u0ABC-\\u0AC5\\u0AC7-\\u0AC9\\u0ACB-\\u0ACD\\u0AD0\\u0AE0-\\u0AE3\\u0AE6-\\u0AEF\\u0B01-\\u0B03\\u0B05-\\u0B0C\\u0B0F\\u0B10\\u0B13-\\u0B28\\u0B2A-\\u0B30\\u0B32\\u0B33\\u0B35-\\u0B39\\u0B3C-\\u0B44\\u0B47\\u0B48\\u0B4B-\\u0B4D\\u0B56\\u0B57\\u0B5C\\u0B5D\\u0B5F-\\u0B63\\u0B66-\\u0B6F\\u0B71\\u0B82\\u0B83\\u0B85-\\u0B8A\\u0B8E-\\u0B90\\u0B92-\\u0B95\\u0B99\\u0B9A\\u0B9C\\u0B9E\\u0B9F\\u0BA3\\u0BA4\\u0BA8-\\u0BAA\\u0BAE-\\u0BB9\\u0BBE-\\u0BC2\\u0BC6-\\u0BC8\\u0BCA-\\u0BCD\\u0BD0\\u0BD7\\u0BE6-\\u0BEF\\u0C00-\\u0C03\\u0C05-\\u0C0C\\u0C0E-\\u0C10\\u0C12-\\u0C28\\u0C2A-\\u0C39\\u0C3D-\\u0C44\\u0C46-\\u0C48\\u0C4A-\\u0C4D\\u0C55\\u0C56\\u0C58\\u0C59\\u0C60-\\u0C63\\u0C66-\\u0C6F\\u0C81-\\u0C83\\u0C85-\\u0C8C\\u0C8E-\\u0C90\\u0C92-\\u0CA8\\u0CAA-\\u0CB3\\u0CB5-\\u0CB9\\u0CBC-\\u0CC4\\u0CC6-\\u0CC8\\u0CCA-\\u0CCD\\u0CD5\\u0CD6\\u0CDE\\u0CE0-\\u0CE3\\u0CE6-\\u0CEF\\u0CF1\\u0CF2\\u0D01-\\u0D03\\u0D05-\\u0D0C\\u0D0E-\\u0D10\\u0D12-\\u0D3A\\u0D3D-\\u0D44\\u0D46-\\u0D48\\u0D4A-\\u0D4E\\u0D57\\u0D60-\\u0D63\\u0D66-\\u0D6F\\u0D7A-\\u0D7F\\u0D82\\u0D83\\u0D85-\\u0D96\\u0D9A-\\u0DB1\\u0DB3-\\u0DBB\\u0DBD\\u0DC0-\\u0DC6\\u0DCA\\u0DCF-\\u0DD4\\u0DD6\\u0DD8-\\u0DDF\\u0DE6-\\u0DEF\\u0DF2\\u0DF3\\u0E01-\\u0E3A\\u0E40-\\u0E4E\\u0E50-\\u0E59\\u0E81\\u0E82\\u0E84\\u0E87\\u0E88\\u0E8A\\u0E8D\\u0E94-\\u0E97\\u0E99-\\u0E9F\\u0EA1-\\u0EA3\\u0EA5\\u0EA7\\u0EAA\\u0EAB\\u0EAD-\\u0EB9\\u0EBB-\\u0EBD\\u0EC0-\\u0EC4\\u0EC6\\u0EC8-\\u0ECD\\u0ED0-\\u0ED9\\u0EDC-\\u0EDF\\u0F00\\u0F18\\u0F19\\u0F20-\\u0F29\\u0F35\\u0F37\\u0F39\\u0F3E-\\u0F47\\u0F49-\\u0F6C\\u0F71-\\u0F84\\u0F86-\\u0F97\\u0F99-\\u0FBC\\u0FC6\\u1000-\\u1049\\u1050-\\u109D\\u10A0-\\u10C5\\u10C7\\u10CD\\u10D0-\\u10FA\\u10FC-\\u1248\\u124A-\\u124D\\u1250-\\u1256\\u1258\\u125A-\\u125D\\u1260-\\u1288\\u128A-\\u128D\\u1290-\\u12B0\\u12B2-\\u12B5\\u12B8-\\u12BE\\u12C0\\u12C2-\\u12C5\\u12C8-\\u12D6\\u12D8-\\u1310\\u1312-\\u1315\\u1318-\\u135A\\u135D-\\u135F\\u1380-\\u138F\\u13A0-\\u13F4\\u1401-\\u166C\\u166F-\\u167F\\u1681-\\u169A\\u16A0-\\u16EA\\u16EE-\\u16F8\\u1700-\\u170C\\u170E-\\u1714\\u1720-\\u1734\\u1740-\\u1753\\u1760-\\u176C\\u176E-\\u1770\\u1772\\u1773\\u1780-\\u17D3\\u17D7\\u17DC\\u17DD\\u17E0-\\u17E9\\u180B-\\u180D\\u1810-\\u1819\\u1820-\\u1877\\u1880-\\u18AA\\u18B0-\\u18F5\\u1900-\\u191E\\u1920-\\u192B\\u1930-\\u193B\\u1946-\\u196D\\u1970-\\u1974\\u1980-\\u19AB\\u19B0-\\u19C9\\u19D0-\\u19D9\\u1A00-\\u1A1B\\u1A20-\\u1A5E\\u1A60-\\u1A7C\\u1A7F-\\u1A89\\u1A90-\\u1A99\\u1AA7\\u1AB0-\\u1ABD\\u1B00-\\u1B4B\\u1B50-\\u1B59\\u1B6B-\\u1B73\\u1B80-\\u1BF3\\u1C00-\\u1C37\\u1C40-\\u1C49\\u1C4D-\\u1C7D\\u1CD0-\\u1CD2\\u1CD4-\\u1CF6\\u1CF8\\u1CF9\\u1D00-\\u1DF5\\u1DFC-\\u1F15\\u1F18-\\u1F1D\\u1F20-\\u1F45\\u1F48-\\u1F4D\\u1F50-\\u1F57\\u1F59\\u1F5B\\u1F5D\\u1F5F-\\u1F7D\\u1F80-\\u1FB4\\u1FB6-\\u1FBC\\u1FBE\\u1FC2-\\u1FC4\\u1FC6-\\u1FCC\\u1FD0-\\u1FD3\\u1FD6-\\u1FDB\\u1FE0-\\u1FEC\\u1FF2-\\u1FF4\\u1FF6-\\u1FFC\\u200C\\u200D\\u203F\\u2040\\u2054\\u2071\\u207F\\u2090-\\u209C\\u20D0-\\u20DC\\u20E1\\u20E5-\\u20F0\\u2102\\u2107\\u210A-\\u2113\\u2115\\u2119-\\u211D\\u2124\\u2126\\u2128\\u212A-\\u212D\\u212F-\\u2139\\u213C-\\u213F\\u2145-\\u2149\\u214E\\u2160-\\u2188\\u2C00-\\u2C2E\\u2C30-\\u2C5E\\u2C60-\\u2CE4\\u2CEB-\\u2CF3\\u2D00-\\u2D25\\u2D27\\u2D2D\\u2D30-\\u2D67\\u2D6F\\u2D7F-\\u2D96\\u2DA0-\\u2DA6\\u2DA8-\\u2DAE\\u2DB0-\\u2DB6\\u2DB8-\\u2DBE\\u2DC0-\\u2DC6\\u2DC8-\\u2DCE\\u2DD0-\\u2DD6\\u2DD8-\\u2DDE\\u2DE0-\\u2DFF\\u2E2F\\u3005-\\u3007\\u3021-\\u302F\\u3031-\\u3035\\u3038-\\u303C\\u3041-\\u3096\\u3099\\u309A\\u309D-\\u309F\\u30A1-\\u30FA\\u30FC-\\u30FF\\u3105-\\u312D\\u3131-\\u318E\\u31A0-\\u31BA\\u31F0-\\u31FF\\u3400-\\u4DB5\\u4E00-\\u9FCC\\uA000-\\uA48C\\uA4D0-\\uA4FD\\uA500-\\uA60C\\uA610-\\uA62B\\uA640-\\uA66F\\uA674-\\uA67D\\uA67F-\\uA69D\\uA69F-\\uA6F1\\uA717-\\uA71F\\uA722-\\uA788\\uA78B-\\uA78E\\uA790-\\uA7AD\\uA7B0\\uA7B1\\uA7F7-\\uA827\\uA840-\\uA873\\uA880-\\uA8C4\\uA8D0-\\uA8D9\\uA8E0-\\uA8F7\\uA8FB\\uA900-\\uA92D\\uA930-\\uA953\\uA960-\\uA97C\\uA980-\\uA9C0\\uA9CF-\\uA9D9\\uA9E0-\\uA9FE\\uAA00-\\uAA36\\uAA40-\\uAA4D\\uAA50-\\uAA59\\uAA60-\\uAA76\\uAA7A-\\uAAC2\\uAADB-\\uAADD\\uAAE0-\\uAAEF\\uAAF2-\\uAAF6\\uAB01-\\uAB06\\uAB09-\\uAB0E\\uAB11-\\uAB16\\uAB20-\\uAB26\\uAB28-\\uAB2E\\uAB30-\\uAB5A\\uAB5C-\\uAB5F\\uAB64\\uAB65\\uABC0-\\uABEA\\uABEC\\uABED\\uABF0-\\uABF9\\uAC00-\\uD7A3\\uD7B0-\\uD7C6\\uD7CB-\\uD7FB\\uF900-\\uFA6D\\uFA70-\\uFAD9\\uFB00-\\uFB06\\uFB13-\\uFB17\\uFB1D-\\uFB28\\uFB2A-\\uFB36\\uFB38-\\uFB3C\\uFB3E\\uFB40\\uFB41\\uFB43\\uFB44\\uFB46-\\uFBB1\\uFBD3-\\uFD3D\\uFD50-\\uFD8F\\uFD92-\\uFDC7\\uFDF0-\\uFDFB\\uFE00-\\uFE0F\\uFE20-\\uFE2D\\uFE33\\uFE34\\uFE4D-\\uFE4F\\uFE70-\\uFE74\\uFE76-\\uFEFC\\uFF10-\\uFF19\\uFF21-\\uFF3A\\uFF3F\\uFF41-\\uFF5A\\uFF66-\\uFFBE\\uFFC2-\\uFFC7\\uFFCA-\\uFFCF\\uFFD2-\\uFFD7\\uFFDA-\\uFFDC]');
-
-// Ensure the condition is true, otherwise throw an error.
-// This is only to have a better contract semantic, i.e. another safety net
-// to catch a logic error. The condition shall be fulfilled in normal case.
-// Do NOT use this to enforce a certain condition on any user input.
-
-function assert(condition, message) {
-  /* istanbul ignore next */
-  if (!condition) {
-    throw new Error('ASSERT: ' + message);
-  }
-}
-function isDecimalDigit(ch) {
-  return ch >= 0x30 && ch <= 0x39; // 0..9
-}
-function isHexDigit(ch) {
-  return '0123456789abcdefABCDEF'.includes(ch);
-}
-function isOctalDigit(ch) {
-  return '01234567'.includes(ch);
-}
-
-// 7.2 White Space
-
-function isWhiteSpace(ch) {
-  return ch === 0x20 || ch === 0x09 || ch === 0x0B || ch === 0x0C || ch === 0xA0 || ch >= 0x1680 && [0x1680, 0x180E, 0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005, 0x2006, 0x2007, 0x2008, 0x2009, 0x200A, 0x202F, 0x205F, 0x3000, 0xFEFF].includes(ch);
-}
-
-// 7.3 Line Terminators
-
-function isLineTerminator(ch) {
-  return ch === 0x0A || ch === 0x0D || ch === 0x2028 || ch === 0x2029;
-}
-
-// 7.6 Identifier Names and Identifiers
-
-function isIdentifierStart(ch) {
-  return ch === 0x24 || ch === 0x5F ||
-  // $ (dollar) and _ (underscore)
-  ch >= 0x41 && ch <= 0x5A ||
-  // A..Z
-  ch >= 0x61 && ch <= 0x7A ||
-  // a..z
-  ch === 0x5C ||
-  // \ (backslash)
-  ch >= 0x80 && RegexNonAsciiIdentifierStart.test(String.fromCharCode(ch));
-}
-function isIdentifierPart(ch) {
-  return ch === 0x24 || ch === 0x5F ||
-  // $ (dollar) and _ (underscore)
-  ch >= 0x41 && ch <= 0x5A ||
-  // A..Z
-  ch >= 0x61 && ch <= 0x7A ||
-  // a..z
-  ch >= 0x30 && ch <= 0x39 ||
-  // 0..9
-  ch === 0x5C ||
-  // \ (backslash)
-  ch >= 0x80 && RegexNonAsciiIdentifierPart.test(String.fromCharCode(ch));
-}
-
-// 7.6.1.1 Keywords
-
-const keywords = {
-  'if': 1,
-  'in': 1,
-  'do': 1,
-  'var': 1,
-  'for': 1,
-  'new': 1,
-  'try': 1,
-  'let': 1,
-  'this': 1,
-  'else': 1,
-  'case': 1,
-  'void': 1,
-  'with': 1,
-  'enum': 1,
-  'while': 1,
-  'break': 1,
-  'catch': 1,
-  'throw': 1,
-  'const': 1,
-  'yield': 1,
-  'class': 1,
-  'super': 1,
-  'return': 1,
-  'typeof': 1,
-  'delete': 1,
-  'switch': 1,
-  'export': 1,
-  'import': 1,
-  'public': 1,
-  'static': 1,
-  'default': 1,
-  'finally': 1,
-  'extends': 1,
-  'package': 1,
-  'private': 1,
-  'function': 1,
-  'continue': 1,
-  'debugger': 1,
-  'interface': 1,
-  'protected': 1,
-  'instanceof': 1,
-  'implements': 1
-};
-function skipComment() {
-  while (index < length) {
-    const ch = source.charCodeAt(index);
-    if (isWhiteSpace(ch) || isLineTerminator(ch)) {
-      ++index;
-    } else {
-      break;
-    }
-  }
-}
-function scanHexEscape(prefix) {
-  var i,
-    len,
-    ch,
-    code = 0;
-  len = prefix === 'u' ? 4 : 2;
-  for (i = 0; i < len; ++i) {
-    if (index < length && isHexDigit(source[index])) {
-      ch = source[index++];
-      code = code * 16 + '0123456789abcdef'.indexOf(ch.toLowerCase());
-    } else {
-      throwError({}, MessageUnexpectedToken, ILLEGAL);
-    }
-  }
-  return String.fromCharCode(code);
-}
-function scanUnicodeCodePointEscape() {
-  var ch, code, cu1, cu2;
-  ch = source[index];
-  code = 0;
-
-  // At least, one hex digit is required.
-  if (ch === '}') {
-    throwError({}, MessageUnexpectedToken, ILLEGAL);
-  }
-  while (index < length) {
-    ch = source[index++];
-    if (!isHexDigit(ch)) {
-      break;
-    }
-    code = code * 16 + '0123456789abcdef'.indexOf(ch.toLowerCase());
-  }
-  if (code > 0x10FFFF || ch !== '}') {
-    throwError({}, MessageUnexpectedToken, ILLEGAL);
-  }
-
-  // UTF-16 Encoding
-  if (code <= 0xFFFF) {
-    return String.fromCharCode(code);
-  }
-  cu1 = (code - 0x10000 >> 10) + 0xD800;
-  cu2 = (code - 0x10000 & 1023) + 0xDC00;
-  return String.fromCharCode(cu1, cu2);
-}
-function getEscapedIdentifier() {
-  var ch, id;
-  ch = source.charCodeAt(index++);
-  id = String.fromCharCode(ch);
-
-  // '\u' (U+005C, U+0075) denotes an escaped character.
-  if (ch === 0x5C) {
-    if (source.charCodeAt(index) !== 0x75) {
-      throwError({}, MessageUnexpectedToken, ILLEGAL);
-    }
-    ++index;
-    ch = scanHexEscape('u');
-    if (!ch || ch === '\\' || !isIdentifierStart(ch.charCodeAt(0))) {
-      throwError({}, MessageUnexpectedToken, ILLEGAL);
-    }
-    id = ch;
-  }
-  while (index < length) {
-    ch = source.charCodeAt(index);
-    if (!isIdentifierPart(ch)) {
-      break;
-    }
-    ++index;
-    id += String.fromCharCode(ch);
-
-    // '\u' (U+005C, U+0075) denotes an escaped character.
-    if (ch === 0x5C) {
-      id = id.substr(0, id.length - 1);
-      if (source.charCodeAt(index) !== 0x75) {
-        throwError({}, MessageUnexpectedToken, ILLEGAL);
-      }
-      ++index;
-      ch = scanHexEscape('u');
-      if (!ch || ch === '\\' || !isIdentifierPart(ch.charCodeAt(0))) {
-        throwError({}, MessageUnexpectedToken, ILLEGAL);
-      }
-      id += ch;
-    }
-  }
-  return id;
-}
-function getIdentifier() {
-  var start, ch;
-  start = index++;
-  while (index < length) {
-    ch = source.charCodeAt(index);
-    if (ch === 0x5C) {
-      // Blackslash (U+005C) marks Unicode escape sequence.
-      index = start;
-      return getEscapedIdentifier();
-    }
-    if (isIdentifierPart(ch)) {
-      ++index;
-    } else {
-      break;
-    }
-  }
-  return source.slice(start, index);
-}
-function scanIdentifier() {
-  var start, id, type;
-  start = index;
-
-  // Backslash (U+005C) starts an escaped character.
-  id = source.charCodeAt(index) === 0x5C ? getEscapedIdentifier() : getIdentifier();
-
-  // There is no keyword or literal with only one character.
-  // Thus, it must be an identifier.
-  if (id.length === 1) {
-    type = TokenIdentifier;
-  } else if (keywords.hasOwnProperty(id)) {
-    // eslint-disable-line no-prototype-builtins
-    type = TokenKeyword;
-  } else if (id === 'null') {
-    type = TokenNullLiteral;
-  } else if (id === 'true' || id === 'false') {
-    type = TokenBooleanLiteral;
-  } else {
-    type = TokenIdentifier;
-  }
-  return {
-    type: type,
-    value: id,
-    start: start,
-    end: index
-  };
-}
-
-// 7.7 Punctuators
-
-function scanPunctuator() {
-  var start = index,
-    code = source.charCodeAt(index),
-    code2,
-    ch1 = source[index],
-    ch2,
-    ch3,
-    ch4;
-  switch (code) {
-    // Check for most common single-character punctuators.
-    case 0x2E: // . dot
-    case 0x28: // ( open bracket
-    case 0x29: // ) close bracket
-    case 0x3B: // ; semicolon
-    case 0x2C: // , comma
-    case 0x7B: // { open curly brace
-    case 0x7D: // } close curly brace
-    case 0x5B: // [
-    case 0x5D: // ]
-    case 0x3A: // :
-    case 0x3F: // ?
-    case 0x7E:
-      // ~
-      ++index;
-      return {
-        type: TokenPunctuator,
-        value: String.fromCharCode(code),
-        start: start,
-        end: index
-      };
-    default:
-      code2 = source.charCodeAt(index + 1);
-
-      // '=' (U+003D) marks an assignment or comparison operator.
-      if (code2 === 0x3D) {
-        switch (code) {
-          case 0x2B: // +
-          case 0x2D: // -
-          case 0x2F: // /
-          case 0x3C: // <
-          case 0x3E: // >
-          case 0x5E: // ^
-          case 0x7C: // |
-          case 0x25: // %
-          case 0x26: // &
-          case 0x2A:
-            // *
-            index += 2;
-            return {
-              type: TokenPunctuator,
-              value: String.fromCharCode(code) + String.fromCharCode(code2),
-              start: start,
-              end: index
-            };
-          case 0x21: // !
-          case 0x3D:
-            // =
-            index += 2;
-
-            // !== and ===
-            if (source.charCodeAt(index) === 0x3D) {
-              ++index;
-            }
-            return {
-              type: TokenPunctuator,
-              value: source.slice(start, index),
-              start: start,
-              end: index
-            };
-        }
-      }
-  }
-
-  // 4-character punctuator: >>>=
-
-  ch4 = source.substr(index, 4);
-  if (ch4 === '>>>=') {
-    index += 4;
-    return {
-      type: TokenPunctuator,
-      value: ch4,
-      start: start,
-      end: index
-    };
-  }
-
-  // 3-character punctuators: === !== >>> <<= >>=
-
-  ch3 = ch4.substr(0, 3);
-  if (ch3 === '>>>' || ch3 === '<<=' || ch3 === '>>=') {
-    index += 3;
-    return {
-      type: TokenPunctuator,
-      value: ch3,
-      start: start,
-      end: index
-    };
-  }
-
-  // Other 2-character punctuators: ++ -- << >> && ||
-  ch2 = ch3.substr(0, 2);
-  if (ch1 === ch2[1] && '+-<>&|'.includes(ch1) || ch2 === '=>') {
-    index += 2;
-    return {
-      type: TokenPunctuator,
-      value: ch2,
-      start: start,
-      end: index
-    };
-  }
-  if (ch2 === '//') {
-    throwError({}, MessageUnexpectedToken, ILLEGAL);
-  }
-
-  // 1-character punctuators: < > = ! + - * % & | ^ /
-
-  if ('<>=!+-*%&|^/'.includes(ch1)) {
-    ++index;
-    return {
-      type: TokenPunctuator,
-      value: ch1,
-      start: start,
-      end: index
-    };
-  }
-  throwError({}, MessageUnexpectedToken, ILLEGAL);
-}
-
-// 7.8.3 Numeric Literals
-
-function scanHexLiteral(start) {
-  let number = '';
-  while (index < length) {
-    if (!isHexDigit(source[index])) {
-      break;
-    }
-    number += source[index++];
-  }
-  if (number.length === 0) {
-    throwError({}, MessageUnexpectedToken, ILLEGAL);
-  }
-  if (isIdentifierStart(source.charCodeAt(index))) {
-    throwError({}, MessageUnexpectedToken, ILLEGAL);
-  }
-  return {
-    type: TokenNumericLiteral,
-    value: parseInt('0x' + number, 16),
-    start: start,
-    end: index
-  };
-}
-function scanOctalLiteral(start) {
-  let number = '0' + source[index++];
-  while (index < length) {
-    if (!isOctalDigit(source[index])) {
-      break;
-    }
-    number += source[index++];
-  }
-  if (isIdentifierStart(source.charCodeAt(index)) || isDecimalDigit(source.charCodeAt(index))) {
-    throwError({}, MessageUnexpectedToken, ILLEGAL);
-  }
-  return {
-    type: TokenNumericLiteral,
-    value: parseInt(number, 8),
-    octal: true,
-    start: start,
-    end: index
-  };
-}
-function scanNumericLiteral() {
-  var number, start, ch;
-  ch = source[index];
-  assert(isDecimalDigit(ch.charCodeAt(0)) || ch === '.', 'Numeric literal must start with a decimal digit or a decimal point');
-  start = index;
-  number = '';
-  if (ch !== '.') {
-    number = source[index++];
-    ch = source[index];
-
-    // Hex number starts with '0x'.
-    // Octal number starts with '0'.
-    if (number === '0') {
-      if (ch === 'x' || ch === 'X') {
-        ++index;
-        return scanHexLiteral(start);
-      }
-      if (isOctalDigit(ch)) {
-        return scanOctalLiteral(start);
-      }
-
-      // decimal number starts with '0' such as '09' is illegal.
-      if (ch && isDecimalDigit(ch.charCodeAt(0))) {
-        throwError({}, MessageUnexpectedToken, ILLEGAL);
-      }
-    }
-    while (isDecimalDigit(source.charCodeAt(index))) {
-      number += source[index++];
-    }
-    ch = source[index];
-  }
-  if (ch === '.') {
-    number += source[index++];
-    while (isDecimalDigit(source.charCodeAt(index))) {
-      number += source[index++];
-    }
-    ch = source[index];
-  }
-  if (ch === 'e' || ch === 'E') {
-    number += source[index++];
-    ch = source[index];
-    if (ch === '+' || ch === '-') {
-      number += source[index++];
-    }
-    if (isDecimalDigit(source.charCodeAt(index))) {
-      while (isDecimalDigit(source.charCodeAt(index))) {
-        number += source[index++];
-      }
-    } else {
-      throwError({}, MessageUnexpectedToken, ILLEGAL);
-    }
-  }
-  if (isIdentifierStart(source.charCodeAt(index))) {
-    throwError({}, MessageUnexpectedToken, ILLEGAL);
-  }
-  return {
-    type: TokenNumericLiteral,
-    value: parseFloat(number),
-    start: start,
-    end: index
-  };
-}
-
-// 7.8.4 String Literals
-
-function scanStringLiteral() {
-  var str = '',
-    quote,
-    start,
-    ch,
-    code,
-    octal = false;
-  quote = source[index];
-  assert(quote === '\'' || quote === '"', 'String literal must starts with a quote');
-  start = index;
-  ++index;
-  while (index < length) {
-    ch = source[index++];
-    if (ch === quote) {
-      quote = '';
-      break;
-    } else if (ch === '\\') {
-      ch = source[index++];
-      if (!ch || !isLineTerminator(ch.charCodeAt(0))) {
-        switch (ch) {
-          case 'u':
-          case 'x':
-            if (source[index] === '{') {
-              ++index;
-              str += scanUnicodeCodePointEscape();
-            } else {
-              str += scanHexEscape(ch);
-            }
-            break;
-          case 'n':
-            str += '\n';
-            break;
-          case 'r':
-            str += '\r';
-            break;
-          case 't':
-            str += '\t';
-            break;
-          case 'b':
-            str += '\b';
-            break;
-          case 'f':
-            str += '\f';
-            break;
-          case 'v':
-            str += '\x0B';
-            break;
-          default:
-            if (isOctalDigit(ch)) {
-              code = '01234567'.indexOf(ch);
-
-              // \0 is not octal escape sequence
-              if (code !== 0) {
-                octal = true;
-              }
-              if (index < length && isOctalDigit(source[index])) {
-                octal = true;
-                code = code * 8 + '01234567'.indexOf(source[index++]);
-
-                // 3 digits are only allowed when string starts
-                // with 0, 1, 2, 3
-                if ('0123'.includes(ch) && index < length && isOctalDigit(source[index])) {
-                  code = code * 8 + '01234567'.indexOf(source[index++]);
-                }
-              }
-              str += String.fromCharCode(code);
-            } else {
-              str += ch;
-            }
-            break;
-        }
-      } else {
-        if (ch === '\r' && source[index] === '\n') {
-          ++index;
-        }
-      }
-    } else if (isLineTerminator(ch.charCodeAt(0))) {
-      break;
-    } else {
-      str += ch;
-    }
-  }
-  if (quote !== '') {
-    throwError({}, MessageUnexpectedToken, ILLEGAL);
-  }
-  return {
-    type: TokenStringLiteral,
-    value: str,
-    octal: octal,
-    start: start,
-    end: index
-  };
-}
-function testRegExp(pattern, flags) {
-  let tmp = pattern;
-  if (flags.includes('u')) {
-    // Replace each astral symbol and every Unicode code point
-    // escape sequence with a single ASCII symbol to avoid throwing on
-    // regular expressions that are only valid in combination with the
-    // `/u` flag.
-    // Note: replacing with the ASCII symbol `x` might cause false
-    // negatives in unlikely scenarios. For example, `[\u{61}-b]` is a
-    // perfectly valid pattern that is equivalent to `[a-b]`, but it
-    // would be replaced by `[x-b]` which throws an error.
-    tmp = tmp.replace(/\\u\{([0-9a-fA-F]+)\}/g, ($0, $1) => {
-      if (parseInt($1, 16) <= 0x10FFFF) {
-        return 'x';
-      }
-      throwError({}, MessageInvalidRegExp);
-    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, 'x');
-  }
-
-  // First, detect invalid regular expressions.
-  try {
-    new RegExp(tmp);
-  } catch (e) {
-    throwError({}, MessageInvalidRegExp);
-  }
-
-  // Return a regular expression object for this pattern-flag pair, or
-  // `null` in case the current environment doesn't support the flags it
-  // uses.
-  try {
-    return new RegExp(pattern, flags);
-  } catch (exception) {
-    return null;
-  }
-}
-function scanRegExpBody() {
-  var ch, str, classMarker, terminated, body;
-  ch = source[index];
-  assert(ch === '/', 'Regular expression literal must start with a slash');
-  str = source[index++];
-  classMarker = false;
-  terminated = false;
-  while (index < length) {
-    ch = source[index++];
-    str += ch;
-    if (ch === '\\') {
-      ch = source[index++];
-      // ECMA-262 7.8.5
-      if (isLineTerminator(ch.charCodeAt(0))) {
-        throwError({}, MessageUnterminatedRegExp);
-      }
-      str += ch;
-    } else if (isLineTerminator(ch.charCodeAt(0))) {
-      throwError({}, MessageUnterminatedRegExp);
-    } else if (classMarker) {
-      if (ch === ']') {
-        classMarker = false;
-      }
-    } else {
-      if (ch === '/') {
-        terminated = true;
-        break;
-      } else if (ch === '[') {
-        classMarker = true;
-      }
-    }
-  }
-  if (!terminated) {
-    throwError({}, MessageUnterminatedRegExp);
-  }
-
-  // Exclude leading and trailing slash.
-  body = str.substr(1, str.length - 2);
-  return {
-    value: body,
-    literal: str
-  };
-}
-function scanRegExpFlags() {
-  var ch, str, flags;
-  str = '';
-  flags = '';
-  while (index < length) {
-    ch = source[index];
-    if (!isIdentifierPart(ch.charCodeAt(0))) {
-      break;
-    }
-    ++index;
-    if (ch === '\\' && index < length) {
-      throwError({}, MessageUnexpectedToken, ILLEGAL);
-    } else {
-      flags += ch;
-      str += ch;
-    }
-  }
-  if (flags.search(/[^gimuy]/g) >= 0) {
-    throwError({}, MessageInvalidRegExp, flags);
-  }
-  return {
-    value: flags,
-    literal: str
-  };
-}
-function scanRegExp() {
-  var start, body, flags, value;
-  lookahead = null;
-  skipComment();
-  start = index;
-  body = scanRegExpBody();
-  flags = scanRegExpFlags();
-  value = testRegExp(body.value, flags.value);
-  return {
-    literal: body.literal + flags.literal,
-    value: value,
-    regex: {
-      pattern: body.value,
-      flags: flags.value
-    },
-    start: start,
-    end: index
-  };
-}
-function isIdentifierName(token) {
-  return token.type === TokenIdentifier || token.type === TokenKeyword || token.type === TokenBooleanLiteral || token.type === TokenNullLiteral;
-}
-function advance() {
-  skipComment();
-  if (index >= length) {
-    return {
-      type: TokenEOF,
-      start: index,
-      end: index
-    };
-  }
-  const ch = source.charCodeAt(index);
-  if (isIdentifierStart(ch)) {
-    return scanIdentifier();
-  }
-
-  // Very common: ( and ) and ;
-  if (ch === 0x28 || ch === 0x29 || ch === 0x3B) {
-    return scanPunctuator();
-  }
-
-  // String literal starts with single quote (U+0027) or double quote (U+0022).
-  if (ch === 0x27 || ch === 0x22) {
-    return scanStringLiteral();
-  }
-
-  // Dot (.) U+002E can also start a floating-point number, hence the need
-  // to check the next character.
-  if (ch === 0x2E) {
-    if (isDecimalDigit(source.charCodeAt(index + 1))) {
-      return scanNumericLiteral();
-    }
-    return scanPunctuator();
-  }
-  if (isDecimalDigit(ch)) {
-    return scanNumericLiteral();
-  }
-  return scanPunctuator();
-}
-function lex() {
-  const token = lookahead;
-  index = token.end;
-  lookahead = advance();
-  index = token.end;
-  return token;
-}
-function peek() {
-  const pos = index;
-  lookahead = advance();
-  index = pos;
-}
-function finishArrayExpression(elements) {
-  const node = new ASTNode(SyntaxArrayExpression);
-  node.elements = elements;
-  return node;
-}
-function finishBinaryExpression(operator, left, right) {
-  const node = new ASTNode(operator === '||' || operator === '&&' ? SyntaxLogicalExpression : SyntaxBinaryExpression);
-  node.operator = operator;
-  node.left = left;
-  node.right = right;
-  return node;
-}
-function finishCallExpression(callee, args) {
-  const node = new ASTNode(SyntaxCallExpression);
-  node.callee = callee;
-  node.arguments = args;
-  return node;
-}
-function finishConditionalExpression(test, consequent, alternate) {
-  const node = new ASTNode(SyntaxConditionalExpression);
-  node.test = test;
-  node.consequent = consequent;
-  node.alternate = alternate;
-  return node;
-}
-function finishIdentifier(name) {
-  const node = new ASTNode(SyntaxIdentifier);
-  node.name = name;
-  return node;
-}
-function finishLiteral(token) {
-  const node = new ASTNode(SyntaxLiteral);
-  node.value = token.value;
-  node.raw = source.slice(token.start, token.end);
-  if (token.regex) {
-    if (node.raw === '//') {
-      node.raw = '/(?:)/';
-    }
-    node.regex = token.regex;
-  }
-  return node;
-}
-function finishMemberExpression(accessor, object, property) {
-  const node = new ASTNode(SyntaxMemberExpression);
-  node.computed = accessor === '[';
-  node.object = object;
-  node.property = property;
-  if (!node.computed) property.member = true;
-  return node;
-}
-function finishObjectExpression(properties) {
-  const node = new ASTNode(SyntaxObjectExpression);
-  node.properties = properties;
-  return node;
-}
-function finishProperty(kind, key, value) {
-  const node = new ASTNode(SyntaxProperty);
-  node.key = key;
-  node.value = value;
-  node.kind = kind;
-  return node;
-}
-function finishUnaryExpression(operator, argument) {
-  const node = new ASTNode(SyntaxUnaryExpression);
-  node.operator = operator;
-  node.argument = argument;
-  node.prefix = true;
-  return node;
-}
-
-// Throw an exception
-
-function throwError(token, messageFormat) {
-  var error,
-    args = Array.prototype.slice.call(arguments, 2),
-    msg = messageFormat.replace(/%(\d)/g, (whole, index) => {
-      assert(index < args.length, 'Message reference must be in range');
-      return args[index];
-    });
-  error = new Error(msg);
-  error.index = index;
-  error.description = msg;
-  throw error;
-}
-
-// Throw an exception because of the token.
-
-function throwUnexpected(token) {
-  if (token.type === TokenEOF) {
-    throwError(token, MessageUnexpectedEOS);
-  }
-  if (token.type === TokenNumericLiteral) {
-    throwError(token, MessageUnexpectedNumber);
-  }
-  if (token.type === TokenStringLiteral) {
-    throwError(token, MessageUnexpectedString);
-  }
-  if (token.type === TokenIdentifier) {
-    throwError(token, MessageUnexpectedIdentifier);
-  }
-  if (token.type === TokenKeyword) {
-    throwError(token, MessageUnexpectedReserved);
-  }
-
-  // BooleanLiteral, NullLiteral, or Punctuator.
-  throwError(token, MessageUnexpectedToken, token.value);
-}
-
-// Expect the next token to match the specified punctuator.
-// If not, an exception will be thrown.
-
-function expect(value) {
-  const token = lex();
-  if (token.type !== TokenPunctuator || token.value !== value) {
-    throwUnexpected(token);
-  }
-}
-
-// Return true if the next token matches the specified punctuator.
-
-function match(value) {
-  return lookahead.type === TokenPunctuator && lookahead.value === value;
-}
-
-// Return true if the next token matches the specified keyword
-
-function matchKeyword(keyword) {
-  return lookahead.type === TokenKeyword && lookahead.value === keyword;
-}
-
-// 11.1.4 Array Initialiser
-
-function parseArrayInitialiser() {
-  const elements = [];
-  index = lookahead.start;
-  expect('[');
-  while (!match(']')) {
-    if (match(',')) {
-      lex();
-      elements.push(null);
-    } else {
-      elements.push(parseConditionalExpression());
-      if (!match(']')) {
-        expect(',');
-      }
-    }
-  }
-  lex();
-  return finishArrayExpression(elements);
-}
-
-// 11.1.5 Object Initialiser
-
-function parseObjectPropertyKey() {
-  index = lookahead.start;
-  const token = lex();
-
-  // Note: This function is called only from parseObjectProperty(), where
-  // EOF and Punctuator tokens are already filtered out.
-
-  if (token.type === TokenStringLiteral || token.type === TokenNumericLiteral) {
-    if (token.octal) {
-      throwError(token, MessageStrictOctalLiteral);
-    }
-    return finishLiteral(token);
-  }
-  return finishIdentifier(token.value);
-}
-function parseObjectProperty() {
-  var token, key, id, value;
-  index = lookahead.start;
-  token = lookahead;
-  if (token.type === TokenIdentifier) {
-    id = parseObjectPropertyKey();
-    expect(':');
-    value = parseConditionalExpression();
-    return finishProperty('init', id, value);
-  }
-  if (token.type === TokenEOF || token.type === TokenPunctuator) {
-    throwUnexpected(token);
-  } else {
-    key = parseObjectPropertyKey();
-    expect(':');
-    value = parseConditionalExpression();
-    return finishProperty('init', key, value);
-  }
-}
-function parseObjectInitialiser() {
-  var properties = [],
-    property,
-    name,
-    key,
-    map = {},
-    toString = String;
-  index = lookahead.start;
-  expect('{');
-  while (!match('}')) {
-    property = parseObjectProperty();
-    if (property.key.type === SyntaxIdentifier) {
-      name = property.key.name;
-    } else {
-      name = toString(property.key.value);
-    }
-    key = '$' + name;
-    if (Object.prototype.hasOwnProperty.call(map, key)) {
-      throwError({}, MessageStrictDuplicateProperty);
-    } else {
-      map[key] = true;
-    }
-    properties.push(property);
-    if (!match('}')) {
-      expect(',');
-    }
-  }
-  expect('}');
-  return finishObjectExpression(properties);
-}
-
-// 11.1.6 The Grouping Operator
-
-function parseGroupExpression() {
-  expect('(');
-  const expr = parseExpression();
-  expect(')');
-  return expr;
-}
-
-// 11.1 Primary Expressions
-
-const legalKeywords = {
-  'if': 1
-};
-function parsePrimaryExpression() {
-  var type, token, expr;
-  if (match('(')) {
-    return parseGroupExpression();
-  }
-  if (match('[')) {
-    return parseArrayInitialiser();
-  }
-  if (match('{')) {
-    return parseObjectInitialiser();
-  }
-  type = lookahead.type;
-  index = lookahead.start;
-  if (type === TokenIdentifier || legalKeywords[lookahead.value]) {
-    expr = finishIdentifier(lex().value);
-  } else if (type === TokenStringLiteral || type === TokenNumericLiteral) {
-    if (lookahead.octal) {
-      throwError(lookahead, MessageStrictOctalLiteral);
-    }
-    expr = finishLiteral(lex());
-  } else if (type === TokenKeyword) {
-    throw new Error(DISABLED);
-  } else if (type === TokenBooleanLiteral) {
-    token = lex();
-    token.value = token.value === 'true';
-    expr = finishLiteral(token);
-  } else if (type === TokenNullLiteral) {
-    token = lex();
-    token.value = null;
-    expr = finishLiteral(token);
-  } else if (match('/') || match('/=')) {
-    expr = finishLiteral(scanRegExp());
-    peek();
-  } else {
-    throwUnexpected(lex());
-  }
-  return expr;
-}
-
-// 11.2 Left-Hand-Side Expressions
-
-function parseArguments() {
-  const args = [];
-  expect('(');
-  if (!match(')')) {
-    while (index < length) {
-      args.push(parseConditionalExpression());
-      if (match(')')) {
-        break;
-      }
-      expect(',');
-    }
-  }
-  expect(')');
-  return args;
-}
-function parseNonComputedProperty() {
-  index = lookahead.start;
-  const token = lex();
-  if (!isIdentifierName(token)) {
-    throwUnexpected(token);
-  }
-  return finishIdentifier(token.value);
-}
-function parseNonComputedMember() {
-  expect('.');
-  return parseNonComputedProperty();
-}
-function parseComputedMember() {
-  expect('[');
-  const expr = parseExpression();
-  expect(']');
-  return expr;
-}
-function parseLeftHandSideExpressionAllowCall() {
-  var expr, args, property;
-  expr = parsePrimaryExpression();
-  for (;;) {
-    if (match('.')) {
-      property = parseNonComputedMember();
-      expr = finishMemberExpression('.', expr, property);
-    } else if (match('(')) {
-      args = parseArguments();
-      expr = finishCallExpression(expr, args);
-    } else if (match('[')) {
-      property = parseComputedMember();
-      expr = finishMemberExpression('[', expr, property);
-    } else {
-      break;
-    }
-  }
-  return expr;
-}
-
-// 11.3 Postfix Expressions
-
-function parsePostfixExpression() {
-  const expr = parseLeftHandSideExpressionAllowCall();
-  if (lookahead.type === TokenPunctuator) {
-    if (match('++') || match('--')) {
-      throw new Error(DISABLED);
-    }
-  }
-  return expr;
-}
-
-// 11.4 Unary Operators
-
-function parseUnaryExpression() {
-  var token, expr;
-  if (lookahead.type !== TokenPunctuator && lookahead.type !== TokenKeyword) {
-    expr = parsePostfixExpression();
-  } else if (match('++') || match('--')) {
-    throw new Error(DISABLED);
-  } else if (match('+') || match('-') || match('~') || match('!')) {
-    token = lex();
-    expr = parseUnaryExpression();
-    expr = finishUnaryExpression(token.value, expr);
-  } else if (matchKeyword('delete') || matchKeyword('void') || matchKeyword('typeof')) {
-    throw new Error(DISABLED);
-  } else {
-    expr = parsePostfixExpression();
-  }
-  return expr;
-}
-function binaryPrecedence(token) {
-  let prec = 0;
-  if (token.type !== TokenPunctuator && token.type !== TokenKeyword) {
-    return 0;
-  }
-  switch (token.value) {
-    case '||':
-      prec = 1;
-      break;
-    case '&&':
-      prec = 2;
-      break;
-    case '|':
-      prec = 3;
-      break;
-    case '^':
-      prec = 4;
-      break;
-    case '&':
-      prec = 5;
-      break;
-    case '==':
-    case '!=':
-    case '===':
-    case '!==':
-      prec = 6;
-      break;
-    case '<':
-    case '>':
-    case '<=':
-    case '>=':
-    case 'instanceof':
-    case 'in':
-      prec = 7;
-      break;
-    case '<<':
-    case '>>':
-    case '>>>':
-      prec = 8;
-      break;
-    case '+':
-    case '-':
-      prec = 9;
-      break;
-    case '*':
-    case '/':
-    case '%':
-      prec = 11;
-      break;
-  }
-  return prec;
-}
-
-// 11.5 Multiplicative Operators
-// 11.6 Additive Operators
-// 11.7 Bitwise Shift Operators
-// 11.8 Relational Operators
-// 11.9 Equality Operators
-// 11.10 Binary Bitwise Operators
-// 11.11 Binary Logical Operators
-
-function parseBinaryExpression() {
-  var marker, markers, expr, token, prec, stack, right, operator, left, i;
-  marker = lookahead;
-  left = parseUnaryExpression();
-  token = lookahead;
-  prec = binaryPrecedence(token);
-  if (prec === 0) {
-    return left;
-  }
-  token.prec = prec;
-  lex();
-  markers = [marker, lookahead];
-  right = parseUnaryExpression();
-  stack = [left, token, right];
-  while ((prec = binaryPrecedence(lookahead)) > 0) {
-    // Reduce: make a binary expression from the three topmost entries.
-    while (stack.length > 2 && prec <= stack[stack.length - 2].prec) {
-      right = stack.pop();
-      operator = stack.pop().value;
-      left = stack.pop();
-      markers.pop();
-      expr = finishBinaryExpression(operator, left, right);
-      stack.push(expr);
-    }
-
-    // Shift.
-    token = lex();
-    token.prec = prec;
-    stack.push(token);
-    markers.push(lookahead);
-    expr = parseUnaryExpression();
-    stack.push(expr);
-  }
-
-  // Final reduce to clean-up the stack.
-  i = stack.length - 1;
-  expr = stack[i];
-  markers.pop();
-  while (i > 1) {
-    markers.pop();
-    expr = finishBinaryExpression(stack[i - 1].value, stack[i - 2], expr);
-    i -= 2;
-  }
-  return expr;
-}
-
-// 11.12 Conditional Operator
-
-function parseConditionalExpression() {
-  var expr, consequent, alternate;
-  expr = parseBinaryExpression();
-  if (match('?')) {
-    lex();
-    consequent = parseConditionalExpression();
-    expect(':');
-    alternate = parseConditionalExpression();
-    expr = finishConditionalExpression(expr, consequent, alternate);
-  }
-  return expr;
-}
-
-// 11.14 Comma Operator
-
-function parseExpression() {
-  const expr = parseConditionalExpression();
-  if (match(',')) {
-    throw new Error(DISABLED); // no sequence expressions
-  }
-  return expr;
-}
-function parser (code) {
-  source = code;
-  index = 0;
-  length = source.length;
-  lookahead = null;
-  peek();
-  const expr = parseExpression();
-  if (lookahead.type !== TokenEOF) {
-    throw new Error('Unexpect token after expression.');
-  }
-  return expr;
-}
-
-var Constants = {
-  NaN: 'NaN',
-  E: 'Math.E',
-  LN2: 'Math.LN2',
-  LN10: 'Math.LN10',
-  LOG2E: 'Math.LOG2E',
-  LOG10E: 'Math.LOG10E',
-  PI: 'Math.PI',
-  SQRT1_2: 'Math.SQRT1_2',
-  SQRT2: 'Math.SQRT2',
-  MIN_VALUE: 'Number.MIN_VALUE',
-  MAX_VALUE: 'Number.MAX_VALUE'
-};
-
-function Functions (codegen) {
-  function fncall(name, args, cast, type) {
-    let obj = codegen(args[0]);
-    if (cast) {
-      obj = cast + '(' + obj + ')';
-      if (cast.lastIndexOf('new ', 0) === 0) obj = '(' + obj + ')';
-    }
-    return obj + '.' + name + (type < 0 ? '' : type === 0 ? '()' : '(' + args.slice(1).map(codegen).join(',') + ')');
-  }
-  function fn(name, cast, type) {
-    return args => fncall(name, args, cast, type);
-  }
-  const DATE = 'new Date',
-    STRING = 'String',
-    REGEXP = 'RegExp';
-  return {
-    // MATH functions
-    isNaN: 'Number.isNaN',
-    isFinite: 'Number.isFinite',
-    abs: 'Math.abs',
-    acos: 'Math.acos',
-    asin: 'Math.asin',
-    atan: 'Math.atan',
-    atan2: 'Math.atan2',
-    ceil: 'Math.ceil',
-    cos: 'Math.cos',
-    exp: 'Math.exp',
-    floor: 'Math.floor',
-    hypot: 'Math.hypot',
-    log: 'Math.log',
-    max: 'Math.max',
-    min: 'Math.min',
-    pow: 'Math.pow',
-    random: 'Math.random',
-    round: 'Math.round',
-    sin: 'Math.sin',
-    sqrt: 'Math.sqrt',
-    tan: 'Math.tan',
-    clamp: function (args) {
-      if (args.length < 3) (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)('Missing arguments to clamp function.');
-      if (args.length > 3) (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)('Too many arguments to clamp function.');
-      const a = args.map(codegen);
-      return 'Math.max(' + a[1] + ', Math.min(' + a[2] + ',' + a[0] + '))';
-    },
-    // DATE functions
-    now: 'Date.now',
-    utc: 'Date.UTC',
-    datetime: DATE,
-    date: fn('getDate', DATE, 0),
-    day: fn('getDay', DATE, 0),
-    year: fn('getFullYear', DATE, 0),
-    month: fn('getMonth', DATE, 0),
-    hours: fn('getHours', DATE, 0),
-    minutes: fn('getMinutes', DATE, 0),
-    seconds: fn('getSeconds', DATE, 0),
-    milliseconds: fn('getMilliseconds', DATE, 0),
-    time: fn('getTime', DATE, 0),
-    timezoneoffset: fn('getTimezoneOffset', DATE, 0),
-    utcdate: fn('getUTCDate', DATE, 0),
-    utcday: fn('getUTCDay', DATE, 0),
-    utcyear: fn('getUTCFullYear', DATE, 0),
-    utcmonth: fn('getUTCMonth', DATE, 0),
-    utchours: fn('getUTCHours', DATE, 0),
-    utcminutes: fn('getUTCMinutes', DATE, 0),
-    utcseconds: fn('getUTCSeconds', DATE, 0),
-    utcmilliseconds: fn('getUTCMilliseconds', DATE, 0),
-    // sequence functions
-    length: fn('length', null, -1),
-    // STRING functions
-    parseFloat: 'parseFloat',
-    parseInt: 'parseInt',
-    upper: fn('toUpperCase', STRING, 0),
-    lower: fn('toLowerCase', STRING, 0),
-    substring: fn('substring', STRING),
-    split: fn('split', STRING),
-    trim: fn('trim', STRING, 0),
-    // base64 encode/decode
-    btoa: 'btoa',
-    atob: 'atob',
-    // REGEXP functions
-    regexp: REGEXP,
-    test: fn('test', REGEXP),
-    // Control Flow functions
-    if: function (args) {
-      if (args.length < 3) (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)('Missing arguments to if function.');
-      if (args.length > 3) (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)('Too many arguments to if function.');
-      const a = args.map(codegen);
-      return '(' + a[0] + '?' + a[1] + ':' + a[2] + ')';
-    }
-  };
-}
-
-function stripQuotes(s) {
-  const n = s && s.length - 1;
-  return n && (s[0] === '"' && s[n] === '"' || s[0] === '\'' && s[n] === '\'') ? s.slice(1, -1) : s;
-}
-function codegen (opt) {
-  opt = opt || {};
-  const allowed = opt.allowed ? (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.toSet)(opt.allowed) : {},
-    forbidden = opt.forbidden ? (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.toSet)(opt.forbidden) : {},
-    constants = opt.constants || Constants,
-    functions = (opt.functions || Functions)(visit),
-    globalvar = opt.globalvar,
-    fieldvar = opt.fieldvar,
-    outputGlobal = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isFunction)(globalvar) ? globalvar : id => `${globalvar}["${id}"]`;
-    // JSON authors are not allowed to set properties with these names, as these are built-in to the JS Object Prototype.
-    new Set([...Object.getOwnPropertyNames(Object.prototype).filter(name => typeof Object.prototype[name] === 'function'), '__proto__']);
-  let globals = {},
-    fields = {},
-    memberDepth = 0;
-  function visit(ast) {
-    if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isString)(ast)) return ast;
-    const generator = Generators[ast.type];
-    if (generator == null) (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)('Unsupported type: ' + ast.type);
-    return generator(ast);
-  }
-  const Generators = {
-    Literal: n => n.raw,
-    Identifier: n => {
-      const id = n.name;
-      if (memberDepth > 0) {
-        return id;
-      } else if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.hasOwnProperty)(forbidden, id)) {
-        return (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)('Illegal identifier: ' + id);
-      } else if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.hasOwnProperty)(constants, id)) {
-        return constants[id];
-      } else if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.hasOwnProperty)(allowed, id)) {
-        return id;
-      } else {
-        globals[id] = 1;
-        return outputGlobal(id);
-      }
-    },
-    MemberExpression: n => {
-      const d = !n.computed,
-        o = visit(n.object);
-      if (d) memberDepth += 1;
-      const p = visit(n.property);
-      if (o === fieldvar) {
-        // strip quotes to sanitize field name (#1653)
-        fields[stripQuotes(p)] = 1;
-      }
-      if (d) memberDepth -= 1;
-      return o + (d ? '.' + p : '[' + p + ']');
-    },
-    CallExpression: n => {
-      if (n.callee.type !== 'Identifier') {
-        (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)('Illegal callee type: ' + n.callee.type);
-      }
-      const callee = n.callee.name,
-        args = n.arguments,
-        fn = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.hasOwnProperty)(functions, callee) && functions[callee];
-      if (!fn) (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)('Unrecognized function: ' + callee);
-      return (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isFunction)(fn) ? fn(args) : fn + '(' + args.map(visit).join(',') + ')';
-    },
-    ArrayExpression: n => '[' + n.elements.map(visit).join(',') + ']',
-    BinaryExpression: n => '(' + visit(n.left) + ' ' + n.operator + ' ' + visit(n.right) + ')',
-    UnaryExpression: n => '(' + n.operator + visit(n.argument) + ')',
-    ConditionalExpression: n => '(' + visit(n.test) + '?' + visit(n.consequent) + ':' + visit(n.alternate) + ')',
-    LogicalExpression: n => '(' + visit(n.left) + n.operator + visit(n.right) + ')',
-    ObjectExpression: n => {
-      // If any keys would override Object prototype methods, throw error
-      for (const prop of n.properties) {
-        const keyName = prop.key.name;
-        if (vega_util__WEBPACK_IMPORTED_MODULE_0__.DisallowedObjectProperties.has(keyName)) {
-          (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.error)('Illegal property: ' + keyName);
-        }
-      }
-      return '{' + n.properties.map(visit).join(',') + '}';
-    },
-    Property: n => {
-      memberDepth += 1;
-      const k = visit(n.key);
-      memberDepth -= 1;
-      return k + ':' + visit(n.value);
-    }
-  };
-  function codegen(ast) {
-    const result = {
-      code: visit(ast),
-      globals: Object.keys(globals),
-      fields: Object.keys(fields)
-    };
-    globals = {};
-    fields = {};
-    return result;
-  }
-  codegen.functions = functions;
-  codegen.constants = constants;
-  return codegen;
-}
-
-
-//# sourceMappingURL=vega-expression.js.map
 
 
 }),
@@ -123284,7 +122088,7 @@ Label.Definition = {
 
 
 }),
-"./node_modules/.pnpm/vega-lite@6.4.3_vega@6.4.0/node_modules/vega-lite/build/index.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-lite@6.5.0_vega@6.4.0/node_modules/vega-lite/build/index.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -123314,6 +122118,7 @@ __webpack_require__.d(__webpack_exports__, {
   isPrimitive: function() { return isPrimitive; },
   keys: function() { return keys; },
   logicalExpr: function() { return logicalExpr; },
+  mergeConfig: function() { return /* reexport safe */ vega_util__WEBPACK_IMPORTED_MODULE_0__.mergeConfig; },
   mergeDeep: function() { return mergeDeep; },
   never: function() { return never; },
   normalize: function() { return normalize; },
@@ -123334,18 +122139,20 @@ __webpack_require__.d(__webpack_exports__, {
   uniqueId: function() { return uniqueId; },
   vals: function() { return vals; },
   varName: function() { return varName; },
-  version: function() { return version; }
+  version: function() { return version; },
+  writeConfig: function() { return /* reexport safe */ vega_util__WEBPACK_IMPORTED_MODULE_0__.writeConfig; }
 });
 /* harmony import */var vega_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vega-util */ "./node_modules/.pnpm/vega-util@2.1.3/node_modules/vega-util/build/index.js");
 /* harmony import */var vega__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega */ "./node_modules/.pnpm/vega@6.4.0/node_modules/vega/build/vega.module.js");
 /* harmony import */var vega_event_selector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vega-event-selector */ "./node_modules/.pnpm/vega-event-selector@4.0.0/node_modules/vega-event-selector/build/vega-event-selector.js");
-/* harmony import */var vega_expression__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-expression */ "./node_modules/.pnpm/vega-expression@6.1.0/node_modules/vega-expression/build/vega-expression.js");
+/* harmony import */var vega_expression__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-expression */ "./node_modules/.pnpm/vega-expression@6.2.2/node_modules/vega-expression/build/vega-expression.js");
 
 
 
 
 
-var version$1 = "6.4.3";
+
+var version$1 = "6.5.0";
 var pkg = {
 	version: version$1};
 
@@ -124426,6 +123233,24 @@ function isArgminDef(a) {
 function isArgmaxDef(a) {
     return hasProperty(a, 'argmax');
 }
+function isExponentialDef(a) {
+    return hasProperty(a, 'exponential');
+}
+function isExponentialBDef(a) {
+    return hasProperty(a, 'exponentialb');
+}
+function isParameterizedAggregateDef(a) {
+    return isExponentialDef(a) || isExponentialBDef(a);
+}
+function getAggregateOp(a) {
+    return isExponentialDef(a) ? 'exponential' : isExponentialBDef(a) ? 'exponentialb' : a;
+}
+/**
+ * Returns the parameter of a parameterized aggregate def, or `undefined` for other aggregates.
+ */
+function getAggregateParam(a) {
+    return isExponentialDef(a) ? a.exponential : isExponentialBDef(a) ? a.exponentialb : undefined;
+}
 function isAggregateOp(a) {
     return (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isString)(a) && (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.hasOwnProperty)(AGGREGATE_OP_INDEX, a);
 }
@@ -124778,9 +123603,8 @@ function getMarkStyleConfig(prop, mark, styleConfigIndex) {
     return getStyleConfig(prop, getStyles(mark), styleConfigIndex);
 }
 function getStyleConfig(p, styles, styleConfigIndex) {
-    styles = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.array)(styles);
     let value;
-    for (const style of styles) {
+    for (const style of (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.array)(styles)) {
         const styleConfig = styleConfigIndex[style];
         if (hasProperty(styleConfig, p)) {
             value = styleConfig[p];
@@ -124946,11 +123770,18 @@ const ADD_SAME_CHILD_TWICE = 'Attempt to add the same child twice.';
 function invalidTransformIgnored(transform) {
     return `Ignoring an invalid transform: ${stringify(transform)}.`;
 }
+function conflictingAggregateParam(op, field, parentParam, childParam) {
+    return `The "${op}" aggregate of the field "${field}" is used with different parameters (${parentParam} and ${childParam}). Using ${childParam}.`;
+}
 const NO_FIELDS_NEEDS_AS = 'If "from.fields" is not specified, "as" has to be a string that specifies the key to be used for the data from the secondary source.';
 // ENCODING & FACET
 function customFormatTypeNotAllowed(channel) {
     return `Config.customFormatTypes is not true, thus custom format type and format for channel ${channel} are dropped.`;
 }
+function invalidTooltipFilter(filter) {
+    return `Ignoring an invalid tooltip filter: ${stringify(filter)}.`;
+}
+const TOOLTIP_FILTER_REQUIRES_FIELD = 'Ignoring tooltip filter because it requires a field (argmin and argmax fields are not supported).';
 function projectionOverridden(opt) {
     const { parentProjection, projection } = opt;
     return `Layer's shared projection ${stringify(parentProjection)} is overridden by a child projection ${stringify(projection)}.`;
@@ -125390,8 +124221,8 @@ function containsTimeUnit(fullTimeUnit, timeUnit) {
 /**
  * Returns Vega expression for a given timeUnit and fieldRef
  */
-function fieldExpr(fullTimeUnit, field, { end } = { end: false }) {
-    const fieldRef = accessPathWithDatum(field);
+function fieldExpr(fullTimeUnit, field, { end = false, expr = 'datum' } = {}) {
+    const fieldRef = accessPathWithDatum(field, expr);
     const utc = isUTCTimeUnit(fullTimeUnit) ? 'utc' : '';
     function func(timeUnit) {
         if (timeUnit === 'quarter') {
@@ -125582,17 +124413,17 @@ function predicateValueExpr(v, timeUnit) {
 function predicateValuesExpr(vals, timeUnit) {
     return vals.map((v) => predicateValueExpr(v, timeUnit));
 }
-// This method is used by Voyager. Do not change its behavior without changing Voyager.
-function fieldFilterExpression(predicate, useInRange = true) {
+// This method is used by Voyager. Do not change its default behavior without changing Voyager.
+function fieldFilterExpression(predicate, useInRange = true, expr = 'datum') {
     const { field } = predicate;
     const normalizedTimeUnit = normalizeTimeUnit(predicate.timeUnit);
     const { unit, binned } = normalizedTimeUnit || {};
-    const rawFieldExpr = vgField(predicate, { expr: 'datum' });
+    const rawFieldExpr = vgField(predicate, { expr });
     const fieldExpr$1 = unit
         ? // For timeUnit, cast into integer with time() so we can use ===, inrange, indexOf to compare values directly.
             // TODO: We calculate timeUnit on the fly here. Consider if we would like to consolidate this with timeUnit pipeline
             // TODO: support utc
-            `time(${!binned ? fieldExpr(unit, field) : rawFieldExpr})`
+            `time(${!binned ? fieldExpr(unit, field, { expr }) : rawFieldExpr})`
         : rawFieldExpr;
     if (isFieldEqualPredicate(predicate)) {
         return `${fieldExpr$1}===${predicateValueExpr(predicate.equal, unit)}`;
@@ -125666,9 +124497,22 @@ const Type = {
     nominal: 'nominal',
     geojson: 'geojson',
 };
+/**
+ * Type-only continuous check (does not consider binning).
+ * A binned quantitative field still counts as continuous here, whereas the
+ * field-aware `isDiscrete` in `./channeldef.js` treats it as discrete.
+ */
 function isContinuous(type) {
     return type === 'quantitative' || type === 'temporal';
 }
+/**
+ * Type-only discrete check (does not consider binning).
+ * For a field-aware version that treats binned quantitative fields as discrete,
+ * use `isDiscrete` from `./channeldef.js`.
+ * Note: `tooltipRefForEncoding` relies on this type-only check so that binned
+ * quantitative fields keep the bin-range tooltip format instead of the
+ * discrete format.
+ */
 function isDiscrete$1(type) {
     return type === 'ordinal' || type === 'nominal';
 }
@@ -126072,11 +124916,24 @@ const TRAIL = Mark.trail;
 const CIRCLE = Mark.circle;
 const SQUARE = Mark.square;
 const GEOSHAPE = Mark.geoshape;
+const PATH_MARKS = ['line', 'area', 'trail'];
+const PATH_MARK_SET = new Set(PATH_MARKS);
 function isPathMark(m) {
-    return ['line', 'area', 'trail'].includes(m);
+    return PATH_MARK_SET.has(m);
 }
+/* arc is rect/interval in polar coordinate */
+const RECT_BASED_MARKS = ['rect', 'bar', 'image', 'arc', 'tick'];
+const RECT_BASED_MARK_SET = new Set(RECT_BASED_MARKS);
 function isRectBasedMark(m) {
-    return ['rect', 'bar', 'image', 'arc', 'tick' /* arc is rect/interval in polar coordinate */].includes(m);
+    return RECT_BASED_MARK_SET.has(m);
+}
+/**
+ * Marks that span from a baseline to a value (e.g., for zero baselines and stacking).
+ */
+const BAR_AREA_MARKS = ['bar', 'area'];
+const BAR_AREA_MARK_SET = new Set(BAR_AREA_MARKS);
+function isBarOrArea(m) {
+    return BAR_AREA_MARK_SET.has(m);
 }
 const PRIMITIVE_MARKS = new Set(keys(Mark));
 function isMarkDef(mark) {
@@ -126143,10 +125000,6 @@ const MARK_CONFIGS = keys(MARK_CONFIG_INDEX);
 function isRelativeBandSize(o) {
     return hasProperty(o, 'band');
 }
-const BAR_CORNER_RADIUS_INDEX = {
-    horizontal: ['cornerRadiusTopRight', 'cornerRadiusBottomRight'],
-    vertical: ['cornerRadiusTopLeft', 'cornerRadiusTopRight'],
-};
 const DEFAULT_RECT_BAND_SIZE = 5;
 const defaultRectConfig = {
     binSpacing: 0,
@@ -126567,6 +125420,7 @@ function guideFormat(fieldOrDatumDef, type, format, formatType, config, omitTime
         config.normalizedNumberFormat) {
         return numberFormat({
             type: 'quantitative',
+            specifiedFormat: format,
             config,
             normalizeStack: true,
         });
@@ -126846,7 +125700,7 @@ function vgField(fieldDef, opt = {}) {
         let fn;
         if (!opt.nofn) {
             if (isOpFieldDef(fieldDef)) {
-                fn = fieldDef.op;
+                fn = getAggregateOp(fieldDef.op);
             }
             else {
                 const { bin, aggregate, timeUnit } = fieldDef;
@@ -126864,7 +125718,7 @@ function vgField(fieldDef, opt = {}) {
                         field = `argmin_${aggregate.argmin}`;
                     }
                     else {
-                        fn = String(aggregate);
+                        fn = getAggregateOp(aggregate);
                     }
                 }
                 else if (timeUnit && !isBinnedTimeUnit(timeUnit)) {
@@ -126936,7 +125790,7 @@ function verbalTitleFormatter(fieldDef, config) {
             return `${field} for min ${aggregate.argmin}`;
         }
         else {
-            return `${titleCase(aggregate)} of ${field}`;
+            return `${titleCase(getAggregateOp(aggregate))} of ${field}`;
         }
     }
     return field;
@@ -126950,7 +125804,10 @@ function functionalTitleFormatter(fieldDef) {
         return `${field} for argmin(${aggregate.argmin})`;
     }
     const timeUnitParams = timeUnit && !isBinnedTimeUnit(timeUnit) ? normalizeTimeUnit(timeUnit) : undefined;
-    const fn = aggregate || timeUnitParams?.unit || (timeUnitParams?.maxbins && 'timeunit') || (isBinning(bin) && 'bin');
+    const fn = getAggregateOp(aggregate) ||
+        timeUnitParams?.unit ||
+        (timeUnitParams?.maxbins && 'timeunit') ||
+        (isBinning(bin) && 'bin');
     return fn ? `${fn.toUpperCase()}(${field})` : field;
 }
 const defaultTitleFormatter = (fieldDef, config) => {
@@ -127131,7 +125988,12 @@ function initFieldDef(fd, channel, { compositeMark = false } = {}) {
     const { aggregate, timeUnit, bin, field } = fd;
     const fieldDef = { ...fd };
     // Drop invalid aggregate
-    if (!compositeMark && aggregate && !isAggregateOp(aggregate) && !isArgmaxDef(aggregate) && !isArgminDef(aggregate)) {
+    if (!compositeMark &&
+        aggregate &&
+        !isAggregateOp(aggregate) &&
+        !isArgmaxDef(aggregate) &&
+        !isArgminDef(aggregate) &&
+        !isParameterizedAggregateDef(aggregate)) {
         warn(invalidAggregate(aggregate));
         delete fieldDef.aggregate;
     }
@@ -127724,6 +126586,16 @@ function channelHasNestedOffsetScale(encoding, channel) {
     }
     return false;
 }
+/**
+ * Returns true if the given position channel has a quantitative offset channel (e.g., `xOffset` for `x`) that can drive ranged marks.
+ */
+function channelHasQuantitativeOffset(encoding, channel) {
+    const offsetChannel = getOffsetScaleChannel(channel);
+    if (!offsetChannel) {
+        return false;
+    }
+    return isUnbinnedQuantitativeFieldOrDatumDef(encoding[offsetChannel]);
+}
 function isAggregate$1(encoding) {
     return some(CHANNELS, (channel) => {
         if (channelHasField(encoding, channel)) {
@@ -127771,6 +126643,9 @@ function extractTransformsFromEncoding(oldEncoding, config) {
                         op = 'argmin';
                         newField = vgField({ op: 'argmin', field: aggOp.argmin }, { forAs: true });
                         newFieldDef.field = `${newField}.${field}`;
+                    }
+                    else if (isParameterizedAggregateDef(aggOp)) {
+                        op = aggOp;
                     }
                     else if (aggOp !== 'boxplot' && aggOp !== 'errorbar' && aggOp !== 'errorband') {
                         op = aggOp;
@@ -128038,25 +126913,8 @@ function pathGroupingFields(mark, encoding) {
             case URL:
             case X2:
             case Y2:
-                return details;
             case XOFFSET:
-            case YOFFSET: {
-                if (mark === 'line' || mark === 'area' || mark === 'trail') {
-                    const offsetDef = encoding[channel];
-                    if (isFieldDef(offsetDef)) {
-                        const mainChannel = channel === XOFFSET ? X : Y;
-                        const mainDef = encoding[mainChannel];
-                        if (isFieldDef(mainDef) && !mainDef.aggregate && !offsetDef.aggregate) {
-                            const mainField = vgField(mainDef, {});
-                            const offsetField = vgField(offsetDef, {});
-                            if (mainField && offsetField && mainField !== offsetField) {
-                                details.push(mainField);
-                            }
-                        }
-                    }
-                }
-                return details;
-            }
+            case YOFFSET:
             case THETA:
             case THETA2:
             case RADIUS:
@@ -129809,7 +128667,7 @@ function isUnbinnedQuantitative(channelDef) {
 }
 function potentialStackedChannel(encoding, x, { orient, type: mark }) {
     const y = x === 'x' ? 'y' : 'radius';
-    const isCartesianBarOrArea = x === 'x' && ['bar', 'area'].includes(mark);
+    const isCartesianBarOrArea = x === 'x' && isBarOrArea(mark);
     const xDef = encoding[x];
     const yDef = encoding[y];
     if (isFieldDef(xDef) && isFieldDef(yDef)) {
@@ -129885,6 +128743,11 @@ function stack(m, encoding) {
     }
     const stackedFieldDef = encoding[fieldChannel];
     const stackedField = isFieldDef(stackedFieldDef) ? vgField(stackedFieldDef, {}) : undefined;
+    if (stackedFieldDef.stack === undefined &&
+        ((fieldChannel === 'x' && !encoding.y && channelHasQuantitativeOffset(encoding, 'y')) ||
+            (fieldChannel === 'y' && !encoding.x && channelHasQuantitativeOffset(encoding, 'x')))) {
+        return null;
+    }
     const dimensionChannel = getDimensionChannel(fieldChannel);
     const groupbyChannels = [];
     const groupbyFields = new Set();
@@ -129986,20 +128849,6 @@ function initMarkdef(originalMarkDef, encoding, config) {
     if (specifiedOrient !== undefined && specifiedOrient !== markDef.orient) {
         warn(orientOverridden(markDef.orient, specifiedOrient));
     }
-    if (markDef.type === 'bar' && markDef.orient) {
-        const cornerRadiusEnd = getMarkPropOrConfig('cornerRadiusEnd', markDef, config);
-        if (cornerRadiusEnd !== undefined) {
-            const newProps = (markDef.orient === 'horizontal' && encoding.x2) || (markDef.orient === 'vertical' && encoding.y2)
-                ? ['cornerRadius']
-                : BAR_CORNER_RADIUS_INDEX[markDef.orient];
-            for (const newProp of newProps) {
-                markDef[newProp] = cornerRadiusEnd;
-            }
-            if (markDef.cornerRadiusEnd !== undefined) {
-                delete markDef.cornerRadiusEnd; // no need to keep the original cap cornerRadius
-            }
-        }
-    }
     // set opacity and filled if not specified in mark config
     const specifiedOpacity = getMarkPropOrConfig('opacity', markDef, config);
     const specifiedFillOpacity = getMarkPropOrConfig('fillOpacity', markDef, config);
@@ -130046,9 +128895,17 @@ function orient(mark, encoding, specifiedOrient) {
             return undefined;
     }
     const { x, y, x2, y2 } = encoding;
+    const xOffsetIsMeasure = channelHasQuantitativeOffset(encoding, 'x');
+    const yOffsetIsMeasure = channelHasQuantitativeOffset(encoding, 'y');
     switch (mark) {
         case TEXT:
         case BAR:
+            if (!y && yOffsetIsMeasure) {
+                return specifiedOrient ?? 'vertical';
+            }
+            if (!x && xOffsetIsMeasure) {
+                return specifiedOrient ?? 'horizontal';
+            }
             if (isFieldDef(x) && (isBinned(x.bin) || (isFieldDef(y) && y.aggregate && !x.aggregate))) {
                 return 'vertical';
             }
@@ -130088,6 +128945,12 @@ function orient(mark, encoding, specifiedOrient) {
             }
         // falls through
         case AREA:
+            if (!y && yOffsetIsMeasure) {
+                return specifiedOrient ?? 'vertical';
+            }
+            if (!x && xOffsetIsMeasure) {
+                return specifiedOrient ?? 'horizontal';
+            }
             // If there are range for both x and y, y (vertical) has higher precedence.
             if (y2) {
                 if (isFieldDef(y) && isBinned(y.bin)) {
@@ -130965,7 +129828,7 @@ class TopLevelSelectionsNormalizer extends SpecMapper {
 for (const method of ['mapFacet', 'mapRepeat', 'mapHConcat', 'mapVConcat', 'mapLayer']) {
     const proto = TopLevelSelectionsNormalizer.prototype[method];
     TopLevelSelectionsNormalizer.prototype[method] = function (spec, params) {
-        return proto.call(this, spec, addSpecNameToParams(spec, params));
+        return Reflect.apply(proto, this, [spec, addSpecNameToParams(spec, params)]);
     };
 }
 function addSpecNameToParams(spec, params) {
@@ -131885,7 +130748,7 @@ const point$1 = {
         const test = `datum && item().mark.marktype !== 'group' && indexof(item().mark.role, 'legend') < 0${brushes ? ` && ${brushes}` : ''}`;
         let update = `unit: ${unitName(model)}, `;
         if (selCmpt.project.hasSelectionId) {
-            update += `${SELECTION_ID}: ${datum}[${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(SELECTION_ID)}]`;
+            update += `${SELECTION_ID}: ${flatAccessWithDatum(SELECTION_ID, datum)}`;
         }
         else if (isTimerSelection(selCmpt)) {
             update += `fields: ${fieldsSg}, values: [${ANIM_VALUE} ? ${ANIM_VALUE} : ${MIN_EXTENT}]`;
@@ -131896,9 +130759,9 @@ const point$1 = {
                 const fieldDef = model.fieldDef(p.channel);
                 // Binned fields should capture extents, for a range test against the raw field.
                 return fieldDef?.bin
-                    ? `[${datum}[${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(model.vgField(p.channel, {}))}], ` +
-                        `${datum}[${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(model.vgField(p.channel, { binSuffix: 'end' }))}]]`
-                    : `${datum}[${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(p.field)}]`;
+                    ? `[${flatAccessWithDatum(model.vgField(p.channel, {}), datum)}, ` +
+                        `${flatAccessWithDatum(model.vgField(p.channel, { binSuffix: 'end' }), datum)}]`
+                    : flatAccessWithDatum(p.field, datum);
             })
                 .join(', ');
             update += `fields: ${fieldsSg}, values: [${values}]`;
@@ -131907,14 +130770,14 @@ const point$1 = {
             // timer event: selection is for animation
             return signals.concat(animationSignals(selCmpt.name, model.scaleName(TIME)), [
                 {
+                    // An `update` expression rather than an `on` handler: unlike a
+                    // direct-manipulation selection, an animation always has a current
+                    // frame, including before any event has fired. Event handlers do not
+                    // run during the initial pulse, so an `on` handler here leaves the
+                    // selection store empty for the first render -- the frame filter
+                    // matches nothing until the first timer tick lands.
                     name: name + TUPLE,
-                    on: [
-                        {
-                            events: [{ signal: EASED_ANIM_CLOCK }, { signal: ANIM_VALUE }],
-                            update: `{${update}}`,
-                            force: true,
-                        },
-                    ],
+                    update: `{${update}}`,
                 },
             ]);
         }
@@ -131943,7 +130806,7 @@ function assembleProjection(proj) {
     rest.field = replacePathInField(rest.field);
     return rest;
 }
-function assembleInit(init, isExpr = true, wrap = vega_util__WEBPACK_IMPORTED_MODULE_0__.identity) {
+function assembleInit(init, isExpr = true, wrap = (x) => x) {
     if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(init)) {
         const assembled = init.map((v) => assembleInit(v, isExpr, wrap));
         return isExpr ? `[${assembled.join(', ')}]` : assembled;
@@ -131970,15 +130833,13 @@ function assembleUnitSelectionSignals(model, signals) {
             if (c.modifyExpr)
                 modifyExpr = c.modifyExpr(model, selCmpt, modifyExpr);
         }
-        signals.push({
-            name: name + MODIFY,
-            on: [
-                {
-                    events: { signal: selCmpt.name + TUPLE },
-                    update: `modify(${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(selCmpt.name + STORE)}, ${modifyExpr})`,
-                },
-            ],
-        });
+        const modify = `modify(${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(selCmpt.name + STORE)}, ${modifyExpr})`;
+        signals.push(isTimerSelection(selCmpt)
+            ? // an animation's tuple signal is itself an `update` expression, so
+                // write the store on the initial pulse too -- otherwise the first
+                // frame renders against an empty store. see point.ts.
+                { name: name + MODIFY, update: modify }
+            : { name: name + MODIFY, on: [{ events: { signal: selCmpt.name + TUPLE }, update: modify }] });
     }
     return cleanupEmptyOnArray(signals);
 }
@@ -132209,9 +131070,10 @@ const interval = {
                     warn(`${evt} is not an ordered event stream for interval selections.`);
                     continue;
                 }
-                const filters = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.array)((evt.between[0].filter ??= []));
+                const between = evt.between[0];
+                const filters = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.array)(between.filter ?? []);
                 if (!filters.includes(filterExpr)) {
-                    filters.push(filterExpr);
+                    between.filter = [...filters, filterExpr];
                 }
             }
         }
@@ -132592,7 +131454,7 @@ function tooltip(model, opt = {}) {
         });
     }
 }
-function tooltipData(encoding, stack, config, { reactiveGeom } = {}) {
+function tooltipDataTuples(encoding, stack, config, { reactiveGeom } = {}) {
     const formatConfig = { ...config, ...config.tooltipFormat };
     const toSkip = new Set();
     const expr = reactiveGeom ? 'datum.datum' : 'datum';
@@ -132619,6 +131481,10 @@ function tooltipData(encoding, stack, config, { reactiveGeom } = {}) {
                 toSkip.add(channel2);
             }
         }
+        if (fieldDef.tooltip === false) {
+            return;
+        }
+        const test = tooltipFilterExpression(fieldDef, channel, expr);
         if ((isXorY(channel) || channel === THETA || channel === RADIUS) &&
             stack &&
             stack.fieldChannel === channel &&
@@ -132634,7 +131500,7 @@ function tooltipData(encoding, stack, config, { reactiveGeom } = {}) {
             }).signal;
         }
         value ??= addLineBreaksToTooltip(fieldDef, formatConfig, expr).signal;
-        tuples.push({ channel, key, value });
+        tuples.push({ channel, key, value, test });
     }
     forEach(encoding, (channelDef, channel) => {
         if (isFieldDef(channelDef)) {
@@ -132644,18 +131510,71 @@ function tooltipData(encoding, stack, config, { reactiveGeom } = {}) {
             add(channelDef.condition, channel);
         }
     });
-    const out = {};
-    for (const { channel, key, value } of tuples) {
-        if (!toSkip.has(channel) && !out[key]) {
-            out[key] = value;
+    const out = [];
+    const keys = new Set();
+    for (const { channel, key, value, test } of tuples) {
+        if (!toSkip.has(channel) && !keys.has(key)) {
+            out.push({ channel, key, value, test });
+            keys.add(key);
         }
     }
     return out;
 }
+// Converts a tooltip filter for the given field into a Vega expression, undefined when absent or invalid.
+function tooltipFilterExpression(fieldDef, channel, expr) {
+    if (channel !== TOOLTIP || !hasProperty(fieldDef, 'filter')) {
+        return undefined;
+    }
+    const { filter } = fieldDef;
+    if (isArgminDef(fieldDef.aggregate) || isArgmaxDef(fieldDef.aggregate) || (!fieldDef.field && !isCount(fieldDef))) {
+        warn(TOOLTIP_FILTER_REQUIRES_FIELD);
+        return undefined;
+    }
+    // The predicates test the mark's datum, where aggregate, bin, and time unit are already applied
+    // (the raw field may not even exist after aggregation), so resolve the datum field upfront and
+    // mark time units as binned so they are not recomputed from the raw field.
+    const timeUnit = normalizeTimeUnit(fieldDef.timeUnit);
+    const boundFieldDef = { field: vgField(fieldDef), ...(timeUnit ? { timeUnit: { ...timeUnit, binned: true } } : {}) };
+    let valid = true;
+    let leafCount = 0;
+    const test = logicalExpr(filter, (predicate) => {
+        leafCount++;
+        if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isObject)(predicate)) {
+            const fieldPredicate = { ...predicate, ...boundFieldDef };
+            if (isFieldPredicate(fieldPredicate) || isFieldValidPredicate(fieldPredicate)) {
+                return fieldFilterExpression(fieldPredicate, true, expr);
+            }
+        }
+        valid = false;
+        return '';
+    });
+    if (valid && leafCount > 0) {
+        return test;
+    }
+    warn(invalidTooltipFilter(filter));
+    return undefined;
+}
 function tooltipRefForEncoding(encoding, stack, config, { reactiveGeom } = {}) {
-    const data = tooltipData(encoding, stack, config, { reactiveGeom });
-    const keyValues = entries$1(data).map(([key, value]) => `"${key}": ${value}`);
-    return keyValues.length > 0 ? { signal: `{${keyValues.join(', ')}}` } : undefined;
+    const tuples = tooltipDataTuples(encoding, stack, config, { reactiveGeom });
+    if (tuples.length === 0) {
+        return undefined;
+    }
+    const objectExpr = ({ key, value }) => `{"${key}": ${value}}`;
+    if (tuples.some(({ test }) => !!test)) {
+        if (tuples.length === 1) {
+            return { signal: `(${tuples[0].test}) ? ${objectExpr(tuples[0])} : null` };
+        }
+        const keyValues = tuples.map((tuple) => tuple.test ? `(${tuple.test}) ? ${objectExpr(tuple)} : {}` : objectExpr(tuple));
+        const value = `merge(${keyValues.join(', ')})`;
+        if (tuples.every(({ test }) => !!test)) {
+            // With all fields filtered, return null instead of an empty object so that no tooltip is shown.
+            const anyVisible = tuples.map(({ test }) => `(${test})`).join(' || ');
+            return { signal: `(${anyVisible}) ? ${value} : null` };
+        }
+        return { signal: value };
+    }
+    const keyValues = tuples.map(({ key, value }) => `"${key}": ${value}`);
+    return { signal: `{${keyValues.join(', ')}}` };
 }
 /**
  * Transforms a tooltip value that is an array to a string with line breaks
@@ -132722,19 +131641,31 @@ function description(model) {
     if (config.aria === false) {
         return {};
     }
-    const data = tooltipData(encoding, stack, config);
-    if (isEmpty(data)) {
+    const data = tooltipDataTuples(encoding, stack, config)
+        // remove internal/private signals from aria description
+        .filter(({ key }) => !key.startsWith('_'));
+    if (data.length === 0) {
         return undefined;
     }
     return {
         description: {
-            signal: entries$1(data)
-                .filter(([key]) => !key.startsWith('_')) // remove internal/private signals from aria description
-                .map(([key, value]) => [key, value.replaceAll('\\n', ' ')]) // replace newlines with spaces in aria description
-                .map(([key, value], index) => `"${index > 0 ? '; ' : ''}${key}: " + (${value})`)
-                .join(' + '),
+            signal: ariaDescription(data),
         },
     };
+}
+function ariaDescription(data) {
+    // replace newlines with spaces in aria description
+    const entries = data.map(({ key, value, test }) => ({ key, value: value.replaceAll('\\n', ' '), test }));
+    if (entries.every(({ test }) => !test)) {
+        return entries.map(({ key, value }, index) => `"${index > 0 ? '; ' : ''}${key}: " + (${value})`).join(' + ');
+    }
+    // Prefix every field with a separator and strip the leading separator so that
+    // separators only appear between fields that pass their tests.
+    const segments = entries.map(({ key, value, test }) => {
+        const segment = `"; ${key}: " + (${value})`;
+        return test ? `((${test}) ? ${segment} : "")` : segment;
+    });
+    return `slice(${segments.join(' + ')}, 2)`;
 }
 
 /**
@@ -133108,15 +132039,22 @@ function pointPosition2OrSize(model, defaultPos, channel) {
             [sizeChannel]: getMarkStyleConfig(sizeChannel, markDef, config.style),
         }) ||
         position2orSize(channel, config[mark]) ||
-        position2orSize(channel, config.mark) || {
-        [vgChannel]: pointPositionDefaultRef({
-            model,
-            defaultPos,
-            channel,
-            scaleName,
-            scale,
-        })(),
-    });
+        position2orSize(channel, config.mark) ||
+        (isFieldOrDatumDef(channelDef) && model.isRangedOffset(baseChannel)
+            ? {
+                [vgChannel]: valueRefForFieldOrDatumDef(channelDef, scaleName, {}, {
+                    offset: valueRefForFieldOrDatumDef({ datum: 0 }, model.scaleName(getOffsetScaleChannel(baseChannel)), {}, {}),
+                }),
+            }
+            : {
+                [vgChannel]: pointPositionDefaultRef({
+                    model,
+                    defaultPos,
+                    channel,
+                    scaleName,
+                    scale,
+                })(),
+            }));
 }
 function position2Ref({ channel, channelDef, channel2Def, markDef, config, scaleName, scale, stack, offset, defaultRef, }) {
     if (isFieldOrDatumDef(channelDef) &&
@@ -133174,6 +132112,7 @@ function rectPosition(model, channel) {
     const offsetScaleChannel = getOffsetChannel(channel);
     const isBarOrTickBand = (mark === 'bar' && (channel === 'x' ? orient === 'vertical' : orient === 'horizontal')) ||
         (mark === 'tick' && (channel === 'y' ? orient === 'vertical' : orient === 'horizontal'));
+    const isImage = mark === 'image';
     // x, x2, and width -- we must specify two of these in all conditions
     if (isFieldDef(channelDef) &&
         (isBinning(channelDef.bin) || isBinned(channelDef.bin) || (channelDef.timeUnit && !channelDef2)) &&
@@ -133186,6 +132125,20 @@ function rectPosition(model, channel) {
             channel,
             model,
         });
+    }
+    else if (isFieldOrDatumDef(channelDef) && model.isRangedOffset(channel)) {
+        return rangePosition(channel, model, { defaultPos: 'zeroOrMax', defaultPos2: 'zeroOrMin' });
+    }
+    else if (isImage && channelDef && !hasSizeDef && !channelDef2) {
+        // Images without an explicit size use their natural dimensions, which Vega only knows at render time.
+        // Thus, we cannot use xc/yc and instead output a point position with the image mark's own
+        // align/baseline property, which Vega applies based on the rendered dimensions.
+        const alignChannel = channel === 'x' ? 'align' : 'baseline';
+        const align = getMarkPropOrConfig(alignChannel, markDef, config) ?? (channel === 'x' ? 'center' : 'middle');
+        return {
+            ...pointPosition(channel, model, { defaultPos: 'mid' }),
+            [alignChannel]: signalOrValueRef(align),
+        };
     }
     else if (((isFieldOrDatumDef(channelDef) && hasDiscreteDomain(scaleType)) || isBarOrTickBand) && !channelDef2) {
         return positionAndSize(channelDef, channel, model);
@@ -133493,11 +132446,155 @@ function colorRef(channel, valueRef) {
 }
 function markDefProperties(mark, ignore) {
     return VG_MARK_CONFIGS.reduce((m, prop) => {
-        if (!ALWAYS_IGNORE.has(prop) && hasProperty(mark, prop) && ignore[prop] !== 'ignore') {
+        if (!ALWAYS_IGNORE.has(prop) &&
+            hasProperty(mark, prop) &&
+            ignore[prop] !== 'ignore' &&
+            // `tooltip: true` and `tooltip: {content: ...}` request generated tooltips, which tooltip() compiles; they are not Vega values.
+            !(prop === 'tooltip' && (mark.tooltip === true || hasProperty(mark.tooltip, 'content')))) {
             m[prop] = signalOrValueRef(mark[prop]);
         }
         return m;
     }, {});
+}
+
+function cornerRadiusEnd(model, encodeEntry) {
+    const { markDef, config, encoding } = model;
+    const radius = getMarkPropOrConfig('cornerRadiusEnd', markDef, config);
+    if (markDef.type !== 'bar' || radius === undefined || !markDef.orient) {
+        return {};
+    }
+    // Check the original encoding because non-ranged bars also compile to x/x2 or y/y2 endpoints.
+    const isRanged = markDef.orient === 'horizontal' ? encoding.x2 : encoding.y2;
+    if (isRanged) {
+        // Both ends of a ranged bar cap a value, so round every corner —
+        // unless a mark-level cornerRadius beats a config-level cornerRadiusEnd.
+        if (markDef.cornerRadiusEnd === undefined && markDef.cornerRadius !== undefined) {
+            return {};
+        }
+        return { cornerRadius: signalOrValueRef(radius) };
+    }
+    // Compare rendered positions so negative values and reversed scales round the correct end.
+    if (markDef.orient === 'horizontal') {
+        const x = positionRefToExpr(encodeEntry.x);
+        const x2 = positionRefToExpr(encodeEntry.x2);
+        return x && x2 ? horizontalCornerRadius(model, radius, `${x} > ${x2}`, `${x} < ${x2}`) : {};
+    }
+    else {
+        const y = positionRefToExpr(encodeEntry.y);
+        const y2 = positionRefToExpr(encodeEntry.y2);
+        // Vega's y coordinates increase downward, so the top end has the smaller position.
+        return y && y2 ? verticalCornerRadius(model, radius, `${y} < ${y2}`, `${y} > ${y2}`) : {};
+    }
+}
+function cornerRadiusEndForStackedBar(model, radius, scaleName, fields) {
+    if (radius === undefined) {
+        return {};
+    }
+    // Rounded stacks use generated min/max fields for the outer negative and positive boundaries.
+    const minStart = scaledFieldExpr(scaleName, fields.minStart);
+    const maxStart = scaledFieldExpr(scaleName, fields.maxStart);
+    const minEnd = scaledFieldExpr(scaleName, fields.minEnd);
+    const maxEnd = scaledFieldExpr(scaleName, fields.maxEnd);
+    if (model.stack.fieldChannel === 'x') {
+        return horizontalCornerRadius(model, radius, `${maxEnd} > ${maxStart}`, `${minEnd} < ${minStart}`);
+    }
+    else {
+        return verticalCornerRadius(model, radius, `${maxEnd} < ${maxStart}`, `${minEnd} > ${minStart}`);
+    }
+}
+function horizontalCornerRadius(model, radius, rightEndTest, leftEndTest) {
+    return {
+        ...conditionalCornerRadius(model, ['cornerRadiusTopRight', 'cornerRadiusBottomRight'], rightEndTest, radius),
+        ...conditionalCornerRadius(model, ['cornerRadiusTopLeft', 'cornerRadiusBottomLeft'], leftEndTest, radius),
+    };
+}
+function verticalCornerRadius(model, radius, topEndTest, bottomEndTest) {
+    return {
+        ...conditionalCornerRadius(model, ['cornerRadiusTopLeft', 'cornerRadiusTopRight'], topEndTest, radius),
+        ...conditionalCornerRadius(model, ['cornerRadiusBottomLeft', 'cornerRadiusBottomRight'], bottomEndTest, radius),
+    };
+}
+function conditionalCornerRadius(model, corners, test, radius) {
+    const { markDef, config } = model;
+    const valueRef = signalOrValueRef(radius);
+    // Mark properties beat config properties, so a config-level cornerRadiusEnd
+    // must not override corner radii from the mark definition.
+    const specifiedEnd = markDef.cornerRadiusEnd !== undefined;
+    return corners.reduce((encode, corner) => {
+        if (!specifiedEnd && (markDef[corner] !== undefined || markDef.cornerRadius !== undefined)) {
+            return encode;
+        }
+        // At the non-value end, fall back to the corner's own radius so cornerRadiusEnd only overrides the value end.
+        const fallback = getMarkPropOrConfig(corner, markDef, config) ?? getMarkPropOrConfig('cornerRadius', markDef, config) ?? 0;
+        encode[corner] = [{ test, ...valueRef }, signalOrValueRef(fallback)];
+        return encode;
+    }, {});
+}
+function positionRefToExpr(ref) {
+    if (Array.isArray(ref)) {
+        // Conditional position encodings keep their unconditional fallback last.
+        ref = ref[ref.length - 1];
+    }
+    return ref ? valueRefToExpr(ref) : undefined;
+}
+function valueRefToExpr(ref) {
+    let expr;
+    if (ref.scale) {
+        const scaledValue = scaledValueRefToExpr(ref);
+        if (scaledValue === undefined) {
+            return undefined;
+        }
+        expr = `scale(${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(ref.scale)}, ${scaledValue})`;
+    }
+    else if (ref.signal) {
+        expr = `(${ref.signal})`;
+    }
+    else if (ref.field !== undefined) {
+        expr = fieldRefToExpr(ref.field);
+    }
+    else if (ref.value !== undefined) {
+        expr = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(ref.value);
+    }
+    if (expr === undefined) {
+        return undefined;
+    }
+    if (ref.mult !== undefined) {
+        expr = `${ref.mult} * (${expr})`;
+    }
+    if (ref.offset !== undefined) {
+        const offset = typeof ref.offset === 'number' ? (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(ref.offset) : valueRefToExpr(ref.offset);
+        if (offset) {
+            expr = `${expr} + ${offset}`;
+        }
+    }
+    return expr;
+}
+function scaledValueRefToExpr(ref) {
+    if (ref.signal) {
+        return ref.signal;
+    }
+    else if (ref.field !== undefined) {
+        return fieldRefToExpr(ref.field);
+    }
+    else if (ref.value !== undefined) {
+        return (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(ref.value);
+    }
+    return undefined;
+}
+function fieldRefToExpr(field) {
+    if (typeof field === 'string') {
+        return flatAccessWithDatum(field);
+    }
+    else if (field.datum) {
+        return flatAccessWithDatum(field.datum, 'datum');
+    }
+    else if (field.parent) {
+        return flatAccessWithDatum(field.parent, 'parent');
+    }
+    return undefined;
+}
+function scaledFieldExpr(scaleName, field) {
+    return `scale(${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(scaleName)}, ${flatAccessWithDatum(field)})`;
 }
 
 /**
@@ -133631,7 +132728,7 @@ const inputBindings = {
                         ? [
                             {
                                 events: selCmpt.events,
-                                update: `datum && item().mark.marktype !== 'group' ? ${datum}[${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(p.field)}] : null`,
+                                update: `datum && item().mark.marktype !== 'group' ? ${flatAccessWithDatum(p.field, datum)} : null`,
                             },
                         ]
                         : [],
@@ -133744,14 +132841,14 @@ const legendBindings = {
         if ((0,vega__WEBPACK_IMPORTED_MODULE_1__.isObject)(selDef.select) && (selDef.select.on || selDef.select.clear)) {
             const legendFilter = 'event.item && indexof(event.item.mark.role, "legend") < 0';
             for (const evt of selCmpt.events) {
-                evt.filter = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.array)(evt.filter ?? []);
-                if (!evt.filter.includes(legendFilter)) {
-                    evt.filter.push(legendFilter);
+                const filters = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.array)(evt.filter ?? []);
+                if (!filters.includes(legendFilter)) {
+                    evt.filter = [...filters, legendFilter];
                 }
             }
         }
         const evt = isLegendStreamBinding(selCmpt.bind) ? selCmpt.bind.legend : 'click';
-        const stream = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isString)(evt) ? (0,vega_event_selector__WEBPACK_IMPORTED_MODULE_2__.parseSelector)(evt, 'view') : (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.array)(evt);
+        const stream = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isString)(evt) ? (0,vega_event_selector__WEBPACK_IMPORTED_MODULE_2__.parseSelector)(evt, 'view') : [...(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.array)(evt)];
         selCmpt.bind = { legend: { merge: stream } };
     },
     topLevelSignals: (model, selCmpt, signals) => {
@@ -134495,7 +133592,7 @@ function getAxisConfigs(channel, scaleType, orient, config) {
     };
 }
 function getAxisConfigStyle(axisConfigTypes, config) {
-    const toMerge = [{}];
+    const toMerge = [];
     for (const configType of axisConfigTypes) {
         // TODO: add special casing to add conditional value based on orient signal
         let style = config[configType]?.style;
@@ -134506,7 +133603,7 @@ function getAxisConfigStyle(axisConfigTypes, config) {
             }
         }
     }
-    return Object.assign.apply(null, toMerge);
+    return Object.assign({}, ...toMerge);
 }
 function getAxisConfig(property, styleConfigIndex, style, axisConfigs = {}) {
     const styleConfig = getStyleConfig(property, style, styleConfigIndex);
@@ -134536,6 +133633,7 @@ const axisRules = {
     labelFlush: ({ axis, fieldOrDatumDef, channel }) => axis.labelFlush ?? defaultLabelFlush(fieldOrDatumDef.type, channel),
     labelOverlap: ({ axis, fieldOrDatumDef, scaleType }) => axis.labelOverlap ??
         defaultLabelOverlap$1(fieldOrDatumDef.type, scaleType, isFieldDef(fieldOrDatumDef) && !!fieldOrDatumDef.timeUnit, isFieldDef(fieldOrDatumDef) ? fieldOrDatumDef.sort : undefined),
+    bandPosition: ({ axis, model, channel }) => axis.bandPosition ?? defaultBandPosition(model, channel),
     // we already calculate orient in parse
     orient: ({ orient }) => orient, // Need to cast until Vega supports signal
     tickCount: ({ channel, model, axis, fieldOrDatumDef, scaleType }) => {
@@ -134568,6 +133666,12 @@ const axisRules = {
  */
 function defaultGrid(scaleType, fieldDef) {
     return !hasDiscreteDomain(scaleType) && isFieldDef(fieldDef) && !isBinning(fieldDef?.bin) && !isBinned(fieldDef?.bin);
+}
+function defaultBandPosition(model, channel) {
+    if (model.isRangedOffset(channel)) {
+        return channel === 'x' ? 0 : 1;
+    }
+    return undefined;
 }
 function gridScale(model, channel) {
     const gridChannel = channel === 'x' ? 'y' : 'x';
@@ -135093,7 +134197,17 @@ function sizeSignals(model, sizeType) {
         const expr = isWidth ? 'containerSize()[0]' : 'containerSize()[1]';
         const defaultValue = getViewConfigContinuousSize(model.config.view, isWidth ? 'width' : 'height');
         const safeExpr = `isFinite(${expr}) ? ${expr} : ${defaultValue}`;
-        return [{ name, init: safeExpr, on: [{ update: safeExpr, events: 'window:resize' }] }];
+        return [
+            {
+                name,
+                init: safeExpr,
+                // `window:resize` supports Vega versions before 6.4, which have no `container:resize` event
+                on: [
+                    { update: safeExpr, events: 'window:resize' },
+                    { update: safeExpr, events: 'container:resize' },
+                ],
+            },
+        ];
     }
     else {
         return [
@@ -135157,7 +134271,7 @@ function defaultScaleResolve(channel, model) {
         return 'shared';
     }
     else if (isConcatModel(model)) {
-        return isXorY(channel) || channel === 'theta' || channel === 'radius' ? 'independent' : 'shared';
+        return isXorY(channel) || isXorYOffset(channel) || isPolarPositionChannel(channel) ? 'independent' : 'shared';
     }
     /* istanbul ignore next: should never reach here. */
     throw new Error('invalid model type for resolve');
@@ -135906,7 +135020,17 @@ function mergeMeasures(parentMeasures, childMeasures) {
         for (const op of keys(ops)) {
             if (field in parentMeasures) {
                 // add operator to existing measure field
-                parentMeasures[field][op] = new Set([...(parentMeasures[field][op] ?? []), ...ops[op]]);
+                const parentAggregateParam = parentMeasures[field][op]?.aggregateParam;
+                const childAggregateParam = ops[op].aggregateParam;
+                if (parentAggregateParam !== undefined &&
+                    childAggregateParam !== undefined &&
+                    parentAggregateParam !== childAggregateParam) {
+                    warn(conflictingAggregateParam(op, field, parentAggregateParam, childAggregateParam));
+                }
+                parentMeasures[field][op] = {
+                    aliases: new Set([...(parentMeasures[field][op]?.aliases ?? []), ...ops[op].aliases]),
+                    aggregateParam: childAggregateParam ?? parentAggregateParam,
+                };
             }
             else {
                 parentMeasures[field] = { [op]: ops[op] };
@@ -135950,24 +135074,31 @@ class AggregateNode extends DataFlowNode {
             if (aggregate) {
                 if (aggregate === 'count') {
                     meas['*'] ??= {};
-                    meas['*']['count'] = new Set([vgField(fieldDef, { forAs: true })]);
+                    meas['*']['count'] = { aliases: new Set([vgField(fieldDef, { forAs: true })]) };
                 }
                 else {
                     if (isArgminDef(aggregate) || isArgmaxDef(aggregate)) {
                         const op = isArgminDef(aggregate) ? 'argmin' : 'argmax';
                         const argField = aggregate[op];
                         meas[argField] ??= {};
-                        meas[argField][op] = new Set([vgField({ op, field: argField }, { forAs: true })]);
+                        meas[argField][op] = { aliases: new Set([vgField({ op, field: argField }, { forAs: true })]) };
+                    }
+                    else if (isParameterizedAggregateDef(aggregate)) {
+                        meas[field] ??= {};
+                        meas[field][getAggregateOp(aggregate)] = {
+                            aliases: new Set([vgField(fieldDef, { forAs: true })]),
+                            aggregateParam: getAggregateParam(aggregate),
+                        };
                     }
                     else {
                         meas[field] ??= {};
-                        meas[field][aggregate] = new Set([vgField(fieldDef, { forAs: true })]);
+                        meas[field][aggregate] = { aliases: new Set([vgField(fieldDef, { forAs: true })]) };
                     }
                     // For scale channel with domain === 'unaggregated', add min/max so we can use their union as unaggregated domain
                     if (isScaleChannel(channel) && model.scaleDomain(channel) === 'unaggregated') {
                         meas[field] ??= {};
-                        meas[field]['min'] = new Set([vgField({ field, aggregate: 'min' }, { forAs: true })]);
-                        meas[field]['max'] = new Set([vgField({ field, aggregate: 'max' }, { forAs: true })]);
+                        meas[field]['min'] = { aliases: new Set([vgField({ field, aggregate: 'min' }, { forAs: true })]) };
+                        meas[field]['max'] = { aliases: new Set([vgField({ field, aggregate: 'max' }, { forAs: true })]) };
                     }
                 }
             }
@@ -135986,14 +135117,16 @@ class AggregateNode extends DataFlowNode {
         for (const s of t.aggregate) {
             const { op, field, as } = s;
             if (op) {
+                const alias = as ? as : vgField(s, { forAs: true });
                 if (op === 'count') {
                     meas['*'] ??= {};
-                    meas['*']['count'] = new Set([as ? as : vgField(s, { forAs: true })]);
+                    meas['*']['count'] = { aliases: new Set([alias]) };
                 }
                 else {
+                    const opName = getAggregateOp(op);
                     meas[field] ??= {};
-                    meas[field][op] ??= new Set();
-                    meas[field][op].add(as ? as : vgField(s, { forAs: true }));
+                    meas[field][opName] ??= { aliases: new Set(), aggregateParam: getAggregateParam(op) };
+                    meas[field][opName].aliases.add(alias);
                 }
             }
         }
@@ -136023,7 +135156,7 @@ class AggregateNode extends DataFlowNode {
         const out = new Set();
         for (const field of keys(this.measures)) {
             for (const op of keys(this.measures[field])) {
-                const m = this.measures[field][op];
+                const m = this.measures[field][op].aliases;
                 if (m.size === 0) {
                     out.add(`${op}_${field}`);
                 }
@@ -136041,12 +135174,14 @@ class AggregateNode extends DataFlowNode {
         const ops = [];
         const fields = [];
         const as = [];
+        const aggregateParams = [];
         for (const field of keys(this.measures)) {
             for (const op of keys(this.measures[field])) {
-                for (const alias of this.measures[field][op]) {
+                for (const alias of this.measures[field][op].aliases) {
                     as.push(alias);
                     ops.push(op);
                     fields.push(field === '*' ? null : replacePathInField(field));
+                    aggregateParams.push(this.measures[field][op].aggregateParam ?? null);
                 }
             }
         }
@@ -136057,10 +135192,32 @@ class AggregateNode extends DataFlowNode {
             fields,
             as,
         };
+        if (aggregateParams.some((param) => typeof param === 'number')) {
+            result.aggregate_params = aggregateParams;
+        }
         return result;
     }
 }
 
+function isCrossedFacetWithCustomSort(facet) {
+    const { row, column } = facet;
+    return !!(row && column && (isCustomSortField(row) || isCustomSortField(column)));
+}
+function isCustomSortField(fieldDef) {
+    return !!fieldDef && (isSortField(fieldDef.sort) || (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(fieldDef.sort));
+}
+function facetLookupKeyFieldName(model, channel) {
+    return model.getName(`${channel}_facet_key`);
+}
+function facetLookupKeyExpr(fieldDef, datum) {
+    const fields = [vgField(fieldDef, { expr: datum })];
+    if (isBinning(fieldDef.bin)) {
+        fields.push(vgField(fieldDef, { expr: datum, binSuffix: 'end' }));
+    }
+    return `join([${fields
+        .map((field) => `isValid(${field}) ? length(toString(${field})) + ':' + toString(${field}) : '-1:'`)
+        .join(', ')}], '|')`;
+}
 /**
  * A node that helps us track what fields we are faceting by.
  */
@@ -136117,6 +135274,31 @@ class FacetNode extends DataFlowNode {
         }
         return f;
     }
+    /**
+     * The sort index fields of the facet channels that are sorted by an array.
+     */
+    get sortIndexFields() {
+        const fields = [];
+        for (const channel of FACET_CHANNELS) {
+            const sortIndexField = this[channel]?.sortIndexField;
+            if (sortIndexField) {
+                fields.push(sortIndexField);
+            }
+        }
+        return fields;
+    }
+    get canMoveBelowAggregate() {
+        for (const channel of FACET_CHANNELS) {
+            const info = this[channel];
+            if (!info) {
+                continue;
+            }
+            if (info.sortField || (info.sortIndexField && isBinning(this.model.facet[channel].bin))) {
+                return false;
+            }
+        }
+        return true;
+    }
     dependentFields() {
         const depFields = new Set(this.fields);
         for (const channel of FACET_CHANNELS) {
@@ -136145,7 +135327,6 @@ class FacetNode extends DataFlowNode {
         for (const channel of POSITION_SCALE_CHANNELS) {
             const childScaleComponent = this.childModel.component.scales[channel];
             if (childScaleComponent && !childScaleComponent.merged) {
-                // independent scale
                 const type = childScaleComponent.get('type');
                 const range = childScaleComponent.get('range');
                 if (hasDiscreteDomain(type) && isVgRangeStep(range)) {
@@ -136254,6 +135435,28 @@ class FacetNode extends DataFlowNode {
         }
         return data;
     }
+    assembleFacetLookupDomainData(channel) {
+        const facetChannel = this[channel];
+        if (!facetChannel || (!facetChannel.sortField && !facetChannel.sortIndexField)) {
+            return null;
+        }
+        return {
+            name: this.model.getName(`${channel}_lookup_domain`),
+            source: facetChannel.name,
+            transform: [
+                {
+                    type: 'formula',
+                    expr: facetLookupKeyExpr(this.model.facet[channel], 'datum'),
+                    as: facetLookupKeyFieldName(this.model, channel),
+                },
+            ],
+        };
+    }
+    assembleFacetSortLookupData() {
+        return [ROW, COLUMN]
+            .map((channel) => this.assembleFacetLookupDomainData(channel))
+            .filter((lookupData) => lookupData !== null);
+    }
     assemble() {
         const data = [];
         let crossedDataName = null;
@@ -136281,6 +135484,9 @@ class FacetNode extends DataFlowNode {
             if (this[channel]) {
                 data.push(this.assembleRowColumnHeaderData(channel, crossedDataName, childIndependentFieldsWithStep));
             }
+        }
+        if (isCrossedFacetWithCustomSort(this.model.facet)) {
+            data.push(...this.assembleFacetSortLookupData());
         }
         if (facet) {
             const facetData = this.assembleFacetHeaderData(childIndependentFieldsWithStep);
@@ -137574,19 +136780,35 @@ function cloneSubtree(facet) {
     return clone;
 }
 /**
+ * Checks whether facet node can swap with the given child to move further down the dataflow.
+ */
+function canMoveFacetBelow(facet, child) {
+    if (child instanceof OutputNode) {
+        return false;
+    }
+    if (child instanceof AggregateNode) {
+        return facet.canMoveBelowAggregate;
+    }
+    return true;
+}
+/**
  * Move facet nodes down to the next fork or output node. Also pull the main output with the facet node.
  * After moving down the facet node, make a copy of the subtree and make it a child of the main output.
  */
 function moveFacetDown(node) {
     if (node instanceof FacetNode) {
-        if (node.numChildren() === 1 && !(node.children[0] instanceof OutputNode)) {
-            // move down until we hit a fork or output node
+        if (node.numChildren() === 1 && canMoveFacetBelow(node, node.children[0])) {
+            // move down until we hit a fork, an output node, or an aggregate that would break sorting
             const child = node.children[0];
             if (child instanceof AggregateNode ||
                 child instanceof StackNode ||
                 child instanceof WindowTransformNode ||
                 child instanceof JoinAggregateTransformNode) {
                 child.addDimensions(node.fields);
+                if (child instanceof AggregateNode) {
+                    // also group by the sort index fields so that the aggregate does not drop them
+                    child.addDimensions(node.sortIndexFields);
+                }
             }
             child.swapWithParent();
             moveFacetDown(node);
@@ -137835,17 +137057,14 @@ function parseDomainForChannel(model, channel) {
     }
     return parseSingleChannelDomain(scaleType, domain, model, channel);
 }
-function mapDomainToDataSignal(domain, type, timeUnit) {
-    return domain.map((v) => {
-        const data = valueExpr(v, { timeUnit, type });
-        return { signal: `{data: ${data}}` };
-    });
+function mapDomainToSignals(domain, type, timeUnit) {
+    return domain.map((v) => ({ signal: valueExpr(v, { timeUnit, type }) }));
 }
 function convertDomainIfItIsDateTime(domain, type, timeUnit) {
     // explicit value
     const normalizedTimeUnit = normalizeTimeUnit(timeUnit)?.unit;
     if (type === 'temporal' || normalizedTimeUnit) {
-        return mapDomainToDataSignal(domain, type, normalizedTimeUnit);
+        return [mapDomainToSignals(domain, type, normalizedTimeUnit)];
     }
     return [domain]; // Date time won't make sense
 }
@@ -138209,7 +137428,19 @@ function mergeDomains(domains) {
         };
         return domain;
     }
-    return { fields: uniqueDomains, ...(sort ? { sort } : {}) };
+    const domain = {
+        fields: uniqueDomains.map(unionDomainField),
+        ...(sort ? { sort } : {}),
+    };
+    return domain;
+}
+function unionDomainField(domain) {
+    if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(domain) && domain.some(isSignalRef)) {
+        return {
+            signal: `[${domain.map((v) => `{data: ${isSignalRef(v) ? v.signal : stringify(v)}}`).join(', ')}]`,
+        };
+    }
+    return domain;
 }
 /**
  * Return a field if a scale uses a single field.
@@ -139095,6 +138326,9 @@ function getOffsetRange(channel, model, offsetScaleType) {
             }
         }
         // otherwise use the position
+        if (channel === YOFFSET && hasContinuousDomain(offsetScaleType)) {
+            return [{ signal: `bandwidth('${positionScaleName}')` }, 0];
+        }
         return [0, { signal: `bandwidth('${positionScaleName}')` }];
     }
     else {
@@ -139340,7 +138574,7 @@ const scaleRules = {
         const sort = isFieldDef(fieldOrDatumDef) ? fieldOrDatumDef.sort : undefined;
         return reverse(scaleType, sort, channel, config.scale);
     },
-    zero: ({ channel, fieldOrDatumDef, domain, markDef, scaleType, config, hasSecondaryRangeChannel }) => zero(channel, fieldOrDatumDef, domain, markDef, scaleType, config.scale, hasSecondaryRangeChannel),
+    zero: ({ model, channel, fieldOrDatumDef, domain, markDef, scaleType, config, hasSecondaryRangeChannel }) => zero(channel, fieldOrDatumDef, domain, markDef, scaleType, config.scale, hasSecondaryRangeChannel, isXorYOffset(channel) && model.isRangedOffset(getMainChannelFromOffsetChannel(channel))),
 };
 // This method is here rather than in range.ts to avoid circular dependency.
 function parseScaleRange(model) {
@@ -139507,7 +138741,7 @@ function reverse(scaleType, sort, channel, scaleConfig) {
     }
     return undefined;
 }
-function zero(channel, fieldDef, specifiedDomain, markDef, scaleType, scaleConfig, hasSecondaryRangeChannel) {
+function zero(channel, fieldDef, specifiedDomain, markDef, scaleType, scaleConfig, hasSecondaryRangeChannel, hasRangedOffset = false) {
     // If users explicitly provide a domain, we should not augment zero as that will be unexpected.
     const hasCustomDomain = !!specifiedDomain && specifiedDomain !== 'unaggregated';
     if (hasCustomDomain) {
@@ -139531,6 +138765,10 @@ function zero(channel, fieldDef, specifiedDomain, markDef, scaleType, scaleConfi
     if (channel === 'size' && fieldDef.type === 'quantitative' && !isContinuousToDiscrete(scaleType)) {
         return true;
     }
+    // 1.5) the offset scale of a ranged offset mark, so all marks in the band share the in-band zero baseline
+    if (isXorYOffset(channel)) {
+        return hasRangedOffset;
+    }
     // 2) non-binned, quantitative x-scale or y-scale
     // (For binning, we should not include zero by default because binning are calculated without zero.)
     // (For area/bar charts with ratio scale chart, we should always include zero.)
@@ -139542,7 +138780,7 @@ function zero(channel, fieldDef, specifiedDomain, markDef, scaleType, scaleConfi
                 return false;
             }
         }
-        if (contains(['bar', 'area'], type) && !hasSecondaryRangeChannel) {
+        if (isBarOrArea(type) && !hasSecondaryRangeChannel) {
             return true;
         }
         return scaleConfig?.zero;
@@ -140652,7 +139890,7 @@ class LookupNode extends DataFlowNode {
             // lookup a few fields and add create a flat output
             foreign = {
                 values: this.transform.from.fields,
-                ...(this.transform.as ? { as: (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.array)(this.transform.as) } : {}),
+                ...(this.transform.as ? { as: [...(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.array)(this.transform.as)] } : {}),
             };
         }
         else {
@@ -140673,6 +139911,43 @@ class LookupNode extends DataFlowNode {
             fields: [this.transform.lookup],
             ...foreign,
             ...(this.transform.default ? { default: this.transform.default } : {}),
+        };
+    }
+}
+
+/**
+ * A class for pivot transform nodes.
+ */
+class PivotTransformNode extends DataFlowNode {
+    transform;
+    clone() {
+        return new PivotTransformNode(null, duplicate(this.transform));
+    }
+    constructor(parent, transform) {
+        super(parent);
+        this.transform = transform;
+    }
+    addDimensions(fields) {
+        this.transform.groupby = unique((this.transform.groupby ?? []).concat(fields), (d) => d);
+    }
+    producedFields() {
+        return undefined; // return undefined so that potentially everything can depend on the pivot
+    }
+    dependentFields() {
+        return new Set([this.transform.pivot, this.transform.value, ...(this.transform.groupby ?? [])]);
+    }
+    hash() {
+        return `PivotTransform ${hash(this.transform)}`;
+    }
+    assemble() {
+        const { pivot, value, groupby, limit, op } = this.transform;
+        return {
+            type: 'pivot',
+            field: pivot,
+            value,
+            ...(limit !== undefined ? { limit } : {}),
+            ...(op !== undefined ? { op } : {}),
+            ...(groupby !== undefined ? { groupby } : {}),
         };
     }
 }
@@ -140749,43 +140024,6 @@ class RegressionTransformNode extends DataFlowNode {
 }
 
 /**
- * A class for pivot transform nodes.
- */
-class PivotTransformNode extends DataFlowNode {
-    transform;
-    clone() {
-        return new PivotTransformNode(null, duplicate(this.transform));
-    }
-    constructor(parent, transform) {
-        super(parent);
-        this.transform = transform;
-    }
-    addDimensions(fields) {
-        this.transform.groupby = unique((this.transform.groupby ?? []).concat(fields), (d) => d);
-    }
-    producedFields() {
-        return undefined; // return undefined so that potentially everything can depend on the pivot
-    }
-    dependentFields() {
-        return new Set([this.transform.pivot, this.transform.value, ...(this.transform.groupby ?? [])]);
-    }
-    hash() {
-        return `PivotTransform ${hash(this.transform)}`;
-    }
-    assemble() {
-        const { pivot, value, groupby, limit, op } = this.transform;
-        return {
-            type: 'pivot',
-            field: pivot,
-            value,
-            ...(limit !== undefined ? { limit } : {}),
-            ...(op !== undefined ? { op } : {}),
-            ...(groupby !== undefined ? { groupby } : {}),
-        };
-    }
-}
-
-/**
  * A class for the sample transform nodes
  */
 class SampleTransformNode extends DataFlowNode {
@@ -140812,780 +140050,6 @@ class SampleTransformNode extends DataFlowNode {
             size: this.transform.sample,
         };
     }
-}
-
-function makeWalkTree(data) {
-    // to name datasources
-    let datasetIndex = 0;
-    /**
-     * Recursively walk down the tree.
-     */
-    function walkTree(node, dataSource) {
-        if (node instanceof SourceNode) {
-            // If the source is a named data source or a data source with values, we need
-            // to put it in a different data source. Otherwise, Vega may override the data.
-            if (!node.isGenerator && !isUrlData(node.data)) {
-                data.push(dataSource);
-                const newData = {
-                    name: null,
-                    source: dataSource.name,
-                    transform: [],
-                };
-                dataSource = newData;
-            }
-        }
-        if (node instanceof ParseNode) {
-            if (node.parent instanceof SourceNode && !dataSource.source) {
-                // If node's parent is a root source and the data source does not refer to another data source, use normal format parse
-                dataSource.format = {
-                    ...dataSource.format,
-                    parse: node.assembleFormatParse(),
-                };
-                // add calculates for all nested fields
-                dataSource.transform.push(...node.assembleTransforms(true));
-            }
-            else {
-                // Otherwise use Vega expression to parse
-                dataSource.transform.push(...node.assembleTransforms());
-            }
-        }
-        if (node instanceof FacetNode) {
-            if (!dataSource.name) {
-                dataSource.name = `data_${datasetIndex++}`;
-            }
-            if (!dataSource.source || dataSource.transform.length > 0) {
-                data.push(dataSource);
-                node.data = dataSource.name;
-            }
-            else {
-                node.data = dataSource.source;
-            }
-            data.push(...node.assemble());
-            // break here because the rest of the tree has to be taken care of by the facet.
-            return;
-        }
-        if (node instanceof GraticuleNode ||
-            node instanceof SequenceNode ||
-            node instanceof FilterInvalidNode ||
-            node instanceof FilterNode ||
-            node instanceof CalculateNode ||
-            node instanceof GeoPointNode ||
-            node instanceof AggregateNode ||
-            node instanceof LookupNode ||
-            node instanceof WindowTransformNode ||
-            node instanceof JoinAggregateTransformNode ||
-            node instanceof FoldTransformNode ||
-            node instanceof FlattenTransformNode ||
-            node instanceof DensityTransformNode ||
-            node instanceof LoessTransformNode ||
-            node instanceof QuantileTransformNode ||
-            node instanceof RegressionTransformNode ||
-            node instanceof IdentifierNode ||
-            node instanceof SampleTransformNode ||
-            node instanceof PivotTransformNode ||
-            node instanceof ExtentTransformNode) {
-            dataSource.transform.push(node.assemble());
-        }
-        if (node instanceof BinNode ||
-            node instanceof TimeUnitNode ||
-            node instanceof ImputeNode ||
-            node instanceof StackNode ||
-            node instanceof GeoJSONNode) {
-            dataSource.transform.push(...node.assemble());
-        }
-        if (node instanceof OutputNode) {
-            if (dataSource.source && dataSource.transform.length === 0) {
-                node.setSource(dataSource.source);
-            }
-            else if (node.parent instanceof OutputNode) {
-                // Note that an output node may be required but we still do not assemble a
-                // separate data source for it.
-                node.setSource(dataSource.name);
-            }
-            else {
-                if (!dataSource.name) {
-                    dataSource.name = `data_${datasetIndex++}`;
-                }
-                // Here we set the name of the datasource we generated. From now on
-                // other assemblers can use it.
-                node.setSource(dataSource.name);
-                // if this node has more than one child, we will add a datasource automatically
-                if (node.numChildren() === 1) {
-                    data.push(dataSource);
-                    const newData = {
-                        name: null,
-                        source: dataSource.name,
-                        transform: [],
-                    };
-                    dataSource = newData;
-                }
-            }
-        }
-        switch (node.numChildren()) {
-            case 0:
-                // done
-                if (node instanceof OutputNode && (!dataSource.source || dataSource.transform.length > 0)) {
-                    // do not push empty datasources that are simply references
-                    data.push(dataSource);
-                }
-                break;
-            case 1:
-                walkTree(node.children[0], dataSource);
-                break;
-            default: {
-                if (!dataSource.name) {
-                    dataSource.name = `data_${datasetIndex++}`;
-                }
-                let source = dataSource.name;
-                if (!dataSource.source || dataSource.transform.length > 0) {
-                    data.push(dataSource);
-                }
-                else {
-                    source = dataSource.source;
-                }
-                for (const child of node.children) {
-                    const newData = {
-                        name: null,
-                        source,
-                        transform: [],
-                    };
-                    walkTree(child, newData);
-                }
-                break;
-            }
-        }
-    }
-    return walkTree;
-}
-/**
- * Assemble data sources that are derived from faceted data.
- */
-function assembleFacetData(root) {
-    const data = [];
-    const walkTree = makeWalkTree(data);
-    for (const child of root.children) {
-        walkTree(child, {
-            source: root.name,
-            name: null,
-            transform: [],
-        });
-    }
-    return data;
-}
-/**
- * Create Vega data array from a given compiled model and append all of them to the given array
- *
- * @param  model
- * @param  data array
- * @return modified data array
- */
-function assembleRootData(dataComponent, datasets) {
-    const data = [];
-    // dataComponent.sources.forEach(debug);
-    // draw(dataComponent.sources);
-    const walkTree = makeWalkTree(data);
-    let sourceIndex = 0;
-    for (const root of dataComponent.sources) {
-        // assign a name if the source does not have a name yet
-        if (!root.hasName()) {
-            root.dataName = `source_${sourceIndex++}`;
-        }
-        const newData = root.assemble();
-        walkTree(root, newData);
-    }
-    // remove empty transform arrays for cleaner output
-    for (const d of data) {
-        if (d.transform.length === 0) {
-            delete d.transform;
-        }
-    }
-    // move sources without transforms (the ones that are potentially used in lookups) to the beginning
-    let whereTo = 0;
-    for (const [i, d] of data.entries()) {
-        if ((d.transform ?? []).length === 0 && !d.source) {
-            data.splice(whereTo++, 0, data.splice(i, 1)[0]);
-        }
-    }
-    // now fix the from references in lookup transforms
-    for (const d of data) {
-        for (const t of d.transform ?? []) {
-            if (t.type === 'lookup') {
-                t.from = dataComponent.outputNodes[t.from].getSource();
-            }
-        }
-    }
-    // inline values for datasets that are in the datastore
-    for (const d of data) {
-        if (d.name in datasets) {
-            d.values = datasets[d.name];
-        }
-    }
-    return data;
-}
-
-function getHeaderType(orient) {
-    if (orient === 'top' || orient === 'left' || isSignalRef(orient)) {
-        // we always use header for orient signal since we can't dynamically make header becomes footer
-        return 'header';
-    }
-    return 'footer';
-}
-function parseFacetHeaders(model) {
-    for (const channel of FACET_CHANNELS) {
-        parseFacetHeader(model, channel);
-    }
-    mergeChildAxis(model, 'x');
-    mergeChildAxis(model, 'y');
-}
-function parseFacetHeader(model, channel) {
-    const { facet, config, child, component } = model;
-    if (model.channelHasField(channel)) {
-        const fieldDef = facet[channel];
-        const titleConfig = getHeaderProperty('title', null, config, channel);
-        let title$1 = title(fieldDef, config, {
-            allowDisabling: true,
-            includeDefault: titleConfig === undefined || !!titleConfig,
-        });
-        if (child.component.layoutHeaders[channel].title) {
-            // TODO: better handle multiline titles
-            title$1 = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(title$1) ? title$1.join(', ') : title$1;
-            // merge title with child to produce "Title / Subtitle / Sub-subtitle"
-            title$1 += ` / ${child.component.layoutHeaders[channel].title}`;
-            child.component.layoutHeaders[channel].title = null;
-        }
-        const labelOrient = getHeaderProperty('labelOrient', fieldDef.header, config, channel);
-        const labels = fieldDef.header !== null ? getFirstDefined(fieldDef.header?.labels, config.header.labels, true) : false;
-        const headerType = contains(['bottom', 'right'], labelOrient) ? 'footer' : 'header';
-        component.layoutHeaders[channel] = {
-            title: fieldDef.header !== null ? title$1 : null,
-            facetFieldDef: fieldDef,
-            [headerType]: channel === 'facet' ? [] : [makeHeaderComponent(model, channel, labels)],
-        };
-    }
-}
-function makeHeaderComponent(model, channel, labels) {
-    const sizeType = channel === 'row' ? 'height' : 'width';
-    return {
-        labels,
-        sizeSignal: model.child.component.layoutSize.get(sizeType) ? model.child.getSizeSignalRef(sizeType) : undefined,
-        axes: [],
-    };
-}
-function mergeChildAxis(model, channel) {
-    const { child } = model;
-    if (child.component.axes[channel]) {
-        const { layoutHeaders, resolve } = model.component;
-        resolve.axis[channel] = parseGuideResolve(resolve, channel);
-        if (resolve.axis[channel] === 'shared') {
-            // For shared axis, move the axes to facet's header or footer
-            const headerChannel = channel === 'x' ? 'column' : 'row';
-            const layoutHeader = layoutHeaders[headerChannel];
-            for (const axisComponent of child.component.axes[channel]) {
-                const headerType = getHeaderType(axisComponent.get('orient'));
-                layoutHeader[headerType] ??= [makeHeaderComponent(model, headerChannel, false)];
-                // FIXME: assemble shouldn't be called here, but we do it this way so we only extract the main part of the axes
-                const mainAxis = assembleAxis(axisComponent, 'main', model.config, { header: true });
-                if (mainAxis) {
-                    // LayoutHeader no longer keep track of property precedence, thus let's combine.
-                    layoutHeader[headerType][0].axes.push(mainAxis);
-                }
-                axisComponent.mainExtracted = true;
-            }
-        }
-    }
-}
-
-function parseLayerLayoutSize(model) {
-    parseChildrenLayoutSize(model);
-    parseNonUnitLayoutSizeForChannel(model, 'width');
-    parseNonUnitLayoutSizeForChannel(model, 'height');
-}
-function parseConcatLayoutSize(model) {
-    parseChildrenLayoutSize(model);
-    // for columns === 1 (vconcat), we can completely merge width. Otherwise, we can treat merged width as childWidth.
-    const widthType = model.layout.columns === 1 ? 'width' : 'childWidth';
-    // for columns === undefined (hconcat), we can completely merge height. Otherwise, we can treat merged height as childHeight.
-    const heightType = model.layout.columns === undefined ? 'height' : 'childHeight';
-    parseNonUnitLayoutSizeForChannel(model, widthType);
-    parseNonUnitLayoutSizeForChannel(model, heightType);
-}
-function parseChildrenLayoutSize(model) {
-    for (const child of model.children) {
-        child.parseLayoutSize();
-    }
-}
-/**
- * Merge child layout size (width or height).
- */
-function parseNonUnitLayoutSizeForChannel(model, layoutSizeType) {
-    /*
-     * For concat, the parent width or height might not be the same as the children's shared height.
-     * For example, hconcat's subviews may share width, but the shared width is not the hconcat view's width.
-     *
-     * layoutSizeType represents the output of the view (could be childWidth/childHeight/width/height)
-     * while the sizeType represents the properties of the child.
-     */
-    const sizeType = getSizeTypeFromLayoutSizeType(layoutSizeType);
-    const channel = getPositionScaleChannel(sizeType);
-    const resolve = model.component.resolve;
-    const layoutSizeCmpt = model.component.layoutSize;
-    let mergedSize;
-    // Try to merge layout size
-    for (const child of model.children) {
-        const childSize = child.component.layoutSize.getWithExplicit(sizeType);
-        const scaleResolve = resolve.scale[channel] ?? defaultScaleResolve(channel, model);
-        if (scaleResolve === 'independent' && childSize.value === 'step') {
-            // Do not merge independent scales with range-step as their size depends
-            // on the scale domains, which can be different between scales.
-            mergedSize = undefined;
-            break;
-        }
-        if (mergedSize) {
-            if (scaleResolve === 'independent' && mergedSize.value !== childSize.value) {
-                // For independent scale, only merge if all the sizes are the same.
-                // If the values are different, abandon the merge!
-                mergedSize = undefined;
-                break;
-            }
-            mergedSize = mergeValuesWithExplicit(mergedSize, childSize, sizeType, '');
-        }
-        else {
-            mergedSize = childSize;
-        }
-    }
-    if (mergedSize) {
-        // If merged, rename size and set size of all children.
-        for (const child of model.children) {
-            model.renameSignal(child.getName(sizeType), model.getName(layoutSizeType));
-            child.component.layoutSize.set(sizeType, 'merged', false);
-        }
-        layoutSizeCmpt.setWithExplicit(layoutSizeType, mergedSize);
-    }
-    else {
-        layoutSizeCmpt.setWithExplicit(layoutSizeType, {
-            explicit: false,
-            value: undefined,
-        });
-    }
-}
-function parseUnitLayoutSize(model) {
-    const { size, component } = model;
-    for (const channel of POSITION_SCALE_CHANNELS) {
-        const sizeType = getSizeChannel(channel);
-        if (size[sizeType] != undefined && size[sizeType] != null) {
-            const specifiedSize = size[sizeType];
-            component.layoutSize.set(sizeType, isStep(specifiedSize) ? 'step' : specifiedSize, true);
-        }
-        else {
-            const defaultSize = defaultUnitSize(model, sizeType);
-            component.layoutSize.set(sizeType, defaultSize, false);
-        }
-    }
-}
-function defaultUnitSize(model, sizeType) {
-    const channel = sizeType === 'width' ? 'x' : 'y';
-    const config = model.config;
-    const scaleComponent = model.getScaleComponent(channel);
-    if (scaleComponent) {
-        const scaleType = scaleComponent.get('type');
-        const range = scaleComponent.get('range');
-        if (hasDiscreteDomain(scaleType)) {
-            const size = getViewConfigDiscreteSize(config.view, sizeType);
-            if (isVgRangeStep(range) || isStep(size)) {
-                // For discrete domain with range.step, use dynamic width/height
-                return 'step';
-            }
-            else {
-                return size;
-            }
-        }
-        else {
-            return getViewConfigContinuousSize(config.view, sizeType);
-        }
-    }
-    else if (model.hasProjection || model.mark === 'arc') {
-        // arc should use continuous size by default otherwise the pie is extremely small
-        return getViewConfigContinuousSize(config.view, sizeType);
-    }
-    else {
-        const size = getViewConfigDiscreteSize(config.view, sizeType);
-        return isStep(size) ? size.step : size;
-    }
-}
-
-function facetSortFieldName(fieldDef, sort, opt) {
-    return vgField(sort, { suffix: `by_${vgField(fieldDef)}`, ...opt });
-}
-class FacetModel extends ModelWithField {
-    facet;
-    child;
-    children;
-    constructor(spec, parent, parentGivenName, config) {
-        super(spec, 'facet', parent, parentGivenName, config, spec.resolve);
-        this.child = buildModel(spec.spec, this, this.getName('child'), undefined, config);
-        this.children = [this.child];
-        this.facet = this.initFacet(spec.facet);
-    }
-    initFacet(facet) {
-        // clone to prevent side effect to the original spec
-        if (!isFacetMapping(facet)) {
-            return { facet: this.initFacetFieldDef(facet, 'facet') };
-        }
-        const channels = keys(facet);
-        const normalizedFacet = {};
-        for (const channel of channels) {
-            if (![ROW, COLUMN].includes(channel)) {
-                // Drop unsupported channel
-                warn(incompatibleChannel(channel, 'facet'));
-                break;
-            }
-            const fieldDef = facet[channel];
-            if (fieldDef.field === undefined) {
-                warn(emptyFieldDef(fieldDef, channel));
-                break;
-            }
-            normalizedFacet[channel] = this.initFacetFieldDef(fieldDef, channel);
-        }
-        return normalizedFacet;
-    }
-    initFacetFieldDef(fieldDef, channel) {
-        // Cast because we call initFieldDef, which assumes general FieldDef.
-        // However, FacetFieldDef is a bit more constrained than the general FieldDef
-        const facetFieldDef = initFieldDef(fieldDef, channel);
-        if (facetFieldDef.header) {
-            facetFieldDef.header = replaceExprRef(facetFieldDef.header);
-        }
-        else if (facetFieldDef.header === null) {
-            facetFieldDef.header = null;
-        }
-        return facetFieldDef;
-    }
-    channelHasField(channel) {
-        return hasProperty(this.facet, channel);
-    }
-    fieldDef(channel) {
-        return this.facet[channel];
-    }
-    parseData() {
-        this.component.data = parseData(this);
-        this.child.parseData();
-    }
-    parseLayoutSize() {
-        parseChildrenLayoutSize(this);
-    }
-    parseSelections() {
-        // As a facet has a single child, the selection components are the same.
-        // The child maintains its selections to assemble signals, which remain
-        // within its unit.
-        this.child.parseSelections();
-        this.component.selection = this.child.component.selection;
-        if (vals(this.component.selection).some((selCmpt) => isTimerSelection(selCmpt))) {
-            error(MULTI_VIEW_ANIMATION_UNSUPPORTED);
-        }
-    }
-    parseMarkGroup() {
-        this.child.parseMarkGroup();
-    }
-    parseAxesAndHeaders() {
-        this.child.parseAxesAndHeaders();
-        parseFacetHeaders(this);
-    }
-    assembleSelectionTopLevelSignals(signals) {
-        return this.child.assembleSelectionTopLevelSignals(signals);
-    }
-    assembleSignals() {
-        this.child.assembleSignals();
-        return [];
-    }
-    assembleSelectionData(data) {
-        return this.child.assembleSelectionData(data);
-    }
-    getHeaderLayoutMixins() {
-        const layoutMixins = {};
-        for (const channel of FACET_CHANNELS) {
-            for (const headerType of HEADER_TYPES) {
-                const layoutHeaderComponent = this.component.layoutHeaders[channel];
-                const headerComponent = layoutHeaderComponent[headerType];
-                const { facetFieldDef } = layoutHeaderComponent;
-                if (facetFieldDef) {
-                    const titleOrient = getHeaderProperty('titleOrient', facetFieldDef.header, this.config, channel);
-                    if (['right', 'bottom'].includes(titleOrient)) {
-                        const headerChannel = getHeaderChannel(channel, titleOrient);
-                        layoutMixins.titleAnchor ??= {};
-                        layoutMixins.titleAnchor[headerChannel] = 'end';
-                    }
-                }
-                if (headerComponent?.[0]) {
-                    // set header/footerBand
-                    const sizeType = channel === 'row' ? 'height' : 'width';
-                    const bandType = headerType === 'header' ? 'headerBand' : 'footerBand';
-                    if (channel !== 'facet' && !this.child.component.layoutSize.get(sizeType)) {
-                        // If facet child does not have size signal, then apply headerBand
-                        layoutMixins[bandType] ??= {};
-                        layoutMixins[bandType][channel] = 0.5;
-                    }
-                    if (layoutHeaderComponent.title) {
-                        layoutMixins.offset ??= {};
-                        layoutMixins.offset[channel === 'row' ? 'rowTitle' : 'columnTitle'] = 10;
-                    }
-                }
-            }
-        }
-        return layoutMixins;
-    }
-    assembleDefaultLayout() {
-        const { column, row } = this.facet;
-        const columns = column ? this.columnDistinctSignal() : row ? 1 : undefined;
-        let align = 'all';
-        // Do not align the cells if the scale corresponding to the direction is indepent.
-        // We always align when we facet into both row and column.
-        if (!row && this.component.resolve.scale.x === 'independent') {
-            align = 'none';
-        }
-        else if (!column && this.component.resolve.scale.y === 'independent') {
-            align = 'none';
-        }
-        return {
-            ...this.getHeaderLayoutMixins(),
-            ...(columns ? { columns } : {}),
-            bounds: 'full',
-            align,
-        };
-    }
-    assembleLayoutSignals() {
-        // FIXME(https://github.com/vega/vega-lite/issues/1193): this can be incorrect if we have independent scales.
-        return this.child.assembleLayoutSignals();
-    }
-    columnDistinctSignal() {
-        if (this.parent && this.parent instanceof FacetModel) {
-            // For nested facet, we will add columns to group mark instead
-            // See discussion in https://github.com/vega/vega/issues/952
-            // and https://github.com/vega/vega-view/releases/tag/v1.2.6
-            return undefined;
-        }
-        else {
-            // In facetNode.assemble(), the name is always this.getName('column') + '_layout'.
-            const facetLayoutDataName = this.getName('column_domain');
-            return { signal: `length(data('${facetLayoutDataName}'))` };
-        }
-    }
-    assembleGroupStyle() {
-        return undefined;
-    }
-    assembleGroup(signals) {
-        if (this.parent && this.parent instanceof FacetModel) {
-            // Provide number of columns for layout.
-            // See discussion in https://github.com/vega/vega/issues/952
-            // and https://github.com/vega/vega-view/releases/tag/v1.2.6
-            return {
-                ...(this.channelHasField('column')
-                    ? {
-                        encode: {
-                            update: {
-                                // TODO(https://github.com/vega/vega-lite/issues/2759):
-                                // Correct the signal for facet of concat of facet_column
-                                columns: { field: vgField(this.facet.column, { prefix: 'distinct' }) },
-                            },
-                        },
-                    }
-                    : {}),
-                ...super.assembleGroup(signals),
-            };
-        }
-        return super.assembleGroup(signals);
-    }
-    /**
-     * Aggregate cardinality for calculating size
-     */
-    getCardinalityAggregateForChild() {
-        const fields = [];
-        const ops = [];
-        const as = [];
-        if (this.child instanceof FacetModel) {
-            if (this.child.channelHasField('column')) {
-                const field = vgField(this.child.facet.column);
-                fields.push(field);
-                ops.push('distinct');
-                as.push(`distinct_${field}`);
-            }
-        }
-        else {
-            for (const channel of POSITION_SCALE_CHANNELS) {
-                const childScaleComponent = this.child.component.scales[channel];
-                if (childScaleComponent && !childScaleComponent.merged) {
-                    const type = childScaleComponent.get('type');
-                    const range = childScaleComponent.get('range');
-                    if (hasDiscreteDomain(type) && isVgRangeStep(range)) {
-                        const domain = assembleDomain(this.child, channel);
-                        const field = getFieldFromDomain(domain);
-                        if (field) {
-                            fields.push(field);
-                            ops.push('distinct');
-                            as.push(`distinct_${field}`);
-                        }
-                        else {
-                            warn(unknownField(channel));
-                        }
-                    }
-                }
-            }
-        }
-        return { fields, ops, as };
-    }
-    assembleFacet() {
-        const { name, data } = this.component.data.facetRoot;
-        const { row, column } = this.facet;
-        const { fields, ops, as } = this.getCardinalityAggregateForChild();
-        const groupby = [];
-        for (const channel of FACET_CHANNELS) {
-            const fieldDef = this.facet[channel];
-            if (fieldDef) {
-                groupby.push(vgField(fieldDef));
-                const { bin, sort } = fieldDef;
-                if (isBinning(bin)) {
-                    groupby.push(vgField(fieldDef, { binSuffix: 'end' }));
-                }
-                if (isSortField(sort)) {
-                    const { field, op = DEFAULT_SORT_OP } = sort;
-                    const outputName = facetSortFieldName(fieldDef, sort);
-                    if (row && column) {
-                        // For crossed facet, use pre-calculate field as it requires a different groupby
-                        // For each calculated field, apply max and assign them to the same name as
-                        // all values of the same group should be the same anyway.
-                        fields.push(outputName);
-                        ops.push('max');
-                        as.push(outputName);
-                    }
-                    else {
-                        fields.push(field);
-                        ops.push(op);
-                        as.push(outputName);
-                    }
-                }
-                else if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(sort)) {
-                    const outputName = sortArrayIndexField(fieldDef, channel);
-                    fields.push(outputName);
-                    ops.push('max');
-                    as.push(outputName);
-                }
-            }
-        }
-        const cross = !!row && !!column;
-        return {
-            name,
-            data,
-            groupby,
-            ...(cross || fields.length > 0
-                ? {
-                    aggregate: {
-                        ...(cross ? { cross } : {}),
-                        ...(fields.length ? { fields, ops, as } : {}),
-                    },
-                }
-                : {}),
-        };
-    }
-    facetSortFields(channel) {
-        const { facet } = this;
-        const fieldDef = facet[channel];
-        if (fieldDef) {
-            if (isSortField(fieldDef.sort)) {
-                return [facetSortFieldName(fieldDef, fieldDef.sort, { expr: 'datum' })];
-            }
-            else if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(fieldDef.sort)) {
-                return [sortArrayIndexField(fieldDef, channel, { expr: 'datum' })];
-            }
-            return [vgField(fieldDef, { expr: 'datum' })];
-        }
-        return [];
-    }
-    facetSortOrder(channel) {
-        const { facet } = this;
-        const fieldDef = facet[channel];
-        if (fieldDef) {
-            const { sort } = fieldDef;
-            const order = (isSortField(sort) ? sort.order : !(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(sort) && sort) || 'ascending';
-            return [order];
-        }
-        return [];
-    }
-    assembleLabelTitle() {
-        const { facet, config } = this;
-        if (facet.facet) {
-            // Facet always uses title to display labels
-            return assembleLabelTitle(facet.facet, 'facet', config);
-        }
-        const ORTHOGONAL_ORIENT = {
-            row: ['top', 'bottom'],
-            column: ['left', 'right'],
-        };
-        for (const channel of HEADER_CHANNELS) {
-            if (facet[channel]) {
-                const labelOrient = getHeaderProperty('labelOrient', facet[channel]?.header, config, channel);
-                if (ORTHOGONAL_ORIENT[channel].includes(labelOrient)) {
-                    // Row/Column with orthogonal labelOrient must use title to display labels
-                    return assembleLabelTitle(facet[channel], channel, config);
-                }
-            }
-        }
-        return undefined;
-    }
-    assembleMarks() {
-        const { child } = this;
-        // If we facet by two dimensions, we need to add a cross operator to the aggregation
-        // so that we create all groups
-        const facetRoot = this.component.data.facetRoot;
-        const data = assembleFacetData(facetRoot);
-        const encodeEntry = child.assembleGroupEncodeEntry(false);
-        const title = this.assembleLabelTitle() || child.assembleTitle();
-        const style = child.assembleGroupStyle();
-        const markGroup = {
-            name: this.getName('cell'),
-            type: 'group',
-            ...(title ? { title } : {}),
-            ...(style ? { style } : {}),
-            from: {
-                facet: this.assembleFacet(),
-            },
-            // TODO: move this to after data
-            sort: {
-                field: FACET_CHANNELS.map((c) => this.facetSortFields(c)).flat(),
-                order: FACET_CHANNELS.map((c) => this.facetSortOrder(c)).flat(),
-            },
-            ...(data.length > 0 ? { data } : {}),
-            ...(encodeEntry ? { encode: { update: encodeEntry } } : {}),
-            ...child.assembleGroup(assembleFacetSignals(this, [])),
-        };
-        return [markGroup];
-    }
-    getMapping() {
-        return this.facet;
-    }
-}
-
-function makeJoinAggregateFromFacet(parent, facet) {
-    const { row, column } = facet;
-    if (row && column) {
-        let newParent = null;
-        // only need to make one for crossed facet
-        for (const fieldDef of [row, column]) {
-            if (isSortField(fieldDef.sort)) {
-                const { field, op = DEFAULT_SORT_OP } = fieldDef.sort;
-                parent = newParent = new JoinAggregateTransformNode(parent, {
-                    joinaggregate: [
-                        {
-                            op,
-                            field,
-                            as: facetSortFieldName(fieldDef, fieldDef.sort, { forAs: true }),
-                        },
-                    ],
-                    groupby: [vgField(fieldDef)],
-                });
-            }
-        }
-        return newParent;
-    }
-    return null;
 }
 
 function findSource(data, sources) {
@@ -141936,9 +140400,6 @@ function parseData(model) {
     let facetRoot = null;
     if (isFacetModel(model)) {
         const facetName = model.getName('facet');
-        // Derive new aggregate for facet's sort field
-        // augment data source with new fields for crossed facet
-        head = makeJoinAggregateFromFacet(head, model.facet) ?? head;
         facetRoot = new FacetNode(head, model, facetName, main.getSource());
         outputNodes[facetName] = facetRoot;
     }
@@ -141960,6 +140421,124 @@ function makeOutputNode(dataSourceType, model, head) {
     const node = new OutputNode(head, name, dataSourceType, outputNodeRefCounts);
     outputNodes[name] = node;
     return node;
+}
+
+function parseLayerLayoutSize(model) {
+    parseChildrenLayoutSize(model);
+    parseNonUnitLayoutSizeForChannel(model, 'width');
+    parseNonUnitLayoutSizeForChannel(model, 'height');
+}
+function parseConcatLayoutSize(model) {
+    parseChildrenLayoutSize(model);
+    // for columns === 1 (vconcat), we can completely merge width. Otherwise, we can treat merged width as childWidth.
+    const widthType = model.layout.columns === 1 ? 'width' : 'childWidth';
+    // for columns === undefined (hconcat), we can completely merge height. Otherwise, we can treat merged height as childHeight.
+    const heightType = model.layout.columns === undefined ? 'height' : 'childHeight';
+    parseNonUnitLayoutSizeForChannel(model, widthType);
+    parseNonUnitLayoutSizeForChannel(model, heightType);
+}
+function parseChildrenLayoutSize(model) {
+    for (const child of model.children) {
+        child.parseLayoutSize();
+    }
+}
+/**
+ * Merge child layout size (width or height).
+ */
+function parseNonUnitLayoutSizeForChannel(model, layoutSizeType) {
+    /*
+     * For concat, the parent width or height might not be the same as the children's shared height.
+     * For example, hconcat's subviews may share width, but the shared width is not the hconcat view's width.
+     *
+     * layoutSizeType represents the output of the view (could be childWidth/childHeight/width/height)
+     * while the sizeType represents the properties of the child.
+     */
+    const sizeType = getSizeTypeFromLayoutSizeType(layoutSizeType);
+    const channel = getPositionScaleChannel(sizeType);
+    const resolve = model.component.resolve;
+    const layoutSizeCmpt = model.component.layoutSize;
+    let mergedSize;
+    // Try to merge layout size
+    for (const child of model.children) {
+        const childSize = child.component.layoutSize.getWithExplicit(sizeType);
+        const scaleResolve = resolve.scale[channel] ?? defaultScaleResolve(channel, model);
+        if (scaleResolve === 'independent' && childSize.value === 'step') {
+            // Do not merge independent scales with range-step as their size depends
+            // on the scale domains, which can be different between scales.
+            mergedSize = undefined;
+            break;
+        }
+        if (mergedSize) {
+            if (scaleResolve === 'independent' && mergedSize.value !== childSize.value) {
+                // For independent scale, only merge if all the sizes are the same.
+                // If the values are different, abandon the merge!
+                mergedSize = undefined;
+                break;
+            }
+            mergedSize = mergeValuesWithExplicit(mergedSize, childSize, sizeType, '');
+        }
+        else {
+            mergedSize = childSize;
+        }
+    }
+    if (mergedSize) {
+        // If merged, rename size and set size of all children.
+        for (const child of model.children) {
+            model.renameSignal(child.getName(sizeType), model.getName(layoutSizeType));
+            child.component.layoutSize.set(sizeType, 'merged', false);
+        }
+        layoutSizeCmpt.setWithExplicit(layoutSizeType, mergedSize);
+    }
+    else {
+        layoutSizeCmpt.setWithExplicit(layoutSizeType, {
+            explicit: false,
+            value: undefined,
+        });
+    }
+}
+function parseUnitLayoutSize(model) {
+    const { size, component } = model;
+    for (const channel of POSITION_SCALE_CHANNELS) {
+        const sizeType = getSizeChannel(channel);
+        if (size[sizeType] != undefined && size[sizeType] != null) {
+            const specifiedSize = size[sizeType];
+            component.layoutSize.set(sizeType, isStep(specifiedSize) ? 'step' : specifiedSize, true);
+        }
+        else {
+            const defaultSize = defaultUnitSize(model, sizeType);
+            component.layoutSize.set(sizeType, defaultSize, false);
+        }
+    }
+}
+function defaultUnitSize(model, sizeType) {
+    const channel = sizeType === 'width' ? 'x' : 'y';
+    const config = model.config;
+    const scaleComponent = model.getScaleComponent(channel);
+    if (scaleComponent) {
+        const scaleType = scaleComponent.get('type');
+        const range = scaleComponent.get('range');
+        if (hasDiscreteDomain(scaleType)) {
+            const size = getViewConfigDiscreteSize(config.view, sizeType);
+            if (isVgRangeStep(range) || isStep(size)) {
+                // For discrete domain with range.step, use dynamic width/height
+                return 'step';
+            }
+            else {
+                return size;
+            }
+        }
+        else {
+            return getViewConfigContinuousSize(config.view, sizeType);
+        }
+    }
+    else if (model.hasProjection || model.mark === 'arc') {
+        // arc should use continuous size by default otherwise the pie is extremely small
+        return getViewConfigContinuousSize(config.view, sizeType);
+    }
+    else {
+        const size = getViewConfigDiscreteSize(config.view, sizeType);
+        return isStep(size) ? size.step : size;
+    }
 }
 
 class ConcatModel extends Model {
@@ -142067,6 +140646,651 @@ class ConcatModel extends Model {
     }
 }
 
+function makeWalkTree(data) {
+    // to name datasources
+    let datasetIndex = 0;
+    /**
+     * Recursively walk down the tree.
+     */
+    function walkTree(node, dataSource) {
+        if (node instanceof SourceNode) {
+            // If the source is a named data source or a data source with values, we need
+            // to put it in a different data source. Otherwise, Vega may override the data.
+            if (!node.isGenerator && !isUrlData(node.data)) {
+                data.push(dataSource);
+                const newData = {
+                    name: null,
+                    source: dataSource.name,
+                    transform: [],
+                };
+                dataSource = newData;
+            }
+        }
+        if (node instanceof ParseNode) {
+            if (node.parent instanceof SourceNode && !dataSource.source) {
+                // If node's parent is a root source and the data source does not refer to another data source, use normal format parse
+                dataSource.format = {
+                    ...dataSource.format,
+                    parse: node.assembleFormatParse(),
+                };
+                // add calculates for all nested fields
+                dataSource.transform.push(...node.assembleTransforms(true));
+            }
+            else {
+                // Otherwise use Vega expression to parse
+                dataSource.transform.push(...node.assembleTransforms());
+            }
+        }
+        if (node instanceof FacetNode) {
+            if (!dataSource.name) {
+                dataSource.name = `data_${datasetIndex++}`;
+            }
+            if (!dataSource.source || dataSource.transform.length > 0) {
+                data.push(dataSource);
+                node.data = dataSource.name;
+            }
+            else {
+                node.data = dataSource.source;
+            }
+            data.push(...node.assemble());
+            // break here because the rest of the tree has to be taken care of by the facet.
+            return;
+        }
+        if (node instanceof GraticuleNode ||
+            node instanceof SequenceNode ||
+            node instanceof FilterInvalidNode ||
+            node instanceof FilterNode ||
+            node instanceof CalculateNode ||
+            node instanceof GeoPointNode ||
+            node instanceof AggregateNode ||
+            node instanceof LookupNode ||
+            node instanceof WindowTransformNode ||
+            node instanceof JoinAggregateTransformNode ||
+            node instanceof FoldTransformNode ||
+            node instanceof FlattenTransformNode ||
+            node instanceof DensityTransformNode ||
+            node instanceof LoessTransformNode ||
+            node instanceof QuantileTransformNode ||
+            node instanceof RegressionTransformNode ||
+            node instanceof IdentifierNode ||
+            node instanceof SampleTransformNode ||
+            node instanceof PivotTransformNode ||
+            node instanceof ExtentTransformNode) {
+            dataSource.transform.push(node.assemble());
+        }
+        if (node instanceof BinNode ||
+            node instanceof TimeUnitNode ||
+            node instanceof ImputeNode ||
+            node instanceof StackNode ||
+            node instanceof GeoJSONNode) {
+            dataSource.transform.push(...node.assemble());
+        }
+        if (node instanceof OutputNode) {
+            if (dataSource.source && dataSource.transform.length === 0) {
+                node.setSource(dataSource.source);
+            }
+            else if (node.parent instanceof OutputNode) {
+                // Note that an output node may be required but we still do not assemble a
+                // separate data source for it.
+                node.setSource(dataSource.name);
+            }
+            else {
+                if (!dataSource.name) {
+                    dataSource.name = `data_${datasetIndex++}`;
+                }
+                // Here we set the name of the datasource we generated. From now on
+                // other assemblers can use it.
+                node.setSource(dataSource.name);
+                // if this node has more than one child, we will add a datasource automatically
+                if (node.numChildren() === 1) {
+                    data.push(dataSource);
+                    const newData = {
+                        name: null,
+                        source: dataSource.name,
+                        transform: [],
+                    };
+                    dataSource = newData;
+                }
+            }
+        }
+        switch (node.numChildren()) {
+            case 0:
+                // done
+                if (node instanceof OutputNode && (!dataSource.source || dataSource.transform.length > 0)) {
+                    // do not push empty datasources that are simply references
+                    data.push(dataSource);
+                }
+                break;
+            case 1:
+                walkTree(node.children[0], dataSource);
+                break;
+            default: {
+                if (!dataSource.name) {
+                    dataSource.name = `data_${datasetIndex++}`;
+                }
+                let source = dataSource.name;
+                if (!dataSource.source || dataSource.transform.length > 0) {
+                    data.push(dataSource);
+                }
+                else {
+                    source = dataSource.source;
+                }
+                for (const child of node.children) {
+                    const newData = {
+                        name: null,
+                        source,
+                        transform: [],
+                    };
+                    walkTree(child, newData);
+                }
+                break;
+            }
+        }
+    }
+    return walkTree;
+}
+/**
+ * Assemble data sources that are derived from faceted data.
+ */
+function assembleFacetData(root) {
+    const data = [];
+    const walkTree = makeWalkTree(data);
+    for (const child of root.children) {
+        walkTree(child, {
+            source: root.name,
+            name: null,
+            transform: [],
+        });
+    }
+    return data;
+}
+/**
+ * Create Vega data array from a given compiled model and append all of them to the given array
+ *
+ * @param  model
+ * @param  data array
+ * @return modified data array
+ */
+function assembleRootData(dataComponent, datasets) {
+    const data = [];
+    // dataComponent.sources.forEach(debug);
+    // draw(dataComponent.sources);
+    const walkTree = makeWalkTree(data);
+    let sourceIndex = 0;
+    for (const root of dataComponent.sources) {
+        // assign a name if the source does not have a name yet
+        if (!root.hasName()) {
+            root.dataName = `source_${sourceIndex++}`;
+        }
+        const newData = root.assemble();
+        walkTree(root, newData);
+    }
+    // remove empty transform arrays for cleaner output
+    for (const d of data) {
+        if (d.transform.length === 0) {
+            delete d.transform;
+        }
+    }
+    // move sources without transforms (the ones that are potentially used in lookups) to the beginning
+    let whereTo = 0;
+    for (const [i, d] of data.entries()) {
+        if ((d.transform ?? []).length === 0 && !d.source) {
+            data.splice(whereTo++, 0, data.splice(i, 1)[0]);
+        }
+    }
+    // now fix the from references in lookup transforms
+    for (const d of data) {
+        for (const t of d.transform ?? []) {
+            if (t.type === 'lookup') {
+                t.from = dataComponent.outputNodes[t.from].getSource();
+            }
+        }
+    }
+    // inline values for datasets that are in the datastore
+    for (const d of data) {
+        if (d.name in datasets) {
+            d.values = datasets[d.name];
+        }
+    }
+    return data;
+}
+
+function getHeaderType(orient) {
+    if (orient === 'top' || orient === 'left' || isSignalRef(orient)) {
+        // we always use header for orient signal since we can't dynamically make header becomes footer
+        return 'header';
+    }
+    return 'footer';
+}
+function parseFacetHeaders(model) {
+    for (const channel of FACET_CHANNELS) {
+        parseFacetHeader(model, channel);
+    }
+    mergeChildAxis(model, 'x');
+    mergeChildAxis(model, 'y');
+}
+function parseFacetHeader(model, channel) {
+    const { facet, config, child, component } = model;
+    if (model.channelHasField(channel)) {
+        const fieldDef = facet[channel];
+        const titleConfig = getHeaderProperty('title', null, config, channel);
+        let title$1 = title(fieldDef, config, {
+            allowDisabling: true,
+            includeDefault: titleConfig === undefined || !!titleConfig,
+        });
+        if (child.component.layoutHeaders[channel].title) {
+            // TODO: better handle multiline titles
+            title$1 = (0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(title$1) ? title$1.join(', ') : title$1;
+            // merge title with child to produce "Title / Subtitle / Sub-subtitle"
+            title$1 += ` / ${child.component.layoutHeaders[channel].title}`;
+            child.component.layoutHeaders[channel].title = null;
+        }
+        const labelOrient = getHeaderProperty('labelOrient', fieldDef.header, config, channel);
+        const labels = fieldDef.header !== null ? getFirstDefined(fieldDef.header?.labels, config.header.labels, true) : false;
+        const headerType = contains(['bottom', 'right'], labelOrient) ? 'footer' : 'header';
+        component.layoutHeaders[channel] = {
+            title: fieldDef.header !== null ? title$1 : null,
+            facetFieldDef: fieldDef,
+            [headerType]: channel === 'facet' ? [] : [makeHeaderComponent(model, channel, labels)],
+        };
+    }
+}
+function makeHeaderComponent(model, channel, labels) {
+    const sizeType = channel === 'row' ? 'height' : 'width';
+    return {
+        labels,
+        sizeSignal: model.child.component.layoutSize.get(sizeType) ? model.child.getSizeSignalRef(sizeType) : undefined,
+        axes: [],
+    };
+}
+function mergeChildAxis(model, channel) {
+    const { child } = model;
+    if (child.component.axes[channel]) {
+        const { layoutHeaders, resolve } = model.component;
+        resolve.axis[channel] = parseGuideResolve(resolve, channel);
+        if (resolve.axis[channel] === 'shared') {
+            // For shared axis, move the axes to facet's header or footer
+            const headerChannel = channel === 'x' ? 'column' : 'row';
+            const layoutHeader = layoutHeaders[headerChannel];
+            for (const axisComponent of child.component.axes[channel]) {
+                const headerType = getHeaderType(axisComponent.get('orient'));
+                layoutHeader[headerType] ??= [makeHeaderComponent(model, headerChannel, false)];
+                // FIXME: assemble shouldn't be called here, but we do it this way so we only extract the main part of the axes
+                const mainAxis = assembleAxis(axisComponent, 'main', model.config, { header: true });
+                if (mainAxis) {
+                    // LayoutHeader no longer keep track of property precedence, thus let's combine.
+                    layoutHeader[headerType][0].axes.push(mainAxis);
+                }
+                axisComponent.mainExtracted = true;
+            }
+        }
+    }
+}
+
+function facetSortFieldName(fieldDef, sort, opt) {
+    return vgField(sort, { suffix: `by_${vgField(fieldDef)}`, ...opt });
+}
+class FacetModel extends ModelWithField {
+    facet;
+    child;
+    children;
+    constructor(spec, parent, parentGivenName, config) {
+        super(spec, 'facet', parent, parentGivenName, config, spec.resolve);
+        this.child = buildModel(spec.spec, this, this.getName('child'), undefined, config);
+        this.children = [this.child];
+        this.facet = this.initFacet(spec.facet);
+    }
+    initFacet(facet) {
+        // clone to prevent side effect to the original spec
+        if (!isFacetMapping(facet)) {
+            return { facet: this.initFacetFieldDef(facet, 'facet') };
+        }
+        const channels = keys(facet);
+        const normalizedFacet = {};
+        for (const channel of channels) {
+            if (![ROW, COLUMN].includes(channel)) {
+                // Drop unsupported channel
+                warn(incompatibleChannel(channel, 'facet'));
+                break;
+            }
+            const fieldDef = facet[channel];
+            if (fieldDef.field === undefined) {
+                warn(emptyFieldDef(fieldDef, channel));
+                break;
+            }
+            normalizedFacet[channel] = this.initFacetFieldDef(fieldDef, channel);
+        }
+        return normalizedFacet;
+    }
+    initFacetFieldDef(fieldDef, channel) {
+        // Cast because we call initFieldDef, which assumes general FieldDef.
+        // However, FacetFieldDef is a bit more constrained than the general FieldDef
+        const facetFieldDef = initFieldDef(fieldDef, channel);
+        if (facetFieldDef.header) {
+            facetFieldDef.header = replaceExprRef(facetFieldDef.header);
+        }
+        else if (facetFieldDef.header === null) {
+            facetFieldDef.header = null;
+        }
+        return facetFieldDef;
+    }
+    channelHasField(channel) {
+        return hasProperty(this.facet, channel);
+    }
+    fieldDef(channel) {
+        return this.facet[channel];
+    }
+    parseData() {
+        this.component.data = parseData(this);
+        this.child.parseData();
+    }
+    parseLayoutSize() {
+        parseChildrenLayoutSize(this);
+    }
+    parseSelections() {
+        // As a facet has a single child, the selection components are the same.
+        // The child maintains its selections to assemble signals, which remain
+        // within its unit.
+        this.child.parseSelections();
+        this.component.selection = this.child.component.selection;
+        if (vals(this.component.selection).some((selCmpt) => isTimerSelection(selCmpt))) {
+            error(MULTI_VIEW_ANIMATION_UNSUPPORTED);
+        }
+    }
+    parseMarkGroup() {
+        this.child.parseMarkGroup();
+    }
+    parseAxesAndHeaders() {
+        this.child.parseAxesAndHeaders();
+        parseFacetHeaders(this);
+    }
+    assembleSelectionTopLevelSignals(signals) {
+        return this.child.assembleSelectionTopLevelSignals(signals);
+    }
+    assembleSignals() {
+        this.child.assembleSignals();
+        return [];
+    }
+    assembleSelectionData(data) {
+        return this.child.assembleSelectionData(data);
+    }
+    getHeaderLayoutMixins() {
+        const layoutMixins = {};
+        for (const channel of FACET_CHANNELS) {
+            for (const headerType of HEADER_TYPES) {
+                const layoutHeaderComponent = this.component.layoutHeaders[channel];
+                const headerComponent = layoutHeaderComponent[headerType];
+                const { facetFieldDef } = layoutHeaderComponent;
+                if (facetFieldDef) {
+                    const titleOrient = getHeaderProperty('titleOrient', facetFieldDef.header, this.config, channel);
+                    if (['right', 'bottom'].includes(titleOrient)) {
+                        const headerChannel = getHeaderChannel(channel, titleOrient);
+                        layoutMixins.titleAnchor ??= {};
+                        layoutMixins.titleAnchor[headerChannel] = 'end';
+                    }
+                }
+                if (headerComponent?.[0]) {
+                    // set header/footerBand
+                    const sizeType = channel === 'row' ? 'height' : 'width';
+                    const bandType = headerType === 'header' ? 'headerBand' : 'footerBand';
+                    if (channel !== 'facet' && !this.child.component.layoutSize.get(sizeType)) {
+                        // If facet child does not have size signal, then apply headerBand
+                        layoutMixins[bandType] ??= {};
+                        layoutMixins[bandType][channel] = 0.5;
+                    }
+                    if (layoutHeaderComponent.title) {
+                        layoutMixins.offset ??= {};
+                        layoutMixins.offset[channel === 'row' ? 'rowTitle' : 'columnTitle'] = 10;
+                    }
+                }
+            }
+        }
+        return layoutMixins;
+    }
+    assembleDefaultLayout() {
+        const { column, row } = this.facet;
+        const columns = column ? this.columnDistinctSignal() : row ? 1 : undefined;
+        let align = 'all';
+        // Do not align the cells if the scale corresponding to the direction is indepent.
+        // We always align when we facet into both row and column.
+        if (!row && this.component.resolve.scale.x === 'independent') {
+            align = 'none';
+        }
+        else if (!column && this.component.resolve.scale.y === 'independent') {
+            align = 'none';
+        }
+        return {
+            ...this.getHeaderLayoutMixins(),
+            ...(columns ? { columns } : {}),
+            bounds: 'full',
+            align,
+        };
+    }
+    assembleLayoutSignals() {
+        // FIXME(https://github.com/vega/vega-lite/issues/1193): this can be incorrect if we have independent scales.
+        return this.child.assembleLayoutSignals();
+    }
+    columnDistinctSignal() {
+        if (this.parent && this.parent instanceof FacetModel) {
+            // For nested facet, we will add columns to group mark instead
+            // See discussion in https://github.com/vega/vega/issues/952
+            // and https://github.com/vega/vega-view/releases/tag/v1.2.6
+            return undefined;
+        }
+        else {
+            // In facetNode.assemble(), the name is always this.getName('column') + '_layout'.
+            const facetLayoutDataName = this.getName('column_domain');
+            return { signal: `length(data('${facetLayoutDataName}'))` };
+        }
+    }
+    assembleGroupStyle() {
+        return undefined;
+    }
+    assembleGroup(signals) {
+        if (this.parent && this.parent instanceof FacetModel) {
+            // Provide number of columns for layout.
+            // See discussion in https://github.com/vega/vega/issues/952
+            // and https://github.com/vega/vega-view/releases/tag/v1.2.6
+            return {
+                ...(this.channelHasField('column')
+                    ? {
+                        encode: {
+                            update: {
+                                // TODO(https://github.com/vega/vega-lite/issues/2759):
+                                // Correct the signal for facet of concat of facet_column
+                                columns: { field: vgField(this.facet.column, { prefix: 'distinct' }) },
+                            },
+                        },
+                    }
+                    : {}),
+                ...super.assembleGroup(signals),
+            };
+        }
+        return super.assembleGroup(signals);
+    }
+    /**
+     * Aggregate cardinality for calculating size
+     */
+    getCardinalityAggregateForChild() {
+        const fields = [];
+        const ops = [];
+        const as = [];
+        if (this.child instanceof FacetModel) {
+            if (this.child.channelHasField('column')) {
+                const field = vgField(this.child.facet.column);
+                fields.push(field);
+                ops.push('distinct');
+                as.push(`distinct_${field}`);
+            }
+        }
+        else {
+            for (const channel of POSITION_SCALE_CHANNELS) {
+                const childScaleComponent = this.child.component.scales[channel];
+                if (childScaleComponent && !childScaleComponent.merged) {
+                    const type = childScaleComponent.get('type');
+                    const range = childScaleComponent.get('range');
+                    if (hasDiscreteDomain(type) && isVgRangeStep(range)) {
+                        const domain = assembleDomain(this.child, channel);
+                        const field = getFieldFromDomain(domain);
+                        if (field) {
+                            fields.push(field);
+                            ops.push('distinct');
+                            as.push(`distinct_${field}`);
+                        }
+                        else {
+                            warn(unknownField(channel));
+                        }
+                    }
+                }
+            }
+        }
+        return { fields, ops, as };
+    }
+    assembleFacet() {
+        const { name, data } = this.component.data.facetRoot;
+        const { row, column } = this.facet;
+        const cross = !!row && !!column;
+        const { fields, ops, as } = this.getCardinalityAggregateForChild();
+        const groupby = [];
+        for (const channel of FACET_CHANNELS) {
+            const fieldDef = this.facet[channel];
+            if (fieldDef) {
+                groupby.push(vgField(fieldDef));
+                const { bin, sort } = fieldDef;
+                if (isBinning(bin)) {
+                    groupby.push(vgField(fieldDef, { binSuffix: 'end' }));
+                }
+                if (isSortField(sort)) {
+                    const { field, op = DEFAULT_SORT_OP } = sort;
+                    const outputName = facetSortFieldName(fieldDef, sort);
+                    if (!cross) {
+                        fields.push(field);
+                        ops.push(op);
+                        as.push(outputName);
+                    }
+                }
+                else if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(sort)) {
+                    const outputName = sortArrayIndexField(fieldDef, channel);
+                    if (!cross) {
+                        fields.push(outputName);
+                        ops.push('max');
+                        as.push(outputName);
+                    }
+                }
+            }
+        }
+        return {
+            name,
+            data,
+            groupby,
+            ...(cross || fields.length > 0
+                ? {
+                    aggregate: {
+                        ...(cross ? { cross } : {}),
+                        ...(fields.length ? { fields, ops, as } : {}),
+                    },
+                }
+                : {}),
+        };
+    }
+    crossedFacetLookupSortExpr(channel) {
+        const fieldDef = this.facet[channel];
+        if (!fieldDef || (!isSortField(fieldDef.sort) && !(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(fieldDef.sort))) {
+            return undefined;
+        }
+        const lookupDataName = this.getName(`${channel}_lookup_domain`);
+        const lookupDataExpr = `data(${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(lookupDataName)})`;
+        const lookupField = facetLookupKeyFieldName(this, channel);
+        const lookupIndexExpr = `indexof(pluck(${lookupDataExpr}, ${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(lookupField)}), ${facetLookupKeyExpr(fieldDef, 'datum.datum')})`;
+        const sortValueField = isSortField(fieldDef.sort)
+            ? vgField(fieldDef.sort, { forAs: true })
+            : sortArrayIndexField(fieldDef, channel);
+        return `${lookupIndexExpr} >= 0 ? ${lookupDataExpr}[${lookupIndexExpr}][${(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.stringValue)(sortValueField)}] : null`;
+    }
+    facetSortFields(channel) {
+        const { facet } = this;
+        const fieldDef = facet[channel];
+        if (fieldDef) {
+            if (isCrossedFacetWithCustomSort(facet)) {
+                const lookupSortExpr = this.crossedFacetLookupSortExpr(channel);
+                if (lookupSortExpr) {
+                    return [{ expr: lookupSortExpr }];
+                }
+            }
+            if (isSortField(fieldDef.sort)) {
+                return [facetSortFieldName(fieldDef, fieldDef.sort, { expr: 'datum' })];
+            }
+            else if ((0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(fieldDef.sort)) {
+                return [sortArrayIndexField(fieldDef, channel, { expr: 'datum' })];
+            }
+            return [vgField(fieldDef, { expr: 'datum' })];
+        }
+        return [];
+    }
+    facetSortOrder(channel) {
+        const { facet } = this;
+        const fieldDef = facet[channel];
+        if (fieldDef) {
+            const { sort } = fieldDef;
+            const order = (isSortField(sort) ? sort.order : !(0,vega_util__WEBPACK_IMPORTED_MODULE_0__.isArray)(sort) && sort) || 'ascending';
+            return [order];
+        }
+        return [];
+    }
+    assembleLabelTitle() {
+        const { facet, config } = this;
+        if (facet.facet) {
+            // Facet always uses title to display labels
+            return assembleLabelTitle(facet.facet, 'facet', config);
+        }
+        const ORTHOGONAL_ORIENT = {
+            row: ['top', 'bottom'],
+            column: ['left', 'right'],
+        };
+        for (const channel of HEADER_CHANNELS) {
+            if (facet[channel]) {
+                const labelOrient = getHeaderProperty('labelOrient', facet[channel]?.header, config, channel);
+                if (ORTHOGONAL_ORIENT[channel].includes(labelOrient)) {
+                    // Row/Column with orthogonal labelOrient must use title to display labels
+                    return assembleLabelTitle(facet[channel], channel, config);
+                }
+            }
+        }
+        return undefined;
+    }
+    assembleMarks() {
+        const { child } = this;
+        // If we facet by two dimensions, we need to add a cross operator to the aggregation
+        // so that we create all groups
+        const facetRoot = this.component.data.facetRoot;
+        const data = assembleFacetData(facetRoot);
+        const encodeEntry = child.assembleGroupEncodeEntry(false);
+        const title = this.assembleLabelTitle() || child.assembleTitle();
+        const style = child.assembleGroupStyle();
+        const markGroup = {
+            name: this.getName('cell'),
+            type: 'group',
+            ...(title ? { title } : {}),
+            ...(style ? { style } : {}),
+            from: {
+                facet: this.assembleFacet(),
+            },
+            // TODO: move this to after data
+            sort: {
+                field: FACET_CHANNELS.map((c) => this.facetSortFields(c)).flat(),
+                order: FACET_CHANNELS.map((c) => this.facetSortOrder(c)).flat(),
+            },
+            ...(data.length > 0 ? { data } : {}),
+            ...(encodeEntry ? { encode: { update: encodeEntry } } : {}),
+            ...child.assembleGroup(assembleFacetSignals(this, [])),
+        };
+        return [markGroup];
+    }
+    getMapping() {
+        return this.facet;
+    }
+}
+
 function isFalseOrNull(v) {
     return v === false || v === null;
 }
@@ -142110,6 +141334,9 @@ class AxisComponent extends Split {
 }
 
 function labels(model, channel, specifiedLabelsSpec) {
+    return labelsPositionSpec(model, channel, labelsTextSpec(model, channel, specifiedLabelsSpec));
+}
+function labelsTextSpec(model, channel, specifiedLabelsSpec) {
     const { encoding, config } = model;
     const fieldOrDatumDef = getFieldOrDatumDef(encoding[channel]) ?? getFieldOrDatumDef(encoding[getSecondaryRangeChannel(channel)]);
     const axis = model.axis(channel) || {};
@@ -142172,6 +141399,34 @@ function labels(model, channel, specifiedLabelsSpec) {
         }
     }
     return specifiedLabelsSpec;
+}
+/**
+ * Vega positions band-scale axis labels at the band center regardless of the axis `bandPosition`
+ * (only ticks and grid lines move), so ranged offset marks need an explicit label position
+ * override to anchor the labels at the in-band baseline.
+ */
+function labelsPositionSpec(model, channel, specifiedLabelsSpec) {
+    if ('x' in specifiedLabelsSpec || 'y' in specifiedLabelsSpec) {
+        return specifiedLabelsSpec;
+    }
+    const inferredBandPosition = defaultBandPosition(model, channel);
+    if (inferredBandPosition === undefined) {
+        // Without an offset-driven band position, Vega's axis handles any specified bandPosition natively.
+        return specifiedLabelsSpec;
+    }
+    const bandPosition = model.axis(channel)?.bandPosition ?? inferredBandPosition;
+    if (bandPosition === 0.5) {
+        return specifiedLabelsSpec;
+    }
+    const positionRef = {
+        scale: model.scaleName(channel),
+        signal: 'datum.value',
+        band: bandPosition,
+    };
+    return {
+        ...(channel === 'x' ? { x: positionRef } : { y: positionRef }),
+        ...specifiedLabelsSpec,
+    };
 }
 
 function parseUnitAxes(model) {
@@ -142462,6 +141717,12 @@ const arc = {
 const area = {
     vgMark: 'area',
     encodeEntry: (model) => {
+        const xRangeFromOffset = model.isRangedOffset('x');
+        const yRangeFromOffset = model.isRangedOffset('y');
+        const hasOffsetDrivenRange = xRangeFromOffset || yRangeFromOffset;
+        const xIsRange = xRangeFromOffset || (!hasOffsetDrivenRange && model.markDef.orient === 'horizontal');
+        const yIsRange = yRangeFromOffset || (!hasOffsetDrivenRange && model.markDef.orient === 'vertical');
+        const yDefaultPos = yRangeFromOffset && !model.encoding.y ? 'zeroOrMax' : 'zeroOrMin';
         return {
             ...baseEncodeEntry(model, {
                 align: 'ignore',
@@ -142474,12 +141735,12 @@ const area = {
             ...pointOrRangePosition('x', model, {
                 defaultPos: 'zeroOrMin',
                 defaultPos2: 'zeroOrMin',
-                range: model.markDef.orient === 'horizontal',
+                range: xIsRange,
             }),
             ...pointOrRangePosition('y', model, {
-                defaultPos: 'zeroOrMin',
+                defaultPos: yDefaultPos,
                 defaultPos2: 'zeroOrMin',
-                range: model.markDef.orient === 'vertical',
+                range: yIsRange,
             }),
             ...defined(model),
         };
@@ -142489,7 +141750,7 @@ const area = {
 const bar = {
     vgMark: 'rect',
     encodeEntry: (model) => {
-        return {
+        const encodeEntry = {
             ...baseEncodeEntry(model, {
                 align: 'ignore',
                 baseline: 'ignore',
@@ -142500,6 +141761,10 @@ const bar = {
             }),
             ...rectPosition(model, 'x'),
             ...rectPosition(model, 'y'),
+        };
+        return {
+            ...encodeEntry,
+            ...cornerRadiusEnd(model, encodeEntry),
         };
     },
 };
@@ -142785,9 +142050,11 @@ function parseMarkGroups(model) {
         // otherwise use standard mark groups
     }
     else if (model.mark === BAR) {
-        const hasCornerRadius = VG_CORNERRADIUS_CHANNELS.some((prop) => getMarkPropOrConfig(prop, model.markDef, model.config));
+        const cornerRadiusEnd = getMarkPropOrConfig('cornerRadiusEnd', model.markDef, model.config);
+        const hasCornerRadius = cornerRadiusEnd ||
+            VG_CORNERRADIUS_CHANNELS.some((prop) => getMarkPropOrConfig(prop, model.markDef, model.config));
         if (model.stack && !model.fieldDef('size') && hasCornerRadius) {
-            return getGroupsForStackedBarWithCornerRadius(model);
+            return getGroupsForStackedBarWithCornerRadius(model, cornerRadiusEnd);
         }
     }
     return getMarkGroup(model);
@@ -142823,7 +142090,7 @@ const STACK_GROUP_PREFIX = 'stack_group_';
  * If stack is used and the model doesn't have size encoding, we put the mark into groups,
  * and apply cornerRadius properties at the group.
  */
-function getGroupsForStackedBarWithCornerRadius(model) {
+function getGroupsForStackedBarWithCornerRadius(model, cornerRadiusEnd) {
     // Generate the mark
     const [mark] = getMarkGroup(model, { fromPrefix: STACK_GROUP_PREFIX });
     // Get the scale for the stacked field
@@ -142895,6 +142162,15 @@ function getGroupsForStackedBarWithCornerRadius(model) {
             mark.encode.update[key] = { value: 0 };
         }
     }
+    groupUpdate = {
+        ...groupUpdate,
+        ...cornerRadiusEndForStackedBar(model, cornerRadiusEnd, fieldScale, {
+            minStart: stackField({ prefix: 'min', suffix: 'start' }),
+            maxStart: stackField({ prefix: 'max', suffix: 'start' }),
+            minEnd: stackField({ prefix: 'min', suffix: 'end' }),
+            maxEnd: stackField({ prefix: 'max', suffix: 'end' }),
+        }),
+    };
     const groupby = [];
     if (model.stack.groupbyChannels?.length > 0) {
         for (const groupbyChannel of model.stack.groupbyChannels) {
@@ -143132,6 +142408,25 @@ class UnitModel extends ModelWithField {
     }
     axis(channel) {
         return this.specifiedAxes[channel];
+    }
+    /**
+     * Returns true if the given position channel is in ranged-offset mode: a bar/area mark
+     * whose missing or discrete position channel has a quantitative offset channel, so the
+     * mark spans from an in-band zero baseline to the offset value.
+     */
+    isRangedOffset(channel) {
+        const { encoding, markDef } = this;
+        if (!isBarOrArea(markDef.type)) {
+            return false;
+        }
+        if (encoding[getSecondaryRangeChannel(channel)] || !channelHasQuantitativeOffset(encoding, channel)) {
+            return false;
+        }
+        const channelDef = encoding[channel];
+        if (channelDef === undefined) {
+            return true;
+        }
+        return isFieldOrDatumDef(channelDef) && hasDiscreteDomain(this.getScaleComponent(channel)?.get('type'));
     }
     legend(channel) {
         return this.specifiedLegends[channel];
@@ -156287,7 +155582,7 @@ function angleDelta(p, q, r, sx, sy) {
 
 
 }),
-"./node_modules/.pnpm/vega-themes@3.0.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-themes/build/index.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+"./node_modules/.pnpm/vega-themes@3.0.0_vega-lite@6.5.0_vega@6.4.0__vega@6.4.0/node_modules/vega-themes/build/index.js": (function (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
@@ -167226,6 +166521,7 @@ __webpack_require__.d(__webpack_exports__, {
   load_search: function() { return load_search; },
   resetColumnOrder: function() { return resetColumnOrder; },
   screenshot_table: function() { return screenshot_table; },
+  selectPlotColumn: function() { return /* reexport safe */ _plot_column_plot__WEBPACK_IMPORTED_MODULE_19__.selectPlotColumn; },
   sort: function() { return sort; },
   sortColumns: function() { return sortColumns; },
   toggle_line_numbers: function() { return toggle_line_numbers; },
@@ -167237,7 +166533,7 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var lz_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lz-string */ "./node_modules/.pnpm/lz-string@1.5.0/node_modules/lz-string/libs/lz-string.js");
 /* harmony import */var lz_string__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lz_string__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */var jsonm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsonm */ "./node_modules/.pnpm/jsonm@1.0.10/node_modules/jsonm/build/node/index.js");
-/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.4.3_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
+/* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.5.0_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
 /* harmony import */var qrcode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! qrcode */ "./node_modules/.pnpm/qrcode@1.5.4/node_modules/qrcode/lib/browser.js");
 /* harmony import */var bootstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bootstrap */ "./node_modules/.pnpm/bootstrap@4.6.2_jquery@3.7.1_popper.js@1.16.1/node_modules/bootstrap/dist/js/bootstrap.js");
 /* harmony import */var bootstrap__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(bootstrap__WEBPACK_IMPORTED_MODULE_5__);
@@ -167255,13 +166551,17 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var _plot_link_to_url__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./plot/link-to-url */ "./src/plot/link-to-url.js");
 /* harmony import */var _plot_pills__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./plot/pills */ "./src/plot/pills.js");
 /* harmony import */var _plot_plot__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./plot/plot */ "./src/plot/plot.js");
-/* harmony import */var _style_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../style/bootstrap.min.css */ "./style/bootstrap.min.css");
-/* harmony import */var _style_bootstrap_table_min_css__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../style/bootstrap-table.min.css */ "./style/bootstrap-table.min.css");
-/* harmony import */var _style_bootstrap_select_min_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../style/bootstrap-select.min.css */ "./style/bootstrap-select.min.css");
-/* harmony import */var _style_bootstrap_table_fixed_columns_min_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../style/bootstrap-table-fixed-columns.min.css */ "./style/bootstrap-table-fixed-columns.min.css");
-/* harmony import */var _style_datavzrd_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../style/datavzrd.css */ "./style/datavzrd.css");
+/* harmony import */var _plot_column_plot__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./plot/column-plot */ "./src/plot/column-plot.js");
+/* harmony import */var _style_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../style/bootstrap.min.css */ "./style/bootstrap.min.css");
+/* harmony import */var _style_bootstrap_table_min_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../style/bootstrap-table.min.css */ "./style/bootstrap-table.min.css");
+/* harmony import */var _style_bootstrap_select_min_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../style/bootstrap-select.min.css */ "./style/bootstrap-select.min.css");
+/* harmony import */var _style_bootstrap_table_fixed_columns_min_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../style/bootstrap-table-fixed-columns.min.css */ "./style/bootstrap-table-fixed-columns.min.css");
+/* harmony import */var _style_datavzrd_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../style/datavzrd.css */ "./style/datavzrd.css");
 /* provided dependency */ var __webpack_provide_window_dot_jQuery = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
 /* provided dependency */ var __webpack_provide_window_dot_$ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
+
+
+
 
 
 
@@ -167770,6 +167070,9 @@ function load() {
         let histogram_icon = `<span class="sym ic" style="margin-left: 2px;" data-toggle="modal" data-target="#histogram_modal" onclick="datavzrd.embedHistogram(show_plot_${columnIdMap[column]}, ${columnIdMap[column]}, plot_${columnIdMap[column]})"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></span>`;
         if (!config.additional_colums[column]) {
           title += histogram_icon;
+          if (config.is_single_page) {
+            title += (0,_plot_column_plot__WEBPACK_IMPORTED_MODULE_19__.columnPlotIcon)(columnIdMap[column]);
+          }
         }
 
         // Add static search if not single page mode
@@ -168689,8 +167992,9 @@ function load_plot(specs, data, multiple_datasets, resize) {
   }
   (0,vega_embed__WEBPACK_IMPORTED_MODULE_3__["default"])("#vis", specs).then(({ spec, view }) => {
     if (resize && specs.width !== "container") {
-      let width = view.width();
-      let height = view.height();
+      // With autosize fit, the view only reports the inner plot size.
+      let width = typeof specs.width === "number" ? specs.width : view.width();
+      let height = typeof specs.height === "number" ? specs.height : view.height();
       let aspect_ratio = height / width;
       specs.width = width + resize;
       specs.height = height + resize * aspect_ratio;
@@ -168782,18 +168086,6 @@ function toggle_narrow_view() {
   }
 }
 
-function downloadSVG(dataUrl, fileName) {
-  const blob = new Blob([decodeURIComponent(dataUrl.split(",")[1])], {
-    type: "image/svg+xml",
-  });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
 function filter(node) {
   const hidden = ["sym", "header-sort", "col-drag-handle"];
   return !hidden.some((c) => node.classList?.contains(c));
@@ -168860,7 +168152,11 @@ function screenshot_table() {
       },
     })
     .then((dataUrl) =>
-      downloadSVG(dataUrl, `${jquery__WEBPACK_IMPORTED_MODULE_0___default()("#view-selection").attr("title")}.svg`),
+      (0,_utils__WEBPACK_IMPORTED_MODULE_10__.download)(
+        decodeURIComponent(dataUrl.split(",")[1]),
+        "image/svg+xml",
+        `${jquery__WEBPACK_IMPORTED_MODULE_0___default()("#view-selection").attr("title")}.svg`,
+      ),
     )
     .finally(() => {
       narrow_contents.forEach(([cell, html]) => {
