@@ -66,6 +66,37 @@
     border:none;
 }
 
+#column-plot {
+    display: block;
+    width: 100%;
+    max-height: 70vh;
+    overflow: auto;
+}
+
+#column-plot-options input[type="text"] {
+    width: 100%;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.2rem;
+}
+
+#column-plot-yaml {
+    max-height: 300px;
+    overflow: auto;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    background-color: #f8f9fa;
+}
+
+.plot-column-icon {
+    margin-left: 3px;
+}
+
+.plot-column-icon.active {
+    color: #c21f30;
+}
+
 #search-iframe {
     width: 100%;
     height: min(530px, 50vh)
