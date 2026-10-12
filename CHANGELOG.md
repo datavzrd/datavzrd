@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.75.1](https://github.com/datavzrd/datavzrd/compare/v2.75.0...v2.75.1) (2026-10-12)
+
+
+### Bug Fixes
+
+* Prevent linked pills in detail view from overlapping ([#1299](https://github.com/datavzrd/datavzrd/issues/1299)) ([dc42222](https://github.com/datavzrd/datavzrd/commit/dc42222294d9bab459e7b50ddcae72e4c85b34b2))
+
 ## [2.75.0](https://github.com/datavzrd/datavzrd/compare/v2.74.0...v2.75.0) (2026-10-09)
 
 
