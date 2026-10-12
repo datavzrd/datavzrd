@@ -538,3 +538,8 @@ th.col-drag-over {
 .detail-pills-wrapper {
   padding: 4px 0;
 }
+
+.detail-pills-wrapper a,
+.detail-pills-wrapper .pill-dropdown {
+  display: flex;
+}
