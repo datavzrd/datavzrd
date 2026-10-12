@@ -538,3 +538,9 @@ th.col-drag-over {
 .detail-pills-wrapper {
   padding: 4px 0;
 }
+
+/* Otherwise the padding of linked pills is ignored and wrapped rows overlap. */
+.detail-pills-wrapper a,
+.detail-pills-wrapper .pill-dropdown {
+  display: flex;
+}
