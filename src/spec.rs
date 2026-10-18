@@ -85,6 +85,7 @@ impl ItemsSpec {
             dataset.preprocess()?;
         }
         for (name, dataset) in &self.datasets {
+            dataset.reader()?.validate()?;
             let lines = dataset
                 .reader()?
                 .records()?
@@ -2179,6 +2180,29 @@ mod tests {
             error.downcast_ref::<ConfigError>(),
             Some(ConfigError::NotEnoughHeaderRows { .. })
         ));
+    }
+
+    #[test]
+    fn test_invalid_records_config_validation() {
+        let mut data_file = tempfile::Builder::new().suffix(".csv").tempfile().unwrap();
+        data_file.write_all(b"gene,value\nA,1\nB,2,3\n").unwrap();
+        let raw_config = format!(
+            r#"
+            datasets:
+                d:
+                    path: {}
+            views:
+                d:
+                    dataset: d
+            "#,
+            data_file.path().display()
+        );
+        let mut config_file = tempfile::NamedTempFile::new().unwrap();
+        config_file.write_all(raw_config.as_bytes()).unwrap();
+        let error = ItemsSpec::from_file(config_file.path()).unwrap_err();
+        assert!(error
+            .to_string()
+            .contains("has a different number of fields (3) than the header (2)"));
     }
 
     #[test]
