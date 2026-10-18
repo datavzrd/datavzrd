@@ -1823,10 +1823,10 @@ pub enum ConfigError {
 mod tests {
     use crate::spec::{
         default_links, default_page_size, default_precision, default_render_table,
-        default_single_page_threshold, AuxDomainColumns, ColorRange, DatasetSpecs, DisplayMode,
-        HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec, LinkToUrlSpec,
-        LinkToUrlSpecEntry, PlotSpec, RenderColumnSpec, RenderHtmlSpec, RenderPlotSpec,
-        RenderTableSpecs, ScaleType, TickPlot,
+        default_single_page_threshold, AuxDomainColumns, ColorRange, ConfigError, DatasetSpecs,
+        DisplayMode, HeaderDisplayMode, HeaderSpecs, Heatmap, ItemSpecs, ItemsSpec, LinkSpec,
+        LinkToUrlSpec, LinkToUrlSpecEntry, PlotSpec, RenderColumnSpec, RenderHtmlSpec,
+        RenderPlotSpec, RenderTableSpecs, ScaleType, TickPlot,
     };
     use std::collections::HashMap;
     use std::io::Write;
@@ -2174,7 +2174,11 @@ mod tests {
             "#;
         let mut config_file = tempfile::NamedTempFile::new().unwrap();
         config_file.write_all(raw_config.as_bytes()).unwrap();
-        assert!(ItemsSpec::from_file(config_file.path()).is_err());
+        let error = ItemsSpec::from_file(config_file.path()).unwrap_err();
+        assert!(matches!(
+            error.downcast_ref::<ConfigError>(),
+            Some(ConfigError::NotEnoughHeaderRows { .. })
+        ));
     }
 
     #[test]
@@ -2196,7 +2200,11 @@ mod tests {
             "#;
         let mut config_file = tempfile::NamedTempFile::new().unwrap();
         config_file.write_all(raw_config.as_bytes()).unwrap();
-        assert!(ItemsSpec::from_file(config_file.path()).is_err());
+        let error = ItemsSpec::from_file(config_file.path()).unwrap_err();
+        assert!(matches!(
+            error.downcast_ref::<ConfigError>(),
+            Some(ConfigError::NonNumericQuantitativeColumn { .. })
+        ));
     }
 
     #[test]
