@@ -104,7 +104,6 @@ impl Renderer for ItemRenderer {
                     // Render plot with multiple datasets
                     render_plot_page_with_multiple_datasets(
                         &out_path,
-                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                         name,
                         table,
                         datasets
@@ -113,10 +112,7 @@ impl Renderer for ItemRenderer {
                                 (n.to_string(), self.specs.datasets.get(name).unwrap())
                             })
                             .collect(),
-                        &self.specs.views,
-                        &self.specs.default_view,
-                        &self.specs.report_name,
-                        self.specs.needs_excel_sheet(),
+                        &self.specs,
                         &view_sizes,
                         debug,
                     )?;
@@ -152,16 +148,12 @@ impl Renderer for ItemRenderer {
                 if table.render_plot.is_some() {
                     render_plot_page(
                         &out_path,
-                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                         name,
                         table,
                         dataset,
                         &linked_tables,
                         dataset.links.as_ref().unwrap(),
-                        &self.specs.views,
-                        &self.specs.default_view,
-                        &self.specs.report_name,
-                        self.specs.needs_excel_sheet(),
+                        &self.specs,
                         &view_sizes,
                         debug,
                     )?;
@@ -169,28 +161,20 @@ impl Renderer for ItemRenderer {
                 } else if let Some(table_specs) = &table.render_html {
                     render_html_page(
                         &out_path,
-                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                         name,
                         table,
                         dataset,
-                        &self.specs.views,
-                        &self.specs.default_view,
                         table_specs.script_path.to_string(),
-                        &self.specs.aux_libraries,
-                        &self.specs.report_name,
-                        self.specs.needs_excel_sheet(),
+                        &self.specs,
                         &view_sizes,
                     )?;
                 } else if let Some(table_specs) = &table.render_img {
                     render_img_page(
                         &out_path,
-                        &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                         name,
                         table,
-                        &self.specs.views,
-                        &self.specs.default_view,
                         table_specs.path.to_string(),
-                        &self.specs.report_name,
+                        &self.specs,
                         &view_sizes,
                     )?;
                 }
@@ -255,14 +239,10 @@ impl Renderer for ItemRenderer {
                             page + 1,
                             records.iter().map(|(_, records)| records).collect_vec(),
                             &headers,
-                            &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
                             name,
                             &linked_tables,
                             &mut dataset.links.clone().unwrap(),
-                            &self.specs.report_name,
                             &self.specs.views,
-                            &self.specs.default_view,
-                            is_single_page,
                             debug,
                         )?;
                         if pages > 1 && ((page + 1) % progress_step == 0 || page + 1 == pages) {
@@ -320,14 +300,7 @@ impl Renderer for ItemRenderer {
                     render_plots(&out_path, dataset, &summary, records_length, debug)?;
                 }
             } else {
-                render_empty_dataset(
-                    &out_path,
-                    name,
-                    &self.specs.report_name,
-                    &self.specs.views.keys().map(|s| s.to_owned()).collect_vec(),
-                    self.specs.needs_excel_sheet(),
-                    &view_sizes,
-                )?;
+                render_empty_dataset(&out_path, name, &self.specs, &view_sizes)?;
             }
         }
         if self.specs.needs_excel_sheet() {
@@ -344,14 +317,10 @@ fn render_page<P: AsRef<Path>>(
     page_index: usize,
     data: Vec<&Vec<String>>,
     titles: &[String],
-    tables: &[String],
     name: &str,
     linked_tables: &LinkedTable,
     links: &mut HashMap<String, LinkSpec>,
-    report_name: &str,
     views: &HashMap<String, ItemSpecs>,
-    default_view: &Option<String>,
-    is_single_page: bool,
     debug: bool,
 ) -> Result<()> {
     let mut templates = Tera::default();
@@ -397,23 +366,6 @@ fn render_page<P: AsRef<Path>>(
     context.insert("data", &compressed_data);
     context.insert("linkouts", &compressed_linkouts);
     context.insert("current_page", &page_index);
-    context.insert("is_single_page", &is_single_page);
-    context.insert(
-        "tables",
-        &tables
-            .iter()
-            .filter(|t| !views.get(*t).unwrap().hidden)
-            .filter(|t| {
-                if let Some(default_view) = default_view {
-                    t != &default_view
-                } else {
-                    true
-                }
-            })
-            .collect_vec(),
-    );
-    context.insert("default_view", default_view);
-    context.insert("report_name", report_name);
 
     let file_path = Path::new(output_path.as_ref())
         .join(Path::new(&format!("index_{page_index}")).with_extension("html"));
@@ -1349,13 +1301,31 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
     Ok(())
 }
 
+/// Creates the template context shared by the pages of non-table views, e.g. for the view menu
+fn page_context(specs: &ItemsSpec, name: &str, view_sizes: &HashMap<String, String>) -> Context {
+    let tables = specs
+        .views
+        .iter()
+        .filter(|(view, spec)| !spec.hidden && Some(*view) != specs.default_view.as_ref())
+        .map(|(view, _)| view)
+        .collect_vec();
+    let mut context = Context::new();
+    context.insert("tables", &tables);
+    context.insert("view_sizes", view_sizes);
+    context.insert("default_view", &specs.default_view);
+    context.insert("report_name", &specs.report_name);
+    context.insert("has_excel_sheet", &specs.needs_excel_sheet());
+    context.insert("name", name);
+    context.insert("time", &Local::now().format("%a %b %e %T %Y").to_string());
+    context.insert("version", &env!("CARGO_PKG_VERSION"));
+    context
+}
+
 /// Renders an empty page when datasets are empty
 fn render_empty_dataset<P: AsRef<Path>>(
     output_path: P,
     name: &str,
-    report_name: &str,
-    tables: &[String],
-    has_excel_sheet: bool,
+    specs: &ItemsSpec,
     view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
     let mut templates = Tera::default();
@@ -1363,16 +1333,7 @@ fn render_empty_dataset<P: AsRef<Path>>(
         "empty.html.tera",
         include_str!("../../../templates/empty.html.tera"),
     )?;
-    let mut context = Context::new();
-    let local: DateTime<Local> = Local::now();
-
-    context.insert("view_sizes", &view_sizes);
-    context.insert("tables", tables);
-    context.insert("name", name);
-    context.insert("report_name", report_name);
-    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
-    context.insert("version", &env!("CARGO_PKG_VERSION"));
-    context.insert("has_excel_sheet", &has_excel_sheet);
+    let context = page_context(specs, name, view_sizes);
 
     let file_path =
         Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
@@ -1651,16 +1612,12 @@ pub(crate) fn get_column_domain(
 /// Renders a plot page from given render-plot spec
 fn render_plot_page<P: AsRef<Path>>(
     output_path: P,
-    tables: &[String],
     name: &str,
     item_spec: &ItemSpecs,
     dataset: &DatasetSpecs,
     linked_tables: &LinkedTable,
     links: &HashMap<String, LinkSpec>,
-    views: &HashMap<String, ItemSpecs>,
-    default_view: &Option<String>,
-    report_name: &String,
-    has_excel_sheet: bool,
+    specs: &ItemsSpec,
     view_sizes: &HashMap<String, String>,
     debug: bool,
 ) -> Result<()> {
@@ -1693,7 +1650,7 @@ fn render_plot_page<P: AsRef<Path>>(
                     linked_tables,
                     &link_columns,
                     links,
-                    views.get(name).unwrap().dataset.as_ref().unwrap(),
+                    specs.views.get(name).unwrap().dataset.as_ref().unwrap(),
                 )
                 .unwrap()
             })
@@ -1716,36 +1673,10 @@ fn render_plot_page<P: AsRef<Path>>(
         "plot.html.tera",
         include_str!("../../../templates/plot.html.tera"),
     )?;
-    let mut context = Context::new();
-
-    let local: DateTime<Local> = Local::now();
-
-    let compressed_data = compress(json!(records), debug)?;
-
-    context.insert("data", &compressed_data);
+    let mut context = page_context(specs, name, view_sizes);
+    context.insert("data", &compress(json!(records), debug)?);
     context.insert("description", &item_spec.description);
-    context.insert("has_excel_sheet", &has_excel_sheet);
-    context.insert(
-        "tables",
-        &tables
-            .iter()
-            .filter(|t| !views.get(*t).unwrap().hidden)
-            .filter(|t| {
-                if let Some(default_view) = default_view {
-                    t != &default_view
-                } else {
-                    true
-                }
-            })
-            .collect_vec(),
-    );
-    context.insert("view_sizes", &view_sizes);
-    context.insert("default_view", default_view);
-    context.insert("report_name", report_name);
-    context.insert("name", name);
     context.insert("specs", &render_plot_specs.schema.as_ref().unwrap());
-    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
-    context.insert("version", &env!("CARGO_PKG_VERSION"));
 
     let file_path =
         Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
@@ -1758,20 +1689,14 @@ fn render_plot_page<P: AsRef<Path>>(
     Ok(())
 }
 
-#[allow(clippy::too_many_arguments)]
 /// Renders a plot page from given render-plot spec
 fn render_html_page<P: AsRef<Path>>(
     output_path: P,
-    tables: &[String],
     name: &str,
     item_spec: &ItemSpecs,
     dataset: &DatasetSpecs,
-    views: &HashMap<String, ItemSpecs>,
-    default_view: &Option<String>,
     script_path: String,
-    aux_libraries: &Option<Vec<String>>,
-    report_name: &String,
-    has_excel_sheet: bool,
+    specs: &ItemsSpec,
     view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
     let headers = dataset
@@ -1799,35 +1724,11 @@ fn render_html_page<P: AsRef<Path>>(
         "html.html.tera",
         include_str!("../../../templates/html.html.tera"),
     )?;
-    let mut context = Context::new();
-
-    let local: DateTime<Local> = Local::now();
-
+    let mut context = page_context(specs, name, view_sizes);
     context.insert("data", &json!(records).to_string());
     context.insert("script", &script);
-    context.insert("aux_libraries", &aux_libraries);
+    context.insert("aux_libraries", &specs.aux_libraries);
     context.insert("description", &item_spec.description);
-    context.insert("has_excel_sheet", &has_excel_sheet);
-    context.insert(
-        "tables",
-        &tables
-            .iter()
-            .filter(|t| !views.get(*t).unwrap().hidden)
-            .filter(|t| {
-                if let Some(default_view) = default_view {
-                    t != &default_view
-                } else {
-                    true
-                }
-            })
-            .collect_vec(),
-    );
-    context.insert("view_sizes", &view_sizes);
-    context.insert("default_view", default_view);
-    context.insert("report_name", report_name);
-    context.insert("name", name);
-    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
-    context.insert("version", &env!("CARGO_PKG_VERSION"));
 
     let file_path =
         Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
@@ -1840,17 +1741,13 @@ fn render_html_page<P: AsRef<Path>>(
     Ok(())
 }
 
-#[allow(clippy::too_many_arguments)]
 /// Renders a plot page from given render-plot spec
 fn render_img_page<P: AsRef<Path>>(
     output_path: P,
-    tables: &[String],
     name: &str,
     item_spec: &ItemSpecs,
-    views: &HashMap<String, ItemSpecs>,
-    default_view: &Option<String>,
     img_path: String,
-    report_name: &String,
+    specs: &ItemsSpec,
     view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
     let img_file = Path::new(&img_path);
@@ -1863,32 +1760,9 @@ fn render_img_page<P: AsRef<Path>>(
         "img.html.tera",
         include_str!("../../../templates/img.html.tera"),
     )?;
-    let mut context = Context::new();
-
-    let local: DateTime<Local> = Local::now();
-
+    let mut context = page_context(specs, name, view_sizes);
     context.insert("description", &item_spec.description);
     context.insert("img", &img_file_name.to_str().unwrap());
-    context.insert(
-        "tables",
-        &tables
-            .iter()
-            .filter(|t| !views.get(*t).unwrap().hidden)
-            .filter(|t| {
-                if let Some(default_view) = default_view {
-                    t != &default_view
-                } else {
-                    true
-                }
-            })
-            .collect_vec(),
-    );
-    context.insert("view_sizes", &view_sizes);
-    context.insert("default_view", default_view);
-    context.insert("report_name", report_name);
-    context.insert("name", name);
-    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
-    context.insert("version", &env!("CARGO_PKG_VERSION"));
 
     let file_path =
         Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
@@ -1902,17 +1776,12 @@ fn render_img_page<P: AsRef<Path>>(
 }
 
 /// Renders a plot page from given render-plot spec containing multiple datasets
-#[allow(clippy::too_many_arguments)]
 fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
     output_path: P,
-    tables: &[String],
     name: &str,
     item_spec: &ItemSpecs,
     datasets: HashMap<String, &DatasetSpecs>,
-    views: &HashMap<String, ItemSpecs>,
-    default_view: &Option<String>,
-    report_name: &String,
-    has_excel_sheet: bool,
+    specs: &ItemsSpec,
     view_sizes: &HashMap<String, String>,
     debug: bool,
 ) -> Result<()> {
@@ -1945,36 +1814,10 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
         "plot.html.tera",
         include_str!("../../../templates/plot.html.tera"),
     )?;
-    let mut context = Context::new();
-
-    let local: DateTime<Local> = Local::now();
-
-    let compressed_data = compress(json!(data), debug)?;
-
-    context.insert("datasets", &compressed_data);
+    let mut context = page_context(specs, name, view_sizes);
+    context.insert("datasets", &compress(json!(data), debug)?);
     context.insert("description", &item_spec.description);
-    context.insert(
-        "tables",
-        &tables
-            .iter()
-            .filter(|t| !views.get(*t).unwrap().hidden)
-            .filter(|t| {
-                if let Some(default_view) = default_view {
-                    t != &default_view
-                } else {
-                    true
-                }
-            })
-            .collect_vec(),
-    );
-    context.insert("default_view", default_view);
-    context.insert("report_name", report_name);
-    context.insert("has_excel_sheet", &has_excel_sheet);
-    context.insert("view_sizes", &view_sizes);
-    context.insert("name", name);
     context.insert("specs", &render_plot_specs.schema.as_ref().unwrap());
-    context.insert("time", &local.format("%a %b %e %T %Y").to_string());
-    context.insert("version", &env!("CARGO_PKG_VERSION"));
 
     let file_path =
         Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
