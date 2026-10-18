@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.75.2](https://github.com/datavzrd/datavzrd/compare/v2.75.1...v2.75.2) (2026-10-18)
+
+
+### Bug Fixes
+
+* Allow numbers and booleans as spell parameters in the config schema ([#1307](https://github.com/datavzrd/datavzrd/issues/1307)) ([f6faa3d](https://github.com/datavzrd/datavzrd/commit/f6faa3d3720af2de7e78da0a184dba73350ff4ba))
+* Cap automatic column plot size at the slider maximum ([#1309](https://github.com/datavzrd/datavzrd/issues/1309)) ([5492b9a](https://github.com/datavzrd/datavzrd/commit/5492b9ad5974f014af88654f603952f1a47fb398))
+* Create missing parent directories of the output directory ([#1304](https://github.com/datavzrd/datavzrd/issues/1304)) ([56faeab](https://github.com/datavzrd/datavzrd/commit/56faeab5bf12fe1bf83a283f79cff194d7cdc7f1))
+* Keep pills columns readable in narrow view ([#1311](https://github.com/datavzrd/datavzrd/issues/1311)) ([7a95984](https://github.com/datavzrd/datavzrd/commit/7a959841c255f8261f223389cb0ddab432eb1295))
+* Keep the order of files and columns in suggested configs ([#1315](https://github.com/datavzrd/datavzrd/issues/1315)) ([676a0b0](https://github.com/datavzrd/datavzrd/commit/676a0b0b87613f0ab37130b3af2e42057bcca31b))
+* Name the output directory in errors when it cannot be created or read ([#1317](https://github.com/datavzrd/datavzrd/issues/1317)) ([c1e651e](https://github.com/datavzrd/datavzrd/commit/c1e651e0747e4093e5259f46831ab936e5db0d78))
+* Reject render-plot specs that are not valid JSON ([#1310](https://github.com/datavzrd/datavzrd/issues/1310)) ([f8cd9e3](https://github.com/datavzrd/datavzrd/commit/f8cd9e3b2f48fbf50f353bc58ad58d2c9a70fce9))
+* Reject view names that cannot be used as directory names ([#1318](https://github.com/datavzrd/datavzrd/issues/1318)) ([e9513c9](https://github.com/datavzrd/datavzrd/commit/e9513c97e32de26a9a1797292be4cf1115553287))
+* Remove duplicated rows label from view size badges ([#1308](https://github.com/datavzrd/datavzrd/issues/1308)) ([3911b3a](https://github.com/datavzrd/datavzrd/commit/3911b3a7503e745c2bc3d86e6c2ed0a1aacc02bc))
+* Render table when add-columns functions could not be loaded ([#1313](https://github.com/datavzrd/datavzrd/issues/1313)) ([526c4f3](https://github.com/datavzrd/datavzrd/commit/526c4f3e0f526942bc10f0e5ae7018f7430bf03b))
+* Report custom plots without a data function instead of panicking ([#1312](https://github.com/datavzrd/datavzrd/issues/1312)) ([df9ffc2](https://github.com/datavzrd/datavzrd/commit/df9ffc2164df708a39368ce19fad6139f318d9e1))
+* Report dataset records that cannot be read instead of dropping them ([#1301](https://github.com/datavzrd/datavzrd/issues/1301)) ([6149489](https://github.com/datavzrd/datavzrd/commit/61494899ebddd0b0c5e4aea315d760ae0186c19b))
+* Report syntax errors in custom functions ([#1306](https://github.com/datavzrd/datavzrd/issues/1306)) ([7b4ee0b](https://github.com/datavzrd/datavzrd/commit/7b4ee0b463051323a1b92600aa1be15d33ea1a21))
+* Show errors of custom plots and plot views in the error dialog ([#1305](https://github.com/datavzrd/datavzrd/issues/1305)) ([35c4e1a](https://github.com/datavzrd/datavzrd/commit/35c4e1a055fa4b7e6cab34ba4298c18ec9758526))
+* Update readervzrd to 0.5.1 ([#1319](https://github.com/datavzrd/datavzrd/issues/1319)) ([509eb17](https://github.com/datavzrd/datavzrd/commit/509eb17dd2336e583c36230cc2f9320dad1298c3))
+* Use singular label for views with a single row ([#1316](https://github.com/datavzrd/datavzrd/issues/1316)) ([019b06b](https://github.com/datavzrd/datavzrd/commit/019b06b717f3ede82cc8b1ca8ef56ea1dcd4f0c4))
+* Validate input files in suggest ([#1314](https://github.com/datavzrd/datavzrd/issues/1314)) ([0d7e2aa](https://github.com/datavzrd/datavzrd/commit/0d7e2aa083bbe178d5a628e21136aea4f86dd243))
+
 ## [2.75.1](https://github.com/datavzrd/datavzrd/compare/v2.75.0...v2.75.1) (2026-10-12)
 
 
