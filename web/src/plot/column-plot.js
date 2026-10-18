@@ -8,7 +8,6 @@ const TYPES = ["quantitative", "ordinal", "nominal", "temporal"];
 const SCALES = ["linear", "log", "sqrt", "symlog"];
 const AGGREGATES = ["count", "sum", "mean", "median", "min", "max"];
 const HEIGHT = 400;
-const MAX_SIZE = 2000;
 const LABEL_STEP = 14;
 const EXPORTS = {
   svg: async ({ view }) => [await view.toSVG(), "image/svg+xml"],
@@ -85,9 +84,7 @@ function fitAxis(axis) {
   const discrete = ["nominal", "ordinal"].includes(form.elements[`${axis}Type`].value);
   const categories = discrete ? new Set(tableData().map((row) => row[column])).size : 0;
   const available = axis === "x" ? $("#column-plot").width() : HEIGHT;
-  const size = Math.max(available, categories * LABEL_STEP);
-  slider.max = Math.max(MAX_SIZE, size);
-  slider.value = size;
+  slider.value = Math.max(available, categories * LABEL_STEP);
 }
 
 function channel(column, type) {

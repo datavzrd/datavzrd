@@ -407,6 +407,7 @@ function applyNarrowView(columnIndexMap) {
     ...config.tick_titles,
     ...config.bar_titles,
     ...config.bubble_titles,
+    ...config.pill_titles,
     ...config.custom_plot_titles,
   ]);
   for (const column of config.displayed_columns) {
@@ -500,8 +501,7 @@ export function load() {
       for (const column of config.columns) {
         if (config.additional_colums[column]) {
           let value_function = window[config.additional_colums[column]];
-          let new_value = value_function(row_with_keys);
-          row.push(new_value);
+          row.push(value_function?.(row_with_keys));
         }
       }
     }
