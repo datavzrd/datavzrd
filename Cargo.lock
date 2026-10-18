@@ -2994,9 +2994,9 @@ dependencies = [
 
 [[package]]
 name = "readervzrd"
-version = "0.5.0"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "03209c00cab961483802551da2c536fe50acbac27e0f97a14d7867458ba85fc7"
+checksum = "4ea45a272a32150a03d1fbd56223117b9dae833da5ecc44908101375317d7b4c"
 dependencies = [
  "csv",
  "flate2",
