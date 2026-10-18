@@ -68,10 +68,10 @@ mod tests {
         let column_index = ColumnIndex::new(&dataset, "first", 3).unwrap();
         let expected_column_index = ColumnIndex {
             index: HashMap::from([
-                (String::from("Delia"), RowAddress::new(0, 0)),
-                (String::from("George"), RowAddress::new(0, 1)),
-                (String::from("Winnie"), RowAddress::new(0, 2)),
-                (String::from("George"), RowAddress::new(1, 0)),
+                (String::from("Delia"), RowAddress { page: 0, row: 0 }),
+                (String::from("George"), RowAddress { page: 0, row: 1 }),
+                (String::from("Winnie"), RowAddress { page: 0, row: 2 }),
+                (String::from("George"), RowAddress { page: 1, row: 0 }),
             ]),
         };
 

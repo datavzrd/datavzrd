@@ -883,7 +883,6 @@ dependencies = [
  "chrono",
  "clap",
  "derefable",
- "derive-new",
  "fancy-regex",
  "format_serde_error",
  "fs_extra",
@@ -934,17 +933,6 @@ dependencies = [
  "proc-macro2 0.4.30",
  "quote 0.6.13",
  "syn 0.15.44",
-]
-
-[[package]]
-name = "derive-new"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2cdc8d50f426189eef89dac62fabfa0abb27d5cc008f25bf4156a0203325becc"
-dependencies = [
- "proc-macro2 1.0.106",
- "quote 1.0.45",
- "syn 2.0.117",
 ]
 
 [[package]]
