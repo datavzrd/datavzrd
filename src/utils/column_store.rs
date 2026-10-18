@@ -34,7 +34,7 @@ impl DatasetSummary {
                 value_counts: HashMap::new(),
             })
             .collect();
-        for record in dataset.reader()?.records()?.skip(dataset.header_rows - 1) {
+        for record in dataset.records()? {
             for (summary, (title, value)) in
                 columns.iter_mut().zip(headers.iter().zip(record.iter()))
             {
@@ -87,11 +87,8 @@ mod tests {
 
     fn min_max(dataset: &DatasetSpecs, index: usize) -> (f32, f32) {
         dataset
-            .reader()
-            .unwrap()
             .records()
             .unwrap()
-            .skip(dataset.header_rows - 1)
             .filter_map(|record| record.get(index).unwrap().parse::<f32>().ok())
             .fold((f32::INFINITY, f32::NEG_INFINITY), |(min, max), value| {
                 (min.min(value), max.max(value))
@@ -100,11 +97,8 @@ mod tests {
 
     fn unique_count(dataset: &DatasetSpecs, index: usize) -> usize {
         dataset
-            .reader()
-            .unwrap()
             .records()
             .unwrap()
-            .skip(dataset.header_rows - 1)
             .map(|record| record.get(index).unwrap().to_string())
             .collect::<HashSet<_>>()
             .len()

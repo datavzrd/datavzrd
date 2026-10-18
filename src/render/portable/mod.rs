@@ -227,9 +227,7 @@ impl Renderer for ItemRenderer {
                     let summary = DatasetSummary::build(dataset)?;
 
                     for (page, grouped_records) in &dataset
-                        .reader()?
                         .records()?
-                        .skip(dataset.header_rows - 1)
                         .enumerate()
                         .chunk_by(|(i, _)| row_address_factory.get(*i).page)
                     {
@@ -1621,14 +1619,12 @@ fn render_plot_page<P: AsRef<Path>>(
     view_sizes: &HashMap<String, String>,
     debug: bool,
 ) -> Result<()> {
-    let mut records = dataset.read_records()?;
+    let mut records = dataset.keyed_records()?.collect_vec();
     if !links.is_empty() {
         let headers = dataset.reader()?.headers()?;
         let link_columns = link_column_positions(&headers, links);
         let linkouts = dataset
-            .reader()?
             .records()?
-            .skip(&dataset.header_rows - 1)
             .map(|row| {
                 render_linkouts(
                     &row.iter().map(|s| s.to_owned()).collect_vec(),
@@ -1671,7 +1667,7 @@ fn render_html_page<P: AsRef<Path>>(
     specs: &ItemsSpec,
     view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
-    let records = dataset.read_records()?;
+    let records = dataset.keyed_records()?.collect_vec();
     let script = fs::read_to_string(script_path)?;
 
     let mut templates = Tera::default();
@@ -1742,7 +1738,7 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
 ) -> Result<()> {
     let data = datasets
         .into_iter()
-        .map(|(name, dataset)| Ok((name, dataset.read_records()?)))
+        .map(|(name, dataset)| Ok((name, dataset.keyed_records()?.collect_vec())))
         .collect::<Result<HashMap<_, _>>>()?;
     write_plot_page(
         output_path,

@@ -13,13 +13,11 @@ impl ColumnIndex {
     /// Build index from a given table and column name.
     pub(crate) fn new(dataset: &DatasetSpecs, column_name: &str, page_size: usize) -> Result<Self> {
         // Load the column values into the hash map while keeping the row number as value.
-        let mut reader = dataset.reader()?;
-
         let headers = dataset.reader()?.headers()?;
         let column_index = headers.iter().position(|r| r == column_name).unwrap();
         let mut index = HashMap::new();
         let address_factory = RowAddressFactory::new(page_size);
-        for (i, result) in reader.records()?.skip(dataset.header_rows - 1).enumerate() {
+        for (i, result) in dataset.records()?.enumerate() {
             index.insert(
                 result.get(column_index).unwrap().to_owned(),
                 address_factory.get(i),

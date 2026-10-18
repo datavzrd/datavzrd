@@ -77,7 +77,7 @@ pub(crate) fn column_batch_size(records_length: usize) -> usize {
 
 pub(crate) fn read_columns(dataset: &DatasetSpecs, columns: &[usize]) -> Result<Vec<Vec<String>>> {
     let mut buffers: Vec<Vec<String>> = columns.iter().map(|_| Vec::new()).collect();
-    for record in dataset.reader()?.records()?.skip(dataset.header_rows - 1) {
+    for record in dataset.records()? {
         for (buffer, &column) in buffers.iter_mut().zip(columns) {
             buffer.push(record.get(column).unwrap().to_string());
         }

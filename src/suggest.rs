@@ -182,7 +182,7 @@ fn build_contexts(
         .map(|h| (h.to_string(), Vec::new()))
         .collect();
     let mut ranges: HashMap<String, (f64, f64)> = HashMap::new();
-    for record in reader.records()?.skip(dataset.header_rows - 1) {
+    for record in dataset.records()? {
         for (header, value) in headers.iter().zip(record.iter()) {
             if value.is_na() {
                 continue;
