@@ -19,6 +19,7 @@ pub(crate) fn suggest(
     llm: Option<LlmConfig>,
 ) -> Result<String> {
     let mut items_spec = ItemsSpec::new(name);
+    let mut dataset_names = Vec::new();
     for (file, sep) in files.iter().zip(separator.iter()) {
         let dataset = DatasetSpecs {
             path: file.to_owned(),
@@ -35,6 +36,7 @@ pub(crate) fn suggest(
         items_spec
             .datasets
             .insert(dataset_name.clone(), dataset.clone());
+        dataset.reader()?.validate()?;
         let column_types = datavzrd::utils::column_type::classify_table(&dataset, true)?;
         let mut columns: HashMap<String, RenderColumnSpec> = column_types
             .iter()
@@ -57,8 +59,31 @@ pub(crate) fn suggest(
         items_spec
             .views
             .insert(dataset_name.clone(), make_view(&dataset_name, columns));
+        dataset_names.push(dataset_name);
     }
-    Ok(serde_yaml::to_string(&items_spec)?)
+    let mut config = serde_yaml::to_value(&items_spec)?;
+    for name in &dataset_names {
+        let headers = items_spec.datasets[name].reader()?.headers()?;
+        sort_keys(
+            &mut config["views"][name.as_str()]["render-table"]["columns"],
+            &headers,
+        );
+    }
+    sort_keys(&mut config["datasets"], &dataset_names);
+    sort_keys(&mut config["views"], &dataset_names);
+    Ok(serde_yaml::to_string(&config)?)
+}
+
+fn sort_keys(value: &mut serde_yaml::Value, order: &[String]) {
+    if let Some(mapping) = value.as_mapping_mut() {
+        let mut entries = std::mem::take(mapping).into_iter().collect::<Vec<_>>();
+        entries.sort_by_key(|(key, _)| {
+            order
+                .iter()
+                .position(|name| key.as_str() == Some(name.as_str()))
+        });
+        *mapping = entries.into_iter().collect();
+    }
 }
 
 fn apply_draft(

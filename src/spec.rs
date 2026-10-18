@@ -442,7 +442,14 @@ impl ItemsSpec {
                     }
                 }
             }
-            if view.render_plot.is_some() {
+            if let Some(render_plot) = &view.render_plot {
+                if let Some(spec) = render_plot.schema.as_deref() {
+                    if serde_json::from_str::<serde_json::Value>(spec).is_err() {
+                        bail!(ConfigError::InvalidRenderPlotSpec {
+                            view: name.to_string(),
+                        })
+                    }
+                }
                 if let Some(datasets) = &view.datasets {
                     for dataset in datasets.values() {
                         if !self.datasets.contains_key(dataset) {
@@ -1718,6 +1725,8 @@ pub enum ConfigError {
     LinkToUrlMissingUrl { view: String, column: String },
     #[error("The custom-plot spec of column {column:?} in view {view:?} is not valid JSON. Please provide a valid Vega-Lite specification.")]
     InvalidCustomPlotSpec { view: String, column: String },
+    #[error("The render-plot spec of view {view:?} is not valid JSON. Please provide a valid Vega-Lite specification.")]
+    InvalidRenderPlotSpec { view: String },
     #[error("Could not find column with index {index:?} under path {table_path:?} with only {header_length:?} columns.")]
     IndexTooLarge {
         index: usize,
@@ -2239,6 +2248,27 @@ mod tests {
         assert!(matches!(
             error.downcast_ref::<ConfigError>(),
             Some(ConfigError::NonNumericQuantitativeColumn { .. })
+        ));
+    }
+
+    #[test]
+    fn test_invalid_render_plot_spec_config_validation() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                d:
+                    dataset: d
+                    render-plot:
+                        spec: |
+                            {"mark": "point",
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        let error = config.validate().unwrap_err();
+        assert!(matches!(
+            error.downcast_ref::<ConfigError>(),
+            Some(ConfigError::InvalidRenderPlotSpec { .. })
         ));
     }
 

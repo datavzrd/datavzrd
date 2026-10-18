@@ -2,7 +2,7 @@ use crate::render::portable::utils::{render_index_file, render_static_files};
 use crate::render::portable::ItemRenderer;
 use crate::render::Renderer;
 use crate::spec::ItemsSpec;
-use anyhow::{bail, Result};
+use anyhow::{bail, Context, Result};
 use std::fs;
 use std::path::PathBuf;
 use thiserror::Error;
@@ -53,8 +53,14 @@ pub fn render_report(
     }
 
     if !output.exists() {
-        fs::create_dir_all(output)?;
-    } else if output.read_dir()?.next().is_some() {
+        fs::create_dir_all(output)
+            .with_context(|| format!("Failed to create output directory {output:?}"))?;
+    } else if output
+        .read_dir()
+        .with_context(|| format!("Failed to read output directory {output:?}"))?
+        .next()
+        .is_some()
+    {
         if overwrite_output {
             fs::remove_dir_all(output)?;
             fs::create_dir(output)?;
