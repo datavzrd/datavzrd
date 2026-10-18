@@ -40,6 +40,18 @@ pub(crate) fn minify_js(file: &str, debug: bool) -> Result<Vec<u8>> {
     }
 }
 
+pub(crate) fn find_js_syntax_error(js: &str) -> Option<String> {
+    let mut minified: Vec<u8> = Vec::new();
+    minify(
+        &Session::new(),
+        TopLevelMode::Global,
+        js.as_bytes(),
+        &mut minified,
+    )
+    .err()
+    .map(|error| format!("{error:?}"))
+}
+
 pub(crate) fn render_index_file<P: AsRef<Path>>(path: P, specs: &ItemsSpec) -> Result<()> {
     let mut templates = Tera::default();
     templates.register_filter("json_encode", tera_contrib::json::json_encode);
@@ -75,6 +87,7 @@ pub(crate) fn round(x: f32, decimals: u32) -> f32 {
 
 #[cfg(test)]
 mod tests {
+    use super::find_js_syntax_error;
     use crate::render_static_files;
     use std::fs;
     use std::path::Path;
@@ -92,5 +105,14 @@ mod tests {
             fs::remove_file(entry.unwrap().path()).unwrap();
         }
         fs::remove_dir("/tmp/static").unwrap();
+    }
+
+    #[test]
+    fn test_find_js_syntax_error() {
+        assert!(
+            find_js_syntax_error("function f(value) { return `${value}`.toUpperCase(); }")
+                .is_none()
+        );
+        assert!(find_js_syntax_error("function f(value) { return value.toUpperCase(; }").is_some());
     }
 }

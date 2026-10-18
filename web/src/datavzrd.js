@@ -44,7 +44,7 @@ import {
   renderDetailTickBarBubblePlot
 } from "./plot/plot";
 import { columnPlotIcon } from "./plot/column-plot";
-import { plotViewError } from "./error";
+import { functionsLoadError, plotViewError } from "./error";
 import "../style/bootstrap.min.css";
 import "../style/bootstrap-table.min.css";
 import "../style/bootstrap-select.min.css";
@@ -55,6 +55,7 @@ export { selectPlotColumn } from "./plot/column-plot";
 export { customFunctionError as custom_error } from "./error";
 
 let LINE_NUMBERS = false;
+let FUNCTIONS_LOADED = false;
 let NARROW_VIEW = false;
 
 export function downloadCSV() {
@@ -442,6 +443,10 @@ function hideLabelColumn() {
   });
 }
 
+export function functions_loaded() {
+  FUNCTIONS_LOADED = true;
+}
+
 export function load() {
   $(document).ready(function () {
     document.title = "datavzrd report";
@@ -458,6 +463,9 @@ export function load() {
     }
     config.original_displayed_columns = [...config.displayed_columns];
     render_html_contents();
+    if (!FUNCTIONS_LOADED) {
+      functionsLoadError();
+    }
     $(".table-container").show();
     $(".loading").hide();
     $("#pagination").show();

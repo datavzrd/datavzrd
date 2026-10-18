@@ -3,6 +3,7 @@ pub(crate) mod utils;
 use crate::render::portable::plot::render_plots;
 use crate::render::portable::plot::{column_batch_size, read_columns};
 use crate::render::portable::utils::escape_html_string;
+use crate::render::portable::utils::find_js_syntax_error;
 use crate::render::portable::utils::minify_js;
 use crate::render::portable::utils::round;
 use crate::render::Renderer;
@@ -23,7 +24,7 @@ use anyhow::Result;
 use anyhow::{bail, Context as AnyhowContext};
 use chrono::{DateTime, Local};
 use itertools::Itertools;
-use log::info;
+use log::{info, warn};
 use serde::Serialize;
 use serde_json::{json, Value};
 use std::collections::HashMap;
@@ -314,6 +315,7 @@ impl Renderer for ItemRenderer {
                     )?;
                     render_custom_javascript_functions(
                         &out_path,
+                        name,
                         table_specs,
                         &table.render_table.as_ref().unwrap().additional_columns,
                     )?;
@@ -1245,6 +1247,7 @@ impl JavascriptFunction {
 /// Render javascript functions into functions.js file per view
 fn render_custom_javascript_functions<P: AsRef<Path>>(
     output_path: P,
+    view: &str,
     render_columns: &HashMap<String, RenderColumnSpec>,
     additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
 ) -> Result<()> {
@@ -1259,25 +1262,25 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
     let functions = render_columns
         .iter()
         .filter(|(_, k)| k.custom.is_some())
-        .map(|(k, v)| {
-            JavascriptFunction(v.custom.as_ref().unwrap().to_owned()).with_error_handling(k)
-        })
+        .map(|(k, v)| (k, JavascriptFunction(v.custom.as_ref().unwrap().to_owned())))
         .chain(
             render_columns
                 .iter()
                 .filter(|(_, k)| k.link_to_url.is_some())
                 .filter(|(_, k)| k.link_to_url.as_ref().unwrap().custom_content.is_some())
                 .map(|(k, v)| {
-                    JavascriptFunction(
-                        v.link_to_url
-                            .as_ref()
-                            .unwrap()
-                            .custom_content
-                            .as_ref()
-                            .unwrap()
-                            .to_string(),
+                    (
+                        k,
+                        JavascriptFunction(
+                            v.link_to_url
+                                .as_ref()
+                                .unwrap()
+                                .custom_content
+                                .as_ref()
+                                .unwrap()
+                                .to_string(),
+                        ),
                     )
-                    .with_error_handling(k)
                 }),
         )
         .chain(
@@ -1285,8 +1288,10 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                 .iter()
                 .filter(|(_, k)| k.custom_plot.is_some())
                 .map(|(k, v)| {
-                    JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
-                        .with_error_handling(k)
+                    (
+                        k,
+                        JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned()),
+                    )
                 }),
         )
         .chain(
@@ -1298,8 +1303,10 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                 .map(|(k, v)| (k, v.heatmap.as_ref().unwrap()))
                 .filter(|(_, k)| k.custom_content.is_some())
                 .map(|(k, v)| {
-                    JavascriptFunction(v.custom_content.as_ref().unwrap().to_owned())
-                        .with_error_handling(k)
+                    (
+                        k,
+                        JavascriptFunction(v.custom_content.as_ref().unwrap().to_owned()),
+                    )
                 }),
         )
         .chain(
@@ -1307,7 +1314,7 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                 .as_ref()
                 .unwrap_or(&HashMap::new())
                 .iter()
-                .map(|(k, v)| JavascriptFunction(v.value.to_string()).with_error_handling(k)),
+                .map(|(k, v)| (k, JavascriptFunction(v.value.to_string()))),
         )
         .chain(
             additional_columns
@@ -1316,10 +1323,19 @@ fn render_custom_javascript_functions<P: AsRef<Path>>(
                 .iter()
                 .filter(|(_, k)| k.custom_plot.is_some())
                 .map(|(k, v)| {
-                    JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned())
-                        .with_error_handling(k)
+                    (
+                        k,
+                        JavascriptFunction(v.custom_plot.as_ref().unwrap().plot_data.to_owned()),
+                    )
                 }),
         )
+        .map(|(column, function)| {
+            let function = function.with_error_handling(column);
+            if let Some(error) = find_js_syntax_error(&function) {
+                warn!("The custom function of column {column:?} in view {view:?} contains a syntax error ({error}), so none of the custom functions of this view will work in the report.");
+            }
+            function
+        })
         .collect_vec();
 
     context.insert("functions", &functions);
