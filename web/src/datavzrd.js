@@ -407,6 +407,7 @@ function applyNarrowView(columnIndexMap) {
     ...config.tick_titles,
     ...config.bar_titles,
     ...config.bubble_titles,
+    ...config.pill_titles,
     ...config.custom_plot_titles,
   ]);
   for (const column of config.displayed_columns) {
