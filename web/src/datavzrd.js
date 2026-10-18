@@ -44,6 +44,7 @@ import {
   renderDetailTickBarBubblePlot
 } from "./plot/plot";
 import { columnPlotIcon } from "./plot/column-plot";
+import { plotViewError } from "./error";
 import "../style/bootstrap.min.css";
 import "../style/bootstrap-table.min.css";
 import "../style/bootstrap-select.min.css";
@@ -51,6 +52,7 @@ import "../style/bootstrap-table-fixed-columns.min.css";
 import "../style/datavzrd.css";
 
 export { selectPlotColumn } from "./plot/column-plot";
+export { customFunctionError as custom_error } from "./error";
 
 let LINE_NUMBERS = false;
 let NARROW_VIEW = false;
@@ -788,7 +790,8 @@ export function load() {
             window[o.data_function],
             o.specs,
             o.vega_controls,
-            o.legend
+            o.legend,
+            o.title
           );
         }
       }
@@ -1468,13 +1471,7 @@ export function load_plot(specs, data, multiple_datasets, resize) {
         .height(height + resize * aspect_ratio)
         .run();
     }
-  });
-}
-
-export function custom_error(e, column) {
-  $("#error-modal").modal("show");
-  $("#error-column").html(column);
-  $("#error-modal-text").html(e.toString() + "\n" + e.stack.toString());
+  }).catch(plotViewError);
 }
 
 $(document).click(function (event) {

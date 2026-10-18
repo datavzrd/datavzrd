@@ -225,7 +225,7 @@ export function render_html_contents() {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Error when calling custom function for column <b id="error-column"></b> (please fix the function definition in the datavzrd config):</p>
+                                        <p id="error-modal-description"></p>
                                         <pre id="error-modal-text"></pre>
                                     </div>
                                     <div class="modal-footer">
