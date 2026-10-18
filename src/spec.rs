@@ -28,7 +28,7 @@ use std::fmt::Debug;
 use std::fs;
 use std::fs::File;
 use std::io::Read;
-use std::path::{Path, PathBuf};
+use std::path::{Component, Path, PathBuf};
 use std::str::FromStr;
 use std::sync::LazyLock;
 use thiserror::Error;
@@ -144,6 +144,15 @@ impl ItemsSpec {
             }
         }
         for (name, view) in &self.views {
+            let mut components = Path::new(name).components();
+            if !matches!(
+                (components.next(), components.next()),
+                (Some(Component::Normal(_)), None)
+            ) {
+                bail!(ConfigError::InvalidViewName {
+                    view: name.to_string()
+                })
+            }
             if let Some(render_table) = &view.render_table {
                 let custom_plots = render_table
                     .columns
@@ -1758,6 +1767,8 @@ pub enum ConfigError {
     },
     #[error("Could not find default view named {view:?} in given config.")]
     MissingDefaultView { view: String },
+    #[error("View name {view:?} cannot be used as a directory name in the report. Please use a name without path separators like \"/\".")]
+    InvalidViewName { view: String },
     #[error("Heatmap definition for column {column:?} misses a scale. Please provide a scale in the heatmap configuration.")]
     HeatmapMissingScale { column: String },
     #[error("Column {column:?} in dataset at {path:?} is configured with a quantitative scale (e.g. a heatmap), but does not contain any numeric values to derive a domain from. Please provide numeric values for this column, set an explicit domain, or use an ordinal scale.")]
@@ -2304,6 +2315,31 @@ mod tests {
             error.downcast_ref::<ConfigError>(),
             Some(ConfigError::InvalidRenderPlotSpec { .. })
         ));
+    }
+
+    #[test]
+    fn test_invalid_view_name_config_validation() {
+        for view in ["a/b", "..", "."] {
+            let raw_config = format!(
+                r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                "{view}":
+                    dataset: d
+            "#
+            );
+            let config: ItemsSpec = serde_yaml::from_str(&raw_config).unwrap();
+            let error = config.validate().unwrap_err();
+            assert!(
+                matches!(
+                    error.downcast_ref::<ConfigError>(),
+                    Some(ConfigError::InvalidViewName { .. })
+                ),
+                "{view}"
+            );
+        }
     }
 
     #[test]
