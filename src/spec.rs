@@ -1861,6 +1861,7 @@ pub enum ConfigError {
 
 #[cfg(test)]
 mod tests {
+    use crate::render::portable::DatasetError;
     use crate::spec::{
         default_links, default_page_size, default_precision, default_render_table,
         default_single_page_threshold, AuxDomainColumns, ColorRange, ConfigError, DatasetSpecs,
@@ -2178,6 +2179,23 @@ mod tests {
         assert_eq!(config, expected_config);
     }
 
+    fn validation_error(raw_config: &str) -> anyhow::Error {
+        let mut config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        config
+            .preprocess()
+            .and_then(|()| config.validate())
+            .unwrap_err()
+    }
+
+    macro_rules! assert_config_error {
+        ($raw_config:expr, $variant:ident) => {
+            assert!(matches!(
+                validation_error($raw_config).downcast().unwrap(),
+                ConfigError::$variant { .. }
+            ))
+        };
+    }
+
     #[test]
     fn test_valid_config_validation() {
         let config = ItemsSpec::from_file(".examples/example.datavzrd.yaml").unwrap();
@@ -2194,8 +2212,9 @@ mod tests {
                 plot-b:
                     dataset: table-b
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        assert!(validation_error(raw_config)
+            .downcast::<DatasetError>()
+            .is_ok());
     }
 
     #[test]
@@ -2212,13 +2231,7 @@ mod tests {
                         columns:
                             gene: {}
             "#;
-        let mut config_file = tempfile::NamedTempFile::new().unwrap();
-        config_file.write_all(raw_config.as_bytes()).unwrap();
-        let error = ItemsSpec::from_file(config_file.path()).unwrap_err();
-        assert!(matches!(
-            error.downcast_ref::<ConfigError>(),
-            Some(ConfigError::NotEnoughHeaderRows { .. })
-        ));
+        assert_config_error!(raw_config, NotEnoughHeaderRows);
     }
 
     #[test]
@@ -2236,10 +2249,7 @@ mod tests {
             "#,
             data_file.path().display()
         );
-        let mut config_file = tempfile::NamedTempFile::new().unwrap();
-        config_file.write_all(raw_config.as_bytes()).unwrap();
-        let error = ItemsSpec::from_file(config_file.path()).unwrap_err();
-        assert!(error
+        assert!(validation_error(&raw_config)
             .to_string()
             .contains("has a different number of fields (3) than the header (2)"));
     }
@@ -2261,13 +2271,7 @@ mod tests {
                                         scale: linear
                                         color-scheme: viridis
             "#;
-        let mut config_file = tempfile::NamedTempFile::new().unwrap();
-        config_file.write_all(raw_config.as_bytes()).unwrap();
-        let error = ItemsSpec::from_file(config_file.path()).unwrap_err();
-        assert!(matches!(
-            error.downcast_ref::<ConfigError>(),
-            Some(ConfigError::NonNumericQuantitativeColumn { .. })
-        ));
+        assert_config_error!(raw_config, NonNumericQuantitativeColumn);
     }
 
     #[test]
@@ -2288,12 +2292,7 @@ mod tests {
                                     spec: |
                                         {"mark": "bar"}
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        let error = config.validate().unwrap_err();
-        assert!(matches!(
-            error.downcast_ref::<ConfigError>(),
-            Some(ConfigError::CustomPlotMissingData { .. })
-        ));
+        assert_config_error!(raw_config, CustomPlotMissingData);
     }
 
     #[test]
@@ -2309,12 +2308,7 @@ mod tests {
                         spec: |
                             {"mark": "point",
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        let error = config.validate().unwrap_err();
-        assert!(matches!(
-            error.downcast_ref::<ConfigError>(),
-            Some(ConfigError::InvalidRenderPlotSpec { .. })
-        ));
+        assert_config_error!(raw_config, InvalidRenderPlotSpec);
     }
 
     #[test]
@@ -2330,15 +2324,7 @@ mod tests {
                     dataset: d
             "#
             );
-            let config: ItemsSpec = serde_yaml::from_str(&raw_config).unwrap();
-            let error = config.validate().unwrap_err();
-            assert!(
-                matches!(
-                    error.downcast_ref::<ConfigError>(),
-                    Some(ConfigError::InvalidViewName { .. })
-                ),
-                "{view}"
-            );
+            assert_config_error!(&raw_config, InvalidViewName);
         }
     }
 
@@ -2353,8 +2339,7 @@ mod tests {
                 table-a:
                     dataset: table-a
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        assert_config_error!(raw_config, MissingDefaultView);
     }
 
     #[test]
@@ -2377,8 +2362,7 @@ mod tests {
                                             - 50
                                             - 60
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        assert_config_error!(raw_config, ValueOutsideDomain);
     }
 
     #[test]
@@ -2401,8 +2385,7 @@ mod tests {
                                             - 0
                                             - 100
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        assert_config_error!(raw_config, LogScaleDomainIncludesZero);
     }
 
     #[test]
@@ -2422,8 +2405,7 @@ mod tests {
                                         scale: ordinal
                                         color-scheme: category20
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        assert_config_error!(raw_config, HeadersFirstColumnCustomized);
     }
 
     #[test]
@@ -2440,8 +2422,7 @@ mod tests {
                 table-a:
                     dataset: table-a
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        assert_config_error!(raw_config, LinkToMissingView);
     }
 
     #[test]
@@ -2460,8 +2441,7 @@ mod tests {
                 other-table-a:
                     dataset: table-a
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        assert_config_error!(raw_config, MissingLinkoutColumn);
     }
 
     #[test]
@@ -2480,8 +2460,7 @@ mod tests {
                 other-table-a:
                     dataset: table-a
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        assert_config_error!(raw_config, LinkToMissingColumn);
     }
 
     #[test]
@@ -2495,15 +2474,14 @@ mod tests {
                     dataset: table-a
                     render-table:
                         columns:
-                            some-column:
+                            price:
                                 optional: false
                                 plot:
                                     ticks:
                                         scale: linear
                                 ellipsis: 25
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        assert_config_error!(raw_config, ConflictingConfiguration);
     }
 
     #[test]
@@ -2600,8 +2578,7 @@ mod tests {
                                         separator: ","
                                         color-scheme: category20
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        assert_config_error!(raw_config, ConflictingConfiguration);
     }
 
     #[test]
@@ -2642,8 +2619,7 @@ mod tests {
                     render-plot:
                         spec-path: ".examples/specs/movies.vl.json"
             "#;
-        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
-        assert!(config.validate().is_err());
+        assert_config_error!(raw_config, PlotAndTablePresentConfiguration);
     }
 
     #[test]
