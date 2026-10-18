@@ -171,6 +171,17 @@ impl ItemsSpec {
                         })
                     }
                 }
+                for (column, field, source) in
+                    javascript_functions(&render_table.columns, &render_table.additional_columns)
+                {
+                    if !JavascriptFunction(source.to_owned()).is_valid() {
+                        bail!(ConfigError::InvalidJavascriptFunction {
+                            view: name.to_string(),
+                            column: column.to_string(),
+                            field: field.to_string(),
+                        })
+                    }
+                }
                 if view.datasets.is_none() && view.render_img.is_none() {
                     if view.dataset.is_none() {
                         bail!(ConfigError::MissingDatasetProperty {
@@ -248,34 +259,6 @@ impl ItemsSpec {
                                     column: column.to_string(),
                                     conflict: possible_conflicting
                                 })
-                            }
-                            for (field, source) in [
-                                ("custom", render_columns.custom.as_deref()),
-                                (
-                                    "link-to-url custom-content",
-                                    render_columns
-                                        .link_to_url
-                                        .as_ref()
-                                        .and_then(|link| link.custom_content.as_deref()),
-                                ),
-                                (
-                                    "custom-plot data",
-                                    render_columns
-                                        .custom_plot
-                                        .as_ref()
-                                        .map(|plot| plot.plot_data.as_str())
-                                        .filter(|source| !source.is_empty()),
-                                ),
-                            ] {
-                                if let Some(source) = source {
-                                    if !JavascriptFunction(source.to_owned()).is_valid() {
-                                        bail!(ConfigError::InvalidJavascriptFunction {
-                                            view: name.to_string(),
-                                            column: column.to_string(),
-                                            field: field.to_string(),
-                                        })
-                                    }
-                                }
                             }
                             if let Some(link_to_url) = &render_columns.link_to_url {
                                 if link_to_url.entries.is_empty() {
@@ -676,6 +659,56 @@ impl ItemSpecs {
         }
         Ok(merged)
     }
+}
+
+/// Returns the custom javascript functions of the given columns with the column and field they are defined in.
+pub(crate) fn javascript_functions<'a>(
+    columns: &'a HashMap<String, RenderColumnSpec>,
+    additional_columns: &'a Option<HashMap<String, AdditionalColumnSpec>>,
+) -> impl Iterator<Item = (&'a String, &'static str, &'a str)> {
+    let columns = columns.iter().flat_map(|(column, spec)| {
+        [
+            ("custom", spec.custom.as_deref()),
+            (
+                "link-to-url custom-content",
+                spec.link_to_url
+                    .as_ref()
+                    .and_then(|link| link.custom_content.as_deref()),
+            ),
+            (
+                "custom-plot data",
+                spec.custom_plot
+                    .as_ref()
+                    .map(|plot| plot.plot_data.as_str()),
+            ),
+            (
+                "heatmap custom-content",
+                spec.plot
+                    .as_ref()
+                    .and_then(|plot| plot.heatmap.as_ref())
+                    .and_then(|heatmap| heatmap.custom_content.as_deref()),
+            ),
+        ]
+        .map(|(field, source)| (column, field, source))
+    });
+    let additional_columns = additional_columns
+        .iter()
+        .flatten()
+        .flat_map(|(column, spec)| {
+            [
+                ("value", Some(spec.value.as_str())),
+                (
+                    "custom-plot data",
+                    spec.custom_plot
+                        .as_ref()
+                        .map(|plot| plot.plot_data.as_str()),
+                ),
+            ]
+            .map(|(field, source)| (column, field, source))
+        });
+    columns
+        .chain(additional_columns)
+        .filter_map(|(column, field, source)| Some((column, field, source?)))
 }
 
 #[skip_serializing_none]
@@ -2326,6 +2359,40 @@ mod tests {
             );
             assert_config_error!(&raw_config, InvalidViewName);
         }
+    }
+
+    #[test]
+    fn test_invalid_javascript_function_config_validation() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                d:
+                    dataset: d
+                    render-table:
+                        add-columns:
+                            extra:
+                                value: row.price * 2
+            "#;
+        assert_config_error!(raw_config, InvalidJavascriptFunction);
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                d:
+                    dataset: d
+                    render-table:
+                        columns:
+                            price:
+                                plot:
+                                    heatmap:
+                                        scale: linear
+                                        color-scheme: viridis
+                                        custom-content: value * 2
+            "#;
+        assert_config_error!(raw_config, InvalidJavascriptFunction);
     }
 
     #[test]
