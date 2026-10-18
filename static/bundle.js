@@ -70420,23 +70420,28 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   customFunctionError: function() { return customFunctionError; },
   customPlotError: function() { return customPlotError; },
+  functionsLoadError: function() { return functionsLoadError; },
   plotViewError: function() { return plotViewError; }
 });
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 
-function showError(error, ...description) {
+function showError(details, ...description) {
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(() => {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("#error-modal-description").empty().append(...description);
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()("#error-modal-text").text(`${error}\n${error.stack}`);
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("#error-modal-text").text(details).toggle(details !== "");
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("#error-modal").modal("show");
   });
 }
 
+function errorDetails(error) {
+  return `${error}\n${error.stack}`;
+}
+
 function customFunctionError(error, column) {
   showError(
-    error,
+    errorDetails(error),
     "Error when calling custom function for column ",
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("<b>").text(column),
     " (please fix the function definition in the datavzrd config):",
@@ -70445,7 +70450,7 @@ function customFunctionError(error, column) {
 
 function customPlotError(error, column) {
   showError(
-    error,
+    errorDetails(error),
     "Error when rendering custom plot for column ",
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("<b>").text(column),
     " (please fix the plot specification in the datavzrd config):",
@@ -70454,8 +70459,15 @@ function customPlotError(error, column) {
 
 function plotViewError(error) {
   showError(
-    error,
+    errorDetails(error),
     "Error when rendering the plot of this view (please fix the plot specification in the datavzrd config):",
+  );
+}
+
+function functionsLoadError() {
+  showError(
+    "",
+    "The custom functions of this view could not be loaded because one of them contains a syntax error. When rendering the report, datavzrd printed a warning naming the affected column (please fix the function definition in the datavzrd config).",
   );
 }
 
@@ -166572,6 +166584,7 @@ __webpack_require__.d(__webpack_exports__, {
   downloadCSV: function() { return downloadCSV; },
   embedHistogram: function() { return embedHistogram; },
   embedSearch: function() { return embedSearch; },
+  functions_loaded: function() { return functions_loaded; },
   get_config_from_url_query: function() { return get_config_from_url_query; },
   hide: function() { return hide; },
   landing_page: function() { return landing_page; },
@@ -166650,6 +166663,7 @@ __webpack_require__.d(__webpack_exports__, {
 
 
 let LINE_NUMBERS = false;
+let FUNCTIONS_LOADED = false;
 let NARROW_VIEW = false;
 
 function downloadCSV() {
@@ -167037,6 +167051,10 @@ function hideLabelColumn() {
   });
 }
 
+function functions_loaded() {
+  FUNCTIONS_LOADED = true;
+}
+
 function load() {
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(function () {
     document.title = "datavzrd report";
@@ -167053,6 +167071,9 @@ function load() {
     }
     config.original_displayed_columns = [...config.displayed_columns];
     (0,_page__WEBPACK_IMPORTED_MODULE_11__.render_html_contents)();
+    if (!FUNCTIONS_LOADED) {
+      (0,_error__WEBPACK_IMPORTED_MODULE_20__.functionsLoadError)();
+    }
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".table-container").show();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".loading").hide();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("#pagination").show();

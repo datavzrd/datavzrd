@@ -4,3 +4,4 @@ function custom_func_25c0740391f9f68757894e517ef35361(value, row) { try {
     const minutes = total_minutes % 60;
     return `${hours}h ${minutes}m`;
  } catch (e) { datavzrd.custom_error(e, 'Runtime') }}
+datavzrd.functions_loaded();

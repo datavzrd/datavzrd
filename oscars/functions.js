@@ -6,3 +6,4 @@ function custom_func_681872f53fef3af326344cd4b9202655(row) { try {
     const seasons = ["❄️", "🌸", "☀️", "🍁"];
     return (month < 1 || month > 12) ? "Invalid month" : seasons[Math.floor((month % 12) / 3)];
  } catch (e) { datavzrd.custom_error(e, 'birth_season') }}
+datavzrd.functions_loaded();
