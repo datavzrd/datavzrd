@@ -1,5 +1,6 @@
 import $ from "jquery";
 import vegaEmbed from "vega-embed";
+import { customPlotError } from "../error";
 
 export function renderCustomPlot(
   ah,
@@ -33,7 +34,9 @@ export function renderCustomPlot(
     var opt = { actions: plot.vega_controls, renderer: "svg" };
     this.innerHTML = "";
     this.appendChild(div);
-    vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+    vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt).catch((error) =>
+      customPlotError(error, plot.title),
+    );
     row++;
   });
 }
@@ -46,6 +49,7 @@ export function renderCustomPlotDetailView(
   specs,
   vega_controls,
   legend,
+  column,
 ) {
   let all_rows = $("#table").bootstrapTable("getData");
   var data = data_function(value, row, all_rows);
@@ -56,7 +60,9 @@ export function renderCustomPlotDetailView(
     disableVegaLegend(s);
   }
   var opt = { actions: vega_controls, renderer: "svg" };
-  vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt);
+  vegaEmbed(div, JSON.parse(JSON.stringify(s)), opt).catch((error) =>
+    customPlotError(error, column),
+  );
 }
 
 function disableVegaLegend(spec) {
