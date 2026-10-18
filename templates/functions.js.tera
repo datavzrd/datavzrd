@@ -1,2 +1,2 @@
 {% for function in functions %}{{ function | safe }}
-{% endfor %}
+{% endfor %}datavzrd.functions_loaded();
