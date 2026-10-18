@@ -1621,7 +1621,7 @@ fn render_plot_page<P: AsRef<Path>>(
     view_sizes: &HashMap<String, String>,
     debug: bool,
 ) -> Result<()> {
-    let mut records = read_records(dataset)?;
+    let mut records = dataset.read_records()?;
     if !links.is_empty() {
         let headers = dataset.reader()?.headers()?;
         let link_columns = link_column_positions(&headers, links);
@@ -1671,7 +1671,7 @@ fn render_html_page<P: AsRef<Path>>(
     specs: &ItemsSpec,
     view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
-    let records = read_records(dataset)?;
+    let records = dataset.read_records()?;
     let script = fs::read_to_string(script_path)?;
 
     let mut templates = Tera::default();
@@ -1742,7 +1742,7 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
 ) -> Result<()> {
     let data = datasets
         .into_iter()
-        .map(|(name, dataset)| Ok((name, read_records(dataset)?)))
+        .map(|(name, dataset)| Ok((name, dataset.read_records()?)))
         .collect::<Result<HashMap<_, _>>>()?;
     write_plot_page(
         output_path,
@@ -1782,18 +1782,6 @@ fn write_plot_page<P: AsRef<Path>>(
     let html = templates.render("plot.html.tera", &context)?;
     fs::write(file_path, html)?;
     Ok(())
-}
-
-/// Reads the records of a dataset as maps from column name to value
-fn read_records(dataset: &DatasetSpecs) -> Result<Vec<HashMap<String, String>>> {
-    let mut reader = dataset.reader()?;
-    let headers = reader.headers()?;
-    let records = reader
-        .records()?
-        .skip(dataset.header_rows - 1)
-        .map(|row| headers.iter().cloned().zip(row).collect())
-        .collect();
-    Ok(records)
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]

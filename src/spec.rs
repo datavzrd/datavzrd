@@ -591,6 +591,18 @@ impl DatasetSpecs {
         Ok(self.size()? == 0)
     }
 
+    /// Reads the records of the dataset as maps from column name to value
+    pub fn read_records(&self) -> Result<Vec<HashMap<String, String>>> {
+        let mut reader = self.reader()?;
+        let headers = reader.headers()?;
+        let records = reader
+            .records()?
+            .skip(self.header_rows - 1)
+            .map(|row| headers.iter().cloned().zip(row).collect())
+            .collect();
+        Ok(records)
+    }
+
     pub fn reader(&self) -> Result<readervzrd::FileReader> {
         let path = &self.path.to_str().ok_or(anyhow!(
             "Failed to convert given path to string: {}",
