@@ -27,7 +27,6 @@ readervzrd = "0.5.1"
 typed-builder = "0.23"
 serde_yaml = "0.8" # https://github.com/AlexanderThaller/format_serde_error/pull/23
 serde_with = { version = "3.20.0", features = ["macros"] }
-derive-new = "0.7"
 itertools = "0.15.0"
 tera = "2.0.0"
 tera-contrib = { version = "0.3.0", features = ["json"] }
