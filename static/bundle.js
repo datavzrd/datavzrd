@@ -70414,6 +70414,53 @@ function generateSVGGradientLegend(scale, domain, legendId) {
 
 
 }),
+"./src/error.js": (function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  customFunctionError: function() { return customFunctionError; },
+  customPlotError: function() { return customPlotError; },
+  plotViewError: function() { return plotViewError; }
+});
+/* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
+/* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function showError(error, ...description) {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(() => {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("#error-modal-description").empty().append(...description);
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("#error-modal-text").text(`${error}\n${error.stack}`);
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("#error-modal").modal("show");
+  });
+}
+
+function customFunctionError(error, column) {
+  showError(
+    error,
+    "Error when calling custom function for column ",
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("<b>").text(column),
+    " (please fix the function definition in the datavzrd config):",
+  );
+}
+
+function customPlotError(error, column) {
+  showError(
+    error,
+    "Error when rendering custom plot for column ",
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("<b>").text(column),
+    " (please fix the plot specification in the datavzrd config):",
+  );
+}
+
+function plotViewError(error) {
+  showError(
+    error,
+    "Error when rendering the plot of this view (please fix the plot specification in the datavzrd config):",
+  );
+}
+
+
+}),
 "./src/page.js": (function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -70651,7 +70698,7 @@ function render_html_contents() {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Error when calling custom function for column <b id="error-column"></b> (please fix the function definition in the datavzrd config):</p>
+                                        <p id="error-modal-description"></p>
                                         <pre id="error-modal-text"></pre>
                                     </div>
                                     <div class="modal-footer">
@@ -71133,6 +71180,8 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
 /* harmony import */var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */var vega_embed__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vega-embed */ "./node_modules/.pnpm/vega-embed@7.3.0_vega-lite@6.5.0_vega@6.4.0__vega@6.4.0/node_modules/vega-embed/build/embed.js");
+/* harmony import */var _error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../error */ "./src/error.js");
+
 
 
 
@@ -71168,7 +71217,9 @@ function renderCustomPlot(
     var opt = { actions: plot.vega_controls, renderer: "svg" };
     this.innerHTML = "";
     this.appendChild(div);
-    (0,vega_embed__WEBPACK_IMPORTED_MODULE_1__["default"])(div, JSON.parse(JSON.stringify(s)), opt);
+    (0,vega_embed__WEBPACK_IMPORTED_MODULE_1__["default"])(div, JSON.parse(JSON.stringify(s)), opt).catch((error) =>
+      (0,_error__WEBPACK_IMPORTED_MODULE_2__.customPlotError)(error, plot.title),
+    );
     row++;
   });
 }
@@ -71181,6 +71232,7 @@ function renderCustomPlotDetailView(
   specs,
   vega_controls,
   legend,
+  column,
 ) {
   let all_rows = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#table").bootstrapTable("getData");
   var data = data_function(value, row, all_rows);
@@ -71191,7 +71243,9 @@ function renderCustomPlotDetailView(
     disableVegaLegend(s);
   }
   var opt = { actions: vega_controls, renderer: "svg" };
-  (0,vega_embed__WEBPACK_IMPORTED_MODULE_1__["default"])(div, JSON.parse(JSON.stringify(s)), opt);
+  (0,vega_embed__WEBPACK_IMPORTED_MODULE_1__["default"])(div, JSON.parse(JSON.stringify(s)), opt).catch((error) =>
+    (0,_error__WEBPACK_IMPORTED_MODULE_2__.customPlotError)(error, column),
+  );
 }
 
 function disableVegaLegend(spec) {
@@ -166514,7 +166568,7 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   compress_data: function() { return compress_data; },
-  custom_error: function() { return custom_error; },
+  custom_error: function() { return /* reexport safe */ _error__WEBPACK_IMPORTED_MODULE_20__.customFunctionError; },
   downloadCSV: function() { return downloadCSV; },
   embedHistogram: function() { return embedHistogram; },
   embedSearch: function() { return embedSearch; },
@@ -166557,13 +166611,16 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var _plot_pills__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./plot/pills */ "./src/plot/pills.js");
 /* harmony import */var _plot_plot__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./plot/plot */ "./src/plot/plot.js");
 /* harmony import */var _plot_column_plot__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./plot/column-plot */ "./src/plot/column-plot.js");
-/* harmony import */var _style_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../style/bootstrap.min.css */ "./style/bootstrap.min.css");
-/* harmony import */var _style_bootstrap_table_min_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../style/bootstrap-table.min.css */ "./style/bootstrap-table.min.css");
-/* harmony import */var _style_bootstrap_select_min_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../style/bootstrap-select.min.css */ "./style/bootstrap-select.min.css");
-/* harmony import */var _style_bootstrap_table_fixed_columns_min_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../style/bootstrap-table-fixed-columns.min.css */ "./style/bootstrap-table-fixed-columns.min.css");
-/* harmony import */var _style_datavzrd_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../style/datavzrd.css */ "./style/datavzrd.css");
+/* harmony import */var _error__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./error */ "./src/error.js");
+/* harmony import */var _style_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../style/bootstrap.min.css */ "./style/bootstrap.min.css");
+/* harmony import */var _style_bootstrap_table_min_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../style/bootstrap-table.min.css */ "./style/bootstrap-table.min.css");
+/* harmony import */var _style_bootstrap_select_min_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../style/bootstrap-select.min.css */ "./style/bootstrap-select.min.css");
+/* harmony import */var _style_bootstrap_table_fixed_columns_min_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../style/bootstrap-table-fixed-columns.min.css */ "./style/bootstrap-table-fixed-columns.min.css");
+/* harmony import */var _style_datavzrd_css__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../style/datavzrd.css */ "./style/datavzrd.css");
 /* provided dependency */ var __webpack_provide_window_dot_jQuery = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
 /* provided dependency */ var __webpack_provide_window_dot_$ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
+
+
 
 
 
@@ -167328,7 +167385,8 @@ function load() {
             window[o.data_function],
             o.specs,
             o.vega_controls,
-            o.legend
+            o.legend,
+            o.title
           );
         }
       }
@@ -168008,13 +168066,7 @@ function load_plot(specs, data, multiple_datasets, resize) {
         .height(height + resize * aspect_ratio)
         .run();
     }
-  });
-}
-
-function custom_error(e, column) {
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#error-modal").modal("show");
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#error-column").html(column);
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#error-modal-text").html(e.toString() + "\n" + e.stack.toString());
+  }).catch(_error__WEBPACK_IMPORTED_MODULE_20__.plotViewError);
 }
 
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).click(function (event) {
