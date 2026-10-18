@@ -35,6 +35,7 @@ pub(crate) fn suggest(
         items_spec
             .datasets
             .insert(dataset_name.clone(), dataset.clone());
+        dataset.reader()?.validate()?;
         let column_types = datavzrd::utils::column_type::classify_table(&dataset, true)?;
         let mut columns: HashMap<String, RenderColumnSpec> = column_types
             .iter()
