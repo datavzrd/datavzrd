@@ -87,12 +87,10 @@ impl Renderer for ItemRenderer {
                             .render_html
                             .is_none())
             })
-            .map(|(view_name, size)| {
-                if size == 0 {
-                    (view_name, "empty".to_string())
-                } else {
-                    (view_name, format!("{size} rows"))
-                }
+            .map(|(view_name, size)| match size {
+                0 => (view_name, "empty".to_string()),
+                1 => (view_name, "1 row".to_string()),
+                _ => (view_name, format!("{size} rows")),
             })
             .collect();
         let mut column_index_cache: LinkedTable = HashMap::new();
