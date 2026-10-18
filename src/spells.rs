@@ -20,7 +20,16 @@ use std::{thread::sleep, time::Duration};
 pub struct SpellSpec {
     pub url: String,
     #[serde(default)]
+    #[schemars(schema_with = "spell_parameters_schema")]
     pub with: HashMap<String, String>,
+}
+
+fn spell_parameters_schema(_: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
+    serde_json::from_value(serde_json::json!({
+        "type": "object",
+        "additionalProperties": { "type": ["string", "number", "boolean"] }
+    }))
+    .unwrap()
 }
 
 static SPELL_RE: LazyLock<Regex> = LazyLock::new(|| {
@@ -188,6 +197,15 @@ mod tests {
         )
         .unwrap();
         assert_ne!(result, "bar: 2\n");
+    }
+
+    #[test]
+    fn test_spell_parameters_schema_allows_scalars() {
+        let schema = serde_json::to_value(schemars::schema_for!(SpellSpec)).unwrap();
+        assert_eq!(
+            schema["properties"]["with"]["additionalProperties"]["type"],
+            serde_json::json!(["string", "number", "boolean"])
+        );
     }
 
     #[test]
