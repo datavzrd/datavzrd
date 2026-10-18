@@ -53,7 +53,7 @@ pub fn render_report(
     }
 
     if !output.exists() {
-        fs::create_dir(output)?;
+        fs::create_dir_all(output)?;
     } else if output.read_dir()?.next().is_some() {
         if overwrite_output {
             fs::remove_dir_all(output)?;
@@ -78,4 +78,32 @@ pub fn render_report(
 pub enum OutputError {
     #[error("Given output directory {output_path:?} was not empty. If you wish to overwrite it please use the --overwrite-output option.")]
     OutputDirectoryNotEmpty { output_path: PathBuf },
+}
+
+#[cfg(test)]
+mod tests {
+    use super::render_report;
+    use std::io::Write;
+
+    #[test]
+    fn test_render_report_creates_missing_parent_directories() {
+        let mut config_file = tempfile::NamedTempFile::new().unwrap();
+        config_file
+            .write_all(
+                b"datasets:\n  d:\n    path: tests/data/uniform_datatypes.csv\nviews:\n  d:\n    dataset: d\n",
+            )
+            .unwrap();
+        let output_dir = tempfile::tempdir().unwrap();
+        let output = output_dir.path().join("reports").join("report");
+        render_report(
+            &config_file.path().to_path_buf(),
+            &output,
+            "",
+            false,
+            false,
+            false,
+        )
+        .unwrap();
+        assert!(output.join("index.html").exists());
+    }
 }
