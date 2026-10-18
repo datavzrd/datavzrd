@@ -145,6 +145,23 @@ impl ItemsSpec {
         }
         for (name, view) in &self.views {
             if let Some(render_table) = &view.render_table {
+                let custom_plots = render_table
+                    .columns
+                    .iter()
+                    .filter_map(|(column, spec)| {
+                        spec.custom_plot.as_ref().map(|plot| (column, plot))
+                    })
+                    .chain(render_table.additional_columns.iter().flatten().filter_map(
+                        |(column, spec)| spec.custom_plot.as_ref().map(|plot| (column, plot)),
+                    ));
+                for (column, custom_plot) in custom_plots {
+                    if custom_plot.plot_data.is_empty() {
+                        bail!(ConfigError::CustomPlotMissingData {
+                            view: name.to_string(),
+                            column: column.to_string(),
+                        })
+                    }
+                }
                 if view.datasets.is_none() && view.render_img.is_none() {
                     if view.dataset.is_none() {
                         bail!(ConfigError::MissingDatasetProperty {
@@ -1709,6 +1726,8 @@ pub enum ConfigError {
     LinkToUrlMissingUrl { view: String, column: String },
     #[error("The custom-plot spec of column {column:?} in view {view:?} is not valid JSON. Please provide a valid Vega-Lite specification.")]
     InvalidCustomPlotSpec { view: String, column: String },
+    #[error("The custom-plot of column {column:?} in view {view:?} misses a data function. Please provide a function that returns the data of the plot via `data`.")]
+    CustomPlotMissingData { view: String, column: String },
     #[error("Could not find column with index {index:?} under path {table_path:?} with only {header_length:?} columns.")]
     IndexTooLarge {
         index: usize,
@@ -2228,6 +2247,32 @@ mod tests {
         assert!(matches!(
             error.downcast_ref::<ConfigError>(),
             Some(ConfigError::NonNumericQuantitativeColumn { .. })
+        ));
+    }
+
+    #[test]
+    fn test_custom_plot_missing_data_config_validation() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                d:
+                    dataset: d
+                    render-table:
+                        add-columns:
+                            extra:
+                                value: |
+                                    function(row) { return 1; }
+                                custom-plot:
+                                    spec: |
+                                        {"mark": "bar"}
+            "#;
+        let config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        let error = config.validate().unwrap_err();
+        assert!(matches!(
+            error.downcast_ref::<ConfigError>(),
+            Some(ConfigError::CustomPlotMissingData { .. })
         ));
     }
 
