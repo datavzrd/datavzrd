@@ -71,7 +71,7 @@ pub fn classify_table(dataset: &DatasetSpecs, warn: bool) -> Result<HashMap<Stri
     );
     let mut warnings: HashMap<String, bool> =
         HashMap::from_iter(headers.iter().map(|s| (s.to_string(), !warn)));
-    for record in dataset.reader()?.records()?.skip(dataset.header_rows - 1) {
+    for record in dataset.records()? {
         for (title, value) in headers.iter().zip(record.iter()) {
             let column_type = classification.get_mut(title).unwrap();
             warnings.insert(

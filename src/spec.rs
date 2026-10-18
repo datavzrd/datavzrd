@@ -377,9 +377,8 @@ impl ItemsSpec {
                                     false
                                 };
                                 if let Some(domain) = domain {
-                                    let mut reader = dataset.reader()?;
                                     let colum_pos = column_position(column, dataset)?;
-                                    for record in reader.records()?.skip(dataset.header_rows - 1) {
+                                    for record in dataset.records()? {
                                         let value = record.get(colum_pos).unwrap();
                                         if let Ok(value) = value.parse::<f32>() {
                                             if (value < domain[0]
@@ -567,11 +566,24 @@ impl DatasetSpecs {
     }
 
     pub fn size(&self) -> Result<usize> {
-        Ok(self.reader()?.records()?.count() - (self.header_rows - 1))
+        Ok(self.records()?.count())
     }
 
     pub fn is_empty(&self) -> Result<bool> {
         Ok(self.size()? == 0)
+    }
+
+    /// Returns the records of the dataset without its additional header rows
+    pub fn records(&self) -> Result<impl Iterator<Item = Vec<String>>> {
+        Ok(self.reader()?.records()?.skip(self.header_rows - 1))
+    }
+
+    /// Returns the records of the dataset as maps from column name to value
+    pub fn keyed_records(&self) -> Result<impl Iterator<Item = HashMap<String, String>>> {
+        let headers = self.reader()?.headers()?;
+        Ok(self
+            .records()?
+            .map(move |row| headers.iter().cloned().zip(row).collect()))
     }
 
     pub fn reader(&self) -> Result<readervzrd::FileReader> {
@@ -783,8 +795,7 @@ impl ItemSpecs {
         single_page_threshold: usize,
     ) -> Result<()> {
         let mut indexed_keys = HashMap::new();
-        let mut reader = dataset.reader()?;
-        let rows = &reader.records()?.skip(dataset.header_rows - 1).count();
+        let rows = &dataset.records()?.count();
         self.single_page_page_size = self.page_size;
         if rows <= &single_page_threshold {
             self.page_size = *rows;
@@ -1345,17 +1356,15 @@ impl PillsSpec {
             vec![title.to_string()]
         };
         if self.domain.is_none() {
-            let mut reader = dataset.reader()?;
             let domain = domain_columns
                 .iter()
                 .flat_map(|column| {
                     let index = column_position(column, dataset).unwrap_or_else(|_| {
                         panic!("Column {column} not found when calculating domain for {title}.")
                     });
-                    reader
+                    dataset
                         .records()
                         .unwrap()
-                        .skip(dataset.header_rows - 1)
                         .flat_map(|record| {
                             record
                                 .get(index)

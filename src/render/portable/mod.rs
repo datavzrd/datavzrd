@@ -227,9 +227,7 @@ impl Renderer for ItemRenderer {
                     let summary = DatasetSummary::build(dataset)?;
 
                     for (page, grouped_records) in &dataset
-                        .reader()?
                         .records()?
-                        .skip(dataset.header_rows - 1)
                         .enumerate()
                         .chunk_by(|(i, _)| row_address_factory.get(*i).page)
                     {
@@ -1552,29 +1550,12 @@ fn render_plot_page<P: AsRef<Path>>(
     view_sizes: &HashMap<String, String>,
     debug: bool,
 ) -> Result<()> {
-    let headers = dataset
-        .reader()?
-        .headers()?
-        .iter()
-        .map(|s| s.to_owned())
-        .collect_vec();
-    let mut records: Vec<HashMap<String, String>> = dataset
-        .reader()?
-        .records()?
-        .skip(&dataset.header_rows - 1)
-        .map(|row| {
-            row.iter()
-                .enumerate()
-                .map(|(index, record)| (headers.get(index).unwrap().to_owned(), record.to_owned()))
-                .collect()
-        })
-        .collect_vec();
+    let mut records = dataset.keyed_records()?.collect_vec();
     if !links.is_empty() {
+        let headers = dataset.reader()?.headers()?;
         let link_columns = link_column_positions(&headers, links);
         let linkouts = dataset
-            .reader()?
             .records()?
-            .skip(&dataset.header_rows - 1)
             .map(|row| {
                 render_linkouts(
                     &row.iter().map(|s| s.to_owned()).collect_vec(),
@@ -1596,28 +1577,15 @@ fn render_plot_page<P: AsRef<Path>>(
         }
     }
 
-    let mut render_plot_specs = item_spec.render_plot.clone().unwrap();
-    render_plot_specs.read_schema()?;
-
-    let mut templates = Tera::default();
-    templates.add_raw_template(
-        "plot.html.tera",
-        include_str!("../../../templates/plot.html.tera"),
-    )?;
-    let mut context = page_context(specs, name, view_sizes);
-    context.insert("data", &compress(json!(records), debug)?);
-    context.insert("description", &item_spec.description);
-    context.insert("specs", &render_plot_specs.schema.as_ref().unwrap());
-
-    let file_path =
-        Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
-
-    let html = templates.render("plot.html.tera", &context)?;
-
-    let mut file = fs::File::create(file_path)?;
-    file.write_all(html.as_bytes())?;
-
-    Ok(())
+    write_plot_page(
+        output_path,
+        name,
+        item_spec,
+        specs,
+        view_sizes,
+        "data",
+        compress(json!(records), debug)?,
+    )
 }
 
 /// Renders a plot page from given render-plot spec
@@ -1630,24 +1598,7 @@ fn render_html_page<P: AsRef<Path>>(
     specs: &ItemsSpec,
     view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
-    let headers = dataset
-        .reader()?
-        .headers()?
-        .iter()
-        .map(|s| s.to_owned())
-        .collect_vec();
-    let records: Vec<HashMap<String, String>> = dataset
-        .reader()?
-        .records()?
-        .skip(&dataset.header_rows - 1)
-        .map(|row| {
-            row.iter()
-                .enumerate()
-                .map(|(index, record)| (headers.get(index).unwrap().to_owned(), record.to_owned()))
-                .collect()
-        })
-        .collect_vec();
-
+    let records = dataset.keyed_records()?.collect_vec();
     let script = fs::read_to_string(script_path)?;
 
     let mut templates = Tera::default();
@@ -1716,28 +1667,31 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
     view_sizes: &HashMap<String, String>,
     debug: bool,
 ) -> Result<()> {
-    let mut data = HashMap::new();
+    let data = datasets
+        .into_iter()
+        .map(|(name, dataset)| Ok((name, dataset.keyed_records()?.collect_vec())))
+        .collect::<Result<HashMap<_, _>>>()?;
+    write_plot_page(
+        output_path,
+        name,
+        item_spec,
+        specs,
+        view_sizes,
+        "datasets",
+        compress(json!(data), debug)?,
+    )
+}
 
-    for (name, dataset) in datasets {
-        let mut reader = dataset.reader()?;
-
-        let headers = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
-        let records: Vec<HashMap<String, String>> = reader
-            .records()?
-            .skip(&dataset.header_rows - 1)
-            .map(|row| {
-                row.iter()
-                    .enumerate()
-                    .map(|(index, record)| {
-                        (headers.get(index).unwrap().to_owned(), record.to_owned())
-                    })
-                    .collect()
-            })
-            .collect_vec();
-
-        data.insert(name.to_string(), records);
-    }
-
+/// Writes the page of a render-plot view with the given compressed data
+fn write_plot_page<P: AsRef<Path>>(
+    output_path: P,
+    name: &str,
+    item_spec: &ItemSpecs,
+    specs: &ItemsSpec,
+    view_sizes: &HashMap<String, String>,
+    data_key: &'static str,
+    data: String,
+) -> Result<()> {
     let mut render_plot_specs = item_spec.render_plot.clone().unwrap();
     render_plot_specs.read_schema()?;
     let mut templates = Tera::default();
@@ -1746,18 +1700,14 @@ fn render_plot_page_with_multiple_datasets<P: AsRef<Path>>(
         include_str!("../../../templates/plot.html.tera"),
     )?;
     let mut context = page_context(specs, name, view_sizes);
-    context.insert("datasets", &compress(json!(data), debug)?);
+    context.insert(data_key, &data);
     context.insert("description", &item_spec.description);
     context.insert("specs", &render_plot_specs.schema.as_ref().unwrap());
 
     let file_path =
         Path::new(output_path.as_ref()).join(Path::new("index_1").with_extension("html"));
-
     let html = templates.render("plot.html.tera", &context)?;
-
-    let mut file = fs::File::create(file_path)?;
-    file.write_all(html.as_bytes())?;
-
+    fs::write(file_path, html)?;
     Ok(())
 }
 
