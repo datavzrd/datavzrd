@@ -166581,6 +166581,7 @@ __webpack_require__.d(__webpack_exports__, {
   hide: function() { return hide; },
   landing_page: function() { return landing_page; },
   load: function() { return load; },
+  load_description: function() { return load_description; },
   load_plot: function() { return load_plot; },
   load_search: function() { return load_search; },
   resetColumnOrder: function() { return resetColumnOrder; },
@@ -166622,8 +166623,6 @@ __webpack_require__.d(__webpack_exports__, {
 /* harmony import */var _style_bootstrap_select_min_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../style/bootstrap-select.min.css */ "./style/bootstrap-select.min.css");
 /* harmony import */var _style_bootstrap_table_fixed_columns_min_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../style/bootstrap-table-fixed-columns.min.css */ "./style/bootstrap-table-fixed-columns.min.css");
 /* harmony import */var _style_datavzrd_css__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../style/datavzrd.css */ "./style/datavzrd.css");
-/* provided dependency */ var __webpack_provide_window_dot_jQuery = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
-/* provided dependency */ var __webpack_provide_window_dot_$ = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
 
 
 
@@ -166650,6 +166649,9 @@ __webpack_require__.d(__webpack_exports__, {
 
 
 
+
+// ProvidePlugin rewrites window.$, so assigning it directly would be a no-op.
+Object.assign(window, { $: (jquery__WEBPACK_IMPORTED_MODULE_0___default()), jQuery: (jquery__WEBPACK_IMPORTED_MODULE_0___default()) });
 
 
 
@@ -168044,6 +168046,10 @@ function compress_data(data) {
   return lz_string__WEBPACK_IMPORTED_MODULE_1___default().compressToUTF16(JSON.stringify([data]));
 }
 
+function load_description() {
+  (0,_description__WEBPACK_IMPORTED_MODULE_12__.renderMarkdownDescription)(true);
+}
+
 function load_plot(specs, data, multiple_datasets, resize) {
   jquery__WEBPACK_IMPORTED_MODULE_0___default()("#markdown-btn").click(function () {
     (0,_description__WEBPACK_IMPORTED_MODULE_12__.renderMarkdownDescription)(true);
@@ -168090,7 +168096,6 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).click(function (event) {
 
 function load_search() {
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(function () {
-    __webpack_provide_window_dot_$ = __webpack_provide_window_dot_jQuery = __webpack_require__(/*! jquery */ "./node_modules/.pnpm/jquery@3.7.1/node_modules/jquery/dist/jquery.js");
     window[
       "bootstrap-table"
     ] = __webpack_require__(/*! bootstrap-table/src/bootstrap-table.js */ "./node_modules/.pnpm/bootstrap-table@1.24.1_jquery@3.7.1/node_modules/bootstrap-table/src/bootstrap-table.js");
