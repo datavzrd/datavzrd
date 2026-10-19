@@ -1450,6 +1450,10 @@ export function compress_data(data) {
   return LZString.compressToUTF16(JSON.stringify([data]));
 }
 
+export function load_description() {
+  renderMarkdownDescription(true);
+}
+
 export function load_plot(specs, data, multiple_datasets, resize) {
   $("#markdown-btn").click(function () {
     renderMarkdownDescription(true);

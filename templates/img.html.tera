@@ -47,18 +47,8 @@
             {% if description %}
             <script>
                 $(document).ready(function() {
+                    datavzrd.load_description();
                     var innerDescription = document.getElementById('innerDescription');
-                    const converter = new showdown.Converter({
-                        extensions: [
-                            showdownKatex({
-                                throwOnError: true,
-                                displayMode: false,
-                                errorColor: '#1500ff',
-                            }),
-                        ],
-                    });
-                    converter.setFlavor('github');
-                    innerDescription.innerHTML = converter.makeHtml(innerDescription.dataset.markdown);
                     if (innerDescription.offsetHeight < window.screen.height/3) {
                         $('#canvas').css('padding-top', innerDescription.offsetHeight + 50);
                     }
