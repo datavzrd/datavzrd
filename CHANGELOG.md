@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.75.3](https://github.com/datavzrd/datavzrd/compare/v2.75.2...v2.75.3) (2026-10-19)
+
+
+### Bug Fixes
+
+* Allow ordinal heatmaps on numeric columns ([#1331](https://github.com/datavzrd/datavzrd/issues/1331)) ([035155a](https://github.com/datavzrd/datavzrd/commit/035155a9ae6f360a456ce4f94cac9e4dd72df8a7))
+* Clamp heatmap colors by default again ([#1330](https://github.com/datavzrd/datavzrd/issues/1330)) ([24a5d56](https://github.com/datavzrd/datavzrd/commit/24a5d568e9bcd1fc294464263f82bb970b89ebd0))
+* Make jQuery available in HTML views as documented ([#1329](https://github.com/datavzrd/datavzrd/issues/1329)) ([62f6c3c](https://github.com/datavzrd/datavzrd/commit/62f6c3c7ad98e28c731910dfe00719a42af21a23))
+* Reject datasets with duplicate column names ([#1327](https://github.com/datavzrd/datavzrd/issues/1327)) ([5222824](https://github.com/datavzrd/datavzrd/commit/52228248eee9c6dda2b658c79411b9c9b37858f4))
+* Report config errors instead of panicking ([#1325](https://github.com/datavzrd/datavzrd/issues/1325)) ([9ebba49](https://github.com/datavzrd/datavzrd/commit/9ebba4959f82f16243fd4f1e0e1ffff13208867e))
+* Show descriptions of HTML and image views by default ([#1332](https://github.com/datavzrd/datavzrd/issues/1332)) ([5cf9786](https://github.com/datavzrd/datavzrd/commit/5cf978640b9dc8265ec73a97c0039aebe0bbf85f))
+* Support dots and quotes in plotted columns and filter popovers ([#1328](https://github.com/datavzrd/datavzrd/issues/1328)) ([e347b97](https://github.com/datavzrd/datavzrd/commit/e347b97a647e9e103b8b6f7f874ac0f58a28a90e))
+
 ## [2.75.2](https://github.com/datavzrd/datavzrd/compare/v2.75.1...v2.75.2) (2026-10-18)
 
 
