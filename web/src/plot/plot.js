@@ -32,28 +32,18 @@ export function renderPlot(
     if (value != "") {
       this.innerHTML = "";
       this.appendChild(div);
-      var data = [];
-      var v = {};
-      v[title] = value;
-      data.push(v);
       var s = specs;
-      s.data = {};
-      s.data.values = data;
+      s.data = { values: [{ value }] };
       vegaEmbed(div, JSON.parse(JSON.stringify(s)), VEGA_EMBED_OPTIONS);
     }
     row++;
   });
 }
 
-export function renderDetailTickBarBubblePlot(value, div, specs, title) {
+export function renderDetailTickBarBubblePlot(value, div, specs) {
   if (value != "") {
-    var data = [];
-    var v = {};
-    v[title] = value;
-    data.push(v);
     var s = specs;
-    s.data = {};
-    s.data.values = data;
+    s.data = { values: [{ value }] };
     vegaEmbed(div, JSON.parse(JSON.stringify(s)), VEGA_EMBED_OPTIONS);
   }
 }
