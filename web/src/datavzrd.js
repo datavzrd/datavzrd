@@ -51,6 +51,9 @@ import "../style/bootstrap-select.min.css";
 import "../style/bootstrap-table-fixed-columns.min.css";
 import "../style/datavzrd.css";
 
+// ProvidePlugin rewrites window.$, so assigning it directly would be a no-op.
+Object.assign(window, { $, jQuery: $ });
+
 export { selectPlotColumn } from "./plot/column-plot";
 export { customFunctionError as custom_error } from "./error";
 
@@ -1493,7 +1496,6 @@ $(document).click(function (event) {
 
 export function load_search() {
   $(document).ready(function () {
-    window.$ = window.jQuery = require("jquery");
     window[
       "bootstrap-table"
     ] = require("bootstrap-table/src/bootstrap-table.js");
