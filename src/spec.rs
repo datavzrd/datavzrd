@@ -1905,7 +1905,7 @@ pub enum ConfigError {
     },
     #[error("Cannot customize the first header row of view {view:?} in given config. Please start customizing additional headers at index 1.")]
     HeadersFirstColumnCustomized { view: String },
-    #[error("View {view:?} customizes header row {row}, but its dataset only has {header_rows} header row(s). Please set headers of the dataset accordingly or remove the customization.")]
+    #[error("View {view:?} customizes header row {row}, but its dataset has {} additional header row(s) besides the column names (header row 0). Customizing header row {row} requires setting headers: {} for the dataset.", .header_rows - 1, .row + 1)]
     MissingHeaderRow {
         view: String,
         row: u32,
