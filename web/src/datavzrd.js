@@ -51,6 +51,9 @@ import "../style/bootstrap-select.min.css";
 import "../style/bootstrap-table-fixed-columns.min.css";
 import "../style/datavzrd.css";
 
+// ProvidePlugin rewrites window.$, so assigning it directly would be a no-op.
+Object.assign(window, { $, jQuery: $ });
+
 export { selectPlotColumn } from "./plot/column-plot";
 export { customFunctionError as custom_error } from "./error";
 
@@ -1444,6 +1447,10 @@ export function compress_data(data) {
   return LZString.compressToUTF16(JSON.stringify([data]));
 }
 
+export function load_description() {
+  renderMarkdownDescription(true);
+}
+
 export function load_plot(specs, data, multiple_datasets, resize) {
   $("#markdown-btn").click(function () {
     renderMarkdownDescription(true);
@@ -1490,7 +1497,6 @@ $(document).click(function (event) {
 
 export function load_search() {
   $(document).ready(function () {
-    window.$ = window.jQuery = require("jquery");
     window[
       "bootstrap-table"
     ] = require("bootstrap-table/src/bootstrap-table.js");
