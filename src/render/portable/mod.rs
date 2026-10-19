@@ -451,7 +451,7 @@ fn render_table_javascript<P: AsRef<Path>>(
         additional_columns,
         view,
         is_single_page,
-    );
+    )?;
     let header_config = HeaderConfig::from_headers(header_specs, &titles, additional_headers);
 
     context.insert("config", &config);
@@ -478,8 +478,8 @@ impl CustomPlotsConfig {
         additional_columns: &Option<HashMap<String, AdditionalColumnSpec>>,
         view: &str,
         is_single_page: bool,
-    ) -> Self {
-        CustomPlotsConfig(
+    ) -> Result<Self> {
+        Ok(CustomPlotsConfig(
             config
                 .iter()
                 .filter(|(_, k)| k.custom_plot.is_some())
@@ -544,9 +544,8 @@ impl CustomPlotsConfig {
                             })
                         }),
                 )
-                .collect::<Result<Vec<_>, _>>()
-                .unwrap(),
-        )
+                .collect::<Result<_>>()?,
+        ))
     }
 }
 
