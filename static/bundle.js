@@ -71872,28 +71872,18 @@ function renderPlot(
     if (value != "") {
       this.innerHTML = "";
       this.appendChild(div);
-      var data = [];
-      var v = {};
-      v[title] = value;
-      data.push(v);
       var s = specs;
-      s.data = {};
-      s.data.values = data;
+      s.data = { values: [{ value }] };
       (0,vega_embed__WEBPACK_IMPORTED_MODULE_2__["default"])(div, JSON.parse(JSON.stringify(s)), VEGA_EMBED_OPTIONS);
     }
     row++;
   });
 }
 
-function renderDetailTickBarBubblePlot(value, div, specs, title) {
+function renderDetailTickBarBubblePlot(value, div, specs) {
   if (value != "") {
-    var data = [];
-    var v = {};
-    v[title] = value;
-    data.push(v);
     var s = specs;
-    s.data = {};
-    s.data.values = data;
+    s.data = { values: [{ value }] };
     (0,vega_embed__WEBPACK_IMPORTED_MODULE_2__["default"])(div, JSON.parse(JSON.stringify(s)), VEGA_EMBED_OPTIONS);
   }
 }
@@ -71905,6 +71895,7 @@ function renderDetailTickBarBubblePlot(value, div, specs, title) {
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   download: function() { return download; },
+  escapeHtml: function() { return escapeHtml; },
   precision_formatter: function() { return precision_formatter; }
 });
 function precision_formatter(precision, value) {
@@ -71926,6 +71917,10 @@ function download(content, type, fileName) {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 }
 
 
@@ -167443,7 +167438,6 @@ function load() {
             row[o.title],
             `#detail-plot-${index}-ticks-${columnIdMap[o.title]}`,
             o.specs,
-            o.title,
           );
         }
       }
@@ -167454,7 +167448,6 @@ function load() {
             row[o.title],
             `#detail-plot-${index}-bars-${columnIdMap[o.title]}`,
             o.specs,
-            o.title,
           );
         }
       }
@@ -167465,7 +167458,6 @@ function load() {
             row[o.title],
             `#detail-plot-${index}-bubbles-${columnIdMap[o.title]}`,
             o.specs,
-            o.title,
           );
         }
       }
@@ -167642,7 +167634,7 @@ function load() {
               jquery__WEBPACK_IMPORTED_MODULE_0___default()(
                 `table > thead > tr th:nth-child(${index})  > div.th-inner`,
               ).append(
-                `<div class="sym ic" data-s='${JSON.stringify(s)}' data-brush="${tick_brush}" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<div class='filter-brush-container'><div class='filter-brush ${brush_class}' id='brush-${tick_brush}'></div></div>"> ${search_icon}</div>`,
+                `<div class="sym ic" data-s="${(0,_utils__WEBPACK_IMPORTED_MODULE_10__.escapeHtml)(JSON.stringify(s))}" data-brush="${tick_brush}" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<div class='filter-brush-container'><div class='filter-brush ${brush_class}' id='brush-${tick_brush}'></div></div>"> ${search_icon}</div>`,
               );
             }
             var opt = { actions: false };
@@ -167699,15 +167691,15 @@ function load() {
               let values = [...new Set(column_values)];
               for (let opt of values) {
                 let checkbox = `<div class='form-check'>
-                                                    <input type='checkbox' class='form-check-input' id='${opt}' checked>
-                                                    <label class='form-check-label' for='${opt}'>${opt}</label>
+                                                    <input type='checkbox' class='form-check-input' id='${(0,_utils__WEBPACK_IMPORTED_MODULE_10__.escapeHtml)(opt)}' checked>
+                                                    <label class='form-check-label' for='${(0,_utils__WEBPACK_IMPORTED_MODULE_10__.escapeHtml)(opt)}'>${(0,_utils__WEBPACK_IMPORTED_MODULE_10__.escapeHtml)(opt)}</label>
                                                 </div>`;
                 data_content = data_content.concat(checkbox);
               }
               jquery__WEBPACK_IMPORTED_MODULE_0___default()(
                 `table > thead > tr th:nth-child(${index}) > div.th-inner`,
               ).append(
-                `<div class="sym ic" id="filter-${index}-container" data-column-title='${title.replace(/'/g, "&#39;")}' data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="${data_content}"> ${search_icon}</div>`,
+                `<div class="sym ic" id="filter-${index}-container" data-column-title="${(0,_utils__WEBPACK_IMPORTED_MODULE_10__.escapeHtml)(title)}" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="${(0,_utils__WEBPACK_IMPORTED_MODULE_10__.escapeHtml)(data_content)}"> ${search_icon}</div>`,
               );
               jquery__WEBPACK_IMPORTED_MODULE_0___default()(`#filter-${index}-container`).on(
                 "shown.bs.popover",
@@ -167743,7 +167735,7 @@ function load() {
                         e.currentTarget.dataset.columnTitle
                       ].includes(val)
                     ) {
-                      jquery__WEBPACK_IMPORTED_MODULE_0___default()(`[id='${val}']`).prop("checked", false);
+                      jquery__WEBPACK_IMPORTED_MODULE_0___default()(document.getElementById(val)).prop("checked", false);
                     }
                   }
                 },
@@ -167756,7 +167748,7 @@ function load() {
               jquery__WEBPACK_IMPORTED_MODULE_0___default()(
                 `table > thead > tr th:nth-child(${index}) > div.th-inner`,
               ).append(
-                `<div class="sym ic" id="filter-${index}-container" data-column-title='${title.replace(/'/g, "&#39;")}' data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title.replace(/'/g, "&#39;")}' placeholder='Filter...'>"> ${search_icon}</div>`,
+                `<div class="sym ic" id="filter-${index}-container" data-column-title="${(0,_utils__WEBPACK_IMPORTED_MODULE_10__.escapeHtml)(title)}" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="${(0,_utils__WEBPACK_IMPORTED_MODULE_10__.escapeHtml)(`<input class='form-control form-control-sm' id='filter-${index}' data-title='${(0,_utils__WEBPACK_IMPORTED_MODULE_10__.escapeHtml)(title)}' placeholder='Filter...'>`)}"> ${search_icon}</div>`,
               );
               jquery__WEBPACK_IMPORTED_MODULE_0___default()(`#filter-${index}-container`).on(
                 "shown.bs.popover",
