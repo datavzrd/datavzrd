@@ -71418,12 +71418,12 @@ function datavzrdScale(heatmap) {
     } else if (heatmap.heatmap.range?.length) {
       scale = vega__WEBPACK_IMPORTED_MODULE_1__.scale(heatmap.heatmap.scale)()
         .domain(heatmap.heatmap.domain)
-        .clamp(heatmap.heatmap.clamp)
+        .clamp(heatmap.heatmap.clamp ?? true)
         .range(heatmap.heatmap.range);
     } else {
       scale = vega__WEBPACK_IMPORTED_MODULE_1__.scale(heatmap.heatmap.scale)()
         .domain(heatmap.heatmap.domain)
-        .clamp(heatmap.heatmap.clamp);
+        .clamp(heatmap.heatmap.clamp ?? true);
     }
   }
 
@@ -71515,12 +71515,12 @@ function colorizeHeaderRow(row, heatmap, header_label_length) {
     } else if (heatmap.range && heatmap.range.length > 0) {
       scale = vega__WEBPACK_IMPORTED_MODULE_1__.scale(heatmap.scale)()
         .domain(heatmap.domain)
-        .clamp(heatmap.clamp)
+        .clamp(heatmap.clamp ?? true)
         .range(heatmap.range);
     } else {
       scale = vega__WEBPACK_IMPORTED_MODULE_1__.scale(heatmap.scale)()
         .domain(heatmap.domain)
-        .clamp(heatmap.clamp);
+        .clamp(heatmap.clamp ?? true);
     }
   }
   var start = 0;
