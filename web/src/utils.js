@@ -18,3 +18,7 @@ export function download(content, type, fileName) {
   link.click();
   document.body.removeChild(link);
 }
+
+export function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+}

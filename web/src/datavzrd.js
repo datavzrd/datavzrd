@@ -8,7 +8,7 @@ import "bootstrap-table/src/bootstrap-table.js";
 import "bootstrap-table/src/extensions/multiple-sort/bootstrap-table-multiple-sort.js";
 import "bootstrap-select";
 import * as htmlToImage from "html-to-image";
-import { download, precision_formatter } from "./utils";
+import { download, escapeHtml, precision_formatter } from "./utils";
 import {
   render_html_contents,
   render_plot_size_controls,
@@ -838,7 +838,6 @@ export function load() {
             row[o.title],
             `#detail-plot-${index}-ticks-${columnIdMap[o.title]}`,
             o.specs,
-            o.title,
           );
         }
       }
@@ -849,7 +848,6 @@ export function load() {
             row[o.title],
             `#detail-plot-${index}-bars-${columnIdMap[o.title]}`,
             o.specs,
-            o.title,
           );
         }
       }
@@ -860,7 +858,6 @@ export function load() {
             row[o.title],
             `#detail-plot-${index}-bubbles-${columnIdMap[o.title]}`,
             o.specs,
-            o.title,
           );
         }
       }
@@ -1037,7 +1034,7 @@ export function load() {
               $(
                 `table > thead > tr th:nth-child(${index})  > div.th-inner`,
               ).append(
-                `<div class="sym ic" data-s='${JSON.stringify(s)}' data-brush="${tick_brush}" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<div class='filter-brush-container'><div class='filter-brush ${brush_class}' id='brush-${tick_brush}'></div></div>"> ${search_icon}</div>`,
+                `<div class="sym ic" data-s="${escapeHtml(JSON.stringify(s))}" data-brush="${tick_brush}" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<div class='filter-brush-container'><div class='filter-brush ${brush_class}' id='brush-${tick_brush}'></div></div>"> ${search_icon}</div>`,
               );
             }
             var opt = { actions: false };
@@ -1094,15 +1091,15 @@ export function load() {
               let values = [...new Set(column_values)];
               for (let opt of values) {
                 let checkbox = `<div class='form-check'>
-                                                    <input type='checkbox' class='form-check-input' id='${opt}' checked>
-                                                    <label class='form-check-label' for='${opt}'>${opt}</label>
+                                                    <input type='checkbox' class='form-check-input' id='${escapeHtml(opt)}' checked>
+                                                    <label class='form-check-label' for='${escapeHtml(opt)}'>${escapeHtml(opt)}</label>
                                                 </div>`;
                 data_content = data_content.concat(checkbox);
               }
               $(
                 `table > thead > tr th:nth-child(${index}) > div.th-inner`,
               ).append(
-                `<div class="sym ic" id="filter-${index}-container" data-column-title='${title.replace(/'/g, "&#39;")}' data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="${data_content}"> ${search_icon}</div>`,
+                `<div class="sym ic" id="filter-${index}-container" data-column-title="${escapeHtml(title)}" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="${escapeHtml(data_content)}"> ${search_icon}</div>`,
               );
               $(`#filter-${index}-container`).on(
                 "shown.bs.popover",
@@ -1138,7 +1135,7 @@ export function load() {
                         e.currentTarget.dataset.columnTitle
                       ].includes(val)
                     ) {
-                      $(`[id='${val}']`).prop("checked", false);
+                      $(document.getElementById(val)).prop("checked", false);
                     }
                   }
                 },
@@ -1151,7 +1148,7 @@ export function load() {
               $(
                 `table > thead > tr th:nth-child(${index}) > div.th-inner`,
               ).append(
-                `<div class="sym ic" id="filter-${index}-container" data-column-title='${title.replace(/'/g, "&#39;")}' data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<input class='form-control form-control-sm' id='filter-${index}' data-title='${title.replace(/'/g, "&#39;")}' placeholder='Filter...'>"> ${search_icon}</div>`,
+                `<div class="sym ic" id="filter-${index}-container" data-column-title="${escapeHtml(title)}" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="${escapeHtml(`<input class='form-control form-control-sm' id='filter-${index}' data-title='${escapeHtml(title)}' placeholder='Filter...'>`)}"> ${search_icon}</div>`,
               );
               $(`#filter-${index}-container`).on(
                 "shown.bs.popover",
