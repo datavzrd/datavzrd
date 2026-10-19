@@ -304,7 +304,7 @@ impl ItemsSpec {
                                     bar_plot.domain.clone()
                                 } else if let Some(heatmap) = &plot_spec.heatmap {
                                     if !heatmap.color_scheme.is_empty()
-                                        && column_types.get(column).unwrap().is_numeric()
+                                        && heatmap.scale_type.is_quantitative()
                                         && SequentialScheme::from_str(&heatmap.color_scheme)
                                             .is_err()
                                     {
@@ -2257,6 +2257,27 @@ mod tests {
     #[test]
     fn test_valid_config_validation() {
         let config = ItemsSpec::from_file(".examples/example.datavzrd.yaml").unwrap();
+        assert!(config.validate().is_ok());
+    }
+
+    #[test]
+    fn test_ordinal_heatmap_on_numeric_column_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        columns:
+                            price:
+                                plot:
+                                    heatmap:
+                                        type: ordinal
+            "#;
+        let mut config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        config.preprocess().unwrap();
         assert!(config.validate().is_ok());
     }
 
