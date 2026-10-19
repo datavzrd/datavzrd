@@ -1497,7 +1497,6 @@ fn render_plot<T: PlotConfig>(
     let mut context = Context::new();
     context.insert("minimum", &min);
     context.insert("maximum", &max);
-    context.insert("field", &title);
     context.insert("scale_type", plot.scale_type());
     context.insert("color_definition", plot.color());
 
