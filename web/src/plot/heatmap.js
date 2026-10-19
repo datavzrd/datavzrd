@@ -90,13 +90,13 @@ export function datavzrdScale(heatmap) {
       scale = vega
         .scale(heatmap.heatmap.scale)()
         .domain(heatmap.heatmap.domain)
-        .clamp(heatmap.heatmap.clamp)
+        .clamp(heatmap.heatmap.clamp ?? true)
         .range(heatmap.heatmap.range);
     } else {
       scale = vega
         .scale(heatmap.heatmap.scale)()
         .domain(heatmap.heatmap.domain)
-        .clamp(heatmap.heatmap.clamp);
+        .clamp(heatmap.heatmap.clamp ?? true);
     }
   }
 
@@ -192,13 +192,13 @@ export function colorizeHeaderRow(row, heatmap, header_label_length) {
       scale = vega
         .scale(heatmap.scale)()
         .domain(heatmap.domain)
-        .clamp(heatmap.clamp)
+        .clamp(heatmap.clamp ?? true)
         .range(heatmap.range);
     } else {
       scale = vega
         .scale(heatmap.scale)()
         .domain(heatmap.domain)
-        .clamp(heatmap.clamp);
+        .clamp(heatmap.clamp ?? true);
     }
   }
   var start = 0;
