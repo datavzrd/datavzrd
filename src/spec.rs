@@ -198,14 +198,24 @@ impl ItemsSpec {
                             view: name.to_string()
                         });
                     }
+                    let dataset = self.datasets.get(view.dataset.as_ref().unwrap()).unwrap();
                     if let Some(headers) = &render_table.headers {
                         if headers.get(&0_u32).is_some() {
                             bail!(ConfigError::HeadersFirstColumnCustomized {
                                 view: name.to_string()
                             })
                         }
+                        if let Some(row) = headers
+                            .keys()
+                            .find(|row| **row as usize >= dataset.header_rows)
+                        {
+                            bail!(ConfigError::MissingHeaderRow {
+                                view: name.to_string(),
+                                row: *row,
+                                header_rows: dataset.header_rows,
+                            })
+                        }
                     }
-                    let dataset = self.datasets.get(view.dataset.as_ref().unwrap()).unwrap();
                     let mut reader = dataset.reader()?;
                     let titles = reader.headers()?.iter().map(|s| s.to_owned()).collect_vec();
                     let column_types = classify_table(dataset, false)?;
@@ -1895,6 +1905,12 @@ pub enum ConfigError {
     },
     #[error("Cannot customize the first header row of view {view:?} in given config. Please start customizing additional headers at index 1.")]
     HeadersFirstColumnCustomized { view: String },
+    #[error("View {view:?} customizes header row {row}, but its dataset only has {header_rows} header row(s). Please set headers of the dataset accordingly or remove the customization.")]
+    MissingHeaderRow {
+        view: String,
+        row: u32,
+        header_rows: usize,
+    },
     #[error("Given config file is empty. Consider adding a valid configuration.")]
     EmptyConfigFile,
     #[error("Given linkout definition {name} is incomplete and must either specify a view or a table_row.")]
@@ -2482,6 +2498,23 @@ mod tests {
                                         color-scheme: category20
             "#;
         assert_config_error!(raw_config, HeadersFirstColumnCustomized);
+    }
+
+    #[test]
+    fn test_customize_missing_header_row_view_config_validation() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        headers:
+                            1:
+                                label: missing
+            "#;
+        assert_config_error!(raw_config, MissingHeaderRow);
     }
 
     #[test]
