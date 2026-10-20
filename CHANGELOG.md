@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.75.4](https://github.com/datavzrd/datavzrd/compare/v2.75.3...v2.75.4) (2026-10-20)
+
+
+### Bug Fixes
+
+* Apply precision to float columns in the detail view ([#1337](https://github.com/datavzrd/datavzrd/issues/1337)) ([cb5dffd](https://github.com/datavzrd/datavzrd/commit/cb5dffd2369b21d42dd789952f96f1d643b6c13a))
+* Keep view settings when applying a view spell ([#1335](https://github.com/datavzrd/datavzrd/issues/1335)) ([847e2ae](https://github.com/datavzrd/datavzrd/commit/847e2aed2f12d19f1babe65a7d36075d1b857240))
+
 ## [2.75.3](https://github.com/datavzrd/datavzrd/compare/v2.75.2...v2.75.3) (2026-10-19)
 
 
