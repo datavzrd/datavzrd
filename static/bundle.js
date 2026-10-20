@@ -71902,11 +71902,14 @@ function precision_formatter(precision, value) {
   if (value == "") {
     return "";
   }
-  value = parseFloat(value);
-  if (1 / 10 ** precision < Math.abs(value) || value == 0) {
-    return value.toFixed(precision).toString();
+  const number = parseFloat(value);
+  if (Number.isNaN(number)) {
+    return value;
+  }
+  if (1 / 10 ** precision < Math.abs(number) || number == 0) {
+    return number.toFixed(precision).toString();
   } else {
-    return value.toExponential(precision);
+    return number.toExponential(precision);
   }
 }
 
