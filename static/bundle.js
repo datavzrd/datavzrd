@@ -166850,6 +166850,9 @@ function detailFormatter(index, row) {
                  </div>`;
         html.push(card);
       } else {
+        if (config.column_config[key].is_float) {
+          value = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.precision_formatter)(config.column_config[key].precision, value);
+        }
         var card = `<div class="card">
                    <div class="card-header">
                      ${card_title}
