@@ -652,15 +652,17 @@ pub struct ItemSpecs {
 impl ItemSpecs {
     fn merge_item_specs(&self, other: &ItemSpecs) -> Result<ItemSpecs> {
         let mut merged = self.clone();
-        merged.hidden = other.hidden;
-        merged.narrow = other.narrow;
+        merged.hidden |= other.hidden;
+        merged.narrow |= other.narrow;
         if let Some(dataset) = &other.dataset {
             merged.dataset = Some(dataset.to_string());
         }
         if let Some(datasets) = &other.datasets {
             merged.datasets = Some(datasets.clone());
         }
-        merged.page_size = other.page_size;
+        if other.page_size != default_page_size() {
+            merged.page_size = other.page_size;
+        }
         if let Some(description) = &other.description {
             merged.description = Some(description.to_string());
         }
@@ -2258,6 +2260,28 @@ mod tests {
     fn test_valid_config_validation() {
         let config = ItemsSpec::from_file(".examples/example.datavzrd.yaml").unwrap();
         assert!(config.validate().is_ok());
+    }
+
+    #[test]
+    fn test_view_spell_keeps_view_settings() {
+        let raw_config = r#"
+            datasets:
+                table-a:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                table-a:
+                    dataset: table-a
+                    hidden: true
+                    page-size: 50
+                    spell:
+                        url: tests/spells/table.spell.yaml
+            "#;
+        let mut config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        config.preprocess().unwrap();
+        let view = &config.views["table-a"];
+        assert!(view.hidden);
+        assert_eq!(view.single_page_page_size, 50);
+        assert!(view.render_table.is_some());
     }
 
     #[test]
