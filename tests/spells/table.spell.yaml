@@ -1,0 +1,4 @@
+render-table:
+  columns:
+    price:
+      precision: 2
