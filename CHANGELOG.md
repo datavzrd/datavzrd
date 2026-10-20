@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.75.5](https://github.com/datavzrd/datavzrd/compare/v2.75.4...v2.75.5) (2026-10-20)
+
+
+### Bug Fixes
+
+* Show non-numeric values in float columns as they are ([#1338](https://github.com/datavzrd/datavzrd/issues/1338)) ([69d62ed](https://github.com/datavzrd/datavzrd/commit/69d62ed5926b940fa30a91fe4d31966aa88b4f48))
+
 ## [2.75.4](https://github.com/datavzrd/datavzrd/compare/v2.75.3...v2.75.4) (2026-10-20)
 
 
