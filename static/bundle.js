@@ -8211,10 +8211,68 @@ th.col-drag-over {
 }
 
 #plot-size-control {
-    position: absolute;
-    bottom: 52px;
+    position: fixed;
+    bottom: 1rem;
     z-index: 2;
-    right: calc(50% - 50px);
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+    white-space: nowrap;
+}
+
+#plot-size-control button {
+    display: flex;
+    padding: 0.25rem;
+    border: none;
+    border-radius: 0.25rem;
+    background: none;
+    color: #6c757d;
+}
+
+#plot-size-control button:hover {
+    color: #343a40;
+    background-color: #f1f3f5;
+}
+
+#plot-size-control label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#plot-size-control label span {
+    min-width: 4.5em;
+    font-variant-numeric: tabular-nums;
+}
+
+#plot-size-control input {
+    width: 140px;
+}
+
+#plot-size-control .custom-range::-webkit-slider-thumb {
+    background-color: #868e96;
+}
+
+#plot-size-control .custom-range::-webkit-slider-thumb:active {
+    background-color: #495057;
+}
+
+#plot-size-control .custom-range::-moz-range-thumb {
+    background-color: #868e96;
+}
+
+#plot-size-control .custom-range::-moz-range-thumb:active {
+    background-color: #495057;
+}
+
+#plot-size-control .custom-range:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+}
+
+#plot-size-control .custom-range:focus::-moz-range-thumb {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
 }
 
 .popover {
@@ -8309,7 +8367,7 @@ th.col-drag-over {
 .detail-pills-wrapper .pill-dropdown {
   display: flex;
 }
-`, "",{"version":3,"sources":["webpack://./style/datavzrd.css"],"names":[],"mappings":"AAAA;IACI,6BAA6B;IAC7B,2CAA2C;IAC3C,mCAAmC;AACvC;;AAEA;IACI;QACI,aAAa;IACjB;IACA;QACI,eAAe;IACnB;AACJ;;AAEA;IACI,kBAAkB;IAClB,SAAS;IACT,WAAW;AACf;;AAEA;IACI,uBAAuB;IACvB,kBAAkB;IAClB,SAAS;AACb;;AAEA;IACI,gCAAgC;AACpC;;AAEA;IACI,gCAAgC;AACpC;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,eAAe;IACf,eAAe;IACf,cAAc;AAClB;;AAEA;IACI,4BAA4B;AAChC;;AAEA;IACI,wCAAwC;AAC5C;;AAEA;IACI,6BAA6B;AACjC;;AAEA;IACI,aAAa;IACb,iBAAiB;AACrB;;AAEA;IACI,WAAW;IACX,aAAa;IACb,WAAW;AACf;;AAEA;IACI,cAAc;IACd,WAAW;IACX,gBAAgB;IAChB,cAAc;AAClB;;AAEA;IACI,WAAW;IACX,uBAAuB;IACvB,mBAAmB;IACnB,yBAAyB;IACzB,qBAAqB;AACzB;;AAEA;IACI,iBAAiB;IACjB,cAAc;IACd,eAAe;IACf,kBAAkB;IAClB,yBAAyB;AAC7B;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,cAAc;AAClB;;AAEA;IACI,WAAW;IACX;AACJ;;AAEA;IACI,iBAAiB;IACjB,mBAAmB;IACnB,iBAAiB;AACrB;;AAEA;IACI,YAAY;IACZ,gBAAgB;AACpB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,6BAA6B;IAC7B,gBAAgB;AACpB;;AAEA;IACI,wCAAwC;IACxC,gCAAgC;AACpC;;AAEA;IACI,mBAAmB;IACnB,aAAa;IACb,oBAAoB;IACpB,iBAAiB;AACrB;;AAEA;IACI,eAAe;IACf,WAAW;AACf;;AAEA;IACI,uBAAuB;IACvB,6BAA6B;AACjC;;AAEA;IACI,kBAAkB;AACtB;;AAEA;;IAEI,yBAAyB;IACzB,0BAA0B;IAC1B,6HAA6H;IAC7H,4BAA4B;IAC5B,mBAAmB;IACnB,YAAY;IACZ,gBAAgB;AACpB;;AAEA;IACI,mBAAmB;IACnB,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,UAAU;AACd;;AAEA;IACI,mBAAmB;IACnB,aAAa;AACjB;;AAEA;IACI,gDAAgD;IAChD,UAAU;IACV,4BAA4B;IAC5B,0BAA0B;IAC1B,kBAAkB;AACtB;;AAEA;;IAEI,cAAc;IACd,UAAU;IACV,gBAAgB;IAChB,qBAAqB;AACzB;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;;;;;IAKI,aAAa;AACjB;;AAEA;IACI,2BAA2B;IAC3B,iBAAiB;AACrB;;AAEA;IACI,qBAAqB;IACrB,WAAW;IACX,YAAY;IACZ,qBAAqB;AACzB;;AAEA;IACI,yDAAmO;AACvO;;AAEA;IACI,yDAA+Q;AACnR;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,YAAY;IACZ,uBAAuB;IACvB,UAAU;AACd;;AAEA;IACI,mBAAmB;AACvB;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;IACI,YAAY;IACZ,kBAAkB;AACtB;;AAEA;IACI,kBAAkB;IAClB,SAAS;AACb;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,cAAc;IACd,gBAAgB;AACpB;;AAEA;IACI,mBAAmB;AACvB;;;AAGA;IACI,kBAAkB;IAClB,iBAAiB;AACrB;;AAEA;IACI,oBAAoB;AACxB;;AAEA;IACI,kBAAkB;IAClB,SAAS;IACT,WAAW;IACX,YAAY;AAChB;;AAEA;IACI,yBAAyB;IACzB,cAAc;AAClB;;AAEA;IACI,6CAA6C;IAC7C,aAAa;AACjB;;AAEA;IACI,UAAU;IACV,WAAW;AACf;;AAEA;IACI,uBAAuB;AAC3B;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,SAAS;AACb;;AAEA;IACI,eAAe;IACf,QAAQ;IACR,SAAS;IACT,aAAa;IACb,iBAAiB;AACrB;;AAEA;IACI,YAAY;IACZ,wCAAwC;AAC5C;;AAEA;IACI,wCAAwC;AAC5C;;AAEA;IACI,wCAAwC;IACxC,eAAe;AACnB;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,kBAAkB;IAClB,uBAAuB;IACvB,MAAM;IACN,eAAe;AACnB;;AAEA;IACI,wCAAwC;IACxC,WAAW;IACX,YAAY;IACZ,UAAU;AACd;;AAEA;IACI,cAAc;IACd,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,yBAAyB;AAC7B;;AAEA;IACI,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,eAAe;AACnB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,QAAQ;AACZ;;AAEA;IACI,iBAAiB;AACrB;;AAEA;IACI,8BAA8B;IAC9B,iBAAiB;IACjB,kBAAkB;IAClB,gBAAgB;AACpB;;AAEA;IACI,KAAK,mBAAmB,EAAE;IAC1B,MAAM,sBAAsB,EAAE;IAC9B,OAAO,mBAAmB,EAAE;AAChC;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,qBAAqB;IACrB,YAAY;IACZ,cAAc;IACd,aAAa;IACb,gBAAgB;IAChB,sBAAsB;IACtB,cAAc;AAClB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,oBAAoB;IACpB,sBAAsB;IACtB,sBAAsB;IACtB,gBAAgB;IAChB,iBAAiB;AACrB;;AAEA;IACI,cAAc;IACd,cAAc;IACd,eAAe;AACnB;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,kBAAkB;IAClB,YAAY;IACZ,UAAU;IACV,uBAAuB;AAC3B;;AAEA;IACI,wBAAwB;AAC5B;;AAEA;IACI,eAAe;IACf,gBAAgB;IAChB,WAAW;IACX,YAAY;IACZ,cAAc;IACd,iBAAiB;AACrB;;AAEA;IACI,aAAa;AACjB;;AAEA;IACI,aAAa;IACb,eAAe;IACf,eAAe;IACf,gBAAgB;AACpB;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,eAAe;IACf,WAAW;AACf;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;;EAEE,cAAc;EACd,qBAAqB;AACvB;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,cAAc;EACd,0BAA0B;AAC5B;;AAEA;EACE,qBAAqB;AACvB;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,uBAAuB;EACvB,kBAAkB;AACpB;;AAEA;EACE,cAAc;AAChB;;AAEA;;EAEE,aAAa;AACf","sourcesContent":["* {\n    color-adjust: exact!important;\n    -webkit-print-color-adjust: exact!important;\n    print-color-adjust: exact!important;\n}\n\n@media print {\n    .detail-icon, .dropdown, .form-control, .filter-brush-container, .sym, .navbar, .btn, .detail  {\n        display: none;\n    }\n    @page {\n        margin: 0 0 0 0;\n    }\n}\n\n.select-view {\n    position: relative;\n    top: -6px;\n    left: -13px;\n}\n\n.breadcrumb {\n    background-color: white;\n    position: relative;\n    top: 13px;\n}\n\n.navbar-brand, .breadcrumb-item {\n    color: rgba(0,0,0,.5) !important;\n}\n\n.navbar-brand:hover {\n    color: rgba(0,0,0,.7) !important;\n}\n\n.navbar-top {\n    height: 54px;\n}\n\n.sym {\n    cursor: pointer;\n    display: inline;\n    color: #007bff;\n}\n\n.fixed-table-body {\n    overflow: visible !important;\n}\n\n.fixed-top {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.navbar-nav.mr-auto.breadcrumb {\n    background-color: transparent;\n}\n\n.table-container {\n    display: none;\n    font-size: 0.8rem;\n}\n\n#histogram-plot {\n    width: 100%;\n    height: 300px;\n    border:none;\n}\n\n#column-plot {\n    display: block;\n    width: 100%;\n    max-height: 70vh;\n    overflow: auto;\n}\n\n#column-plot-options input[type=\"text\"] {\n    width: 100%;\n    padding: 0.25rem 0.5rem;\n    font-size: 0.875rem;\n    border: 1px solid #ced4da;\n    border-radius: 0.2rem;\n}\n\n#column-plot-yaml {\n    max-height: 300px;\n    overflow: auto;\n    padding: 0.5rem;\n    font-size: 0.75rem;\n    background-color: #f8f9fa;\n}\n\n.plot-column-icon {\n    margin-left: 3px;\n}\n\n.plot-column-icon.active {\n    color: #c21f30;\n}\n\n#search-iframe {\n    width: 100%;\n    height: min(530px, 50vh)\n}\n\n.linkout-btn {\n    font-size: 0.8rem;\n    white-space: nowrap;\n    text-align: right;\n}\n\n.loading {\n    height: 100%;\n    padding-top: 25%;\n}\n\n#heatmap-plot-modal {\n    z-index: 9999;\n}\n\n.modal-body {\n    max-width: calc(100vw - 50px);\n    overflow-x: auto;\n}\n\n.active-row {\n    border-top: 2px solid #6ea8fe !important;\n    border-bottom: 2px solid #6ea8fe;\n}\n\nth {\n    white-space: nowrap;\n    height: 150px;\n    border: 0 !important;\n    overflow: visible;\n}\n\n#table {\n    max-width: 100%;\n    width: auto;\n}\n\n.bootstrap-table {\n    margin: auto !important;\n    width: fit-content !important;\n}\n\ntd {\n    position: relative;\n}\n\n#table td,\n#table th {\n    padding: 0 5px !important;\n    font-size: 12px !important;\n    /* Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=688556 see https://github.com/koesterlab/datavzrd/issues/144 */\n    background-clip: padding-box;\n    white-space: nowrap;\n    height: 18px;\n    line-height: 0.8;\n}\n\n#table tr.detail-view td {\n    white-space: normal;\n    height: auto;\n    line-height: normal;\n}\n\n.table td.plotcell {\n    padding: 0;\n}\n\n#pagination {\n    padding-top: 0.5rem;\n    display: none;\n}\n\nth .th-inner {\n    transform: translate(-10px, 30px) rotate(-45deg);\n    width: 1em;\n    overflow: visible !important;\n    transform-origin: top left;\n    margin-bottom: 5px;\n}\n\n#table td.narrow-col,\n#table th.narrow-col {\n    max-width: 4px;\n    width: 4px;\n    overflow: hidden;\n    padding: 0 !important;\n}\n\n#table td.narrow-col {\n    font-size: 0 !important;\n}\n\nth.narrow-col .th-inner,\nth.narrow-col .sym,\nth.narrow-col .sym-container,\nth.narrow-col .header-sort,\nth.narrow-col .col-drag-handle {\n    display: none;\n}\n\n#vis-container {\n    height: calc(100vh - 105px);\n    padding-top: 50px;\n}\n\n.fa {\n    display: inline-block;\n    width: 24px;\n    height: 24px;\n    background-size: 100%;\n}\n\n.fa-minus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z\"/></svg>');\n}\n\n.fa-plus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z\"/></svg>');\n}\n\n.num-cell {\n    white-space: nowrap;\n}\n\n.form-control {\n    height: 35px;\n    border: none !important;\n    width: 5em;\n}\n\n.filter-control {\n    padding-bottom: 2px;\n}\n\n.fixed-table-container {\n    border: none !important;\n}\n\n.filter-brush-container {\n    height: 48px;\n    position: relative;\n}\n\n.no-labels {\n    position: absolute;\n    top: 12px;\n}\n\n.card {\n    margin: 0.5em;\n}\n\n.container-fluid {\n    overflow: auto;\n    margin-top: 50px;\n}\n\n.dropdown-item {\n    line-height: normal;\n}\n\n\n#page-container {\n    position: relative;\n    min-height: 100vh;\n}\n\n#content-wrap {\n    padding-bottom: 54px;\n}\n\nfooter {\n    position: absolute;\n    bottom: 0;\n    width: 100%;\n    height: 54px;\n}\n\n.badge-light {\n    background-color: #cbcbcb;\n    color: #222222;\n}\n\n.katex-html {\n    /* Hide unrendered mathematical expressions */\n    display: none;\n}\n\n.navbar-toggler-icon {\n    width: 1em;\n    height: 1em;\n}\n\n.navbar-toggler {\n    background-color: white;\n}\n\n#right-top-nav {\n    margin: auto;\n}\n\n.btn-table {\n    border: none;\n}\n\n.description-box {\n    margin: 0;\n}\n\n#sidebar {\n    position: fixed;\n    right: 0;\n    top: 3rem;\n    z-index: 9999;\n    margin-right: 7px;\n}\n\n#sidebar-card {\n    width: 13rem;\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn:hover {\n    background-color: rgba(203,203,203,0.75);\n    cursor: pointer;\n}\n\n.navbar-toggler {\n    border: none;\n}\n\n#close-description {\n    position: absolute;\n    left: calc(100% - 72px);\n    top: 0;\n    padding: 0.2rem;\n}\n\n.description-card-body {\n    background-color: rgba(255,255,255,0.75);\n    width: 100%;\n    border: none;\n    padding: 0;\n}\n\n#innerDescription {\n    margin: 0 auto;\n    max-width: 800px;\n}\n\n.ic:hover {\n    color: grey;\n}\n\n.nav-btn {\n    display: block !important;\n}\n\n.sym-container svg {\n    position: absolute;\n    top: 0;\n    left: 0;\n    cursor: pointer;\n}\n\n.sym-container svg:hover {\n    color: grey;\n}\n\n.sym-container .bi-caret-down {\n    top: 8px;\n}\n\n.hide-sym {\n    margin-left: 14px;\n}\n\n.pulsating-button {\n    animation: pulsate 2s infinite;\n    margin-left: 2rem;\n    margin-right: 2rem;\n    margin-top: 10px;\n}\n\n@keyframes pulsate {\n    0% { transform: scale(1); }\n    50% { transform: scale(1.05); }\n    100% { transform: scale(1); }\n}\n\n.hide-sym:hover {\n    color: grey;\n}\n\n.col-drag-handle {\n    display: inline-block;\n    cursor: grab;\n    color: #007bff;\n    opacity: 0.35;\n    margin-left: 4px;\n    vertical-align: middle;\n    line-height: 1;\n}\n\n.col-drag-handle:hover {\n    opacity: 0.75;\n}\n\nth.col-dragging {\n    opacity: 0.45;\n}\n\nth.col-drag-over {\n    border-left: 2px solid #0275d8 !important;\n}\n\n.header-sort {\n    display: inline-flex;\n    flex-direction: column;\n    vertical-align: middle;\n    margin-left: 4px;\n    margin-right: 7px;\n}\n\n.header-sort svg {\n    display: block;\n    color: #007bff;\n    cursor: pointer;\n}\n\n.header-sort .bi-caret-down {\n    margin-top: -4px;\n}\n\n.header-sort svg:hover {\n    color: grey;\n}\n\n#plot-size-control {\n    position: absolute;\n    bottom: 52px;\n    z-index: 2;\n    right: calc(50% - 50px);\n}\n\n.popover {\n    z-index: 9999 !important;\n}\n\n.datavzrd-img {\n    max-width: 85vw;\n    max-height: 85vh;\n    width: auto;\n    height: auto;\n    display: block;\n    margin: 5rem auto;\n}\n\n.linkout-raw-value {\n    display: none;\n}\n\n.detail-pills-wrapper {\n    display: flex;\n    flex-wrap: wrap;\n    max-width: 25vw;\n    line-height: 1.3;\n}\n\n#filter-columns-input {\n    min-width: 140px;\n}\n\n#colum-filter-icon:hover {\n    cursor: pointer;\n    color: grey;\n}\n\n#landing-table h1 {\n  font-weight: 900;\n  font-size: inherit;\n}\n\n#landing-table h2 {\n  font-weight: 800;\n  font-size: inherit;\n}\n\n#landing-table h3 {\n  font-weight: 700;\n  font-size: inherit;\n}\n\n#landing-table h4 {\n  font-weight: 600;\n  font-size: inherit;\n}\n\n#landing-table h5 {\n  font-weight: 500;\n  font-size: inherit;\n}\n\n.pills-cell a,\n.detail-pills-wrapper a {\n  color: inherit;\n  text-decoration: none;\n}\n\n.linked-cell a {\n  color: inherit;\n}\n\n.linked-cell .dropdown-toggle {\n  color: inherit;\n  border-color: currentColor;\n}\n\n.pill-dropdown {\n  display: inline-block;\n}\n\n.centered-card {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n}\n\n.detail-pills-wrapper {\n  padding: 4px 0;\n}\n\n.detail-pills-wrapper a,\n.detail-pills-wrapper .pill-dropdown {\n  display: flex;\n}\n"],"sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./style/datavzrd.css"],"names":[],"mappings":"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","sourcesContent":["* {\n    color-adjust: exact!important;\n    -webkit-print-color-adjust: exact!important;\n    print-color-adjust: exact!important;\n}\n\n@media print {\n    .detail-icon, .dropdown, .form-control, .filter-brush-container, .sym, .navbar, .btn, .detail  {\n        display: none;\n    }\n    @page {\n        margin: 0 0 0 0;\n    }\n}\n\n.select-view {\n    position: relative;\n    top: -6px;\n    left: -13px;\n}\n\n.breadcrumb {\n    background-color: white;\n    position: relative;\n    top: 13px;\n}\n\n.navbar-brand, .breadcrumb-item {\n    color: rgba(0,0,0,.5) !important;\n}\n\n.navbar-brand:hover {\n    color: rgba(0,0,0,.7) !important;\n}\n\n.navbar-top {\n    height: 54px;\n}\n\n.sym {\n    cursor: pointer;\n    display: inline;\n    color: #007bff;\n}\n\n.fixed-table-body {\n    overflow: visible !important;\n}\n\n.fixed-top {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.navbar-nav.mr-auto.breadcrumb {\n    background-color: transparent;\n}\n\n.table-container {\n    display: none;\n    font-size: 0.8rem;\n}\n\n#histogram-plot {\n    width: 100%;\n    height: 300px;\n    border:none;\n}\n\n#column-plot {\n    display: block;\n    width: 100%;\n    max-height: 70vh;\n    overflow: auto;\n}\n\n#column-plot-options input[type=\"text\"] {\n    width: 100%;\n    padding: 0.25rem 0.5rem;\n    font-size: 0.875rem;\n    border: 1px solid #ced4da;\n    border-radius: 0.2rem;\n}\n\n#column-plot-yaml {\n    max-height: 300px;\n    overflow: auto;\n    padding: 0.5rem;\n    font-size: 0.75rem;\n    background-color: #f8f9fa;\n}\n\n.plot-column-icon {\n    margin-left: 3px;\n}\n\n.plot-column-icon.active {\n    color: #c21f30;\n}\n\n#search-iframe {\n    width: 100%;\n    height: min(530px, 50vh)\n}\n\n.linkout-btn {\n    font-size: 0.8rem;\n    white-space: nowrap;\n    text-align: right;\n}\n\n.loading {\n    height: 100%;\n    padding-top: 25%;\n}\n\n#heatmap-plot-modal {\n    z-index: 9999;\n}\n\n.modal-body {\n    max-width: calc(100vw - 50px);\n    overflow-x: auto;\n}\n\n.active-row {\n    border-top: 2px solid #6ea8fe !important;\n    border-bottom: 2px solid #6ea8fe;\n}\n\nth {\n    white-space: nowrap;\n    height: 150px;\n    border: 0 !important;\n    overflow: visible;\n}\n\n#table {\n    max-width: 100%;\n    width: auto;\n}\n\n.bootstrap-table {\n    margin: auto !important;\n    width: fit-content !important;\n}\n\ntd {\n    position: relative;\n}\n\n#table td,\n#table th {\n    padding: 0 5px !important;\n    font-size: 12px !important;\n    /* Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=688556 see https://github.com/koesterlab/datavzrd/issues/144 */\n    background-clip: padding-box;\n    white-space: nowrap;\n    height: 18px;\n    line-height: 0.8;\n}\n\n#table tr.detail-view td {\n    white-space: normal;\n    height: auto;\n    line-height: normal;\n}\n\n.table td.plotcell {\n    padding: 0;\n}\n\n#pagination {\n    padding-top: 0.5rem;\n    display: none;\n}\n\nth .th-inner {\n    transform: translate(-10px, 30px) rotate(-45deg);\n    width: 1em;\n    overflow: visible !important;\n    transform-origin: top left;\n    margin-bottom: 5px;\n}\n\n#table td.narrow-col,\n#table th.narrow-col {\n    max-width: 4px;\n    width: 4px;\n    overflow: hidden;\n    padding: 0 !important;\n}\n\n#table td.narrow-col {\n    font-size: 0 !important;\n}\n\nth.narrow-col .th-inner,\nth.narrow-col .sym,\nth.narrow-col .sym-container,\nth.narrow-col .header-sort,\nth.narrow-col .col-drag-handle {\n    display: none;\n}\n\n#vis-container {\n    height: calc(100vh - 105px);\n    padding-top: 50px;\n}\n\n.fa {\n    display: inline-block;\n    width: 24px;\n    height: 24px;\n    background-size: 100%;\n}\n\n.fa-minus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z\"/></svg>');\n}\n\n.fa-plus {\n    background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z\"/></svg>');\n}\n\n.num-cell {\n    white-space: nowrap;\n}\n\n.form-control {\n    height: 35px;\n    border: none !important;\n    width: 5em;\n}\n\n.filter-control {\n    padding-bottom: 2px;\n}\n\n.fixed-table-container {\n    border: none !important;\n}\n\n.filter-brush-container {\n    height: 48px;\n    position: relative;\n}\n\n.no-labels {\n    position: absolute;\n    top: 12px;\n}\n\n.card {\n    margin: 0.5em;\n}\n\n.container-fluid {\n    overflow: auto;\n    margin-top: 50px;\n}\n\n.dropdown-item {\n    line-height: normal;\n}\n\n\n#page-container {\n    position: relative;\n    min-height: 100vh;\n}\n\n#content-wrap {\n    padding-bottom: 54px;\n}\n\nfooter {\n    position: absolute;\n    bottom: 0;\n    width: 100%;\n    height: 54px;\n}\n\n.badge-light {\n    background-color: #cbcbcb;\n    color: #222222;\n}\n\n.katex-html {\n    /* Hide unrendered mathematical expressions */\n    display: none;\n}\n\n.navbar-toggler-icon {\n    width: 1em;\n    height: 1em;\n}\n\n.navbar-toggler {\n    background-color: white;\n}\n\n#right-top-nav {\n    margin: auto;\n}\n\n.btn-table {\n    border: none;\n}\n\n.description-box {\n    margin: 0;\n}\n\n#sidebar {\n    position: fixed;\n    right: 0;\n    top: 3rem;\n    z-index: 9999;\n    margin-right: 7px;\n}\n\n#sidebar-card {\n    width: 13rem;\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn {\n    background-color: rgba(255,255,255,0.75);\n}\n\n.sidebar-btn:hover {\n    background-color: rgba(203,203,203,0.75);\n    cursor: pointer;\n}\n\n.navbar-toggler {\n    border: none;\n}\n\n#close-description {\n    position: absolute;\n    left: calc(100% - 72px);\n    top: 0;\n    padding: 0.2rem;\n}\n\n.description-card-body {\n    background-color: rgba(255,255,255,0.75);\n    width: 100%;\n    border: none;\n    padding: 0;\n}\n\n#innerDescription {\n    margin: 0 auto;\n    max-width: 800px;\n}\n\n.ic:hover {\n    color: grey;\n}\n\n.nav-btn {\n    display: block !important;\n}\n\n.sym-container svg {\n    position: absolute;\n    top: 0;\n    left: 0;\n    cursor: pointer;\n}\n\n.sym-container svg:hover {\n    color: grey;\n}\n\n.sym-container .bi-caret-down {\n    top: 8px;\n}\n\n.hide-sym {\n    margin-left: 14px;\n}\n\n.pulsating-button {\n    animation: pulsate 2s infinite;\n    margin-left: 2rem;\n    margin-right: 2rem;\n    margin-top: 10px;\n}\n\n@keyframes pulsate {\n    0% { transform: scale(1); }\n    50% { transform: scale(1.05); }\n    100% { transform: scale(1); }\n}\n\n.hide-sym:hover {\n    color: grey;\n}\n\n.col-drag-handle {\n    display: inline-block;\n    cursor: grab;\n    color: #007bff;\n    opacity: 0.35;\n    margin-left: 4px;\n    vertical-align: middle;\n    line-height: 1;\n}\n\n.col-drag-handle:hover {\n    opacity: 0.75;\n}\n\nth.col-dragging {\n    opacity: 0.45;\n}\n\nth.col-drag-over {\n    border-left: 2px solid #0275d8 !important;\n}\n\n.header-sort {\n    display: inline-flex;\n    flex-direction: column;\n    vertical-align: middle;\n    margin-left: 4px;\n    margin-right: 7px;\n}\n\n.header-sort svg {\n    display: block;\n    color: #007bff;\n    cursor: pointer;\n}\n\n.header-sort .bi-caret-down {\n    margin-top: -4px;\n}\n\n.header-sort svg:hover {\n    color: grey;\n}\n\n#plot-size-control {\n    position: fixed;\n    bottom: 1rem;\n    z-index: 2;\n    left: 50%;\n    transform: translateX(-50%);\n    gap: 1rem;\n    font-size: 0.875rem;\n    color: #6c757d;\n    white-space: nowrap;\n}\n\n#plot-size-control button {\n    display: flex;\n    padding: 0.25rem;\n    border: none;\n    border-radius: 0.25rem;\n    background: none;\n    color: #6c757d;\n}\n\n#plot-size-control button:hover {\n    color: #343a40;\n    background-color: #f1f3f5;\n}\n\n#plot-size-control label {\n    display: flex;\n    align-items: center;\n    gap: 0.5rem;\n}\n\n#plot-size-control label span {\n    min-width: 4.5em;\n    font-variant-numeric: tabular-nums;\n}\n\n#plot-size-control input {\n    width: 140px;\n}\n\n#plot-size-control .custom-range::-webkit-slider-thumb {\n    background-color: #868e96;\n}\n\n#plot-size-control .custom-range::-webkit-slider-thumb:active {\n    background-color: #495057;\n}\n\n#plot-size-control .custom-range::-moz-range-thumb {\n    background-color: #868e96;\n}\n\n#plot-size-control .custom-range::-moz-range-thumb:active {\n    background-color: #495057;\n}\n\n#plot-size-control .custom-range:focus::-webkit-slider-thumb {\n    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(108, 117, 125, 0.25);\n}\n\n#plot-size-control .custom-range:focus::-moz-range-thumb {\n    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(108, 117, 125, 0.25);\n}\n\n.popover {\n    z-index: 9999 !important;\n}\n\n.datavzrd-img {\n    max-width: 85vw;\n    max-height: 85vh;\n    width: auto;\n    height: auto;\n    display: block;\n    margin: 5rem auto;\n}\n\n.linkout-raw-value {\n    display: none;\n}\n\n.detail-pills-wrapper {\n    display: flex;\n    flex-wrap: wrap;\n    max-width: 25vw;\n    line-height: 1.3;\n}\n\n#filter-columns-input {\n    min-width: 140px;\n}\n\n#colum-filter-icon:hover {\n    cursor: pointer;\n    color: grey;\n}\n\n#landing-table h1 {\n  font-weight: 900;\n  font-size: inherit;\n}\n\n#landing-table h2 {\n  font-weight: 800;\n  font-size: inherit;\n}\n\n#landing-table h3 {\n  font-weight: 700;\n  font-size: inherit;\n}\n\n#landing-table h4 {\n  font-weight: 600;\n  font-size: inherit;\n}\n\n#landing-table h5 {\n  font-weight: 500;\n  font-size: inherit;\n}\n\n.pills-cell a,\n.detail-pills-wrapper a {\n  color: inherit;\n  text-decoration: none;\n}\n\n.linked-cell a {\n  color: inherit;\n}\n\n.linked-cell .dropdown-toggle {\n  color: inherit;\n  border-color: currentColor;\n}\n\n.pill-dropdown {\n  display: inline-block;\n}\n\n.centered-card {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n}\n\n.detail-pills-wrapper {\n  padding: 4px 0;\n}\n\n.detail-pills-wrapper a,\n.detail-pills-wrapper .pill-dropdown {\n  display: flex;\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
 
@@ -70749,21 +70807,26 @@ function footer(version, time) {
     </footer>`;
 }
 
-function render_plot_size_controls() {
+function render_plot_size_controls(width, height) {
+    let slider = (id, label, value, max) => `
+        <label class="mb-0">${label}
+            <input type="range" class="custom-range" id="plot-${id}" min="${Math.min(100, value)}" max="${max}" step="1" value="${value}">
+            <span id="plot-${id}-value">${value} px</span>
+        </label>`;
     let controls = `
-        <div id="plot-size-control">
-            <div class="btn-group btn-group-sm" role="group">
-                <button type="button" id="zoom" class="btn btn-sm btn-outline-secondary" onclick="datavzrd.load_plot(specs, data, false, 100)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-angle-expand" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707"/>
-                    </svg>
-                </button>
-                <button type="button" id="unzoom" class="btn btn-sm btn-outline-secondary"onclick="datavzrd.load_plot(specs, data, false, -100)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-angle-contract" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M.172 15.828a.5.5 0 0 0 .707 0l4.096-4.096V14.5a.5.5 0 1 0 1 0v-3.975a.5.5 0 0 0-.5-.5H1.5a.5.5 0 0 0 0 1h2.768L.172 15.121a.5.5 0 0 0 0 .707M15.828.172a.5.5 0 0 0-.707 0l-4.096 4.096V1.5a.5.5 0 1 0-1 0v3.975a.5.5 0 0 0 .5.5H14.5a.5.5 0 0 0 0-1h-2.768L15.828.879a.5.5 0 0 0 0-.707"/>
-                    </svg>
-                </button>
-            </div>
+        <div id="plot-size-control" class="d-flex align-items-center">
+            <button type="button" id="unzoom" title="Smaller" aria-label="Smaller">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M2 7h10"/>
+                </svg>
+            </button>
+            ${slider("width", "Width", width, Math.max(2000, 2 * width))}
+            ${slider("height", "Height", height, Math.max(1200, 2 * height))}
+            <button type="button" id="zoom" title="Larger" aria-label="Larger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M2 7h10M7 2v10"/>
+                </svg>
+            </button>
         </div>`;
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('.container-fluid').append(controls);
 }
@@ -168056,7 +168119,7 @@ function load_description() {
   (0,_description__WEBPACK_IMPORTED_MODULE_12__.renderMarkdownDescription)(true);
 }
 
-function load_plot(specs, data, multiple_datasets, resize) {
+function load_plot(specs, data, multiple_datasets) {
   jquery__WEBPACK_IMPORTED_MODULE_0___default()("#markdown-btn").click(function () {
     (0,_description__WEBPACK_IMPORTED_MODULE_12__.renderMarkdownDescription)(true);
   });
@@ -168072,23 +168135,43 @@ function load_plot(specs, data, multiple_datasets, resize) {
   }
   if (specs.width == "container") {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("#vis").css("width", "100%");
-  } else if (!resize && !specs.hconcat && !specs.vconcat) {
-    (0,_page__WEBPACK_IMPORTED_MODULE_11__.render_plot_size_controls)();
   }
   (0,vega_embed__WEBPACK_IMPORTED_MODULE_3__["default"])("#vis", specs).then(({ spec, view }) => {
-    if (resize && specs.width !== "container") {
+    if (specs.width !== "container" && !specs.hconcat && !specs.vconcat) {
       // With autosize fit, the view only reports the inner plot size.
       let width = typeof specs.width === "number" ? specs.width : view.width();
       let height = typeof specs.height === "number" ? specs.height : view.height();
-      let aspect_ratio = height / width;
-      specs.width = width + resize;
-      specs.height = height + resize * aspect_ratio;
-      view
-        .width(width + resize)
-        .height(height + resize * aspect_ratio)
-        .run();
+      (0,_page__WEBPACK_IMPORTED_MODULE_11__.render_plot_size_controls)(width, height);
+      add_plot_size_listeners(view);
     }
   }).catch(_error__WEBPACK_IMPORTED_MODULE_20__.plotViewError);
+}
+
+function add_plot_size_listeners(view) {
+  const width = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#plot-width");
+  const height = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#plot-height");
+  const resize = (w, h) => {
+    width.val(Math.round(w));
+    height.val(Math.round(h));
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("#plot-width-value").text(`${width.val()} px`);
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("#plot-height-value").text(`${height.val()} px`);
+    view.width(Number(width.val())).height(Number(height.val())).run();
+  };
+  // scale both dimensions by the same factor so the aspect ratio is kept within the slider bounds
+  const scale = (factor) => {
+    const w = Number(width.val());
+    const h = Number(height.val());
+    const bound = factor > 1 ? Math.min : Math.max;
+    factor = bound(
+      factor,
+      Number(factor > 1 ? width.attr("max") : width.attr("min")) / w,
+      Number(factor > 1 ? height.attr("max") : height.attr("min")) / h,
+    );
+    resize(w * factor, h * factor);
+  };
+  width.add(height).on("input", () => resize(width.val(), height.val()));
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#zoom").on("click", () => scale(1.25));
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#unzoom").on("click", () => scale(0.8));
 }
 
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).click(function (event) {
