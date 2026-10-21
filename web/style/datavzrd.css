@@ -202,8 +202,13 @@ th.narrow-col .col-drag-handle {
     display: none;
 }
 
+#plot-container {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 54px);
+}
+
 #vis-container {
-    height: calc(100vh - 105px);
     padding-top: 50px;
 }
 
@@ -256,7 +261,7 @@ th.narrow-col .col-drag-handle {
 
 .container-fluid {
     overflow: auto;
-    margin-top: 50px;
+    padding-top: 50px;
 }
 
 .dropdown-item {
@@ -446,7 +451,7 @@ th.col-drag-over {
 
 #plot-size-control {
     position: fixed;
-    bottom: 1rem;
+    bottom: 54px;
     z-index: 2;
     left: 50%;
     transform: translateX(-50%);
