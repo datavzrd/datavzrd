@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.76.0](https://github.com/datavzrd/datavzrd/compare/v2.75.5...v2.76.0) (2026-10-21)
+
+
+### Features
+
+* Replace plot resize buttons with width and height sliders ([#1340](https://github.com/datavzrd/datavzrd/issues/1340)) ([ebe4897](https://github.com/datavzrd/datavzrd/commit/ebe4897b9abb4f8cbd621de734643b1d6d04020d))
+
+
+### Bug Fixes
+
+* Avoid page scrolling when the report content fits the window ([#1342](https://github.com/datavzrd/datavzrd/issues/1342)) ([0c0a1f0](https://github.com/datavzrd/datavzrd/commit/0c0a1f0952353032b400b6fa90bcc05813ffdc75))
+
 ## [2.75.5](https://github.com/datavzrd/datavzrd/compare/v2.75.4...v2.75.5) (2026-10-20)
 
 
