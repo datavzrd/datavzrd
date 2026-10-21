@@ -1454,7 +1454,7 @@ export function load_description() {
   renderMarkdownDescription(true);
 }
 
-export function load_plot(specs, data, multiple_datasets, resize) {
+export function load_plot(specs, data, multiple_datasets) {
   $("#markdown-btn").click(function () {
     renderMarkdownDescription(true);
   });
@@ -1470,23 +1470,43 @@ export function load_plot(specs, data, multiple_datasets, resize) {
   }
   if (specs.width == "container") {
     $("#vis").css("width", "100%");
-  } else if (!resize && !specs.hconcat && !specs.vconcat) {
-    render_plot_size_controls();
   }
   vegaEmbed("#vis", specs).then(({ spec, view }) => {
-    if (resize && specs.width !== "container") {
+    if (specs.width !== "container" && !specs.hconcat && !specs.vconcat) {
       // With autosize fit, the view only reports the inner plot size.
       let width = typeof specs.width === "number" ? specs.width : view.width();
       let height = typeof specs.height === "number" ? specs.height : view.height();
-      let aspect_ratio = height / width;
-      specs.width = width + resize;
-      specs.height = height + resize * aspect_ratio;
-      view
-        .width(width + resize)
-        .height(height + resize * aspect_ratio)
-        .run();
+      render_plot_size_controls(width, height);
+      add_plot_size_listeners(view);
     }
   }).catch(plotViewError);
+}
+
+function add_plot_size_listeners(view) {
+  const width = $("#plot-width");
+  const height = $("#plot-height");
+  const resize = (w, h) => {
+    width.val(Math.round(w));
+    height.val(Math.round(h));
+    $("#plot-width-value").text(`${width.val()} px`);
+    $("#plot-height-value").text(`${height.val()} px`);
+    view.width(Number(width.val())).height(Number(height.val())).run();
+  };
+  // scale both dimensions by the same factor so the aspect ratio is kept within the slider bounds
+  const scale = (factor) => {
+    const w = Number(width.val());
+    const h = Number(height.val());
+    const bound = factor > 1 ? Math.min : Math.max;
+    factor = bound(
+      factor,
+      Number(factor > 1 ? width.attr("max") : width.attr("min")) / w,
+      Number(factor > 1 ? height.attr("max") : height.attr("min")) / h,
+    );
+    resize(w * factor, h * factor);
+  };
+  width.add(height).on("input", () => resize(width.val(), height.val()));
+  $("#zoom").on("click", () => scale(1.25));
+  $("#unzoom").on("click", () => scale(0.8));
 }
 
 $(document).click(function (event) {

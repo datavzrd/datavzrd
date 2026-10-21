@@ -445,10 +445,68 @@ th.col-drag-over {
 }
 
 #plot-size-control {
-    position: absolute;
-    bottom: 52px;
+    position: fixed;
+    bottom: 1rem;
     z-index: 2;
-    right: calc(50% - 50px);
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+    white-space: nowrap;
+}
+
+#plot-size-control button {
+    display: flex;
+    padding: 0.25rem;
+    border: none;
+    border-radius: 0.25rem;
+    background: none;
+    color: #6c757d;
+}
+
+#plot-size-control button:hover {
+    color: #343a40;
+    background-color: #f1f3f5;
+}
+
+#plot-size-control label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#plot-size-control label span {
+    min-width: 4.5em;
+    font-variant-numeric: tabular-nums;
+}
+
+#plot-size-control input {
+    width: 140px;
+}
+
+#plot-size-control .custom-range::-webkit-slider-thumb {
+    background-color: #868e96;
+}
+
+#plot-size-control .custom-range::-webkit-slider-thumb:active {
+    background-color: #495057;
+}
+
+#plot-size-control .custom-range::-moz-range-thumb {
+    background-color: #868e96;
+}
+
+#plot-size-control .custom-range::-moz-range-thumb:active {
+    background-color: #495057;
+}
+
+#plot-size-control .custom-range:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+}
+
+#plot-size-control .custom-range:focus::-moz-range-thumb {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
 }
 
 .popover {

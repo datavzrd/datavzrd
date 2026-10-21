@@ -264,21 +264,26 @@ function footer(version, time) {
     </footer>`;
 }
 
-export function render_plot_size_controls() {
+export function render_plot_size_controls(width, height) {
+    let slider = (id, label, value, max) => `
+        <label class="mb-0">${label}
+            <input type="range" class="custom-range" id="plot-${id}" min="${Math.min(100, value)}" max="${max}" step="1" value="${value}">
+            <span id="plot-${id}-value">${value} px</span>
+        </label>`;
     let controls = `
-        <div id="plot-size-control">
-            <div class="btn-group btn-group-sm" role="group">
-                <button type="button" id="zoom" class="btn btn-sm btn-outline-secondary" onclick="datavzrd.load_plot(specs, data, false, 100)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-angle-expand" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707"/>
-                    </svg>
-                </button>
-                <button type="button" id="unzoom" class="btn btn-sm btn-outline-secondary"onclick="datavzrd.load_plot(specs, data, false, -100)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-angle-contract" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M.172 15.828a.5.5 0 0 0 .707 0l4.096-4.096V14.5a.5.5 0 1 0 1 0v-3.975a.5.5 0 0 0-.5-.5H1.5a.5.5 0 0 0 0 1h2.768L.172 15.121a.5.5 0 0 0 0 .707M15.828.172a.5.5 0 0 0-.707 0l-4.096 4.096V1.5a.5.5 0 1 0-1 0v3.975a.5.5 0 0 0 .5.5H14.5a.5.5 0 0 0 0-1h-2.768L15.828.879a.5.5 0 0 0 0-.707"/>
-                    </svg>
-                </button>
-            </div>
+        <div id="plot-size-control" class="d-flex align-items-center">
+            <button type="button" id="unzoom" title="Smaller" aria-label="Smaller">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M2 7h10"/>
+                </svg>
+            </button>
+            ${slider("width", "Width", width, Math.max(2000, 2 * width))}
+            ${slider("height", "Height", height, Math.max(1200, 2 * height))}
+            <button type="button" id="zoom" title="Larger" aria-label="Larger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M2 7h10M7 2v10"/>
+                </svg>
+            </button>
         </div>`;
     $('.container-fluid').append(controls);
 }
