@@ -202,9 +202,15 @@ th.narrow-col .col-drag-handle {
     display: none;
 }
 
+#plot-container {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 54px);
+}
+
 #vis-container {
-    height: calc(100vh - 105px);
     padding-top: 50px;
+    overflow-x: auto;
 }
 
 .fa {
@@ -256,7 +262,7 @@ th.narrow-col .col-drag-handle {
 
 .container-fluid {
     overflow: auto;
-    margin-top: 50px;
+    padding-top: 50px;
 }
 
 .dropdown-item {
@@ -445,12 +451,10 @@ th.col-drag-over {
 }
 
 #plot-size-control {
-    position: fixed;
-    bottom: 1rem;
-    z-index: 2;
-    left: 50%;
-    transform: translateX(-50%);
-    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+    padding: 0.5rem 0;
     font-size: 0.875rem;
     color: #6c757d;
     white-space: nowrap;

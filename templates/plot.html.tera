@@ -44,7 +44,7 @@
                 </span>
             </nav>
         </div>
-        <div class="container-fluid">
+        <div class="container-fluid" id="plot-container">
             {% if description %}
             <div class="row description-box">
                 <div class="col-md-12">
@@ -59,8 +59,8 @@
                 </div>
             </div>
             {% endif %}
-            <div class="row">
-                <div class="col-md-12 d-flex justify-content-center" id="vis-container">
+            <div class="row flex-grow-1 mx-0">
+                <div class="col-md-12 d-flex" id="vis-container">
                     <div class="mt-auto mb-auto ml-auto mr-auto" id="vis"></div>
                     <script>
                         const specs = {{ specs | safe }};
