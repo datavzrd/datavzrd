@@ -450,12 +450,10 @@ th.col-drag-over {
 }
 
 #plot-size-control {
-    position: fixed;
-    bottom: 54px;
-    z-index: 2;
-    left: 50%;
-    transform: translateX(-50%);
-    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+    padding: 0.5rem 0;
     font-size: 0.875rem;
     color: #6c757d;
     white-space: nowrap;
