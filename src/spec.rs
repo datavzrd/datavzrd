@@ -609,9 +609,11 @@ impl DatasetSpecs {
     }
 
     pub fn default_separator(&self) -> Result<char> {
-        match self.path.extension().and_then(|ext| ext.to_str()) {
-            Some("tsv") => Ok('\t'),
-            _ => Ok(','),
+        let path = self.path.to_string_lossy();
+        if path.strip_suffix(".gz").unwrap_or(&path).ends_with(".tsv") {
+            Ok('\t')
+        } else {
+            Ok(',')
         }
     }
 }
@@ -1932,6 +1934,23 @@ mod tests {
     use std::collections::HashMap;
     use std::io::Write;
     use std::path::PathBuf;
+
+    #[test]
+    fn test_default_separator() {
+        for (path, expected) in [
+            ("data.csv", ','),
+            ("data.tsv", '\t'),
+            ("data.csv.gz", ','),
+            ("data.tsv.gz", '\t'),
+            ("data.parquet", ','),
+        ] {
+            let dataset = DatasetSpecs {
+                path: PathBuf::from(path),
+                ..Default::default()
+            };
+            assert_eq!(dataset.default_separator().unwrap(), expected);
+        }
+    }
 
     #[test]
     fn test_table_config_deserialization() {

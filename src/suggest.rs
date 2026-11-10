@@ -7,32 +7,49 @@ use datavzrd::spec::{
 use datavzrd::utils::column_type::{ColumnType, IsNa};
 use log::warn;
 use std::collections::HashMap;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 const MAX_EXAMPLES: usize = 2;
 const EXAMPLE_MAX_CHARS: usize = 25;
 
 pub(crate) fn suggest(
     files: Vec<PathBuf>,
-    separator: Vec<char>,
+    separators: Vec<char>,
     name: String,
     llm: Option<LlmConfig>,
 ) -> Result<String> {
     let mut items_spec = ItemsSpec::new(name);
     let mut dataset_names = Vec::new();
-    for (file, sep) in files.iter().zip(separator.iter()) {
-        let dataset = DatasetSpecs {
+    for (i, file) in files.iter().enumerate() {
+        let path = file.to_string_lossy();
+        let path = Path::new(path.strip_suffix(".gz").unwrap_or(&path));
+        let delimited = matches!(
+            path.extension().and_then(|ext| ext.to_str()),
+            Some("csv" | "tsv")
+        );
+        let mut dataset = DatasetSpecs {
             path: file.to_owned(),
-            separator: sep.to_owned(),
+            separator: separators
+                .get(i)
+                .copied()
+                .filter(|_| delimited)
+                .unwrap_or_default(),
             header_rows: 1,
             links: None,
             offer_excel: false,
         };
-        let dataset_name = file
+        dataset.preprocess()?;
+        let stem = path
             .file_stem()
             .and_then(|stem| stem.to_str())
-            .with_context(|| format!("Could not derive a dataset name from {}", file.display()))?
-            .to_string();
+            .with_context(|| format!("Could not derive a dataset name from {}", file.display()))?;
+        // Files with the same name (e.g. from different directories) get a numbered suffix.
+        let mut dataset_name = stem.to_string();
+        let mut n = 1;
+        while items_spec.datasets.contains_key(&dataset_name) {
+            n += 1;
+            dataset_name = format!("{stem}_{n}");
+        }
         items_spec
             .datasets
             .insert(dataset_name.clone(), dataset.clone());
@@ -63,7 +80,14 @@ pub(crate) fn suggest(
     }
     let mut config = serde_yaml::to_value(&items_spec)?;
     for name in &dataset_names {
-        let headers = items_spec.datasets[name].reader()?.headers()?;
+        let dataset = &items_spec.datasets[name];
+        // Only keep separators that differ from the one inferred when rendering the report.
+        if dataset.separator == dataset.default_separator()? {
+            if let Some(mapping) = config["datasets"][name.as_str()].as_mapping_mut() {
+                mapping.remove(&"separator".into());
+            }
+        }
+        let headers = dataset.reader()?.headers()?;
         sort_keys(
             &mut config["views"][name.as_str()]["render-table"]["columns"],
             &headers,
@@ -294,6 +318,21 @@ mod tests {
         assert!(result.is_ok());
         let tmp = tempfile::NamedTempFile::new()?;
         tmp.as_file().write_all(result.unwrap().as_bytes())?;
+        let config = ItemsSpec::from_file(tmp.path())?;
+        assert!(config.validate().is_ok());
+        Ok(())
+    }
+
+    #[test]
+    fn test_suggest_without_separators() -> Result<()> {
+        let files = vec![
+            PathBuf::from(".examples/data/movies.csv"),
+            PathBuf::from("tests/data/uniform_datatypes.json"),
+        ];
+        let result = suggest(files, Vec::new(), "Test Report".to_string(), None)?;
+        assert!(!result.contains("separator"));
+        let tmp = tempfile::NamedTempFile::new()?;
+        tmp.as_file().write_all(result.as_bytes())?;
         let config = ItemsSpec::from_file(tmp.path())?;
         assert!(config.validate().is_ok());
         Ok(())
