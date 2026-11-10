@@ -7,7 +7,7 @@ use datavzrd::spec::{
 use datavzrd::utils::column_type::{ColumnType, IsNa};
 use log::warn;
 use std::collections::HashMap;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 const MAX_EXAMPLES: usize = 2;
 const EXAMPLE_MAX_CHARS: usize = 25;
@@ -21,19 +21,35 @@ pub(crate) fn suggest(
     let mut items_spec = ItemsSpec::new(name);
     let mut dataset_names = Vec::new();
     for (i, file) in files.iter().enumerate() {
+        let path = file.to_string_lossy();
+        let path = Path::new(path.strip_suffix(".gz").unwrap_or(&path));
+        let delimited = matches!(
+            path.extension().and_then(|ext| ext.to_str()),
+            Some("csv" | "tsv")
+        );
         let mut dataset = DatasetSpecs {
             path: file.to_owned(),
-            separator: separators.get(i).copied().unwrap_or_default(),
+            separator: separators
+                .get(i)
+                .copied()
+                .filter(|_| delimited)
+                .unwrap_or_default(),
             header_rows: 1,
             links: None,
             offer_excel: false,
         };
         dataset.preprocess()?;
-        let dataset_name = file
+        let stem = path
             .file_stem()
             .and_then(|stem| stem.to_str())
-            .with_context(|| format!("Could not derive a dataset name from {}", file.display()))?
-            .to_string();
+            .with_context(|| format!("Could not derive a dataset name from {}", file.display()))?;
+        // Files with the same name (e.g. from different directories) get a numbered suffix.
+        let mut dataset_name = stem.to_string();
+        let mut n = 1;
+        while items_spec.datasets.contains_key(&dataset_name) {
+            n += 1;
+            dataset_name = format!("{stem}_{n}");
+        }
         items_spec
             .datasets
             .insert(dataset_name.clone(), dataset.clone());
