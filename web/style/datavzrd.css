@@ -97,6 +97,28 @@
     color: #c21f30;
 }
 
+#plot-column-panel {
+    right: 1.5rem;
+    bottom: calc(54px + 1rem);
+    z-index: 1030;
+    min-width: 13rem;
+    box-shadow: 0 .25rem .75rem rgba(0,0,0,.12);
+}
+
+#plot-column-mapping td {
+    padding: .1rem 0;
+    max-width: 12rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#plot-column-mapping td:first-child {
+    width: 3.5rem;
+    color: #6c757d;
+    text-transform: capitalize;
+}
+
 #search-iframe {
     width: 100%;
     height: min(530px, 50vh)
