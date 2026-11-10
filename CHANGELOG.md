@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.77.0](https://github.com/datavzrd/datavzrd/compare/v2.76.0...v2.77.0) (2026-11-10)
+
+
+### Features
+
+* Make separators optional for the suggest subcommand ([#1349](https://github.com/datavzrd/datavzrd/issues/1349)) ([ce6e585](https://github.com/datavzrd/datavzrd/commit/ce6e585ae792b0ed9ea36f181292049c451ad5f9))
+
 ## [2.76.0](https://github.com/datavzrd/datavzrd/compare/v2.75.5...v2.76.0) (2026-10-21)
 
 
