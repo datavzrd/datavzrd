@@ -17,22 +17,67 @@ const EXPORTS = {
   yaml: (plot) => [viewConfig(plot), "text/yaml"],
 };
 
-let selectedColumn = null;
+// Selected columns are mapped to these channels in the order they were clicked.
+const CHANNELS = ["x", "y", "color", "size", "shape", "opacity"];
+
+let selectedColumns = [];
 let currentPlot = null;
 
 export function columnPlotIcon(index) {
-  return `<span class="sym ic plot-column-icon" data-column="${index}" title="Plot against another column" onclick="datavzrd.selectPlotColumn(${index})"><svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M1 1h1v13h13v1H1z"/><circle cx="5" cy="10" r="1.5"/><circle cx="8" cy="6" r="1.5"/><circle cx="11.5" cy="8.5" r="1.5"/><circle cx="13" cy="3.5" r="1.5"/></svg></span>`;
+  return `<span class="sym ic plot-column-icon" data-column="${index}" title="Add to plot" onclick="datavzrd.selectPlotColumn(${index})"><svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M1 1h1v13h13v1H1z"/><circle cx="5" cy="10" r="1.5"/><circle cx="8" cy="6" r="1.5"/><circle cx="11.5" cy="8.5" r="1.5"/><circle cx="13" cy="3.5" r="1.5"/></svg></span>`;
 }
 
-// The first click marks a column, the second one opens the plot of both.
+// Clicking a column adds it to the next free channel, clicking it again removes it.
 export function selectPlotColumn(index) {
   const column = config.columns[index];
-  if (selectedColumn !== null && selectedColumn !== column) {
-    openColumnPlot(selectedColumn, column);
+  if (selectedColumns.includes(column)) {
+    selectedColumns = selectedColumns.filter((c) => c !== column);
+  } else if (selectedColumns.length < CHANNELS.length) {
+    selectedColumns.push(column);
   }
-  selectedColumn = selectedColumn === null ? column : null;
-  $(".plot-column-icon").removeClass("active");
-  $(`.plot-column-icon[data-column="${index}"]`).toggleClass("active", selectedColumn !== null);
+  updateSelection();
+}
+
+function updateSelection() {
+  if ($("#plot-column-panel").length === 0) {
+    $("body").append(`
+      <div id="plot-column-panel" class="card small p-2 position-fixed">
+        <table id="plot-column-mapping"></table>
+        <div class="mt-2">
+          <button type="button" class="btn btn-sm btn-primary mr-1" id="plot-column-open">Plot</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="plot-column-reset">Reset</button>
+        </div>
+      </div>`);
+    $("#plot-column-open").on("click", () => openColumnPlot(selectedColumns));
+    $("#plot-column-reset").on("click", () => {
+      selectedColumns = [];
+      updateSelection();
+    });
+    // The table header is rebuilt e.g. when columns are hidden or reordered.
+    $("#table").on("post-header.bs.table", markPlotColumns);
+  }
+  const rows = CHANNELS.slice(0, selectedColumns.length + 1).map((name, i) => {
+    const column = selectedColumns[i];
+    return $("<tr>").append(
+      $("<td>").text(name),
+      column === undefined
+        ? $('<td class="text-muted font-italic">').text("click a scatter icon")
+        : $("<td>").text(label(column) ?? column),
+    );
+  });
+  $("#plot-column-mapping").empty().append(rows);
+  $("#plot-column-open").prop("disabled", selectedColumns.length < 2);
+  $("#plot-column-panel").toggle(selectedColumns.length > 0);
+  markPlotColumns();
+}
+
+function markPlotColumns() {
+  $(".plot-column-icon").each(function () {
+    const i = selectedColumns.indexOf(config.columns[this.dataset.column]);
+    $(this)
+      .toggleClass("active", i >= 0)
+      .attr("title", i >= 0 ? `Plotted as ${CHANNELS[i]}, click to remove` : "Add to plot");
+  });
 }
 
 function columnPlotSpec(options) {
@@ -50,7 +95,7 @@ function columnPlotSpec(options) {
   const mark = {
     type: options.mark,
     ...(options.mark !== "boxplot" && { tooltip: { content: "data" } }),
-    ...(options.opacity < 1 && { opacity: Number(options.opacity) }),
+    ...(options.alpha < 1 && { opacity: Number(options.alpha) }),
   };
   const encoding = {
     x,
@@ -58,6 +103,7 @@ function columnPlotSpec(options) {
     ...(options.color && { color: channel(options.color, defaultType(options.color)) }),
     ...(options.size && { size: channel(options.size, defaultType(options.size)) }),
     ...(options.shape && { shape: channel(options.shape, "nominal") }),
+    ...(options.opacity && { opacity: channel(options.opacity, defaultType(options.opacity)) }),
   };
 
   return {
@@ -114,14 +160,18 @@ function addScale(encoding, type, mark) {
   }
 }
 
-function openColumnPlot(x, y) {
+function openColumnPlot(columns) {
   if ($("#column-plot-modal").length === 0) {
     initModal();
   }
   const form = document.getElementById("column-plot-options");
-  for (const [axis, column] of [["x", x], ["y", y]]) {
-    form.elements[axis].value = column;
-    form.elements[`${axis}Type`].value = defaultType(column);
+  // Start from the defaults so that e.g. a previous mark does not disable size or shape.
+  form.reset();
+  CHANNELS.forEach((name, i) => {
+    form.elements[name].value = columns[i] ?? "";
+  });
+  for (const axis of ["x", "y"]) {
+    form.elements[`${axis}Type`].value = defaultType(form.elements[axis].value);
   }
   $("#column-plot-modal").modal("show");
 }
@@ -129,7 +179,7 @@ function openColumnPlot(x, y) {
 function initModal() {
   $("#modal-container").append(modal());
   const form = $("#column-plot-options");
-  for (const name of ["x", "y", "color", "size", "shape"]) {
+  for (const name of CHANNELS) {
     form
       .find(`[name=${name}]`)
       .append(datasetColumns().map((c) => new Option(label(c) ?? c, c)));
@@ -181,7 +231,7 @@ function render() {
 
 // Disabled controls are left out of the form data and hence out of the spec.
 function updateControls(form) {
-  const { mark, aggregate, yType, xType } = form.elements;
+  const { mark, aggregate, yType, xType, opacity } = form.elements;
   const canAggregate = mark.value !== "boxplot";
   const count = canAggregate && aggregate.value === "count";
   const enabled = {
@@ -193,6 +243,7 @@ function updateControls(form) {
     size: POINT_MARKS.includes(mark.value),
     shape: mark.value === "point",
     zoom: mark.value !== "boxplot",
+    alpha: !opacity.value,
   };
   for (const [name, isEnabled] of Object.entries(enabled)) {
     form.elements[name].disabled = !isEnabled;
@@ -327,7 +378,8 @@ function modal() {
                 ${field("Color", select("color", [], "none"))}
                 ${field("Size", select("size", [], "none"))}
                 ${field("Shape", select("shape", [], "none"))}
-                ${field("Opacity", '<input type="range" class="custom-range" name="opacity" min="0.1" max="1" step="0.1" value="1">')}
+                ${field("Opacity", select("opacity", [], "none"))}
+                ${field("Fixed opacity", '<input type="range" class="custom-range" name="alpha" min="0.1" max="1" step="0.1" value="1">')}
                 ${field('Width <span id="column-plot-width"></span>', '<input type="range" class="custom-range" name="width" min="200" max="2000" step="10">')}
                 ${field('Height <span id="column-plot-height"></span>', '<input type="range" class="custom-range" name="height" min="200" max="1200" step="10" value="400">')}
                 ${field("Title", '<input type="text" name="title">')}
