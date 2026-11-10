@@ -49,7 +49,7 @@ fn main() -> Result<()> {
             llm_token,
             prompt,
         }) => {
-            if files.len() != separators.len() {
+            if !separators.is_empty() && files.len() != separators.len() {
                 bail!(CliError::MismatchedSeparators);
             }
             let llm = match (llm_url, llm_model) {

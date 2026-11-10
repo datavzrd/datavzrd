@@ -14,20 +14,21 @@ const EXAMPLE_MAX_CHARS: usize = 25;
 
 pub(crate) fn suggest(
     files: Vec<PathBuf>,
-    separator: Vec<char>,
+    separators: Vec<char>,
     name: String,
     llm: Option<LlmConfig>,
 ) -> Result<String> {
     let mut items_spec = ItemsSpec::new(name);
     let mut dataset_names = Vec::new();
-    for (file, sep) in files.iter().zip(separator.iter()) {
-        let dataset = DatasetSpecs {
+    for (i, file) in files.iter().enumerate() {
+        let mut dataset = DatasetSpecs {
             path: file.to_owned(),
-            separator: sep.to_owned(),
+            separator: separators.get(i).copied().unwrap_or_default(),
             header_rows: 1,
             links: None,
             offer_excel: false,
         };
+        dataset.preprocess()?;
         let dataset_name = file
             .file_stem()
             .and_then(|stem| stem.to_str())
@@ -63,7 +64,14 @@ pub(crate) fn suggest(
     }
     let mut config = serde_yaml::to_value(&items_spec)?;
     for name in &dataset_names {
-        let headers = items_spec.datasets[name].reader()?.headers()?;
+        let dataset = &items_spec.datasets[name];
+        // Only keep separators that differ from the one inferred when rendering the report.
+        if dataset.separator == dataset.default_separator()? {
+            if let Some(mapping) = config["datasets"][name.as_str()].as_mapping_mut() {
+                mapping.remove(&"separator".into());
+            }
+        }
+        let headers = dataset.reader()?.headers()?;
         sort_keys(
             &mut config["views"][name.as_str()]["render-table"]["columns"],
             &headers,
@@ -294,6 +302,21 @@ mod tests {
         assert!(result.is_ok());
         let tmp = tempfile::NamedTempFile::new()?;
         tmp.as_file().write_all(result.unwrap().as_bytes())?;
+        let config = ItemsSpec::from_file(tmp.path())?;
+        assert!(config.validate().is_ok());
+        Ok(())
+    }
+
+    #[test]
+    fn test_suggest_without_separators() -> Result<()> {
+        let files = vec![
+            PathBuf::from(".examples/data/movies.csv"),
+            PathBuf::from("tests/data/uniform_datatypes.json"),
+        ];
+        let result = suggest(files, Vec::new(), "Test Report".to_string(), None)?;
+        assert!(!result.contains("separator"));
+        let tmp = tempfile::NamedTempFile::new()?;
+        tmp.as_file().write_all(result.as_bytes())?;
         let config = ItemsSpec::from_file(tmp.path())?;
         assert!(config.validate().is_ok());
         Ok(())

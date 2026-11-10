@@ -74,14 +74,15 @@ pub enum Command {
     },
     /// Suggest a configuration file based on the given tabular input files.
     ///
-    /// Example: `datavzrd suggest -f data1.csv -s , -f data2.tsv -s $'\t'`
+    /// Example: `datavzrd suggest -f data1.csv -f data2.tsv -f data3.parquet`
     Suggest {
         /// List of paths to input files
         #[arg(required = true, short, long, value_parser)]
         files: Vec<PathBuf>,
 
-        /// Separators for the corresponding input files (e.g., comma for CSV, tab for TSV)
-        #[arg(required = true, short, long, value_parser, value_name = "SEPARATORS")]
+        /// Separators for the corresponding input files (e.g., comma for CSV, tab for TSV).
+        /// If omitted, they are inferred from the file extensions. Ignored for JSON and Parquet files.
+        #[arg(short, long, value_parser, value_name = "SEPARATORS")]
         separators: Vec<char>,
 
         /// Name of the report
@@ -118,6 +119,6 @@ pub enum CliError {
     #[error("`<CONFIG>` is required when no subcommand is used.")]
     MissingConfig,
 
-    #[error("Given separators don not match the number of input files.")]
+    #[error("Given separators do not match the number of input files.")]
     MismatchedSeparators,
 }
