@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.78.0](https://github.com/datavzrd/datavzrd/compare/v2.77.0...v2.78.0) (2026-11-10)
+
+
+### Features
+
+* Plot more than two columns from the table header ([#1352](https://github.com/datavzrd/datavzrd/issues/1352)) ([f41eb3a](https://github.com/datavzrd/datavzrd/commit/f41eb3af656e0d8d580c5408660c0f63b9a14e3e))
+
 ## [2.77.0](https://github.com/datavzrd/datavzrd/compare/v2.76.0...v2.77.0) (2026-11-10)
 
 
