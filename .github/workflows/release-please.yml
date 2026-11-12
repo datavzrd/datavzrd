@@ -67,27 +67,21 @@ jobs:
           repository: datavzrd/view
           path: view
 
-      - name: Install stable toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: datavzrd
-
       - uses: pnpm/action-setup@v6
         with:
           version: 10
 
-      - name: Build
+      - name: Build bundle.js
         run: |
-          cd datavzrd
-          cargo build --release
+          cd datavzrd/web
+          pnpm install
+          pnpm exec rspack build
 
       - name: Copy bundle.js
         run: |
           outdir=view/static/${{ needs.release-please.outputs.tag_name }}
           mkdir -p $outdir
-          cp datavzrd/target/release/build/datavzrd-*/out/web/dist/bundle.js $outdir/bundle.js
+          cp datavzrd/web/dist/bundle.js $outdir/bundle.js
 
       - name: Commit and push changes
         uses: cpina/github-action-push-to-another-repository@main
