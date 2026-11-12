@@ -47,7 +47,8 @@ export function render_html_contents() {
         report_name_html = `<li class="breadcrumb-item"><div>${config.report_name}</div></li>`;
     }
     let selection_html = "";
-    if (!config.default_view) {
+    // A shared row has no other views
+    if (!config.default_view && !config.shared_row) {
         selection_html += `<option value="../index.html">Back to overview</option>`;
     }
     if (config.default_view) {
@@ -63,7 +64,7 @@ export function render_html_contents() {
         <ol class="navbar-nav mr-auto breadcrumb">
             ${report_name_html}
             <li class="breadcrumb-item">
-                <select id="view-selection" title="${config.title.replace(/_/g, " ")}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true">
+                <select id="view-selection" title="${config.title.replace(/_/g, " ")}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true" ${config.shared_row ? "disabled" : ""}>
                     ${selection_html}
                 </select>
             </li>
