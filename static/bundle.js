@@ -70616,7 +70616,8 @@ function render_html_contents() {
         report_name_html = `<li class="breadcrumb-item"><div>${config.report_name}</div></li>`;
     }
     let selection_html = "";
-    if (!config.default_view) {
+    // A shared row has no other views
+    if (!config.default_view && !config.shared_row) {
         selection_html += `<option value="../index.html">Back to overview</option>`;
     }
     if (config.default_view) {
@@ -70632,7 +70633,7 @@ function render_html_contents() {
         <ol class="navbar-nav mr-auto breadcrumb">
             ${report_name_html}
             <li class="breadcrumb-item">
-                <select id="view-selection" title="${config.title.replace(/_/g, " ")}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true">
+                <select id="view-selection" title="${config.title.replace(/_/g, " ")}" data-width="fit" onchange="location = this.value;" data-live-search-placeholder="Filter..." class="selectpicker" data-style="select-view" data-live-search="true" ${config.shared_row ? "disabled" : ""}>
                     ${selection_html}
                 </select>
             </li>
@@ -157905,19 +157906,18 @@ var __webpack_exports__ = {};
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
-  compress_data: function() { return compress_data; },
   custom_error: function() { return /* reexport safe */ _error__WEBPACK_IMPORTED_MODULE_20__.customFunctionError; },
   downloadCSV: function() { return downloadCSV; },
   embedHistogram: function() { return embedHistogram; },
   embedSearch: function() { return embedSearch; },
   functions_loaded: function() { return functions_loaded; },
-  get_config_from_url_query: function() { return get_config_from_url_query; },
   hide: function() { return hide; },
   landing_page: function() { return landing_page; },
   load: function() { return load; },
   load_description: function() { return load_description; },
   load_plot: function() { return load_plot; },
   load_search: function() { return load_search; },
+  load_shared: function() { return load_shared; },
   resetColumnOrder: function() { return resetColumnOrder; },
   screenshot_table: function() { return screenshot_table; },
   selectPlotColumn: function() { return /* reexport safe */ _plot_column_plot__WEBPACK_IMPORTED_MODULE_19__.selectPlotColumn; },
@@ -158026,15 +158026,44 @@ function downloadCSV() {
   link.click();
 }
 
+// Config that only works in the full report, left out of share links and replaced by these values
+const SHARED_ROW_DEFAULTS = {
+  shared_row: true,
+  webview_controls: false,
+  webview_host: "",
+  is_single_page: true,
+  pages: 1,
+  tables: [],
+  view_sizes: {},
+  default_view: null,
+  has_excel_sheet: false,
+  description: null,
+  brush_domains: {},
+  aux_domains: {},
+  unique_column_values: {},
+  format: {},
+  custom_plot_titles: [],
+};
+
 function createShareURL(index, webhost_url) {
-  var data = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#table").bootstrapTable("getData")[index];
-  delete data["linkouts"];
-  delete data["share"];
-  delete data["line_number"];
+  const row = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#table").bootstrapTable("getData")[index];
   var c = JSON.parse(JSON.stringify(config));
-  c["format"] = {}; // Remove any custom function
-  delete c["unique_column_values"];
-  c["data"] = data;
+  // The last two are set up again on load
+  for (const key of [
+    ...Object.keys(SHARED_ROW_DEFAULTS),
+    "original_displayed_columns",
+    "to_be_hidden",
+  ]) {
+    delete c[key];
+  }
+  // Report functions are not available in the view
+  for (const link of c.link_urls) {
+    delete link["custom-content"];
+  }
+  for (const heatmap of c.heatmaps) {
+    delete heatmap.heatmap["custom-content"];
+  }
+  c["data"] = config.columns.map((column) => row[column]);
   const packer = new jsonm__WEBPACK_IMPORTED_MODULE_2__.Packer();
   let packedMessage = packer.pack(c);
   let compressed = lz_string__WEBPACK_IMPORTED_MODULE_1___default().compressToEncodedURIComponent(
@@ -158438,7 +158467,8 @@ function load() {
         config.columns.map((k, i) => [k, row[i]]),
       );
       for (const column of config.columns) {
-        if (config.additional_colums[column]) {
+        // Shared rows already contain additional columns
+        if (config.additional_colums[column] && !config.shared_row) {
           let value_function = window[config.additional_colums[column]];
           row.push(value_function?.(row_with_keys));
         }
@@ -158482,7 +158512,8 @@ function load() {
 
         // Add histogram button
         let histogram_icon = `<span class="sym ic" style="margin-left: 2px;" data-toggle="modal" data-target="#histogram_modal" onclick="datavzrd.embedHistogram(show_plot_${columnIdMap[column]}, ${columnIdMap[column]}, plot_${columnIdMap[column]})"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="5" x="1" y="10" rx="1"/><rect width="4" height="9" x="6" y="6" rx="1"/><rect width="4" height="14" x="11" y="1" rx="1"/></svg></span>`;
-        if (!config.additional_colums[column]) {
+        // Column plots need the full report
+        if (!config.additional_colums[column] && !config.shared_row) {
           title += histogram_icon;
           if (config.is_single_page) {
             title += (0,_plot_column_plot__WEBPACK_IMPORTED_MODULE_19__.columnPlotIcon)(columnIdMap[column]);
@@ -158681,7 +158712,7 @@ function load() {
       if (config.webview_controls) {
         row["share"] =
           `<span data-toggle="tooltip" data-placement="left" title="Share link via QR code. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of ${config.webview_host}.">
-            <button class="btn btn-outline-secondary btn-table share-btn" data-row="${j}">
+            <button class="btn btn-outline-secondary btn-table share-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
                 <path d="M2 2h2v2H2V2Z"/>
                 <path d="M6 0v6H0V0h6ZM5 1H1v4h4V1ZM4 12H2v2h2v-2Z"/>
@@ -158691,7 +158722,7 @@ function load() {
             </svg></button>
             </span>
             <span data-toggle="tooltip" data-placement="left" title="Copy portable share link to clipboard. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of ${config.webview_host}.">
-                <button type="button" data-row="${j}" class="btn btn-outline-secondary btn-table copy-url">
+                <button type="button" class="btn btn-outline-secondary btn-table copy-url">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2" viewBox="0 0 16 16">
                         <path d="M3.5 2a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-12a.5.5 0 0 0-.5-.5H12a.5.5 0 0 1 0-1h.5A1.5 1.5 0 0 1 14 2.5v12a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-12A1.5 1.5 0 0 1 3.5 1H4a.5.5 0 0 1 0 1h-.5Z"/>
                         <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5Z"/>
@@ -158703,13 +158734,16 @@ function load() {
       table_rows.push(row);
     }
 
+    // Row index in the sorted and filtered data
+    const rowIndex = (button) => jquery__WEBPACK_IMPORTED_MODULE_0___default()(button).closest("tr").data("index");
+
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on("click", ".share-btn", function () {
-      shareRow(jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data("row"), config.webview_host);
+      shareRow(rowIndex(this), config.webview_host);
     });
 
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on("click", ".copy-url", function () {
       navigator.clipboard.writeText(
-        createShareURL(jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data("row"), config.webview_host),
+        createShareURL(rowIndex(this), config.webview_host),
       );
     });
 
@@ -159379,8 +159413,17 @@ function get_config_from_url_query() {
   return unpacker.unpack(jsonm_config);
 }
 
-function compress_data(data) {
-  return lz_string__WEBPACK_IMPORTED_MODULE_1___default().compressToUTF16(JSON.stringify([data]));
+// Shows a row shared via createShareURL, called by https://github.com/datavzrd/view
+function load_shared() {
+  const { data, ...shared } = get_config_from_url_query();
+  window.data = [data];
+  window.config = { ...shared, ...SHARED_ROW_DEFAULTS };
+  window.linkouts = null;
+  window.header_config = { headers: [], heatmaps: [], ellipsis: [] };
+  window.custom_plots = [];
+  window.CURRENT_PAGE = 1;
+  FUNCTIONS_LOADED = true;
+  load();
 }
 
 function load_description() {
