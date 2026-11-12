@@ -187,7 +187,7 @@ export function render_html_contents() {
                                     <div class="modal-body">
                                         <p class="text-right small">Scan the QR code to view the shared data</p>
                                         <div class="text-center">
-                                            <canvas id="qr-code"></canvas>
+                                            <canvas id="qr-code" style="image-rendering: pixelated;"></canvas>
                                         </div>
                                         <div class="modal-footer">
                                             <span data-toggle="tooltip" data-placement="left" title="Open portable share link. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of ${config.webview_host}.">
