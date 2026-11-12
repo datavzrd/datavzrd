@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.78.1](https://github.com/datavzrd/datavzrd/compare/v2.78.0...v2.78.1) (2026-11-12)
+
+
+### Bug Fixes
+
+* Draw share QR codes with whole pixels per module ([#1356](https://github.com/datavzrd/datavzrd/issues/1356)) ([e7e7d88](https://github.com/datavzrd/datavzrd/commit/e7e7d8837692a726d412a9442f30359d87145988))
+* Make shared rows work in the web view again ([#1354](https://github.com/datavzrd/datavzrd/issues/1354)) ([061835d](https://github.com/datavzrd/datavzrd/commit/061835de5d56fc4de10eade770ee417a2c7bfb15))
+
 ## [2.78.0](https://github.com/datavzrd/datavzrd/compare/v2.77.0...v2.78.0) (2026-11-10)
 
 
