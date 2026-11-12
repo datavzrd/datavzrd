@@ -147,12 +147,20 @@ function shareRow(index, webhost_url) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   let url = createShareURL(index, webhost_url);
   $("#open-url").attr("href", url);
-  QRCode.toCanvas(document.getElementById("qr-code"), url, {
-    width: window.innerHeight / 1.8,
-  }).catch((err) => {
+  let qr;
+  try {
+    qr = QRCode.create(url);
+  } catch (err) {
     console.error("QR code generation failed:", err);
     showNotification(`Data too large for QR code.`);
-  });
+    return;
+  }
+  // Whole pixels per module keep the code sharp, the margin is 4 modules on each side
+  const scale = Math.max(
+    1,
+    Math.round(window.innerHeight / 1.8 / (qr.modules.size + 8)),
+  );
+  QRCode.toCanvas(canvas, url, { scale });
 }
 
 export function embedSearch(index) {
