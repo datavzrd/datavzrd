@@ -70756,7 +70756,7 @@ function render_html_contents() {
                                     <div class="modal-body">
                                         <p class="text-right small">Scan the QR code to view the shared data</p>
                                         <div class="text-center">
-                                            <canvas id="qr-code"></canvas>
+                                            <canvas id="qr-code" style="image-rendering: pixelated;"></canvas>
                                         </div>
                                         <div class="modal-footer">
                                             <span data-toggle="tooltip" data-placement="left" title="Open portable share link. Note that when using the link the row data can temporarily occur (in base64-encoded form) in the server logs of ${config.webview_host}.">
@@ -158080,12 +158080,20 @@ function shareRow(index, webhost_url) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   let url = createShareURL(index, webhost_url);
   jquery__WEBPACK_IMPORTED_MODULE_0___default()("#open-url").attr("href", url);
-  qrcode__WEBPACK_IMPORTED_MODULE_4__.toCanvas(document.getElementById("qr-code"), url, {
-    width: window.innerHeight / 1.8,
-  }).catch((err) => {
+  let qr;
+  try {
+    qr = qrcode__WEBPACK_IMPORTED_MODULE_4__.create(url);
+  } catch (err) {
     console.error("QR code generation failed:", err);
     showNotification(`Data too large for QR code.`);
-  });
+    return;
+  }
+  // Whole pixels per module keep the code sharp, the margin is 4 modules on each side
+  const scale = Math.max(
+    1,
+    Math.round(window.innerHeight / 1.8 / (qr.modules.size + 8)),
+  );
+  qrcode__WEBPACK_IMPORTED_MODULE_4__.toCanvas(canvas, url, { scale });
 }
 
 function embedSearch(index) {
