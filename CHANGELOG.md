@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.78.2](https://github.com/datavzrd/datavzrd/compare/v2.78.1...v2.78.2) (2026-11-13)
+
+
+### Bug Fixes
+
+* Build the webview bundle without cargo ([#1358](https://github.com/datavzrd/datavzrd/issues/1358)) ([dc21cfd](https://github.com/datavzrd/datavzrd/commit/dc21cfd38e78ad0aebb49bd2323e08192d60f3ff))
+
 ## [2.78.1](https://github.com/datavzrd/datavzrd/compare/v2.78.0...v2.78.1) (2026-11-12)
 
 
