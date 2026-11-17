@@ -49,7 +49,7 @@ export function render_html_contents() {
     let selection_html = "";
     // A shared row has no other views
     if (!config.default_view && !config.shared_row) {
-        selection_html += `<option value="../index.html">Back to overview</option>`;
+        selection_html += `<option value="../../index.html">Back to overview</option>`;
     }
     if (config.default_view) {
         selection_html += `<option value="../${config.default_view}/index_1.html" data-content="${config.default_view.replace(/_/g, " ")} ${config.view_sizes[config.default_view] ? `<span class='badge badge-light'>${config.view_sizes[config.default_view]}</span>` : ""}">${config.default_view.replace(/_/g, " ")}</option>`;
@@ -303,7 +303,7 @@ export function render_landing_page() {
                 <tbody>
                     ${Object.entries(views).sort(([a], [b]) => a.localeCompare(b)).map(([table, description]) => `
                         <tr>
-                            <td><a href="./${table}/index_1.html">${table.replace(/_/g, " ")}</a></td>
+                            <td><a href="./views/${table}/index_1.html">${table.replace(/_/g, " ")}</a></td>
                             <td data-markdown="${description || 'No description available'}"></td>
                         </tr>
                     `).join('')}

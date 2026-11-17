@@ -111,5 +111,6 @@ mod tests {
         )
         .unwrap();
         assert!(output.join("index.html").exists());
+        assert!(output.join("views").join("d").join("index_1.html").exists());
     }
 }

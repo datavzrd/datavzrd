@@ -95,9 +95,11 @@ impl Renderer for ItemRenderer {
             .collect();
         let mut column_index_cache: LinkedTable = HashMap::new();
         let total_views = self.specs.views.len();
+        let views_path = Path::new(path.as_ref()).join("views");
+        fs::create_dir(&views_path)?;
         for (index, (name, table)) in self.specs.views.iter().enumerate() {
             info!("Rendering view '{name}' ({}/{total_views})", index + 1);
-            let out_path = Path::new(path.as_ref()).join(name);
+            let out_path = views_path.join(name);
             fs::create_dir(&out_path)?;
             if table.render_plot.is_some() {
                 if let Some(datasets) = &table.datasets {

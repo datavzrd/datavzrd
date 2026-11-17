@@ -13,7 +13,7 @@
     const name = {{ name | json_encode }};
     const views = {{ views | json_encode}};
     const table = {{ table | json_encode }};
-    let redirectUrl = viewParam ? `${viewParam}/index_1.html` : `${table}/index_1.html`;
+    let redirectUrl = `views/${viewParam || table}/index_1.html`;
     urlParams.delete('view');
     const remainingParams = urlParams.toString();
     if (remainingParams) redirectUrl += `?${remainingParams}`;
