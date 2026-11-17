@@ -274,8 +274,8 @@ fn baseline_column(column_type: &ColumnType) -> RenderColumnSpec {
 }
 
 /// Completes a suggested pills or heatmap plot that the model left uncolored with a
-/// sensible default scheme (`category20` for categorical values, `blues` for numeric
-/// ones), so the model's feature choice survives validation instead of falling back.
+/// sensible default scheme (`blues` for numeric values on a quantitative scale, `category20`
+/// otherwise), so the model's feature choice survives validation instead of falling back.
 fn fill_default_colors(spec: &mut RenderColumnSpec, column_type: &ColumnType) {
     let Some(plot) = spec.plot.as_mut() else {
         return;
@@ -291,7 +291,9 @@ fn fill_default_colors(spec: &mut RenderColumnSpec, column_type: &ColumnType) {
             && heatmap.color_range.0.is_empty()
         {
             heatmap.color_scheme = match column_type {
-                ColumnType::Integer | ColumnType::Float => "blues",
+                ColumnType::Integer | ColumnType::Float if heatmap.scale_type.is_quantitative() => {
+                    "blues"
+                }
                 _ => "category20",
             }
             .to_string();
