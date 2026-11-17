@@ -1,12 +1,22 @@
 import $ from "jquery";
 
+// Values are encoded apart from "/", ":" and "@" (e.g. for paths), except at the
+// start of the url, where they may be whole links.
+function fillPlaceholder(link, placeholder, value) {
+  return link.replaceAll(placeholder, (_, offset) =>
+    offset === 0
+      ? `${value}`.replaceAll('"', "%22")
+      : encodeURIComponent(value).replace(/%(2F|3A|40)/g, decodeURIComponent),
+  );
+}
+
 function buildLinkUrl(url, columns, value, row, pill_value) {
-  let link = url.replaceAll("{value}", value);
+  let link = fillPlaceholder(url, "{value}", value);
   if (pill_value !== undefined) {
-    link = link.replaceAll("{pill-value}", pill_value);
+    link = fillPlaceholder(link, "{pill-value}", pill_value);
   }
   for (const column of columns) {
-    link = link.replaceAll(`{${column}}`, row[column]);
+    link = fillPlaceholder(link, `{${column}}`, row[column]);
   }
   return link;
 }
