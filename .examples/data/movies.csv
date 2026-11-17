@@ -4,9 +4,9 @@ Coquette,1929,Unrated,06 Apr 1929,76 min,"Drama, Romance",Sam Taylor,5.7,tt00197
 The Divorcee,1930,Passed,19 Apr 1930,84 min,"Romance, Drama",Robert Z. Leonard,6.7,tt0020827
 Min and Bill,1930,Passed,29 Nov 1930,69 min,"Comedy, Drama",George W. Hill,6.8,tt0021148
 The Sin of Madelon Claudet,1931,Passed,24 Oct 1931,75 min,Drama,Edgar Selwyn,6.7,tt0022386
-Morning Glory,2010,PG-13,10 Nov 2010,107 min,"Comedy, Drama, Romance",Roger Michell,6.5,tt1126618
+Morning Glory,1933,Passed,18 Aug 1933,74 min,"Drama, Romance",Lowell Sherman,6.4,tt0024353
 It Happened One Night,1934,Passed,22 Feb 1934,105 min,"Comedy, Romance",Frank Capra,8.1,tt0025316
-Dangerous,2021,R,05 Nov 2021,99 min,"Action, Thriller",David Hackl,5.1,tt3876910
+Dangerous,1935,Passed,25 Dec 1935,79 min,"Drama, Romance",Alfred E. Green,6.8,tt0026261
 The Great Ziegfeld,1936,Passed,08 Apr 1936,176 min,"Drama, Musical",Robert Z. Leonard,6.7,tt0027698
 The Good Earth,1937,Passed,06 Aug 1937,138 min,"Drama, Romance","Sidney Franklin, Victor Fleming, Gustav Machatý",7.5,tt0028944
 Jezebel,1938,Approved,26 Mar 1938,104 min,"Drama, Romance",William Wyler,7.5,tt0030287
@@ -27,7 +27,7 @@ A Streetcar Named Desire,1951,M/PG,19 Sep 1951,122 min,Drama,Elia Kazan,8.0,tt00
 Roman Holiday,1953,Passed,02 Sep 1953,118 min,"Comedy, Romance",William Wyler,8.0,tt0046250
 The Country Girl,1954,Unrated,17 May 1955,104 min,"Drama, Music",George Seaton,7.3,tt0046874
 The Rose Tattoo,1955,Unrated,13 Dec 1955,117 min,"Comedy, Drama, Romance",Daniel Mann,7.0,tt0048563
-Anastasia,1997,G,21 Nov 1997,94 min,"Animation, Adventure, Drama","Don Bluth, Gary Goldman",7.2,tt0118617
+Anastasia,1956,Approved,13 Dec 1956,105 min,"Biography, Drama, History, Romance",Anatole Litvak,7.0,tt0048947
 The Three Faces of Eve,1957,Approved,18 Sep 1957,91 min,"Drama, Mystery",Nunnally Johnson,7.2,tt0051077
 I Want to Live!,1958,Approved,03 Dec 1958,120 min,"Biography, Crime, Drama",Robert Wise,7.5,tt0051758
 Room at the Top,1959,Not Rated,22 Jan 1959,115 min,"Drama, Romance",Jack Clayton,7.5,tt0053226
@@ -89,9 +89,9 @@ In Old Arizona,1928,Passed,20 Jan 1929,95 min,Western,Irving Cummings,5.6,tt0020
 Disraeli,1929,Passed,01 Nov 1929,90 min,"Biography, Drama, History",Alfred E. Green,6.1,tt0019823
 A Free Soul,1931,Passed,20 Jun 1931,93 min,"Crime, Drama, Romance",Clarence Brown,6.6,tt0021885
 Dr. Jekyll and Mr. Hyde,1931,Passed,03 Jan 1932,98 min,"Horror, Sci-Fi",Rouben Mamoulian,7.6,tt0022835
-The Champ,1979,PG,04 Apr 1979,121 min,"Drama, Sport",Franco Zeffirelli,6.9,tt0078950
+The Champ,1931,Passed,21 Nov 1931,86 min,"Drama, Family, Sport",King Vidor,7.2,tt0021730
 The Private Life of Henry VIII,1933,Passed,21 Sep 1933,97 min,Drama,Alexander Korda,7.1,tt0024473
-The Informer,2019,R,30 Aug 2019,113 min,"Action, Crime, Drama",Andrea Di Stefano,6.6,tt1833116
+The Informer,1935,Approved,24 May 1935,91 min,"Crime, Drama",John Ford,7.3,tt0026529
 The Story of Louis Pasteur,1936,Passed,01 Feb 1936,86 min,"Biography, Drama, History",William Dieterle,7.3,tt0028313
 Captains Courageous,1937,G,25 Jun 1937,117 min,"Adventure, Drama, Family",Victor Fleming,8.0,tt0028691
 Boys Town,1938,Passed,09 Sep 1938,96 min,"Biography, Drama, Family",Norman Taurog,7.3,tt0029942
@@ -104,9 +104,9 @@ Going My Way,1944,Passed,02 Oct 1944,126 min,"Comedy, Drama, Music",Leo McCarey,
 The Lost Weekend,1945,Passed,01 Jan 1946,101 min,"Drama, Film-Noir",Billy Wilder,7.9,tt0037884
 The Best Years of Our Lives,1946,Approved,29 May 1947,170 min,"Drama, Romance, War",William Wyler,8.1,tt0036868
 A Double Life,1947,Approved,01 Apr 1948,104 min,"Crime, Drama, Film-Noir",George Cukor,7.0,tt0039335
-Hamlet,1996,PG-13,25 Dec 1996,242 min,Drama,Kenneth Branagh,7.7,tt0116477
-All the King's Men,2006,PG-13,22 Sep 2006,128 min,"Drama, Thriller",Steven Zaillian,6.2,tt0405676
-Cyrano de Bergerac,1990,PG,01 Dec 1990,137 min,"Comedy, Drama, History",Jean-Paul Rappeneau,7.5,tt0099334
+Hamlet,1948,Approved,18 Aug 1948,154 min,Drama,Laurence Olivier,7.5,tt0040416
+All the King's Men,1949,Approved,08 Nov 1949,110 min,"Drama, Film-Noir",Robert Rossen,7.4,tt0041113
+Cyrano de Bergerac,1950,Approved,16 Nov 1950,113 min,"Adventure, Drama, Romance",Michael Gordon,7.4,tt0042367
 The African Queen,1951,PG,21 Mar 1952,105 min,"Adventure, Drama, Romance",John Huston,7.8,tt0043265
 High Noon,1952,PG,30 Jul 1952,85 min,"Drama, Thriller, Western",Fred Zinnemann,8.0,tt0044706
 Stalag 17,1953,Not Rated,06 Jun 1953,120 min,"Comedy, Drama, War",Billy Wilder,8.0,tt0046359
@@ -125,7 +125,7 @@ Cat Ballou,1965,Not Rated,24 Jun 1965,97 min,"Comedy, Romance, Western",Elliot S
 A Man for All Seasons,1966,G,16 Dec 1966,120 min,"Biography, Drama, History",Fred Zinnemann,7.7,tt0060665
 In the Heat of the Night,1967,Approved,02 Aug 1967,110 min,"Crime, Drama, Mystery",Norman Jewison,7.9,tt0061811
 Charly,1968,M,23 Sep 1968,103 min,"Drama, Romance, Sci-Fi",Ralph Nelson,7.0,tt0062794
-True Grit,2010,PG-13,22 Dec 2010,110 min,"Drama, Western","Ethan Coen, Joel Coen",7.6,tt1403865
+True Grit,1969,G,13 Jun 1969,128 min,"Adventure, Drama, Western",Henry Hathaway,7.4,tt0065126
 Patton,1970,PG,02 Apr 1970,172 min,"Biography, Drama, War",Franklin J. Schaffner,7.9,tt0066206
 The French Connection,1971,R,09 Oct 1971,104 min,"Action, Crime, Drama",William Friedkin,7.7,tt0067116
 The Godfather,1972,R,24 Mar 1972,175 min,"Crime, Drama",Francis Ford Coppola,9.2,tt0068646
@@ -134,7 +134,7 @@ Harry and Tonto,1974,R,12 Aug 1974,115 min,"Adventure, Comedy, Drama",Paul Mazur
 The Goodbye Girl,1977,PG,30 Nov 1977,111 min,"Comedy, Drama, Romance",Herbert Ross,7.4,tt0076095
 Kramer vs. Kramer,1979,PG,19 Dec 1979,105 min,Drama,Robert Benton,7.8,tt0079417
 Raging Bull,1980,R,19 Dec 1980,129 min,"Biography, Drama, Sport",Martin Scorsese,8.2,tt0081398
-Kung Fu Ghandi,1986,N/A,N/A,5 min,Short,Joseph Marzano,5.6,tt0300094
+Gandhi,1982,PG,25 Feb 1983,191 min,"Biography, Drama, History",Richard Attenborough,8.0,tt0083987
 Tender Mercies,1983,PG,04 Mar 1983,92 min,"Drama, Music",Bruce Beresford,7.4,tt0086423
 Amadeus,1984,PG,19 Sep 1984,160 min,"Biography, Drama, Music",Milos Forman,8.3,tt0086879
 Kiss of the Spider Woman,1985,R,26 Jul 1985,120 min,Drama,Hector Babenco,7.3,tt0089424
