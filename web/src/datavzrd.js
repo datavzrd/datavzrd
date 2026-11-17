@@ -696,6 +696,7 @@ export function load() {
 
     if (config.is_single_page) {
       bs_table_config.pagination = true;
+      bs_table_config.showExtendedPagination = true;
       bs_table_config.pageSize = config.page_size;
       bs_table_config.sortable = true;
       bs_table_config.multipleSort = true;
@@ -973,6 +974,7 @@ export function load() {
 
     hideLabelColumn();
 
+    let filterByValue;
     if (config.is_single_page) {
       $("#sidebar-list").append(
         $(
@@ -982,6 +984,7 @@ export function load() {
       let filter_boundaries = {};
       let filters = {};
       let checkbox_filters = {};
+      let value_filter = null;
       for (const title of config.displayed_columns) {
         checkbox_filters[title] = [];
       }
@@ -1240,6 +1243,7 @@ export function load() {
         filter_boundaries = {};
         filters = {};
         checkbox_filters = {};
+        value_filter = null;
         for (const title of config.displayed_columns) {
           checkbox_filters[title] = [];
         }
@@ -1257,6 +1261,9 @@ export function load() {
       });
 
       function customFilter(row, filter) {
+        if (value_filter && row[value_filter.column] !== value_filter.value) {
+          return false;
+        }
         for (const title of config.displayed_columns) {
           if (
             filter_boundaries[title] !== undefined &&
@@ -1284,6 +1291,15 @@ export function load() {
         }
         return true;
       }
+
+      filterByValue = (column, value) => {
+        value_filter = { column, value };
+        $("#table").bootstrapTable(
+          "filterBy",
+          { "": "" },
+          { filterAlgorithm: customFilter },
+        );
+      };
     }
 
     if (config.is_single_page) {
@@ -1368,15 +1384,21 @@ export function load() {
     if (!isNaN(to_be_highlighted)) {
       highlightRow(to_be_highlighted);
     } else if (highlightValue !== null && highlightColumn !== null) {
-      let index = $("#table")
-        .bootstrapTable("getData")
-        .findIndex((row) => row[highlightColumn] === highlightValue);
-      if (index !== -1) {
-        highlightRow(index);
-      } else {
+      const rows = $("#table").bootstrapTable("getData");
+      const matches = rows.filter(
+        (row) => row[highlightColumn] === highlightValue,
+      );
+      const value_html = `<strong>${escapeHtml(highlightValue)}</strong> in column <strong>${escapeHtml(highlightColumn)}</strong>`;
+      if (matches.length > 1 && filterByValue) {
+        filterByValue(highlightColumn, highlightValue);
         showNotification(
-          `Could not find row with value <strong>${highlightValue}</strong> in column <strong>${highlightColumn}</strong>.`,
+          `Showing the ${matches.length} rows with value ${value_html}. Use <em>Clear filters</em> in the menu to show all rows.`,
+          true,
         );
+      } else if (matches.length > 0) {
+        highlightRow(rows.indexOf(matches[0]));
+      } else {
+        showNotification(`Could not find row with value ${value_html}.`);
       }
     }
 
@@ -1464,9 +1486,14 @@ function highlightRow(row) {
   });
 }
 
-function showNotification(message) {
+function showNotification(message, info = false) {
   const toast = document.getElementById("warningToast");
+  toast.querySelector(".toast-header strong").textContent = info
+    ? "Info"
+    : "Error";
   const toastBody = toast.querySelector(".toast-body");
+  toastBody.classList.toggle("alert-danger", !info);
+  toastBody.classList.toggle("alert-info", info);
   toastBody.innerHTML = message;
   $(toast).toast({ delay: 5000 });
   $(toast).toast("show");

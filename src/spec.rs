@@ -125,7 +125,8 @@ impl ItemsSpec {
                         })
                     }
                 };
-                spec.preprocess_columns(dataset, self.max_in_memory_rows)?;
+                let max_in_memory_rows = spec.max_in_memory_rows.unwrap_or(self.max_in_memory_rows);
+                spec.preprocess_columns(dataset, max_in_memory_rows)?;
             }
         }
         Ok(())
