@@ -297,6 +297,16 @@ impl ItemsSpec {
                                             column: column.to_string()
                                         })
                                     }
+                                    if !pills.color_scheme.is_empty()
+                                        && !is_categorical_scheme(&pills.color_scheme)
+                                    {
+                                        bail!(UnsupportedColorScheme {
+                                            view: name.to_string(),
+                                            column: column.to_string(),
+                                            scheme: pills.color_scheme.to_string(),
+                                            options: CATEGORICAL_SCHEMES.map(String::from).into()
+                                        })
+                                    }
                                 }
                                 let domain = if let Some(tick_plot) = &plot_spec.tick_plot {
                                     tick_plot.domain.clone()
@@ -316,6 +326,17 @@ impl ItemsSpec {
                                                 .iter()
                                                 .map(|s| s.to_string())
                                                 .collect()
+                                        })
+                                    }
+                                    if !heatmap.color_scheme.is_empty()
+                                        && heatmap.scale_type == ScaleType::Ordinal
+                                        && !is_categorical_scheme(&heatmap.color_scheme)
+                                    {
+                                        bail!(UnsupportedColorScheme {
+                                            view: name.to_string(),
+                                            column: column.to_string(),
+                                            scheme: heatmap.color_scheme.to_string(),
+                                            options: CATEGORICAL_SCHEMES.map(String::from).into()
                                         })
                                     }
                                     if heatmap.vega_type.is_none()
@@ -444,6 +465,17 @@ impl ItemsSpec {
                                             .iter()
                                             .map(|s| s.to_string())
                                             .collect()
+                                    })
+                                }
+                                if !heatmap.color_scheme.is_empty()
+                                    && heatmap.scale_type == ScaleType::Ordinal
+                                    && !is_categorical_scheme(&heatmap.color_scheme)
+                                {
+                                    bail!(UnsupportedHeaderColorScheme {
+                                        view: name.to_string(),
+                                        row: *row,
+                                        scheme: heatmap.color_scheme.to_string(),
+                                        options: CATEGORICAL_SCHEMES.map(String::from).into()
                                     })
                                 }
                             }
@@ -1579,6 +1611,28 @@ static COLOR_MAPPING: LazyLock<HashMap<&'static str, &'static str>> = LazyLock::
     m
 });
 
+const CATEGORICAL_SCHEMES: [&str; 15] = [
+    "accent",
+    "category10",
+    "category20",
+    "category20b",
+    "category20c",
+    "dark2",
+    "observable10",
+    "paired",
+    "pastel1",
+    "pastel2",
+    "set1",
+    "set2",
+    "set3",
+    "tableau10",
+    "tableau20",
+];
+
+fn is_categorical_scheme(scheme: &str) -> bool {
+    CATEGORICAL_SCHEMES.contains(&scheme.to_lowercase().as_str())
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub(crate) enum SequentialScheme {
     Blues,
@@ -1858,7 +1912,7 @@ pub enum ConfigError {
     )]
     LogScaleDomainIncludesZero { view: String, column: String },
     #[error(
-    "Given color-scheme {scheme:?} for numeric column {column:?} of view {view:?} is not supported. Please use a sequential scheme from d3. Available options are: {options:?}"
+    "Given color-scheme {scheme:?} for column {column:?} of view {view:?} is not supported. Available options are: {options:?}"
     )]
     UnsupportedColorScheme {
         view: String,
@@ -1866,7 +1920,7 @@ pub enum ConfigError {
         scheme: String,
         options: Vec<String>,
     },
-    #[error("Given color-scheme {scheme:?} for header row {row:?} of view {view:?} is not supported. Please use a sequential scheme from d3. Available options are: {options:?}")]
+    #[error("Given color-scheme {scheme:?} for header row {row:?} of view {view:?} is not supported. Available options are: {options:?}")]
     UnsupportedHeaderColorScheme {
         view: String,
         row: u32,
@@ -2322,6 +2376,31 @@ mod tests {
         let mut config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
         config.preprocess().unwrap();
         assert!(config.validate().is_ok());
+    }
+
+    #[test]
+    fn test_unsupported_categorical_color_scheme_config_validation() {
+        for plot in [
+            "heatmap: {scale: ordinal, color-scheme: catgeory20}",
+            "pills: {color-scheme: catgeory20}",
+        ] {
+            let raw_config = format!(
+                r#"
+            datasets:
+                table-a:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                table-a:
+                    dataset: table-a
+                    render-table:
+                        columns:
+                            first:
+                                plot:
+                                    {plot}
+            "#
+            );
+            assert_config_error!(&raw_config, UnsupportedColorScheme);
+        }
     }
 
     #[test]
