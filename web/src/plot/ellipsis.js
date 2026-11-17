@@ -11,7 +11,7 @@ export function shortenColumn(
 ) {
   let index = columnIndexMap[title];
   let row = 0;
-  $(`table > tbody > tr td:nth-child(${index})`).each(function () {
+  $(`#table > tbody > tr > td:nth-child(${index})`).each(function () {
     let value = this.innerHTML;
     if (ellipsis === 0) {
       this.innerHTML = `<div style="width: 100%; height: 100%;" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'></div>`;
@@ -23,7 +23,7 @@ export function shortenColumn(
 }
 
 export function shortenHeaderRow(row, ellipsis, skip_label) {
-  $(`table > thead > tr:nth-child(${row + 1}) > td`).each(function () {
+  $(`#table > thead > tr:nth-child(${row + 1}) > td`).each(function () {
     let value = this.innerHTML;
     if (ellipsis === 0 && !skip_label) {
       this.innerHTML = `<div style="width: 100%; height: 100%;" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'></div>`;

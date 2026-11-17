@@ -120,7 +120,7 @@ export function renderPills(
   let heatmap = pillsToHeatmap(pills);
   let scale = datavzrdScale(heatmap);
 
-  $(`table > tbody > tr td:nth-child(${index})`).each(function () {
+  $(`#table > tbody > tr > td:nth-child(${index})`).each(function () {
     var value = table_rows[row][pills.title];
     if (value !== "") {
       let content = renderPillGroup(

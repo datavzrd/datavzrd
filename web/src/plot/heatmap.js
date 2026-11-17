@@ -23,7 +23,7 @@ export function colorizeColumn(
 
   let scale = datavzrdScale(heatmap);
 
-  $(`table > tbody > tr td:nth-child(${index})`).each(function () {
+  $(`#table > tbody > tr > td:nth-child(${index})`).each(function () {
     var value = table_rows[row][heatmap.title];
     let color = scale(value);
     if (value !== "" && d3.color(color)) {
@@ -205,7 +205,7 @@ export function colorizeHeaderRow(row, heatmap, header_label_length) {
   if (header_label_length > 0) {
     start = 1;
   }
-  $(`table > thead > tr:nth-child(${row + 1}) > td:gt(${start})`).each(
+  $(`#table > thead > tr:nth-child(${row + 1}) > td:gt(${start})`).each(
     function () {
       var value = this.innerHTML;
       if (value !== "") {

@@ -185,7 +185,7 @@ function addNumClass(dp_num, ah, detail_mode, config) {
       if (detail_mode) {
         n += 1;
       }
-      $(`table > tbody > tr td:nth-child(${n})`).each(function () {
+      $(`#table > tbody > tr > td:nth-child(${n})`).each(function () {
         this.classList.add("num-cell");
         row++;
       });
@@ -457,9 +457,9 @@ function applyNarrowView(columnIndexMap) {
     if (readable.has(column)) continue;
     const index = columnIndexMap[column];
     const cells = $(
-      `table > thead > tr > :nth-child(${index}), table > tbody > tr > td:nth-child(${index})`,
+      `#table > thead > tr > :nth-child(${index}), #table > tbody > tr > td:nth-child(${index})`,
     );
-    const header = $(`table > thead > tr:first-child > :nth-child(${index})`);
+    const header = $(`#table > thead > tr:first-child > :nth-child(${index})`);
     if (NARROW_VIEW) {
       cells.addClass("narrow-col");
       if (!header.data("bs.tooltip")) {
@@ -480,8 +480,8 @@ function applyNarrowView(columnIndexMap) {
 
 function hideLabelColumn() {
   if (config.detail_mode || header_config.headers.length === 0) return;
-  $("table > thead > tr:first-child th:first-child").css("visibility", "hidden");
-  $("table > tbody > tr td:first-child").each(function () {
+  $("#table > thead > tr:first-child th:first-child").css("visibility", "hidden");
+  $("#table > tbody > tr > td:first-child").each(function () {
     this.style.setProperty("visibility", "hidden");
     this.style.setProperty("border", "none");
   });
@@ -766,7 +766,7 @@ export function load() {
         (Math.SQRT2 / 2) +
       40;
 
-    $("th").css("height", header_height);
+    $("#table th").css("height", header_height);
 
     var table_rows = [];
     var j = 0;
@@ -1083,7 +1083,7 @@ export function load() {
               let search_icon =
                 '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
               $(
-                `table > thead > tr th:nth-child(${index})  > div.th-inner`,
+                `#table > thead > tr th:nth-child(${index})  > div.th-inner`,
               ).append(
                 `<div class="sym ic" data-s="${escapeHtml(JSON.stringify(s))}" data-brush="${tick_brush}" id="filter-${index}-container" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="<div class='filter-brush-container'><div class='filter-brush ${brush_class}' id='brush-${tick_brush}'></div></div>"> ${search_icon}</div>`,
               );
@@ -1148,7 +1148,7 @@ export function load() {
                 data_content = data_content.concat(checkbox);
               }
               $(
-                `table > thead > tr th:nth-child(${index}) > div.th-inner`,
+                `#table > thead > tr th:nth-child(${index}) > div.th-inner`,
               ).append(
                 `<div class="sym ic" id="filter-${index}-container" data-column-title="${escapeHtml(title)}" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="${escapeHtml(data_content)}"> ${search_icon}</div>`,
               );
@@ -1197,7 +1197,7 @@ export function load() {
               let search_icon =
                 '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>';
               $(
-                `table > thead > tr th:nth-child(${index}) > div.th-inner`,
+                `#table > thead > tr th:nth-child(${index}) > div.th-inner`,
               ).append(
                 `<div class="sym ic" id="filter-${index}-container" data-column-title="${escapeHtml(title)}" data-toggle="popover" data-placement="top" data-trigger="click focus" data-html="true" data-content="${escapeHtml(`<input class='form-control form-control-sm' id='filter-${index}' data-title='${escapeHtml(title)}' placeholder='Filter...'>`)}"> ${search_icon}</div>`,
               );
@@ -1319,10 +1319,10 @@ export function load() {
       });
       $("#unhide-btn").on("click", function () {
         config["to_be_hidden"] = new Set();
-        $(`table > thead > tr:first-child th`).each(function () {
+        $(`#table > thead > tr:first-child th`).each(function () {
           this.style.setProperty("display", "");
         });
-        $(`table > tbody > tr td`).each(function () {
+        $(`#table > tbody > tr > td`).each(function () {
           this.style.setProperty("display", "");
         });
         if (!LINE_NUMBERS) {
@@ -1470,7 +1470,7 @@ function highlightRow(row) {
   if (config.is_single_page) {
     $("#table").bootstrapTable("selectPage", Math.floor(row / page_size) + 1);
   }
-  let rows = $("table > tbody > tr");
+  let rows = $("#table > tbody > tr");
   rows.each(function () {
     if (this.dataset.index == row) {
       $(this).children().addClass("active-row");
@@ -1672,7 +1672,7 @@ function fitHeaderBelowNavbar() {
     ),
   );
   let header_top = Infinity;
-  for (const el of document.querySelectorAll("table > thead th *")) {
+  for (const el of document.querySelectorAll("#table > thead th *")) {
     const rect = el.getBoundingClientRect();
     if (rect.height > 0) {
       header_top = Math.min(header_top, rect.top + window.scrollY);
@@ -1680,9 +1680,9 @@ function fitHeaderBelowNavbar() {
   }
   if (header_top < navbar_bottom) {
     const height = document
-      .querySelector("table > thead > tr")
+      .querySelector("#table > thead > tr")
       .getBoundingClientRect().height;
-    $("th").css("height", height + navbar_bottom - header_top);
+    $("#table th").css("height", height + navbar_bottom - header_top);
   }
 }
 
@@ -1693,10 +1693,10 @@ function filter(node) {
 
 export function screenshot_table() {
   let header_height = parseFloat($(this).css("height"));
-  $("th").each(function () {
+  $("#table th").each(function () {
     $(this).css("height", `${header_height - 80}`);
   });
-  document.querySelectorAll("table tr").forEach((row) => {
+  document.querySelectorAll("#table tr").forEach((row) => {
     const cells = row.querySelectorAll("td");
     let s = linkouts !== null ? -2 : -1;
     if (!config.webview_controls) {
@@ -1708,7 +1708,7 @@ export function screenshot_table() {
     }
   });
   if (config.detail_mode) {
-    document.querySelectorAll("table tr").forEach((row) => {
+    document.querySelectorAll("#table tr").forEach((row) => {
       const cells = row.querySelectorAll("td, th");
       const first = Array.from(cells).slice(0, 1);
       first.forEach((cell) => (cell.style.display = "none"));
@@ -1765,11 +1765,11 @@ export function screenshot_table() {
       });
     });
   if (config.detail_mode) {
-    document.querySelectorAll("table tr").forEach((row) => {
+    document.querySelectorAll("#table tr").forEach((row) => {
       const cells = row.querySelectorAll("td, th");
       const first = Array.from(cells).slice(0, 1);
       first.forEach((cell) => (cell.style.display = "block"));
-      document.querySelectorAll("table tr").forEach((row) => {
+      document.querySelectorAll("#table tr").forEach((row) => {
         const cells = row.querySelectorAll("td");
         let s = linkouts !== null ? -2 : -1;
         if (!config.webview_controls) {
@@ -1786,7 +1786,7 @@ export function screenshot_table() {
       document
         .querySelectorAll(".linkout-raw-value")
         .forEach((el) => (el.style.display = "none"));
-      $("th").each(function () {
+      $("#table th").each(function () {
         $(this).css("height", `${header_height}px`);
       });
     });
@@ -1859,7 +1859,7 @@ function applyColumnOrderToBody() {
   const n = current.length;
   const base = 1 + (config.detail_mode || header_config.headers.length > 0 ? 1 : 0);
 
-  document.querySelectorAll("table > tbody > tr").forEach(row => {
+  document.querySelectorAll("#table > tbody > tr").forEach(row => {
     const children = row.children;
     if (children.length < base + n) return;
 
@@ -1884,9 +1884,9 @@ function reorderColumn(srcColName, targetColName) {
     row.insertBefore(src, target);
   };
 
-  moveCell(document.querySelector("table > thead > tr:first-child"), srcIdx, targetIdx);
-  document.querySelectorAll("table > thead > tr:not(:first-child)").forEach(row => moveCell(row, srcIdx, targetIdx));
-  document.querySelectorAll("table > tbody > tr").forEach(row => moveCell(row, srcIdx, targetIdx));
+  moveCell(document.querySelector("#table > thead > tr:first-child"), srcIdx, targetIdx);
+  document.querySelectorAll("#table > thead > tr:not(:first-child)").forEach(row => moveCell(row, srcIdx, targetIdx));
+  document.querySelectorAll("#table > tbody > tr").forEach(row => moveCell(row, srcIdx, targetIdx));
 
   const from = config.displayed_columns.indexOf(srcColName);
   config.displayed_columns.splice(from, 1);
@@ -1983,7 +1983,7 @@ export function sortColumns(row, order) {
 }
 
 function attachColumnDragAttributes() {
-  const headerRow = document.querySelector("table > thead > tr:first-child");
+  const headerRow = document.querySelector("#table > thead > tr:first-child");
   if (!headerRow) return;
   config.displayed_columns.forEach(colName => {
     const idx = window.columnIndexMap[colName];
@@ -2022,7 +2022,7 @@ function dropDisplacesPinned(srcColName, targetColName) {
 }
 
 function setupColumnDragAndDrop() {
-  const thead = document.querySelector("table > thead");
+  const thead = document.querySelector("#table > thead");
   if (!thead || thead.dataset.dragReady) return;
   thead.dataset.dragReady = "1";
 
@@ -2094,11 +2094,11 @@ function buildColumnIndexMap() {
 export function hide(c, render, columnIndexMap) {
   let column = config.columns[c];
   const column_index = columnIndexMap[column];
-  $(`table > thead > tr:first-child th:nth-child(${column_index})`).css(
+  $(`#table > thead > tr:first-child th:nth-child(${column_index})`).css(
     "display",
     "none",
   );
-  $(`table > tbody > tr td:nth-child(${column_index})`).each(function () {
+  $(`#table > tbody > tr > td:nth-child(${column_index})`).each(function () {
     this.style.setProperty("display", "none");
   });
   if (!render) {
@@ -2109,11 +2109,11 @@ export function hide(c, render, columnIndexMap) {
 export function unhide(c, columnIndexMap) {
   let column = config.columns[c];
   const column_index = columnIndexMap[column];
-  $(`table > thead > tr:first-child th:nth-child(${column_index})`).css(
+  $(`#table > thead > tr:first-child th:nth-child(${column_index})`).css(
     "display",
     "",
   );
-  $(`table > tbody > tr td:nth-child(${column_index})`).each(function () {
+  $(`#table > tbody > tr > td:nth-child(${column_index})`).each(function () {
     this.style.setProperty("display", "");
   });
   config["to_be_hidden"].delete(column);

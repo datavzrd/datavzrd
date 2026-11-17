@@ -21,7 +21,7 @@ export function renderPlot(
   let table_rows = $("#table").bootstrapTable("getData", {
     useCurrentPage: true,
   });
-  $(`table > tbody > tr td:nth-child(${index})`).each(function () {
+  $(`#table > tbody > tr > td:nth-child(${index})`).each(function () {
     var id = `${slug_title}-${row}`;
     this.classList.add("plotcell");
     const div = document.createElement("div");
