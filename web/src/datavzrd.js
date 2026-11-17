@@ -1339,7 +1339,7 @@ export function load() {
         screenshot_table();
       });
       $("#btnExcel").on("click", function () {
-        window.location.href = "../data.xlsx";
+        window.location.href = "../../data.xlsx";
       });
     }
 

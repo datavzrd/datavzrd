@@ -6,7 +6,7 @@
 </head>
 
 <body>
-<script src="../static/bundle.js"></script>
+<script src="../../static/bundle.js"></script>
 
 <div id="page-container">
     <div id="content-wrap">

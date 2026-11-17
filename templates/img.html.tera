@@ -6,7 +6,7 @@
 </head>
 
 <body>
-<script src="../static/bundle.js"></script>
+<script src="../../static/bundle.js"></script>
 <div class="collapse" id="sidebar">
     <div class="card" id="sidebar-card">
         <ul class="list-group list-group-flush" id="sidebar-list">
@@ -27,7 +27,7 @@
                                 {% if default_view %}
                                 <option value="../{{ default_view }}/index_1.html" data-content="{{ default_view | replace(from="_", to=" ") }} {% if view_sizes[default_view] %}<span class='badge badge-light'>{{ view_sizes[default_view] }}</span>{% endif %}">{{ default_view | replace(from="_", to=" ") }}</option>
                                 {% else %}
-                                <option value="../index.html" data-content="Back to overview">Back to overview</option>
+                                <option value="../../index.html" data-content="Back to overview">Back to overview</option>
                                 {% endif %}
                                 {% for table in tables | sort %}
                                 <option value="../{{ table }}/index_1.html" data-content="{{ table | replace(from="_", to=" ") }} {% if view_sizes[table] %}<span class='badge badge-light'>{{ view_sizes[table] }}</span>{% endif %}">{{ table | replace(from="_", to=" ") }}</option>
