@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.79.0](https://github.com/datavzrd/datavzrd/compare/v2.78.1...v2.79.0) (2026-11-17)
+
+
+### Features
+
+* Add url-encode option to link-to-url ([#1369](https://github.com/datavzrd/datavzrd/issues/1369)) ([d43b923](https://github.com/datavzrd/datavzrd/commit/d43b9238990f831baa579f7228cd079f2142c93d))
+* Move views into a subdirectory of the report ([#1364](https://github.com/datavzrd/datavzrd/issues/1364)) ([9a7c65a](https://github.com/datavzrd/datavzrd/commit/9a7c65af12544373d49eb8c722d2a3342b72cef9))
+
+
+### Bug Fixes
+
+* Build the webview bundle without cargo ([#1358](https://github.com/datavzrd/datavzrd/issues/1358)) ([dc21cfd](https://github.com/datavzrd/datavzrd/commit/dc21cfd38e78ad0aebb49bd2323e08192d60f3ff))
+* Reject unknown color schemes for ordinal heatmaps and pills ([#1366](https://github.com/datavzrd/datavzrd/issues/1366)) ([2d1a95a](https://github.com/datavzrd/datavzrd/commit/2d1a95afc98f6f76b1dcf39d869c0d3ce4b6c555))
+* Remove duplicate movies from the example dataset ([#1368](https://github.com/datavzrd/datavzrd/issues/1368)) ([9b2c778](https://github.com/datavzrd/datavzrd/commit/9b2c778d31051c2eceb7c9b8d0134b11d557630f))
+
 ## [2.78.1](https://github.com/datavzrd/datavzrd/compare/v2.78.0...v2.78.1) (2026-11-12)
 
 
