@@ -6,29 +6,36 @@ use crate::utils::row_address::{RowAddress, RowAddressFactory};
 
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) struct ColumnIndex {
-    pub(crate) index: HashMap<String, RowAddress>,
+    pub(crate) index: HashMap<String, Vec<RowAddress>>,
+    pub(crate) in_memory: bool,
 }
 
 impl ColumnIndex {
     /// Build index from a given table and column name.
-    pub(crate) fn new(dataset: &DatasetSpecs, column_name: &str, page_size: usize) -> Result<Self> {
-        // Load the column values into the hash map while keeping the row number as value.
+    pub(crate) fn new(
+        dataset: &DatasetSpecs,
+        column_name: &str,
+        page_size: usize,
+        max_in_memory_rows: usize,
+    ) -> Result<Self> {
+        // Load the column values into the hash map while keeping the row numbers as value.
         let headers = dataset.reader()?.headers()?;
         let column_index = headers.iter().position(|r| r == column_name).unwrap();
-        let mut index = HashMap::new();
+        let mut index: HashMap<String, Vec<RowAddress>> = HashMap::new();
         let address_factory = RowAddressFactory::new(page_size);
         for (i, result) in dataset.records()?.enumerate() {
-            index.insert(
-                result.get(column_index).unwrap().to_owned(),
-                address_factory.get(i),
-            );
+            index
+                .entry(result.get(column_index).unwrap().to_owned())
+                .or_default()
+                .push(address_factory.get(i));
         }
-        Ok(ColumnIndex { index })
+        let in_memory = index.values().map(Vec::len).sum::<usize>() <= max_in_memory_rows;
+        Ok(ColumnIndex { index, in_memory })
     }
 
     /// Obtain subset of index given a set of keys. This can e.g. be used to obtain
     /// an index for serialization to JSON for use in a specific page of a foreign table.
-    pub(crate) fn _subset<R, K>(&self, keys: K) -> HashMap<String, Option<RowAddress>>
+    pub(crate) fn _subset<R, K>(&self, keys: K) -> HashMap<String, Option<Vec<RowAddress>>>
     where
         R: AsRef<str>,
         K: Iterator<Item = R>,
@@ -63,14 +70,20 @@ mod tests {
             links: None,
             offer_excel: false,
         };
-        let column_index = ColumnIndex::new(&dataset, "first", 3).unwrap();
+        let column_index = ColumnIndex::new(&dataset, "first", 3, 3).unwrap();
         let expected_column_index = ColumnIndex {
             index: HashMap::from([
-                (String::from("Delia"), RowAddress { page: 0, row: 0 }),
-                (String::from("George"), RowAddress { page: 0, row: 1 }),
-                (String::from("Winnie"), RowAddress { page: 0, row: 2 }),
-                (String::from("George"), RowAddress { page: 1, row: 0 }),
+                (String::from("Delia"), vec![RowAddress { page: 0, row: 0 }]),
+                (
+                    String::from("George"),
+                    vec![
+                        RowAddress { page: 0, row: 1 },
+                        RowAddress { page: 1, row: 0 },
+                    ],
+                ),
+                (String::from("Winnie"), vec![RowAddress { page: 0, row: 2 }]),
             ]),
+            in_memory: false,
         };
 
         assert_eq!(column_index, expected_column_index)

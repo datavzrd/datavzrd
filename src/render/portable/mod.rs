@@ -1361,8 +1361,18 @@ fn get_linked_tables(
                         })
                     }
                 };
-                let page_size = specs.views.get(*table).unwrap().page_size;
-                let column_index = Rc::new(ColumnIndex::new(other_dataset, column, page_size)?);
+                let column_index = Rc::new(ColumnIndex::new(
+                    other_dataset,
+                    column,
+                    linked_table.page_size,
+                    linked_table
+                        .max_in_memory_rows
+                        .unwrap_or(specs.max_in_memory_rows),
+                )?);
+                if !column_index.in_memory && column_index.index.values().any(|rows| rows.len() > 1)
+                {
+                    warn!("Column {column:?} of view {table:?} contains duplicate values, so links to them point to the first matching row because the view is not rendered in-memory (see max-in-memory-rows).");
+                }
                 cache.insert(key.clone(), Rc::clone(&column_index));
                 column_index
             }
@@ -1775,8 +1785,8 @@ fn render_linkouts(
             let linked_values = linked_tables
                 .get(&(table.to_string(), linked_column.to_string()))
                 .unwrap();
-            let linked_value = match linked_values.index.get(&row[index]) {
-                Some(value) => value,
+            let linked_rows = match linked_values.index.get(&row[index]) {
+                Some(rows) => rows,
                 None => {
                     if !link_specs.optional {
                         bail!(TableLinkingError::NotFound {
@@ -1791,14 +1801,23 @@ fn render_linkouts(
                     }
                 }
             };
-            linkouts.push(Linkout {
-                name: name.to_string(),
-                url: format!(
+            let url = if linked_values.in_memory && linked_rows.len() > 1 {
+                let query = form_urlencoded::Serializer::new(String::new())
+                    .append_pair("highlight_value", &row[index])
+                    .append_pair("highlight_column", linked_column)
+                    .finish();
+                format!("../{table}/index_1.html?{query}")
+            } else {
+                format!(
                     "../{}/index_{}.html?highlight={}",
                     table,
-                    linked_value.page + 1,
-                    linked_value.row,
-                ),
+                    linked_rows[0].page + 1,
+                    linked_rows[0].row,
+                )
+            };
+            linkouts.push(Linkout {
+                name: name.to_string(),
+                url,
             });
         } else {
             unreachable!()
