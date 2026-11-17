@@ -1,20 +1,21 @@
 import $ from "jquery";
 
-function buildLinkUrl(url, columns, value, row, pill_value) {
-  let link = url.replaceAll("{value}", value);
+function buildLinkUrl(link, columns, value, row, pill_value) {
+  const encode = (v) => (link["url-encode"] ? encodeURIComponent(v) : v);
+  let url = link.url.replaceAll("{value}", encode(value));
   if (pill_value !== undefined) {
-    link = link.replaceAll("{pill-value}", pill_value);
+    url = url.replaceAll("{pill-value}", encode(pill_value));
   }
   for (const column of columns) {
-    link = link.replaceAll(`{${column}}`, row[column]);
+    url = url.replaceAll(`{${column}}`, encode(row[column]));
   }
-  return link;
+  return url.replaceAll('"', "&quot;");
 }
 
 export function dropdownItems(columns, link_urls, value, row, pill_value) {
   let items = "";
   for (let l of link_urls) {
-    let link = buildLinkUrl(l.link.url, columns, value, row, pill_value);
+    let link = buildLinkUrl(l.link, columns, value, row, pill_value);
     if (l.link["new-window"]) {
       items = `${items}<a class="dropdown-item" href="${link}" target='_blank' rel="noopener noreferrer" >${l.name}</a>`;
     } else {
@@ -33,7 +34,7 @@ export function createLinkHtml(
   pill_value,
 ) {
   if (link_urls.length == 1) {
-    let link = buildLinkUrl(link_urls[0].link.url, columns, value, row, pill_value);
+    let link = buildLinkUrl(link_urls[0].link, columns, value, row, pill_value);
     if (link_urls[0].link["new-window"]) {
       return `<a href="${link}" target="_blank" rel="noopener noreferrer" >${shown_value}</a>`;
     } else {

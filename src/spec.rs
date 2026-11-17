@@ -1099,9 +1099,15 @@ pub struct LinkToUrlSpecEntry {
     url: String,
     #[serde(default = "default_new_window")]
     new_window: bool,
+    #[serde(default = "default_url_encode")]
+    url_encode: bool,
 }
 
 fn default_new_window() -> bool {
+    true
+}
+
+fn default_url_encode() -> bool {
     true
 }
 
@@ -2021,6 +2027,7 @@ mod tests {
                     LinkToUrlSpecEntry {
                         url: "https://www.rust-lang.org".to_string(),
                         new_window: true,
+                        url_encode: true,
                     },
                 )]),
             }),
