@@ -1375,6 +1375,9 @@ export function load() {
       add_scroll_button();
     }
 
+    fitHeaderBelowNavbar();
+    $("#collapseDescription").on("hidden.bs.collapse", fitHeaderBelowNavbar);
+
     let urlParams = new URLSearchParams(window.location.search);
     let highlightIndex = urlParams.get("highlight");
     let highlightValue = urlParams.get("highlight_value");
@@ -1657,6 +1660,29 @@ export function toggle_narrow_view() {
   applyNarrowView(window.columnIndexMap);
   if (!config.is_single_page) {
     persistNarrowView();
+  }
+  fitHeaderBelowNavbar();
+}
+
+// Rotated column titles can reach under the navbar.
+function fitHeaderBelowNavbar() {
+  const navbar_bottom = Math.max(
+    ...[...document.querySelectorAll(".fixed-top *")].map(
+      (el) => el.getBoundingClientRect().bottom,
+    ),
+  );
+  let header_top = Infinity;
+  for (const el of document.querySelectorAll("table > thead th *")) {
+    const rect = el.getBoundingClientRect();
+    if (rect.height > 0) {
+      header_top = Math.min(header_top, rect.top + window.scrollY);
+    }
+  }
+  if (header_top < navbar_bottom) {
+    const height = document
+      .querySelector("table > thead > tr")
+      .getBoundingClientRect().height;
+    $("th").css("height", height + navbar_bottom - header_top);
   }
 }
 
