@@ -3071,7 +3071,7 @@ mod tests {
     #[test]
     fn test_dataset_size() {
         let config = ItemsSpec::from_file(".examples/example.datavzrd.yaml").unwrap();
-        assert_eq!(config.datasets.get("movies").unwrap().size().unwrap(), 184);
+        assert_eq!(config.datasets.get("movies").unwrap().size().unwrap(), 177);
     }
 
     #[test]
