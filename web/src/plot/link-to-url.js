@@ -64,7 +64,7 @@ export function linkUrlColumn(
 ) {
   let index = columnIndexMap[title];
   let table_rows = $("#table").bootstrapTable("getData");
-  $(`table > tbody > tr td:nth-child(${index})`).each(function () {
+  $(`#table > tbody > tr > td:nth-child(${index})`).each(function () {
     let row = this.parentElement.dataset.index;
     let value = table_rows[row][title];
     let shown_value = value;

@@ -18,7 +18,7 @@ export function renderCustomPlot(
     useCurrentPage: true,
   });
   let all_rows = $("#table").bootstrapTable("getData");
-  $(`table > tbody > tr td:nth-child(${index})`).each(function () {
+  $(`#table > tbody > tr > td:nth-child(${index})`).each(function () {
     var id = `${plot.title}-${row}`;
     this.classList.add("plotcell");
     const div = document.createElement("div");
