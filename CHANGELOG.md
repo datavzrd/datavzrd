@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.80.0](https://github.com/datavzrd/datavzrd/compare/v2.79.0...v2.80.0) (2026-11-17)
+
+
+### Features
+
+* Filter to all rows matching a highlighted value ([#1371](https://github.com/datavzrd/datavzrd/issues/1371)) ([0eb90d7](https://github.com/datavzrd/datavzrd/commit/0eb90d788ad3c533fbe35d746a8e336ea3c01538))
+
+
+### Bug Fixes
+
+* Keep rotated column headers below the navbar ([#1374](https://github.com/datavzrd/datavzrd/issues/1374)) ([f251d07](https://github.com/datavzrd/datavzrd/commit/f251d071831136ac3180905496f2f24e58b5ddb9))
+* Replace wrong movies in the example dataset ([#1373](https://github.com/datavzrd/datavzrd/issues/1373)) ([e48e8a9](https://github.com/datavzrd/datavzrd/commit/e48e8a9fc5442a07b2094ca7259205197b9263ce))
+* Scope table selectors to the report table ([#1375](https://github.com/datavzrd/datavzrd/issues/1375)) ([0abf7e2](https://github.com/datavzrd/datavzrd/commit/0abf7e2e2ca6d9eb97eb33b78f6f32b14e0cb5bd))
+
 ## [2.79.0](https://github.com/datavzrd/datavzrd/compare/v2.78.1...v2.79.0) (2026-11-17)
 
 
