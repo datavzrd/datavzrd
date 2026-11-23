@@ -1732,9 +1732,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e9067a0b23e5be3147d56b2dcf652b18e6b1364caca93fb157653b6fbcab23a9"
 dependencies = [
  "jiff-core",
- "proc-macro2 1.0.106",
- "quote 1.0.45",
- "syn 3.0.5",
+ "proc-macro2 1.0.107",
+ "quote 1.0.47",
+ "syn 3.0.10",
 ]
 
 [[package]]
