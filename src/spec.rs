@@ -634,7 +634,6 @@ impl DatasetSpecs {
         if self.separator == char::default() {
             self.separator = self.default_separator()?;
         }
-        // `links:` without any entries is parsed as None
         self.links.get_or_insert_default();
         Ok(())
     }
