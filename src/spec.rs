@@ -71,11 +71,14 @@ impl ItemsSpec {
             "Could not find config file under given path {:?}",
             path
         ))?;
+        let config_file = config_file.trim_start_matches('\u{feff}');
         if config_file.is_empty() {
             bail!(ConfigError::EmptyConfigFile);
         }
-        let mut items_spec: ItemsSpec = serde_yaml::from_str(&config_file)
-            .map_err(|err| SerdeError::new(config_file.to_string(), err))?;
+        // serde_yaml reports errors at the end of the file on the line after the last one,
+        // but format_serde_error only prints the message if that line exists in the input
+        let mut items_spec: ItemsSpec = serde_yaml::from_str(config_file)
+            .map_err(|err| SerdeError::new(format!("{config_file}\n"), err))?;
         items_spec.preprocess()?;
         Ok(items_spec)
     }
@@ -1192,7 +1195,8 @@ impl RenderColumnSpec {
             }
         }
         if let Some(path) = self.custom_path.as_ref() {
-            let mut file = File::open(path)?;
+            let mut file =
+                File::open(path).with_context(|| format!("Could not read file {path:?}"))?;
             let mut contents = String::new();
             file.read_to_string(&mut contents)?;
             self.custom = Some(contents);
@@ -1285,7 +1289,8 @@ impl RenderPlotSpec {
     /// Reads schema for RenderPlotSpec from path and saves it under the schema attribute
     pub fn read_schema(&mut self) -> Result<()> {
         if let Some(path) = self.schema_path.as_ref() {
-            let mut file = File::open(path)?;
+            let mut file =
+                File::open(path).with_context(|| format!("Could not read file {path:?}"))?;
             let mut contents = String::new();
             file.read_to_string(&mut contents)?;
             self.schema = Some(contents);
@@ -1359,7 +1364,8 @@ impl CustomPlot {
     /// Reads schema for CustomPlot from path and saves it under the schema attribute
     pub fn read_schema(&mut self) -> Result<()> {
         if let Some(path) = self.schema_path.as_ref() {
-            let mut file = File::open(path)?;
+            let mut file =
+                File::open(path).with_context(|| format!("Could not read file {path:?}"))?;
             let mut contents = String::new();
             file.read_to_string(&mut contents)?;
             self.schema = Some(contents);
