@@ -1,6 +1,6 @@
 use crate::spec::{ItemSpecs, RenderColumnSpec};
 use anyhow::anyhow;
-use anyhow::Result;
+use anyhow::{Context, Result};
 use fancy_regex::Regex;
 use pyo3::prelude::*;
 use pyo3::types::IntoPyDict;
@@ -90,7 +90,8 @@ pub fn fetch_content(url: &String, relative_path: &String) -> Result<String> {
         Ok(content)
     } else {
         let path = Path::new(url).join(relative_path);
-        let content = fs::read_to_string(path)?;
+        let content =
+            fs::read_to_string(&path).with_context(|| format!("Could not read file {path:?}"))?;
         Ok(content)
     }
 }
@@ -144,7 +145,8 @@ fn fetch_from_url(url: &str) -> Result<String> {
 
 /// Fetches content from a local file.
 fn fetch_from_file(path: &str) -> Result<String> {
-    let content = fs::read_to_string(Path::new(path))?;
+    let content = fs::read_to_string(Path::new(path))
+        .with_context(|| format!("Could not read file {path:?}"))?;
     Ok(content)
 }
 

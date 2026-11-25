@@ -1607,7 +1607,8 @@ fn render_html_page<P: AsRef<Path>>(
     view_sizes: &HashMap<String, String>,
 ) -> Result<()> {
     let records = dataset.keyed_records()?.collect_vec();
-    let script = fs::read_to_string(script_path)?;
+    let script = fs::read_to_string(&script_path)
+        .with_context(|| format!("Could not read file {script_path:?}"))?;
 
     let mut templates = Tera::default();
     templates.add_raw_template(
@@ -1643,7 +1644,8 @@ fn render_img_page<P: AsRef<Path>>(
     let img_file = Path::new(&img_path);
     let img_file_name = img_file.file_name().unwrap();
     let img_file_path = Path::new(output_path.as_ref()).join(img_file_name);
-    fs::copy(img_file, &img_file_path)?;
+    fs::copy(img_file, &img_file_path)
+        .with_context(|| format!("Could not copy image {img_path:?}"))?;
 
     let mut templates = Tera::default();
     templates.add_raw_template(
