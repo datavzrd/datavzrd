@@ -1739,12 +1739,6 @@ export function screenshot_table() {
       narrow_contents.forEach(([cell, html]) => {
         cell.innerHTML = html;
       });
-    });
-  if (config.detail_mode) {
-    document.querySelectorAll("#table tr").forEach((row) => {
-      const cells = row.querySelectorAll("td, th");
-      const first = Array.from(cells).slice(0, 1);
-      first.forEach((cell) => (cell.style.display = "block"));
       document.querySelectorAll("#table tr").forEach((row) => {
         const cells = row.querySelectorAll("td");
         let s = linkouts !== null ? -2 : -1;
@@ -1753,20 +1747,19 @@ export function screenshot_table() {
         }
         if (s < 0) {
           const lastTwo = Array.from(cells).slice(s);
-          lastTwo.forEach((cell) => (cell.style.display = "table-cell"));
+          lastTwo.forEach((cell) => (cell.style.display = ""));
+        }
+        if (config.detail_mode) {
+          row.querySelector("td, th").style.display = "";
         }
       });
       document
-        .querySelectorAll(".linkout-group")
-        .forEach((el) => (el.style.display = "table-cell"));
-      document
-        .querySelectorAll(".linkout-raw-value")
-        .forEach((el) => (el.style.display = "none"));
+        .querySelectorAll(".linkout-group, .linkout-raw-value")
+        .forEach((el) => (el.style.display = ""));
       $("#table th").each(function () {
         $(this).css("height", `${header_height}px`);
       });
     });
-  }
 }
 
 function decompress(data) {
