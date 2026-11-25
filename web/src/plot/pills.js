@@ -41,11 +41,11 @@ function renderPill(
     : ' data-toggle="tooltip" data-trigger="hover click focus"';
 
   if (ellipsis === 0) {
-    return `<span style="${styles}; padding:6px 12px; height:24px; width:24px;"${toggle}${tooltip} title='${value}'></span>`;
+    return `<span style="${styles}; padding:6px 12px; height:24px; width:24px;"${toggle}${tooltip} title='${value.replaceAll("'", "&#39;")}'></span>`;
   } else if (ellipsis === undefined || value.length <= ellipsis) {
     return `<span style="${styles}"${toggle}>${value}</span>`;
   } else {
-    return `<span style="${styles}"${toggle}${tooltip} title='${value}'>${value.substring(0, ellipsis)}...</span>`;
+    return `<span style="${styles}"${toggle}${tooltip} title='${value.replaceAll("'", "&#39;")}'>${value.substring(0, ellipsis)}...</span>`;
   }
 }
 
