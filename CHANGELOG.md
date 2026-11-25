@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.80.2](https://github.com/datavzrd/datavzrd/compare/v2.80.1...v2.80.2) (2026-11-25)
+
+
+### Bug Fixes
+
+* Download complete and properly quoted CSV files ([#1386](https://github.com/datavzrd/datavzrd/issues/1386)) ([1e4ed60](https://github.com/datavzrd/datavzrd/commit/1e4ed6068da49bfdde069ea45845fdd27abc5c35))
+* Escape apostrophes in ellipsis and pill tooltips ([#1383](https://github.com/datavzrd/datavzrd/issues/1383)) ([ac4e6a6](https://github.com/datavzrd/datavzrd/commit/ac4e6a679172f5666045bd0d3d603d653a58292c))
+* Escape column names in table headers ([#1385](https://github.com/datavzrd/datavzrd/issues/1385)) ([f90960b](https://github.com/datavzrd/datavzrd/commit/f90960bbf998db46e8b7ee2bc2891f0d5ba52d96))
+* Improve error messages for unreadable files and YAML errors ([#1391](https://github.com/datavzrd/datavzrd/issues/1391)) ([2bd0f3a](https://github.com/datavzrd/datavzrd/commit/2bd0f3aaa9ed22326eb3669e397a8af515f44743))
+* Keep the active sort when filtering ([#1387](https://github.com/datavzrd/datavzrd/issues/1387)) ([0ae0e2d](https://github.com/datavzrd/datavzrd/commit/0ae0e2d83f9801a651c2947924b95560b3300c99))
+* Restore hidden cells after SVG export ([#1389](https://github.com/datavzrd/datavzrd/issues/1389)) ([0ed9802](https://github.com/datavzrd/datavzrd/commit/0ed98021ecac144f88d91adebec05b5718119bf4))
+* Skip full-width rows when toggling line numbers ([#1388](https://github.com/datavzrd/datavzrd/issues/1388)) ([eecdf19](https://github.com/datavzrd/datavzrd/commit/eecdf19a3b68e5b5c1c9a1a5f2b19fa416aab764))
+* Validate that linked views exist ([#1390](https://github.com/datavzrd/datavzrd/issues/1390)) ([0d2f2d4](https://github.com/datavzrd/datavzrd/commit/0d2f2d47746498f756cb4477060334694188ad19))
+
 ## [2.80.1](https://github.com/datavzrd/datavzrd/compare/v2.80.0...v2.80.1) (2026-11-25)
 
 
