@@ -35,7 +35,7 @@ pub struct Datavzrd {
     )]
     pub(crate) webview_url: String,
 
-    /// Overwrites the contents of the given output directory if it is not empty.
+    /// Overwrites the given output directory if it contains a previously rendered report.
     #[arg(long, short = 'x')]
     pub(crate) overwrite_output: bool,
 
