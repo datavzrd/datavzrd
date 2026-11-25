@@ -1613,7 +1613,7 @@ function line_numbers(style) {
   var cell_index = config.detail_mode || header_config.headers.length > 0 ? 1 : 0;
   for (var i = 0; i < rows.length; i++) {
     var cells = rows[i].getElementsByTagName("td");
-    if (cells.length > 0) {
+    if (cells.length > 1) {
       cells[cell_index].style.display = style;
     }
   }
