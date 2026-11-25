@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.80.1](https://github.com/datavzrd/datavzrd/compare/v2.80.0...v2.80.1) (2026-11-25)
+
+
+### Bug Fixes
+
+* Only overwrite output directories that contain a report ([#1381](https://github.com/datavzrd/datavzrd/issues/1381)) ([153822b](https://github.com/datavzrd/datavzrd/commit/153822b87b29cd81732ec73372d4be1cc2886ca5))
+* Report more config errors instead of panicking ([#1380](https://github.com/datavzrd/datavzrd/issues/1380)) ([c164c58](https://github.com/datavzrd/datavzrd/commit/c164c5826ebcbbe6854e9cc629549f5a709b41ec))
+
 ## [2.80.0](https://github.com/datavzrd/datavzrd/compare/v2.79.0...v2.80.0) (2026-11-17)
 
 
