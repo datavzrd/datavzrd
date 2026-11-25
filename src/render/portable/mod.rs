@@ -353,9 +353,8 @@ fn render_page<P: AsRef<Path>>(
                     links,
                     views.get(name).unwrap().dataset.as_ref().unwrap(),
                 )
-                .unwrap()
             })
-            .collect_vec();
+            .collect::<Result<Vec<_>>>()?;
         compress(json!(linkouts), debug)?
     } else {
         Value::Null.to_string()
@@ -1574,9 +1573,8 @@ fn render_plot_page<P: AsRef<Path>>(
                     links,
                     specs.views.get(name).unwrap().dataset.as_ref().unwrap(),
                 )
-                .unwrap()
             })
-            .collect_vec();
+            .collect::<Result<Vec<_>>>()?;
 
         assert_eq!(records.len(), linkouts.len());
 
