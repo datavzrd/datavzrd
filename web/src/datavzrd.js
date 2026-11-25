@@ -69,28 +69,24 @@ export function downloadCSV() {
     return;
   }
 
-  var csvContent = "data:text/csv;charset=utf-8,";
+  var quote = function (value) {
+    if (typeof value === "string" && /[",\n\r]/.test(value)) {
+      return '"' + value.replace(/"/g, '""') + '"';
+    }
+    return value;
+  };
   var headers = config["columns"];
-  csvContent += headers.join(",") + "\n";
+  var csvContent = headers.map(quote).join(",") + "\n";
 
   data.forEach(function (item) {
-    var row = [];
-    headers.forEach(function (header) {
-      var value = item[header];
-      if (typeof value === "string" && value.includes(",")) {
-        value = '"' + value.replace(/"/g, '""') + '"';
-      }
-      row.push(value);
-    });
-    csvContent += row.join(",") + "\n";
+    csvContent += headers.map((header) => quote(item[header])).join(",") + "\n";
   });
 
-  var encodedUri = encodeURI(csvContent);
-  var link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", `${$("#view-selection").attr("title")}.csv`);
-  document.body.appendChild(link);
-  link.click();
+  download(
+    csvContent,
+    "text/csv;charset=utf-8",
+    `${$("#view-selection").attr("title")}.csv`,
+  );
 }
 
 // Config that only works in the full report, left out of share links and replaced by these values
