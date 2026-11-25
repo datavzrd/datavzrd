@@ -62,6 +62,11 @@ pub fn render_report(
         .is_some()
     {
         if overwrite_output {
+            if !output.join("index.html").is_file() || !output.join("static").is_dir() {
+                bail!(OutputError::NotAReport {
+                    output_path: output.to_path_buf(),
+                })
+            }
             fs::remove_dir_all(output)?;
             fs::create_dir(output)?;
         } else {
@@ -84,11 +89,13 @@ pub fn render_report(
 pub enum OutputError {
     #[error("Given output directory {output_path:?} was not empty. If you wish to overwrite it please use the --overwrite-output option.")]
     OutputDirectoryNotEmpty { output_path: PathBuf },
+    #[error("Given output directory {output_path:?} does not look like a datavzrd report and is not overwritten. Please remove it yourself or choose another output directory.")]
+    NotAReport { output_path: PathBuf },
 }
 
 #[cfg(test)]
 mod tests {
-    use super::render_report;
+    use super::{render_report, OutputError};
     use std::io::Write;
 
     #[test]
@@ -111,6 +118,32 @@ mod tests {
         )
         .unwrap();
         assert!(output.join("index.html").exists());
+        assert!(output.join("views").join("d").join("index_1.html").exists());
+    }
+
+    #[test]
+    fn test_render_report_only_overwrites_reports() {
+        let mut config_file = tempfile::NamedTempFile::new().unwrap();
+        config_file
+            .write_all(
+                b"datasets:\n  d:\n    path: tests/data/uniform_datatypes.csv\nviews:\n  d:\n    dataset: d\n",
+            )
+            .unwrap();
+        let config = config_file.path().to_path_buf();
+        let output_dir = tempfile::tempdir().unwrap();
+        let output = output_dir.path().to_path_buf();
+        std::fs::write(output.join("notes.txt"), "keep me").unwrap();
+
+        let err = render_report(&config, &output, "", false, true, false).unwrap_err();
+        assert!(matches!(
+            err.downcast().unwrap(),
+            OutputError::NotAReport { .. }
+        ));
+        assert!(output.join("notes.txt").exists());
+
+        std::fs::remove_file(output.join("notes.txt")).unwrap();
+        render_report(&config, &output, "", false, false, false).unwrap();
+        render_report(&config, &output, "", false, true, false).unwrap();
         assert!(output.join("views").join("d").join("index_1.html").exists());
     }
 }
