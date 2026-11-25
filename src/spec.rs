@@ -85,6 +85,11 @@ impl ItemsSpec {
             dataset.preprocess()?;
         }
         for (name, dataset) in &self.datasets {
+            if dataset.header_rows == 0 {
+                bail!(ConfigError::NoHeaderRows {
+                    dataset: name.to_string(),
+                })
+            }
             dataset.reader()?.validate()?;
             let lines = dataset
                 .reader()?
@@ -105,6 +110,11 @@ impl ItemsSpec {
             if let Some(spell) = spec.spell.as_ref() {
                 let rendered_spec = spell.render_item_spec()?;
                 *spec = spec.merge_item_specs(&rendered_spec)?;
+            }
+            if spec.page_size == 0 {
+                bail!(ConfigError::InvalidPageSize {
+                    view: name.to_string(),
+                })
             }
             if spec.render_table.is_some()
                 && spec.render_plot.is_none()
@@ -167,6 +177,12 @@ impl ItemsSpec {
                 for (column, custom_plot) in custom_plots {
                     if custom_plot.plot_data.is_empty() {
                         bail!(ConfigError::CustomPlotMissingData {
+                            view: name.to_string(),
+                            column: column.to_string(),
+                        })
+                    }
+                    if custom_plot.schema.is_none() && custom_plot.schema_path.is_none() {
+                        bail!(ConfigError::CustomPlotMissingSpec {
                             view: name.to_string(),
                             column: column.to_string(),
                         })
@@ -485,6 +501,11 @@ impl ItemsSpec {
                 }
             }
             if let Some(render_plot) = &view.render_plot {
+                if render_plot.schema.is_none() && render_plot.schema_path.is_none() {
+                    bail!(ConfigError::RenderPlotMissingSpec {
+                        view: name.to_string(),
+                    })
+                }
                 if let Some(spec) = render_plot.schema.as_deref() {
                     if serde_json::from_str::<serde_json::Value>(spec).is_err() {
                         bail!(ConfigError::InvalidRenderPlotSpec {
@@ -518,9 +539,12 @@ impl ItemsSpec {
                         })
                     }
                     if let Some(table_row) = &link.table_row {
-                        let (table, linked_column) = table_row
-                            .split_once('/')
-                            .expect("Missing expected delimiter / in table-row configuration.");
+                        let Some((table, linked_column)) = table_row.split_once('/') else {
+                            bail!(ConfigError::InvalidTableRow {
+                                table_row: table_row.to_string(),
+                                link: link_name.to_string(),
+                            })
+                        };
                         if let Some(table_spec) = self.views.get(table) {
                             if let Some(table_dataset) = &table_spec.dataset {
                                 if let Some(dataset) = self.datasets.get(table_dataset) {
@@ -543,6 +567,11 @@ impl ItemsSpec {
                                         dataset: table_dataset.to_string()
                                     })
                                 }
+                            } else {
+                                bail!(ConfigError::LinkToViewWithoutDataset {
+                                    view: table.to_string(),
+                                    link: link_name.to_string()
+                                })
                             }
                         } else {
                             bail!(LinkToMissingView {
@@ -605,6 +634,8 @@ impl DatasetSpecs {
         if self.separator == char::default() {
             self.separator = self.default_separator()?;
         }
+        // `links:` without any entries is parsed as None
+        self.links.get_or_insert_default();
         Ok(())
     }
 
@@ -1863,6 +1894,14 @@ pub enum ConfigError {
     CustomPlotMissingData { view: String, column: String },
     #[error("The render-plot spec of view {view:?} is not valid JSON. Please provide a valid Vega-Lite specification.")]
     InvalidRenderPlotSpec { view: String },
+    #[error("The custom-plot of column {column:?} in view {view:?} misses a spec. Please provide a Vega-Lite specification via `spec` or `spec-path`.")]
+    CustomPlotMissingSpec { view: String, column: String },
+    #[error("The render-plot of view {view:?} misses a spec. Please provide a Vega-Lite specification via `spec` or `spec-path`.")]
+    RenderPlotMissingSpec { view: String },
+    #[error("View {view:?} has a page-size of 0. Please use a page-size of at least 1.")]
+    InvalidPageSize { view: String },
+    #[error("Dataset {dataset:?} is configured with 0 header rows. Please use at least 1 header row for the column names.")]
+    NoHeaderRows { dataset: String },
     #[error("Could not find column with index {index:?} under path {table_path:?} with only {header_length:?} columns.")]
     IndexTooLarge {
         index: usize,
@@ -1961,6 +2000,12 @@ pub enum ConfigError {
         "Could not find view named {view:?} in given config that is referred to with {link:?}."
     )]
     LinkToMissingView { view: String, link: String },
+    #[error(
+        "Linkout {link:?} points to table-row {table_row:?}, which is not of the form view/column."
+    )]
+    InvalidTableRow { table_row: String, link: String },
+    #[error("Linkout {link:?} points to rows of view {view:?}, which has no dataset.")]
+    LinkToViewWithoutDataset { view: String, link: String },
     #[error("Linkout {link:?} points to column {column:?} of view {view:?}, which does not exist in that view's dataset ({path}).")]
     LinkToMissingColumn {
         view: String,
@@ -2518,6 +2563,119 @@ mod tests {
                             {"mark": "point",
             "#;
         assert_config_error!(raw_config, InvalidRenderPlotSpec);
+    }
+
+    #[test]
+    fn test_missing_custom_plot_spec_config_validation() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                d:
+                    dataset: d
+                    render-table:
+                        columns:
+                            first:
+                                custom-plot:
+                                    data: function(value) { return [value]; }
+            "#;
+        assert_config_error!(raw_config, CustomPlotMissingSpec);
+    }
+
+    #[test]
+    fn test_missing_render_plot_spec_config_validation() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                d:
+                    dataset: d
+                    render-plot: {}
+            "#;
+        assert_config_error!(raw_config, RenderPlotMissingSpec);
+    }
+
+    #[test]
+    fn test_zero_page_size_config_validation() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+            views:
+                d:
+                    dataset: d
+                    page-size: 0
+            "#;
+        assert_config_error!(raw_config, InvalidPageSize);
+    }
+
+    #[test]
+    fn test_zero_header_rows_config_validation() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+                    headers: 0
+            views:
+                d:
+                    dataset: d
+            "#;
+        assert_config_error!(raw_config, NoHeaderRows);
+    }
+
+    #[test]
+    fn test_invalid_table_row_config_validation() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+                    links:
+                        self:
+                            column: first
+                            table-row: d
+            views:
+                d:
+                    dataset: d
+            "#;
+        assert_config_error!(raw_config, InvalidTableRow);
+    }
+
+    #[test]
+    fn test_link_to_view_without_dataset_config_validation() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+                    links:
+                        image:
+                            column: first
+                            table-row: image/first
+            views:
+                d:
+                    dataset: d
+                image:
+                    render-img:
+                        path: tests/data/uniform_datatypes.csv
+            "#;
+        assert_config_error!(raw_config, LinkToViewWithoutDataset);
+    }
+
+    #[test]
+    fn test_empty_links() {
+        let raw_config = r#"
+            datasets:
+                d:
+                    path: tests/data/uniform_datatypes.csv
+                    links:
+            views:
+                d:
+                    dataset: d
+            "#;
+        let mut config: ItemsSpec = serde_yaml::from_str(raw_config).unwrap();
+        config.preprocess().unwrap();
+        assert_eq!(config.datasets["d"].links, default_links());
     }
 
     #[test]
