@@ -71523,9 +71523,9 @@ function shortenColumn(
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(`#table > tbody > tr > td:nth-child(${index})`).each(function () {
     let value = this.innerHTML;
     if (ellipsis === 0) {
-      this.innerHTML = `<div style="width: 100%; height: 100%;" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'></div>`;
+      this.innerHTML = `<div style="width: 100%; height: 100%;" data-toggle="tooltip" data-trigger="hover click focus" title='${value.replaceAll("'", "&#39;")}'></div>`;
     } else if (value.length > ellipsis) {
-      this.innerHTML = `<span data-toggle="tooltip" data-trigger="hover click focus" title='${value}'>${value.substring(0, ellipsis)}...</span>`;
+      this.innerHTML = `<span data-toggle="tooltip" data-trigger="hover click focus" title='${value.replaceAll("'", "&#39;")}'>${value.substring(0, ellipsis)}...</span>`;
     }
     row++;
   });
@@ -71535,9 +71535,9 @@ function shortenHeaderRow(row, ellipsis, skip_label) {
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(`#table > thead > tr:nth-child(${row + 1}) > td`).each(function () {
     let value = this.innerHTML;
     if (ellipsis === 0 && !skip_label) {
-      this.innerHTML = `<div style="width: 100%; height: 100%;" data-toggle="tooltip" data-trigger="hover click focus" title='${value}'></div>`;
+      this.innerHTML = `<div style="width: 100%; height: 100%;" data-toggle="tooltip" data-trigger="hover click focus" title='${value.replaceAll("'", "&#39;")}'></div>`;
     } else if (value.length > ellipsis && !skip_label) {
-      this.innerHTML = `<span data-toggle="tooltip" data-trigger="hover click focus" title='${value}'>${value.substring(0, ellipsis)}...</span>`;
+      this.innerHTML = `<span data-toggle="tooltip" data-trigger="hover click focus" title='${value.replaceAll("'", "&#39;")}'>${value.substring(0, ellipsis)}...</span>`;
     }
     skip_label = false;
   });
@@ -71947,11 +71947,11 @@ function renderPill(
     : ' data-toggle="tooltip" data-trigger="hover click focus"';
 
   if (ellipsis === 0) {
-    return `<span style="${styles}; padding:6px 12px; height:24px; width:24px;"${toggle}${tooltip} title='${value}'></span>`;
+    return `<span style="${styles}; padding:6px 12px; height:24px; width:24px;"${toggle}${tooltip} title='${value.replaceAll("'", "&#39;")}'></span>`;
   } else if (ellipsis === undefined || value.length <= ellipsis) {
     return `<span style="${styles}"${toggle}>${value}</span>`;
   } else {
-    return `<span style="${styles}"${toggle}${tooltip} title='${value}'>${value.substring(0, ellipsis)}...</span>`;
+    return `<span style="${styles}"${toggle}${tooltip} title='${value.replaceAll("'", "&#39;")}'>${value.substring(0, ellipsis)}...</span>`;
   }
 }
 
