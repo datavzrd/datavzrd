@@ -158706,7 +158706,7 @@ function load() {
         if (config.column_config[column].label) {
           title = config.column_config[column].label;
         } else {
-          title = column.replace(/_/g, " ");
+          title = (0,_utils__WEBPACK_IMPORTED_MODULE_10__.escapeHtml)(column.replace(/_/g, " "));
         }
 
         // Add histogram button
