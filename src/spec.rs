@@ -538,6 +538,14 @@ impl ItemsSpec {
                             link: link_name.to_string(),
                         })
                     }
+                    if let Some(view) = &link.view {
+                        if !view.contains("{value}") && !self.views.contains_key(view) {
+                            bail!(LinkToMissingView {
+                                view: view.to_string(),
+                                link: link_name.to_string()
+                            })
+                        }
+                    }
                     if let Some(table_row) = &link.table_row {
                         let Some((table, linked_column)) = table_row.split_once('/') else {
                             bail!(ConfigError::InvalidTableRow {
