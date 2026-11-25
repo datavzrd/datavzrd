@@ -1103,25 +1103,13 @@ export function load() {
                 document
                   .getElementById(`brush-${e.currentTarget.dataset.brush}`)
                   .addEventListener("click", function (event) {
-                    $("#table").bootstrapTable(
-                      "filterBy",
-                      { "": "" },
-                      {
-                        filterAlgorithm: customFilter,
-                      },
-                    );
+                    filterTable();
                   });
                 // Add another event listener so the filter is still triggered when the brush is dragged outside the plot.
                 view.addEventListener("mouseleave", function (event) {
                   // Only apply filter when mouseleave events happens while mouse is pressed
                   if (event.buttons > 0) {
-                    $("#table").bootstrapTable(
-                      "filterBy",
-                      { "": "" },
-                      {
-                        filterAlgorithm: customFilter,
-                      },
-                    );
+                    filterTable();
                   }
                 });
               });
@@ -1161,13 +1149,7 @@ export function load() {
                         },
                       );
                     }
-                    $("#table").bootstrapTable(
-                      "filterBy",
-                      { "": "" },
-                      {
-                        filterAlgorithm: customFilter,
-                      },
-                    );
+                    filterTable();
                   });
                 },
               );
@@ -1205,13 +1187,7 @@ export function load() {
                     filters[event.target.dataset.title] = $(
                       `#filter-${index}`,
                     ).val();
-                    $("#table").bootstrapTable(
-                      "filterBy",
-                      { "": "" },
-                      {
-                        filterAlgorithm: customFilter,
-                      },
-                    );
+                    filterTable();
                   });
                 },
               );
@@ -1243,13 +1219,7 @@ export function load() {
         for (const title of config.displayed_columns) {
           checkbox_filters[title] = [];
         }
-        $("#table").bootstrapTable(
-          "filterBy",
-          { "": "" },
-          {
-            filterAlgorithm: customFilter,
-          },
-        );
+        filterTable();
         $(".form-control").each(function () {
           $(this).val("");
         });
@@ -1288,13 +1258,23 @@ export function load() {
         return true;
       }
 
-      filterByValue = (column, value) => {
-        value_filter = { column, value };
-        $("#table").bootstrapTable(
+      function filterTable() {
+        const table = $("#table");
+        table.bootstrapTable(
           "filterBy",
           { "": "" },
           { filterAlgorithm: customFilter },
         );
+        // filterBy goes back to the original row order, so sort again
+        const sortPriority = table.bootstrapTable("getOptions").sortPriority;
+        if (sortPriority.length > 0) {
+          table.bootstrapTable("multiSort", sortPriority);
+        }
+      }
+
+      filterByValue = (column, value) => {
+        value_filter = { column, value };
+        filterTable();
       };
     }
 
